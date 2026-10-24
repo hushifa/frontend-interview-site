@@ -1,0 +1,11 @@
+var e={answerHtml:`<p>模态对话框打开后，用户的操作范围应暂时集中在对话框内。焦点要进入一个合理的位置：短提示可以进入主要按钮，长内容可以进入标题或正文容器，表单则通常进入第一个需要填写的字段。关闭时，焦点应回到触发按钮；如果触发按钮已经消失，就要把焦点放到完成任务所需的下一个位置。</p>
+<p>对话框必须有可访问名称。标题通常通过 <code>aria-labelledby</code> 关联，只有没有可见标题时才使用 <code>aria-label</code>；正文很长时不要把整篇文本强行塞进描述，否则屏幕阅读器进入控件时会朗读大量内容。<code>aria-modal=&quot;true&quot;</code> 只表达模态语义，不会自动实现焦点循环、背景遮挡或禁止背景点击。</p>
+<p>可以优先使用原生 <code>&lt;dialog&gt;</code> 的 <code>showModal()</code>，也可以使用经过验证的组件库。无论使用哪种方式，都要处理 Tab 和 Shift+Tab 的循环、Escape 的关闭行为、滚动区域、嵌套弹层和关闭后的焦点恢复。对话框打开期间，背景内容不能继续获得键盘焦点，也不能因为视觉上加了遮罩就默认认为背景已经不可操作。</p>
+<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;open-settings&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span>&gt;</span>打开设置<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">dialog</span> <span class="hljs-attr">aria-labelledby</span>=<span class="hljs-string">&quot;settings-title&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">h2</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;settings-title&quot;</span>&gt;</span>设置<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span>&gt;</span>保存<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span>&gt;</span>取消<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">dialog</span>&gt;</span>
+</code></pre></div>
+<p>验收时要从触发按钮开始，用键盘完成打开、填写、报错、保存和关闭，再用屏幕阅读器确认名称、状态和错误提示。自动化属性检查只能发现一部分问题，不能证明焦点顺序和真实操作体验正确。</p>`};export{e as default};
