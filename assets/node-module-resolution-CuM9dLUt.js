@@ -1,3 +1,0 @@
-var e={answerHtml:`<p><code>exports</code> 可以定义包的公开入口和子路径，并阻止消费者通过未声明的内部路径导入文件。它还支持条件导出，例如 <code>import</code>、<code>require</code>、<code>node</code> 和 <code>default</code>，但条件顺序和工具支持会影响最终解析结果。</p>
-<p>发布库时要同时考虑 ESM、CommonJS、类型声明、浏览器构建器和 Node 版本。不能只把 <code>main</code> 改成 <code>exports</code> 就认为兼容；应在目标环境分别测试入口、子路径、类型提示和打包结果。<code>imports</code> 主要用于包内部的私有映射，不等同于对外 API。</p>
-<p>封装内部文件有助于稳定 API，但也可能让旧的深层导入突然失败。升级前需要记录公开入口并提供迁移说明，避免把构建工具偶然能解析当成 Node 官方解析规则。</p>`};export{e as default};

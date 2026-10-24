@@ -1,3 +1,0 @@
-var e={answerHtml:`<p>Testing Library 倾向用用户可感知的角色、名称、标签和文本查询元素，例如 <code>getByRole</code>、<code>getByLabelText</code>。这样测试更接近真实使用，也能同时暴露缺少可访问名称的问题。</p>
-<p>查询优先级不是绝对规则：没有合适语义时可以使用文本、显示值或 <code>data-testid</code>。<code>data-testid</code> 应作为最后手段，不能把组件内部 class、DOM 层级或第三方实现细节当成稳定契约。</p>
-<p>断言要区分同步、异步和消失状态，异步内容使用 <code>findBy</code> 或等待工具，避免固定 sleep。测试失败时先检查真实用户是否能找到并操作该元素，而不是马上降低查询条件。</p>`};export{e as default};

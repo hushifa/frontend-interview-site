@@ -1,3 +1,0 @@
-var e={answerHtml:`<p><code>scheduler.postTask()</code> 可以把回调放入浏览器任务队列，并提示 <code>user-blocking</code>、<code>user-visible</code> 或 <code>background</code> 等优先级；还可以通过 <code>AbortSignal</code> 取消尚未执行的任务。</p>
-<p>优先级只是浏览器调度提示，不会把一个同步长任务拆开。耗时计算仍需拆分、延迟、Worker 或算法优化；大量高优先级任务会挤压渲染和输入响应。</p>
-<p>该 API 支持情况和调度细节需要按目标浏览器验证。没有支持时应降级到 <code>setTimeout</code> 或其他调度方式，并保持任务可取消、幂等和生命周期明确。</p>`};export{e as default};

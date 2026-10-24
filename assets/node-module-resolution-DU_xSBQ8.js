@@ -1,0 +1,6 @@
+var e={answerHtml:`<p><code>exports</code> 可以定义包的公开入口和子路径，并阻止消费者通过未声明的内部路径导入文件。它还支持条件导出，例如 <code>import</code>、<code>require</code>、<code>node</code> 和 <code>default</code>，但条件顺序和工具支持会影响最终解析结果。</p>
+<p>发布库时要同时考虑 ESM、CommonJS、类型声明、浏览器构建器和 Node 版本。不能只把 <code>main</code> 改成 <code>exports</code> 就认为兼容；应在目标环境分别测试入口、子路径、类型提示和打包结果。<code>imports</code> 主要用于包内部的私有映射，不等同于对外 API。</p>
+<p>封装内部文件有助于稳定 API，但也可能让旧的深层导入突然失败。升级前需要记录公开入口并提供迁移说明，避免把构建工具偶然能解析当成 Node 官方解析规则。</p>
+<h3>服务端边界</h3>
+<p>Node.js 代码比浏览器拥有更广的文件、网络和进程权限。处理请求时要限制请求体、并发、超时和连接生命周期，并对路径、命令参数、Header 和环境变量做输入校验。</p>
+<p>CPU 密集任务、流式响应和上游重试会影响整个进程的资源。BFF 可以整理接口和会话，但不能替代业务服务的认证、授权、幂等和审计。</p>`};export{e as default};

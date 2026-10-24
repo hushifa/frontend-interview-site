@@ -1,3 +1,0 @@
-var e={answerHtml:`<p><code>inputmode</code> 是给浏览器的键盘布局提示，例如 <code>numeric</code>、<code>decimal</code>、<code>email</code> 和 <code>url</code>。它不会改变输入值类型，也不会替代 <code>pattern</code>、服务端校验或表单语义。</p>
-<p>需要数字键盘不等于只能输入数字；验证码、负数、小数和国际电话号码的规则不同。应根据真实格式选择 <code>type</code>、<code>inputmode</code>、autocomplete 和校验策略，避免为了键盘方便把字段声明成错误类型。</p>
-<p>不同平台显示的键盘可能不同，用户仍可能粘贴或输入其他字符。移动端输入体验要结合错误提示、焦点滚动和可访问标签测试。</p>`};export{e as default};

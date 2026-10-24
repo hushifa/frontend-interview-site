@@ -1,3 +1,0 @@
-var e={answerHtml:`<p>RTL 支持应从文档或应用根节点的 <code>dir=&quot;rtl&quot;</code> 开始，让浏览器和辅助技术理解阅读方向。布局中优先使用 <code>margin-inline-start</code>、<code>padding-inline-end</code>、<code>inset-inline-start</code> 等逻辑属性，而不是把 left/right 字符串全局替换。</p>
-<p>图标、箭头、时间线和数字不一定都要镜像。需要根据语义判断：返回箭头通常随阅读方向变化，播放按钮或品牌标志可能保持方向。混合语言和代码还要使用合适的 <code>dir=&quot;auto&quot;</code> 或局部覆盖。</p>
-<p>测试要覆盖文本长度、换行、表格、弹窗、键盘顺序和图标方向。RTL 不是单纯的 CSS 主题，翻译、日期数字格式和组件交互都需要一起验证。</p>`};export{e as default};

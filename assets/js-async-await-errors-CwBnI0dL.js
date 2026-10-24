@@ -1,3 +1,0 @@
-var e={answerHtml:`<p>async 函数始终返回 Promise。await 暂停的是当前异步函数后续逻辑，不会阻塞整个线程；等待的 Promise 拒绝时，会在 await 位置抛出异常，可由 try/catch 处理。</p>
-<p>彼此独立的任务若逐个 await，会意外串行化。可以先创建多个任务，再使用 Promise.all 等组合；但有速率或资源限制时需要并发池。异常处理要区分可恢复业务错误、取消、网络失败与程序缺陷，避免一律吞掉。</p>
-<p>在 try 中需要捕获被返回 Promise 的拒绝时，return await 与直接 return Promise 的错误传播位置不同。finally 中的 return 或 throw 会覆盖先前结果，应尽量避免。对无法取消的 Promise，仅停止等待不代表任务已经停止。</p>`};export{e as default};

@@ -1,3 +1,0 @@
-var e={answerHtml:`<p><code>resolveId</code> 负责把导入字符串解析成模块 ID，适合处理别名或虚拟模块；<code>load</code> 根据 ID 提供模块内容；<code>transform</code> 对已加载的源码进行转换。虚拟模块通常需要区分用户可见 ID 与内部使用的唯一 ID，避免与真实文件冲突。</p>
-<p>开发服务器还可以通过 <code>configureServer</code> 添加中间件、监听文件和触发更新，但这部分能力不等同于生产构建钩子。插件要分别考虑 dev、build、SSR 和 watch 模式，不能只在一个命令下工作就算完成。</p>
-<p>转换插件应保留 source map、限制匹配范围，并避免重复转换或把用户输入直接拼进 JavaScript。插件之间有顺序关系，必要时使用明确的 enforce 配置和测试项目验证。</p>`};export{e as default};

@@ -1,3 +1,0 @@
-var e={answerHtml:`<p>动态内容不会因为视觉上更新就自动被屏幕阅读器及时感知。<code>aria-live=&quot;polite&quot;</code> 适合排队播报的普通状态，例如搜索结果数量；紧急且需要立即打断时才考虑 <code>assertive</code>。<code>role=&quot;status&quot;</code> 和 <code>role=&quot;alert&quot;</code> 也有默认的播报语义，不能为了保险全部叠加。</p>
-<p>更新区域时，应让文本变化本身可被检测，避免每次渲染都重复播报相同内容。消息要短、明确，并说明发生了什么；错误信息还要与相关控件建立关系。不要把整张结果列表放进高优先级 live region，否则用户会被大量内容打断。</p>
-<p>不同屏幕阅读器和浏览器组合的细节可能不同，关键流程仍需要真实辅助技术测试。动态播报不能替代视觉状态、焦点移动和可操作的错误修复入口。</p>`};export{e as default};
