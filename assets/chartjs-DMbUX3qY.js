@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合常规统计图和报表。框架封装需独立选择，图表实例生命周期与高数据量场景要实测。</p>`};export{e as default};

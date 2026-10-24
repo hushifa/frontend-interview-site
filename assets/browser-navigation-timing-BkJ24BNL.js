@@ -1,5 +1,0 @@
-var e={answerHtml:`<p><code>PerformanceNavigationTiming</code> 提供一次导航的时间戳，例如 <code>domainLookupStart/End</code>、<code>connectStart/End</code>、<code>requestStart</code>、<code>responseStart</code>、<code>responseEnd</code>、<code>domContentLoadedEventEnd</code> 和 <code>loadEventEnd</code>。它可以帮助判断时间主要消耗在 DNS、连接、服务端首字节、下载还是页面脚本执行。</p>
-<p>这些时间点描述浏览器事件，不等价于用户已经能顺畅使用页面。<code>load</code> 只表示页面依赖资源达到相应加载状态；大型脚本、长任务、字体替换和异步数据仍可能影响交互。要分析真实体验，还要结合 LCP、INP、CLS、Long Tasks 和业务可用信号。</p>
-<p>跨页面、刷新、bfcache 恢复和 SPA 路由切换的观测方式也不同。采集时要处理没有某些条目、时间戳为零和隐私限制，不要把单个用户的一次测量当成整体结论。</p>
-<h3>复习提示</h3>
-<p>回答时沿着页面生命周期、事件循环、渲染和存储边界说明过程。浏览器 API 的支持情况要结合特性检测和目标版本验证，不能只凭开发机现象下结论。建议用一个最小示例验证“Navigation Timing、性能诊断、页面加载”，再比较正常路径、失败路径和目标运行环境的差异。</p>`};export{e as default};

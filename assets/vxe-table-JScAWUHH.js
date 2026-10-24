@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合复杂 Vue 业务表格。不同主版本、配套包及扩展插件的能力和条款需单独核对。</p>`};export{e as default};
