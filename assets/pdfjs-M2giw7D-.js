@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合嵌入 PDF 阅读或预览。Worker、字体和资源路径需要正确配置，复杂文档还要关注内存与渲染耗时；它不是通用 PDF 编辑器。</p>`};export{e as default};

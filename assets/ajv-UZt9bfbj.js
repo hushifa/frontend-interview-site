@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合已有 JSON Schema 契约的系统。必须选择匹配的规范版本并检查格式校验配置，Schema 本身也应来自可信来源。</p>`};export{e as default};

@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合细粒度共享状态。需要设计 atom 的生命周期和依赖，SSR 或多应用场景要明确 Store 的隔离范围。</p>`};export{e as default};

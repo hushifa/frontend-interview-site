@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合 Vue 3 管理界面和常规业务系统。与面向 Vue 2 的 Element UI 区分，按项目需求配置样式、语言和按需引入。</p>`};export{e as default};

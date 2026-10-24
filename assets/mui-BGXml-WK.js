@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合采用 Material 风格的产品。本条仅收录 MIT 许可的 Material UI 开源组件；MUI X 的高级组件等独立产品不在收录范围。主题、国际化和实际打包体积需按项目评估。</p>`};export{e as default};

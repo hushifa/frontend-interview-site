@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合需要完整应用框架的项目。学习资料与项目版本要配套，升级前检查官方迁移说明。</p>`};export{e as default};

@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合只渲染可视区附近项目的场景。行高测量、滚动定位、焦点及无障碍需要结合具体界面设计。</p>`};export{e as default};

@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合 Vue 单页应用的路由匹配和导航管理。History 模式需要托管层配合回退规则，导航守卫不能代替服务端鉴权。</p>`};export{e as default};

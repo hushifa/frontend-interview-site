@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合使用 GraphQL 的 React 应用。规范化缓存标识、分页合并和失效策略需要业务设计，不能假定修改后所有列表都会自动正确同步。</p>`};export{e as default};

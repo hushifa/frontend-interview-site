@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合以 Web 技术构建应用体验。Ionic UI 与 Capacitor 的原生运行及插件能力分工不同，仍需处理平台样式和交互差异。</p>`};export{e as default};

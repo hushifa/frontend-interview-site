@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合需要轻量 Store 的 React 应用，也有独立于 React 的 Store API。订阅选择器、持久化和 SSR 使用方式需要按场景配置。</p>`};export{e as default};

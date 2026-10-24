@@ -1,0 +1,2 @@
+var e={notesHtml:`<p>适合在 Vite 构建流程中配置 manifest、Service Worker 和 Workbox 集成。缓存策略、版本更新、离线失败和敏感响应仍需要项目自行设计，插件不会自动保证离线体验正确。</p>
+<p>本条仅收录 vite-plugin-pwa 开源代码本体，npm 元数据标记为 MIT；不包含托管服务、推送平台或商业扩展。</p>`};export{e as default};

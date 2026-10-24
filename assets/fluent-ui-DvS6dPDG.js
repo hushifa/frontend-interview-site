@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合采用 Fluent 视觉与交互规范的应用。本条指向 react-components 包，历史包和不同代际的接口并不相同。</p>`};export{e as default};

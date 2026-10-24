@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合从组件设计开始学习，再按需查阅 API。框架集成、服务端能力和编译工具的可用性应分别核对。</p>`};export{e as default};

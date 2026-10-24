@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合需要明确时区与区间语义的日期处理。运行环境的 Intl 支持和业务的夏令时边界仍需验证。</p>`};export{e as default};

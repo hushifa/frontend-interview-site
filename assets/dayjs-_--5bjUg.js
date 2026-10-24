@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合熟悉链式日期接口的项目。部分能力需显式安装插件，时区转换与解析规则应实际测试。</p>`};export{e as default};

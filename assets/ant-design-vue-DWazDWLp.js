@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合希望在 Vue 项目中使用 Ant Design 风格的业务界面。它与 React 版是不同项目，API、版本和更新节奏要分别核对。</p>`};export{e as default};

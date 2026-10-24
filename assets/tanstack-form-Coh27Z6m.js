@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合希望自行组织表单 UI 的 React 应用。它与成品表单组件库分工不同，其他框架适配需查对应文档。</p>`};export{e as default};

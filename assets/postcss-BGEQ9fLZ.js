@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合在构建阶段进行 CSS 转换。PostCSS 本身不是一套固定的预处理语法，实际能力、顺序与兼容目标取决于安装的插件。</p>`};export{e as default};

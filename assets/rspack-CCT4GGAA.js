@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合评估构建性能或迁移已有工程。与 webpack 生态的兼容需要逐项核对，不能假定全部 Loader、插件和配置都可直接复用。</p>`};export{e as default};

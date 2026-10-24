@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合复用常见有状态逻辑。Hook 的依赖、清理和竞态语义各不相同，不能仅凭名称推断与原生 Hook 完全等价。</p>`};export{e as default};

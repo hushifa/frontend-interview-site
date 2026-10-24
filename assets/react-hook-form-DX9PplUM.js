@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合复杂输入和动态表单。集成受控 UI 组件时要理解适配方式，表单提交到服务端后仍需权威校验。</p>`};export{e as default};

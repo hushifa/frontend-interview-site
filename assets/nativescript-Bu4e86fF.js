@@ -1,0 +1,2 @@
+var e={notesHtml:`<p>适合希望用 JavaScript/TypeScript 访问原生移动 API、并接受平台构建和原生依赖管理的团队。它与 React Native、WebView 混合方案的渲染和调试模型不同，选型前要验证插件和目标系统支持。</p>
+<p>本条仅收录 NativeScript 开源工具本体，npm 元数据标记为 Apache-2.0；不包含商业模板、托管服务或付费插件。</p>`};export{e as default};

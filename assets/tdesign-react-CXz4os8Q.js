@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合需要统一交互与视觉规范的 React 业务界面。主题、按需引入和框架集成应按对应版本文档配置。</p>`};export{e as default};

@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合管理系统和数据密集界面。本条指向 React 版本，Vue 版本应查阅独立文档与发布包。</p>`};export{e as default};

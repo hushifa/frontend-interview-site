@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合端到端流程、跨浏览器和截图检查。稳定测试需要明确等待条件、受控数据和可重复环境。</p>`};export{e as default};

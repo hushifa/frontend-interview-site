@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合 Vue 表单和跨字段校验。本链接指向 v4 文档，实际项目需与安装版本配套，并处理异步校验的状态和竞态。</p>`};export{e as default};

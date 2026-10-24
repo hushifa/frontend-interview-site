@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合浏览器端结构化存储。本条仅收录 Dexie.js 开源本地数据库库，不包含 Dexie Cloud 托管服务。数据库迁移、配额、清理和同步需分别设计，本地保存不等于永久备份。</p>`};export{e as default};

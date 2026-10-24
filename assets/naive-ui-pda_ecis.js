@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合需要统一主题和类型支持的 Vue 3 应用。使用前核对组件能力与业务需求，主题配置方式与其他组件库不同。</p>`};export{e as default};

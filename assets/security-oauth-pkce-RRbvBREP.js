@@ -1,0 +1,3 @@
+var e={answerHtml:`<p>公共客户端（例如浏览器和移动应用）无法安全保存客户端密钥。PKCE 在授权开始时生成高熵 <code>code_verifier</code>，把它的哈希值作为 <code>code_challenge</code> 发给授权服务器；换取授权码时再提交原始 <code>code_verifier</code>。服务器只有在两者匹配时才发放令牌，从而降低授权码被拦截后被他人兑换的风险。</p>
+<p>前端还要使用不可预测的 <code>state</code> 防止请求关联被伪造，并严格校验回调地址、issuer、授权码和令牌的来源。PKCE 不会让浏览器成为可信客户端，也不能替代 HTTPS、正确的令牌存储策略、最小权限和服务端会话控制。</p>
+<p>具体授权服务器可能要求 <code>S256</code>、不同的回调方式或额外的同意流程。应按提供方文档实现并锁定配置，不能把“用了 PKCE”当成整套 OAuth 安全已经完成。</p>`};export{e as default};

@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合需要路由和多种渲染模式的 React 应用。App Router 与 Pages Router 的语义不同，缓存和部署能力需要按版本核对。</p>`};export{e as default};

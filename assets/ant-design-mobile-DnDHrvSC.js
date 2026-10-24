@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合触摸操作、移动表单和业务页面。它与桌面端 Ant Design 是不同的包，组件 API、样式和适配目标需要分别核对。</p>`};export{e as default};

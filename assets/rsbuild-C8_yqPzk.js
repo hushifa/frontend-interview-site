@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合希望减少底层构建配置的前端项目。与直接使用 Rspack 的抽象层次不同，框架支持和扩展方式由相应插件提供。</p>`};export{e as default};

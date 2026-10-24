@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合前端工程脚本、构建工具和 Node 服务开发。浏览器 API 与 Node API 不完全相同，应明确运行环境。</p>`};export{e as default};

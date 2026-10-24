@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合需要覆盖网页、小程序和应用等目标的项目。平台 API、组件与发布要求存在差异，需要条件编译和真机验证。</p>`};export{e as default};

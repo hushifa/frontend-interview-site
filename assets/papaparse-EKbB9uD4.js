@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合 CSV 导入导出。大文件要关注流式处理与 Worker，导出到电子表格时还需考虑公式注入和字段类型。</p>`};export{e as default};

@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合团队样式规范和错误检查。SCSS 等语法需要对应配置或插件，规则检查不替代浏览器中的布局验证。</p>`};export{e as default};

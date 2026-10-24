@@ -1,0 +1,3 @@
+var e={answerHtml:`<p><code>fetchpriority</code> 是给浏览器的相对优先级提示，不是强制调度命令。图片可以通过 <code>fetchpriority=&quot;high&quot;</code> 或 DOM 属性提示某张已在页面中发现的图片更重要，也可以用 <code>low</code> 降低非关键图片的竞争。</p>
+<p>它不能替代懒加载、响应式图片、正确的 HTML 顺序或 <code>preload</code>。如果资源根本没有被发现，单独设置优先级不会让它出现；如果把大量资源都标成高优先级，优先级差异也失去意义。不同浏览器和网络条件可能采用不同调度策略，因此必须用真实页面测量 LCP、请求开始时间和带宽竞争。</p>
+<p>对首屏主图，通常先确保图片尺寸、<code>srcset</code>、<code>sizes</code> 和加载时机合理，再考虑使用高优先级提示。非首屏图片应优先减少传输和延迟解码，而不是仅依赖低优先级属性。</p>`};export{e as default};

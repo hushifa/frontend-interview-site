@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合采用 Material 设计规范的 Angular 产品。Material 组件与 CDK 的职责不同，低层交互能力也可以单独评估 CDK。</p>`};export{e as default};

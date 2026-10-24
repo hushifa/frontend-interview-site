@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合移动端表单、弹层和商品类界面。移动网页组件不等于原生 App 控件，也需要实测触摸、软键盘和安全区域。</p>`};export{e as default};

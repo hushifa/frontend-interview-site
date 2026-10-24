@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合需要自定义样式的菜单、对话框和选择控件。React 与 Vue 的接口及支持范围应分别核对，不能直接复用另一框架的示例。</p>`};export{e as default};

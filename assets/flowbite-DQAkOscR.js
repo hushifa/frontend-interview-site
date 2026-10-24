@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>本条仅收录 MIT 许可的开源组件，不包含 Pro 模板或其他商业设计资源。适合 Tailwind 项目，核心库与各框架适配的初始化方式需要分别核对。</p>`};export{e as default};

@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合需要灵活扩展 GraphQL 数据层的项目。本条对应 React 使用入口，核心与其他框架适配包要分别核对。</p>`};export{e as default};

@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合用原生 CSS 搭建间距、色彩和动效规范。它提供样式变量与相关资源，不是完整的交互组件库。</p>`};export{e as default};

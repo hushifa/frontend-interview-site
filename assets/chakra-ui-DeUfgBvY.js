@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合快速组织应用界面并维护主题。不同主版本的组件 API 和主题方式可能变化，应按当前项目版本查阅文档。</p>`};export{e as default};

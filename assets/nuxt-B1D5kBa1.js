@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合基于 Vue 组织完整应用。选择模块时检查 Nuxt 主版本支持情况，静态生成与服务端部署也有不同约束。</p>`};export{e as default};

@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合需要插件和渲染规则控制的 Markdown 流程。输出 HTML 的使用位置需要安全处理，尤其不要对不可信内容随意开启原始 HTML。</p>`};export{e as default};

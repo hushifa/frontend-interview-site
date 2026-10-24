@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合学习 Vue 3 应用开发与组件设计。不要直接把 Vue 2 的插件和 API 经验套用到 Vue 3。</p>`};export{e as default};

@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合复现成功、失败和边界数据场景。浏览器与 Node 集成方式不同，Mock 通过也不等于真实后端契约已验证。</p>`};export{e as default};

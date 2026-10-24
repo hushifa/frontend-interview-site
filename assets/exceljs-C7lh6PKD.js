@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合报表导入导出。浏览器与 Node 可用能力不同，不应默认库会像 Excel 一样计算所有公式；大文件需要测量内存占用。</p>`};export{e as default};

@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合仪表盘和业务数据展示。响应式尺寸、无障碍、数据量及实例销毁需要在应用中处理。</p>`};export{e as default};

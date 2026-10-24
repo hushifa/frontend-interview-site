@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合跨组件共享状态。服务端渲染时要注意请求隔离，持久化和敏感数据存储也需单独设计。</p>`};export{e as default};

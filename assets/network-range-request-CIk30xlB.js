@@ -1,0 +1,3 @@
+var e={answerHtml:`<p>客户端可以用 <code>Range: bytes=起始-结束</code> 请求资源的一部分。服务端支持时通常返回 <code>206 Partial Content</code>，并在 <code>Content-Range</code> 中说明实际范围和完整大小；不支持或不接受范围时可能返回完整内容，具体行为由服务端决定。</p>
+<p>它适合大文件的分段读取、音视频按需加载和中断后续传。客户端要校验响应状态、<code>Content-Range</code>、<code>Content-Length</code> 和文件标识，不能只把多个响应简单拼接。并发分片还需要控制总连接数、处理失败重试和服务端是否支持合并。</p>
+<p>Range 不是安全边界。服务端仍然要校验权限、资源范围和请求频率；把任意用户输入直接拼进文件路径会产生路径穿越等问题。跨域读取时还需要服务端正确配置 CORS 和暴露必要响应头。</p>`};export{e as default};

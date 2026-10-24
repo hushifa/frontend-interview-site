@@ -1,0 +1,2 @@
+var e={notesHtml:`<p>适合需要 Fluent Design 风格、主题切换和可访问交互组件的 React 应用。使用前先确认组件版本、样式方案和项目是否需要与微软产品视觉保持一致。</p>
+<p>本条仅收录 Fluent UI 的开源 React 组件代码，npm 元数据标记为 MIT；不包含任何商业设计服务、托管平台或其他产品授权。</p>`};export{e as default};

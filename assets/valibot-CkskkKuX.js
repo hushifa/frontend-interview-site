@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合希望按需组合校验能力的 TypeScript 项目。评估转换、异步校验与生态适配是否满足现有业务。</p>`};export{e as default};

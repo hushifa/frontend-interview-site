@@ -1,0 +1,2 @@
+var e={notesHtml:`<p>适合把复杂的 <code>if</code>/<code>switch</code> 分支写成可组合的模式匹配，并利用 TypeScript 检查未覆盖的联合分支。它不会替代运行时数据校验，来自网络或用户的对象仍需先验证结构。</p>
+<p>本条仅收录 ts-pattern 开源代码本体，npm 元数据标记为 MIT；不包含收费扩展、托管服务或商业支持。</p>`};export{e as default};

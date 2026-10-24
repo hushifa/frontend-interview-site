@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合已有 webpack 工程或需要其生态能力的项目。构建速度与输出结果取决于依赖、配置和插件，需要实际分析。</p>`};export{e as default};

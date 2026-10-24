@@ -1,0 +1,2 @@
+var e={notesHtml:`<p>适合前后端都使用 TypeScript、希望从服务端过程推导客户端输入输出的项目。它不是 HTTP 协议替代品，部署、鉴权、错误格式、缓存和版本兼容仍由应用负责。</p>
+<p>本条仅收录 tRPC 开源代码本体，<code>@trpc/server</code> npm 元数据标记为 MIT；不包含任何托管服务或商业支持。</p>`};export{e as default};

@@ -1,0 +1,1 @@
+var e={notesHtml:`<p>适合 Vue 业务系统。本条与 React 版单独收录，框架支持、功能和维护状态应查各自文档，不能直接套用另一版本示例。</p>`};export{e as default};
