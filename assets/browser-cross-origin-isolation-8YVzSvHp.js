@@ -1,6 +1,0 @@
-var e={answerHtml:`<p>跨源隔离用于收紧文档与其他来源的共享关系，为 SharedArrayBuffer 等能力提供环境条件。常见部署组合是 COOP: same-origin，以及 COEP: require-corp 或 credentialless，还需满足安全上下文和相关 Permissions Policy 等要求。</p>
-<p>部署时应通过 window.crossOriginIsolated 检查实际结果，并测试所有跨源资源和弹窗流程。COEP 可能使没有合适授权的资源加载失败，COOP 可能改变跨源弹窗与 opener 的关系，不能只添加响应头后就视为迁移完成。</p>
-<p>这些机制不等于允许任意跨源读取，也不替代 CORS、输入校验或 XSS 防护。静态托管平台是否能配置相应响应头同样是实施前提，不能仅靠前端变量把页面切换成隔离环境。</p>
-<h3>排查路径</h3>
-<p>浏览器问题通常同时涉及页面生命周期、事件循环、渲染调度和资源状态。排查时先记录触发顺序和页面可见性，再用 Performance、Network 或对应的 Application 面板确认事实，不要只根据某一次 console 输出推断机制。</p>
-<p>跨浏览器或跨页面场景要考虑特性检测、恢复路径和清理时机。只在首次加载事件里写逻辑，往往会漏掉回退、前进、恢复和后台切换等状态。</p>`};export{e as default};

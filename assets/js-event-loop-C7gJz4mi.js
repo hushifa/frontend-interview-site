@@ -1,0 +1,11 @@
+var e={answerHtml:`<p>浏览器一次只会执行一个 JavaScript 任务。脚本、定时器回调、用户输入和网络事件的回调都可能成为任务；当前任务里的同步代码执行完以后，浏览器会进入微任务检查点，把微任务队列清空，再决定是否有机会更新页面，之后才会处理下一个任务。</p>
+<p>Promise 的 <code>then</code>、<code>catch</code>、<code>finally</code> 回调和 <code>queueMicrotask</code> 都会进入微任务队列。微任务按照进入队列的顺序执行，而且一个微任务执行过程中新增的微任务，也会在离开这个检查点之前继续执行。因此，微任务递归过多会一直占用主线程，让渲染和用户输入迟迟得不到机会。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;A&quot;</span>);
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;B&quot;</span>), <span class="hljs-number">0</span>);
+<span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;C&quot;</span>));
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;D&quot;</span>);
+<span class="hljs-comment">// 输出顺序：A → D → C → B</span>
+</code></pre></div>
+<p>这段代码先在同一个任务里执行 <code>A</code>，注册定时器和 Promise 回调，再同步输出 <code>D</code>。当前任务结束后，Promise 回调已经在微任务队列中，所以先输出 <code>C</code>；定时器回调要等到后续任务才有机会执行，最后输出 <code>B</code>。<code>setTimeout(fn, 0)</code> 的含义是满足调度条件后尽快安排一个任务，并不保证它能立刻执行。</p>
+<p>微任务和渲染之间也不是“每执行一个微任务就绘制一次”。浏览器通常会在清空微任务后寻找渲染机会，但是否绘制、何时绘制由浏览器调度决定。需要把工作让给下一轮任务时，可以使用定时器等方式主动让出主线程；需要和下一帧视觉更新配合时，再考虑 <code>requestAnimationFrame</code>。两者都不能替代对实际长任务的测量。</p>
+<p>网络请求也不能简单归类为“Promise 会在后台执行”。网络完成后，浏览器先安排相应的事件或任务，Promise 的后续回调再以微任务形式继续执行。Node.js 还有自己的事件循环阶段和 <code>process.nextTick</code> 队列，面试时应明确是在浏览器还是 Node.js 中讨论，不能把两套调度顺序混成一条规则。</p>`};export{e as default};
