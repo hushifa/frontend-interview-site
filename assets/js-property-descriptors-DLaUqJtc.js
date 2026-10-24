@@ -1,0 +1,11 @@
+var e={answerHtml:`<p>对象的属性可以是数据属性，也可以是访问器属性。数据属性包含 value、writable；访问器属性包含 get、set；两类都可具有 enumerable 和 configurable。Object.defineProperty 未显式指定的布尔特性默认是 false。</p>
+<p>Object.preventExtensions 阻止新增属性；seal 还使已有属性不可配置；freeze 进一步使数据属性不可写。冻结是浅层的，嵌套对象仍可能变化；访问器属性的 getter 返回值也可能变化，setter 仍可被调用，Map 等内置集合的内部状态也不能仅靠 freeze 固定。</p>
+<p>TypeScript 的 readonly 是编译时约束，不能替代运行时冻结。需要不可变数据时，应明确采用结构共享、受控更新或冻结策略，并评估深冻结在循环引用和性能上的代价。</p>
+<h2>可运行示例</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> item = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">freeze</span>({ <span class="hljs-attr">nested</span>: { <span class="hljs-attr">count</span>: <span class="hljs-number">0</span> } });
+item.<span class="hljs-property">nested</span>.<span class="hljs-property">count</span> += <span class="hljs-number">1</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(item.<span class="hljs-property">nested</span>.<span class="hljs-property">count</span>);
+</code></pre></div>
+<p>输出依次为：1，说明冻结不会自动递归到嵌套对象。</p>
+<h3>复习提示</h3>
+<p>回答时先把同步执行、异步执行和数据变更分开，再用最小示例验证结果。需要比较方案时说明副作用、可读性和运行成本，不为了使用某个 API 牺牲代码清晰度。建议用一个最小示例验证“属性描述符、Object.freeze、不可变”，再比较正常路径、失败路径和目标运行环境的差异。</p>`};export{e as default};
