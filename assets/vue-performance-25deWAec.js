@@ -1,0 +1,75 @@
+var e={answerHtml:`<p>页面卡顿可能来自不同阶段：输入后执行了昂贵筛选，很多子组件收到变化的 prop，大量 DOM 需要布局，或者只是网络结果尚未到达。先用浏览器 Performance、Vue DevTools 等观察真实交互，再决定改哪一层。</p>
+<p>“少渲染几个组件”和“首屏少下载一些 JavaScript”也不是同一个优化。代码分割、静态生成和 SSR 可以改善交付路径，但不能自动解决每次输入时的长任务。</p>
+<h3>让子组件只接收真正变化的值</h3>
+<p>列表行如果每行都接收 activeId，那么选中项改变时，所有行都看到这个 prop 改变。可以由父级先算出每行自己的 active，再传给子组件：</p>
+<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;!-- TopicRow.vue --&gt;
+&lt;script setup&gt;
+import { onUpdated } from &#x27;vue&#x27;;
+const props = defineProps({ id: String, title: String, active: Boolean });
+const emit = defineEmits([&#x27;select&#x27;]);
+onUpdated(() =&gt; console.log(&#x27;更新行：&#x27;, props.id));
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;button type=&quot;button&quot; :aria-pressed=&quot;props.active&quot; @click=&quot;emit(&#x27;select&#x27;, props.id)&quot;&gt;
+    {{ props.title }}
+  &lt;/button&gt;
+&lt;/template&gt;
+</code></pre></div>
+<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;!-- Parent.vue --&gt;
+&lt;script setup&gt;
+import { ref } from &#x27;vue&#x27;;
+import TopicRow from &#x27;./TopicRow.vue&#x27;;
+const activeId = ref(&#x27;html&#x27;);
+const topics = [
+  { id: &#x27;html&#x27;, title: &#x27;HTML&#x27; },
+  { id: &#x27;css&#x27;, title: &#x27;CSS&#x27; },
+  { id: &#x27;vue&#x27;, title: &#x27;Vue&#x27; },
+];
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;ul&gt;
+    &lt;li v-for=&quot;topic in topics&quot; :key=&quot;topic.id&quot;&gt;
+      &lt;TopicRow :id=&quot;topic.id&quot; :title=&quot;topic.title&quot; :active=&quot;topic.id === activeId&quot;
+        @select=&quot;activeId = $event&quot; /&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/template&gt;
+</code></pre></div>
+<p>从 HTML 切换到 CSS 时，主要变化的是旧行的 active 从 true 变 false、新行从 false 变 true，其余行的相关 props 保持不变。日志可用于观察这个小例子，不应作为整个页面的性能基准。</p>
+<p>这不意味着父级无需遍历列表，也不意味着子组件永远不会因自己的响应式依赖而更新。它只是让父级传递的变化范围更符合业务事实。</p>
+<h3>减少重复计算与无意义的身份变化</h3>
+<p>筛选、排序和统计通常可以通过 computed 表达，而不是用多个 watch 维护重复结果。依赖不变时可复用计算，相关值变化时再更新。</p>
+<p>但每次计算都创建一个新对象或新数组，可能让下游看到新的身份，即使业务内容没变。Vue 的计算稳定性优化也需要结合实际返回值理解，不能假定所有内容相同的新对象都会自动被深度比较并跳过。</p>
+<p>频繁传递新配置对象、把整份大数据传给每个小组件，或让一个输入影响整页无关内容，都值得先检查。缩小依赖与组件更新范围，通常比到处添加缓存指令更容易保持正确。</p>
+<h3>浅层响应式必须配合清楚的更新约定</h3>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { nextTick, shallowRef, watchEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">const</span> rows = <span class="hljs-title function_">shallowRef</span>([{ <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;原内容&#x27;</span> }]);
+<span class="hljs-keyword">const</span> seen = [];
+<span class="hljs-keyword">const</span> stop = <span class="hljs-title function_">watchEffect</span>(<span class="hljs-function">() =&gt;</span> seen.<span class="hljs-title function_">push</span>(rows.<span class="hljs-property">value</span>[<span class="hljs-number">0</span>].<span class="hljs-property">title</span>));
+
+rows.<span class="hljs-property">value</span>[<span class="hljs-number">0</span>].<span class="hljs-property">title</span> = <span class="hljs-string">&#x27;直接改内部&#x27;</span>;
+<span class="hljs-keyword">await</span> <span class="hljs-title function_">nextTick</span>();
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(seen.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 原内容</span>
+
+rows.<span class="hljs-property">value</span> = [{ ...rows.<span class="hljs-property">value</span>[<span class="hljs-number">0</span>], <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;替换根值&#x27;</span> }];
+<span class="hljs-keyword">await</span> <span class="hljs-title function_">nextTick</span>();
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(seen.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 原内容,替换根值</span>
+<span class="hljs-title function_">stop</span>();
+</code></pre></div>
+<p>shallowRef 不会按深层响应式方式追踪内部对象修改，通常通过替换根值表达新版本。某些场景也可以显式通知，但必须由接口清楚规定，不能一边依赖深层修改一边期待浅层 API 自动发现。</p>
+<p>如果其他无关更新顺便重新读取了内部数据，界面可能偶尔显现出那次修改，这不表示它建立了正确的通知关系。浅层 API 适合按不可变方式管理的大结构或外部对象，不是一个加上就必然更快的开关。</p>
+<h3>大列表首先面对 DOM 规模</h3>
+<p>几万行即使每行只有很少计算，创建、布局、绘制和保留节点也会有成本。分页或虚拟列表可以减少同时存在的 DOM，但需要处理滚动位置、行高、焦点、键盘导航和动态内容。</p>
+<p>虚拟化还可能卸载不可见行，因此本地草稿不能只放在随时会消失的行组件里。需要按稳定 ID 保存在合适位置，并设计返回可见区时怎样恢复。</p>
+<p>稳定 key 能保持正确身份，但不能把一万个实际节点变成十个。更新身份和节点数量是不同问题。</p>
+<h3>v-once、v-memo 需要完整的正确性条件</h3>
+<p>v-once 适合真正只需要初始呈现的内容，后续相关状态变化不会按普通方式更新这段子树。v-memo 可以按依赖条件跳过一部分更新，但依赖必须包含决定这段内容需要变化的因素。</p>
+<p>如果为了少更新而漏掉标题、权限或其他真实依赖，就可能留下旧界面。它们适合测量后确认的局部优化，不应成为修复错误状态设计的默认办法。</p>
+<p>大型 v-for 场景还应按文档把指令与列表结构放在正确位置。只看某一次操作快了，不足以证明所有后续变化都仍然正确。</p>
+<h3>响应式之外还有很多成本</h3>
+<p>每帧交替读布局、改样式、再读布局，会造成同步布局压力；复杂阴影、大图片和动画也可能让绘制昂贵。网络瀑布、重复请求和过多依赖则需要数据层与构建层处理。</p>
+<p>组件隐藏后仍运行轮询、观察器和计时器，也会消耗资源。优化应包含卸载、停用与后台场景，而不是只测第一次看到页面的速度。</p>
+<p>最后建立可重复的交互场景，例如连续输入、切换选中项、滚动大列表或打开复杂面板，比较改动前后的耗时、内存与正确性。优化的结果应是用户更快得到正确反馈，而不是单纯让某个更新计数变小。</p>`};export{e as default};

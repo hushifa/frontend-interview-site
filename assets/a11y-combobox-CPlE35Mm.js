@@ -1,0 +1,95 @@
+var e={answerHtml:`<p>Combobox 让用户通过一个主要控件查看或输入当前值，并通过关联的弹层选择候选。它不一定是“可以打字的输入框”：有可编辑型，也有只能从选项中选择的 select-only 类型。</p>
+<p>如果需求只是从固定选项中选择，原生 select 往往最合适，不需要手工给它叠加一套 combobox ARIA。需要搜索建议、异步结果或复杂展示时，才更常使用自定义组合框。</p>
+<h2>先确定是哪一种交互，而不是先加 role</h2>
+<p>可编辑型可能允许任意文本，也可能只允许从固定结果中选值。允许任意文本时，“没有匹配项”不一定代表输入无效；只能选候选时，则必须区分“看起来输入了一个城市名”和“确实提交了合法城市 ID”。</p>
+<p>只选择型不提供普通文本编辑，但可以根据模式支持键入字符定位选项。它的空格、Home、End 等行为与可编辑输入框不同，不能把一套按键处理原样套在两种控件上。</p>
+<p>弹层也不只有 listbox，可以是 grid、tree 或 dialog。每种弹层有自己的交互模式；下面主要讨论最常见的可编辑输入框加单选 listbox，并明确采用“手动确认候选”的方式。</p>
+<h2>三份状态必须分开</h2>
+<p>假设用户原来选了上海，现在输入“北”，再按向下键移动到北京：</p>
+<ul>
+<li>输入文本是“北”，用于展示与过滤。</li>
+<li>活动选项是北京，用于当前键盘浏览和列表中的选中展示。</li>
+<li>最后确认的业务值仍可能是上海，直到用户按 Enter 或执行明确选择。</li>
+</ul>
+<p>列表中的 aria-selected 可以跟随活动候选，表示当前在弹层中选择浏览的建议；这不意味着业务表单已经正式提交了该值。</p>
+<p>如果所有状态只存成一个字符串，方向键移动就可能意外覆盖输入，Escape 无法恢复合理状态，异步返回还可能把过时选项当成用户的最终选择。</p>
+<h2>需要哪些语义关系</h2>
+<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;city-label&quot;</span> <span class="hljs-attr">for</span>=<span class="hljs-string">&quot;city-search&quot;</span>&gt;</span>城市<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+  <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;city-search&quot;</span>
+  <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span>
+  <span class="hljs-attr">role</span>=<span class="hljs-string">&quot;combobox&quot;</span>
+  <span class="hljs-attr">aria-autocomplete</span>=<span class="hljs-string">&quot;list&quot;</span>
+  <span class="hljs-attr">aria-expanded</span>=<span class="hljs-string">&quot;false&quot;</span>
+  <span class="hljs-attr">aria-controls</span>=<span class="hljs-string">&quot;city-options&quot;</span>
+  <span class="hljs-attr">autocomplete</span>=<span class="hljs-string">&quot;off&quot;</span>
+/&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">ul</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;city-options&quot;</span> <span class="hljs-attr">role</span>=<span class="hljs-string">&quot;listbox&quot;</span> <span class="hljs-attr">aria-labelledby</span>=<span class="hljs-string">&quot;city-label&quot;</span> <span class="hljs-attr">hidden</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;city-status&quot;</span> <span class="hljs-attr">role</span>=<span class="hljs-string">&quot;status&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+</code></pre></div>
+<p>label 提供名称，aria-expanded 反映真实展开状态，aria-controls 指向弹层，aria-autocomplete=list 表达候选列表与输入有关。HTML 的 autocomplete 与 ARIA 的 aria-autocomplete 不是同一个机制，前者不会替你实现候选列表。</p>
+<p>combobox 默认的弹层语义是 listbox。如果使用 grid、tree 或 dialog，需要把 aria-haspopup 设为相应类型；<code>aria-haspopup=&quot;true&quot;</code> 表示的不是“任意下拉都可以”，不能拿来代替正确弹层类型。</p>
+<p>选项需要 role=option、稳定且唯一的 ID，以及与视觉选中状态一致的 aria-selected。未展开时，应真正隐藏或移除不该被阅读和操作的弹层内容，不能只是把透明度调成 0。</p>
+<h2>键盘浏览时，DOM 焦点通常留在输入框</h2>
+<p>对于 listbox、grid、tree 这类组合框弹层，APG 模式通过 aria-activedescendant 表达活动后代，DOM 焦点仍保持在 combobox 上。这样用户可以继续输入和编辑，辅助技术则能获知当前候选。</p>
+<p>不要一边设置 aria-activedescendant，一边随意把实际焦点挪进 li，再另外写一套 Tab 路径。那会让输入光标、列表选择和辅助技术焦点失去一致关系。</p>
+<p>dialog 类型的弹层是不同情况，通常会把实际焦点移入对话框，并按对话框规则处理；它不能照搬 listbox 的活动后代模型。</p>
+<h2>手动确认候选的按键规则</h2>
+<table><thead><tr><th>操作</th><th>这类实现应明确的行为</th></tr></thead><tbody><tr><td>ArrowDown / ArrowUp</td><td>按模式打开列表或移动活动候选，并让候选保持可见</td></tr><tr><td>Enter</td><td>有活动候选时确认它、更新输入和业务值、关闭列表</td></tr><tr><td>Escape</td><td>关闭弹层，按预先约定保留输入或恢复值，不随意提交候选</td></tr><tr><td>Tab / Shift+Tab</td><td>离开组合框，不把每个普通候选都塞进 Tab 顺序</td></tr><tr><td>普通字符与编辑键</td><td>保留文本输入、光标移动、删除、选择等能力</td></tr></tbody></table>
+<p>候选首尾是否循环、按 Escape 是否清空、失焦是否接受自动候选，取决于所采用的具体模式。必须有一致、可预期的约定，不能让鼠标选择和键盘选择使用两套提交规则。</p>
+<p>对于可编辑输入框，不要无条件拦截空格、左右键、Home 或 End，它们通常还有文本编辑用途。中文等输入法组合过程中，Enter 可能是在确认候选文字，应检查 isComposing 等状态，避免同时提交城市。</p>
+<p>列表关闭或没有活动项时，Enter 也可能有原生表单提交语义。是否阻止它要按当前控件状态判断，不能给整个表单统一吞掉所有 Enter。</p>
+<h2>结果刷新后，不能留下悬空的活动项 ID</h2>
+<p>下面只演示中小型候选列表的 DOM 与 ARIA 状态同步，不是一套完整 Combobox。options 是不含禁用项的候选数组，使用唯一的字符串 id 和可见 label，调用者负责过滤、按键、指针与业务提交：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">renderCityOptions</span>(<span class="hljs-params">input, list, options, { open = <span class="hljs-literal">false</span>, activeId = <span class="hljs-literal">null</span> } = {}</span>) {
+  <span class="hljs-keyword">if</span> (!list.<span class="hljs-property">id</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;候选列表需要稳定的 ID&#x27;</span>);
+  <span class="hljs-keyword">const</span> ids = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>();
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> item <span class="hljs-keyword">of</span> options) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> item.<span class="hljs-property">id</span> !== <span class="hljs-string">&#x27;string&#x27;</span> || !item.<span class="hljs-property">id</span> || <span class="hljs-keyword">typeof</span> item.<span class="hljs-property">label</span> !== <span class="hljs-string">&#x27;string&#x27;</span> || ids.<span class="hljs-title function_">has</span>(item.<span class="hljs-property">id</span>)) {
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;候选需要唯一的字符串 ID 和文本标签&#x27;</span>);
+    }
+    ids.<span class="hljs-title function_">add</span>(item.<span class="hljs-property">id</span>);
+  }
+
+  <span class="hljs-keyword">const</span> expanded = <span class="hljs-title class_">Boolean</span>(open) &amp;&amp; options.<span class="hljs-property">length</span> &gt; <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">const</span> active = expanded ? options.<span class="hljs-title function_">find</span>(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> item.<span class="hljs-property">id</span> === activeId) : <span class="hljs-literal">undefined</span>;
+  <span class="hljs-keyword">const</span> fragment = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createDocumentFragment</span>();
+  <span class="hljs-keyword">let</span> activeElement;
+
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> item <span class="hljs-keyword">of</span> options) {
+    <span class="hljs-keyword">const</span> option = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;li&#x27;</span>);
+    option.<span class="hljs-property">id</span> = <span class="hljs-string">\`<span class="hljs-subst">\${list.id}</span>--<span class="hljs-subst">\${<span class="hljs-built_in">encodeURIComponent</span>(item.id)}</span>\`</span>;
+    option.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;role&#x27;</span>, <span class="hljs-string">&#x27;option&#x27;</span>);
+    option.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;aria-selected&#x27;</span>, <span class="hljs-title class_">String</span>(item === active));
+    option.<span class="hljs-property">textContent</span> = item.<span class="hljs-property">label</span>;
+    fragment.<span class="hljs-title function_">append</span>(option);
+    <span class="hljs-keyword">if</span> (item === active) activeElement = option;
+  }
+
+  input.<span class="hljs-title function_">removeAttribute</span>(<span class="hljs-string">&#x27;aria-activedescendant&#x27;</span>);
+  list.<span class="hljs-title function_">replaceChildren</span>(fragment);
+  list.<span class="hljs-property">hidden</span> = !expanded;
+  input.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;aria-controls&#x27;</span>, list.<span class="hljs-property">id</span>);
+  input.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;aria-expanded&#x27;</span>, <span class="hljs-title class_">String</span>(expanded));
+
+  <span class="hljs-keyword">if</span> (activeElement) {
+    input.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;aria-activedescendant&#x27;</span>, activeElement.<span class="hljs-property">id</span>);
+    activeElement.<span class="hljs-title function_">scrollIntoView</span>({ <span class="hljs-attr">block</span>: <span class="hljs-string">&#x27;nearest&#x27;</span> });
+  }
+  <span class="hljs-keyword">return</span> active?.<span class="hljs-property">id</span> ?? <span class="hljs-literal">null</span>;
+}
+</code></pre></div>
+<p>过滤结果不再包含旧活动 ID 时，返回 null，清除相应属性，不会继续指向已经删除的节点。关闭时也会清除活动后代并隐藏列表。调用者应把返回值同步回自己的活动状态，避免内部状态与 DOM 各说各话。</p>
+<p>这段代码没有移动输入焦点，也没有偷偷把第一个结果当成已提交值。显示文本使用 textContent，候选不能因为来自接口就直接作为 HTML 注入。</p>
+<p>ARIA 不会自动绘制高亮，还需让视觉样式与状态一致，例如：</p>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-attr">[role=<span class="hljs-string">&quot;option&quot;</span>]</span><span class="hljs-selector-attr">[aria-selected=<span class="hljs-string">&quot;true&quot;</span>]</span> {
+  <span class="hljs-attribute">color</span>: <span class="hljs-number">#1e3a8a</span>;
+  <span class="hljs-attribute">background</span>: <span class="hljs-number">#e0e7ff</span>;
+}
+</code></pre></div>
+<p>重建整个列表不适合所有大数据场景；虚拟列表需要额外保证活动选项仍有正确的 DOM 与可访问性信息，不能滚动后把 aria-activedescendant 指向的节点卸载掉。</p>
+<h2>异步、无结果和指针操作也属于控件行为</h2>
+<p>请求应关联当前查询条件，并取消或忽略过期结果。用户输入“北京”后，较慢的“北”请求返回，不应把旧候选覆盖回来，更不能让 Enter 确认它。</p>
+<p>加载中、没有匹配项和请求失败可以用简短状态区域通知；这些状态通常不是可选择的真实 option，不要给“正在加载”一个可被 Enter 提交的业务 ID。</p>
+<p>鼠标点击、触摸选择、滚动列表和输入框失焦之间的顺序也要测试。粗暴地在 blur 时立刻销毁列表，可能让随后到达的选项 click 失效；为了保留焦点而阻止所有 pointerdown，又可能破坏滚动和其他手势。成熟组件库通常更适合处理这些细节。</p>
+<p>最终应验证输入、方向键浏览、确认、取消、Tab 离开、输入法、触摸和异步竞态，并用真实读屏确认名称、展开状态和活动项。属性检查与上面这个同步函数只能覆盖其中一部分，不能据此把完整组合框判定为可用。</p>`};export{e as default};

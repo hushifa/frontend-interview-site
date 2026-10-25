@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="TypeScript面试题：比较对象建模、联合类型、扩展与声明合并。" />
+    <meta name="description" content="TypeScript面试题：interface 和类型别名都能描述对象契约，主要差别在于可表达的类型形式、声明合并与组合方式。扩展冲突、联合关系和公共 API 的开放性，比简单规定“对象只准用某一种”更值得关注。" />
     <title>type 和 interface 有哪些区别？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/ts-interface-type/" />
     <meta name="robots" content="index,follow" />
@@ -19,23 +19,91 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="type 和 interface 有哪些区别？ · 前端知库" />
-    <meta property="og:description" content="TypeScript面试题：比较对象建模、联合类型、扩展与声明合并。" />
+    <meta property="og:description" content="TypeScript面试题：interface 和类型别名都能描述对象契约，主要差别在于可表达的类型形式、声明合并与组合方式。扩展冲突、联合关系和公共 API 的开放性，比简单规定“对象只准用某一种”更值得关注。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/ts-interface-type/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-interface-type/#webpage","url":"https://fe.hushifa.top/questions/ts-interface-type/","name":"type 和 interface 有哪些区别？ · 前端知库","description":"TypeScript面试题：比较对象建模、联合类型、扩展与声明合并。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-interface-type/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-interface-type/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"type 和 interface 有哪些区别？","item":"https://fe.hushifa.top/questions/ts-interface-type/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-interface-type/#webpage","url":"https://fe.hushifa.top/questions/ts-interface-type/","name":"type 和 interface 有哪些区别？ · 前端知库","description":"TypeScript面试题：interface 和类型别名都能描述对象契约，主要差别在于可表达的类型形式、声明合并与组合方式。扩展冲突、联合关系和公共 API 的开放性，比简单规定“对象只准用某一种”更值得关注。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-interface-type/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-interface-type/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"type 和 interface 有哪些区别？","item":"https://fe.hushifa.top/questions/ts-interface-type/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-Dbk-gXeC.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-BCtqzlRM.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">type 和 interface 有哪些区别？</span></nav><h1 tabindex="-1">type 和 interface 有哪些区别？</h1><p class="reading-summary">比较对象建模、联合类型、扩展与声明合并。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p><code>interface</code> 和 <code>type</code> 都能描述对象结构。<code>interface</code> 支持声明合并，可通过 <code>extends</code> 扩展；类型别名可以描述联合类型、元组、原始类型别名以及映射类型等。</p>
-<p>TypeScript 的类型检查发生在编译期，运行时仍然执行生成的 JavaScript；类型声明不会自动校验接口返回值、用户输入或第三方数据。回答类型题时应明确哪些保证来自编译器，哪些需要运行时校验或测试补上。</p>
-<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">User</span> { <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span> }
-<span class="hljs-keyword">interface</span> <span class="hljs-title class_">Admin</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">User</span> { <span class="hljs-attr">role</span>: <span class="hljs-string">&quot;admin&quot;</span> }
-<span class="hljs-keyword">type</span> <span class="hljs-title class_">Result</span> = { <span class="hljs-attr">ok</span>: <span class="hljs-literal">true</span>; <span class="hljs-attr">value</span>: <span class="hljs-title class_">User</span> }
-  | { <span class="hljs-attr">ok</span>: <span class="hljs-literal">false</span>; <span class="hljs-attr">error</span>: <span class="hljs-built_in">string</span> };
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">type 和 interface 有哪些区别？</span></nav><h1 tabindex="-1">type 和 interface 有哪些区别？</h1><p class="reading-summary">interface 和类型别名都能描述对象契约，主要差别在于可表达的类型形式、声明合并与组合方式。扩展冲突、联合关系和公共 API 的开放性，比简单规定“对象只准用某一种”更值得关注。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>描述一个包含姓名和年龄的对象时，interface 与 type 往往都能胜任。它们都参与 TypeScript 的结构类型检查，不会因为名字不同，就让两个相同结构自动变成完全不兼容的类型。</p>
+<p>选择时主要看三件事：要表达的是普通对象还是联合等类型关系，是否允许后续声明扩展，以及希望组合发生冲突时怎样暴露问题。</p>
+<h3>对象结构和函数契约，两者都能描述</h3>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">User</span> {
+  <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">age</span>?: <span class="hljs-built_in">number</span>;
+}
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">UserRecord</span> = {
+  <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">age</span>?: <span class="hljs-built_in">number</span>;
+};
+
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">Formatter</span> {
+  (<span class="hljs-attr">value</span>: <span class="hljs-built_in">number</span>): <span class="hljs-built_in">string</span>;
+}
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">FormatFunction</span> = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">value</span>: <span class="hljs-built_in">number</span></span>) =&gt;</span> <span class="hljs-built_in">string</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">format</span>: <span class="hljs-title class_">Formatter</span> = <span class="hljs-function"><span class="hljs-params">value</span> =&gt;</span> value.<span class="hljs-title function_">toFixed</span>(<span class="hljs-number">2</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">format</span>(<span class="hljs-number">1</span>)); <span class="hljs-comment">// 1.00</span>
 </code></pre></div>
-<p>组合对象时，<code>extends</code> 与交叉类型遇到冲突属性的报错行为不同。公开且需要可扩展的对象契约可优先考虑接口；表达联合关系时使用类型别名更直接。团队一致性也很重要。</p>
-<p>公共类型还要考虑调用方的错误提示、类型推导速度、模块发布方式和版本兼容。复杂类型可以用类型测试验证，但不要为了表达一个简单约束引入难以维护的递归类型。</p>
-<p>在实际项目中，类型最容易在接口边界失效：后端返回、localStorage、URL 参数和第三方库都不是编译器可以直接信任的输入。把类型声明、运行时校验和错误处理放在同一条数据流上，类型才真正能降低维护成本。</p></div><div class="answer-bottom"><a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html" target="_blank" rel="noreferrer">TypeScript · Everyday Types<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+type+%E5%92%8C+interface+%E6%9C%89%E5%93%AA%E4%BA%9B%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Atype+%E5%92%8C+interface+%E6%9C%89%E5%93%AA%E4%BA%9B%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-interface-type%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-interface-type%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：type 和 interface 有哪些区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-unknown/">any、unknown 和 never 分别适合什么场景？</a></li><li><a href="/questions/ts-generics/">泛型解决了什么问题？如何约束泛型？</a></li><li><a href="/questions/ts-discriminated-union/">如何用可辨识联合避免不合理的状态组合？</a></li><li><a href="/questions/ts-narrowing/">TypeScript 怎样通过控制流缩小类型？</a></li></ul></nav></main></div></div>
+<p>interface 不只会列普通字段，也能描述调用签名等对象能力。类型别名描述对象同样可以有可选、只读属性和方法，不是只能给已有名字换一个别名。</p>
+<p>但是两者都不是运行时构造器。不能通过 new User 创建对象，也不能在运行时用 value instanceof User 检查它；这里的 User 只在类型层存在。</p>
+<h3>type 能直接表达联合、元组和原始类型别名</h3>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">UserId</span> = <span class="hljs-built_in">string</span>;
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Point</span> = <span class="hljs-keyword">readonly</span> [<span class="hljs-built_in">number</span>, <span class="hljs-built_in">number</span>];
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Result</span>&lt;T&gt; =
+  | { <span class="hljs-attr">ok</span>: <span class="hljs-literal">true</span>; <span class="hljs-attr">value</span>: T }
+  | { <span class="hljs-attr">ok</span>: <span class="hljs-literal">false</span>; <span class="hljs-attr">error</span>: <span class="hljs-built_in">string</span> };
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Nullable</span>&lt;T&gt; = T | <span class="hljs-literal">null</span>;
+</code></pre></div>
+<p>这些类型关系很适合用 type 表达。一个 interface 主要描述对象或可调用对象的结构，不能直接把自身定义成 <code>string | number</code> 这样的联合。</p>
+<p>UserId 只是 string 的别名，并不会因此获得运行时包装或自动的名义区分。若用户 ID 与订单 ID 都是字符串，光起两个不同别名不能防止它们混用，必要时需要品牌等额外建模方式。</p>
+<h3>interface 可以合并，同名类型别名不能重复打开</h3>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">ReadingOptions</span> {
+  <span class="hljs-attr">theme</span>: <span class="hljs-string">&#x27;light&#x27;</span> | <span class="hljs-string">&#x27;dark&#x27;</span>;
+}
+
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">ReadingOptions</span> {
+  <span class="hljs-attr">fontSize</span>: <span class="hljs-built_in">number</span>;
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">options</span>: <span class="hljs-title class_">ReadingOptions</span> = {
+  <span class="hljs-attr">theme</span>: <span class="hljs-string">&#x27;light&#x27;</span>,
+  <span class="hljs-attr">fontSize</span>: <span class="hljs-number">16</span>,
+};
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(options.<span class="hljs-property">fontSize</span>); <span class="hljs-comment">// 16</span>
+</code></pre></div>
+<p>两份同名接口声明在允许合并的同一声明空间中组成一个接口，调用方需要同时满足 theme 与 fontSize。库扩展、模块增补等场景可以利用这种开放性。</p>
+<p>合并并不是后声明覆盖前声明。若重复的普通属性类型不兼容，编译器会报错；方法等成员还有各自的重载合并规则。类型别名则不能通过再写一次同名 type 来追加字段。</p>
+<p>不希望无意扩展的内部类型可以采用类型别名，但这不代表类型别名描述的对象是“精确封闭对象”，也不会阻止结构兼容的值含有其他运行时字段。声明能否被重新打开，与对象能否携带额外属性，是两种问题。</p>
+<h3>extends 与交叉类型遇到冲突时不一样</h3>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">TextValue</span> {
+  <span class="hljs-attr">value</span>: <span class="hljs-built_in">string</span>;
+}
+
+<span class="hljs-comment">// @ts-expect-error 子接口不能把 value 改成不兼容的 number</span>
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">NumberValue</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">TextValue</span> {
+  <span class="hljs-attr">value</span>: <span class="hljs-built_in">number</span>;
+}
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">ImpossibleValue</span> = <span class="hljs-title class_">TextValue</span> &amp; { <span class="hljs-attr">value</span>: <span class="hljs-built_in">number</span> };
+
+<span class="hljs-comment">// @ts-expect-error value 同时满足 string 和 number，在这里成为 never</span>
+<span class="hljs-keyword">const</span> <span class="hljs-attr">impossible</span>: <span class="hljs-title class_">ImpossibleValue</span> = { <span class="hljs-attr">value</span>: <span class="hljs-number">1</span> };
+</code></pre></div>
+<p>接口 extends 会在扩展声明时指出冲突。交叉类型表示同时满足两边的约束，不是右边覆盖左边；这个例子中的 value 需要同时是 string 和 number，所以变成不可能的类型。</p>
+<p>有的交叉冲突会让某个属性成为 never，有的涉及判别字段的冲突可能使整个类型缩成 never，不能一概说“冲突时总会选一边”。应该检查真正组合出来的类型是否可构造。</p>
+<p>接口也可以扩展结构明确的对象类型别名，类型别名也可以通过交叉组合接口。它们不是两个完全隔离的类型世界。interface 不能随意 extends 一个成员不确定的联合，是因为它需要可明确描述的对象成员。</p>
+<h3>class implements 是检查，不是代码生成</h3>
+<p>一个类可以 implements 接口，也可以 implements 结构适合的对象类型别名。implements 要求实例满足契约，但不会替类生成字段、方法或自动继承实现。</p>
+<p>如果需要复用运行时代码，要使用真正的函数、组合或类继承；如果只是说明对象需要提供哪些能力，类型契约就足够。不要把 interface extends 和 class extends 当成同样的运行时机制。</p>
+<h3>项目中怎样形成稳定约定</h3>
+<p>对需要生态扩展或声明合并的公共对象契约，interface 通常更合适。对状态联合、元组、条件类型和类型变换，type 更直接。普通内部对象两者都可用，团队保持一致比为了细微语法差异来回改写更重要。</p>
+<p>组合非常复杂时，还应关注编译器错误信息和检查成本。给中间类型取清楚的名字、减少不必要的巨大交叉，往往比追求一句“某一种永远更快”有用。</p>
+<p>最终两者都只描述静态契约，不会过滤接口返回的数据，也不会在运行时验证字段。使用哪一种声明，不应改变对外部输入仍需检查的事实。</p></div><div class="answer-bottom"><a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html" target="_blank" rel="noreferrer">TypeScript · Everyday Types<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+type+%E5%92%8C+interface+%E6%9C%89%E5%93%AA%E4%BA%9B%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Atype+%E5%92%8C+interface+%E6%9C%89%E5%93%AA%E4%BA%9B%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-interface-type%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-interface-type%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：type 和 interface 有哪些区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-unknown/">any、unknown 和 never 分别适合什么场景？</a></li><li><a href="/questions/ts-generics/">泛型解决了什么问题？如何约束泛型？</a></li><li><a href="/questions/ts-discriminated-union/">如何用可辨识联合避免不合理的状态组合？</a></li><li><a href="/questions/ts-narrowing/">TypeScript 怎样通过控制流缩小类型？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

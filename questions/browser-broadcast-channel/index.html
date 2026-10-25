@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="浏览器原理面试题：使用 BroadcastChannel 在同源窗口、标签页和 Worker 之间广播消息，理解来源、生命周期和数据一致性边界。" />
+    <meta name="description" content="浏览器原理面试题：用草稿保存通知解释频道、结构化消息和清理，区分同源与存储分区，并说明广播的交付、顺序、账号边界及数据一致性限制。" />
     <title>BroadcastChannel 适合解决什么跨标签通信问题？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/browser-broadcast-channel/" />
     <meta name="robots" content="index,follow" />
@@ -19,19 +19,85 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="BroadcastChannel 适合解决什么跨标签通信问题？ · 前端知库" />
-    <meta property="og:description" content="浏览器原理面试题：使用 BroadcastChannel 在同源窗口、标签页和 Worker 之间广播消息，理解来源、生命周期和数据一致性边界。" />
+    <meta property="og:description" content="浏览器原理面试题：用草稿保存通知解释频道、结构化消息和清理，区分同源与存储分区，并说明广播的交付、顺序、账号边界及数据一致性限制。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/browser-broadcast-channel/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/browser-broadcast-channel/#webpage","url":"https://fe.hushifa.top/questions/browser-broadcast-channel/","name":"BroadcastChannel 适合解决什么跨标签通信问题？ · 前端知库","description":"浏览器原理面试题：使用 BroadcastChannel 在同源窗口、标签页和 Worker 之间广播消息，理解来源、生命周期和数据一致性边界。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/browser-broadcast-channel/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/browser-broadcast-channel/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"浏览器原理面试题","item":"https://fe.hushifa.top/topics/browser/"},{"@type":"ListItem","position":3,"name":"BroadcastChannel 适合解决什么跨标签通信问题？","item":"https://fe.hushifa.top/questions/browser-broadcast-channel/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/browser-broadcast-channel/#webpage","url":"https://fe.hushifa.top/questions/browser-broadcast-channel/","name":"BroadcastChannel 适合解决什么跨标签通信问题？ · 前端知库","description":"浏览器原理面试题：用草稿保存通知解释频道、结构化消息和清理，区分同源与存储分区，并说明广播的交付、顺序、账号边界及数据一致性限制。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/browser-broadcast-channel/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/browser-broadcast-channel/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"浏览器原理面试题","item":"https://fe.hushifa.top/topics/browser/"},{"@type":"ListItem","position":3,"name":"BroadcastChannel 适合解决什么跨标签通信问题？","item":"https://fe.hushifa.top/questions/browser-broadcast-channel/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-Dbk-gXeC.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-BCtqzlRM.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/browser/">浏览器原理面试题</a><span aria-hidden="true">/</span><span aria-current="page">BroadcastChannel 适合解决什么跨标签通信问题？</span></nav><h1 tabindex="-1">BroadcastChannel 适合解决什么跨标签通信问题？</h1><p class="reading-summary">使用 BroadcastChannel 在同源窗口、标签页和 Worker 之间广播消息，理解来源、生命周期和数据一致性边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p><code>BroadcastChannel</code> 让同源的窗口、标签页、iframe 和部分 Worker 通过频道名广播结构化消息。它适合通知其他标签刷新数据、同步登录状态变化或协调简单的 UI 状态。</p>
-<p>浏览器问题通常同时涉及页面生命周期、事件循环、渲染调度和资源状态。排查时先记录触发顺序和页面可见性，再用 Performance、Network 或对应的 Application 面板确认事实，不要只根据某一次 console 输出推断机制。</p>
-<p>它不是可靠消息队列，也不保证历史消息会被新打开的页面补收。发送者不会收到自己通过同一对象发出的消息；关闭频道后应停止监听，避免页面生命周期结束后保留对象引用。</p>
-<p>跨标签同步仍要处理消息乱序、重复、版本不兼容和同时修改。关键数据应以服务端或持久化存储为准，消息只作为“可能需要重新读取”的通知。</p>
-<p>跨浏览器或跨页面场景要考虑特性检测、恢复路径和清理时机。只在首次加载事件里写逻辑，往往会漏掉回退、前进、恢复和后台切换等状态。</p>
-<p>在实际项目中，页面不只有首次打开这一种生命周期。回退恢复、标签页切换、网络变化和窗口失焦都可能让旧状态重新出现；相关逻辑要能重复执行，也要能在页面销毁或状态过期时清理。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/BroadcastChannel" target="_blank" rel="noreferrer">MDN · BroadcastChannel<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+BroadcastChannel+%E9%80%82%E5%90%88%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E8%B7%A8%E6%A0%87%E7%AD%BE%E9%80%9A%E4%BF%A1%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ABroadcastChannel+%E9%80%82%E5%90%88%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E8%B7%A8%E6%A0%87%E7%AD%BE%E9%80%9A%E4%BF%A1%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Abrowser-broadcast-channel%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%90%86%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fbrowser-broadcast-channel%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：BroadcastChannel 适合解决什么跨标签通信问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/browser-render/">浏览器从 HTML 到页面显示，经历哪些主要步骤？</a></li><li><a href="/questions/browser-delegation/">事件委托是什么？target 和 currentTarget 有何区别？</a></li><li><a href="/questions/browser-storage/">Cookie、localStorage 和 sessionStorage 如何选择？</a></li><li><a href="/questions/browser-reflow/">什么是强制同步布局？如何避免布局抖动？</a></li></ul></nav></main></div></div>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/browser/">浏览器原理面试题</a><span aria-hidden="true">/</span><span aria-current="page">BroadcastChannel 适合解决什么跨标签通信问题？</span></nav><h1 tabindex="-1">BroadcastChannel 适合解决什么跨标签通信问题？</h1><p class="reading-summary">用草稿保存通知解释频道、结构化消息和清理，区分同源与存储分区，并说明广播的交付、顺序、账号边界及数据一致性限制。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>用户同时打开了两个笔记标签页，在其中一个页面修改标题后，希望另一个页面及时刷新列表。两个页面不一定保留彼此的窗口引用，也不适合靠每秒轮询检测本地变化。这时可以让它们加入同名 BroadcastChannel，保存成功后发送一个通知。</p>
+<p>BroadcastChannel 适合“有变化了，请重新检查”这样的跨上下文协作。它不保存历史、不自动确认收到，也不替你解决同时修改的数据冲突。</p>
+<h2>同名频道如何让页面互相发现</h2>
+<p>每个页面分别创建 <code>new BroadcastChannel(&#x27;某个频道名&#x27;)</code>。符合通信边界的其他对象加入同名频道后，可以收到发送的消息，不要求发送方持有它们的引用。</p>
+<p>同源是重要条件，但现代浏览器还可能按存储分区隔离通信。例如同一个小组件源分别嵌入两个不同的顶层站点中，即使 iframe 的 origin 相同，也不能假定它们与直接打开的小组件页面互通。应理解为同源且满足相应存储分区条件的上下文之间通信，而不是全浏览器按字符串频道名广播。</p>
+<p>页面、iframe 和支持该 API 的 Worker 可以参与。频道名不同，不会互相收到；不同浏览器配置、隐私会话和另一台设备也不是同一个广播空间。</p>
+<h2>一个用于通知草稿变化的小封装</h2>
+<p>这个示例只传草稿编号，接收者通过自己已有的数据访问层重新读取，不把整份草稿内容当成广播中的权威状态。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">createDraftChannel</span>(<span class="hljs-params">onChanged</span>) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> globalThis.<span class="hljs-property">BroadcastChannel</span> !== <span class="hljs-string">&#x27;function&#x27;</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;当前环境不支持 BroadcastChannel&#x27;</span>);
+  }
+
+  <span class="hljs-keyword">const</span> channel = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BroadcastChannel</span>(<span class="hljs-string">&#x27;frontend-drafts:v1&#x27;</span>);
+  <span class="hljs-keyword">let</span> closed = <span class="hljs-literal">false</span>;
+
+  channel.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;message&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> data = event.<span class="hljs-property">data</span>;
+    <span class="hljs-keyword">if</span> (
+      closed ||
+      !data ||
+      data.<span class="hljs-property">version</span> !== <span class="hljs-number">1</span> ||
+      data.<span class="hljs-property">type</span> !== <span class="hljs-string">&#x27;draft-saved&#x27;</span> ||
+      <span class="hljs-keyword">typeof</span> data.<span class="hljs-property">id</span> !== <span class="hljs-string">&#x27;string&#x27;</span> ||
+      data.<span class="hljs-property">id</span>.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>
+    ) {
+      <span class="hljs-keyword">return</span>;
+    }
+
+    <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>()
+      .<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+        <span class="hljs-keyword">if</span> (!closed) <span class="hljs-keyword">return</span> <span class="hljs-title function_">onChanged</span>(data.<span class="hljs-property">id</span>);
+      })
+      .<span class="hljs-title function_">catch</span>(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;刷新草稿失败&#x27;</span>, error));
+  });
+
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-title function_">notifySaved</span>(<span class="hljs-params">id</span>) {
+      <span class="hljs-keyword">if</span> (closed) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;频道已关闭&#x27;</span>);
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> id !== <span class="hljs-string">&#x27;string&#x27;</span> || id.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>) {
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;草稿编号不能为空&#x27;</span>);
+      }
+      channel.<span class="hljs-title function_">postMessage</span>({ <span class="hljs-attr">version</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;draft-saved&#x27;</span>, id });
+    },
+    <span class="hljs-title function_">close</span>(<span class="hljs-params"></span>) {
+      closed = <span class="hljs-literal">true</span>;
+      channel.<span class="hljs-title function_">close</span>();
+    },
+  };
+}
+</code></pre></div>
+<p>将真实的重新读取函数传给 onChanged，它可以返回 Promise。示例接住了处理失败，但不负责合并请求、解决旧结果覆盖或实现重试；这些取决于数据层的版本策略。</p>
+<p><strong>应在 IndexedDB 事务完成或服务端确认保存成功后，再调用 notifySaved。</strong> 如果刚发起写入就广播，接收页面可能先收到通知，却还读不到新值。</p>
+<p>当前页面本身也要更新自己的界面。同一个 BroadcastChannel 对象不会收到自己发送的消息；但同一页面若另建了第二个同名对象，第二个对象可以收到。因此不要把“发送对象不回收自己的消息”误解成“同一个标签页所有对象都不接收”。</p>
+<h2>传的是结构化消息，不是共享对象引用</h2>
+<p>消息使用结构化克隆，可传普通对象、数组等支持的数据类型，不需要先 JSON.stringify。接收者得到的是相应副本，修改它不会直接改变发送者的对象。</p>
+<p>函数、DOM 节点等不能这样发送，可能导致 DataCloneError。BroadcastChannel 的 postMessage 也没有像某些 Worker 通信接口那样的 transfer 列表参数，不应把大 ArrayBuffer 的广播当成零复制转移。</p>
+<p>对高频大数据，先考虑只通知 ID 或版本，然后按需要读取。给所有标签不断广播整张大表，会增加克隆、处理和内存成本，即使网络完全没有请求也可能拖慢页面。</p>
+<h2>没有回放，也没有业务上的“恰好一次”保证</h2>
+<p>新页面加入频道后，不会补收加入之前的历史通知。已关闭、离开页面或不符合交付条件的接收者，也不能被当成可靠消息队列的消费者。</p>
+<p>因此页面启动和恢复时应主动读取最新状态，广播只是缩短其他活跃页面发现变化的时间。收到通知也不等于读取成功，更不等于界面已经渲染；需要确认或补偿的业务，应另外设计协议。</p>
+<p>单个发送者的消息与多个发送者交错的业务更新，不能简单归并成同一个全局版本顺序。应用的重试、转发或重复订阅还可能造成重复处理，接收端应能去重或安全地重新读取。</p>
+<p>只用 Date.now 给消息打时间戳也不能可靠解决所有冲突：多个页面可能同时写入，时钟不提供完整的事务顺序。真正需要判断新旧时，应以持久化层或服务端定义的版本为准。</p>
+<h2>“请刷新”并不解决两个页面同时保存</h2>
+<p>如果两个页面都读到草稿 v3，各自编辑后写入，一个可能覆盖另一个。事后互相广播“保存了”，只能让它们知道当前状态变化，不能恢复被覆盖的内容。</p>
+<p>可以根据场景使用数据库事务、版本比较、冲突提示或服务端协同算法。涉及多个本地步骤的协调时可考虑 Web Locks，但所有参与者必须遵守同一协议。不要把“大家都能收到消息”当成已经有了互斥锁。</p>
+<p>重新读取也需要防止异步竞态：旧通知发起的读取结果如果晚于新通知返回，可能覆盖新界面。数据层可以使用版本检查、请求序号或取消过期读取等方式处理，而不是假定回调顺序等于请求完成顺序。</p>
+<h2>频道名和消息字段不是权限凭证</h2>
+<p>同一通信边界内的其他脚本也可能创建这个频道，知道一个特殊名称不等于经过身份认证。接收端应检查消息结构，敏感操作仍由应用权限和服务端验证负责，不能仅凭 <code>type: &#x27;signed-out&#x27;</code> 就推导服务器会话已经失效。</p>
+<p>多账号应用应按账号或工作空间管理频道生命周期，切换后关闭旧频道，防止旧会话通知污染新界面。消息里也不应广播长期密钥或不必要的敏感内容。</p>
+<p>组件销毁时调用 close，释放不再需要的连接。它会阻止后续收发，但不会自动取消 onChanged 已经开始的网络请求；这部分还需要数据层的清理逻辑。</p>
+<p>不支持时，可以在页面重新获得焦点或可见时刷新，必要时使用 storage 事件等较有限的通知方式。降级应准确保留业务功能，不要假装它们具有完全相同的消息与分区语义。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API" target="_blank" rel="noreferrer">MDN · Broadcast Channel API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+BroadcastChannel+%E9%80%82%E5%90%88%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E8%B7%A8%E6%A0%87%E7%AD%BE%E9%80%9A%E4%BF%A1%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ABroadcastChannel+%E9%80%82%E5%90%88%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E8%B7%A8%E6%A0%87%E7%AD%BE%E9%80%9A%E4%BF%A1%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Abrowser-broadcast-channel%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%90%86%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fbrowser-broadcast-channel%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：BroadcastChannel 适合解决什么跨标签通信问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/browser-render/">浏览器从 HTML 到页面显示，经历哪些主要步骤？</a></li><li><a href="/questions/browser-delegation/">事件委托是什么？target 和 currentTarget 有何区别？</a></li><li><a href="/questions/browser-storage/">Cookie、localStorage 和 sessionStorage 如何选择？</a></li><li><a href="/questions/browser-reflow/">什么是强制同步布局？如何避免布局抖动？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

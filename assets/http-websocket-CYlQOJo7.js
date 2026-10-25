@@ -1,0 +1,88 @@
+var e={answerHtml:`<p>聊天页面如果每隔两秒请求一次“有没有新消息”，即使没人说话，也要不断发送请求；刚好在一次查询之后到达的消息，还得等下一次查询。WebSocket 则先建立一条持续的双向连接：用户可以随时发消息，服务端有新消息时也可以主动推送，不必等浏览器再次询问。</p>
+<p>它适合聊天、多人协作、实时游戏指令和频繁变化的状态。只有服务端持续向页面推送文本时，SSE 往往更简单；数据几分钟才变化一次时，普通请求或低频轮询也可能足够。长连接需要维护连接状态、容量和恢复逻辑，并不是使用它就一定更快、更省资源。</p>
+<h2>建立连接后，传输的是消息</h2>
+<p>在常见的 HTTP/1.1 场景中，客户端发起带 <code>Upgrade: websocket</code> 的握手，服务端同意后返回 <code>101 Switching Protocols</code>，随后双方使用 WebSocket 帧传输数据。支持相应扩展的 HTTP/2、HTTP/3 也可以通过扩展 CONNECT 承载 WebSocket，不能把“必须收到 101”当成所有传输版本的通用规则。</p>
+<p>浏览器使用 <code>WebSocket</code> API，通常不需要自己拼接握手头。线上 HTTPS 页面应连接 <code>wss://</code>，由 TLS 保护通信。</p>
+<p>WebSocket 保留消息边界，浏览器的 <code>message</code> 事件交付一条完整消息，不需要像处理原始字节流那样自己判断 JSON 在哪里结束。不过，消息内容是什么格式仍由业务约定：它可以是文本，也可以是二进制，协议并不要求必须使用 JSON。文本消息的 <code>event.data</code> 是字符串；二进制消息通常是 Blob，也可以通过 <code>binaryType = &#x27;arraybuffer&#x27;</code> 接收 ArrayBuffer。</p>
+<h2>一个只负责单次连接的客户端</h2>
+<p>下面假设服务端发送的聊天消息格式为 <code>{ type: &#x27;message&#x27;, id: &#x27;消息编号&#x27;, text: &#x27;正文&#x27; }</code>。示例只实现连接、收发和释放，重连后的历史恢复另行设计。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">openChat</span>(<span class="hljs-params">url, onMessage</span>) {
+  <span class="hljs-keyword">const</span> socket = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WebSocket</span>(url);
+  <span class="hljs-keyword">const</span> encoder = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TextEncoder</span>();
+  <span class="hljs-keyword">const</span> maxQueuedBytes = <span class="hljs-number">256</span> * <span class="hljs-number">1024</span>;
+  <span class="hljs-keyword">let</span> disposed = <span class="hljs-literal">false</span>;
+
+  socket.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;message&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (disposed || <span class="hljs-keyword">typeof</span> event.<span class="hljs-property">data</span> !== <span class="hljs-string">&#x27;string&#x27;</span>) <span class="hljs-keyword">return</span>;
+
+    <span class="hljs-keyword">let</span> message;
+    <span class="hljs-keyword">try</span> {
+      message = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(event.<span class="hljs-property">data</span>);
+    } <span class="hljs-keyword">catch</span> {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">warn</span>(<span class="hljs-string">&#x27;收到无法解析的聊天消息&#x27;</span>);
+      <span class="hljs-keyword">return</span>;
+    }
+
+    <span class="hljs-keyword">if</span> (
+      !message ||
+      message.<span class="hljs-property">type</span> !== <span class="hljs-string">&#x27;message&#x27;</span> ||
+      <span class="hljs-keyword">typeof</span> message.<span class="hljs-property">id</span> !== <span class="hljs-string">&#x27;string&#x27;</span> ||
+      <span class="hljs-keyword">typeof</span> message.<span class="hljs-property">text</span> !== <span class="hljs-string">&#x27;string&#x27;</span>
+    ) {
+      <span class="hljs-keyword">return</span>;
+    }
+
+    <span class="hljs-title function_">onMessage</span>(message);
+  });
+
+  socket.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;error&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">warn</span>(<span class="hljs-string">&#x27;聊天连接发生错误&#x27;</span>);
+  });
+
+  socket.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;close&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (!disposed) {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">info</span>(<span class="hljs-string">&#x27;聊天连接已关闭&#x27;</span>, event.<span class="hljs-property">code</span>, event.<span class="hljs-property">reason</span>);
+    }
+  });
+
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-title function_">send</span>(<span class="hljs-params">text, clientMessageId</span>) {
+      <span class="hljs-keyword">if</span> (disposed || socket.<span class="hljs-property">readyState</span> !== <span class="hljs-title class_">WebSocket</span>.<span class="hljs-property">OPEN</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> text !== <span class="hljs-string">&#x27;string&#x27;</span> || <span class="hljs-keyword">typeof</span> clientMessageId !== <span class="hljs-string">&#x27;string&#x27;</span>) {
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;消息正文和客户端消息编号必须是字符串&#x27;</span>);
+      }
+
+      <span class="hljs-keyword">const</span> payload = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;send&#x27;</span>, clientMessageId, text });
+      <span class="hljs-keyword">if</span> (socket.<span class="hljs-property">bufferedAmount</span> + encoder.<span class="hljs-title function_">encode</span>(payload).<span class="hljs-property">byteLength</span> &gt; maxQueuedBytes) {
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+      }
+
+      socket.<span class="hljs-title function_">send</span>(payload);
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    },
+    <span class="hljs-title function_">dispose</span>(<span class="hljs-params"></span>) {
+      disposed = <span class="hljs-literal">true</span>;
+      socket.<span class="hljs-title function_">close</span>(<span class="hljs-number">1000</span>, <span class="hljs-string">&#x27;页面离开&#x27;</span>);
+    },
+  };
+}
+</code></pre></div>
+<p><code>new WebSocket()</code> 返回时，连接可能还处于 <code>CONNECTING</code>，不能立即假定它已经可发送。界面可以监听 <code>open</code> 更新连接提示，也可以像示例一样，在真正发送时检查 <code>readyState</code>。返回 <code>false</code> 时，应向用户显示尚未连接或发送繁忙，不能悄悄丢掉输入内容。</p>
+<p><code>send()</code> 返回 <code>true</code> 在这里只表示数据已交给浏览器发送，不表示服务器已收到，更不表示消息已经入库。<code>bufferedAmount</code> 是尚未发出的应用数据字节数，也不是服务器的确认计数。若要显示“已送达”，需要服务端处理消息后返回对应 <code>clientMessageId</code> 的业务确认。</p>
+<p>示例限制的是发送缓冲，且阈值只是演示值。传统 WebSocket 没有标准的接收背压接口：把 <code>message</code> 回调写成 <code>async</code>，浏览器也不会等待它完成才交付下一条消息。大量行情或协同事件应控制订阅量、合并可以替换的状态，并约定服务端限速；把所有消息无限堆进数组只是把压力搬进了 JavaScript 内存。</p>
+<h2>为什么网络断了，页面可能还显示“已连接”</h2>
+<p>正常关闭通常能收到 <code>close</code>。但 Wi-Fi 突然中断、网络设备丢失连接状态时，本机不一定立刻知道远端已不可达，连接状态可能暂时没有变化。</p>
+<p>这时可以由服务端发送协议层 ping 并检测 pong，或由双方约定应用层心跳，例如客户端发送 <code>{ type: &#x27;ping&#x27;, time }</code>，服务端回复对应响应。浏览器原生 WebSocket API 不提供直接发送协议 ping 帧的方法，应用层 JSON 心跳与协议控制帧不能混为一谈。</p>
+<p>超时阈值要考虑网络延迟和后台页面计时器节流。短时间没收到心跳只能说明连接值得怀疑，不能证明某条写入一定失败。<code>navigator.onLine</code> 也只能作为辅助信号，无法证明你的 WebSocket 服务可访问。</p>
+<h2>重连成功，还需要补齐断线期间的状态</h2>
+<p>假设客户端最后处理了房间事件 <code>120</code>，掉线时服务端产生了 <code>121</code> 到 <code>125</code>。新连接建立后如果直接开始接收 <code>126</code>，页面仍然缺失五次变更。因此恢复通常包括两件事：</p>
+<ol>
+<li>重新建立连接、恢复认证和订阅。</li>
+<li>带上最后成功应用的游标，请求重放后续事件；若游标过期、历史已清理，就获取完整快照，再从快照对应的版本继续订阅。</li>
+</ol>
+<p>游标的作用域必须明确，例如“这个房间的事件序号”。不要把不同房间或不同服务器随意生成的编号直接比较。重放期间也可能收到重复事件，客户端要按事件编号去重，或者采用本身可重复应用的状态更新。</p>
+<p>另一个情况是：服务端已保存用户发送的消息，但确认在断线时丢失了。此时盲目重发会产生重复消息。可让客户端为一次用户操作生成稳定的 <code>clientMessageId</code>，重试沿用同一个编号，服务端在相应用户或会话范围内做幂等处理，再返回原结果。更换连接不会自动获得这种保证。</p>
+<p>重连间隔一般逐步增加，并加入随机抖动，例如先在短延迟范围内随机等待，连续失败后扩大范围，并设置上限。这样服务重启时，大批客户端不会在完全相同的时刻一起重试。认证失败、用户退出和主动关闭应有不同处理；组件卸载时要取消待执行的重连定时器，防止页面已经离开却又建立连接。</p>
+<h2>长连接也需要逐项授权</h2>
+<p>浏览器 WebSocket 构造函数不能任意添加 <code>Authorization</code> 等请求头。认证可以结合受保护的 Cookie、短期连接凭证或握手后的应用协议设计；不要把长期密钥放进 URL，因为 URL 可能进入日志。</p>
+<p>WebSocket 的握手不使用普通 fetch 那套 CORS 预检流程，返回 <code>Access-Control-Allow-Origin</code> 不能代替服务端的来源检查。服务端应校验浏览器握手的 <code>Origin</code>，并验证用户身份、房间订阅权限和每条消息的操作权限；<code>Origin</code> 自身又不是用户身份证明。即使用户已连接，也不能允许他随意订阅其他人的私密房间。</p>`};export{e as default};

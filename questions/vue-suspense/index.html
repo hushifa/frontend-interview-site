@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Vue面试题：理解 Vue Suspense 对异步组件和 setup 的支持，以及它与普通请求 loading 状态的区别。" />
+    <meta name="description" content="Vue面试题：Suspense 协调组件树中受支持的异步依赖，在准备期间显示 fallback。它不自动追踪所有请求，也不自身提供完整错误恢复；初次等待、后续切换、超时显示与资源取消需要分别设计。" />
     <title>Vue Suspense 适合处理什么异步组件边界？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/vue-suspense/" />
     <meta name="robots" content="index,follow" />
@@ -19,19 +19,96 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Vue Suspense 适合处理什么异步组件边界？ · 前端知库" />
-    <meta property="og:description" content="Vue面试题：理解 Vue Suspense 对异步组件和 setup 的支持，以及它与普通请求 loading 状态的区别。" />
+    <meta property="og:description" content="Vue面试题：Suspense 协调组件树中受支持的异步依赖，在准备期间显示 fallback。它不自动追踪所有请求，也不自身提供完整错误恢复；初次等待、后续切换、超时显示与资源取消需要分别设计。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/vue-suspense/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-suspense/#webpage","url":"https://fe.hushifa.top/questions/vue-suspense/","name":"Vue Suspense 适合处理什么异步组件边界？ · 前端知库","description":"Vue面试题：理解 Vue Suspense 对异步组件和 setup 的支持，以及它与普通请求 loading 状态的区别。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-suspense/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-suspense/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"Vue Suspense 适合处理什么异步组件边界？","item":"https://fe.hushifa.top/questions/vue-suspense/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-suspense/#webpage","url":"https://fe.hushifa.top/questions/vue-suspense/","name":"Vue Suspense 适合处理什么异步组件边界？ · 前端知库","description":"Vue面试题：Suspense 协调组件树中受支持的异步依赖，在准备期间显示 fallback。它不自动追踪所有请求，也不自身提供完整错误恢复；初次等待、后续切换、超时显示与资源取消需要分别设计。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-suspense/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-suspense/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"Vue Suspense 适合处理什么异步组件边界？","item":"https://fe.hushifa.top/questions/vue-suspense/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-Dbk-gXeC.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-BCtqzlRM.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue Suspense 适合处理什么异步组件边界？</span></nav><h1 tabindex="-1">Vue Suspense 适合处理什么异步组件边界？</h1><p class="reading-summary">理解 Vue Suspense 对异步组件和 setup 的支持，以及它与普通请求 loading 状态的区别。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>Vue Suspense 可以在异步组件或异步 <code>setup()</code> 准备期间显示 fallback，并在依赖完成后渲染默认内容。它更适合表达组件树级别的等待边界，不会自动把任意事件回调里的请求变成 Suspense 状态。</p>
-<p>Vue 题目可以沿着依赖收集、更新调度、组件渲染和副作用生命周期来理解。响应式引用记录的是读取关系，不代表所有嵌套对象都会以同样方式被追踪；具体行为还取决于使用的 API 和 Vue 版本。</p>
-<p>异步组件失败、超时、重试和局部错误仍需错误处理策略；fallback 也不能把用户正在编辑的内容重置。嵌套 Suspense 和路由切换要明确哪个边界负责显示加载状态。</p>
-<p>该能力与 Vue 版本和框架集成有关。实际使用要核对 SSR、hydration、异步依赖和当前版本的实验性说明。</p>
-<p>落地时把派生状态、用户输入和副作用分开，避免用一个 watch 或可写变量反复同步同一事实。组件卸载、异步竞态、SSR 和第三方 DOM 操作都需要单独验证。</p>
-<p>实际组件中，先画出数据从哪里来、在哪里被修改、哪些值只是派生结果。这样可以避免把同一份数据同时交给 props、ref、store 和 watch，减少更新顺序变化后出现的互相覆盖。</p></div><div class="answer-bottom"><a href="https://vuejs.org/guide/built-ins/suspense.html" target="_blank" rel="noreferrer">Vue · Suspense<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vue+Suspense+%E9%80%82%E5%90%88%E5%A4%84%E7%90%86%E4%BB%80%E4%B9%88%E5%BC%82%E6%AD%A5%E7%BB%84%E4%BB%B6%E8%BE%B9%E7%95%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVue+Suspense+%E9%80%82%E5%90%88%E5%A4%84%E7%90%86%E4%BB%80%E4%B9%88%E5%BC%82%E6%AD%A5%E7%BB%84%E4%BB%B6%E8%BE%B9%E7%95%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-suspense%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-suspense%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vue Suspense 适合处理什么异步组件边界？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-complex-form/">Vue 复杂表单怎样组织状态、校验和提交？</a></li><li><a href="/questions/vue-define-model/">Vue 3 defineModel 的双向绑定边界是什么？</a></li><li><a href="/questions/vue-ref-reactive/">Vue 3 中 ref 和 reactive 有什么区别？</a></li><li><a href="/questions/vue-computed-watch/">computed、watch 和 watchEffect 应该如何选择？</a></li></ul></nav></main></div></div>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue Suspense 适合处理什么异步组件边界？</span></nav><h1 tabindex="-1">Vue Suspense 适合处理什么异步组件边界？</h1><p class="reading-summary">Suspense 协调组件树中受支持的异步依赖，在准备期间显示 fallback。它不自动追踪所有请求，也不自身提供完整错误恢复；初次等待、后续切换、超时显示与资源取消需要分别设计。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>一个面板需要等异步 setup 或异步组件准备好才能完整显示，Suspense 可以在边界层统一协调等待，而不是让每个子组件各自显示一个不相关的 loading。</p>
+<p>当前 Vue 文档仍把 Suspense 标为实验性功能，使用时应与项目版本和框架集成一起验证。它提供的是特定异步组件协议，不是页面里所有 Promise 的通用监视器。</p>
+<h3>顶层 await 会让 script setup 成为异步依赖</h3>
+<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;!-- AsyncPanel.vue --&gt;
+&lt;script setup&gt;
+const props = defineProps({ fail: Boolean });
+const shouldFail = props.fail;
+await new Promise(resolve =&gt; setTimeout(resolve, 300));
+if (shouldFail) throw new Error(&#x27;模拟加载失败&#x27;);
+const message = &#x27;内容已准备好&#x27;;
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;article&gt;&lt;p&gt;{{ message }}&lt;/p&gt;&lt;/article&gt;
+&lt;/template&gt;
+</code></pre></div>
+<p>这里用本地延迟模拟准备过程，不发网络请求。shouldFail 保存本次开始时的选项，后续修改 prop 不会让这个已经启动的初始化过程自动重新执行。</p>
+<p>调用方提供等待回退，并在祖先中处理错误：</p>
+<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;!-- Parent.vue --&gt;
+&lt;script setup&gt;
+import { onErrorCaptured, ref } from &#x27;vue&#x27;;
+import AsyncPanel from &#x27;./AsyncPanel.vue&#x27;;
+
+const attempt = ref(0);
+const fail = ref(false);
+const pending = ref(true);
+const errorMessage = ref(&#x27;&#x27;);
+
+function reload() {
+  if (pending.value) return;
+  errorMessage.value = &#x27;&#x27;;
+  attempt.value += 1;
+}
+
+function retry() {
+  fail.value = false;
+  reload();
+}
+
+onErrorCaptured(error =&gt; {
+  console.error(&#x27;异步面板失败：&#x27;, error);
+  pending.value = false;
+  errorMessage.value = &#x27;内容准备失败，请重试。&#x27;;
+  return false;
+});
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;section&gt;
+    &lt;label&gt;&lt;input v-model=&quot;fail&quot; type=&quot;checkbox&quot; :disabled=&quot;pending&quot; /&gt;模拟下次失败&lt;/label&gt;
+    &lt;button type=&quot;button&quot; :disabled=&quot;pending&quot; @click=&quot;reload&quot;&gt;重新加载&lt;/button&gt;
+    &lt;div v-if=&quot;errorMessage&quot; role=&quot;alert&quot;&gt;
+      &lt;p&gt;{{ errorMessage }}&lt;/p&gt;
+      &lt;button type=&quot;button&quot; @click=&quot;retry&quot;&gt;重试&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;Suspense v-else :key=&quot;attempt&quot; @pending=&quot;pending = true&quot; @resolve=&quot;pending = false&quot;&gt;
+      &lt;AsyncPanel :fail=&quot;fail&quot; /&gt;
+      &lt;template #fallback&gt;&lt;p role=&quot;status&quot;&gt;正在准备内容&lt;/p&gt;&lt;/template&gt;
+    &lt;/Suspense&gt;
+  &lt;/section&gt;
+&lt;/template&gt;
+</code></pre></div>
+<p>初次渲染时默认内容需要等待，先显示 fallback；完成后展示面板。重新加载改变边界身份，让本例重新创建异步子树；失败由祖先的 onErrorCaptured 转成错误界面，重试先修正模拟失败条件，再创建新尝试。</p>
+<p>返回 false 会阻止这份错误继续按相应捕获链传播，因此示例同时记录了诊断。真实项目应明确哪些错误已被本地处理，不要为了没有控制台输出就统一吞掉所有故障。</p>
+<h3>哪些异步工作会被协调</h3>
+<p>async setup、script setup 顶层 await，以及符合规则的异步组件，是常见的 Suspense 依赖。普通事件处理器中发出的请求，或挂载后某个 watch 启动的异步工作，不会自动使现有边界进入同样的等待状态。</p>
+<p>这些后续工作仍需要自己的 pending、错误和取消策略。把任意 fetch 放进组件文件，不等于它已经成为初次渲染依赖。</p>
+<p>异步组件处在 Suspense 接管范围内时，它自己的 loading、error、delay、timeout 等装载显示选项可能由外层边界取代。需要自行控制装载状态时，可以按异步组件 API 使用 suspensible 等选项，但要区分组件装载与内部 async setup 的不同阶段。</p>
+<h3>fallback 与错误界面不是同一种状态</h3>
+<p>Suspense 本身不提供完整错误处理插槽。等待失败后，应通过祖先错误捕获、框架机制或明确的错误状态进行恢复，而不是让“加载中”一直显示。</p>
+<p>空数据也不等于还在等待。请求已经成功但没有记录时，应展示正常的空状态；错误、空结果和 pending 混成同一个布尔值，会让重试和统计都不可靠。</p>
+<p>本例通过重建边界重试，会丢弃那份子树的局部状态。若里面有编辑草稿或用户操作，应该先决定是否需要保留、上提或确认，而不是让 fallback 顺便把用户内容清空。</p>
+<h3>初次等待与后续更新有不同规则</h3>
+<p>初次渲染会收集相应异步依赖。边界已经解决后，不是内部任何更深处的新 Promise 都会无条件重新触发整个边界；根节点替换等情况有具体规则，应根据实际组件结构判断。</p>
+<p>常驻边界重新进入等待时，可以按 timeout 等规则暂时保留原来内容，再决定何时切换 fallback。这个 timeout 控制的是加载界面的显示时机，不是自动取消网络请求或把服务器任务标记为超时失败。</p>
+<p>本例更换了整个边界的 key，所以属于新建尝试，不是在证明任意内部更新都会保留旧画面。边界身份与资源身份都要明确。</p>
+<h3>嵌套、路由与缓存会影响谁负责等待</h3>
+<p>默认内容与 fallback 需要遵守各自插槽的根结构要求。嵌套 Suspense 还要理解父边界是否参与子依赖，以及相关 suspensible 配置，不能把所有层都当成独立、互不影响的 loading 容器。</p>
+<p>与 RouterView、KeepAlive、Transition 组合时，层级决定哪一层被缓存、过渡和替换。应采用框架支持的组织方式，并实际测试导航、返回、停用和错误重试，而不只是任意调整标签顺序直到某次渲染通过。</p>
+<p>SSR 与 hydration 也有各自等待和输出协议，客户端延迟示例不能证明服务端流式输出已经配置完成。</p>
+<h3>等待协调不等于资源自动终止</h3>
+<p>组件切走后，底层网络或计时任务可能仍在运行。真实数据源应支持适当取消或忽略过期结果，错误处理也要避免旧任务影响新的页面。</p>
+<p>本例通过禁用控制减少同一界面的并发重载，但这不是所有路由切换、外部更新或远端重试的完整方案。用可控制的异步任务验证成功、失败、快速切换和再次进入，才能确认边界管理的是正确那一次工作。</p></div><div class="answer-bottom"><a href="https://vuejs.org/guide/built-ins/suspense.html" target="_blank" rel="noreferrer">Vue · Suspense<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vue+Suspense+%E9%80%82%E5%90%88%E5%A4%84%E7%90%86%E4%BB%80%E4%B9%88%E5%BC%82%E6%AD%A5%E7%BB%84%E4%BB%B6%E8%BE%B9%E7%95%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVue+Suspense+%E9%80%82%E5%90%88%E5%A4%84%E7%90%86%E4%BB%80%E4%B9%88%E5%BC%82%E6%AD%A5%E7%BB%84%E4%BB%B6%E8%BE%B9%E7%95%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-suspense%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-suspense%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vue Suspense 适合处理什么异步组件边界？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-complex-form/">Vue 复杂表单怎样组织状态、校验和提交？</a></li><li><a href="/questions/vue-define-model/">Vue 3 defineModel 的双向绑定边界是什么？</a></li><li><a href="/questions/vue-ref-reactive/">Vue 3 中 ref 和 reactive 有什么区别？</a></li><li><a href="/questions/vue-computed-watch/">computed、watch 和 watchEffect 应该如何选择？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

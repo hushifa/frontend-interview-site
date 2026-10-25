@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Vue面试题：自定义指令主要复用普通元素上的底层 DOM 操作，例如聚焦、集成观察器或对接第三方 DOM 工具。组件更适合封装界面结构，组合式函数更适合复用有状态逻辑，不应把全部业务都塞进指令。" />
+    <meta name="description" content="Vue面试题：自定义指令用于复用普通元素上的底层 DOM 行为，例如聚焦或观察尺寸。它需要处理绑定值变化与资源释放，不应替代组件结构、状态逻辑，也不会自动找到自定义组件内部的目标元素。" />
     <title>Vue 自定义指令适合什么场景？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/vue-custom-directives/" />
     <meta name="robots" content="index,follow" />
@@ -19,19 +19,88 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Vue 自定义指令适合什么场景？ · 前端知库" />
-    <meta property="og:description" content="Vue面试题：自定义指令主要复用普通元素上的底层 DOM 操作，例如聚焦、集成观察器或对接第三方 DOM 工具。组件更适合封装界面结构，组合式函数更适合复用有状态逻辑，不应把全部业务都塞进指令。" />
+    <meta property="og:description" content="Vue面试题：自定义指令用于复用普通元素上的底层 DOM 行为，例如聚焦或观察尺寸。它需要处理绑定值变化与资源释放，不应替代组件结构、状态逻辑，也不会自动找到自定义组件内部的目标元素。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/vue-custom-directives/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-custom-directives/#webpage","url":"https://fe.hushifa.top/questions/vue-custom-directives/","name":"Vue 自定义指令适合什么场景？ · 前端知库","description":"Vue面试题：自定义指令主要复用普通元素上的底层 DOM 操作，例如聚焦、集成观察器或对接第三方 DOM 工具。组件更适合封装界面结构，组合式函数更适合复用有状态逻辑，不应把全部业务都塞进指令。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-custom-directives/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-custom-directives/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"Vue 自定义指令适合什么场景？","item":"https://fe.hushifa.top/questions/vue-custom-directives/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-custom-directives/#webpage","url":"https://fe.hushifa.top/questions/vue-custom-directives/","name":"Vue 自定义指令适合什么场景？ · 前端知库","description":"Vue面试题：自定义指令用于复用普通元素上的底层 DOM 行为，例如聚焦或观察尺寸。它需要处理绑定值变化与资源释放，不应替代组件结构、状态逻辑，也不会自动找到自定义组件内部的目标元素。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-custom-directives/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-custom-directives/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"Vue 自定义指令适合什么场景？","item":"https://fe.hushifa.top/questions/vue-custom-directives/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-Dbk-gXeC.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-BCtqzlRM.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue 自定义指令适合什么场景？</span></nav><h1 tabindex="-1">Vue 自定义指令适合什么场景？</h1><p class="reading-summary">自定义指令主要复用普通元素上的底层 DOM 操作，例如聚焦、集成观察器或对接第三方 DOM 工具。组件更适合封装界面结构，组合式函数更适合复用有状态逻辑，不应把全部业务都塞进指令。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>自定义指令主要复用普通元素上的底层 DOM 操作，例如聚焦、集成观察器或对接第三方 DOM 工具。组件更适合封装界面结构，组合式函数更适合复用有状态逻辑，不应把全部业务都塞进指令。</p>
-<p>Vue 题目可以沿着依赖收集、更新调度、组件渲染和副作用生命周期来理解。响应式引用记录的是读取关系，不代表所有嵌套对象都会以同样方式被追踪；具体行为还取决于使用的 API 和 Vue 版本。</p>
-<p>指令可以通过 mounted、updated、unmounted 等钩子访问绑定元素，并读取绑定值。注册事件、观察器或其他资源时，要在适当生命周期释放；更新时应处理新旧值，避免重复注册和互相覆盖。</p>
-<p>Vue 官方不推荐把自定义指令直接用在组件上，因为它依赖组件根节点，多根组件会有问题。指令不能自动跨越组件边界选择正确内部元素，也不应绕开响应式状态去随意修改由模板管理的内容。</p>
-<p>落地时把派生状态、用户输入和副作用分开，避免用一个 watch 或可写变量反复同步同一事实。组件卸载、异步竞态、SSR 和第三方 DOM 操作都需要单独验证。</p>
-<p>实际组件中，先画出数据从哪里来、在哪里被修改、哪些值只是派生结果。这样可以避免把同一份数据同时交给 props、ref、store 和 watch，减少更新顺序变化后出现的互相覆盖。</p></div><div class="answer-bottom"><a href="https://vuejs.org/guide/reusability/custom-directives.html" target="_blank" rel="noreferrer">Custom Directives | Vue.js<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vue+%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVue+%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-custom-directives%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-custom-directives%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vue 自定义指令适合什么场景？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-plugins/">Vue 插件如何向应用提供可复用能力？</a></li><li><a href="/questions/vue-compiler-optimizations/">Vue 模板编译如何减少运行时更新工作？</a></li><li><a href="/questions/vue-ref-reactive/">Vue 3 中 ref 和 reactive 有什么区别？</a></li><li><a href="/questions/vue-computed-watch/">computed、watch 和 watchEffect 应该如何选择？</a></li></ul></nav></main></div></div>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue 自定义指令适合什么场景？</span></nav><h1 tabindex="-1">Vue 自定义指令适合什么场景？</h1><p class="reading-summary">自定义指令用于复用普通元素上的底层 DOM 行为，例如聚焦或观察尺寸。它需要处理绑定值变化与资源释放，不应替代组件结构、状态逻辑，也不会自动找到自定义组件内部的目标元素。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>当一段复用逻辑主要围绕“这个真实 DOM 元素怎样操作”，自定义指令通常合适。例如聚焦、接入观察器或与只接受元素的第三方工具协作。</p>
+<p>如果需求是复用一块界面结构，组件更清楚；如果主要是响应式状态和业务计算，组合函数更自然。不要把请求、表单状态和一整套页面逻辑都藏进一个看似简短的 v-xxx。</p>
+<h3>指令钩子拿到的是绑定元素和绑定信息</h3>
+<p>mounted 可以在元素挂载后建立行为，updated 可以读取本轮绑定值，unmounted 可以释放资源。还有创建、挂载前、更新前和卸载前等钩子，应根据需要操作 DOM 的时机选择。</p>
+<p>binding.value 是表达式结果，oldValue 在相应更新钩子中提供旧值，arg 与 modifiers 则表达参数和修饰符。updated 被调用不意味着 value 一定变化，指令应按自己的成本与契约判断是否需要重新设置。</p>
+<h3>用指令管理一个尺寸观察器</h3>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// vMeasure.js</span>
+<span class="hljs-keyword">const</span> records = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WeakMap</span>();
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> vMeasure = {
+  <span class="hljs-title function_">mounted</span>(<span class="hljs-params">element, binding</span>) {
+    <span class="hljs-keyword">const</span> record = { <span class="hljs-attr">callback</span>: binding.<span class="hljs-property">value</span>, <span class="hljs-attr">observer</span>: <span class="hljs-literal">null</span> };
+    <span class="hljs-keyword">const</span> observer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ResizeObserver</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-keyword">const</span> current = records.<span class="hljs-title function_">get</span>(element);
+      <span class="hljs-keyword">if</span> (!current || <span class="hljs-keyword">typeof</span> current.<span class="hljs-property">callback</span> !== <span class="hljs-string">&#x27;function&#x27;</span>) <span class="hljs-keyword">return</span>;
+      <span class="hljs-keyword">const</span> rect = element.<span class="hljs-title function_">getBoundingClientRect</span>();
+      current.<span class="hljs-title function_">callback</span>({ <span class="hljs-attr">width</span>: rect.<span class="hljs-property">width</span>, <span class="hljs-attr">height</span>: rect.<span class="hljs-property">height</span> });
+    });
+    record.<span class="hljs-property">observer</span> = observer;
+    records.<span class="hljs-title function_">set</span>(element, record);
+    observer.<span class="hljs-title function_">observe</span>(element);
+  },
+  <span class="hljs-title function_">updated</span>(<span class="hljs-params">element, binding</span>) {
+    <span class="hljs-keyword">const</span> record = records.<span class="hljs-title function_">get</span>(element);
+    <span class="hljs-keyword">if</span> (record) record.<span class="hljs-property">callback</span> = binding.<span class="hljs-property">value</span>;
+  },
+  <span class="hljs-title function_">unmounted</span>(<span class="hljs-params">element</span>) {
+    records.<span class="hljs-title function_">get</span>(element)?.<span class="hljs-property">observer</span>.<span class="hljs-title function_">disconnect</span>();
+    records.<span class="hljs-title function_">delete</span>(element);
+  },
+};
+</code></pre></div>
+<p>每个元素有自己的记录，更新绑定时替换回调，不重复创建观察器。回调执行时再取当前记录，卸载后记录已删除，就不继续给失效使用者写入结果。</p>
+<p>WeakMap 只是管理元素与记录的关联，不能代替 observer.disconnect。观察器和其他宿主资源可能仍持有元素，资源释放必须显式完成。</p>
+<h3>在组件中局部使用</h3>
+<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;!-- MeasurePanel.vue --&gt;
+&lt;script setup&gt;
+import { ref } from &#x27;vue&#x27;;
+import { vMeasure } from &#x27;./vMeasure.js&#x27;;
+
+const width = ref(240);
+const size = ref({ width: 0, height: 0 });
+
+function recordSize(next) {
+  if (size.value.width !== next.width || size.value.height !== next.height) {
+    size.value = next;
+  }
+}
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;section&gt;
+    &lt;div v-measure=&quot;recordSize&quot; :style=&quot;{ width: `${width}px`, padding: &#x27;8px&#x27;, border: &#x27;1px solid&#x27; }&quot;&gt;
+      被观察的内容
+    &lt;/div&gt;
+    &lt;p&gt;实际宽度：{{ size.width }}&lt;/p&gt;
+    &lt;button type=&quot;button&quot; @click=&quot;width = width === 240 ? 320 : 240&quot;&gt;改变宽度&lt;/button&gt;
+  &lt;/section&gt;
+&lt;/template&gt;
+</code></pre></div>
+<p>script setup 中以 v 开头的相应指令绑定可以被模板识别，vMeasure 对应 v-measure。也可以通过应用级 directive 注册，但没有共享需要时，局部使用更容易看出依赖。</p>
+<p>测量返回的是 getBoundingClientRect 对应的几何宽高，包含相应边框、内边距和变换影响，不一定等于 CSS 中写的 width。结果显示在独立区域，避免直接用测量值反复改变被测元素自身尺寸形成反馈循环。</p>
+<h3>更新回调与重新初始化不是一回事</h3>
+<p>绑定函数可能随着父级逻辑变化。示例只更新记录中的 callback，下一次尺寸变化就使用新函数，不需要先断开再观察同一个元素。</p>
+<p>如果需求是绑定更新后立即报告当前尺寸，则应明确增加一次读取；当前例子不承诺“换回调就马上触发尺寸事件”。对不同第三方库，配置变化可能确实需要重新初始化，也应在 updated 中有针对性地处理。</p>
+<p>初次 ResizeObserver 通知有自己的调度时机，不能把 observe 调用完成当作同步得到最终尺寸。后续字体、内容和布局还可能变化，是否需要这些变化决定了为什么采用观察器。</p>
+<h3>不要与模板争夺同一份 DOM 状态</h3>
+<p>Vue 模板负责的文本、class、style 或子节点，如果被指令悄悄替换，后续 patch 可能与指令相互覆盖。指令应有明确的负责范围，避免把整个组件结构改写成框架不知道的另一棵树。</p>
+<p>聚焦指令也不应在每次 updated 时无条件 focus，否则普通状态更新就可能抢走用户焦点。应按绑定变化或明确操作意图执行，而不是把“更新了”当成用户要求重新聚焦。</p>
+<p>事件监听需要移除同一函数引用，观察器需要断开，第三方实例需要调用对应销毁方法。需要仍存在 DOM 才能正确释放的资源，可以根据接口选择 beforeUnmount 等更早阶段。</p>
+<h3>组件边界与 SSR 需要额外考虑</h3>
+<p>不建议把自定义指令直接当成深入自定义组件内部的选择器。它依赖组件根节点，多根组件或根结构变化时可能不符合预期，也不会自动知道哪个后代 input 才是目标。</p>
+<p>更稳妥的方式是在需要操作的普通元素上使用指令，或让组件提供明确的 ref/方法接口。组件的 attrs 与根继承规则也不应被指令绕过。</p>
+<p>服务端没有真实浏览器 DOM，普通 DOM 指令钩子不会按客户端方式执行。确实需要在 SSR 输出某些属性时，可以按 Vue 的服务端指令接口提供 getSSRProps，并保持逻辑不依赖浏览器资源。</p>
+<p>验证指令时应覆盖首次挂载、绑定值变化、元素尺寸或交互变化、卸载和重新挂载。一个 mounted 能跑通，不足以证明指令在真实组件生命周期中没有重复资源或旧回调。</p></div><div class="answer-bottom"><a href="https://vuejs.org/guide/reusability/custom-directives.html" target="_blank" rel="noreferrer">Vue · Custom Directives<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vue+%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVue+%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-custom-directives%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-custom-directives%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vue 自定义指令适合什么场景？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-plugins/">Vue 插件如何向应用提供可复用能力？</a></li><li><a href="/questions/vue-compiler-optimizations/">Vue 模板编译如何减少运行时更新工作？</a></li><li><a href="/questions/vue-ref-reactive/">Vue 3 中 ref 和 reactive 有什么区别？</a></li><li><a href="/questions/vue-computed-watch/">computed、watch 和 watchEffect 应该如何选择？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

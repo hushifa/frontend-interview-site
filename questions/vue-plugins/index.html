@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Vue面试题：Vue 插件通过 app.use 安装，可以是带 install 方法的对象，也可以直接是安装函数。它接收应用实例和选项，可注册组件、指令，提供依赖，或扩展应用级能力。" />
+    <meta name="description" content="Vue面试题：插件通过 app.use 在应用范围安装能力，可以注册组件、指令或依赖。配置、状态与资源应按应用实例组织，重复安装不等于动态更新配置，SSR 与应用卸载也需要明确的生命周期。" />
     <title>Vue 插件如何向应用提供可复用能力？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/vue-plugins/" />
     <meta name="robots" content="index,follow" />
@@ -19,19 +19,102 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Vue 插件如何向应用提供可复用能力？ · 前端知库" />
-    <meta property="og:description" content="Vue面试题：Vue 插件通过 app.use 安装，可以是带 install 方法的对象，也可以直接是安装函数。它接收应用实例和选项，可注册组件、指令，提供依赖，或扩展应用级能力。" />
+    <meta property="og:description" content="Vue面试题：插件通过 app.use 在应用范围安装能力，可以注册组件、指令或依赖。配置、状态与资源应按应用实例组织，重复安装不等于动态更新配置，SSR 与应用卸载也需要明确的生命周期。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/vue-plugins/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-plugins/#webpage","url":"https://fe.hushifa.top/questions/vue-plugins/","name":"Vue 插件如何向应用提供可复用能力？ · 前端知库","description":"Vue面试题：Vue 插件通过 app.use 安装，可以是带 install 方法的对象，也可以直接是安装函数。它接收应用实例和选项，可注册组件、指令，提供依赖，或扩展应用级能力。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-plugins/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-plugins/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"Vue 插件如何向应用提供可复用能力？","item":"https://fe.hushifa.top/questions/vue-plugins/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-plugins/#webpage","url":"https://fe.hushifa.top/questions/vue-plugins/","name":"Vue 插件如何向应用提供可复用能力？ · 前端知库","description":"Vue面试题：插件通过 app.use 在应用范围安装能力，可以注册组件、指令或依赖。配置、状态与资源应按应用实例组织，重复安装不等于动态更新配置，SSR 与应用卸载也需要明确的生命周期。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-plugins/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-plugins/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"Vue 插件如何向应用提供可复用能力？","item":"https://fe.hushifa.top/questions/vue-plugins/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-Dbk-gXeC.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-BCtqzlRM.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue 插件如何向应用提供可复用能力？</span></nav><h1 tabindex="-1">Vue 插件如何向应用提供可复用能力？</h1><p class="reading-summary">Vue 插件通过 app.use 安装，可以是带 install 方法的对象，也可以直接是安装函数。它接收应用实例和选项，可注册组件、指令，提供依赖，或扩展应用级能力。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>Vue 插件通过 app.use 安装，可以是带 install 方法的对象，也可以直接是安装函数。它接收应用实例和选项，可注册组件、指令，提供依赖，或扩展应用级能力。</p>
-<p>Vue 题目可以沿着依赖收集、更新调度、组件渲染和副作用生命周期来理解。响应式引用记录的是读取关系，不代表所有嵌套对象都会以同样方式被追踪；具体行为还取决于使用的 API 和 Vue 版本。</p>
-<p>对于需要配置的共享服务，可以用 app.provide 配合组件注入，明确依赖入口；使用 globalProperties 时则要控制数量并补充类型，避免组件依赖大量隐式全局名称。</p>
-<p>插件应明确初始化参数和资源生命周期，并考虑多个应用实例、测试隔离以及 SSR 请求间隔离。把可变用户状态放到模块级单例里并不会因为套了一层插件就安全。安装后是否支持动态配置、如何清理，也应写成可维护的接口约定。</p>
-<p>落地时把派生状态、用户输入和副作用分开，避免用一个 watch 或可写变量反复同步同一事实。组件卸载、异步竞态、SSR 和第三方 DOM 操作都需要单独验证。</p>
-<p>实际组件中，先画出数据从哪里来、在哪里被修改、哪些值只是派生结果。这样可以避免把同一份数据同时交给 props、ref、store 和 watch，减少更新顺序变化后出现的互相覆盖。</p></div><div class="answer-bottom"><a href="https://vuejs.org/guide/reusability/plugins.html" target="_blank" rel="noreferrer">Plugins | Vue.js<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vue+%E6%8F%92%E4%BB%B6%E5%A6%82%E4%BD%95%E5%90%91%E5%BA%94%E7%94%A8%E6%8F%90%E4%BE%9B%E5%8F%AF%E5%A4%8D%E7%94%A8%E8%83%BD%E5%8A%9B%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVue+%E6%8F%92%E4%BB%B6%E5%A6%82%E4%BD%95%E5%90%91%E5%BA%94%E7%94%A8%E6%8F%90%E4%BE%9B%E5%8F%AF%E5%A4%8D%E7%94%A8%E8%83%BD%E5%8A%9B%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-plugins%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-plugins%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vue 插件如何向应用提供可复用能力？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-custom-directives/">Vue 自定义指令适合什么场景？</a></li><li><a href="/questions/vue-compiler-optimizations/">Vue 模板编译如何减少运行时更新工作？</a></li><li><a href="/questions/vue-ref-reactive/">Vue 3 中 ref 和 reactive 有什么区别？</a></li><li><a href="/questions/vue-computed-watch/">computed、watch 和 watchEffect 应该如何选择？</a></li></ul></nav></main></div></div>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue 插件如何向应用提供可复用能力？</span></nav><h1 tabindex="-1">Vue 插件如何向应用提供可复用能力？</h1><p class="reading-summary">插件通过 app.use 在应用范围安装能力，可以注册组件、指令或依赖。配置、状态与资源应按应用实例组织，重复安装不等于动态更新配置，SSR 与应用卸载也需要明确的生命周期。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>插件适合安装一组应用级能力，例如格式化服务、路由、国际化或全局组件。它可以是一个安装函数，也可以是具有 install 方法的对象，接收 app 与调用方提供的选项。</p>
+<p>插件不是给所有组件随意增加隐藏全局变量的理由。最好明确暴露一个小接口，说明配置何时生效、状态属于哪个应用、资源何时释放。</p>
+<h3>通过应用级 provide 暴露服务</h3>
+<p>下面示例面向 Vue 3.5 及以上，用 app.onUnmount 清理可选的浏览器监听。状态在每次 install 中创建，不放在模块级单例里。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// localePlugin.js</span>
+<span class="hljs-keyword">import</span> { readonly, ref } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> localeKey = <span class="hljs-title class_">Symbol</span>(<span class="hljs-string">&#x27;区域服务&#x27;</span>);
+<span class="hljs-keyword">const</span> supported = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>([<span class="hljs-string">&#x27;zh-CN&#x27;</span>, <span class="hljs-string">&#x27;en-US&#x27;</span>, <span class="hljs-string">&#x27;de-DE&#x27;</span>]);
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> localePlugin = {
+  <span class="hljs-title function_">install</span>(<span class="hljs-params">app, options = {}</span>) {
+    <span class="hljs-keyword">const</span> initial = options.<span class="hljs-property">locale</span> ?? <span class="hljs-string">&#x27;zh-CN&#x27;</span>;
+    <span class="hljs-keyword">if</span> (!supported.<span class="hljs-title function_">has</span>(initial)) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RangeError</span>(<span class="hljs-string">&#x27;不支持的区域配置&#x27;</span>);
+    <span class="hljs-keyword">const</span> locale = <span class="hljs-title function_">ref</span>(initial);
+
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">setLocale</span>(<span class="hljs-params">value</span>) {
+      <span class="hljs-keyword">if</span> (!supported.<span class="hljs-title function_">has</span>(value)) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RangeError</span>(<span class="hljs-string">&#x27;不支持的区域配置&#x27;</span>);
+      locale.<span class="hljs-property">value</span> = value;
+    }
+
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">formatNumber</span>(<span class="hljs-params">value</span>) {
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Intl</span>.<span class="hljs-title class_">NumberFormat</span>(locale.<span class="hljs-property">value</span>).<span class="hljs-title function_">format</span>(value);
+    }
+
+    app.<span class="hljs-title function_">provide</span>(localeKey, { <span class="hljs-attr">locale</span>: <span class="hljs-title function_">readonly</span>(locale), setLocale, formatNumber });
+
+    <span class="hljs-keyword">if</span> (options.<span class="hljs-property">followBrowser</span> &amp;&amp; <span class="hljs-keyword">typeof</span> <span class="hljs-variable language_">window</span> !== <span class="hljs-string">&#x27;undefined&#x27;</span>) {
+      <span class="hljs-keyword">function</span> <span class="hljs-title function_">syncLanguage</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-keyword">if</span> (supported.<span class="hljs-title function_">has</span>(navigator.<span class="hljs-property">language</span>)) <span class="hljs-title function_">setLocale</span>(navigator.<span class="hljs-property">language</span>);
+      }
+      <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;languagechange&#x27;</span>, syncLanguage);
+      app.<span class="hljs-title function_">onUnmount</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">removeEventListener</span>(<span class="hljs-string">&#x27;languagechange&#x27;</span>, syncLanguage));
+    }
+  },
+};
+</code></pre></div>
+<p>消费者注入同一份键，读取区域并通过明确方法修改：</p>
+<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;!-- LocalePanel.vue --&gt;
+&lt;script setup&gt;
+import { computed, inject } from &#x27;vue&#x27;;
+import { localeKey } from &#x27;./localePlugin.js&#x27;;
+const service = inject(localeKey, null);
+if (!service) throw new Error(&#x27;需要安装区域插件&#x27;);
+const selected = computed({
+  get: () =&gt; service.locale.value,
+  set: value =&gt; service.setLocale(value),
+});
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;section&gt;
+    &lt;label&gt;区域
+      &lt;select v-model=&quot;selected&quot;&gt;
+        &lt;option value=&quot;zh-CN&quot;&gt;中文区域&lt;/option&gt;
+        &lt;option value=&quot;en-US&quot;&gt;美国区域&lt;/option&gt;
+        &lt;option value=&quot;de-DE&quot;&gt;德国区域&lt;/option&gt;
+      &lt;/select&gt;
+    &lt;/label&gt;
+    &lt;p&gt;{{ service.formatNumber(1234.5) }}&lt;/p&gt;
+  &lt;/section&gt;
+&lt;/template&gt;
+</code></pre></div>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// main.js</span>
+<span class="hljs-keyword">import</span> { createApp } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">LocalePanel</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./LocalePanel.vue&#x27;</span>;
+<span class="hljs-keyword">import</span> { localePlugin } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./localePlugin.js&#x27;</span>;
+
+<span class="hljs-keyword">const</span> app = <span class="hljs-title function_">createApp</span>(<span class="hljs-title class_">LocalePanel</span>);
+app.<span class="hljs-title function_">use</span>(localePlugin, { <span class="hljs-attr">locale</span>: <span class="hljs-string">&#x27;zh-CN&#x27;</span>, <span class="hljs-attr">followBrowser</span>: <span class="hljs-literal">true</span> });
+app.<span class="hljs-title function_">mount</span>(<span class="hljs-string">&#x27;#app&#x27;</span>);
+</code></pre></div>
+<p>这个例子只演示数字格式化，不是完整国际化系统。formatNumber 在组件渲染中读取响应式 locale，选择新区域后可以重新显示对应格式；消费者无需把内部 ref 当作可随意写入的全局变量。</p>
+<h3>同一插件的重复安装有明确范围</h3>
+<p>Vue 会避免同一个应用重复安装同一个插件对象或函数。第二次 app.use 不应被当作更新配置的方法；需要动态配置，应像示例的 setLocale 那样提供正式接口。</p>
+<p>同一个插件可以被不同应用安装。由于 locale 在 install 内部创建，两个应用可以有不同初始区域，不会因为导入了同一模块就自动共享用户状态。</p>
+<p>如果每次都通过工厂产生一个新的插件对象，身份又不同，不能期待框架把所有看起来相似的对象都判为同一次安装。</p>
+<h3>初始化和清理属于插件契约</h3>
+<p>插件如果注册浏览器事件、创建定时器或连接外部服务，就应提供相应释放路径。当前应用 API 可以登记卸载回调，但还要考虑安装失败、应用尚未挂载或提前取消初始化等情况。</p>
+<p>示例先验证配置，再建立状态和监听；浏览器专属逻辑也有环境判断。真实复杂初始化应避免执行到一半失败后留下已创建资源，必要时显式管理清理栈或可释放服务。</p>
+<p>app.use 调用安装函数不等于会自动等待任意异步准备工作。若某个服务必须就绪后才能挂载，应由应用启动流程明确等待，或在组件层提供可解释的准备状态。</p>
+<h3>globalProperties 适合有限的兼容接口</h3>
+<p>app.config.globalProperties 可以向组件实例或模板提供全局能力，但大量隐式的 $xxx 会让依赖来源不清楚，也给单独测试组件增加负担。</p>
+<p>script setup 不会因为存在全局属性，就自动在 JavaScript 作用域里多出一个同名变量。组合式代码通常更适合显式 inject 或导入清楚的服务接口。</p>
+<p>TypeScript 项目还需要为公开的注入键或全局实例能力提供相应类型，但声明只描述接口，不会替代实际安装。类型补全出现一个方法，不意味着运行时插件一定已执行。</p>
+<h3>SSR 与测试隔离不能依赖模块单例</h3>
+<p>服务器可能为不同用户处理多个请求。如果插件把可变用户状态放在模块顶层，请求之间可能意外共享。应按应用或请求创建状态，并清楚区分可以共享的静态配置和不该共享的用户数据。</p>
+<p>mounted、unmounted 等客户端生命周期不能替代服务器请求资源管理。示例在服务器不注册 window 监听，真正的服务端连接和缓存则需要自己的作用域。</p>
+<p>测试时应创建独立 app，验证配置、注入、重复安装与卸载，并确认没有残留监听。对于不需要应用级安装的纯函数，直接导出通常更简单；只有确实需要统一注册或配置时，再使用插件这一层。</p></div><div class="answer-bottom"><a href="https://vuejs.org/guide/reusability/plugins.html" target="_blank" rel="noreferrer">Vue · Plugins<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vue+%E6%8F%92%E4%BB%B6%E5%A6%82%E4%BD%95%E5%90%91%E5%BA%94%E7%94%A8%E6%8F%90%E4%BE%9B%E5%8F%AF%E5%A4%8D%E7%94%A8%E8%83%BD%E5%8A%9B%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVue+%E6%8F%92%E4%BB%B6%E5%A6%82%E4%BD%95%E5%90%91%E5%BA%94%E7%94%A8%E6%8F%90%E4%BE%9B%E5%8F%AF%E5%A4%8D%E7%94%A8%E8%83%BD%E5%8A%9B%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-plugins%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-plugins%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vue 插件如何向应用提供可复用能力？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-custom-directives/">Vue 自定义指令适合什么场景？</a></li><li><a href="/questions/vue-compiler-optimizations/">Vue 模板编译如何减少运行时更新工作？</a></li><li><a href="/questions/vue-ref-reactive/">Vue 3 中 ref 和 reactive 有什么区别？</a></li><li><a href="/questions/vue-computed-watch/">computed、watch 和 watchEffect 应该如何选择？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

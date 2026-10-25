@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="JavaScript面试题：用异步迭代器顺序消费流式数据，理解 return、异常、背压和取消边界。" />
+    <meta name="description" content="JavaScript面试题：异步迭代把下一项数据建模为可等待的结果，适合分页、流和逐步产生的数据。for await...of 顺序消费结果，但不会自动限制生产者内部缓存，也不会替底层网络实现取消。" />
     <title>异步迭代器和 for await...of 适合处理什么数据？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/js-async-iterators/" />
     <meta name="robots" content="index,follow" />
@@ -19,19 +19,100 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="异步迭代器和 for await...of 适合处理什么数据？ · 前端知库" />
-    <meta property="og:description" content="JavaScript面试题：用异步迭代器顺序消费流式数据，理解 return、异常、背压和取消边界。" />
+    <meta property="og:description" content="JavaScript面试题：异步迭代把下一项数据建模为可等待的结果，适合分页、流和逐步产生的数据。for await...of 顺序消费结果，但不会自动限制生产者内部缓存，也不会替底层网络实现取消。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/js-async-iterators/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-async-iterators/#webpage","url":"https://fe.hushifa.top/questions/js-async-iterators/","name":"异步迭代器和 for await...of 适合处理什么数据？ · 前端知库","description":"JavaScript面试题：用异步迭代器顺序消费流式数据，理解 return、异常、背压和取消边界。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-async-iterators/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-async-iterators/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"异步迭代器和 for await...of 适合处理什么数据？","item":"https://fe.hushifa.top/questions/js-async-iterators/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-async-iterators/#webpage","url":"https://fe.hushifa.top/questions/js-async-iterators/","name":"异步迭代器和 for await...of 适合处理什么数据？ · 前端知库","description":"JavaScript面试题：异步迭代把下一项数据建模为可等待的结果，适合分页、流和逐步产生的数据。for await...of 顺序消费结果，但不会自动限制生产者内部缓存，也不会替底层网络实现取消。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-async-iterators/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-async-iterators/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"异步迭代器和 for await...of 适合处理什么数据？","item":"https://fe.hushifa.top/questions/js-async-iterators/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-Dbk-gXeC.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-BCtqzlRM.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">异步迭代器和 for await...of 适合处理什么数据？</span></nav><h1 tabindex="-1">异步迭代器和 for await...of 适合处理什么数据？</h1><p class="reading-summary">用异步迭代器顺序消费流式数据，理解 return、异常、背压和取消边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>异步迭代器让数据源按需提供 Promise 结果，<code>for await...of</code> 可以顺序消费异步生成器、ReadableStream 包装器或分页数据。它适合把“下一块数据”建模成可等待的迭代过程。</p>
-<p>可以把过程拆成表达式求值、函数调用、任务排队和副作用清理四步。先写一个只包含关键变量的最小例子，再逐步加入闭包、异常或异步操作，能更容易看出结果是在哪一步产生的。</p>
-<p>顺序消费不等于并发消费；如果每项处理可以并行，需要显式设置并发上限。循环提前退出或抛错时，应确认底层迭代器是否执行 <code>return()</code> 并释放连接、定时器或读取器。</p>
-<p>取消通常需要额外的 <code>AbortSignal</code> 或数据源协议。异步迭代器不会自动停止服务器任务，也不能保证网络流已经被服务端取消。</p>
-<p>如果几个写法都能得到同样输出，还要比较可读性、执行时机、内存占用和取消方式。涉及 Promise、事件或资源时，完成结果和清理结果要分别验证。</p>
-<p>在实际项目中，搜索框、定时器、事件监听和请求经常同时存在。先写出每一步的触发顺序，再决定在哪里更新状态、在哪里清理资源，能避免“结果看起来对，但偶尔重复、过期或无法取消”的问题。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of" target="_blank" rel="noreferrer">MDN · for await...of<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%BC%82%E6%AD%A5%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%92%8C+for+await...of+%E9%80%82%E5%90%88%E5%A4%84%E7%90%86%E4%BB%80%E4%B9%88%E6%95%B0%E6%8D%AE%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%BC%82%E6%AD%A5%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%92%8C+for+await...of+%E9%80%82%E5%90%88%E5%A4%84%E7%90%86%E4%BB%80%E4%B9%88%E6%95%B0%E6%8D%AE%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-async-iterators%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-async-iterators%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：异步迭代器和 for await...of 适合处理什么数据？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-this/">普通函数和箭头函数的 this 有什么区别？</a></li><li><a href="/questions/js-promise-combinators/">Promise.all、allSettled、race 和 any 如何选择？</a></li></ul></nav></main></div></div>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">异步迭代器和 for await...of 适合处理什么数据？</span></nav><h1 tabindex="-1">异步迭代器和 for await...of 适合处理什么数据？</h1><p class="reading-summary">异步迭代把下一项数据建模为可等待的结果，适合分页、流和逐步产生的数据。for await...of 顺序消费结果，但不会自动限制生产者内部缓存，也不会替底层网络实现取消。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>普通数组已经有全部元素，普通迭代器可以同步给出下一项。分页接口、网络流或异步生成的数据则不同：下一项可能还要等请求、读取或计算完成。</p>
+<p>异步迭代器把“给我下一项”定义成一个可等待的过程。数据源提供 Symbol.asyncIterator，返回的迭代器通过 next 产生 Promise 结果，兑现后得到 <code>{ value, done }</code>。for await...of 帮助消费者等待并检查这些结果。</p>
+<h3>async Generator 是一种直观的生产者</h3>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span>* <span class="hljs-title function_">pages</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">yield</span> [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>];
+  <span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>();
+  <span class="hljs-keyword">yield</span> [<span class="hljs-number">3</span>];
+}
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">readPages</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">for</span> <span class="hljs-keyword">await</span> (<span class="hljs-keyword">const</span> page <span class="hljs-keyword">of</span> <span class="hljs-title function_">pages</span>()) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(page.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>));
+  }
+}
+
+<span class="hljs-title function_">readPages</span>();
+<span class="hljs-comment">// 输出：1,2</span>
+<span class="hljs-comment">// 随后输出：3</span>
+</code></pre></div>
+<p>消费者没有一次拿到完整数组，而是先得到第一页，再请求后面的数据。真实分页生产者可以在每次需要下一页时请求接口，并根据服务端的游标或完成标志结束；这里用就绪数据演示协议，不包含网络请求。</p>
+<p>调用 async Generator 函数先得到异步生成器对象，next 才推动执行。函数体可以 await 异步操作，也可以 yield 一项结果。它仍然不是独立线程，里面长时间的同步计算依然会阻塞所在执行环境。</p>
+<h3>顺序消费不等于“自动并发所有处理”</h3>
+<p>for await...of 会等待本次 next 的结果，然后执行循环体，再继续请求下一项。如果循环体中也 await 某项处理，那么通常是这项处理结束后才请求下一项。</p>
+<p>如果循环体只是启动一个异步函数却没有等待它，那些处理仍然可能同时在途，错误也可能没有被当前循环观察。需要并发处理时应明确管理任务集合与并发上限，而不是误以为 for await 自带并发池。</p>
+<p>与 Promise.all 等待一组已启动任务相比，异步迭代很适合总量尚不确定、希望边到达边处理的数据。但如果传进来的是一个已经创建了大量请求 Promise 的数组，那些请求仍然已经启动，顺序 await 不会倒过来限制其启动数量。</p>
+<h3>从 ReadableStream 读取时，锁和取消要分别处理</h3>
+<p>下面的包装器拥有传入流的读取锁。正常读到结束时释放锁；消费者提前退出或读取流程异常时，尝试取消后续读取，并在 finally 中释放锁。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span>* <span class="hljs-title function_">readChunks</span>(<span class="hljs-params">stream</span>) {
+  <span class="hljs-keyword">const</span> reader = stream.<span class="hljs-title function_">getReader</span>();
+  <span class="hljs-keyword">let</span> completed = <span class="hljs-literal">false</span>;
+
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+      <span class="hljs-keyword">const</span> { done, value } = <span class="hljs-keyword">await</span> reader.<span class="hljs-title function_">read</span>();
+      <span class="hljs-keyword">if</span> (done) {
+        completed = <span class="hljs-literal">true</span>;
+        <span class="hljs-keyword">return</span>;
+      }
+      <span class="hljs-keyword">yield</span> value;
+    }
+  } <span class="hljs-keyword">finally</span> {
+    <span class="hljs-keyword">try</span> {
+      <span class="hljs-keyword">if</span> (!completed) <span class="hljs-keyword">await</span> reader.<span class="hljs-title function_">cancel</span>();
+    } <span class="hljs-keyword">finally</span> {
+      reader.<span class="hljs-title function_">releaseLock</span>();
+    }
+  }
+}
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">demonstrateStream</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> stream = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ReadableStream</span>({
+    <span class="hljs-title function_">start</span>(<span class="hljs-params">controller</span>) {
+      controller.<span class="hljs-title function_">enqueue</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]));
+      controller.<span class="hljs-title function_">enqueue</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>([<span class="hljs-number">3</span>, <span class="hljs-number">4</span>]));
+    },
+    <span class="hljs-title function_">cancel</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;数据源已取消&#x27;</span>);
+    },
+  });
+
+  <span class="hljs-keyword">for</span> <span class="hljs-keyword">await</span> (<span class="hljs-keyword">const</span> chunk <span class="hljs-keyword">of</span> <span class="hljs-title function_">readChunks</span>(stream)) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>([...chunk].<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 1,2</span>
+    <span class="hljs-keyword">break</span>;
+  }
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(stream.<span class="hljs-property">locked</span>); <span class="hljs-comment">// false</span>
+}
+
+<span class="hljs-title function_">demonstrateStream</span>();
+<span class="hljs-comment">// 完整输出顺序：1,2 → 数据源已取消 → false</span>
+</code></pre></div>
+<p>break 触发相应的异步关闭，进入生成器 finally；循环等待这段清理结束后才继续，因此最后读取 stream.locked 为 false。</p>
+<p>releaseLock 只是解除当前 reader 对流的占用，并不等于取消底层数据生产。这里显式调用 cancel，是因为包装器约定提前结束就不再需要后续数据。若调用者还希望把未消费部分交给其他 reader，就应选择不同的所有权和取消策略。</p>
+<p>取消本身也可能失败，生产代码应决定如何记录清理错误，避免丢失主要错误上下文。内层 finally 确保即便取消 Promise 拒绝，也仍尝试释放锁。</p>
+<h3>背压不是只要写 for await 就自动完整实现</h3>
+<p>消费者一次请求一项，有助于表达按需获取，但生产者仍可能在内部预取多页、提前缓冲大量字节，甚至完全忽略需求不断推送。缓冲区大小、highWaterMark、拉取策略和外部服务行为，都会影响实际内存与吞吐。</p>
+<p>示例中的流在 start 时就排入两块数据，说明队列中可以提前存在内容。网络流的一块字节也不保证恰好是一行文本、一个 JSON 对象或一条业务消息；解码和协议分帧仍需单独处理跨块边界。</p>
+<p>消费者把所有结果 push 进数组，也会重新累积全部内存。若目标是流式处理，应尽可能及时处理或写出已经消费的数据，而不是最后才一次性汇总。</p>
+<h3>关闭迭代器不保证立即打断正在等待的 next</h3>
+<p>for await 的 break 要等执行进入循环体后才有机会发生。如果当前 next 一直等待底层请求，外部用户点击取消，不会自动使这段等待结束。async Generator 的 return 请求也可能排在尚未完成的操作之后，不能当成抢占式中断。</p>
+<p>需要及时取消，应把 AbortSignal 或数据源自己的取消入口连接到那项等待，让它能够结束或拒绝。收到拒绝后再按生产者的 try/finally 收尾；服务端任务是否真的停止，又是另外的协议问题。</p>
+<p>循环体抛错、正常耗尽与生产者 next 拒绝也不是同一条关闭路径。生产者应对自己获取资源后的失败负责，不要把所有清理都寄托在消费者额外调用 return 上。</p>
+<h3>同步迭代器也能被消费，但适配细节有边界</h3>
+<p>for await...of 找不到 Symbol.asyncIterator 时，可以使用同步 Symbol.iterator 并进行异步适配。同步迭代器产出的 Promise 值会被等待，所以拿一个普通的 Promise 数组也能逐项得到兑现值。</p>
+<p>这与“自定义异步迭代器的 value 无论嵌套多少层都自动解包”不是同一保证。自定义异步协议主要等待 next 返回的结果对象；应清楚定义 value 的类型，async Generator 的 yield 则有其等待语义。</p>
+<p>同步生成器 yield 一个被拒绝的 Promise 时，关闭行为存在规范更新与运行时支持差异：当前 ECMAScript 异步适配算法安排在相关拒绝路径上关闭同步迭代器，但一些较旧实现可能没有执行同步生成器 finally。例如 Node 22.23.3 的这一场景不会执行 finally。</p>
+<p>因此管理真实异步资源时，优先使用 async Generator 并在内部 await、try/finally 中明确处理失败，或对目标运行时单独验证清理路径，不要只看成功遍历例子就认定跨环境资源管理已经可靠。</p>
+<p>补充参考：<a href="https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-asyncfromsynciteratorcontinuation">ECMAScript · AsyncFromSyncIteratorContinuation</a>。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of" target="_blank" rel="noreferrer">MDN · for await...of<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%BC%82%E6%AD%A5%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%92%8C+for+await...of+%E9%80%82%E5%90%88%E5%A4%84%E7%90%86%E4%BB%80%E4%B9%88%E6%95%B0%E6%8D%AE%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%BC%82%E6%AD%A5%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%92%8C+for+await...of+%E9%80%82%E5%90%88%E5%A4%84%E7%90%86%E4%BB%80%E4%B9%88%E6%95%B0%E6%8D%AE%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-async-iterators%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-async-iterators%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：异步迭代器和 for await...of 适合处理什么数据？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-this/">普通函数和箭头函数的 this 有什么区别？</a></li><li><a href="/questions/js-promise-combinators/">Promise.all、allSettled、race 和 any 如何选择？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

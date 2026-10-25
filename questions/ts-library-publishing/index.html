@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="TypeScript面试题：从 package.json exports、types、模块格式和构建产物说明 TypeScript 库发布的兼容边界。" />
+    <meta name="description" content="TypeScript面试题：库发布需要同时提供可解析的 JavaScript 入口、与模块格式匹配的声明入口，以及完整的产物依赖。应从实际安装包验证消费者，而不是只检查源码仓库里的路径别名和类型编译。" />
     <title>TypeScript 库发布时怎样组织类型声明和入口？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/ts-library-publishing/" />
     <meta name="robots" content="index,follow" />
@@ -19,19 +19,101 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="TypeScript 库发布时怎样组织类型声明和入口？ · 前端知库" />
-    <meta property="og:description" content="TypeScript面试题：从 package.json exports、types、模块格式和构建产物说明 TypeScript 库发布的兼容边界。" />
+    <meta property="og:description" content="TypeScript面试题：库发布需要同时提供可解析的 JavaScript 入口、与模块格式匹配的声明入口，以及完整的产物依赖。应从实际安装包验证消费者，而不是只检查源码仓库里的路径别名和类型编译。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/ts-library-publishing/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-library-publishing/#webpage","url":"https://fe.hushifa.top/questions/ts-library-publishing/","name":"TypeScript 库发布时怎样组织类型声明和入口？ · 前端知库","description":"TypeScript面试题：从 package.json exports、types、模块格式和构建产物说明 TypeScript 库发布的兼容边界。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-library-publishing/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-library-publishing/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"TypeScript 库发布时怎样组织类型声明和入口？","item":"https://fe.hushifa.top/questions/ts-library-publishing/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-library-publishing/#webpage","url":"https://fe.hushifa.top/questions/ts-library-publishing/","name":"TypeScript 库发布时怎样组织类型声明和入口？ · 前端知库","description":"TypeScript面试题：库发布需要同时提供可解析的 JavaScript 入口、与模块格式匹配的声明入口，以及完整的产物依赖。应从实际安装包验证消费者，而不是只检查源码仓库里的路径别名和类型编译。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-library-publishing/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-library-publishing/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"TypeScript 库发布时怎样组织类型声明和入口？","item":"https://fe.hushifa.top/questions/ts-library-publishing/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-Dbk-gXeC.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-BCtqzlRM.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">TypeScript 库发布时怎样组织类型声明和入口？</span></nav><h1 tabindex="-1">TypeScript 库发布时怎样组织类型声明和入口？</h1><p class="reading-summary">从 package.json exports、types、模块格式和构建产物说明 TypeScript 库发布的兼容边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>库发布至少要让消费者能找到运行时代码和类型声明。通常需要构建 ESM 或 CommonJS 入口、生成 <code>.d.ts</code>，并在 <code>package.json</code> 中正确声明 <code>types</code> 或通过 <code>exports</code> 的条件暴露类型入口。</p>
-<p>TypeScript 的类型检查发生在编译期，运行时仍然执行生成的 JavaScript；类型声明不会自动校验接口返回值、用户输入或第三方数据。回答类型题时应明确哪些保证来自编译器，哪些需要运行时校验或测试补上。</p>
-<p><code>exports</code> 会封装未声明的子路径，也可能改变旧项目的解析结果。发布者应分别测试 Node、打包器、TypeScript 不同 moduleResolution 设置下的 <code>import</code>、<code>require</code>、类型导入和子路径，不能只在本仓库能编译就认为兼容。</p>
-<p>类型声明描述的是公开 API 契约，不能保证运行时一定提供同样行为。发布前应检查产物中是否误包含源码路径、测试文件或仅开发环境存在的依赖，并用一个独立消费者项目验证安装包。</p>
-<p>公共类型还要考虑调用方的错误提示、类型推导速度、模块发布方式和版本兼容。复杂类型可以用类型测试验证，但不要为了表达一个简单约束引入难以维护的递归类型。</p>
-<p>在实际项目中，类型最容易在接口边界失效：后端返回、localStorage、URL 参数和第三方库都不是编译器可以直接信任的输入。把类型声明、运行时校验和错误处理放在同一条数据流上，类型才真正能降低维护成本。</p></div><div class="answer-bottom"><a href="https://www.typescriptlang.org/docs/handbook/declaration-files/publishing.html" target="_blank" rel="noreferrer">TypeScript Handbook · Publishing<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+TypeScript+%E5%BA%93%E5%8F%91%E5%B8%83%E6%97%B6%E6%80%8E%E6%A0%B7%E7%BB%84%E7%BB%87%E7%B1%BB%E5%9E%8B%E5%A3%B0%E6%98%8E%E5%92%8C%E5%85%A5%E5%8F%A3%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ATypeScript+%E5%BA%93%E5%8F%91%E5%B8%83%E6%97%B6%E6%80%8E%E6%A0%B7%E7%BB%84%E7%BB%87%E7%B1%BB%E5%9E%8B%E5%A3%B0%E6%98%8E%E5%92%8C%E5%85%A5%E5%8F%A3%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-library-publishing%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-library-publishing%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：TypeScript 库发布时怎样组织类型声明和入口？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-declaration-merging/">TypeScript 声明合并和模块扩展有哪些边界？</a></li><li><a href="/questions/ts-unknown/">any、unknown 和 never 分别适合什么场景？</a></li><li><a href="/questions/ts-interface-type/">type 和 interface 有哪些区别？</a></li><li><a href="/questions/ts-generics/">泛型解决了什么问题？如何约束泛型？</a></li></ul></nav></main></div></div>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">TypeScript 库发布时怎样组织类型声明和入口？</span></nav><h1 tabindex="-1">TypeScript 库发布时怎样组织类型声明和入口？</h1><p class="reading-summary">库发布需要同时提供可解析的 JavaScript 入口、与模块格式匹配的声明入口，以及完整的产物依赖。应从实际安装包验证消费者，而不是只检查源码仓库里的路径别名和类型编译。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>发布 TypeScript 库，至少需要回答两件事：运行时加载哪个 JavaScript 文件，编译器读取哪份类型声明。两份入口必须描述同一套公开 API，并且消费者不应依赖库作者本机的源码路径或工作区别名。</p>
+<p>最有效的验证方式，是把实际打包得到的包放进一个独立消费者，再按真实包名导入、检查和运行。</p>
+<h3>先做一个边界清楚的 ESM 包</h3>
+<p>下面以只承诺 ESM 导入的工具库为例。源码提供一个函数与它的选项类型：</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-comment">// src/index.ts</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">FormatOptions</span> {
+  <span class="hljs-attr">suffix</span>?: <span class="hljs-built_in">string</span>;
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">formatCount</span>(<span class="hljs-params"><span class="hljs-attr">value</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">options</span>: <span class="hljs-title class_">FormatOptions</span> = {}</span>): <span class="hljs-built_in">string</span> {
+  <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Number</span>.<span class="hljs-title function_">isSafeInteger</span>(value) || value &lt; <span class="hljs-number">0</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RangeError</span>(<span class="hljs-string">&#x27;数量必须是非负安全整数&#x27;</span>);
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${value}</span><span class="hljs-subst">${options.suffix ?? <span class="hljs-string">&#x27; 项&#x27;</span>}</span>`</span>;
+}
+</code></pre></div>
+<p>使用项目选定并安装的 TypeScript 开发依赖构建，tsconfig.json 可以明确输出目录与声明：</p>
+<div class="not-prose code-block"><div class="code-language">json</div><pre><code class="hljs language-json">{
+  &quot;compilerOptions&quot;: {
+    &quot;target&quot;: &quot;ES2022&quot;,
+    &quot;lib&quot;: [&quot;ES2022&quot;],
+    &quot;module&quot;: &quot;NodeNext&quot;,
+    &quot;moduleResolution&quot;: &quot;NodeNext&quot;,
+    &quot;strict&quot;: true,
+    &quot;declaration&quot;: true,
+    &quot;noEmitOnError&quot;: true,
+    &quot;rootDir&quot;: &quot;src&quot;,
+    &quot;outDir&quot;: &quot;dist&quot;
+  },
+  &quot;include&quot;: [&quot;src&quot;]
+}
+</code></pre></div>
+<p>package.json 将运行入口与类型入口一起暴露：</p>
+<div class="not-prose code-block"><div class="code-language">json</div><pre><code class="hljs language-json">{
+  &quot;name&quot;: &quot;@example/count-label&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;type&quot;: &quot;module&quot;,
+  &quot;files&quot;: [&quot;dist&quot;],
+  &quot;types&quot;: &quot;./dist/index.d.ts&quot;,
+  &quot;exports&quot;: {
+    &quot;.&quot;: {
+      &quot;types&quot;: &quot;./dist/index.d.ts&quot;,
+      &quot;import&quot;: &quot;./dist/index.js&quot;
+    }
+  },
+  &quot;scripts&quot;: {
+    &quot;build&quot;: &quot;tsc -p tsconfig.json&quot;
+  }
+}
+</code></pre></div>
+<p>构建后应实际存在 dist/index.js 和 dist/index.d.ts。顶层 type:module 让这些 .js 与相应 .d.ts 采用 ESM 语义。types 提供类型入口，相应 exports 条件则服务遵循现代包解析的消费者，类型条件放在适当的前置位置。</p>
+<p>FormatOptions 只存在于类型层，不会成为 JavaScript 中可读取的接口对象。消费者应使用 import type 导入它，真正调用 formatCount 则需要值导入。</p>
+<h3>exports 封装了公开路径，不是列出目录就结束</h3>
+<p>设置 exports 后，未声明的子路径可能不再允许被消费者按包名深层导入。包中实际有某个内部文件，也不意味着 <code>包名/dist/internal.js</code> 就是受支持的公共入口。</p>
+<p>如果要公开额外功能，应增加明确子路径及其类型和运行入口。以后调整内部文件结构时，消费者依赖这些稳定入口，比直接依赖 dist 布局更容易维护。</p>
+<p>老版本工具不一定使用同样的 exports 解析规则，因此声明支持范围时应实际测试目标。不要为了让一个工具勉强工作而让 types、exports 和真实模块格式互相矛盾。</p>
+<h3>双格式包需要分别匹配声明格式</h3>
+<p>如果确实承诺同时支持 import 与 require，可以为它们提供分开的入口。例如发布结构采用 .mjs、.cjs 时，对应声明可采用 .d.mts、.d.cts：</p>
+<div class="not-prose code-block"><div class="code-language">json</div><pre><code class="hljs language-json">{
+  &quot;exports&quot;: {
+    &quot;.&quot;: {
+      &quot;import&quot;: {
+        &quot;types&quot;: &quot;./dist/esm/index.d.mts&quot;,
+        &quot;default&quot;: &quot;./dist/esm/index.mjs&quot;
+      },
+      &quot;require&quot;: {
+        &quot;types&quot;: &quot;./dist/cjs/index.d.cts&quot;,
+        &quot;default&quot;: &quot;./dist/cjs/index.cjs&quot;
+      }
+    }
+  }
+}
+</code></pre></div>
+<p>这只是入口组织示例，必须由构建流程真正生成四个相互对应的文件，并从两类消费者验证。不能把同一份按 ESM 解释的声明随意指给 CommonJS 分支，然后认为“反正内容都是函数签名”就完全等价。</p>
+<p>还有其他合法组织方式，例如在子目录通过 package.json 明确模块格式，关键是让运行时代码与声明的格式一致。现代 Node 能 require 某些同步 ESM，也不等于一个包无需验证就可以对所有 CommonJS 用户承诺兼容。</p>
+<p>双构建还可能在同一进程中形成两份模块状态，影响单例、类身份与缓存。如果没有实际兼容需求，单一格式通常更容易保持一致。</p>
+<h3>声明不能泄漏开发环境专属路径</h3>
+<p>源码里通过 paths 或工作区别名导入的类型，可能原样进入 .d.ts。消费者没有同样的别名配置，就会出现“库自己能编译，安装后找不到类型”的问题。</p>
+<p>如果公开声明引用了另一个包的类型，那个包需要通过合适的依赖或 peer 关系对消费者可用，不能只因为作者在 devDependencies 安装过就认为发布后也存在。只供内部测试使用的依赖则不应无意成为公共签名的一部分。</p>
+<p>自动推导有时会暴露内部实现类型。发布前应查看生成声明，给公共边界适当的显式签名，避免使用者被迫理解一串未公开的内部路径或复杂类型。</p>
+<h3>从实际安装包验证，而不是从源码直接引用</h3>
+<p>可以先用 npm pack 在本地生成包，再检查内容清单，确认入口、声明和必要资源都在里面，源码测试、临时文件或本机配置没有误入。</p>
+<p>把包安装到独立消费者后，至少检查以下路径：运行时按包名导入函数；TypeScript 能推导返回值并拒绝错误参数；import type 能找到公开类型；承诺的子路径可用；未公开内部路径没有被当成隐含 API。</p>
+<p>若支持 CommonJS、不同 moduleResolution 或一定范围的 TypeScript 版本，应分别准备相应消费者。仓库内 monorepo 链接可能直接指向源码，掩盖产物缺失，不能替代安装包测试。</p>
+<p>files 字段可以限制发布内容，但仍要看 pack 的实际清单。declarationMap 若要帮助跳回源码，还需要确保映射目标可用；只发布地图却遗漏其指向内容，不能保证消费者体验。</p>
+<h3>类型兼容也是版本契约的一部分</h3>
+<p>运行函数名字没变，类型参数、重载顺序、返回联合或可选属性的变化，也可能让使用者升级后无法编译。类型修正可能是合理的，但仍应按公开兼容承诺评估与说明。</p>
+<p>构建成功只能证明作者环境完成了构建，声明生成成功只能证明产生了文件。最终可信的发布证据，是消费者从包入口拿到正确类型，并能运行到对应的真实实现。</p></div><div class="answer-bottom"><a href="https://www.typescriptlang.org/docs/handbook/declaration-files/publishing.html" target="_blank" rel="noreferrer">TypeScript · Publishing declaration files<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+TypeScript+%E5%BA%93%E5%8F%91%E5%B8%83%E6%97%B6%E6%80%8E%E6%A0%B7%E7%BB%84%E7%BB%87%E7%B1%BB%E5%9E%8B%E5%A3%B0%E6%98%8E%E5%92%8C%E5%85%A5%E5%8F%A3%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ATypeScript+%E5%BA%93%E5%8F%91%E5%B8%83%E6%97%B6%E6%80%8E%E6%A0%B7%E7%BB%84%E7%BB%87%E7%B1%BB%E5%9E%8B%E5%A3%B0%E6%98%8E%E5%92%8C%E5%85%A5%E5%8F%A3%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-library-publishing%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-library-publishing%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：TypeScript 库发布时怎样组织类型声明和入口？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-declaration-merging/">TypeScript 声明合并和模块扩展有哪些边界？</a></li><li><a href="/questions/ts-unknown/">any、unknown 和 never 分别适合什么场景？</a></li><li><a href="/questions/ts-interface-type/">type 和 interface 有哪些区别？</a></li><li><a href="/questions/ts-generics/">泛型解决了什么问题？如何约束泛型？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>
