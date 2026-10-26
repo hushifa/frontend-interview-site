@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合希望使用 Web 界面开发客户端的项目。本条指向 Tauri 2，系统 WebView、插件和权限配置会影响跨平台行为；核心工程也涉及 Rust。</p>`};export{e as default};

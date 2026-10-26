@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合了解编译驱动的组件开发。Svelte 与 SvelteKit 分工不同，完整应用的路由和服务端能力需查阅对应框架文档。</p>`};export{e as default};

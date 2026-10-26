@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合协作、通知和实时数据场景。Socket.IO 协议不等于原生 WebSocket，客户端与服务端需要配套；重连也不自动保证业务消息不丢失。</p>`};export{e as default};

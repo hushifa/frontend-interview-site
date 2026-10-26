@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合使用 Tailwind 快速组织常见界面外观。CSS 组件样式不等于完整的复杂交互逻辑，仍需处理行为和可访问性。</p>`};export{e as default};

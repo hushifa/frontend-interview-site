@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合组件中的条件类名。它不负责判断 Tailwind 工具类之间的冲突，也不进行样式隔离。</p>`};export{e as default};

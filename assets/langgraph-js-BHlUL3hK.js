@@ -1,2 +1,0 @@
-var e={notesHtml:`<p>适合把 Agent 的节点、状态、循环、暂停和恢复显式建模。前端接入时仍需定义消息协议、工具确认、错误恢复和状态持久化，不能把图执行结果直接当成用户可执行指令。</p>
-<p>本条仅收录 LangGraph.js 开源代码本体，<code>@langchain/langgraph</code> npm 元数据标记为 MIT；不包含模型调用额度、LangSmith 等托管服务或商业支持。</p>`};export{e as default};

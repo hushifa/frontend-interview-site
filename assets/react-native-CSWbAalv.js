@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合 React 技术栈的原生移动应用。组件与浏览器 DOM 不同，平台 API、原生依赖和性能需要真机验证。</p>`};export{e as default};

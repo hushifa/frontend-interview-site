@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合需要统一请求配置与拦截器的项目。简单请求也可使用原生 Fetch，选择前应比较错误语义、取消与现有工程约定。</p>`};export{e as default};

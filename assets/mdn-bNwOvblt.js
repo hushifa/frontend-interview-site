@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合查 API、学习 Web 平台概念，以及核对浏览器支持情况。兼容性需要查看具体条目和目标版本，示例不等于所有环境的行为保证。</p>`};export{e as default};

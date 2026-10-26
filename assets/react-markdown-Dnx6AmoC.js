@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合文档、题解和聊天内容展示。插件、自定义组件和 URL 转换会影响安全边界，不可信内容不应直接当作 HTML 执行。</p>`};export{e as default};

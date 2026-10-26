@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合减少排版争论与格式噪声。它主要处理格式，不负责证明代码逻辑正确，可与 Lint 分工使用。</p>`};export{e as default};

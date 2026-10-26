@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合在提交前运行约定检查。本地 hooks 可以被跳过，关键校验仍应在 CI 执行；不要依赖它保证远端代码始终合规。</p>`};export{e as default};

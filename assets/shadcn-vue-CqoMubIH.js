@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合希望直接维护组件源码和样式的 Vue 项目。生成进项目的代码需要自行维护，React 版 shadcn/ui 的示例不能直接照搬。</p>`};export{e as default};

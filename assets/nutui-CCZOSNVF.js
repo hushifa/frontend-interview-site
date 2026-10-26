@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合移动网页的输入、展示和交互。本条对应 Vue 版本，React、Taro 等相关实现需使用各自匹配的包和文档。</p>`};export{e as default};

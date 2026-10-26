@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合在线代码编辑、配置编辑和语法提示。它不是完整 VS Code，也不能假定所有 VS Code 扩展都可直接使用；Worker 和资源加载需要配置。</p>`};export{e as default};

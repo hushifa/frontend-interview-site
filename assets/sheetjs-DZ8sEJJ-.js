@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>本条仅收录 Apache-2.0 许可的 Community Edition，不包含专业产品。适合表格数据导入导出；具体版本和分发渠道以官方说明为准，不将 npm 上的版本号等同于官方最新版本。</p>`};export{e as default};

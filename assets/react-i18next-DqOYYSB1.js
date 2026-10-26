@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合多语言 React 产品。复数、插值、资源加载与缺失翻译策略需要配置，日期和数字格式化可配合 Intl。</p>`};export{e as default};

@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合 Nuxt 或官方支持的 Vue 集成场景。不同主版本的底层依赖、主题方式与安装步骤有变化，应按安装版本查阅。</p>`};export{e as default};

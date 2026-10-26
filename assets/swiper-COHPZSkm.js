@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合移动网页轮播和滑动内容。需要按使用模块引入样式，React、Vue 与 Web Component 的集成方式不同。</p>`};export{e as default};

@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合自建组件库或定制设计系统。React Aria 与带完整外观的 React Spectrum 分工不同，最终界面仍需检查名称、对比度与完整操作流程。</p>`};export{e as default};

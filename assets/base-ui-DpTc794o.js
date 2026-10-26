@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合希望自行控制组件外观的团队。它与 Material UI 不是同一套成品样式组件，主题和具体产品体验需要自己组织。</p>`};export{e as default};

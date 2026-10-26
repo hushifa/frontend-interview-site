@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合构建流程中的快速转换或打包。处理 TypeScript 语法不等于执行完整类型检查，应另外安排类型验证。</p>`};export{e as default};

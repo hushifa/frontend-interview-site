@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合小程序及相关跨端业务。React、Vue、目标平台与插件支持要按具体版本核对，不能假定普通 Web 组件无需修改即可运行。</p>`};export{e as default};

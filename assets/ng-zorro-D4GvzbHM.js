@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合 Angular 管理系统与业务界面。Angular 主版本支持范围、国际化和主题配置要与所用版本配套。</p>`};export{e as default};

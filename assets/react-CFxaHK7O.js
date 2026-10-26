@@ -1,0 +1,2 @@
+var e={notesHtml:`<p>Learn 部分用交互示例讲组件拆分、状态设计和 Effect；API Reference 适合开发时查询具体 Hook、组件和注意事项。相比零散技巧文章，更适合建立一致的 React 更新模型。</p>
+<p>路由、数据缓存和部署通常还涉及所选应用框架，不能把框架提供的能力都算作 React 自身的 API。</p>`};export{e as default};

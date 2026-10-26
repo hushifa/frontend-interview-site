@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合已有 Web 界面需要进入移动应用的项目。原生插件、权限、构建工具和应用商店发布仍需要按平台配置。</p>`};export{e as default};

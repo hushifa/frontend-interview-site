@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合声明式动画、布局变化与交互反馈。本条仅收录 motion 开源动画库，不包含 Motion+ 等付费产品。各框架接口需分别核对，同时尊重减少动画的系统偏好。</p>`};export{e as default};

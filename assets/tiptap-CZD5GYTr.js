@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合定制富文本内容模型和工具栏。本条只收录 @tiptap/core 开源核心与免费开源扩展，不包含 Pro 扩展、付费模板或托管协作服务；具体扩展仍应分别核对许可。</p>`};export{e as default};

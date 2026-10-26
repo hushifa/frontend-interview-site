@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合需要缓存、重验证和请求状态的 React 页面。需要正确设计缓存键与 fetcher，不能把缓存自动更新理解为业务数据永远最新。</p>`};export{e as default};

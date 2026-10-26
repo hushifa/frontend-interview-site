@@ -1,0 +1,2 @@
+var e={notesHtml:`<p>适合已经使用 Tailwind 的项目，能够快速得到按钮、卡片、表单等常见视觉样式。它主要提供 CSS 类，不会自动实现所有复杂交互或业务状态。</p>
+<p>使用前确认 Tailwind 与 daisyUI 主版本，检查主题生成、样式体积和无障碍语义；交互组件仍要由 HTML、JavaScript 或其他库完成。</p>`};export{e as default};

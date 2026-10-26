@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合了解宿主、客户端与服务器如何协作。协议不代替权限设计，网页不能直接拥有本机进程的 stdio 能力。</p>`};export{e as default};

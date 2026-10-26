@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合减少事件、存储、网络状态等重复逻辑。SSR、浏览器 API 支持及副作用清理仍要按具体函数文档处理。</p>`};export{e as default};

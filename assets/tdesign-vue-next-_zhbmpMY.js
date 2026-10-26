@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合 Vue 3 企业应用。Vue 2、Vue 3 和移动端对应不同实现，选型时先确认包名和框架版本。</p>`};export{e as default};

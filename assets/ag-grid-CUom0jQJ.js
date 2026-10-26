@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>本条仅收录 MIT 许可的 Community 版本，Enterprise 模块和需要商业许可证的功能不在范围。使用前按官方功能表确认模块归属，并验证数据规模和框架集成。</p>`};export{e as default};

@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合接口输入、表单数据和外部 JSON 的边界校验。Schema 能验证约定的结构和规则，不自动保证业务事实或操作权限。</p>`};export{e as default};

@@ -1,2 +1,0 @@
-var e={notesHtml:`<p>适合希望用一套快速工具处理 JavaScript、TypeScript、JSON、CSS 等代码风格和静态检查的项目。迁移时要对比现有 ESLint/Prettier 规则、插件覆盖和 CI 行为，不要默认规则完全等价。</p>
-<p>本条仅收录 Biome 开源工具本体，<code>@biomejs/biome</code> npm 元数据标记为 MIT OR Apache-2.0；不包含托管服务或商业支持。</p>`};export{e as default};

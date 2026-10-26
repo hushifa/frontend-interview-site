@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合希望按项目需求组合工具类规则的团队。预设决定可用语法，不应假定所有 Tailwind 类名都默认兼容。</p>`};export{e as default};

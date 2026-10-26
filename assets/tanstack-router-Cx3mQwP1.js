@@ -1,2 +1,0 @@
-var e={notesHtml:`<p>适合需要类型化路由树、结构化搜索参数和嵌套路由加载的 React 项目。选型时要比较现有路由生态、数据获取方案、SSR 支持和团队学习成本。</p>
-<p>本条仅收录 TanStack Router 开源代码本体，<code>@tanstack/react-router</code> npm 元数据标记为 MIT；不包含托管服务或商业扩展。</p>`};export{e as default};

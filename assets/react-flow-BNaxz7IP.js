@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合流程图、工作流和可视化编排。本条只收录 @xyflow/react 开源库，不包含 Pro 服务与付费示例。节点渲染、撤销与业务执行由应用自行实现。</p>`};export{e as default};

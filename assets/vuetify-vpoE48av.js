@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合采用 Material 视觉规范的 Vue 应用。需要核对 Vue 与 Vuetify 主版本的对应关系，以及布局和主题约定。</p>`};export{e as default};

@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合函数、模块和组件相关测试。Node、模拟 DOM 与真实浏览器模式的能力不同，选择环境应与被测行为匹配。</p>`};export{e as default};

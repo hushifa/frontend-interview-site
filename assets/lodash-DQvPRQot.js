@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合需要成熟边界处理的通用操作。先检查原生 API 是否足够，再按实际构建方式控制导入体积。</p>`};export{e as default};

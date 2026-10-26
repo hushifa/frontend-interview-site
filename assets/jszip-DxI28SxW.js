@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合批量下载打包或读取 ZIP 文件。压缩解压会消耗内存和 CPU，处理不可信大文件时要限制规模，并明确运行环境。</p>`};export{e as default};

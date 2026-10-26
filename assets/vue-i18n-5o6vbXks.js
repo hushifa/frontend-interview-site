@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合多语言 Vue 应用。不同模式与主版本的 API 要配套，翻译中的 HTML 和外部输入需谨慎处理。</p>`};export{e as default};

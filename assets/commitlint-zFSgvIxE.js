@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合采用 Conventional Commits 等约定的团队。它验证提交文本格式，不检查代码质量；本地 hooks 与 CI 可以按团队流程配合。</p>`};export{e as default};

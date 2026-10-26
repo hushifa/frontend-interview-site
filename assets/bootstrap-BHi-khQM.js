@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合传统网页、快速原型和已有 Bootstrap 项目。这里的文档指向 5.3，历史版本的依赖和 API 不同；React、Vue 封装库需独立评估。</p>`};export{e as default};

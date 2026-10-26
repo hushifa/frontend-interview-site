@@ -1,2 +1,0 @@
-var e={notesHtml:`<p>适合把前端请求、路由和服务端链路关联到统一的可观测性系统。浏览器端采集要注意隐私、采样、跨域传播、数据量和用户内容脱敏，不能默认上传完整请求或页面数据。</p>
-<p>本条仅收录 OpenTelemetry JavaScript 开源代码本体，<code>@opentelemetry/api</code> npm 元数据标记为 Apache-2.0；不包含任何商业观测平台或托管额度。</p>`};export{e as default};

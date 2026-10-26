@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合自建 Vue 设计系统。历史 Radix Vue 资料可能使用旧包名，采用示例前要核对迁移说明和当前 API。</p>`};export{e as default};

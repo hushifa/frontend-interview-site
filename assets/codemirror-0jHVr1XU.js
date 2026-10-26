@@ -1,1 +1,0 @@
-var e={notesHtml:`<p>适合嵌入式代码和文本编辑。本条为当前模块化文档入口，历史 CodeMirror 5 的接口与新版本有明显区别。</p>`};export{e as default};
