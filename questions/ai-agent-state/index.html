@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="AI 应用前端面试题：建模 Agent 的消息、步骤、工具状态和审批状态，避免只显示一段不可解释的最终文本。" />
+    <meta name="description" content="AI 应用前端面试题：用可恢复的运行状态解释 Agent 正在做什么、等待什么和已经完成什么，区分模型输出、工具执行事实与用户授权。" />
     <title>Agent 前端界面怎样展示计划、工具调用和人工确认？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/ai-agent-state/" />
     <meta name="robots" content="index,follow" />
@@ -19,36 +19,63 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Agent 前端界面怎样展示计划、工具调用和人工确认？ · 前端知库" />
-    <meta property="og:description" content="AI 应用前端面试题：建模 Agent 的消息、步骤、工具状态和审批状态，避免只显示一段不可解释的最终文本。" />
+    <meta property="og:description" content="AI 应用前端面试题：用可恢复的运行状态解释 Agent 正在做什么、等待什么和已经完成什么，区分模型输出、工具执行事实与用户授权。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/ai-agent-state/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ai-agent-state/#webpage","url":"https://fe.hushifa.top/questions/ai-agent-state/","name":"Agent 前端界面怎样展示计划、工具调用和人工确认？ · 前端知库","description":"AI 应用前端面试题：建模 Agent 的消息、步骤、工具状态和审批状态，避免只显示一段不可解释的最终文本。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ai-agent-state/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ai-agent-state/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"AI 应用前端面试题","item":"https://fe.hushifa.top/topics/ai-frontend/"},{"@type":"ListItem","position":3,"name":"Agent 前端界面怎样展示计划、工具调用和人工确认？","item":"https://fe.hushifa.top/questions/ai-agent-state/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ai-agent-state/#webpage","url":"https://fe.hushifa.top/questions/ai-agent-state/","name":"Agent 前端界面怎样展示计划、工具调用和人工确认？ · 前端知库","description":"AI 应用前端面试题：用可恢复的运行状态解释 Agent 正在做什么、等待什么和已经完成什么，区分模型输出、工具执行事实与用户授权。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ai-agent-state/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ai-agent-state/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"AI 应用前端面试题","item":"https://fe.hushifa.top/topics/ai-frontend/"},{"@type":"ListItem","position":3,"name":"Agent 前端界面怎样展示计划、工具调用和人工确认？","item":"https://fe.hushifa.top/questions/ai-agent-state/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-BCtqzlRM.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/ai-frontend/">AI 应用前端面试题</a><span aria-hidden="true">/</span><span aria-current="page">Agent 前端界面怎样展示计划、工具调用和人工确认？</span></nav><h1 tabindex="-1">Agent 前端界面怎样展示计划、工具调用和人工确认？</h1><p class="reading-summary">建模 Agent 的消息、步骤、工具状态和审批状态，避免只显示一段不可解释的最终文本。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>Agent 一次任务可能先检索资料，再生成修改方案，等待用户确认，最后调用工具写入。只显示一个旋转图标和最终回答，会让用户无法判断它是在等待网络、等待自己确认，还是已经执行了操作。</p>
-<p>界面应展示可核验的运行状态与结果，区分计划、尝试和已完成事实，而不是把模型写出的计划直接勾成完成。</p>
-<h3>会话、运行和步骤是不同层次</h3>
-<p>会话保存用户与助手的历史；运行表示一次具体执行尝试；步骤表示模型请求、检索、工具调用或批准等可观察活动。一次运行还可能有并行步骤，因此不一定是一条简单的线性进度条。</p>
-<p>每个对象需要稳定 ID，步骤记录开始、结束、状态和关联结果。重试可以创建新的 attempt，避免把第一次失败的记录直接覆盖掉，让用户误以为从未失败。</p>
-<p>计划也可能在执行中调整，应说明已发现的新条件，不要给尚未发生的步骤伪造精确进度。若总工作量未知，显示“正在检索资料”比显示没有依据的 87% 更诚实。</p>
-<h3>状态来自执行事件，不来自模型措辞</h3>
-<p>模型输出“我已经保存文件”，不能作为保存成功的权威证据。应等待受控执行端返回成功，并关联文件、版本或其他可验证结果。</p>
-<p>工具请求的参数仍在流式接收时，不能标为运行中；待批准表示系统正在等待用户，不是模型继续计算；取消请求已发送也不等于所有外部步骤已经停止。</p>
-<p>错误状态需要区分可重试失败、用户拒绝、权限不足和结果未知。网络断开时工具可能已经成功执行，显示“连接中断，正在核对结果”有时比直接显示失败更准确。</p>
-<h3>计划说明不必暴露或编造内部思考</h3>
-<p>用户需要知道准备做什么、为什么需要某项权限、会影响哪些数据，以及目前有哪些证据。可以用简短的行动摘要、工具记录和来源呈现这些信息。</p>
-<p>不应把不可核验的“内部推理过程”当成执行日志，也不必用大量逐字思考文本占据界面。可观察步骤与产物才是恢复、审计和用户理解的可靠依据。</p>
-<h3>人工确认应嵌在具体动作前</h3>
-<p>读取公开资料与删除文件的风险不同。需要确认的动作应展示目标、参数与影响，并在执行之前暂停对应步骤。用户同意后，执行端仍要校验当前权限和参数是否变化。</p>
-<p>多个并行步骤中，一步待批准不一定意味着所有只读准备都必须停下，但任何依赖该批准的副作用都不能提前发生。界面应表达依赖关系，避免用户以为点一次允许就授权了之后所有动作。</p>
-<h3>刷新恢复需要服务端事实来源</h3>
-<p>前端内存里的数组无法证明后台任务是否还在运行。重连时应获取服务端快照或事件序列，根据运行 ID、步骤 ID 和版本合并，处理重复事件与缺口。</p>
-<p>如果客户端收到结束事件后又迟到一条旧增量，不应把完成状态倒退成运行中。顺序、幂等与版本规则应由协议明确，而不是按到达顺序随意覆盖。</p>
-<p>恢复执行也不同于恢复展示。查看过去步骤不应再次触发工具，重放日志更不能等同于重放副作用。</p>
-<h3>结果要帮助用户检查，而不是只报“完成”</h3>
-<p>最终状态可以附上修改摘要、文件链接、验证结果和未完成事项。工具原始输出可能很长或包含敏感内容，应按用途脱敏与折叠，不要把所有日志默认展开。</p>
-<p>失败时保留已完成产物与可恢复位置，停止时说明哪些工作已结束、哪些结果仍未知。这样的状态模型才能支持长任务，而不只是让一次演示看起来像在自动执行。</p></div><div class="answer-bottom"><a href="https://modelcontextprotocol.io/docs/learn/architecture" target="_blank" rel="noreferrer">Model Context Protocol · Architecture<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Agent+%E5%89%8D%E7%AB%AF%E7%95%8C%E9%9D%A2%E6%80%8E%E6%A0%B7%E5%B1%95%E7%A4%BA%E8%AE%A1%E5%88%92%E3%80%81%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E5%92%8C%E4%BA%BA%E5%B7%A5%E7%A1%AE%E8%AE%A4%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAgent+%E5%89%8D%E7%AB%AF%E7%95%8C%E9%9D%A2%E6%80%8E%E6%A0%B7%E5%B1%95%E7%A4%BA%E8%AE%A1%E5%88%92%E3%80%81%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E5%92%8C%E4%BA%BA%E5%B7%A5%E7%A1%AE%E8%AE%A4%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aai-agent-state%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AAI+%E5%BA%94%E7%94%A8%E5%89%8D%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fai-agent-state%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Agent 前端界面怎样展示计划、工具调用和人工确认？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ai-tool-approval/">模型提出工具调用后，前端应该怎样展示和确认？</a></li><li><a href="/questions/ai-evaluation-observability/">AI 前端应用为什么需要评测和可观测性？</a></li><li><a href="/questions/ai-multimodal-ui/">多模态 AI 前端界面需要额外处理哪些状态？</a></li><li><a href="/questions/ai-realtime-voice/">AI 实时语音界面需要关注哪些前端状态？</a></li></ul></nav></main></div></div>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/ai-frontend/">AI 应用前端面试题</a><span aria-hidden="true">/</span><span aria-current="page">Agent 前端界面怎样展示计划、工具调用和人工确认？</span></nav><h1 tabindex="-1">Agent 前端界面怎样展示计划、工具调用和人工确认？</h1><p class="reading-summary">用可恢复的运行状态解释 Agent 正在做什么、等待什么和已经完成什么，区分模型输出、工具执行事实与用户授权。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>用户真正想知道的不是“模型正在思考”</h2>
+<p>一个 Agent 任务可能先读取项目文件，再检索资料，接着提出修改方案，等待用户批准，最后调用工具写入文件。只放一个转圈图标，用户无法判断它是在等待网络、等待权限、执行工具，还是已经失败。</p>
+<p>更麻烦的是，模型的自然语言不是执行事实。模型说“文件已经保存”，只代表它生成了这句话；只有受控执行端返回成功，界面才能把文件标记为已保存。前端要展示的是可验证的运行过程，而不是把模型措辞当作进度条。</p>
+<h2>先把会话、运行和步骤分开</h2>
+<p>会话是用户看到的长期对话；运行是用户点击一次“执行”后产生的一次尝试；步骤是这次运行中的模型请求、检索、工具调用或人工审批。一次运行可能有并行步骤，所以用一条从 0% 到 100% 的进度条往往会传递错误信息。</p>
+<p>可以用这样的结构保存状态：</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Step</span> = {
+  <span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">kind</span>: <span class="hljs-string">&#x27;model&#x27;</span> | <span class="hljs-string">&#x27;retrieval&#x27;</span> | <span class="hljs-string">&#x27;tool&#x27;</span> | <span class="hljs-string">&#x27;approval&#x27;</span>;
+  <span class="hljs-attr">title</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;queued&#x27;</span> | <span class="hljs-string">&#x27;running&#x27;</span> | <span class="hljs-string">&#x27;waiting-approval&#x27;</span> | <span class="hljs-string">&#x27;succeeded&#x27;</span>
+    | <span class="hljs-string">&#x27;failed&#x27;</span> | <span class="hljs-string">&#x27;cancelled&#x27;</span> | <span class="hljs-string">&#x27;unknown&#x27;</span>;
+  <span class="hljs-attr">startedAt</span>?: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">finishedAt</span>?: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">result</span>?: { <span class="hljs-attr">summary</span>: <span class="hljs-built_in">string</span>; <span class="hljs-attr">links</span>?: <span class="hljs-built_in">string</span>[] };
+  <span class="hljs-attr">error</span>?: { <span class="hljs-attr">code</span>: <span class="hljs-built_in">string</span>; <span class="hljs-attr">message</span>: <span class="hljs-built_in">string</span>; <span class="hljs-attr">retryable</span>: <span class="hljs-built_in">boolean</span> };
+};
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">AgentRun</span> = {
+  <span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;running&#x27;</span> | <span class="hljs-string">&#x27;waiting&#x27;</span> | <span class="hljs-string">&#x27;succeeded&#x27;</span> | <span class="hljs-string">&#x27;failed&#x27;</span> | <span class="hljs-string">&#x27;cancelled&#x27;</span>;
+  <span class="hljs-attr">version</span>: <span class="hljs-built_in">number</span>;
+  <span class="hljs-attr">steps</span>: <span class="hljs-title class_">Step</span>[];
+};
+</code></pre></div>
+<p>每个步骤要有稳定 ID。重试最好创建新的 attempt 或新的步骤记录，而不是覆盖第一次失败，这样用户才能知道系统确实失败过，也能在故障排查时还原过程。</p>
+<h2>状态必须来自事件，而不是来自文本</h2>
+<p>前端可以接收类似下面的事件：</p>
+<div class="not-prose code-block"><div class="code-language">text</div><pre><code class="hljs language-text">run.started
+step.started(kind=retrieval)
+step.succeeded(result=documents)
+step.waiting-approval(tool=writeFile)
+approval.granted
+step.started(kind=tool)
+step.succeeded(result=file-version)
+run.succeeded
+</code></pre></div>
+<p>模型流式输出的“我准备读取配置”可以作为说明展示，但不能触发 <code>step.succeeded</code>。工具执行器返回的文件版本、记录 ID 或校验结果，才是成功状态的依据。参数还在流式接收时，步骤应是 <code>running</code> 或 <code>receiving-args</code>，不能提前显示批准按钮。</p>
+<p>网络断开尤其容易误判。工具请求发出后连接中断，工具可能已经成功写入。此时把步骤标成失败并自动重试，可能造成重复发信或重复创建订单。更准确的状态是 <code>unknown</code>，先根据调用 ID 查询外部结果。</p>
+<h2>人工确认应放在具体副作用之前</h2>
+<p>确认卡片不能只写“是否允许调用工具”。用户需要看到真正会执行的动作，例如收件人、文件路径、写入内容、附件数量和使用的账号。长文本可以折叠，但影响风险的参数不能隐藏。</p>
+<p>用户确认后，执行端仍要重新检查身份、权限和参数。等待期间文件可能被其他人修改，登录会话可能过期，模型也可能生成了新参数。审批记录要绑定调用 ID、参数摘要、用户和有效期；参数发生变化时必须重新确认。</p>
+<p>多个步骤并行时，一步等待批准不代表所有步骤都必须停止。只读检索可以继续，但任何依赖批准的写入、发送或删除都不能提前发生。界面要表达这种依赖，避免用户误以为一次允许就授权了整个 Agent。</p>
+<h2>刷新和重连不能丢失事实</h2>
+<p>长任务页面刷新后，不能从内存数组恢复运行状态。前端应先获取服务端快照，再从快照版本继续订阅事件。事件必须带运行 ID、步骤 ID 和版本号，重复事件要幂等，迟到事件不能把已完成状态改回运行中。</p>
+<p>展示历史步骤不会重新执行工具。重放日志是恢复界面，重放副作用则需要单独的幂等协议和明确授权。用户再次点击“继续”时，也应根据服务端状态决定从哪个安全节点恢复，而不是从最后一条文本继续猜。</p>
+<h2>失败界面要帮助用户做下一步</h2>
+<p>失败不能都显示成“AI 出错了”。权限不足应告诉用户需要什么权限；用户拒绝应显示未执行；网络中断应说明结果是否待确认；可重试的检索失败可以提供重试按钮；不可重试的工具错误应保留诊断 ID。</p>
+<p>成功结果也不应只显示“完成”。应给出修改摘要、产物链接、验证命令和未完成事项。原始工具日志默认折叠并按权限脱敏，避免把环境变量、完整请求头或内部路径直接展示给普通用户。</p>
+<p>这样的界面不是为了让 Agent 看起来更聪明，而是让用户能理解、控制和恢复一次可能持续很久的自动化任务。</p></div><div class="answer-bottom"><a href="https://modelcontextprotocol.io/docs/learn/architecture" target="_blank" rel="noreferrer">Model Context Protocol · Architecture<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Agent+%E5%89%8D%E7%AB%AF%E7%95%8C%E9%9D%A2%E6%80%8E%E6%A0%B7%E5%B1%95%E7%A4%BA%E8%AE%A1%E5%88%92%E3%80%81%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E5%92%8C%E4%BA%BA%E5%B7%A5%E7%A1%AE%E8%AE%A4%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAgent+%E5%89%8D%E7%AB%AF%E7%95%8C%E9%9D%A2%E6%80%8E%E6%A0%B7%E5%B1%95%E7%A4%BA%E8%AE%A1%E5%88%92%E3%80%81%E5%B7%A5%E5%85%B7%E8%B0%83%E7%94%A8%E5%92%8C%E4%BA%BA%E5%B7%A5%E7%A1%AE%E8%AE%A4%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aai-agent-state%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AAI+%E5%BA%94%E7%94%A8%E5%89%8D%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fai-agent-state%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Agent 前端界面怎样展示计划、工具调用和人工确认？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ai-tool-approval/">模型提出工具调用后，前端应该怎样展示和确认？</a></li><li><a href="/questions/ai-evaluation-observability/">AI 前端应用为什么需要评测和可观测性？</a></li><li><a href="/questions/ai-multimodal-ui/">多模态 AI 前端界面需要怎样管理附件状态？</a></li><li><a href="/questions/ai-realtime-voice/">AI 实时语音界面需要关注哪些前端状态？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -11,83 +11,97 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="浏览器原理面试题：用工作区任务说明命名锁的协作范围，解释锁的持有时间、等待取消、立即尝试和共享模式，并区分互斥、存储可见性、事务与服务端幂等。" />
-    <title>Web Locks API 能怎样协调多个标签页？ · 前端知库</title>
+    <meta name="description" content="浏览器原理面试题：Web Locks 让同源标签页和 Worker 按名称排队执行互斥或共享工作，适合协调刷新、同步和主从选举，但不会自动提供数据库事务。" />
+    <title>Web Locks 怎样协调多个标签页对同一资源的操作？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/browser-web-locks/" />
     <meta name="robots" content="index,follow" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
-    <meta property="og:title" content="Web Locks API 能怎样协调多个标签页？ · 前端知库" />
-    <meta property="og:description" content="浏览器原理面试题：用工作区任务说明命名锁的协作范围，解释锁的持有时间、等待取消、立即尝试和共享模式，并区分互斥、存储可见性、事务与服务端幂等。" />
+    <meta property="og:title" content="Web Locks 怎样协调多个标签页对同一资源的操作？ · 前端知库" />
+    <meta property="og:description" content="浏览器原理面试题：Web Locks 让同源标签页和 Worker 按名称排队执行互斥或共享工作，适合协调刷新、同步和主从选举，但不会自动提供数据库事务。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/browser-web-locks/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/browser-web-locks/#webpage","url":"https://fe.hushifa.top/questions/browser-web-locks/","name":"Web Locks API 能怎样协调多个标签页？ · 前端知库","description":"浏览器原理面试题：用工作区任务说明命名锁的协作范围，解释锁的持有时间、等待取消、立即尝试和共享模式，并区分互斥、存储可见性、事务与服务端幂等。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/browser-web-locks/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/browser-web-locks/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"浏览器原理面试题","item":"https://fe.hushifa.top/topics/browser/"},{"@type":"ListItem","position":3,"name":"Web Locks API 能怎样协调多个标签页？","item":"https://fe.hushifa.top/questions/browser-web-locks/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/browser-web-locks/#webpage","url":"https://fe.hushifa.top/questions/browser-web-locks/","name":"Web Locks 怎样协调多个标签页对同一资源的操作？ · 前端知库","description":"浏览器原理面试题：Web Locks 让同源标签页和 Worker 按名称排队执行互斥或共享工作，适合协调刷新、同步和主从选举，但不会自动提供数据库事务。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/browser-web-locks/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/browser-web-locks/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"浏览器原理面试题","item":"https://fe.hushifa.top/topics/browser/"},{"@type":"ListItem","position":3,"name":"Web Locks 怎样协调多个标签页对同一资源的操作？","item":"https://fe.hushifa.top/questions/browser-web-locks/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-BCtqzlRM.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/browser/">浏览器原理面试题</a><span aria-hidden="true">/</span><span aria-current="page">Web Locks API 能怎样协调多个标签页？</span></nav><h1 tabindex="-1">Web Locks API 能怎样协调多个标签页？</h1><p class="reading-summary">用工作区任务说明命名锁的协作范围，解释锁的持有时间、等待取消、立即尝试和共享模式，并区分互斥、存储可见性、事务与服务端幂等。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>两个标签页同时修改同一份本地状态时，可能都先读到旧值，再各自写回，造成后写覆盖先写。Web Locks 允许它们约定一个锁名：取得锁的参与者先完成一段工作，其他需要同名独占锁的参与者等待。</p>
-<p>这个锁不直接锁住 localStorage、文件或网络接口。它协调的是<strong>主动使用同一锁协议的代码</strong>；绕过协议直接写数据的脚本，不会被浏览器神奇拦住。</p>
-<h2>命名锁怎样形成互斥</h2>
-<p>在支持的安全上下文中，可以调用 <code>navigator.locks.request(name, callback)</code>。默认模式是 exclusive，同一锁管理范围内不会同时授予两把同名独占锁。</p>
-<p>通常用同源页面和 Worker 协作来理解，但实际还要满足相应存储分区等边界。它不是全互联网共享的锁，也不会协调不同浏览器配置、不同设备或服务端进程。</p>
-<p>锁名应按业务资源划分，例如某个账号的同步任务或某份本地工作区。把所有操作都命名为一个全局锁，会让本来互不影响的事情也排队；把同一资源随意起成不同名字，又失去了互斥。</p>
-<h2>把同一工作区的任务串行执行</h2>
-<p>下面的函数让同一工作区的参与者轮流执行 work。work 是调用者传入的真实工作函数，可以同步返回，也可以返回 Promise；不同工作区使用不同的锁名，互不强制排队。</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">runWithWorkspaceLock</span>(<span class="hljs-params">workspaceId, work, { signal } = {}</span>) {
-  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> workspaceId !== <span class="hljs-string">&#x27;string&#x27;</span> || workspaceId.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>) {
-    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;工作区编号不能为空&#x27;</span>);
-  }
-  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> work !== <span class="hljs-string">&#x27;function&#x27;</span>) {
-    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;需要传入工作函数&#x27;</span>);
-  }
-  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> navigator.<span class="hljs-property">locks</span>?.<span class="hljs-property">request</span> !== <span class="hljs-string">&#x27;function&#x27;</span>) {
-    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;当前环境不支持 Web Locks&#x27;</span>);
-  }
-
-  <span class="hljs-keyword">const</span> name = <span class="hljs-string">`frontend-notes:workspace:<span class="hljs-subst">${<span class="hljs-built_in">encodeURIComponent</span>(workspaceId)}</span>`</span>;
-  <span class="hljs-keyword">return</span> navigator.<span class="hljs-property">locks</span>.<span class="hljs-title function_">request</span>(name, { <span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;exclusive&#x27;</span>, signal }, <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">work</span>());
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/browser/">浏览器原理面试题</a><span aria-hidden="true">/</span><span aria-current="page">Web Locks 怎样协调多个标签页对同一资源的操作？</span></nav><h1 tabindex="-1">Web Locks 怎样协调多个标签页对同一资源的操作？</h1><p class="reading-summary">Web Locks 让同源标签页和 Worker 按名称排队执行互斥或共享工作，适合协调刷新、同步和主从选举，但不会自动提供数据库事务。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>两个标签页同时刷新同一份本地数据时，可能都读到旧值，再各自写回，后写入的一方覆盖前一方。Web Locks 允许它们约定一个同源锁名，让同名任务在获得锁后按顺序执行。</p>
+<h3>锁保护的是一段异步回调</h3>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">refreshSharedData</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">if</span> (!navigator.<span class="hljs-property">locks</span>) <span class="hljs-keyword">return</span> <span class="hljs-title function_">updateWithoutLock</span>();
+  <span class="hljs-keyword">return</span> navigator.<span class="hljs-property">locks</span>.<span class="hljs-title function_">request</span>(<span class="hljs-string">&#x27;shared-data-refresh&#x27;</span>, <span class="hljs-title function_">async</span> (lock) =&gt; {
+    <span class="hljs-keyword">if</span> (!lock) <span class="hljs-keyword">return</span>;
+    <span class="hljs-keyword">const</span> latest = <span class="hljs-keyword">await</span> <span class="hljs-title function_">readFromServer</span>();
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">writeToIndexedDb</span>(latest);
+    <span class="hljs-keyword">return</span> latest;
+  });
 }
 </code></pre></div>
-<p>可以用两个有限的异步任务观察它的行为：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> timeline = [];
-<span class="hljs-keyword">const</span> <span class="hljs-title function_">makeWork</span> = (<span class="hljs-params">label</span>) =&gt; <span class="hljs-title function_">async</span> () =&gt; {
-  timeline.<span class="hljs-title function_">push</span>(<span class="hljs-string">`<span class="hljs-subst">${label}</span>开始`</span>);
-  <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> <span class="hljs-built_in">setTimeout</span>(resolve, <span class="hljs-number">10</span>));
-  timeline.<span class="hljs-title function_">push</span>(<span class="hljs-string">`<span class="hljs-subst">${label}</span>结束`</span>);
-};
-
-<span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">all</span>([
-  <span class="hljs-title function_">runWithWorkspaceLock</span>(<span class="hljs-string">&#x27;demo&#x27;</span>, <span class="hljs-title function_">makeWork</span>(<span class="hljs-string">&#x27;A&#x27;</span>)),
-  <span class="hljs-title function_">runWithWorkspaceLock</span>(<span class="hljs-string">&#x27;demo&#x27;</span>, <span class="hljs-title function_">makeWork</span>(<span class="hljs-string">&#x27;B&#x27;</span>)),
-]);
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(timeline.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27; → &#x27;</span>));
+<p>回调返回的 Promise 完成后，锁才会释放。只有所有访问者都遵守相同的锁名和协议，才能形成协作；一个绕过锁的页面仍可能并发写入。</p>
+<p>锁名按资源划分，不要把完全无关的任务都放进一个全局锁，否则会产生不必要排队。也不要随意给同一资源起多个名字，否则互斥关系失效。</p>
+<h3>exclusive 与 shared 表达不同关系</h3>
+<p>默认是独占锁，同名任务必须等待前一个完成。shared 模式允许多个读者同时持有，但独占写者要等现有共享者退出。这个约定只有在读写访问者都按相同规则工作时才有意义。</p>
+<p>请求可以使用 AbortSignal 取消等待中的锁请求。取消等待不会自动中止一个已经获得锁的回调；回调内部仍需把 signal 传给 fetch、读取或其他可取消工作，并在安全位置检查是否应该停止。</p>
+<h3>它不是通用事务和死锁解决器</h3>
+<p>Web Locks 只协调锁请求，不让 localStorage 的读取和写入自动变成事务，也不会替 IndexedDB 或服务端提供一致性。重要数据应使用合适的事务存储与服务端约束。</p>
+<p>如果持锁回调等待永不结束的 Promise，其他请求会一直排队。不要在锁内等待用户点击、打开确认框或做与共享资源无关的长任务；需要超时和恢复时，把取消协议设计进工作本身。</p>
+<p>多个锁按不同顺序互相等待可能造成应用层死锁。尽量只申请一个明确锁，或规定一致的申请顺序，并在必要时使用 ifAvailable 等策略降级，而不是无限等待。</p>
+<h3>标签页关闭时不应依赖清理回调</h3>
+<p>浏览器关闭、崩溃或冻结页面时，锁最终会随执行上下文释放，但业务未必已经完成。不能把“持锁者消失”当成同步成功；任务需要可重试、幂等和状态恢复。</p>
+<p>这项 API 适合协调刷新、领导者选举和同源后台工作，不适合保存密钥或替代服务端分布式锁。支持度也应按目标浏览器与 WebView 核对，无法使用时准备不会破坏数据的降级路径。</p>
+<h3>ifAvailable 与排队策略</h3>
+<p>默认请求会等待同名锁释放。如果页面只是想在有空时刷新一次，不希望因为后台标签页长期占用而排队，可以使用 <code>ifAvailable</code>：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">refreshIfIdle</span>(<span class="hljs-params">refresh</span>) {
+  <span class="hljs-keyword">if</span> (!navigator.<span class="hljs-property">locks</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+  <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> navigator.<span class="hljs-property">locks</span>.<span class="hljs-title function_">request</span>(
+    <span class="hljs-string">&#x27;refresh-catalog&#x27;</span>,
+    { <span class="hljs-attr">ifAvailable</span>: <span class="hljs-literal">true</span> },
+    <span class="hljs-title function_">async</span> (lock) =&gt; {
+      <span class="hljs-keyword">if</span> (!lock) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+      <span class="hljs-keyword">await</span> <span class="hljs-title function_">refresh</span>();
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    },
+  );
+  <span class="hljs-keyword">return</span> result;
+}
 </code></pre></div>
-<p>在支持的浏览器中，按这段代码依次申请时，输出 <code>A开始 → A结束 → B开始 → B结束</code>。等待 A 返回的 Promise 结束之前，B 不会进入同名独占锁。这里的计时器只演示异步期间仍持锁，不是在正式代码里靠等待十毫秒实现互斥。</p>
-<p>真实工作中，应在取得锁之后重新读取需要依据的状态。如果在 request 外面先读旧值，进入锁以后只做写入，虽然操作排队了，仍可能依次写回过时结果。退出登录、重置或其他修改路径也应遵守同一套协议。</p>
-<p>还要确认底层数据接口本身的可见性保证。Web Locks 只协调回调，不会为 localStorage 或应用内缓存额外提供跨进程的事务和缓存同步语义；不要把 localStorage 计数器读改写包一层锁，就当作可靠的并发数据库。需要原子持久更新时，应使用 IndexedDB 等适合的事务能力。Web Storage 的多代理集群交互限制可查 <a href="https://html.spec.whatwg.org/multipage/webstorage.html">HTML 标准</a>。</p>
-<h2>锁持有多久，取决于回调返回了什么</h2>
-<p>同步回调返回或抛错后，锁被释放。回调返回 Promise 时，锁会保持到这个 Promise 最终完成；<code>locks.request()</code> 返回的 Promise 则让调用者观察这次受锁保护的工作结果。</p>
-<p>所以在 async 回调里 await 真正需要保护的操作很重要。若只是启动一个异步函数却不返回也不 await，锁可能提前释放，后台工作还没完成就有另一个页面进入。</p>
-<p>反过来，等待一个永远不结束的 Promise，就可能一直占着锁。不要在锁内等用户输入、打开确认弹窗，或做与共享资源无关的长时间工作。需要经过网络的关键步骤，应有超时和恢复设计，而不是假定持锁者永远在线。</p>
-<p>锁释放也不代表业务一定成功：回调抛错会释放，页面终止也会影响持有状态。调用方仍需检查结果，其他参与者取得锁后也应重新读取当前状态。</p>
-<h2>signal 取消的是等待，不是已经运行的临界区</h2>
-<p>给 request 传入 AbortSignal，可以在尚未取得锁时撤销等待。若等待超时，相关 Promise 会拒绝，必须处理，不能遗留未处理的拒绝。</p>
-<p>锁已经授予后，再取消这个信号，不会自动中断回调、释放它仍在等待的 Promise，或撤销之前发出的网络请求。持锁工作需要自己的取消协议，例如把信号继续传给 fetch，并在安全边界检查是否应停止。</p>
-<p>因此“等锁最多五秒”和“整个业务最多五秒”是不同需求。只设置锁请求的等待信号，不能当作整段执行的总时限。</p>
-<h2>ifAvailable、shared 和 query 各有什么用途</h2>
-<p><code>ifAvailable: true</code> 表示只立即尝试，不排队等待；无法立即取得时，回调收到 null。它适合“已有其他页面在做就先跳过”的非关键工作。普通等待型请求则通常在取得 Lock 后才调用回调，不必把 null 当成所有请求的常规结果。</p>
-<p><code>mode: &#x27;shared&#x27;</code> 允许多个同名共享锁持有者同时存在，而同名独占锁需要等待这些共享持有者退出。可以用它组织约定好的读写协作，但前提仍是所有访问者都遵循相同协议。</p>
-<p><code>navigator.locks.query()</code> 可观察持有与等待的快照，适合诊断。它不是原子检查接口；先 query 看到空闲，再执行操作，不等于已经取得锁，最终仍应通过 request 进入受保护区。</p>
-<p>选项也不是任意组合都合法，例如 ifAvailable 或 steal 不能直接和 signal 一起组合。使用前应按当前接口规则检查，不能把所有“看起来有用的选项”一起塞进去。</p>
-<h2>不要用 steal 把超时变成并发冲突</h2>
-<p>steal 能改变锁管理状态并抢占相应锁，但此前持锁回调的 JavaScript 不会因此被终止。旧代码可能还在等待网络，之后继续修改数据，与新持锁者同时执行。</p>
-<p>如果没有额外的版本校验、租约或 fencing 等机制，简单“等太久就偷锁”可能直接破坏原本想要的互斥。浏览器锁并不能强行停止一段已经运行的任意程序。</p>
-<p>还要避免嵌套请求同名非重入独占锁：外层回调等内层，内层又在等外层释放，就会形成死锁。需要多把锁时，应有一致的获取顺序，并尽量缩小临界区。</p>
-<h2>互斥与事务、服务端一致性是不同层次</h2>
-<p>锁能让参与者轮流执行，但不会自动回滚写到一半的数据。IndexedDB 中一组相关读写应优先使用同一事务保证原子性；如果只是数据库支持的事务操作，不需要机械地再加一把 Web Lock。</p>
-<p>它也不是服务端分布式锁。持锁页面可能已把请求发到服务器，确认返回之前浏览器就崩溃了；下个页面取得锁并重试，仍可能造成重复业务操作。服务端幂等键、版本比较和恢复查询仍然必要。</p>
-<p>浏览器不支持时，BroadcastChannel 可以帮助通知谁在工作，却不能直接等价替代互斥锁。可以根据业务选择服务端协调、数据库事务、限制为单页面操作或明确的降级模式，不应悄悄删除锁后继续声称并发安全。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API" target="_blank" rel="noreferrer">MDN · Web Locks API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Web+Locks+API+%E8%83%BD%E6%80%8E%E6%A0%B7%E5%8D%8F%E8%B0%83%E5%A4%9A%E4%B8%AA%E6%A0%87%E7%AD%BE%E9%A1%B5%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AWeb+Locks+API+%E8%83%BD%E6%80%8E%E6%A0%B7%E5%8D%8F%E8%B0%83%E5%A4%9A%E4%B8%AA%E6%A0%87%E7%AD%BE%E9%A1%B5%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Abrowser-web-locks%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%90%86%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fbrowser-web-locks%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Web Locks API 能怎样协调多个标签页？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/browser-render/">浏览器从 HTML 到页面显示，经历哪些主要步骤？</a></li><li><a href="/questions/browser-delegation/">事件委托是什么？target 和 currentTarget 有何区别？</a></li><li><a href="/questions/browser-storage/">Cookie、localStorage 和 sessionStorage 如何选择？</a></li><li><a href="/questions/browser-reflow/">什么是强制同步布局？如何避免布局抖动？</a></li></ul></nav></main></div></div>
+<p>返回 false 表示这次没有获得锁，不代表刷新失败；产品可以等待下一次可见、在线或用户操作。不能把 ifAvailable 当成“抢锁”，也不能在拿不到锁时绕过协议直接写入共享资源。</p>
+<h3>锁请求的返回值和异常</h3>
+<p>request 返回回调的结果，因此可以把“是否执行”和执行结果传回调用方。回调抛出的错误会使请求 Promise 拒绝；如果业务需要记录失败并释放锁，应在回调内部处理或让上层明确捕获。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> navigator.<span class="hljs-property">locks</span>.<span class="hljs-title function_">request</span>(<span class="hljs-string">&#x27;settings&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> settings = <span class="hljs-keyword">await</span> <span class="hljs-title function_">readSettings</span>();
+  <span class="hljs-keyword">if</span> (!settings) <span class="hljs-keyword">return</span> { <span class="hljs-attr">updated</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">reason</span>: <span class="hljs-string">&#x27;missing&#x27;</span> };
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">writeSettings</span>({ ...settings, <span class="hljs-attr">version</span>: settings.<span class="hljs-property">version</span> + <span class="hljs-number">1</span> });
+  <span class="hljs-keyword">return</span> { <span class="hljs-attr">updated</span>: <span class="hljs-literal">true</span> };
+});
+</code></pre></div>
+<p>锁并不自动重试异常，也不保证回调内的两次存储操作构成原子事务。如果第二次写入失败，应用需要存储层支持回滚或使用事务，不能靠锁撤销已经完成的第一步。</p>
+<h3>取消等待与中止工作要分开</h3>
+<p>把 signal 传给 request 可以取消还在队列中等待的请求。若回调已经取得锁，取消信号不会自动打断它；应把同一个 signal 传给可取消的网络任务，并在写入前后检查状态。</p>
+<p>锁内不应等待用户确认。如果业务必须审批，可以先在锁外取得确认，或把资源状态设计成“待处理”，在锁内只做短而明确的状态转换，避免其他标签页长时间饥饿。</p>
+<h3>跨上下文和故障恢复</h3>
+<p>锁只在同一 origin 内协调，协议、端口或子域不同就不是同一个锁管理器。页面、Worker 和其他同源上下文可以参与，但每个参与者都必须使用一致的名称、mode 与数据访问流程。</p>
+<p>浏览器崩溃后锁会释放，但持锁工作可能只完成一半。任务记录应有 pending/running/succeeded 等状态和超时恢复策略；重新获得锁时先检查上次任务是否已经实际完成，避免重复副作用。</p>
+<p>调试并发问题时可以使用 <code>navigator.locks.query()</code> 查看当前持有和等待的锁，但这是某个时刻的快照，不应拿它作为精确的事务判断。Web Locks 让协作更容易，却仍要求应用自己建立可靠的数据协议。</p>
+<h3>领导者选举不能只看一个布尔值</h3>
+<p>常见用法是让多个标签页竞争一个 <code>app-leader</code> 锁，由拿到锁的页面执行轮询或定时同步：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">runLeaderTask</span>(<span class="hljs-params">signal</span>) {
+  <span class="hljs-keyword">await</span> navigator.<span class="hljs-property">locks</span>.<span class="hljs-title function_">request</span>(<span class="hljs-string">&#x27;app-leader&#x27;</span>, <span class="hljs-title function_">async</span> (lock) =&gt; {
+    <span class="hljs-keyword">if</span> (!lock) <span class="hljs-keyword">return</span>;
+    <span class="hljs-keyword">while</span> (!signal.<span class="hljs-property">aborted</span> &amp;&amp; <span class="hljs-variable language_">document</span>.<span class="hljs-property">visibilityState</span> !== <span class="hljs-string">&#x27;hidden&#x27;</span>) {
+      <span class="hljs-keyword">await</span> <span class="hljs-title function_">syncOnce</span>();
+      <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> <span class="hljs-built_in">setTimeout</span>(resolve, <span class="hljs-number">10_000</span>));
+    }
+  });
+}
+</code></pre></div>
+<p>锁释放后另一个页面可以接管，但页面是否可见、网络是否在线、同步任务是否已经完成，仍然需要业务状态配合。不要把“当前持有锁”当作永久主节点身份，也不要在锁内无限循环而不给出退出条件。实际项目通常会在 <code>visibilitychange</code>、<code>online</code> 和 <code>pagehide</code> 时结束当前工作，让更合适的页面重新竞争。</p>
+<h3>锁名和数据版本要一起设计</h3>
+<p>同一资源如果既有刷新任务又有用户编辑任务，最好明确它们是否需要同一把锁，以及写入时如何比较版本。例如读取配置后记录 <code>version</code>，写回时让存储层检查版本没有变化；只有锁而没有版本检查，仍可能被未遵守协议的旧页面覆盖。</p>
+<p>锁的粒度也会影响体验。把整个同步流程放进一把大锁容易让设置保存、缓存清理互相阻塞；拆成太多锁又会让顺序难以推理。应优先围绕“哪一段写操作必须互斥”划分锁，网络请求和纯计算尽量放在锁外，拿到结果后再用短锁提交。</p>
+<h3>观测和降级要能解释“没执行”</h3>
+<p>当任务因为 <code>ifAvailable</code> 没拿到锁时，界面不应提示“同步失败”，而应记录为稍后重试或由其他标签页完成。可以记录等待时长、锁名、任务类型和最终结果，帮助区分锁竞争、网络失败与存储异常。降级到没有 Web Locks 的浏览器时，优先使用 IndexedDB 事务、BroadcastChannel 协调或允许重复但幂等的操作；不要简单删除锁后继续执行原来的并发写入。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API" target="_blank" rel="noreferrer">Web Locks API - Web APIs | MDN<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Web+Locks+%E6%80%8E%E6%A0%B7%E5%8D%8F%E8%B0%83%E5%A4%9A%E4%B8%AA%E6%A0%87%E7%AD%BE%E9%A1%B5%E5%AF%B9%E5%90%8C%E4%B8%80%E8%B5%84%E6%BA%90%E7%9A%84%E6%93%8D%E4%BD%9C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AWeb+Locks+%E6%80%8E%E6%A0%B7%E5%8D%8F%E8%B0%83%E5%A4%9A%E4%B8%AA%E6%A0%87%E7%AD%BE%E9%A1%B5%E5%AF%B9%E5%90%8C%E4%B8%80%E8%B5%84%E6%BA%90%E7%9A%84%E6%93%8D%E4%BD%9C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Abrowser-web-locks%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%90%86%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fbrowser-web-locks%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Web Locks 怎样协调多个标签页对同一资源的操作？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/browser-render/">浏览器从 HTML 到页面显示，经历哪些主要步骤？</a></li><li><a href="/questions/browser-delegation/">事件委托是什么？target 和 currentTarget 有何区别？</a></li><li><a href="/questions/browser-storage/">Cookie、localStorage 和 sessionStorage 如何选择？</a></li><li><a href="/questions/browser-reflow/">什么是强制同步布局？如何避免布局抖动？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>
