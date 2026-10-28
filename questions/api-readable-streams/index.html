@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Web API面试题：响应的 body 可以是 ReadableStream，通过 reader.read 逐块获取 value 和 done，或在支持的环境中使用异步迭代。取得 reader 会锁定流，因此不能同时让另一消费者随意读取同一响应体。" />
+    <meta name="description" content="Web API面试题：response.body 是字节流，用 for await 或 getReader() 逐块读取，配合 TextDecoderStream 解码文本；按行或按事件解析时要缓存跨块的残余数据，并在取消或出错时释放流。" />
     <title>怎样正确消费 Fetch 返回的 ReadableStream？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/api-readable-streams/" />
     <meta name="robots" content="index,follow" />
@@ -19,75 +19,60 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="怎样正确消费 Fetch 返回的 ReadableStream？ · 前端知库" />
-    <meta property="og:description" content="Web API面试题：响应的 body 可以是 ReadableStream，通过 reader.read 逐块获取 value 和 done，或在支持的环境中使用异步迭代。取得 reader 会锁定流，因此不能同时让另一消费者随意读取同一响应体。" />
+    <meta property="og:description" content="Web API面试题：response.body 是字节流，用 for await 或 getReader() 逐块读取，配合 TextDecoderStream 解码文本；按行或按事件解析时要缓存跨块的残余数据，并在取消或出错时释放流。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/api-readable-streams/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/api-readable-streams/#webpage","url":"https://fe.hushifa.top/questions/api-readable-streams/","name":"怎样正确消费 Fetch 返回的 ReadableStream？ · 前端知库","description":"Web API面试题：响应的 body 可以是 ReadableStream，通过 reader.read 逐块获取 value 和 done，或在支持的环境中使用异步迭代。取得 reader 会锁定流，因此不能同时让另一消费者随意读取同一响应体。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/api-readable-streams/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/api-readable-streams/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Web API面试题","item":"https://fe.hushifa.top/topics/web-apis/"},{"@type":"ListItem","position":3,"name":"怎样正确消费 Fetch 返回的 ReadableStream？","item":"https://fe.hushifa.top/questions/api-readable-streams/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/api-readable-streams/#webpage","url":"https://fe.hushifa.top/questions/api-readable-streams/","name":"怎样正确消费 Fetch 返回的 ReadableStream？ · 前端知库","description":"Web API面试题：response.body 是字节流，用 for await 或 getReader() 逐块读取，配合 TextDecoderStream 解码文本；按行或按事件解析时要缓存跨块的残余数据，并在取消或出错时释放流。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/api-readable-streams/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/api-readable-streams/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Web API面试题","item":"https://fe.hushifa.top/topics/web-apis/"},{"@type":"ListItem","position":3,"name":"怎样正确消费 Fetch 返回的 ReadableStream？","item":"https://fe.hushifa.top/questions/api-readable-streams/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/web-apis/">Web API面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样正确消费 Fetch 返回的 ReadableStream？</span></nav><h1 tabindex="-1">怎样正确消费 Fetch 返回的 ReadableStream？</h1><p class="reading-summary">响应的 body 可以是 ReadableStream，通过 reader.read 逐块获取 value 和 done，或在支持的环境中使用异步迭代。取得 reader 会锁定流，因此不能同时让另一消费者随意读取同一响应体。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/web-apis/">Web API面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样正确消费 Fetch 返回的 ReadableStream？</span></nav><h1 tabindex="-1">怎样正确消费 Fetch 返回的 ReadableStream？</h1><p class="reading-summary">response.body 是字节流，用 for await 或 getReader() 逐块读取，配合 TextDecoderStream 解码文本；按行或按事件解析时要缓存跨块的残余数据，并在取消或出错时释放流。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>Fetch 响应的 body 是 ReadableStream，可以用 reader.read() 逐块读取 value 和 done。</li>
-<li>取得 reader 会锁定流，取消和释放锁是两件事。</li>
-<li>文本要用 TextDecoder 按流式模式解码，文本片段还不是完整的协议消息。</li>
-<li>背压和并发消费要明确设计。</li>
+<li><code>response.body</code> 是 <code>ReadableStream&lt;Uint8Array&gt;</code>，数据到一块就能处理一块，不必等整个响应下载完。</li>
+<li>文本流用 <code>pipeThrough(new TextDecoderStream())</code> 解码，多字节字符被拆在两块之间也能正确处理。</li>
+<li>块的边界和业务上的&quot;行&quot;或&quot;消息&quot;无关，解析时要把最后一段不完整的数据留到下一块拼接。</li>
+<li>用 <code>AbortController</code> 取消 <code>fetch</code>，流会随之出错并停止；只读部分数据时要调用 <code>reader.cancel()</code> 释放连接。</li>
 </ul>
-<p>fetch 返回 Response 时，响应体不一定已经全部下载完。response.body 可以作为 ReadableStream 持续提供字节块，让应用边接收边处理，而不是先把全部内容放进内存。</p>
-<p>逐块消费并不代表“每个块是一条消息”。网络、解压和浏览器缓冲决定分块位置，业务协议还需要自己的解码与边界处理。</p>
-<h2>一个安全消费 UTF-8 文本的基础循环</h2>
-<p>下面的 onText 是处理已解码文本片段的回调，可以返回 Promise；示例假设响应使用 UTF-8，并限制累计消费字节数：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">consumeText</span>(<span class="hljs-params">response, onText, maxBytes = <span class="hljs-number">1024</span> * <span class="hljs-number">1024</span></span>) {
-  <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Number</span>.<span class="hljs-title function_">isSafeInteger</span>(maxBytes) || maxBytes &lt; <span class="hljs-number">0</span>) {
-    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RangeError</span>(<span class="hljs-string">&#x27;字节上限必须是非负安全整数&#x27;</span>);
-  }
-  <span class="hljs-keyword">if</span> (!response.<span class="hljs-property">ok</span>) {
-    <span class="hljs-keyword">await</span> response.<span class="hljs-property">body</span>?.<span class="hljs-title function_">cancel</span>();
-    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">`请求失败：<span class="hljs-subst">${response.status}</span>`</span>);
-  }
-  <span class="hljs-keyword">if</span> (!response.<span class="hljs-property">body</span>) <span class="hljs-keyword">return</span>;
-
-  <span class="hljs-keyword">const</span> reader = response.<span class="hljs-property">body</span>.<span class="hljs-title function_">getReader</span>();
-  <span class="hljs-keyword">const</span> decoder = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TextDecoder</span>(<span class="hljs-string">&#x27;utf-8&#x27;</span>, { <span class="hljs-attr">fatal</span>: <span class="hljs-literal">true</span> });
-  <span class="hljs-keyword">let</span> bytes = <span class="hljs-number">0</span>;
-  <span class="hljs-keyword">let</span> completed = <span class="hljs-literal">false</span>;
+<h2>按行解析 NDJSON</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span>* <span class="hljs-title function_">readLines</span>(<span class="hljs-params">response</span>) {
+  <span class="hljs-keyword">const</span> reader = response.<span class="hljs-property">body</span>.<span class="hljs-title function_">pipeThrough</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">TextDecoderStream</span>()).<span class="hljs-title function_">getReader</span>();
+  <span class="hljs-keyword">let</span> buffer = <span class="hljs-string">&#x27;&#x27;</span>;
   <span class="hljs-keyword">try</span> {
     <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
       <span class="hljs-keyword">const</span> { value, done } = <span class="hljs-keyword">await</span> reader.<span class="hljs-title function_">read</span>();
-      <span class="hljs-keyword">if</span> (done) {
-        <span class="hljs-keyword">const</span> tail = decoder.<span class="hljs-title function_">decode</span>();
-        <span class="hljs-keyword">if</span> (tail) <span class="hljs-keyword">await</span> <span class="hljs-title function_">onText</span>(tail);
-        completed = <span class="hljs-literal">true</span>;
-        <span class="hljs-keyword">break</span>;
-      }
-      bytes += value.<span class="hljs-property">byteLength</span>;
-      <span class="hljs-keyword">if</span> (bytes &gt; maxBytes) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;响应体超出读取上限&#x27;</span>);
-      <span class="hljs-keyword">const</span> text = decoder.<span class="hljs-title function_">decode</span>(value, { <span class="hljs-attr">stream</span>: <span class="hljs-literal">true</span> });
-      <span class="hljs-keyword">if</span> (text) <span class="hljs-keyword">await</span> <span class="hljs-title function_">onText</span>(text);
+      <span class="hljs-keyword">if</span> (done) <span class="hljs-keyword">break</span>;
+      buffer += value;
+      <span class="hljs-keyword">const</span> lines = buffer.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;\n&#x27;</span>);
+      buffer = lines.<span class="hljs-title function_">pop</span>();
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> line <span class="hljs-keyword">of</span> lines) <span class="hljs-keyword">if</span> (line.<span class="hljs-title function_">trim</span>()) <span class="hljs-keyword">yield</span> <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(line);
     }
+    <span class="hljs-keyword">if</span> (buffer.<span class="hljs-title function_">trim</span>()) <span class="hljs-keyword">yield</span> <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(buffer);
   } <span class="hljs-keyword">finally</span> {
-    <span class="hljs-keyword">try</span> {
-      <span class="hljs-keyword">if</span> (!completed) <span class="hljs-keyword">await</span> reader.<span class="hljs-title function_">cancel</span>();
-    } <span class="hljs-keyword">finally</span> {
-      reader.<span class="hljs-title function_">releaseLock</span>();
-    }
+    reader.<span class="hljs-title function_">releaseLock</span>();
   }
 }
+
+<span class="hljs-keyword">const</span> controller = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AbortController</span>();
+<span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;/api/export&#x27;</span>, { <span class="hljs-attr">signal</span>: controller.<span class="hljs-property">signal</span> });
+<span class="hljs-keyword">if</span> (!response.<span class="hljs-property">ok</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">`HTTP <span class="hljs-subst">${response.status}</span>`</span>);
+<span class="hljs-keyword">for</span> <span class="hljs-keyword">await</span> (<span class="hljs-keyword">const</span> row <span class="hljs-keyword">of</span> <span class="hljs-title function_">readLines</span>(response)) <span class="hljs-title function_">appendRow</span>(row);
 </code></pre></div>
-<p>stream: true 让解码器保留跨块的不完整字符，最后无参数 decode 完成收尾。fatal: true 使非法编码抛错；若业务选择容忍坏数据，可以使用替换字符策略，但要明确取舍。</p>
-<p>maxBytes 限制的是消费到的响应体字节，不是精确的线上压缩传输量，也不是整个进程内存上限。已经收到的单个块仍占内存，onText 自己若无限累积全部字符串，也会重新造成全量占用。</p>
-<h2>reader 锁与取消是两件事</h2>
-<p>getReader 会锁定流。持有锁时，不能再同时 response.text 或让另一个 reader 消费同一 body。响应体被消费后，也不能随意从头再读。</p>
-<p>releaseLock 只是释放读取器对流的占有，不表示终止底层数据源。仍有未完成 read 时释放锁会使这些读取拒绝，未消费数据也不因此自动被清空。若不再需要结果，应调用 reader.cancel 或取消相关请求，再释放锁。</p>
-<p>示例在异常时取消剩余读取，包括字节超限、解码失败或 onText 抛错。清理自身也可能失败，正式业务可以进一步保留原始异常与清理异常，避免丢失诊断信息。</p>
-<h2>文本片段还不是协议消息</h2>
-<p>一条 JSON 可能跨两个文本片段，也可能一个片段包含多条消息。NDJSON 通常需要保留未完成的一行；SSE 还涉及空行分隔、多个 data 字段、CRLF 等协议规则。</p>
-<p>因此不能对每个 value 直接 JSON.parse，也不能只用一次 split 后丢掉末尾残片。应采用经过验证的协议解析器，并设置单条消息或残片长度上限，避免对方一直不发送分隔符导致内存增长。</p>
-<p>TextDecoderStream 可以把字节流转换成文本流，但它同样不负责解析 JSON、SSE 或业务事件。</p>
-<h2>背压与并发消费需要明确</h2>
-<p>示例 await onText 后再继续 read，让下游处理速度影响消费节奏。若每次 onText 都启动异步任务却不等待，可能很快堆积大量未完成工作。</p>
-<p>ReadableStream 可以通过 pipeThrough、pipeTo 组合转换与目标流，但取消、错误传播和信号仍需按管道语义配置。clone 或 tee 将数据分成多个消费者时，较慢分支可能产生额外缓冲，不应把它当作没有内存成本的复制。</p>
-<p>选择流的依据是能否增量处理和控制缓冲。若最终仍必须拿到全部小型 JSON，response.json 更简单；若需要长连接、渐进展示或大文件处理，就需要完整考虑消息边界、取消与错误收尾。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams" target="_blank" rel="noreferrer">Using readable streams - Web APIs | MDN<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E6%AD%A3%E7%A1%AE%E6%B6%88%E8%B4%B9+Fetch+%E8%BF%94%E5%9B%9E%E7%9A%84+ReadableStream%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E6%AD%A3%E7%A1%AE%E6%B6%88%E8%B4%B9+Fetch+%E8%BF%94%E5%9B%9E%E7%9A%84+ReadableStream%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aapi-readable-streams%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AWeb+API%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fapi-readable-streams%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样正确消费 Fetch 返回的 ReadableStream？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/web-serial/">Web Serial API 适合怎样的硬件交互？</a></li><li><a href="/questions/api-readable-streams-tee/">ReadableStream 的 tee 分流有什么代价？</a></li><li><a href="/questions/api-abort/">AbortController 能取消什么，不能取消什么？</a></li><li><a href="/questions/api-web-components/">Custom Elements、Shadow DOM 和 template 分别负责什么？</a></li></ul></nav></main></div></div>
+<ul>
+<li><code>lines.pop()</code> 取出最后一段可能不完整的内容，留在 <code>buffer</code> 里。</li>
+<li>流结束后处理没有换行结尾的最后一行。</li>
+<li>消费方提前 <code>break</code> 时，生成器的 <code>finally</code> 会执行，释放读取锁。</li>
+</ul>
+<h2>其他读取方式</h2>
+<ul>
+<li>不需要逐块处理时，直接 <code>response.text()</code> 或 <code>response.json()</code> 更简单。</li>
+<li>显示下载进度：读取每块的 <code>value.byteLength</code> 累加，和 <code>Content-Length</code> 比较。响应被压缩时，<code>Content-Length</code> 是压缩后的大小，与读到的字节数不一致。</li>
+<li>支持异步迭代的环境可以直接 <code>for await (const chunk of stream)</code>。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li>一个流能读两次吗：不能，读取时会被锁定。需要两份时用 <code>tee()</code>，见《ReadableStream 的 tee 分流有什么代价？》。</li>
+<li>SSE 能这样解析吗：可以，按空行分隔事件，但更推荐用成熟的解析库处理 <code>data:</code>、<code>id:</code> 和重连字段。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams" target="_blank" rel="noreferrer">MDN · Using readable streams<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E6%AD%A3%E7%A1%AE%E6%B6%88%E8%B4%B9+Fetch+%E8%BF%94%E5%9B%9E%E7%9A%84+ReadableStream%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E6%AD%A3%E7%A1%AE%E6%B6%88%E8%B4%B9+Fetch+%E8%BF%94%E5%9B%9E%E7%9A%84+ReadableStream%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aapi-readable-streams%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AWeb+API%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fapi-readable-streams%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样正确消费 Fetch 返回的 ReadableStream？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/web-serial/">Web Serial API 适合怎样的硬件交互？</a></li><li><a href="/questions/api-readable-streams-tee/">ReadableStream 的 tee 分流有什么代价？</a></li><li><a href="/questions/api-abort/">AbortController 能取消什么，不能取消什么？</a></li><li><a href="/questions/api-web-components/">Custom Elements、Shadow DOM 和 template 分别负责什么？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

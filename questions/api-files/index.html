@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Web API面试题：Blob 表示不可变的原始数据，File 在其基础上提供文件名等信息。页面通常通过用户选择或拖放获得文件，再用 FileReader、流或 object URL 等方式处理，不能任意读取用户磁盘上的所有文件。" />
+    <meta name="description" content="Web API面试题：Blob 是不可变的二进制数据，File 是带文件名和修改时间的 Blob；URL.createObjectURL() 生成指向内存数据的临时地址用于预览，用完要调用 revokeObjectURL() 释放。" />
     <title>File、Blob 和 object URL 怎样用于文件预览？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/api-files/" />
     <meta name="robots" content="index,follow" />
@@ -19,62 +19,46 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="File、Blob 和 object URL 怎样用于文件预览？ · 前端知库" />
-    <meta property="og:description" content="Web API面试题：Blob 表示不可变的原始数据，File 在其基础上提供文件名等信息。页面通常通过用户选择或拖放获得文件，再用 FileReader、流或 object URL 等方式处理，不能任意读取用户磁盘上的所有文件。" />
+    <meta property="og:description" content="Web API面试题：Blob 是不可变的二进制数据，File 是带文件名和修改时间的 Blob；URL.createObjectURL() 生成指向内存数据的临时地址用于预览，用完要调用 revokeObjectURL() 释放。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/api-files/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/api-files/#webpage","url":"https://fe.hushifa.top/questions/api-files/","name":"File、Blob 和 object URL 怎样用于文件预览？ · 前端知库","description":"Web API面试题：Blob 表示不可变的原始数据，File 在其基础上提供文件名等信息。页面通常通过用户选择或拖放获得文件，再用 FileReader、流或 object URL 等方式处理，不能任意读取用户磁盘上的所有文件。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/api-files/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/api-files/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Web API面试题","item":"https://fe.hushifa.top/topics/web-apis/"},{"@type":"ListItem","position":3,"name":"File、Blob 和 object URL 怎样用于文件预览？","item":"https://fe.hushifa.top/questions/api-files/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/api-files/#webpage","url":"https://fe.hushifa.top/questions/api-files/","name":"File、Blob 和 object URL 怎样用于文件预览？ · 前端知库","description":"Web API面试题：Blob 是不可变的二进制数据，File 是带文件名和修改时间的 Blob；URL.createObjectURL() 生成指向内存数据的临时地址用于预览，用完要调用 revokeObjectURL() 释放。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/api-files/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/api-files/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Web API面试题","item":"https://fe.hushifa.top/topics/web-apis/"},{"@type":"ListItem","position":3,"name":"File、Blob 和 object URL 怎样用于文件预览？","item":"https://fe.hushifa.top/questions/api-files/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/web-apis/">Web API面试题</a><span aria-hidden="true">/</span><span aria-current="page">File、Blob 和 object URL 怎样用于文件预览？</span></nav><h1 tabindex="-1">File、Blob 和 object URL 怎样用于文件预览？</h1><p class="reading-summary">Blob 表示不可变的原始数据，File 在其基础上提供文件名等信息。页面通常通过用户选择或拖放获得文件，再用 FileReader、流或 object URL 等方式处理，不能任意读取用户磁盘上的所有文件。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/web-apis/">Web API面试题</a><span aria-hidden="true">/</span><span aria-current="page">File、Blob 和 object URL 怎样用于文件预览？</span></nav><h1 tabindex="-1">File、Blob 和 object URL 怎样用于文件预览？</h1><p class="reading-summary">Blob 是不可变的二进制数据，File 是带文件名和修改时间的 Blob；URL.createObjectURL() 生成指向内存数据的临时地址用于预览，用完要调用 revokeObjectURL() 释放。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>Blob 是不可变的原始数据，File 在其基础上增加文件名等信息。</li>
-<li>页面只能通过用户选择或拖放拿到文件，不能任意读取磁盘。</li>
-<li>预览可以用 URL.createObjectURL，不必先转 Base64；用完再 revoke，但不要过早撤销。</li>
-<li>MIME 类型和文件名只是线索，服务端仍要校验内容。</li>
+<li><code>Blob</code> 表示一段不可变的二进制数据，有 <code>size</code> 和 <code>type</code>；<code>File</code> 继承自 <code>Blob</code>，多了 <code>name</code> 和 <code>lastModified</code>。</li>
+<li>用户通过 <code>&lt;input type=&quot;file&quot;&gt;</code>、拖放或粘贴提供文件，网页才能读取，不能任意读取本地路径。</li>
+<li><code>URL.createObjectURL(blob)</code> 返回 <code>blob:</code> 地址，可以直接赋给 <code>img.src</code> 或 <code>video.src</code> 预览，不需要读成 base64。</li>
+<li>object URL 会一直占用内存，直到调用 <code>URL.revokeObjectURL()</code> 或文档卸载。</li>
+<li>需要读取内容时用 <code>blob.text()</code>、<code>blob.arrayBuffer()</code> 或 <code>blob.stream()</code>。</li>
 </ul>
-<p>Blob 表示一段不可变的二进制数据，File 在 Blob 基础上增加 name、lastModified 等文件信息。用户通过文件选择器或拖放把 File 交给页面后，页面可以读取这份数据，但不会因此获得任意扫描磁盘的权限。</p>
-<p>File 也不等于可写文件句柄。拿到一个头像 File，可以预览或上传，却不能直接修改用户原来的本地图片。</p>
-<h2>根据用途选择读取方式</h2>
-<p>小文本可以用 file.text()，需要字节时用 arrayBuffer()，大文件可评估 stream() 增量处理。FileReader 提供事件式读取与 abort 等能力，适合需要相应兼容或事件接口的场景。</p>
-<p>text 或 arrayBuffer 会把结果整体交给你，文件很大时会增加内存和后续解析成本。即使读取是异步的，大段 JSON.parse 或图像处理仍可能占用主线程。</p>
-<p>Blob.slice 可以表示某个字节范围，但切片边界不一定是完整字符或业务记录；按块解析仍要处理编码和协议边界。</p>
-<h2>object URL 让元素引用 Blob，不必先转 Base64</h2>
-<p>URL.createObjectURL(file) 返回一个 blob: 地址，可以交给 img、video 或下载链接。它通常比先 readAsDataURL 更适合普通预览，因为不必将全部二进制编码成更大的 Base64 字符串。</p>
-<p>下面管理一个预览位置当前拥有的 URL：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">createImagePreview</span>(<span class="hljs-params">image</span>) {
-  <span class="hljs-keyword">let</span> currentUrl = <span class="hljs-literal">null</span>;
+<h2>图片预览</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">let</span> previewUrl;
 
-  <span class="hljs-keyword">function</span> <span class="hljs-title function_">clear</span>(<span class="hljs-params"></span>) {
-    image.<span class="hljs-title function_">removeAttribute</span>(<span class="hljs-string">&#x27;src&#x27;</span>);
-    <span class="hljs-keyword">if</span> (currentUrl !== <span class="hljs-literal">null</span>) {
-      <span class="hljs-variable constant_">URL</span>.<span class="hljs-title function_">revokeObjectURL</span>(currentUrl);
-      currentUrl = <span class="hljs-literal">null</span>;
-    }
+input.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;change&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> file = input.<span class="hljs-property">files</span>?.[<span class="hljs-number">0</span>];
+  <span class="hljs-keyword">if</span> (!file) <span class="hljs-keyword">return</span>;
+  <span class="hljs-keyword">if</span> (!file.<span class="hljs-property">type</span>.<span class="hljs-title function_">startsWith</span>(<span class="hljs-string">&#x27;image/&#x27;</span>)) {
+    <span class="hljs-title function_">showError</span>(<span class="hljs-string">&#x27;请选择图片文件&#x27;</span>);
+    <span class="hljs-keyword">return</span>;
   }
 
-  <span class="hljs-keyword">return</span> {
-    <span class="hljs-title function_">show</span>(<span class="hljs-params">file</span>) {
-      <span class="hljs-title function_">clear</span>();
-      currentUrl = <span class="hljs-variable constant_">URL</span>.<span class="hljs-title function_">createObjectURL</span>(file);
-      image.<span class="hljs-property">src</span> = currentUrl;
-    },
-    <span class="hljs-attr">dispose</span>: clear,
-  };
-}
+  <span class="hljs-keyword">if</span> (previewUrl) <span class="hljs-variable constant_">URL</span>.<span class="hljs-title function_">revokeObjectURL</span>(previewUrl);
+  previewUrl = <span class="hljs-variable constant_">URL</span>.<span class="hljs-title function_">createObjectURL</span>(file);
+  preview.<span class="hljs-property">src</span> = previewUrl;
+});
 </code></pre></div>
-<p>更换文件时释放旧地址，预览区域销毁时调用 dispose。这个辅助函数只管理 URL 生命周期，调用方仍需处理文件类型、解码失败和用户提示。</p>
-<p>每次 createObjectURL 都会创建新的地址，即使传的是同一个 Blob，也应分别管理。不要在组件每次渲染时创建新 URL，却从不释放旧的。</p>
-<h2>不要过早撤销仍在使用的地址</h2>
-<p>如果刚设置 src 就立即 revoke，资源可能还没读完。即使图片 load 已触发，用户还可能需要右键保存或在新页面打开，因此应根据实际使用周期撤销，而不是机械地在第一次加载完成后清掉。</p>
-<p>反过来，只依赖页面关闭时自动清理，会让长期打开的应用保留大量预览资源。应把 URL 所有权放在明确的组件或对象中，复用和释放都有清楚入口。</p>
-<p>object URL 不是可长期分享的公网地址，也不是原文件绝对路径。把它存入数据库或发送给另一个用户，不能期待对方之后直接访问同一份文件。</p>
-<h2>MIME 与文件名只是线索</h2>
-<p>file.type 可能为空，也可能不准确；后缀可以随意改名。accept 属性只是选择提示，不能替代真正的内容验证。上传服务仍需按业务校验格式、大小和权限。</p>
-<p>不要把外部 HTML 或 SVG 源码直接插入主页面作为“预览”。Blob URL 只是引用数据，不会净化内容；不同预览容器拥有不同执行与隔离语义，应按内容类型设计安全展示。</p>
-<h2>选择、读取和上传是不同阶段</h2>
-<p>用户取消选择通常不应显示“上传失败”。读取成功不代表上传成功，上传完成也不代表服务端已经完成扫描或业务处理。界面应按实际阶段反馈，支持取消和重新选择。</p>
-<p>文件选择控件中的 fakepath 不是可供页面访问的真实磁盘路径。若要持续编辑并保存到用户选择的文件，应使用支持的文件句柄方案并处理授权，或者提供下载副本，而不是试图从 File.name 拼出本地写入地址。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications" target="_blank" rel="noreferrer">Using files from web applications - Web APIs | MDN<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+File%E3%80%81Blob+%E5%92%8C+object+URL+%E6%80%8E%E6%A0%B7%E7%94%A8%E4%BA%8E%E6%96%87%E4%BB%B6%E9%A2%84%E8%A7%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AFile%E3%80%81Blob+%E5%92%8C+object+URL+%E6%80%8E%E6%A0%B7%E7%94%A8%E4%BA%8E%E6%96%87%E4%BB%B6%E9%A2%84%E8%A7%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aapi-files%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AWeb+API%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fapi-files%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：File、Blob 和 object URL 怎样用于文件预览？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/api-abort/">AbortController 能取消什么，不能取消什么？</a></li><li><a href="/questions/api-web-components/">Custom Elements、Shadow DOM 和 template 分别负责什么？</a></li><li><a href="/questions/api-readable-streams/">怎样正确消费 Fetch 返回的 ReadableStream？</a></li><li><a href="/questions/api-permissions/">Permissions.query 是申请权限，还是查询权限？</a></li></ul></nav></main></div></div>
+<p>每次换图都先释放上一张的地址；组件卸载时也要释放。</p>
+<h2>object URL 和 data URL</h2>
+<table><thead><tr><th></th><th>object URL</th><th>data URL</th></tr></thead><tbody><tr><td>生成方式</td><td><code>URL.createObjectURL()</code>，同步、立即返回</td><td><code>FileReader.readAsDataURL()</code>，要读完整个文件</td></tr><tr><td>长度</td><td>很短</td><td>文件大小的约 1.33 倍</td></tr><tr><td>生命周期</td><td>需要手动释放</td><td>是普通字符串</td></tr><tr><td>适合</td><td>预览大图、视频</td><td>需要把数据嵌入 HTML 或存储</td></tr></tbody></table>
+<h2>注意事项</h2>
+<ul>
+<li><code>file.type</code> 来自扩展名，不可信。服务端必须重新校验文件内容，前端检查只用于提示。</li>
+<li>大文件切片上传用 <code>file.slice(start, end)</code>，返回新的 Blob，不复制数据。</li>
+<li>生成下载：<code>new Blob([text], { type: &#x27;text/plain&#x27; })</code>，用 object URL 赋给 <code>&lt;a download&gt;</code> 的 <code>href</code>，点击后释放。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/File_API/Using_files_from_web_applications" target="_blank" rel="noreferrer">MDN · Using files from web applications<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+File%E3%80%81Blob+%E5%92%8C+object+URL+%E6%80%8E%E6%A0%B7%E7%94%A8%E4%BA%8E%E6%96%87%E4%BB%B6%E9%A2%84%E8%A7%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AFile%E3%80%81Blob+%E5%92%8C+object+URL+%E6%80%8E%E6%A0%B7%E7%94%A8%E4%BA%8E%E6%96%87%E4%BB%B6%E9%A2%84%E8%A7%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aapi-files%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AWeb+API%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fapi-files%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：File、Blob 和 object URL 怎样用于文件预览？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/api-abort/">AbortController 能取消什么，不能取消什么？</a></li><li><a href="/questions/api-web-components/">Custom Elements、Shadow DOM 和 template 分别负责什么？</a></li><li><a href="/questions/api-readable-streams/">怎样正确消费 Fetch 返回的 ReadableStream？</a></li><li><a href="/questions/api-permissions/">Permissions.query 是申请权限，还是查询权限？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

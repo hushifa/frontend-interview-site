@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Web API面试题：区分一次定位和持续监听，理解权限、超时、精度、清理和隐私边界。" />
+    <meta name="description" content="Web API面试题：navigator.geolocation 在安全上下文中由用户授权后返回经纬度和精度半径；要处理拒绝、超时和无法定位三类错误，按需设置 enableHighAccuracy、timeout 和 maximumAge，持续定位用完要 clearWatch。" />
     <title>Geolocation API 的权限和定位精度怎样处理？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/web-geolocation/" />
     <meta name="robots" content="index,follow" />
@@ -19,56 +19,54 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Geolocation API 的权限和定位精度怎样处理？ · 前端知库" />
-    <meta property="og:description" content="Web API面试题：区分一次定位和持续监听，理解权限、超时、精度、清理和隐私边界。" />
+    <meta property="og:description" content="Web API面试题：navigator.geolocation 在安全上下文中由用户授权后返回经纬度和精度半径；要处理拒绝、超时和无法定位三类错误，按需设置 enableHighAccuracy、timeout 和 maximumAge，持续定位用完要 clearWatch。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/web-geolocation/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/web-geolocation/#webpage","url":"https://fe.hushifa.top/questions/web-geolocation/","name":"Geolocation API 的权限和定位精度怎样处理？ · 前端知库","description":"Web API面试题：区分一次定位和持续监听，理解权限、超时、精度、清理和隐私边界。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/web-geolocation/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/web-geolocation/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Web API面试题","item":"https://fe.hushifa.top/topics/web-apis/"},{"@type":"ListItem","position":3,"name":"Geolocation API 的权限和定位精度怎样处理？","item":"https://fe.hushifa.top/questions/web-geolocation/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/web-geolocation/#webpage","url":"https://fe.hushifa.top/questions/web-geolocation/","name":"Geolocation API 的权限和定位精度怎样处理？ · 前端知库","description":"Web API面试题：navigator.geolocation 在安全上下文中由用户授权后返回经纬度和精度半径；要处理拒绝、超时和无法定位三类错误，按需设置 enableHighAccuracy、timeout 和 maximumAge，持续定位用完要 clearWatch。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/web-geolocation/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/web-geolocation/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Web API面试题","item":"https://fe.hushifa.top/topics/web-apis/"},{"@type":"ListItem","position":3,"name":"Geolocation API 的权限和定位精度怎样处理？","item":"https://fe.hushifa.top/questions/web-geolocation/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/web-apis/">Web API面试题</a><span aria-hidden="true">/</span><span aria-current="page">Geolocation API 的权限和定位精度怎样处理？</span></nav><h1 tabindex="-1">Geolocation API 的权限和定位精度怎样处理？</h1><p class="reading-summary">区分一次定位和持续监听，理解权限、超时、精度、清理和隐私边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/web-apis/">Web API面试题</a><span aria-hidden="true">/</span><span aria-current="page">Geolocation API 的权限和定位精度怎样处理？</span></nav><h1 tabindex="-1">Geolocation API 的权限和定位精度怎样处理？</h1><p class="reading-summary">navigator.geolocation 在安全上下文中由用户授权后返回经纬度和精度半径；要处理拒绝、超时和无法定位三类错误，按需设置 enableHighAccuracy、timeout 和 maximumAge，持续定位用完要 clearWatch。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>getCurrentPosition 是一次查询，watchPosition 持续监听且需要 clearWatch 清理。</li>
-<li>enableHighAccuracy、timeout 和 maximumAge 分别影响精度、等待时间和缓存。</li>
-<li>判断精度要看 accuracy 字段，而不是坐标的小数位数。</li>
-<li>失败原因分权限拒绝、位置不可用和超时，要对应不同的恢复路径。</li>
+<li>只在 HTTPS 等安全上下文中可用，第一次调用时浏览器弹出授权框。</li>
+<li><code>getCurrentPosition</code> 获取一次，<code>watchPosition</code> 持续获取，返回的 ID 用 <code>clearWatch</code> 停止。</li>
+<li>结果中的 <code>coords.accuracy</code> 是精度半径（米），数值越大越不准，界面上应展示出来或据此判断是否可用。</li>
+<li>错误码：<code>1</code> 用户拒绝，<code>2</code> 无法获取位置，<code>3</code> 超时。</li>
+<li><code>enableHighAccuracy: true</code> 可能启用 GPS，更准但更慢、更耗电。</li>
 </ul>
-<p>Geolocation API 返回的是设备推算的位置，不是绝对精确的地理事实。浏览器可能利用卫星定位、Wi-Fi、基站等信息，结果的速度、精度和可用性都受设备与环境影响。</p>
-<p>应用应先明确用途：查附近门店可能只需大致位置，导航需要持续更新，账号风控则不能仅凭网页返回的坐标作出可信身份判断。</p>
-<h2>一次查询与持续观察的生命周期不同</h2>
-<p>getCurrentPosition 请求一次位置，通过成功或错误回调返回，不直接返回 Promise。watchPosition 会持续报告位置变化，并返回 watch ID，结束时要调用 clearWatch。</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">watchLocation</span>(<span class="hljs-params">onPosition, onError</span>) {
-  <span class="hljs-keyword">if</span> (!navigator.<span class="hljs-property">geolocation</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;当前环境不支持定位&#x27;</span>);
-  <span class="hljs-keyword">let</span> active = <span class="hljs-literal">true</span>;
-  <span class="hljs-keyword">const</span> id = navigator.<span class="hljs-property">geolocation</span>.<span class="hljs-title function_">watchPosition</span>(
-    <span class="hljs-function">(<span class="hljs-params">position</span>) =&gt;</span> {
-      <span class="hljs-keyword">if</span> (active) <span class="hljs-title function_">onPosition</span>(position);
-    },
-    <span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> {
-      <span class="hljs-keyword">if</span> (active) <span class="hljs-title function_">onError</span>(error);
-    },
-    { <span class="hljs-attr">enableHighAccuracy</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">timeout</span>: <span class="hljs-number">10000</span>, <span class="hljs-attr">maximumAge</span>: <span class="hljs-number">30000</span> },
-  );
-  <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
-    active = <span class="hljs-literal">false</span>;
-    navigator.<span class="hljs-property">geolocation</span>.<span class="hljs-title function_">clearWatch</span>(id);
-  };
+<h2>示例</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">locate</span>(<span class="hljs-params">{ timeout = <span class="hljs-number">10000</span> } = {}</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (!(<span class="hljs-string">&#x27;geolocation&#x27;</span> <span class="hljs-keyword">in</span> navigator)) {
+      <span class="hljs-title function_">reject</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;当前浏览器不支持定位&#x27;</span>));
+      <span class="hljs-keyword">return</span>;
+    }
+    navigator.<span class="hljs-property">geolocation</span>.<span class="hljs-title function_">getCurrentPosition</span>(
+      <span class="hljs-function">(<span class="hljs-params">{ coords }</span>) =&gt;</span> <span class="hljs-title function_">resolve</span>({ <span class="hljs-attr">lat</span>: coords.<span class="hljs-property">latitude</span>, <span class="hljs-attr">lng</span>: coords.<span class="hljs-property">longitude</span>, <span class="hljs-attr">accuracy</span>: coords.<span class="hljs-property">accuracy</span> }),
+      <span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> {
+        <span class="hljs-keyword">const</span> messages = { <span class="hljs-number">1</span>: <span class="hljs-string">&#x27;你拒绝了定位权限&#x27;</span>, <span class="hljs-number">2</span>: <span class="hljs-string">&#x27;暂时无法获取位置&#x27;</span>, <span class="hljs-number">3</span>: <span class="hljs-string">&#x27;定位超时&#x27;</span> };
+        <span class="hljs-title function_">reject</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(messages[error.<span class="hljs-property">code</span>] ?? error.<span class="hljs-property">message</span>));
+      },
+      { <span class="hljs-attr">enableHighAccuracy</span>: <span class="hljs-literal">false</span>, timeout, <span class="hljs-attr">maximumAge</span>: <span class="hljs-number">60000</span> },
+    );
+  });
 }
 </code></pre></div>
-<p>示例适合允许短时间缓存的大致位置场景，不是导航推荐配置。active 防止关闭后仍提交迟到结果；真正停止观察仍靠 clearWatch，不能只丢弃回调而保留持续工作。</p>
-<p>getCurrentPosition 没有通用的 AbortSignal 参数。包装成 Promise 不会增加真正的底层取消能力；若组件退出，可忽略迟到结果，或按需要采用可停止的观察流程。</p>
-<h2>三个选项分别影响什么</h2>
-<p>enableHighAccuracy 表示希望尽可能获得较好精度，不保证一定启用 GPS，也不保证最终更准。可能增加等待和电量消耗，应按任务需要选择。</p>
-<p>timeout 控制定位过程允许的等待，不能把它理解成所有权限提示与页面生命周期条件下的绝对墙钟截止。若产品要求用户不能一直停留在加载状态，应额外设计取消或稍后重试入口。</p>
-<p>maximumAge 表示可以接受多旧的缓存结果，单位是毫秒。允许缓存可以更快，但必须结合 position.timestamp 判断它是否仍符合业务。设置为 0 要求尝试新位置，也不等于结果没有误差。</p>
-<h2>精度字段比小数位数更有意义</h2>
-<p>coords.latitude 和 longitude 是坐标，accuracy 以米表达水平精度信息。坐标显示很多小数位，不代表定位精确到厘米。海拔、速度或方向等附加值可能不可用，不能直接当成正常数值计算。</p>
-<p>界面可以显示定位范围或“位置可能不够精确”，而不是始终把地图上的一个点当成确定位置。连续结果也可能抖动，应根据场景做过滤或采用地图匹配，不能简单认为每次位置变化都代表用户真的移动。</p>
-<h2>失败原因要对应可行恢复路径</h2>
-<p>常见错误包括权限被拒绝、位置不可用和超时。权限受安全上下文、浏览器设置与 Permissions Policy 等约束；定位不可用则可能是设备或环境问题，两者不应统一提示“请开启权限”。</p>
-<p>用户拒绝时提供手动输入城市或地址；超时可允许再次尝试；页面不需要实时位置时及时停止观察。不要为了提高成功率持续后台请求高精度位置。</p>
-<p>位置属于敏感数据，应只采集完成任务所需精度和持续时间，明确是否上传与保存。服务端不能把浏览器坐标作为不可伪造的凭证，涉及配送范围或高风险操作时仍要执行自身规则。</p>
-<p>测试替身可以检查成功、超时和清理分支，但定位精度、系统提示、室内外差异与电量影响需要真实设备验证。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API" target="_blank" rel="noreferrer">MDN · Geolocation API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Geolocation+API+%E7%9A%84%E6%9D%83%E9%99%90%E5%92%8C%E5%AE%9A%E4%BD%8D%E7%B2%BE%E5%BA%A6%E6%80%8E%E6%A0%B7%E5%A4%84%E7%90%86%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AGeolocation+API+%E7%9A%84%E6%9D%83%E9%99%90%E5%92%8C%E5%AE%9A%E4%BD%8D%E7%B2%BE%E5%BA%A6%E6%80%8E%E6%A0%B7%E5%A4%84%E7%90%86%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aweb-geolocation%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AWeb+API%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fweb-geolocation%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Geolocation API 的权限和定位精度怎样处理？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/web-file-system-access/">File System Access API 的权限和文件句柄怎样管理？</a></li><li><a href="/questions/api-abort/">AbortController 能取消什么，不能取消什么？</a></li><li><a href="/questions/api-web-components/">Custom Elements、Shadow DOM 和 template 分别负责什么？</a></li><li><a href="/questions/api-files/">File、Blob 和 object URL 怎样用于文件预览？</a></li></ul></nav></main></div></div>
+<ul>
+<li><code>maximumAge: 60000</code> 允许使用一分钟内的缓存位置，返回更快。</li>
+<li>在用户点击&quot;使用我的位置&quot;后调用，页面打开就请求定位的话用户更容易拒绝。</li>
+</ul>
+<h2>隐私</h2>
+<ul>
+<li>精确位置是敏感数据，只上传业务需要的精度，例如把坐标四舍五入到城市级别。</li>
+<li>用户拒绝后浏览器不再弹窗，应提供手动选择城市或输入地址的方式。</li>
+<li>iframe 中使用要父页面授权 <code>allow=&quot;geolocation&quot;</code>。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li>为什么室内定位误差很大：没有 GPS 信号时，浏览器依靠 Wi-Fi 和 IP 估算位置，精度可能是几百米到几公里。</li>
+<li>IP 定位和 Geolocation 的区别：IP 定位在服务端完成，不需要授权，只能到城市级别。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API" target="_blank" rel="noreferrer">MDN · Geolocation API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Geolocation+API+%E7%9A%84%E6%9D%83%E9%99%90%E5%92%8C%E5%AE%9A%E4%BD%8D%E7%B2%BE%E5%BA%A6%E6%80%8E%E6%A0%B7%E5%A4%84%E7%90%86%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AGeolocation+API+%E7%9A%84%E6%9D%83%E9%99%90%E5%92%8C%E5%AE%9A%E4%BD%8D%E7%B2%BE%E5%BA%A6%E6%80%8E%E6%A0%B7%E5%A4%84%E7%90%86%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aweb-geolocation%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AWeb+API%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fweb-geolocation%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Geolocation API 的权限和定位精度怎样处理？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/web-file-system-access/">File System Access API 的权限和文件句柄怎样管理？</a></li><li><a href="/questions/api-abort/">AbortController 能取消什么，不能取消什么？</a></li><li><a href="/questions/api-web-components/">Custom Elements、Shadow DOM 和 template 分别负责什么？</a></li><li><a href="/questions/api-files/">File、Blob 和 object URL 怎样用于文件预览？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

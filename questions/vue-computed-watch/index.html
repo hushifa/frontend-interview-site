@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Vue面试题：computed 表达派生值，watch 对明确来源的变化执行副作用，watchEffect 自动收集同步读取的来源。它们的返回、缓存、触发与清理规则不同，应围绕数据是否需要单独保存和外部工作怎样结束来选择。" />
+    <meta name="description" content="Vue面试题：computed 从响应式数据推导新值并缓存，不应有副作用；watch 监听明确的来源，变化时执行副作用，能拿到新旧值；watchEffect 立即执行并自动追踪同步读取的数据。派生数据用 computed，副作用用 watch 或 watchEffect。" />
     <title>computed、watch 和 watchEffect 应该如何选择？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/vue-computed-watch/" />
     <meta name="robots" content="index,follow" />
@@ -19,111 +19,65 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="computed、watch 和 watchEffect 应该如何选择？ · 前端知库" />
-    <meta property="og:description" content="Vue面试题：computed 表达派生值，watch 对明确来源的变化执行副作用，watchEffect 自动收集同步读取的来源。它们的返回、缓存、触发与清理规则不同，应围绕数据是否需要单独保存和外部工作怎样结束来选择。" />
+    <meta property="og:description" content="Vue面试题：computed 从响应式数据推导新值并缓存，不应有副作用；watch 监听明确的来源，变化时执行副作用，能拿到新旧值；watchEffect 立即执行并自动追踪同步读取的数据。派生数据用 computed，副作用用 watch 或 watchEffect。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/vue-computed-watch/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-computed-watch/#webpage","url":"https://fe.hushifa.top/questions/vue-computed-watch/","name":"computed、watch 和 watchEffect 应该如何选择？ · 前端知库","description":"Vue面试题：computed 表达派生值，watch 对明确来源的变化执行副作用，watchEffect 自动收集同步读取的来源。它们的返回、缓存、触发与清理规则不同，应围绕数据是否需要单独保存和外部工作怎样结束来选择。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-computed-watch/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-computed-watch/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"computed、watch 和 watchEffect 应该如何选择？","item":"https://fe.hushifa.top/questions/vue-computed-watch/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-computed-watch/#webpage","url":"https://fe.hushifa.top/questions/vue-computed-watch/","name":"computed、watch 和 watchEffect 应该如何选择？ · 前端知库","description":"Vue面试题：computed 从响应式数据推导新值并缓存，不应有副作用；watch 监听明确的来源，变化时执行副作用，能拿到新旧值；watchEffect 立即执行并自动追踪同步读取的数据。派生数据用 computed，副作用用 watch 或 watchEffect。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-computed-watch/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-computed-watch/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"computed、watch 和 watchEffect 应该如何选择？","item":"https://fe.hushifa.top/questions/vue-computed-watch/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">computed、watch 和 watchEffect 应该如何选择？</span></nav><h1 tabindex="-1">computed、watch 和 watchEffect 应该如何选择？</h1><p class="reading-summary">computed 表达派生值，watch 对明确来源的变化执行副作用，watchEffect 自动收集同步读取的来源。它们的返回、缓存、触发与清理规则不同，应围绕数据是否需要单独保存和外部工作怎样结束来选择。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<p>computed 用于派生值，结果有缓存，依赖不变就不重新计算，应该没有副作用。watch 显式指定数据源，变化时执行副作用，能拿到新旧值，默认懒执行。watchEffect 立即执行一次，并自动追踪同步读取到的依赖，await 之后的读取不会被追踪。三者都能用 onCleanup（3.5 起还有 onWatcherCleanup）清理上一次的副作用。</p>
-<p>总价由单价与数量决定，搜索请求由关键词变化触发，日志记录可能使用多个响应式来源。这些需求不应该都写成一个 watch，再把结果到处复制。</p>
-<p>先判断要的是一个可以读取的派生值，还是某种外部副作用。前者通常适合 computed；后者再根据触发条件是否需要显式表达，选择 watch 或 watchEffect。</p>
-<h2>computed 让派生结果只有一份来源</h2>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { computed, nextTick, reactive, ref, watch } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
-
-<span class="hljs-keyword">const</span> price = <span class="hljs-title function_">ref</span>(<span class="hljs-number">10</span>);
-<span class="hljs-keyword">const</span> quantity = <span class="hljs-title function_">ref</span>(<span class="hljs-number">2</span>);
-<span class="hljs-keyword">const</span> total = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> price.<span class="hljs-property">value</span> * quantity.<span class="hljs-property">value</span>);
-
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(total.<span class="hljs-property">value</span>); <span class="hljs-comment">// 20</span>
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(total.<span class="hljs-property">value</span>); <span class="hljs-comment">// 20</span>
-quantity.<span class="hljs-property">value</span> = <span class="hljs-number">3</span>;
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(total.<span class="hljs-property">value</span>); <span class="hljs-comment">// 30</span>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">computed、watch 和 watchEffect 应该如何选择？</span></nav><h1 tabindex="-1">computed、watch 和 watchEffect 应该如何选择？</h1><p class="reading-summary">computed 从响应式数据推导新值并缓存，不应有副作用；watch 监听明确的来源，变化时执行副作用，能拿到新旧值；watchEffect 立即执行并自动追踪同步读取的数据。派生数据用 computed，副作用用 watch 或 watchEffect。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li><code>computed</code>：返回一个只读 ref，依赖不变时直接返回缓存结果；getter 应是纯计算，不发请求、不修改其他状态。</li>
+<li><code>watch(source, callback)</code>：只在指定来源变化时执行回调，回调参数是新值和旧值；默认懒执行，加 <code>immediate: true</code> 可以立即执行一次。</li>
+<li><code>watchEffect(fn)</code>：立即执行，自动追踪执行期间同步读取的响应式数据；<code>await</code> 之后读取的数据不会被追踪。</li>
+<li>侦听器里清理上一次的副作用（取消请求）：Vue 3.5 起用 <code>onWatcherCleanup</code>，旧写法是回调的第三个参数 <code>onCleanup</code>。</li>
+<li>能用 <code>computed</code> 表达的就不要用 <code>watch</code> 去同步另一份状态。</li>
+</ul>
+<h2>computed：派生数据</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> items = <span class="hljs-title function_">ref</span>([{ <span class="hljs-attr">price</span>: <span class="hljs-number">10</span>, <span class="hljs-attr">count</span>: <span class="hljs-number">2</span> }, { <span class="hljs-attr">price</span>: <span class="hljs-number">5</span>, <span class="hljs-attr">count</span>: <span class="hljs-number">1</span> }]);
+<span class="hljs-keyword">const</span> total = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> items.<span class="hljs-property">value</span>.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">s, i</span>) =&gt;</span> s + i.<span class="hljs-property">price</span> * i.<span class="hljs-property">count</span>, <span class="hljs-number">0</span>));
 </code></pre></div>
-<p>computed 返回可读取的计算引用，并根据响应式依赖缓存。依赖没有变时，重复读取可以复用结果；依赖变化后，再按需要获得新的派生结果。</p>
-<p>不必再用 watch 把 price、quantity 同步到另一个可随意修改的 total state，那样反而多出一份可能不一致的状态。getter 应只计算结果，不在里面发请求、修改别的响应式值或操作 DOM。</p>
-<p>也不要把 async getter 得到的 Promise 当作自动请求管理。computed 不负责等待、loading、错误与取消。Date.now 等非响应式读取也不会自己让 computed 不断失效，必须有实际响应式来源发生变化。</p>
-<h2>watch 明确说明监听什么</h2>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> state = <span class="hljs-title function_">reactive</span>({ <span class="hljs-attr">count</span>: <span class="hljs-number">0</span> });
-<span class="hljs-keyword">const</span> changes = [];
-<span class="hljs-keyword">const</span> stop = <span class="hljs-title function_">watch</span>(
-  <span class="hljs-function">() =&gt;</span> state.<span class="hljs-property">count</span>,
-  <span class="hljs-function">(<span class="hljs-params">next, previous</span>) =&gt;</span> changes.<span class="hljs-title function_">push</span>(<span class="hljs-string">`<span class="hljs-subst">${previous}</span>-&gt;<span class="hljs-subst">${next}</span>`</span>),
+<p>不要写成 <code>watch(items, () =&gt; { total.value = ... }, { deep: true })</code>，那样多了一份需要同步的状态。</p>
+<h2>watch：对指定变化做副作用</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { ref, watch, onWatcherCleanup } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">const</span> userId = <span class="hljs-title function_">ref</span>(<span class="hljs-number">1</span>);
+<span class="hljs-keyword">const</span> user = <span class="hljs-title function_">ref</span>(<span class="hljs-literal">null</span>);
+
+<span class="hljs-title function_">watch</span>(
+  userId,
+  <span class="hljs-title function_">async</span> (id) =&gt; {
+    <span class="hljs-keyword">const</span> controller = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AbortController</span>();
+    <span class="hljs-title function_">onWatcherCleanup</span>(<span class="hljs-function">() =&gt;</span> controller.<span class="hljs-title function_">abort</span>());
+    <span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">`/api/users/<span class="hljs-subst">${id}</span>`</span>, { <span class="hljs-attr">signal</span>: controller.<span class="hljs-property">signal</span> });
+    user.<span class="hljs-property">value</span> = <span class="hljs-keyword">await</span> res.<span class="hljs-title function_">json</span>();
+  },
+  { <span class="hljs-attr">immediate</span>: <span class="hljs-literal">true</span> },
 );
-
-state.<span class="hljs-property">count</span> = <span class="hljs-number">1</span>;
-state.<span class="hljs-property">count</span> = <span class="hljs-number">2</span>;
-<span class="hljs-keyword">await</span> <span class="hljs-title function_">nextTick</span>();
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(changes.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 0-&gt;2</span>
-<span class="hljs-title function_">stop</span>();
 </code></pre></div>
-<p>watch 默认懒执行，先记录来源，再在相关变化后调用回调。默认调度可以合并同一轮变化，所以本例观察到旧值 0 与最后的新值 2，不是保证每次赋值都单独产生一个回调。</p>
-<p>来源可以是 ref、响应式对象、getter 或多个来源组成的数组。<code>watch(state.count, ...)</code> 传进去的是一个当时的数字，不是可继续追踪的属性入口，因此通常应写 getter。</p>
-<p>watch 只追踪明确给出的源，回调里额外读取其他响应式值，不会自动把它们全部变成触发条件。需要首次也执行时，可以使用 immediate，并处理首次没有普通旧值的情况。</p>
-<h2>watchEffect 适合依赖自然来自同步读取的副作用</h2>
-<p>watchEffect 会立即运行并自动记录同步执行中读取的响应式来源，相关来源变化后重新执行。它不提供与 watch 相同的新旧值参数，优势是不用在读取和依赖列表之间重复维护同一组来源。</p>
-<p>async watchEffect 只收集第一次 await 之前的同步读取。等待后才读取的变量，不会因为出现在同一个函数文本中，就自动加入这一轮依赖。</p>
-<p>需要精确控制请求由哪个 ID、关键词或配置触发时，watch 的显式源通常更清楚；小范围自动同步或调试观察则可以考虑 watchEffect。不要为了省一行源表达式而让触发关系变得难以预测。</p>
-<h2>请求副作用必须处理失效清理</h2>
-<p>以下组件假设项目提供 <code>/api/search?q=...</code>，返回包含字符串 label 的 JSON；接口本身需要由实际项目实现。</p>
-<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;script setup&gt;
-import { ref, watch } from &#x27;vue&#x27;;
+<p><code>userId</code> 快速变化时，上一次请求被取消，旧结果不会覆盖新结果。注意 <code>onWatcherCleanup</code> 必须在第一个 <code>await</code> 之前调用。</p>
+<h2>侦听来源的写法</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> state = <span class="hljs-title function_">reactive</span>({ <span class="hljs-attr">keyword</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-attr">page</span>: <span class="hljs-number">1</span> });
 
-const query = ref(&#x27;&#x27;);
-const result = ref(&#x27;请输入关键词&#x27;);
-const loading = ref(false);
-
-watch(query, async (value, _previous, onCleanup) =&gt; {
-  const keyword = value.trim();
-  if (!keyword) {
-    result.value = &#x27;请输入关键词&#x27;;
-    loading.value = false;
-    return;
-  }
-
-  const controller = new AbortController();
-  let active = true;
-  onCleanup(() =&gt; {
-    active = false;
-    controller.abort();
-  });
-
-  loading.value = true;
-  result.value = &#x27;&#x27;;
-  try {
-    const response = await fetch(`/api/search?q=${encodeURIComponent(keyword)}`, {
-      signal: controller.signal,
-    });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const data = await response.json();
-    if (typeof data?.label !== &#x27;string&#x27;) throw new Error(&#x27;返回数据不符合约定&#x27;);
-    if (active) result.value = data.label;
-  } catch (error) {
-    if (active) result.value = error instanceof Error ? error.message : &#x27;查询失败&#x27;;
-  } finally {
-    if (active) loading.value = false;
-  }
+<span class="hljs-title function_">watch</span>(<span class="hljs-function">() =&gt;</span> state.<span class="hljs-property">keyword</span>, <span class="hljs-function">(<span class="hljs-params">kw</span>) =&gt;</span> { state.<span class="hljs-property">page</span> = <span class="hljs-number">1</span>; }); <span class="hljs-comment">// getter</span>
+<span class="hljs-title function_">watch</span>([<span class="hljs-function">() =&gt;</span> state.<span class="hljs-property">keyword</span>, <span class="hljs-function">() =&gt;</span> state.<span class="hljs-property">page</span>], <span class="hljs-function">(<span class="hljs-params">[kw, page]</span>) =&gt;</span> <span class="hljs-title function_">search</span>(kw, page)); <span class="hljs-comment">// 多个来源</span>
+<span class="hljs-title function_">watch</span>(state, <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">save</span>(state)); <span class="hljs-comment">// reactive 对象，默认深层侦听</span>
+</code></pre></div>
+<p>侦听 <code>reactive</code> 对象的某个属性必须写成 getter，<code>watch(state.keyword, ...)</code> 传入的只是一个字符串。</p>
+<h2>watchEffect：自动追踪</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-title function_">watchEffect</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">document</span>.<span class="hljs-property">title</span> = <span class="hljs-string">`<span class="hljs-subst">${unread.value}</span> 条未读 - <span class="hljs-subst">${siteName.value}</span>`</span>;
 });
-&lt;/script&gt;
-
-&lt;template&gt;
-  &lt;label&gt;关键词&lt;input v-model=&quot;query&quot; /&gt;&lt;/label&gt;
-  &lt;p role=&quot;status&quot;&gt;{{ loading ? &#x27;查询中&#x27; : result }}&lt;/p&gt;
-&lt;/template&gt;
 </code></pre></div>
-<p>关键词变化时，旧回调先被标记为失效并请求取消。即使某些后续工作不响应取消，active 检查也阻止旧结果和旧 finally 覆盖新查询的状态。</p>
-<p>Vue 3.5 及以上还提供 onWatcherCleanup，但必须在同步执行阶段登记，不能等 await 之后再调用。示例使用回调参数 onCleanup，并同样选择在等待前登记，避免清理关系建立得太晚。</p>
-<p>这里的注册方式不同于 React Effect：不是让 async 回调返回一个清理函数，而是通过 Vue 的清理入口登记。返回的 Promise 也不会自动把网络请求变成可取消资源。</p>
-<h2>深度监听不等于给你一份历史快照</h2>
-<p>直接 watch 响应式对象通常具有深度监听行为；watch 一个返回对象的 getter，默认更关注这个返回引用是否替换，需要时再开启 deep。</p>
-<p>深层属性原地变化时，新值与旧值可能仍是同一个对象引用，不能把它们当成两份独立快照来计算差异。需要历史差异，应明确保存或生成数据，而不是期待 deep 自动深拷贝。</p>
-<p>深度遍历可能有成本。Vue 3.5 起 deep 也可以指定最大遍历深度，但这只是进一步控制边界，不代表大结构从此可以无成本地随意深度监听。</p>
-<h2>选择回调时机与停止时机</h2>
-<p>默认侦听回调与组件更新存在调度顺序，读取所属组件的新 DOM 时，应考虑 flush:&#x27;post&#x27;、watchPostEffect 或在正确位置等待 nextTick。flush:&#x27;sync&#x27; 则同步触发、缺少相同的批处理优势，不宜不加分析地用于频繁变动的大数组。</p>
-<p>setup 中同步创建的侦听通常会随组件卸载停止。异步创建或脱离组件生命周期的侦听，需要自己持有并调用停止函数，否则可能继续执行无用工作。</p>
-<p>最后，computed 负责让派生数据可读，watch/watchEffect 负责在变化后做事。把这两个目的分开，通常比反复添加更多侦听器来同步同一事实更容易保证正确性。</p></div><div class="answer-bottom"><a href="https://vuejs.org/guide/essentials/watchers.html" target="_blank" rel="noreferrer">Vue · Watchers<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+computed%E3%80%81watch+%E5%92%8C+watchEffect+%E5%BA%94%E8%AF%A5%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Acomputed%E3%80%81watch+%E5%92%8C+watchEffect+%E5%BA%94%E8%AF%A5%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-computed-watch%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-computed-watch%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：computed、watch 和 watchEffect 应该如何选择？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-ref-reactive/">Vue 3 中 ref 和 reactive 有什么区别？</a></li><li><a href="/questions/vue-nexttick/">修改状态后，为什么有时需要 await nextTick()？</a></li><li><a href="/questions/vue-props/">为什么 Vue 提倡 props 单向数据流？</a></li><li><a href="/questions/vue-reactivity-tracking/">Vue 3 响应式依赖是怎样收集和触发的？</a></li></ul></nav></main></div></div>
+<p>依赖多、且都在同步代码中读取时，<code>watchEffect</code> 更简洁。依赖不明显或需要旧值时，用 <code>watch</code> 更清楚。</p>
+<h2>回调执行时机</h2>
+<p>默认情况下，侦听器回调在父组件更新之后、本组件 DOM 更新之前执行。需要在回调中读取更新后的 DOM，设置 <code>flush: &#x27;post&#x27;</code>（或用 <code>watchPostEffect</code>）；需要同步触发，设置 <code>flush: &#x27;sync&#x27;</code>，但要谨慎使用。</p>
+<h2>常见追问</h2>
+<ul>
+<li>怎么停止侦听？<code>watch</code> 和 <code>watchEffect</code> 返回停止函数；在 <code>setup</code> 中同步创建的侦听器会在组件卸载时自动停止，异步创建的要手动停止。</li>
+<li><code>computed</code> 可以写吗？可以传入 <code>{ get, set }</code> 创建可写 computed，常用于包装 v-model，见《组件 v-model 的本质是什么？》。</li>
+</ul></div><div class="answer-bottom"><a href="https://vuejs.org/guide/essentials/watchers.html" target="_blank" rel="noreferrer">Vue · Watchers<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+computed%E3%80%81watch+%E5%92%8C+watchEffect+%E5%BA%94%E8%AF%A5%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Acomputed%E3%80%81watch+%E5%92%8C+watchEffect+%E5%BA%94%E8%AF%A5%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-computed-watch%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-computed-watch%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：computed、watch 和 watchEffect 应该如何选择？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-ref-reactive/">Vue 3 中 ref 和 reactive 有什么区别？</a></li><li><a href="/questions/vue-nexttick/">修改状态后，为什么有时需要 await nextTick()？</a></li><li><a href="/questions/vue-props/">为什么 Vue 提倡 props 单向数据流？</a></li><li><a href="/questions/vue-reactivity-tracking/">Vue 3 响应式依赖是怎样收集和触发的？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

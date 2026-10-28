@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="国际化面试题：时间戳表达一个确定瞬间，时区决定这个瞬间如何转换为当地日期和时间。Date 内部保存时间值，不会因为显示在不同地区就变成另一个瞬间，但本地 getter 和格式化结果可能不同。" />
+    <meta name="description" content="国际化面试题：时间戳是一个确定的瞬间，时区决定它显示成哪个当地时间；生日这类只有日期的值不该转成 Date；未来的当地时间日程要保存本地时间加 IANA 时区。夏令时让&quot;加一天&quot;和&quot;加 24 小时&quot;结果不同，Temporal 为这三种语义提供了不同类型。" />
     <title>时间戳、时区和只有日期的业务值应该怎样区分？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/intl-timezones/" />
     <meta name="robots" content="index,follow" />
@@ -19,64 +19,75 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="时间戳、时区和只有日期的业务值应该怎样区分？ · 前端知库" />
-    <meta property="og:description" content="国际化面试题：时间戳表达一个确定瞬间，时区决定这个瞬间如何转换为当地日期和时间。Date 内部保存时间值，不会因为显示在不同地区就变成另一个瞬间，但本地 getter 和格式化结果可能不同。" />
+    <meta property="og:description" content="国际化面试题：时间戳是一个确定的瞬间，时区决定它显示成哪个当地时间；生日这类只有日期的值不该转成 Date；未来的当地时间日程要保存本地时间加 IANA 时区。夏令时让&quot;加一天&quot;和&quot;加 24 小时&quot;结果不同，Temporal 为这三种语义提供了不同类型。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/intl-timezones/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/intl-timezones/#webpage","url":"https://fe.hushifa.top/questions/intl-timezones/","name":"时间戳、时区和只有日期的业务值应该怎样区分？ · 前端知库","description":"国际化面试题：时间戳表达一个确定瞬间，时区决定这个瞬间如何转换为当地日期和时间。Date 内部保存时间值，不会因为显示在不同地区就变成另一个瞬间，但本地 getter 和格式化结果可能不同。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/intl-timezones/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/intl-timezones/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"国际化面试题","item":"https://fe.hushifa.top/topics/internationalization/"},{"@type":"ListItem","position":3,"name":"时间戳、时区和只有日期的业务值应该怎样区分？","item":"https://fe.hushifa.top/questions/intl-timezones/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/intl-timezones/#webpage","url":"https://fe.hushifa.top/questions/intl-timezones/","name":"时间戳、时区和只有日期的业务值应该怎样区分？ · 前端知库","description":"国际化面试题：时间戳是一个确定的瞬间，时区决定它显示成哪个当地时间；生日这类只有日期的值不该转成 Date；未来的当地时间日程要保存本地时间加 IANA 时区。夏令时让\"加一天\"和\"加 24 小时\"结果不同，Temporal 为这三种语义提供了不同类型。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/intl-timezones/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/intl-timezones/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"国际化面试题","item":"https://fe.hushifa.top/topics/internationalization/"},{"@type":"ListItem","position":3,"name":"时间戳、时区和只有日期的业务值应该怎样区分？","item":"https://fe.hushifa.top/questions/intl-timezones/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/internationalization/">国际化面试题</a><span aria-hidden="true">/</span><span aria-current="page">时间戳、时区和只有日期的业务值应该怎样区分？</span></nav><h1 tabindex="-1">时间戳、时区和只有日期的业务值应该怎样区分？</h1><p class="reading-summary">时间戳表达一个确定瞬间，时区决定这个瞬间如何转换为当地日期和时间。Date 内部保存时间值，不会因为显示在不同地区就变成另一个瞬间，但本地 getter 和格式化结果可能不同。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/internationalization/">国际化面试题</a><span aria-hidden="true">/</span><span aria-current="page">时间戳、时区和只有日期的业务值应该怎样区分？</span></nav><h1 tabindex="-1">时间戳、时区和只有日期的业务值应该怎样区分？</h1><p class="reading-summary">时间戳是一个确定的瞬间，时区决定它显示成哪个当地时间；生日这类只有日期的值不该转成 Date；未来的当地时间日程要保存本地时间加 IANA 时区。夏令时让&quot;加一天&quot;和&quot;加 24 小时&quot;结果不同，Temporal 为这三种语义提供了不同类型。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>时间戳表示一个确定的瞬间，时区只决定它显示成哪个当地时间。</li>
-<li>只有日期的业务值（如生日）不应转换成 Date 后随时区漂移。</li>
-<li>固定偏移不等于完整的时区规则，IANA 时区包含历史和夏令时。</li>
-<li>“加一天”和“加 24 小时”在夏令时切换日结果不同，接口要写清时间语义。</li>
+<li>三类值要分开建模：已发生的事件（订单创建时间）存时间戳；只有日期的值（生日）存 <code>YYYY-MM-DD</code> 字符串；未来的当地时间（每周一上午九点开会）存本地时间加 IANA 时区。</li>
+<li><code>Date</code> 内部只是一个毫秒数，不记得时区。同一个瞬间在上海是 1 月 1 日 08:00，在纽约是 12 月 31 日 19:00。</li>
+<li><code>new Date(&#x27;2026-01-01&#x27;)</code> 按 UTC 解析，<code>new Date(&#x27;2026-01-01T00:00&#x27;)</code> 按本地时间解析，把生日转成 <code>Date</code> 在西半球会显示成前一天。</li>
+<li><code>+08:00</code> 是固定偏移，<code>America/New_York</code> 是带夏令时和历史规则的时区，二者不能互换。</li>
+<li>夏令时切换日，&quot;加一天&quot;可能只有 23 小时。Temporal 用 <code>Instant</code>、<code>PlainDate</code>、<code>ZonedDateTime</code> 分别表达这些语义，它已进入 TC39 第 4 阶段，预计收入 ES2027。</li>
 </ul>
-<p>“订单在什么时候创建”“用户生日是哪天”“每周一上午九点开会”是三种不同问题。都用 Date 和时间戳保存，可能把业务里原本没有的时区含义强行加进去。</p>
-<h2>时间戳表示确定瞬间，时区决定如何显示</h2>
-<p>JavaScript Date 保存的是自 Unix 纪元起的毫秒时间值，不保存创建它时使用的时区名称。同一个瞬间在上海和纽约会显示成不同的当地时间，甚至不同日期，但 getTime 不会因此改变。</p>
+<h2>同一瞬间，不同显示</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> instant = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(<span class="hljs-string">&#x27;2026-01-01T00:00:00Z&#x27;</span>);
 
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> timeZone <span class="hljs-keyword">of</span> [<span class="hljs-string">&#x27;Asia/Shanghai&#x27;</span>, <span class="hljs-string">&#x27;America/New_York&#x27;</span>]) {
-  <span class="hljs-keyword">const</span> formatter = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Intl</span>.<span class="hljs-title class_">DateTimeFormat</span>(<span class="hljs-string">&#x27;en-GB&#x27;</span>, {
+  <span class="hljs-keyword">const</span> text = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Intl</span>.<span class="hljs-title class_">DateTimeFormat</span>(<span class="hljs-string">&#x27;en-GB&#x27;</span>, {
     timeZone,
     <span class="hljs-attr">dateStyle</span>: <span class="hljs-string">&#x27;short&#x27;</span>,
     <span class="hljs-attr">timeStyle</span>: <span class="hljs-string">&#x27;short&#x27;</span>,
-    <span class="hljs-attr">hourCycle</span>: <span class="hljs-string">&#x27;h23&#x27;</span>,
-  });
-  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(timeZone, formatter.<span class="hljs-title function_">format</span>(instant));
+  }).<span class="hljs-title function_">format</span>(instant);
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(timeZone, text);
 }
 <span class="hljs-comment">// Asia/Shanghai 01/01/2026, 08:00</span>
 <span class="hljs-comment">// America/New_York 31/12/2025, 19:00</span>
 </code></pre></div>
-<p>订单创建、支付完成等事件通常适合保存确定瞬间，显示时再选择用户或业务时区。接口还要明确时间戳单位，秒和毫秒混用会产生看似合法但完全错误的日期。</p>
-<h2>只有日期的值不应随用户位置漂移</h2>
-<p>生日 <code>1995-06-10</code> 通常只表示年月日，不表示 UTC 午夜发生的某个事件。若把它解析成 Date，再按美洲时区格式化，可能显示为前一天。</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> date = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(<span class="hljs-string">&#x27;2026-01-01&#x27;</span>);
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(date.<span class="hljs-title function_">toISOString</span>()); <span class="hljs-comment">// 2026-01-01T00:00:00.000Z</span>
+<p>接口里要写清楚时间戳单位是秒还是毫秒，混用会得到合法但错误的日期。</p>
+<h2>纯日期</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(<span class="hljs-string">&#x27;2026-01-01&#x27;</span>).<span class="hljs-title function_">toISOString</span>(); <span class="hljs-comment">// &#x27;2026-01-01T00:00:00.000Z&#x27;，按 UTC 午夜解析</span>
 </code></pre></div>
-<p>标准的 YYYY-MM-DD 无时区形式会按 UTC 解析，而带时间但不含偏移的 <code>2026-01-01T00:00:00</code> 则按本地时间解析。这是 Date 的历史兼容规则，两个字符串不是同一种语义。</p>
-<p>对于生日、账期日期或表单中的纯日期，可以保存经过校验的年月日字符串或专门的日期类型。校验还要确认真实日历合法性，不能只匹配四位年两位月两位日，也不能依赖 Date 自动进位来发现输入错误。</p>
-<h2>固定偏移不是完整时区规则</h2>
-<p><code>+08:00</code> 表示一个偏移；<code>America/New_York</code> 是带历史和夏令时规则的时区标识。纽约冬季和夏季的 UTC 偏移不同，所以不能给所有日期固定减五小时。</p>
-<p>未来的“当地上午九点”安排通常应保留当地日期时间与 IANA 时区，并明确夏令时冲突策略；每周重复日程还需要重复规则。只保存第一次的 UTC 时间再每隔 24 小时或七天相加，可能让之后的当地开会时间变化。</p>
-<h2>加一天与加 24 小时有什么区别</h2>
-<p>在纽约进入夏令时的那一天，钟表会跳过一段本地时间。下面示例应在 <code>TZ=America/New_York</code> 的 Node 环境中运行：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> start = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(<span class="hljs-number">2026</span>, <span class="hljs-number">2</span>, <span class="hljs-number">7</span>, <span class="hljs-number">12</span>);
-<span class="hljs-keyword">const</span> calendarNext = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(start);
-calendarNext.<span class="hljs-title function_">setDate</span>(calendarNext.<span class="hljs-title function_">getDate</span>() + <span class="hljs-number">1</span>);
-<span class="hljs-keyword">const</span> durationNext = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(start.<span class="hljs-title function_">getTime</span>() + <span class="hljs-number">24</span> * <span class="hljs-number">60</span> * <span class="hljs-number">60</span> * <span class="hljs-number">1000</span>);
+<p>生日、账单日这类值直接保存经过校验的 <code>&#x27;1995-06-10&#x27;</code> 字符串，显示时按年月日拆开格式化，不经过时区换算。校验时还要检查日期真实存在（2 月 30 日不合法），不能依赖 <code>Date</code> 自动进位。</p>
+<h2>加一天与加 24 小时</h2>
+<p>2026 年 3 月 8 日纽约进入夏令时，凌晨 2 点直接跳到 3 点：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">process.<span class="hljs-property">env</span>.<span class="hljs-property">TZ</span> = <span class="hljs-string">&#x27;America/New_York&#x27;</span>; <span class="hljs-comment">// 在 Node 中设置，Windows 上命令行 TZ= 前缀可能不生效</span>
+<span class="hljs-keyword">const</span> start = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(<span class="hljs-number">2026</span>, <span class="hljs-number">2</span>, <span class="hljs-number">7</span>, <span class="hljs-number">12</span>); <span class="hljs-comment">// 3 月 7 日中午</span>
 
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(calendarNext.<span class="hljs-title function_">getHours</span>()); <span class="hljs-comment">// 12</span>
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(durationNext.<span class="hljs-title function_">getHours</span>()); <span class="hljs-comment">// 13</span>
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>((calendarNext - start) / <span class="hljs-number">3600000</span>); <span class="hljs-comment">// 23</span>
+<span class="hljs-keyword">const</span> nextDay = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(start);
+nextDay.<span class="hljs-title function_">setDate</span>(nextDay.<span class="hljs-title function_">getDate</span>() + <span class="hljs-number">1</span>);
+<span class="hljs-keyword">const</span> plus24h = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(start.<span class="hljs-title function_">getTime</span>() + <span class="hljs-number">24</span> * <span class="hljs-number">3600</span> * <span class="hljs-number">1000</span>);
+
+nextDay.<span class="hljs-title function_">getHours</span>(); <span class="hljs-comment">// 12</span>
+plus24h.<span class="hljs-title function_">getHours</span>(); <span class="hljs-comment">// 13</span>
+(nextDay - start) / <span class="hljs-number">3600000</span>; <span class="hljs-comment">// 23</span>
 </code></pre></div>
-<p>按日历走到下一天的中午，只经过 23 小时；按固定时长走 24 小时，则到了下一天 13 点。秋季切换还可能出现重复时间，所以“一天永远是 86400000 毫秒”只适合固定时长运算，不适合所有日历运算。</p>
-<p>对于不存在或重复的当地时间，日期时间库或 API 需要采用某种消歧规则。预订、排班等业务应明确要拒绝、向后调整还是选择某一个偏移，不能让运行库默认行为悄悄决定业务结果。</p>
-<h2>把语义写进接口和测试</h2>
-<p>可以分别约定：事件时间使用带 Z/偏移的标准字符串或毫秒时间戳；纯日期使用 YYYY-MM-DD；未来日程包含本地时间、时区和必要的重复规则。不要传 <code>01/02/2026</code> 这种需要猜地区的输入。</p>
-<p>测试至少覆盖跨日显示、夏令时前后、服务器与浏览器不同时区，以及无效日期。格式化只负责显示，不会替你修正上游已经选错的数据类型。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" rel="noreferrer">Date - JavaScript | MDN<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%97%B6%E9%97%B4%E6%88%B3%E3%80%81%E6%97%B6%E5%8C%BA%E5%92%8C%E5%8F%AA%E6%9C%89%E6%97%A5%E6%9C%9F%E7%9A%84%E4%B8%9A%E5%8A%A1%E5%80%BC%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%8C%BA%E5%88%86%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%97%B6%E9%97%B4%E6%88%B3%E3%80%81%E6%97%B6%E5%8C%BA%E5%92%8C%E5%8F%AA%E6%9C%89%E6%97%A5%E6%9C%9F%E7%9A%84%E4%B8%9A%E5%8A%A1%E5%80%BC%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%8C%BA%E5%88%86%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aintl-timezones%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9B%BD%E9%99%85%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fintl-timezones%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：时间戳、时区和只有日期的业务值应该怎样区分？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/i18n-locale-testing/">国际化页面怎样做跨地区测试，避免上线后才发现布局和时间错误？</a></li><li><a href="/questions/intl-format/">为什么日期、金额和排序不应该手动拼接格式？</a></li><li><a href="/questions/intl-unicode/">为什么字符串 length 不一定等于用户看到的字符数？</a></li><li><a href="/questions/i18n-plural-rules/">Intl.PluralRules 怎样帮助实现国际化复数？</a></li></ul></nav></main></div></div>
+<p>秋季切换时同一个当地时间会出现两次。排班和预约系统要定好规则：遇到不存在的时间是报错还是顺延，遇到重复的时间选哪一个。</p>
+<h2>用 Temporal 表达语义</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 需要支持 Temporal 的运行时或 polyfill</span>
+<span class="hljs-keyword">const</span> birthday = <span class="hljs-title class_">Temporal</span>.<span class="hljs-property">PlainDate</span>.<span class="hljs-title function_">from</span>(<span class="hljs-string">&#x27;1995-06-10&#x27;</span>); <span class="hljs-comment">// 没有时区</span>
+<span class="hljs-keyword">const</span> meeting = <span class="hljs-title class_">Temporal</span>.<span class="hljs-property">ZonedDateTime</span>.<span class="hljs-title function_">from</span>(<span class="hljs-string">&#x27;2026-03-09T09:00[America/New_York]&#x27;</span>);
+meeting.<span class="hljs-title function_">add</span>({ <span class="hljs-attr">days</span>: <span class="hljs-number">1</span> }); <span class="hljs-comment">// 按日历加一天，仍是当地 09:00</span>
+meeting.<span class="hljs-title function_">add</span>({ <span class="hljs-attr">hours</span>: <span class="hljs-number">24</span> }); <span class="hljs-comment">// 按时长加 24 小时</span>
+</code></pre></div>
+<p>Node 22 还没有内置 <code>Temporal</code>，使用前做能力检测。</p>
+<h2>接口约定</h2>
+<ul>
+<li>事件时间：带 <code>Z</code> 或偏移的 ISO 字符串，或者毫秒时间戳。</li>
+<li>纯日期：<code>YYYY-MM-DD</code>。</li>
+<li>未来日程：本地日期时间加 IANA 时区，重复日程另存重复规则。</li>
+<li>不要传 <code>01/02/2026</code> 这种需要猜地区才能理解的格式。</li>
+</ul>
+<p>测试覆盖跨日显示、夏令时前后、服务端和浏览器时区不同、无效日期。</p>
+<h2>常见追问</h2>
+<ul>
+<li><strong>只存 UTC 时间戳不行吗？</strong> 过去的事件可以。未来的当地时间不行：时区规则可能被政府修改，只存 UTC 会让会议时间漂移。</li>
+<li><strong>怎样显示时区名称？</strong> <code>Intl.DateTimeFormat</code> 的 <code>timeZoneName: &#x27;short&#x27;</code> 会输出 <code>EDT</code> 之类的缩写。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date" target="_blank" rel="noreferrer">MDN · Date<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%97%B6%E9%97%B4%E6%88%B3%E3%80%81%E6%97%B6%E5%8C%BA%E5%92%8C%E5%8F%AA%E6%9C%89%E6%97%A5%E6%9C%9F%E7%9A%84%E4%B8%9A%E5%8A%A1%E5%80%BC%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%8C%BA%E5%88%86%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%97%B6%E9%97%B4%E6%88%B3%E3%80%81%E6%97%B6%E5%8C%BA%E5%92%8C%E5%8F%AA%E6%9C%89%E6%97%A5%E6%9C%9F%E7%9A%84%E4%B8%9A%E5%8A%A1%E5%80%BC%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%8C%BA%E5%88%86%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aintl-timezones%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9B%BD%E9%99%85%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fintl-timezones%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：时间戳、时区和只有日期的业务值应该怎样区分？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/i18n-locale-testing/">国际化页面怎样做跨地区测试，避免上线后才发现布局和时间错误？</a></li><li><a href="/questions/intl-format/">为什么日期、金额和排序不应该手动拼接格式？</a></li><li><a href="/questions/intl-unicode/">为什么字符串 length 不一定等于用户看到的字符数？</a></li><li><a href="/questions/i18n-plural-rules/">Intl.PluralRules 怎样帮助实现国际化复数？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

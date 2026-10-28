@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="前端安全面试题：从授权码拦截风险理解 code_verifier、code_challenge 与回调校验，区分 PKCE 和客户端身份认证。" />
+    <meta name="description" content="前端安全面试题：PKCE 让发起授权的客户端生成一个随机 code_verifier，授权请求只发送它的 SHA-256 摘要 code_challenge，换取令牌时再提交原值。即使授权码在回调中被截获，攻击者没有 code_verifier 也换不到令牌。RFC 9700 要求公共客户端必须使用 PKCE，机密客户端推荐使用。" />
     <title>OAuth 2.0 的 PKCE 解决了什么问题？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/security-oauth-pkce/" />
     <meta name="robots" content="index,follow" />
@@ -19,65 +19,54 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="OAuth 2.0 的 PKCE 解决了什么问题？ · 前端知库" />
-    <meta property="og:description" content="前端安全面试题：从授权码拦截风险理解 code_verifier、code_challenge 与回调校验，区分 PKCE 和客户端身份认证。" />
+    <meta property="og:description" content="前端安全面试题：PKCE 让发起授权的客户端生成一个随机 code_verifier，授权请求只发送它的 SHA-256 摘要 code_challenge，换取令牌时再提交原值。即使授权码在回调中被截获，攻击者没有 code_verifier 也换不到令牌。RFC 9700 要求公共客户端必须使用 PKCE，机密客户端推荐使用。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/security-oauth-pkce/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/security-oauth-pkce/#webpage","url":"https://fe.hushifa.top/questions/security-oauth-pkce/","name":"OAuth 2.0 的 PKCE 解决了什么问题？ · 前端知库","description":"前端安全面试题：从授权码拦截风险理解 code_verifier、code_challenge 与回调校验，区分 PKCE 和客户端身份认证。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/security-oauth-pkce/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/security-oauth-pkce/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"前端安全面试题","item":"https://fe.hushifa.top/topics/security/"},{"@type":"ListItem","position":3,"name":"OAuth 2.0 的 PKCE 解决了什么问题？","item":"https://fe.hushifa.top/questions/security-oauth-pkce/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/security-oauth-pkce/#webpage","url":"https://fe.hushifa.top/questions/security-oauth-pkce/","name":"OAuth 2.0 的 PKCE 解决了什么问题？ · 前端知库","description":"前端安全面试题：PKCE 让发起授权的客户端生成一个随机 code_verifier，授权请求只发送它的 SHA-256 摘要 code_challenge，换取令牌时再提交原值。即使授权码在回调中被截获，攻击者没有 code_verifier 也换不到令牌。RFC 9700 要求公共客户端必须使用 PKCE，机密客户端推荐使用。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/security-oauth-pkce/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/security-oauth-pkce/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"前端安全面试题","item":"https://fe.hushifa.top/topics/security/"},{"@type":"ListItem","position":3,"name":"OAuth 2.0 的 PKCE 解决了什么问题？","item":"https://fe.hushifa.top/questions/security-oauth-pkce/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/security/">前端安全面试题</a><span aria-hidden="true">/</span><span aria-current="page">OAuth 2.0 的 PKCE 解决了什么问题？</span></nav><h1 tabindex="-1">OAuth 2.0 的 PKCE 解决了什么问题？</h1><p class="reading-summary">从授权码拦截风险理解 code_verifier、code_challenge 与回调校验，区分 PKCE 和客户端身份认证。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/security/">前端安全面试题</a><span aria-hidden="true">/</span><span aria-current="page">OAuth 2.0 的 PKCE 解决了什么问题？</span></nav><h1 tabindex="-1">OAuth 2.0 的 PKCE 解决了什么问题？</h1><p class="reading-summary">PKCE 让发起授权的客户端生成一个随机 code_verifier，授权请求只发送它的 SHA-256 摘要 code_challenge，换取令牌时再提交原值。即使授权码在回调中被截获，攻击者没有 code_verifier 也换不到令牌。RFC 9700 要求公共客户端必须使用 PKCE，机密客户端推荐使用。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>PKCE 防止授权码被截获后被别人兑换令牌。</li>
-<li>授权请求带 code_challenge，兑换令牌时提交 code_verifier，由服务器校验 S256 关系。</li>
-<li>浏览器是公共客户端，PKCE 不是客户端密钥。</li>
-<li>RFC 9700 与 OAuth 2.1 要求所有客户端使用 PKCE，仍需校验 state、回调地址和令牌。</li>
+<li>问题：浏览器单页应用和移动应用是公共客户端，无法保存 <code>client_secret</code>。授权码可能通过重定向、日志、恶意应用注册的同名回调被截获，攻击者拿去就能换到令牌。</li>
+<li>PKCE 把授权码和&quot;发起这次授权的那个客户端实例&quot;绑定：只有持有 <code>code_verifier</code> 的一方能完成兑换。</li>
+<li><code>code_challenge_method</code> 用 <code>S256</code>；<code>plain</code> 会把原值暴露在授权请求里，RFC 9700 指出目前只有 <code>S256</code> 能避免这一点。</li>
+<li>RFC 9700 规定：公共客户端必须（MUST）使用 PKCE；机密客户端推荐（RECOMMENDED）使用；授权服务器必须支持 PKCE。</li>
+<li>它不替代 <code>state</code>（防 CSRF）和回调地址精确匹配，也不认证客户端身份。</li>
 </ul>
-<p>授权码流程中，用户在授权服务器完成操作后，浏览器会被重定向回应用，并携带一个短期授权码。应用再拿这个码去令牌端点兑换令牌。问题是：如果别人截获了这个码，怎样避免他抢先兑换？</p>
-<p>PKCE 让授权码的兑换与最初发起请求的客户端实例关联。发起时提交一个随机秘密的摘要，兑换时证明自己持有那个秘密；只拿到授权码的人不应能完成兑换。</p>
-<h2>verifier 和 challenge 在不同阶段出现</h2>
-<p>一次流程可以按下面的顺序理解：</p>
+<h2>流程</h2>
 <ol>
-<li>客户端生成高熵随机 code_verifier，并保存到本次授权事务中。</li>
-<li>对 verifier 计算 SHA-256，再做不带填充的 Base64URL 编码，得到 code_challenge。</li>
-<li>跳转授权端点时发送 challenge 和 <code>code_challenge_method=S256</code>，不发送 verifier。</li>
-<li>授权服务器把 challenge 与随后签发的授权码关联。</li>
-<li>客户端收到授权码，向令牌端点提交 code 和原始 verifier。</li>
-<li>服务端重新计算摘要，匹配且其他校验也通过，才签发令牌。</li>
+<li>客户端生成 43–128 个字符的随机 <code>code_verifier</code>，计算 <code>code_challenge = BASE64URL(SHA256(code_verifier))</code>。</li>
+<li>跳转授权：<code>/authorize?response_type=code&amp;client_id=...&amp;redirect_uri=...&amp;state=...&amp;code_challenge=...&amp;code_challenge_method=S256</code>。</li>
+<li>回调拿到 <code>code</code>，校验 <code>state</code>。</li>
+<li>换令牌：<code>POST /token</code>，参数包括 <code>grant_type=authorization_code</code>、<code>code</code>、<code>redirect_uri</code>、<code>code_verifier</code>。</li>
+<li>授权服务器重新计算摘要，与第 2 步保存的 <code>code_challenge</code> 比较，一致才签发令牌。</li>
 </ol>
-<p>PKCE 验证发生在“用授权码换令牌”时，不是先用 verifier 去换授权码。challenge 也不是把授权码加密后的结果，两者是在不同阶段产生的值。</p>
-<h2>浏览器中怎样计算 S256</h2>
-<p>下面只演示 PKCE 参数生成，不是一套完整登录 SDK：</p>
+<h2>生成参数</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">base64url</span>(<span class="hljs-params">bytes</span>) {
-  <span class="hljs-keyword">return</span> <span class="hljs-title function_">btoa</span>(<span class="hljs-title class_">String</span>.<span class="hljs-title function_">fromCharCode</span>(...bytes))
-    .<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/\+/g</span>, <span class="hljs-string">&#x27;-&#x27;</span>)
-    .<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/\//g</span>, <span class="hljs-string">&#x27;_&#x27;</span>)
-    .<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/=+$/</span>, <span class="hljs-string">&#x27;&#x27;</span>);
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">btoa</span>(<span class="hljs-title class_">String</span>.<span class="hljs-title function_">fromCharCode</span>(...bytes)).<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/\+/g</span>, <span class="hljs-string">&#x27;-&#x27;</span>).<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/\//g</span>, <span class="hljs-string">&#x27;_&#x27;</span>).<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/=+$/</span>, <span class="hljs-string">&#x27;&#x27;</span>);
 }
 
-<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">challengeFor</span>(<span class="hljs-params">verifier</span>) {
-  <span class="hljs-keyword">const</span> digest = <span class="hljs-keyword">await</span> crypto.<span class="hljs-property">subtle</span>.<span class="hljs-title function_">digest</span>(
-    <span class="hljs-string">&#x27;SHA-256&#x27;</span>,
-    <span class="hljs-keyword">new</span> <span class="hljs-title class_">TextEncoder</span>().<span class="hljs-title function_">encode</span>(verifier),
-  );
-  <span class="hljs-keyword">return</span> <span class="hljs-title function_">base64url</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>(digest));
-}
-
-<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">createPkce</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-keyword">const</span> random = crypto.<span class="hljs-title function_">getRandomValues</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>(<span class="hljs-number">32</span>));
-  <span class="hljs-keyword">const</span> verifier = <span class="hljs-title function_">base64url</span>(random);
-  <span class="hljs-keyword">return</span> { verifier, <span class="hljs-attr">challenge</span>: <span class="hljs-keyword">await</span> <span class="hljs-title function_">challengeFor</span>(verifier) };
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">createPkce</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> verifier = <span class="hljs-title function_">base64url</span>(crypto.<span class="hljs-title function_">getRandomValues</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>(<span class="hljs-number">32</span>)));
+  <span class="hljs-keyword">const</span> digest = <span class="hljs-keyword">await</span> crypto.<span class="hljs-property">subtle</span>.<span class="hljs-title function_">digest</span>(<span class="hljs-string">&#x27;SHA-256&#x27;</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">TextEncoder</span>().<span class="hljs-title function_">encode</span>(verifier));
+  <span class="hljs-keyword">return</span> { verifier, <span class="hljs-attr">challenge</span>: <span class="hljs-title function_">base64url</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>(digest)) };
 }
 </code></pre></div>
-<p>32 个随机字节提供 256 位随机性，编码后得到 43 个字符，符合 RFC 7636 对 verifier 长度和字符集的要求。不能用 Math.random、时间戳或固定字符串代替。摘要应直接编码原始字节，不是把十六进制字符串再做 Base64。</p>
-<p>每次授权都生成新值，并与当前事务对应，回调结束后清理。页面跳转、多标签页并发和失败重试都可能打乱关联，所以不应只用一个全局变量保存所有登录请求。也不要把 verifier 写进授权 URL 或日志。</p>
-<h2>PKCE 不是浏览器里的客户端密钥</h2>
-<p>浏览器前端是公共客户端，打包进 JavaScript 的 client_secret 不能保密。client_id 用来标识已注册的应用，通常可以公开；PKCE 则证明当前兑换者持有本次事务的随机秘密，不证明运行这段代码的一定是某个不可伪造的应用。</p>
-<p>机密客户端有自己的客户端认证机制，PKCE 仍然适用。RFC 9700（OAuth 2.0 安全最佳实践）要求所有客户端使用 PKCE，并不再推荐隐式流程；OAuth 2.1 草案也采纳了这两点。</p>
-<h2>仍然需要完整的回调与令牌校验</h2>
-<p>实际应用还需要关联授权响应，检查预期的授权服务器、回调地址和事务状态。通常由成熟 SDK 管理不可预测的 state；在正确实现且确认授权服务器支持 PKCE 的条件下，PKCE 也可承担特定 CSRF 防护作用，但不能因此省略其他响应关联和来源检查。OIDC 中的 nonce 则用于把 ID Token 关联到认证请求，职责不同。</p>
-<p>授权码应短期、单次使用，回调地址应按注册规则精确匹配；不能把接收到的任意 issuer 或令牌端点当作可信配置。前端直接兑换令牌还取决于提供方是否支持相应的浏览器客户端与 CORS。</p>
-<p>PKCE 不能阻止已经在应用中执行的恶意脚本读取 verifier 或盗用已取得的令牌，也不解决过宽的 scope、令牌泄露或错误会话管理。它补上的是授权码兑换的关键关联，不是给整个登录流程自动加上一层万能保护。</p></div><div class="answer-bottom"><a href="https://www.rfc-editor.org/rfc/rfc7636" target="_blank" rel="noreferrer">RFC 7636 · Proof Key for Code Exchange<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+OAuth+2.0+%E7%9A%84+PKCE+%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AOAuth+2.0+%E7%9A%84+PKCE+%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Asecurity-oauth-pkce%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fsecurity-oauth-pkce%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：OAuth 2.0 的 PKCE 解决了什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/security-oidc/">OpenID Connect 和 OAuth 2.0 分别解决什么问题？</a></li><li><a href="/questions/security-webauthn-passkeys/">WebAuthn 和 Passkey 登录的安全边界是什么？</a></li><li><a href="/questions/sec-csp/">CSP 的 nonce、hash 与 Report-Only 如何使用？</a></li><li><a href="/questions/sec-cookies/">HttpOnly、Secure 和 SameSite 分别保护什么？</a></li></ul></nav></main></div></div>
+<p><code>verifier</code> 保存在 <code>sessionStorage</code> 中直到回调完成，用完即删。<code>crypto.subtle</code> 只在安全上下文（HTTPS 或 localhost）可用。</p>
+<h2>RFC 9700 的其他相关要求</h2>
+<ul>
+<li>不应再使用隐式流程（<code>response_type=token</code>），改用授权码加 PKCE。</li>
+<li>授权服务器校验回调地址必须用精确字符串匹配（localhost 回调的端口号除外）。</li>
+<li>签发给公共客户端的刷新令牌必须做发送方约束（如 DPoP）或启用轮换。</li>
+</ul>
+<h2>前端令牌存放</h2>
+<p>浏览器中直接持有访问令牌，XSS 可以读取。更安全的方案是 BFF：由同源后端作为机密客户端完成授权码兑换，浏览器只持有 <code>HttpOnly</code> 会话 Cookie。</p>
+<h2>常见追问</h2>
+<ul>
+<li>有了 PKCE 还需要 <code>state</code> 吗？需要。<code>state</code> 防止攻击者把自己的授权码注入受害者的回调，PKCE 防止截获的授权码被兑换。</li>
+<li>和 OIDC 的关系？OIDC 在 OAuth 之上加了身份认证，同样使用授权码加 PKCE，见《OpenID Connect 和 OAuth 2.0 分别解决什么问题？》。</li>
+</ul></div><div class="answer-bottom"><a href="https://www.rfc-editor.org/rfc/rfc9700" target="_blank" rel="noreferrer">RFC 9700 · OAuth 2.0 Security Best Current Practice<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+OAuth+2.0+%E7%9A%84+PKCE+%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AOAuth+2.0+%E7%9A%84+PKCE+%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Asecurity-oauth-pkce%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fsecurity-oauth-pkce%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：OAuth 2.0 的 PKCE 解决了什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/security-oidc/">OpenID Connect 和 OAuth 2.0 分别解决什么问题？</a></li><li><a href="/questions/security-webauthn-passkeys/">WebAuthn 和 Passkey 登录的安全边界是什么？</a></li><li><a href="/questions/http-xss/">XSS 和 CSRF 有什么区别？分别如何防范？</a></li><li><a href="/questions/sec-csp/">CSP 的 nonce、hash 与 Report-Only 如何使用？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

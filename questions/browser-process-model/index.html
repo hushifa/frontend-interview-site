@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="浏览器原理面试题：解释浏览器进程、渲染器进程、网络进程和 GPU 进程的职责，区分站点隔离与标签页隔离，说明崩溃、内存、跨源 iframe 和排查工具的实际边界。" />
+    <meta name="description" content="浏览器原理面试题：现代浏览器把浏览器主进程、渲染进程、GPU 进程和网络服务等拆开，一个页面崩溃不会拖垮整个浏览器；站点隔离进一步让不同站点运行在不同渲染进程里，防御 Spectre 类侧信道攻击。" />
     <title>浏览器为什么要拆分进程？前端如何理解故障隔离边界？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/browser-process-model/" />
     <meta name="robots" content="index,follow" />
@@ -19,66 +19,42 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="浏览器为什么要拆分进程？前端如何理解故障隔离边界？ · 前端知库" />
-    <meta property="og:description" content="浏览器原理面试题：解释浏览器进程、渲染器进程、网络进程和 GPU 进程的职责，区分站点隔离与标签页隔离，说明崩溃、内存、跨源 iframe 和排查工具的实际边界。" />
+    <meta property="og:description" content="浏览器原理面试题：现代浏览器把浏览器主进程、渲染进程、GPU 进程和网络服务等拆开，一个页面崩溃不会拖垮整个浏览器；站点隔离进一步让不同站点运行在不同渲染进程里，防御 Spectre 类侧信道攻击。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/browser-process-model/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/browser-process-model/#webpage","url":"https://fe.hushifa.top/questions/browser-process-model/","name":"浏览器为什么要拆分进程？前端如何理解故障隔离边界？ · 前端知库","description":"浏览器原理面试题：解释浏览器进程、渲染器进程、网络进程和 GPU 进程的职责，区分站点隔离与标签页隔离，说明崩溃、内存、跨源 iframe 和排查工具的实际边界。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/browser-process-model/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/browser-process-model/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"浏览器原理面试题","item":"https://fe.hushifa.top/topics/browser/"},{"@type":"ListItem","position":3,"name":"浏览器为什么要拆分进程？前端如何理解故障隔离边界？","item":"https://fe.hushifa.top/questions/browser-process-model/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/browser-process-model/#webpage","url":"https://fe.hushifa.top/questions/browser-process-model/","name":"浏览器为什么要拆分进程？前端如何理解故障隔离边界？ · 前端知库","description":"浏览器原理面试题：现代浏览器把浏览器主进程、渲染进程、GPU 进程和网络服务等拆开，一个页面崩溃不会拖垮整个浏览器；站点隔离进一步让不同站点运行在不同渲染进程里，防御 Spectre 类侧信道攻击。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/browser-process-model/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/browser-process-model/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"浏览器原理面试题","item":"https://fe.hushifa.top/topics/browser/"},{"@type":"ListItem","position":3,"name":"浏览器为什么要拆分进程？前端如何理解故障隔离边界？","item":"https://fe.hushifa.top/questions/browser-process-model/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/browser/">浏览器原理面试题</a><span aria-hidden="true">/</span><span aria-current="page">浏览器为什么要拆分进程？前端如何理解故障隔离边界？</span></nav><h1 tabindex="-1">浏览器为什么要拆分进程？前端如何理解故障隔离边界？</h1><p class="reading-summary">解释浏览器进程、渲染器进程、网络进程和 GPU 进程的职责，区分站点隔离与标签页隔离，说明崩溃、内存、跨源 iframe 和排查工具的实际边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/browser/">浏览器原理面试题</a><span aria-hidden="true">/</span><span aria-current="page">浏览器为什么要拆分进程？前端如何理解故障隔离边界？</span></nav><h1 tabindex="-1">浏览器为什么要拆分进程？前端如何理解故障隔离边界？</h1><p class="reading-summary">现代浏览器把浏览器主进程、渲染进程、GPU 进程和网络服务等拆开，一个页面崩溃不会拖垮整个浏览器；站点隔离进一步让不同站点运行在不同渲染进程里，防御 Spectre 类侧信道攻击。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>浏览器进程管界面和协调，渲染器进程执行页面，网络进程和 GPU 进程分别处理网络与图形。</li>
-<li>站点隔离按 site（scheme 加可注册域，不含端口）把页面分到不同渲染器进程，这和标签页隔离不是一回事。</li>
-<li>进程崩溃后页面不一定能自动恢复，内存和 CPU 诊断也不能只看一个进程。</li>
-<li>进程模型是浏览器实现细节，不是前端可以依赖的部署 API。</li>
+<li>以 Chrome 为例，主要进程有：浏览器主进程（界面、导航、权限）、渲染进程（运行页面的 HTML、CSS、JavaScript）、GPU 进程、网络服务和插件或扩展进程。</li>
+<li>拆分进程后，一个渲染进程崩溃或卡死只影响对应的页面，渲染进程还运行在沙箱里，权限受限。</li>
+<li>站点隔离（Site Isolation）让不同站点的文档使用不同渲染进程，跨站 iframe 也会放到独立进程。</li>
+<li>进程边界按&quot;站点&quot;（协议 + eTLD+1）划分，比同源策略的&quot;源&quot;粗一级。</li>
 </ul>
-<p>当一个页面脚本死循环时，浏览器通常不会让整个操作系统桌面一起卡死；当某个跨源 iframe 崩溃时，顶层页面有时仍然可以显示错误占位符；播放视频、解析网络响应和执行 JavaScript 也不一定在同一个执行单元里完成。这些现象背后是浏览器把不同职责拆到多个进程，并在进程之间使用受控的 IPC 通信。</p>
-<p>但“浏览器是多进程的”不等于“每个标签页都有一个独立进程”。进程数量和归属由浏览器、操作系统、设备内存、站点隔离策略、扩展和当前页面结构共同决定。前端代码可以观察到性能和错误的结果，却不能把某个浏览器版本的进程分配规则当成 Web 标准 API。</p>
-<h2>常见进程分别负责什么</h2>
-<p>不同浏览器的名称和拆分会变化，下面是 Chromium 架构中常见的职责，适合用来建立排查模型：</p>
+<h2>各进程职责</h2>
+<table><thead><tr><th>进程</th><th>负责</th></tr></thead><tbody><tr><td>浏览器主进程</td><td>地址栏、标签页、导航决策、文件和权限访问</td></tr><tr><td>渲染进程</td><td>解析 HTML、样式计算、布局、执行 JavaScript</td></tr><tr><td>GPU 进程</td><td>图层合成和 GPU 绘制</td></tr><tr><td>网络服务</td><td>发起请求、管理缓存和 Cookie</td></tr></tbody></table>
+<p>内存紧张的设备上，浏览器可能让同站点的多个标签页共用渲染进程。</p>
+<h2>站点隔离</h2>
+<p>Spectre 类漏洞让同一进程里的代码有机会通过侧信道读到进程内其他数据。同源策略是 JavaScript 层面的检查，挡不住这类攻击，所以 Chrome 把不同站点放进不同进程，再加上 CORB/ORB 阻止跨站的敏感响应进入渲染进程。</p>
+<p>对前端的影响：</p>
 <ul>
-<li><strong>浏览器主进程</strong>：管理窗口、标签页、导航、权限、进程生命周期和用户界面；它通常拥有更高的宿主权限，但不应直接执行页面提供的不可信脚本。</li>
-<li><strong>渲染器进程</strong>：运行页面的 JavaScript、DOM、CSS 样式和布局绘制准备工作。一个渲染器可能承载一个或多个相同站点的文档，站点隔离策略会影响跨站文档是否被放到不同进程。</li>
-<li><strong>网络进程</strong>：负责 HTTP、缓存、代理、连接池和部分网络安全检查。渲染器通过 IPC 请求资源，页面脚本不能因为“网络进程存在”就绕过同源策略或 CORS。</li>
-<li><strong>GPU 进程</strong>：处理部分 GPU 合成、Canvas、WebGL 或视频相关工作。硬件驱动、渲染路径和浏览器实现会影响它实际承担的任务。</li>
-<li><strong>实用工具或专用进程</strong>：音频、视频解码、数据压缩、扩展和其他能力可能使用单独进程；具体拆分随版本和平台变化。</li>
+<li>跨站 iframe 运行在另一个进程，父页面和 iframe 之间的 <code>postMessage</code> 要跨进程传递。</li>
+<li><code>a.example.com</code> 和 <code>b.example.com</code> 是同站点，可能共用进程；只靠子域区分不能获得进程级隔离。</li>
+<li><code>SharedArrayBuffer</code> 等高精度能力要求跨源隔离（COOP + COEP），见《crossOriginIsolated 为 true 需要哪些条件？》。</li>
 </ul>
-<p>一个请求从页面发出到屏幕显示，可能经过渲染器、网络进程和合成路径。这个模型有助于解释为什么 DevTools 的 Network、Performance 和 Memory 面板看到的是不同层面的数据，但它不能精确预测一次函数调用会由哪个操作系统进程执行。</p>
-<h2>站点隔离解决什么问题</h2>
-<p>站点（site）由 scheme 加可注册域（eTLD+1）组成，不含端口和子域，和源（scheme、host、port）不是同一概念。跨源 iframe 可能仍属于同一站点，也可能属于不同站点；同源策略规定脚本能否读取数据，站点隔离则是浏览器把不同站点的文档放入不同渲染器进程的一种安全实现策略，细节见站点隔离一题。</p>
-<p>站点隔离的安全价值之一是降低 Spectre 一类侧信道读取跨站数据的风险：即使某个渲染器存在内存推测执行风险，浏览器也尽量不让不同站点的敏感文档共享同一渲染器地址空间。它并不会取消同源策略，也不会让跨源 iframe 自动可读；<code>postMessage</code>、CORS、COOP/COEP 和权限策略仍有各自职责。</p>
-<p>跨站 iframe 被放入独立进程后，通常被称为 out-of-process iframe（OOPIF）。顶层页面仍可以通过受浏览器控制的代理对象操作允许的 DOM 接口，例如发送消息或调整 iframe 元素尺寸，但不能直接访问对方文档内容。跨进程通信有成本，复杂嵌套页面的布局、滚动、合成和消息频率都可能影响性能。</p>
-<h2>进程崩溃不等于页面一定能恢复</h2>
-<p>渲染器进程崩溃时，浏览器可能只显示“页面崩溃”错误，并尝试重新加载；如果是浏览器主进程、GPU 进程或操作系统资源不足，影响范围可能更大。页面的 JavaScript 无法捕获一个已经崩溃的渲染器进程，也不能用 <code>try/catch</code> 处理这种级别的故障。</p>
-<p>应用可以做的是降低故障影响并提供恢复路径：</p>
+<h2>排查用途</h2>
 <ul>
-<li>将高风险的解析、解码或计算放入 Worker，避免把主线程和界面逻辑一起阻塞；Worker 仍可能与页面共享渲染器进程，不能把它当成完整的进程隔离；</li>
-<li>对第三方 iframe 使用最小权限、明确的 <code>sandbox</code> 和消息协议，减少它能影响顶层页面的范围；</li>
-<li>将关键状态及时保存到服务器或合适的本地存储，恢复后通过版本号和幂等操作重新建立页面状态；</li>
-<li>对 WebGL、WebCodecs、视频和大图处理设置输入大小、并发数和超时，避免单次任务消耗全部内存或 GPU 资源；</li>
-<li>用错误边界、资源加载失败处理和重试 UI 处理可捕获的页面级错误，但不要把它们描述成可以捕获进程崩溃。</li>
+<li>浏览器任务管理器（Chrome 菜单 → 更多工具 → 任务管理器）能看到每个标签页和 iframe 的进程内存与 CPU。</li>
+<li>页面出现 &quot;Aw, Snap&quot; 崩溃时，通常是对应渲染进程内存耗尽或崩溃，其他标签页不受影响。</li>
+<li>主线程长任务阻塞的是当前渲染进程，地址栏和其他标签页仍然可以操作。</li>
 </ul>
-<p>如果只是某个 iframe 的渲染器失效，顶层页面可能还能收到加载错误或看到替代内容，但具体事件和恢复行为取决于浏览器实现。恢复逻辑必须把 iframe 的重建、消息监听器和权限状态一起处理，不能只重新设置一个 <code>src</code>。</p>
-<h2>内存和 CPU 诊断不能只看一个进程</h2>
-<p>页面卡顿可能来自不同层面：渲染器主线程长任务、Worker 计算、跨进程消息、网络等待、GPU 合成、视频解码或操作系统内存压力。Chrome 的 Task Manager、DevTools Performance、Memory 和浏览器内部页面提供的是不同粒度的证据。</p>
-<p>例如，JavaScript 堆快照只描述部分 JavaScript 对象，不会完整包含图片解码内存、GPU 纹理、ArrayBuffer 外部存储或其他进程的占用。看到堆曲线没有上涨，不能直接证明没有资源泄漏；同样，浏览器为复用而保留已申请的内存，也不等于一定存在泄漏。</p>
-<p>排查一个“页面越用越慢”的问题时，可以按这个顺序缩小范围：</p>
-<ol>
-<li>在 Performance 中检查主线程长任务、布局/绘制和事件处理，确认是否有连续同步工作阻塞输入；</li>
-<li>检查 Worker 消息大小、结构化克隆和 Transferable 的所有权，避免把大对象反复复制到其他执行环境；</li>
-<li>在 Memory 中比较多次相同操作后的快照，观察 DOM、闭包、监听器和缓存是否持续保留；</li>
-<li>对 Canvas、WebGL、视频和图片单独记录资源创建与释放，确认 <code>close()</code>、<code>delete*()</code>、<code>stop()</code> 和元素解绑路径都执行；</li>
-<li>用 Network 和 <code>getStats()</code> 等适用工具排除慢请求、重试风暴和媒体丢包，避免把网络等待误判成渲染器 CPU 问题；</li>
-<li>在目标设备和浏览器上复现，因为低内存设备可能触发系统回收或进程终止，而桌面开发机不会出现同样结果。</li>
-</ol>
-<h2>进程模型不是前端可依赖的部署 API</h2>
-<p>不要在业务代码中根据“当前标签页一定对应某个进程”做状态同步、锁或安全判断。页面可以使用 Web Locks、BroadcastChannel、Service Worker、服务器会话和明确的协议完成协调；进程分配变化不能破坏这些机制。也不要用进程数量推断用户是否打开了多个账号、是否可信或是否同源。</p>
-<p>同样，Web Worker 与 Node.js Worker Threads 的语义不能互相套用。浏览器 Worker 受页面安全模型、跨源隔离和消息接口约束；Node.js Worker 运行在服务器进程中，权限、模块和资源边界不同。需要真正的故障隔离时，服务端应评估独立进程、容器、队列或沙箱，而不是只增加一个浏览器 Worker。</p>
-<p>页面级性能优化也不应追求“少几个进程”。进程拆分带来安全和稳定性收益，也有 IPC、内存和启动成本；减少进程可能让不同页面互相影响。应以输入延迟、长任务、崩溃率、内存峰值和真实设备体验为指标，结合浏览器工具验证瓶颈。</p>
-<h2>面试中怎样准确回答</h2>
-<p>可以先说明进程模型是浏览器实现细节，再用渲染器、网络、GPU 和浏览器主进程解释职责。接着区分三个容易混淆的概念：同源策略决定脚本能否读数据，站点隔离影响文档所在的进程，Worker 提供执行环境但不保证操作系统级进程隔离。最后说明崩溃恢复和性能排查要看具体进程、资源类型和浏览器工具，不能把“一个标签页一个进程”当成通用规律。</p>
-<p>真正可靠的前端设计依赖可观察的 Web 能力和明确的状态协议，而不是依赖某个浏览器版本的进程布局。理解进程模型的价值，是在遇到崩溃、卡顿、跨源嵌入和内存问题时选对证据和隔离手段。</p></div><div class="answer-bottom"><a href="https://developer.chrome.com/blog/inside-browser-part1" target="_blank" rel="noreferrer">Chrome Developers · Inside look at modern web browser<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%8B%86%E5%88%86%E8%BF%9B%E7%A8%8B%EF%BC%9F%E5%89%8D%E7%AB%AF%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E6%95%85%E9%9A%9C%E9%9A%94%E7%A6%BB%E8%BE%B9%E7%95%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%8B%86%E5%88%86%E8%BF%9B%E7%A8%8B%EF%BC%9F%E5%89%8D%E7%AB%AF%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E6%95%85%E9%9A%9C%E9%9A%94%E7%A6%BB%E8%BE%B9%E7%95%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Abrowser-process-model%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%90%86%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fbrowser-process-model%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：浏览器为什么要拆分进程？前端如何理解故障隔离边界？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/browser-navigation-timing/">页面导航的关键阶段怎样用 Navigation Timing 分析？</a></li><li><a href="/questions/browser-render/">浏览器从 HTML 到页面显示，经历哪些主要步骤？</a></li><li><a href="/questions/browser-delegation/">事件委托是什么？target 和 currentTarget 有何区别？</a></li><li><a href="/questions/browser-storage/">Cookie、localStorage 和 sessionStorage 如何选择？</a></li></ul></nav></main></div></div>
+<h2>常见追问</h2>
+<ul>
+<li>进程多会不会很耗内存：会，所以浏览器在低内存设备上会合并进程或丢弃后台标签页。</li>
+<li>合成线程和主线程的关系：两者都在渲染进程里，只改 <code>transform</code> 的动画可以由合成线程完成，主线程繁忙时仍然流畅。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.chrome.com/blog/inside-browser-part1" target="_blank" rel="noreferrer">Chrome Developers · Inside look at modern web browser<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%8B%86%E5%88%86%E8%BF%9B%E7%A8%8B%EF%BC%9F%E5%89%8D%E7%AB%AF%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E6%95%85%E9%9A%9C%E9%9A%94%E7%A6%BB%E8%BE%B9%E7%95%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%8B%86%E5%88%86%E8%BF%9B%E7%A8%8B%EF%BC%9F%E5%89%8D%E7%AB%AF%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E6%95%85%E9%9A%9C%E9%9A%94%E7%A6%BB%E8%BE%B9%E7%95%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Abrowser-process-model%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%90%86%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fbrowser-process-model%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：浏览器为什么要拆分进程？前端如何理解故障隔离边界？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/browser-navigation-timing/">页面导航的关键阶段怎样用 Navigation Timing 分析？</a></li><li><a href="/questions/browser-render/">浏览器从 HTML 到页面显示，经历哪些主要步骤？</a></li><li><a href="/questions/browser-delegation/">事件委托是什么？target 和 currentTarget 有何区别？</a></li><li><a href="/questions/browser-storage/">Cookie、localStorage 和 sessionStorage 如何选择？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

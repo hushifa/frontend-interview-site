@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="性能优化面试题：懒加载只是推迟下载或执行，减少了当前关键路径的工作，却可能把等待转移到用户第一次使用时。应按访问概率、首屏重要性和资源成本决定。" />
+    <meta name="description" content="性能优化面试题：懒加载把下载和执行推迟到需要的时候，减少了首屏的工作，但用户马上就要用的内容会因此在首次使用时多等一轮。首屏 LCP 图片加 loading=&quot;lazy&quot; 会推迟它的请求；点击后才依次下载组件、数据和依赖，会形成串行瀑布。" />
     <title>懒加载为什么有时反而让首屏和首次交互变慢？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/perf-lazy-images/" />
     <meta name="robots" content="index,follow" />
@@ -19,38 +19,29 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="懒加载为什么有时反而让首屏和首次交互变慢？ · 前端知库" />
-    <meta property="og:description" content="性能优化面试题：懒加载只是推迟下载或执行，减少了当前关键路径的工作，却可能把等待转移到用户第一次使用时。应按访问概率、首屏重要性和资源成本决定。" />
+    <meta property="og:description" content="性能优化面试题：懒加载把下载和执行推迟到需要的时候，减少了首屏的工作，但用户马上就要用的内容会因此在首次使用时多等一轮。首屏 LCP 图片加 loading=&quot;lazy&quot; 会推迟它的请求；点击后才依次下载组件、数据和依赖，会形成串行瀑布。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/perf-lazy-images/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-lazy-images/#webpage","url":"https://fe.hushifa.top/questions/perf-lazy-images/","name":"懒加载为什么有时反而让首屏和首次交互变慢？ · 前端知库","description":"性能优化面试题：懒加载只是推迟下载或执行，减少了当前关键路径的工作，却可能把等待转移到用户第一次使用时。应按访问概率、首屏重要性和资源成本决定。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-lazy-images/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-lazy-images/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"懒加载为什么有时反而让首屏和首次交互变慢？","item":"https://fe.hushifa.top/questions/perf-lazy-images/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-lazy-images/#webpage","url":"https://fe.hushifa.top/questions/perf-lazy-images/","name":"懒加载为什么有时反而让首屏和首次交互变慢？ · 前端知库","description":"性能优化面试题：懒加载把下载和执行推迟到需要的时候，减少了首屏的工作，但用户马上就要用的内容会因此在首次使用时多等一轮。首屏 LCP 图片加 loading=\"lazy\" 会推迟它的请求；点击后才依次下载组件、数据和依赖，会形成串行瀑布。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-lazy-images/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-lazy-images/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"懒加载为什么有时反而让首屏和首次交互变慢？","item":"https://fe.hushifa.top/questions/perf-lazy-images/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">懒加载为什么有时反而让首屏和首次交互变慢？</span></nav><h1 tabindex="-1">懒加载为什么有时反而让首屏和首次交互变慢？</h1><p class="reading-summary">懒加载只是推迟下载或执行，减少了当前关键路径的工作，却可能把等待转移到用户第一次使用时。应按访问概率、首屏重要性和资源成本决定。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">懒加载为什么有时反而让首屏和首次交互变慢？</span></nav><h1 tabindex="-1">懒加载为什么有时反而让首屏和首次交互变慢？</h1><p class="reading-summary">懒加载把下载和执行推迟到需要的时候，减少了首屏的工作，但用户马上就要用的内容会因此在首次使用时多等一轮。首屏 LCP 图片加 loading=&quot;lazy&quot; 会推迟它的请求；点击后才依次下载组件、数据和依赖，会形成串行瀑布。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>懒加载只是把成本推迟，用户马上用到的内容会在首次交互时付出等待。</li>
-<li>首屏 LCP 图片不要 lazy，并提供尺寸。</li>
-<li>懒加载图片也要用 width、height 预留空间，避免 CLS。</li>
-<li>已知用户意图时并行预取，避免串行瀑布；加载失败要有重试路径。</li>
+<li>懒加载没有减少总工作量，只是把它挪到后面；挪给&quot;用户马上要用的东西&quot;就会变慢。</li>
+<li>首屏图片（尤其是 LCP 元素）不要加 <code>loading=&quot;lazy&quot;</code>，浏览器要等布局确定它在视口内才开始请求。</li>
+<li>所有图片都写 <code>width</code>、<code>height</code>（或 <code>aspect-ratio</code>），懒加载的图片到达时才不会撑开布局造成 CLS。</li>
+<li>点击后才开始的&quot;下载组件 → 请求数据 → 加载依赖&quot;是串行的，可以在用户表现出意图时（悬停、聚焦、即将进入视口）提前并行预取。</li>
+<li>动态导入可能失败，特别是发布新版本后旧的分块被删除，要有错误提示和重试。</li>
 </ul>
-<h2>懒加载把成本推迟到什么时候</h2>
-<p>打开题库后，用户马上展开第一题。如果题解、Markdown 解析器和代码高亮库都在点击后才下载，首屏确实少了代码，但用户要在第一次展开时支付模块发现、下载、解析和渲染的全部等待。之后展开其他题很快，可能只是依赖已经进入缓存。</p>
-<p>因此懒加载不是“越多越好”，而是把低概率、非关键资源从当前路径移开。首屏大图、首个交互需要的内容和用户几乎必然打开的模块，延后反而可能损害体验。</p>
-<h2>关键图片不要盲目 lazy</h2>
-<p>首屏主图可能是 LCP 元素，应让浏览器尽早发现并提供尺寸：</p>
-<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">img</span>
-  <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/images/hero.webp&quot;</span>
-  <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;1200&quot;</span>
-  <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;600&quot;</span>
-  <span class="hljs-attr">fetchpriority</span>=<span class="hljs-string">&quot;high&quot;</span>
-  <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;产品使用场景&quot;</span>
-/&gt;</span>
-</code></pre></div>
-<p>下方相册、低频弹窗和编辑器更适合延后。<code>fetchpriority</code> 只是相对优先级提示，不会让网络变快；每张图都设为 high 只会让关键资源互相竞争。真正的选择依据是实际访问路径、LCP 和设备网络数据。</p>
-<h2>图片懒加载仍要稳定布局</h2>
-<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">img</span>
-  <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/images/card-640.webp&quot;</span>
-  <span class="hljs-attr">srcset</span>=<span class="hljs-string">&quot;/images/card-640.webp 640w, /images/card-1280.webp 1280w&quot;</span>
+<h2>图片</h2>
+<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-comment">&lt;!-- 首屏主图：立即加载并提高优先级 --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/hero.avif&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;1200&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;600&quot;</span> <span class="hljs-attr">fetchpriority</span>=<span class="hljs-string">&quot;high&quot;</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;产品主图&quot;</span> /&gt;</span>
+
+<span class="hljs-comment">&lt;!-- 首屏以下：懒加载，预留尺寸 --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">img</span>
+  <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/card-640.avif&quot;</span>
+  <span class="hljs-attr">srcset</span>=<span class="hljs-string">&quot;/card-640.avif 640w, /card-1280.avif 1280w&quot;</span>
   <span class="hljs-attr">sizes</span>=<span class="hljs-string">&quot;(max-width: 700px) 100vw, 640px&quot;</span>
   <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;1280&quot;</span>
   <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;720&quot;</span>
@@ -58,16 +49,34 @@
   <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;组件布局示例&quot;</span>
 /&gt;</span>
 </code></pre></div>
-<p><code>width</code> 和 <code>height</code> 让浏览器预留比例空间，减少图片到达时的 CLS。<code>srcset</code> 和 <code>sizes</code> 必须反映真实布局，否则可能下载过大的候选图。原生 <code>loading=&quot;lazy&quot;</code> 的提前距离由浏览器决定，不是精确的“进入视口才加载”；自定义 IntersectionObserver 也应留提前量。</p>
-<p>懒加载不能替代压缩、合适格式和响应式尺寸。推迟一张超大图片，只是把带宽和解码成本移到了后面。</p>
-<h2>避免把首次交互变成串行瀑布</h2>
-<p>如果点击后必须先下载组件、组件启动后才请求数据、数据返回后才加载高亮语言，用户会遇到多次串行等待。已知用户意图出现时，可以让模块和数据并行准备，或在聚焦入口、即将进入视口时预取。</p>
-<p>预取也有预算。触控设备没有鼠标悬停，预取不能成为功能正常工作的必要前提；首屏一次性预取所有低频模块，又会挤占关键资源。小而高频的组件有时直接随首屏提供，比拆成懒块更快。</p>
-<p>静态题解还可以在构建阶段完成 Markdown 解析和代码高亮，浏览器只加载展示结果。是否这样做，要比较构建产物、缓存复用和内容更新方式，而不是只看代码拆得更细。</p>
-<h2>加载失败和旧版本要有恢复路径</h2>
-<p>动态 import、图片和数据请求都可能失败。界面需要错误说明、重试和取消/忽略过期结果的策略。旧页面引用已经删除的异步 chunk 时，继续无限重试没有意义，应提示刷新并保护未保存输入。</p>
-<p>自定义懒加载不能把真实地址全部藏在 <code>data-*</code> 后再假设脚本永远成功；脚本失败时仍应有合理的图片占位、alt 和错误状态。长页面快速滚动、打印和弱网也是验收场景。</p>
-<p>评估时至少比较冷缓存首屏、首次展开、后续展开和弱网：看资源发现、下载、执行、渲染以及用户完成任务的等待。bundle 文件数量变多不是收益本身，只有真实关键路径变快才说明懒加载策略正确。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/Lazy_loading" target="_blank" rel="noreferrer">Lazy loading - Performance | MDN<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%87%92%E5%8A%A0%E8%BD%BD%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E6%97%B6%E5%8F%8D%E8%80%8C%E8%AE%A9%E9%A6%96%E5%B1%8F%E5%92%8C%E9%A6%96%E6%AC%A1%E4%BA%A4%E4%BA%92%E5%8F%98%E6%85%A2%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%87%92%E5%8A%A0%E8%BD%BD%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E6%97%B6%E5%8F%8D%E8%80%8C%E8%AE%A9%E9%A6%96%E5%B1%8F%E5%92%8C%E9%A6%96%E6%AC%A1%E4%BA%A4%E4%BA%92%E5%8F%98%E6%85%A2%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aperf-lazy-images%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fperf-lazy-images%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：懒加载为什么有时反而让首屏和首次交互变慢？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/perf-longtasks/">什么是长任务，为什么会影响交互响应？</a></li><li><a href="/questions/perf-resource-hints/">preload 怎样使用，为什么错误使用会浪费带宽？</a></li><li><a href="/questions/perf-virtual-list/">虚拟列表通过什么方式减少渲染成本？</a></li><li><a href="/questions/perf-rum/">真实用户监测与实验室性能测试为什么要结合？</a></li></ul></nav></main></div></div>
+<p>原生懒加载会在图片接近视口前提前开始加载，具体距离由浏览器决定。<code>iframe</code> 也支持 <code>loading=&quot;lazy&quot;</code>，适合页面下方的视频和地图嵌入。</p>
+<h2>代码</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> button = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;#open-editor&#x27;</span>);
+<span class="hljs-keyword">let</span> editorModule;
+
+<span class="hljs-comment">// 用户表现出意图时开始下载，不必等到点击</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">preload</span> = (<span class="hljs-params"></span>) =&gt; (editorModule ??= <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;./editor.js&#x27;</span>));
+button.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;pointerenter&#x27;</span>, preload, { <span class="hljs-attr">once</span>: <span class="hljs-literal">true</span> });
+button.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;focus&#x27;</span>, preload, { <span class="hljs-attr">once</span>: <span class="hljs-literal">true</span> });
+
+button.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">const</span> { openEditor } = <span class="hljs-keyword">await</span> <span class="hljs-title function_">preload</span>();
+    <span class="hljs-title function_">openEditor</span>();
+  } <span class="hljs-keyword">catch</span> {
+    editorModule = <span class="hljs-literal">undefined</span>;
+    <span class="hljs-title function_">showError</span>(<span class="hljs-string">&#x27;加载失败，请刷新页面后重试&#x27;</span>);
+  }
+});
+</code></pre></div>
+<p>触屏设备没有悬停，预取只能是加速手段，不能作为功能可用的前提。</p>
+<h2>什么该懒加载</h2>
+<table><thead><tr><th>适合</th><th>不适合</th></tr></thead><tbody><tr><td>首屏以下的图片、视频、地图</td><td>首屏主图、Logo</td></tr><tr><td>低频的弹窗、编辑器、图表库</td><td>几乎每个用户都会打开的模块</td></tr><tr><td>只在特定路由使用的代码</td><td>很小的高频组件，拆分后请求开销大于收益</td></tr></tbody></table>
+<h2>常见追问</h2>
+<ul>
+<li>怎么判断懒加载是否有收益？对比冷缓存首屏的 LCP，以及首次使用该功能时的等待时间，只看分块数量变多没有意义。</li>
+<li>发布新版本后旧分块 404 怎么办？保留旧版本的静态资源一段时间，加载失败时提示刷新。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/Lazy_loading" target="_blank" rel="noreferrer">MDN · Lazy loading<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%87%92%E5%8A%A0%E8%BD%BD%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E6%97%B6%E5%8F%8D%E8%80%8C%E8%AE%A9%E9%A6%96%E5%B1%8F%E5%92%8C%E9%A6%96%E6%AC%A1%E4%BA%A4%E4%BA%92%E5%8F%98%E6%85%A2%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%87%92%E5%8A%A0%E8%BD%BD%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E6%97%B6%E5%8F%8D%E8%80%8C%E8%AE%A9%E9%A6%96%E5%B1%8F%E5%92%8C%E9%A6%96%E6%AC%A1%E4%BA%A4%E4%BA%92%E5%8F%98%E6%85%A2%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aperf-lazy-images%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fperf-lazy-images%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：懒加载为什么有时反而让首屏和首次交互变慢？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/perf-longtasks/">什么是长任务，为什么会影响交互响应？怎样观测和拆分？</a></li><li><a href="/questions/perf-virtual-list/">虚拟列表通过什么方式减少渲染成本？</a></li><li><a href="/questions/perf-rum/">真实用户监测与实验室性能测试为什么要结合？</a></li><li><a href="/questions/perf-resource-timing/">Resource Timing 为什么有些跨源字段是零？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

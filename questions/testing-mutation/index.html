@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="测试面试题：解释变异测试通过故意修改代码来检查测试是否能失败，覆盖变异算子、等价变异、前端交互边界和实际落地成本。" />
+    <meta name="description" content="测试面试题：变异测试自动对源代码做小改动（把 &gt; 改成 &gt;=、删掉一行、把 true 改成 false），然后运行测试；测试失败说明变异被“杀死”，测试仍通过说明断言没有覆盖这处逻辑。" />
     <title>变异测试如何发现“覆盖率很高但测试没测到重点”？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/testing-mutation/" />
     <meta name="robots" content="index,follow" />
@@ -19,63 +19,58 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="变异测试如何发现“覆盖率很高但测试没测到重点”？ · 前端知库" />
-    <meta property="og:description" content="测试面试题：解释变异测试通过故意修改代码来检查测试是否能失败，覆盖变异算子、等价变异、前端交互边界和实际落地成本。" />
+    <meta property="og:description" content="测试面试题：变异测试自动对源代码做小改动（把 &gt; 改成 &gt;=、删掉一行、把 true 改成 false），然后运行测试；测试失败说明变异被“杀死”，测试仍通过说明断言没有覆盖这处逻辑。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/testing-mutation/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/testing-mutation/#webpage","url":"https://fe.hushifa.top/questions/testing-mutation/","name":"变异测试如何发现“覆盖率很高但测试没测到重点”？ · 前端知库","description":"测试面试题：解释变异测试通过故意修改代码来检查测试是否能失败，覆盖变异算子、等价变异、前端交互边界和实际落地成本。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/testing-mutation/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/testing-mutation/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"测试面试题","item":"https://fe.hushifa.top/topics/testing/"},{"@type":"ListItem","position":3,"name":"变异测试如何发现“覆盖率很高但测试没测到重点”？","item":"https://fe.hushifa.top/questions/testing-mutation/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/testing-mutation/#webpage","url":"https://fe.hushifa.top/questions/testing-mutation/","name":"变异测试如何发现“覆盖率很高但测试没测到重点”？ · 前端知库","description":"测试面试题：变异测试自动对源代码做小改动（把 > 改成 >=、删掉一行、把 true 改成 false），然后运行测试；测试失败说明变异被“杀死”，测试仍通过说明断言没有覆盖这处逻辑。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/testing-mutation/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/testing-mutation/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"测试面试题","item":"https://fe.hushifa.top/topics/testing/"},{"@type":"ListItem","position":3,"name":"变异测试如何发现“覆盖率很高但测试没测到重点”？","item":"https://fe.hushifa.top/questions/testing-mutation/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/testing/">测试面试题</a><span aria-hidden="true">/</span><span aria-current="page">变异测试如何发现“覆盖率很高但测试没测到重点”？</span></nav><h1 tabindex="-1">变异测试如何发现“覆盖率很高但测试没测到重点”？</h1><p class="reading-summary">解释变异测试通过故意修改代码来检查测试是否能失败，覆盖变异算子、等价变异、前端交互边界和实际落地成本。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/testing/">测试面试题</a><span aria-hidden="true">/</span><span aria-current="page">变异测试如何发现“覆盖率很高但测试没测到重点”？</span></nav><h1 tabindex="-1">变异测试如何发现“覆盖率很高但测试没测到重点”？</h1><p class="reading-summary">变异测试自动对源代码做小改动（把 &gt; 改成 &gt;=、删掉一行、把 true 改成 false），然后运行测试；测试失败说明变异被“杀死”，测试仍通过说明断言没有覆盖这处逻辑。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>覆盖率说明代码被执行过，变异测试检查断言能否区分正确与错误结果。</li>
-<li>工具对代码做小改动，测试失败就说明这个变异被杀死。</li>
-<li>存活的边界变异通常说明缺少边界用例，例如恰好 100 元。</li>
-<li>等价变异需要人工确认，忽略时要写明输入域和理由。</li>
+<li>每个变异体是源代码的一个小改动，例如算术运算符、比较运算符、条件、字面量、删除语句。</li>
+<li>测试失败称为“杀死”变异体，测试通过称为“存活”；变异分数 = 被杀死的数量 / 总数。</li>
+<li>存活的变异体指出了具体哪一行、哪种改动没被断言发现，比覆盖率更能说明测试质量。</li>
+<li>有些变异和原代码行为完全相同（等价变异），它们必然存活，需要人工判断后忽略。</li>
+<li>变异测试要多次运行测试套件，耗时长，通常只对核心模块或变更的文件运行。</li>
 </ul>
-<p>一个计费函数的分支覆盖率达到 100%，但把 <code>&gt;=</code> 改成 <code>&gt;</code> 后所有测试仍然通过，线上恰好在边界金额出错。覆盖率只能说明哪些代码被执行过，不能说明断言是否能区分正确结果和错误结果。变异测试会自动对代码做小幅、可控的修改（mutant），然后运行测试；测试能失败，说明这个变异被杀死，测试对该行为有约束。</p>
-<h2>变异测试测的是断言强度</h2>
-<p>常见变异包括：</p>
-<ul>
-<li><code>===</code> 改成 <code>!==</code> 或反转条件；</li>
-<li><code>&gt;</code> 改成 <code>&gt;=</code>；</li>
-<li>删除函数调用或返回值；</li>
-<li>把布尔值改成 <code>true</code>/<code>false</code>；</li>
-<li>改变算术运算符或数组边界。</li>
-</ul>
-<p>例如原代码规定满 100 元才免运费：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">shippingFee</span>(<span class="hljs-params">total</span>) {
-  <span class="hljs-keyword">return</span> total &gt;= <span class="hljs-number">100</span> ? <span class="hljs-number">0</span> : <span class="hljs-number">10</span>;
+<h2>示例</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">canCheckout</span>(<span class="hljs-params"><span class="hljs-attr">total</span>: <span class="hljs-built_in">number</span>, <span class="hljs-attr">limit</span>: <span class="hljs-built_in">number</span></span>) {
+  <span class="hljs-keyword">return</span> total &gt; <span class="hljs-number">0</span> &amp;&amp; total &lt;= limit;
 }
 </code></pre></div>
-<p>如果测试只有 50 元和 200 元，<code>&gt;=</code> 变成 <code>&gt;</code> 仍然通过；加入恰好 100 元的断言，才能杀死这个边界变异。测试应验证用户能观察到的规则和结果，而不是只断言函数被调用或分支执行。</p>
-<h2>等价变异不能简单算失败</h2>
-<p>等价变异是在约定的有效输入域与可观察行为下，与原程序没有行为差别的变异。仅仅对当前测试输入结果相同不叫等价：上面的 50 元和 200 元恰好无法区分 &gt;= 与 &gt;，100 元却能区分。这是测试缺口，不能按等价变异排除。确认等价通常需要人工分析，不能假设工具总能自动判定；使用忽略配置时应注明适用输入域和理由。</p>
-<p>前端代码还可能产生大量与构建工具、框架编译和 CSS 相关的变异。优先对纯函数、权限规则、金额计算、状态机和数据转换运行变异测试；不要一开始对整个应用和所有第三方依赖运行，成本会迅速失控。</p>
-<h2>交互测试要选择可观察行为</h2>
-<p>对组件变异时，删除一个 <code>aria-disabled</code>、改变按钮文案或跳过错误状态更新，测试应从用户角度发现差异：按钮是否不能提交、错误是否被读屏器感知、焦点是否回到安全位置。只比较内部 state 或组件快照，可能让真实行为变异存活。</p>
-<p>网络请求和异步状态的变异也要覆盖：把成功改成失败、把旧请求结果错误地应用、删除取消逻辑或改变重试次数。测试应控制请求顺序、断网和取消，并断言最终界面、请求数量和可访问状态。</p>
-<h2>如何在工程中落地</h2>
-<p>通常流程是先运行普通单元测试，再对选定目录生成变异；变异测试只在基线测试通过后运行。报告应区分 killed、survived、timeout 和 no coverage，并按代码路径和风险排序。长时间运行的变异可以在 CI 夜间任务执行，Pull Request 只检查关键规则或增量文件。</p>
-<p>变异测试失败时不要为了让分数上升而增加无意义断言。先问“这个变异是否代表真实回归”，再补边界、错误、权限或用户操作测试。变异分数是诊断信号，不是产品质量的单一指标。</p>
-<h2>性能与稳定性边界</h2>
-<p>每个变异都可能触发构建和测试，时间通常远高于普通测试。工具可以利用覆盖关系选择相关测试，具体成本取决于配置。可以限制并发、按目录筛选和设置超时。测试必须控制网络、时间、随机数和全局状态，否则变异结果会受到顺序和环境波动影响。</p>
-<p>按 Stryker 官方报告口径，Timeout 与 Killed 是不同状态，但两者都计入 Detected；变异造成死循环，测试超时也能阻止这段代码进入正常交付流程。Mutation score = (Killed + Timeout) / (Killed + Timeout + Survived + No coverage) × 100，编译错误和运行错误不计入这一分母。不能把 Timeout 擅自改记为 Killed，也不能说它必然不计入得分。若大量超时源于测试环境过载或超时阈值过小，则应先修复环境，避免把不稳定运行误当成测试有效。</p>
-<h2>常见误区</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;总额在限额内可以结账&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">expect</span>(<span class="hljs-title function_">canCheckout</span>(<span class="hljs-number">50</span>, <span class="hljs-number">100</span>)).<span class="hljs-title function_">toBe</span>(<span class="hljs-literal">true</span>);
+  <span class="hljs-title function_">expect</span>(<span class="hljs-title function_">canCheckout</span>(<span class="hljs-number">0</span>, <span class="hljs-number">100</span>)).<span class="hljs-title function_">toBe</span>(<span class="hljs-literal">false</span>);
+});
+</code></pre></div>
+<p>覆盖率是 100%。变异测试会生成例如把 <code>&lt;=</code> 改成 <code>&lt;</code> 的变异体，<code>canCheckout(50, 100)</code> 仍为 <code>true</code>，测试仍通过，变异体存活。这说明“总额刚好等于限额”的边界没有测试。补上 <code>expect(canCheckout(100, 100)).toBe(true)</code> 后，这个变异体被杀死。</p>
+<h2>在项目中使用</h2>
+<div class="not-prose code-block"><div class="code-language">bash</div><pre><code class="hljs language-bash">npm install --save-dev @stryker-mutator/core @stryker-mutator/vitest-runner
+npx stryker run
+</code></pre></div>
+<div class="not-prose code-block"><div class="code-language">json</div><pre><code class="hljs language-json">{
+  &quot;testRunner&quot;: &quot;vitest&quot;,
+  &quot;mutate&quot;: [&quot;src/domain/**/*.ts&quot;],
+  &quot;thresholds&quot;: { &quot;high&quot;: 80, &quot;low&quot;: 60, &quot;break&quot;: 50 },
+  &quot;incremental&quot;: true
+}
+</code></pre></div>
 <ul>
-<li>用覆盖率替代变异测试：执行过不等于断言有效。</li>
-<li>追求 100% 变异分数：等价变异和非关键代码需要合理排除。</li>
-<li>只测试内部实现：用户可见的错误可能仍然存活。</li>
-<li>对全仓库一次性运行：成本和噪声会让结果不可用。</li>
-<li>把超时当作断言命中：工具会计入检测结果，但必须区分变异导致的死循环与环境故障。</li>
+<li><code>mutate</code> 限定在纯逻辑模块，界面胶水代码的变异多数不值得处理。</li>
+<li><code>incremental</code> 只重新测试变化过的代码，适合在 CI 中运行。</li>
+<li>报告会列出每个存活的变异体和对应的代码位置。</li>
 </ul>
-<h2>参考资料</h2>
+<h2>怎样处理存活的变异体</h2>
+<ol>
+<li>是真实的测试遗漏：补边界值或补断言。</li>
+<li>是等价变异：例如改动只影响日志文字，用注释 <code>// Stryker disable next-line</code> 标记并写明原因。</li>
+<li>是不重要的代码：从 <code>mutate</code> 范围中排除。</li>
+</ol>
+<h2>常见追问</h2>
 <ul>
-<li><a href="https://stryker-mutator.io/docs/mutation-testing-elements/supported-mutators/">Stryker Mutator · Supported mutators</a></li>
-<li><a href="https://stryker-mutator.io/docs/mutation-testing-elements/mutant-states-and-metrics/">Stryker Mutator · Mutant states and metrics</a></li>
-<li><a href="https://stryker-mutator.io/docs/mutation-testing-elements/">Stryker Mutator · Mutation testing</a></li>
-<li><a href="https://vitest.dev/guide/">Vitest · Testing</a></li>
-</ul></div><div class="answer-bottom"><a href="https://stryker-mutator.io/docs/mutation-testing-elements/supported-mutators/" target="_blank" rel="noreferrer">Stryker Mutator · Mutation testing<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%8F%98%E5%BC%82%E6%B5%8B%E8%AF%95%E5%A6%82%E4%BD%95%E5%8F%91%E7%8E%B0%E2%80%9C%E8%A6%86%E7%9B%96%E7%8E%87%E5%BE%88%E9%AB%98%E4%BD%86%E6%B5%8B%E8%AF%95%E6%B2%A1%E6%B5%8B%E5%88%B0%E9%87%8D%E7%82%B9%E2%80%9D%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%8F%98%E5%BC%82%E6%B5%8B%E8%AF%95%E5%A6%82%E4%BD%95%E5%8F%91%E7%8E%B0%E2%80%9C%E8%A6%86%E7%9B%96%E7%8E%87%E5%BE%88%E9%AB%98%E4%BD%86%E6%B5%8B%E8%AF%95%E6%B2%A1%E6%B5%8B%E5%88%B0%E9%87%8D%E7%82%B9%E2%80%9D%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Atesting-mutation%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%B5%8B%E8%AF%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Ftesting-mutation%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：变异测试如何发现“覆盖率很高但测试没测到重点”？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/testing-time-and-fake-timers/">前端怎样测试定时器、重试和超时，避免 Fake Timers 造成假通过？</a></li><li><a href="/questions/test-user-behavior/">组件测试为什么应优先测试用户可见行为？</a></li><li><a href="/questions/test-e2e/">如何减少 Playwright 端到端测试的不稳定？</a></li><li><a href="/questions/test-mocks/">什么时候应该 mock，mock 太多有什么问题？</a></li></ul></nav></main></div></div>
+<li>变异分数要达到多少？和覆盖率一样不宜追求固定数字。关注核心逻辑中存活的变异体，每个都给出“补测试”或“可以忽略”的结论，比提高总分更有意义。</li>
+</ul></div><div class="answer-bottom"><a href="https://stryker-mutator.io/docs/mutation-testing-elements/supported-mutators/" target="_blank" rel="noreferrer">Stryker Mutator · Supported mutators<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%8F%98%E5%BC%82%E6%B5%8B%E8%AF%95%E5%A6%82%E4%BD%95%E5%8F%91%E7%8E%B0%E2%80%9C%E8%A6%86%E7%9B%96%E7%8E%87%E5%BE%88%E9%AB%98%E4%BD%86%E6%B5%8B%E8%AF%95%E6%B2%A1%E6%B5%8B%E5%88%B0%E9%87%8D%E7%82%B9%E2%80%9D%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%8F%98%E5%BC%82%E6%B5%8B%E8%AF%95%E5%A6%82%E4%BD%95%E5%8F%91%E7%8E%B0%E2%80%9C%E8%A6%86%E7%9B%96%E7%8E%87%E5%BE%88%E9%AB%98%E4%BD%86%E6%B5%8B%E8%AF%95%E6%B2%A1%E6%B5%8B%E5%88%B0%E9%87%8D%E7%82%B9%E2%80%9D%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Atesting-mutation%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%B5%8B%E8%AF%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Ftesting-mutation%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：变异测试如何发现“覆盖率很高但测试没测到重点”？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/test-coverage-limits/">为什么 100% 代码覆盖率也可能漏掉严重问题？</a></li><li><a href="/questions/test-e2e/">如何减少 Playwright 端到端测试的不稳定？</a></li><li><a href="/questions/test-mocks/">什么时候应该 mock，mock 太多有什么问题？</a></li><li><a href="/questions/test-visual-regression/">视觉回归测试如何减少无意义的截图差异？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

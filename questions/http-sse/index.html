@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="网络与安全面试题：用任务进度推送解释 SSE 的事件格式、原生 EventSource 的连接与重连行为，以及它和 WebSocket、fetch 流式读取的适用边界。" />
+    <meta name="description" content="网络与安全面试题：SSE 是服务器到浏览器的单向文本事件流，基于普通 HTTP，EventSource 自带断线重连和事件 ID 续传；WebSocket 是全双工连接，支持二进制，重连和消息确认都要自己做。" />
     <title>SSE 与 WebSocket 有什么区别？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/http-sse/" />
     <meta name="robots" content="index,follow" />
@@ -19,126 +19,56 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="SSE 与 WebSocket 有什么区别？ · 前端知库" />
-    <meta property="og:description" content="网络与安全面试题：用任务进度推送解释 SSE 的事件格式、原生 EventSource 的连接与重连行为，以及它和 WebSocket、fetch 流式读取的适用边界。" />
+    <meta property="og:description" content="网络与安全面试题：SSE 是服务器到浏览器的单向文本事件流，基于普通 HTTP，EventSource 自带断线重连和事件 ID 续传；WebSocket 是全双工连接，支持二进制，重连和消息确认都要自己做。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/http-sse/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/http-sse/#webpage","url":"https://fe.hushifa.top/questions/http-sse/","name":"SSE 与 WebSocket 有什么区别？ · 前端知库","description":"网络与安全面试题：用任务进度推送解释 SSE 的事件格式、原生 EventSource 的连接与重连行为，以及它和 WebSocket、fetch 流式读取的适用边界。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/http-sse/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/http-sse/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"网络与安全面试题","item":"https://fe.hushifa.top/topics/network/"},{"@type":"ListItem","position":3,"name":"SSE 与 WebSocket 有什么区别？","item":"https://fe.hushifa.top/questions/http-sse/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/http-sse/#webpage","url":"https://fe.hushifa.top/questions/http-sse/","name":"SSE 与 WebSocket 有什么区别？ · 前端知库","description":"网络与安全面试题：SSE 是服务器到浏览器的单向文本事件流，基于普通 HTTP，EventSource 自带断线重连和事件 ID 续传；WebSocket 是全双工连接，支持二进制，重连和消息确认都要自己做。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/http-sse/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/http-sse/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"网络与安全面试题","item":"https://fe.hushifa.top/topics/network/"},{"@type":"ListItem","position":3,"name":"SSE 与 WebSocket 有什么区别？","item":"https://fe.hushifa.top/questions/http-sse/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/network/">网络与安全面试题</a><span aria-hidden="true">/</span><span aria-current="page">SSE 与 WebSocket 有什么区别？</span></nav><h1 tabindex="-1">SSE 与 WebSocket 有什么区别？</h1><p class="reading-summary">用任务进度推送解释 SSE 的事件格式、原生 EventSource 的连接与重连行为，以及它和 WebSocket、fetch 流式读取的适用边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/network/">网络与安全面试题</a><span aria-hidden="true">/</span><span aria-current="page">SSE 与 WebSocket 有什么区别？</span></nav><h1 tabindex="-1">SSE 与 WebSocket 有什么区别？</h1><p class="reading-summary">SSE 是服务器到浏览器的单向文本事件流，基于普通 HTTP，EventSource 自带断线重连和事件 ID 续传；WebSocket 是全双工连接，支持二进制，重连和消息确认都要自己做。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>SSE 适合服务端向客户端推送 UTF-8 文本，双向频繁通信更适合 WebSocket。</li>
-<li>响应类型为 text/event-stream，事件由 data、event、id、retry 字段组成，以空行分隔。</li>
-<li>EventSource 内置重连并发送 Last-Event-ID，但服务端要保留历史才能续传，业务处理成功仍需自己确认。</li>
-<li>代理或 CDN 缓冲会让事件成批到达；原生 EventSource 没有背压控制。</li>
-<li>需要 POST 或自定义认证头时，可以用 fetch 读流再交给 SSE 解析库，但要自己处理重连。</li>
+<li>方向：SSE 只能服务器推给客户端，客户端发消息仍用普通请求；WebSocket 双向。</li>
+<li>协议：SSE 是 <code>Content-Type: text/event-stream</code> 的普通 HTTP 响应，能直接走现有的代理、鉴权和 HTTP/2；WebSocket 需要协议升级。</li>
+<li>重连：<code>EventSource</code> 断线后自动重连，并通过 <code>Last-Event-ID</code> 请求头告诉服务器最后收到的事件；WebSocket 没有内置重连。</li>
+<li>数据：SSE 只传 UTF-8 文本；WebSocket 支持文本和二进制。</li>
+<li>选择：通知、进度、AI 流式输出用 SSE 或 fetch 流；聊天、协同编辑、游戏这类高频双向场景用 WebSocket。</li>
 </ul>
-<p>假设用户上传文件后，服务器要花一分钟生成报表。页面需要不断知道“处理到多少了”，但用户并不会每一秒都向服务器发送操作。SSE 很适合这种场景：浏览器发出一个 HTTP 请求，服务器保持响应开放，在同一个响应里持续写入进度事件。</p>
-<p>SSE 是 Server-Sent Events，主要解决服务端向客户端的文本推送。WebSocket 则允许双方在连接建立后持续收发消息，更适合聊天、协作操作等频繁双向通信。SSE 页面当然仍能发送请求，例如点击“取消任务”时另外发一个 POST；只是客户端操作不通过 EventSource 的那条事件流上传。</p>
-<table><thead><tr><th>对比项</th><th>SSE + 原生 EventSource</th><th>浏览器原生 WebSocket</th></tr></thead><tbody><tr><td>消息方向</td><td>事件流从服务端到客户端</td><td>双方都能主动发送</td></tr><tr><td>数据形式</td><td>UTF-8 文本，遵循 SSE 字段格式</td><td>文本或二进制消息</td></tr><tr><td>建立方式</td><td>普通 HTTP 请求得到持续响应</td><td>WebSocket 握手建立连接</td></tr><tr><td>断线恢复</td><td>API 内置重连机制，业务续传仍需设计</td><td>应用自行实现重连和状态恢复</td></tr><tr><td>请求配置</td><td>通常是 GET，不能任意设置请求头和请求体</td><td>构造函数也不能任意设置请求头</td></tr><tr><td>常见用途</td><td>通知、任务进度、日志、文本增量推送</td><td>聊天、协同编辑、双向实时交互</td></tr></tbody></table>
-<p>选择时先看消息方向、认证方式和部署条件。不能只因 SSE 使用 HTTP，就断言它一定比 WebSocket 慢；也不能因 EventSource 有重连，就认为消息绝不会丢失。</p>
-<h2>服务端写出的内容必须符合事件格式</h2>
-<p>响应的媒体类型应为 <code>text/event-stream</code>，正文使用 UTF-8 编码。下面是一个事件流片段，每个事件块后都有空行：</p>
-<div class="not-prose code-block"><div class="code-language">text</div><pre><code class="hljs language-text">retry: 2000
-
-id: 41
+<h2>事件格式</h2>
+<div class="not-prose code-block"><div class="code-language">text</div><pre><code class="hljs language-text">id: 42
 event: progress
-data: {&quot;percent&quot;:35}
+data: {&quot;percent&quot;: 60}
 
-id: 42
-event: progress
-data: {&quot;percent&quot;:80}
+data: 第一行
+data: 第二行
 
-: 保持连接的注释
-
-id: 43
-event: done
-data: {}
-
+retry: 5000
 </code></pre></div>
-<p>这里几个字段各有自己的职责：</p>
+<p>每个事件以空行结束；多行 <code>data</code> 会用换行拼接；<code>retry</code> 设置重连间隔（毫秒）；以 <code>:</code> 开头的行是注释，常用来发心跳，防止代理断开空闲连接。</p>
+<h2>客户端</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> source = <span class="hljs-keyword">new</span> <span class="hljs-title class_">EventSource</span>(<span class="hljs-string">&#x27;/api/tasks/7/events&#x27;</span>);
+
+source.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;progress&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> { percent } = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(event.<span class="hljs-property">data</span>);
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;进度&#x27;</span>, percent, <span class="hljs-string">&#x27;最后事件 ID&#x27;</span>, event.<span class="hljs-property">lastEventId</span>);
+});
+
+source.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;done&#x27;</span>, <span class="hljs-function">() =&gt;</span> source.<span class="hljs-title function_">close</span>());
+
+source.<span class="hljs-property">onerror</span> = <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// readyState 为 CONNECTING 表示浏览器正在自动重连</span>
+  <span class="hljs-keyword">if</span> (source.<span class="hljs-property">readyState</span> === <span class="hljs-title class_">EventSource</span>.<span class="hljs-property">CLOSED</span>) <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;连接已关闭&#x27;</span>);
+};
+</code></pre></div>
+<p>服务器返回非 200 状态码或错误的 <code>Content-Type</code> 时，<code>EventSource</code> 会关闭且不再重连。</p>
+<h2>EventSource 的限制和 fetch 流</h2>
+<p><code>EventSource</code> 只能发 <code>GET</code>，不能自定义请求头（只能带 Cookie，可设 <code>withCredentials</code>）。需要 <code>POST</code> 请求体或 <code>Authorization</code> 头时（例如调用大模型接口），改用 <code>fetch</code> 读取 <code>response.body</code>，自己解析事件格式，重连和续传也要自己实现。</p>
+<p>HTTP/1.1 下浏览器对同一域名的并发连接数有限（通常 6 个），多个标签页各开一个 SSE 会占满连接；HTTP/2 多路复用后没有这个问题。</p>
+<h2>常见追问</h2>
 <ul>
-<li><code>data</code> 是事件数据。它可以存 JSON 文本，但 SSE 本身不会自动执行 <code>JSON.parse</code>。</li>
-<li><code>event</code> 决定浏览器派发的事件名。<code>event: progress</code> 对应 <code>addEventListener(&#x27;progress&#x27;, ...)</code>，不会交给默认的 <code>onmessage</code>。</li>
-<li><code>id</code> 更新事件 ID，业务可以用它作为恢复游标；它是字符串，协议不要求它是递增数字。</li>
-<li><code>retry</code> 提供重连等待时间，单位是毫秒，字段值必须符合整数格式。浏览器也可能因网络状态等原因延后重连，不应把它当成精确计时器。</li>
-<li>以冒号开头的是注释，不会作为业务消息触发回调，可用于让连接保持活跃。</li>
-</ul>
-<p>一个事件包含多行 <code>data</code> 时，浏览器用换行符连接这些行。例如 <code>data: 第一行</code> 和 <code>data: 第二行</code> 属于同一事件时，<code>event.data</code> 是 <code>第一行\n第二行</code>。因此不能把每行都当成独立 JSON，更不能认为每次底层网络读取刚好等于一个完整事件。</p>
-<p>空行是重要的分隔符。服务器若只写了 <code>data: ...</code> 却迟迟没有完成事件块，客户端不会立即收到相应事件。自定义解析器还要处理 CRLF、LF 等换行形式，以及 UTF-8 字符和事件字段被网络分块拆开的情况。</p>
-<h2>用原生 EventSource 订阅进度</h2>
-<p>下面约定 <code>progress</code> 事件携带 0 到 100 的绝对进度，<code>done</code> 表示任务已经完成。后端需要实现这些业务事件，EventSource 不会自动创造它们。</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">subscribeProgress</span>(<span class="hljs-params">url, onProgress, onStatus</span>) {
-  <span class="hljs-keyword">const</span> source = <span class="hljs-keyword">new</span> <span class="hljs-title class_">EventSource</span>(url);
-  <span class="hljs-keyword">let</span> stopped = <span class="hljs-literal">false</span>;
-
-  source.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;open&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-    <span class="hljs-keyword">if</span> (!stopped) <span class="hljs-title function_">onStatus</span>(<span class="hljs-string">&#x27;已连接&#x27;</span>);
-  });
-
-  source.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;progress&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
-    <span class="hljs-keyword">if</span> (stopped) <span class="hljs-keyword">return</span>;
-
-    <span class="hljs-keyword">let</span> data;
-    <span class="hljs-keyword">try</span> {
-      data = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(event.<span class="hljs-property">data</span>);
-    } <span class="hljs-keyword">catch</span> {
-      <span class="hljs-title function_">onStatus</span>(<span class="hljs-string">&#x27;进度数据无法解析&#x27;</span>);
-      <span class="hljs-keyword">return</span>;
-    }
-
-    <span class="hljs-keyword">if</span> (
-      !data ||
-      <span class="hljs-keyword">typeof</span> data.<span class="hljs-property">percent</span> !== <span class="hljs-string">&#x27;number&#x27;</span> ||
-      !<span class="hljs-title class_">Number</span>.<span class="hljs-built_in">isFinite</span>(data.<span class="hljs-property">percent</span>) ||
-      data.<span class="hljs-property">percent</span> &lt; <span class="hljs-number">0</span> ||
-      data.<span class="hljs-property">percent</span> &gt; <span class="hljs-number">100</span>
-    ) {
-      <span class="hljs-title function_">onStatus</span>(<span class="hljs-string">&#x27;进度数据格式不正确&#x27;</span>);
-      <span class="hljs-keyword">return</span>;
-    }
-
-    <span class="hljs-title function_">onProgress</span>(data.<span class="hljs-property">percent</span>, event.<span class="hljs-property">lastEventId</span>);
-  });
-
-  source.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;done&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-    <span class="hljs-keyword">if</span> (stopped) <span class="hljs-keyword">return</span>;
-    stopped = <span class="hljs-literal">true</span>;
-    source.<span class="hljs-title function_">close</span>();
-    <span class="hljs-title function_">onStatus</span>(<span class="hljs-string">&#x27;任务完成&#x27;</span>);
-  });
-
-  source.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;error&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-    <span class="hljs-keyword">if</span> (stopped) <span class="hljs-keyword">return</span>;
-    <span class="hljs-title function_">onStatus</span>(
-      source.<span class="hljs-property">readyState</span> === <span class="hljs-title class_">EventSource</span>.<span class="hljs-property">CONNECTING</span>
-        ? <span class="hljs-string">&#x27;连接中断，等待重新连接&#x27;</span>
-        : <span class="hljs-string">&#x27;连接已结束&#x27;</span>,
-    );
-  });
-
-  <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
-    stopped = <span class="hljs-literal">true</span>;
-    source.<span class="hljs-title function_">close</span>();
-  };
-}
-</code></pre></div>
-<p>调用时把进度显示和状态提示作为函数传入；页面离开或用户取消订阅时，调用返回的清理函数。<code>close()</code> 只结束这条订阅连接，不会自动取消服务器正在生成的报表，取消业务任务要另有接口。</p>
-<p>示例用“当前进度为 35%”，而不是“进度再加 5%”，这样重复收到同一条进度不会重复累加。但它没有实现跨连接事件排序；需要防止旧进度覆盖新进度时，应再加入任务版本或明确有序的业务序号。</p>
-<p>普通网络断开时，原生 EventSource 通常会尝试重连，所以不能在每次 <code>error</code> 中都立刻创建一个新的 EventSource，否则可能出现多条连接并行重试。认证、状态码或响应类型错误等情况可能使连接终止，不应断言所有错误都会无限重连。客户端主动 <code>close()</code> 会停止，服务端也可用 HTTP <code>204 No Content</code> 告知客户端不要继续重连。</p>
-<h2>自动重连为什么仍可能丢消息</h2>
-<p>若最后收到的事件 ID 是 <code>42</code>，同一个 EventSource 自动重连时，可以通过 <code>Last-Event-ID: 42</code> 告诉服务器自己的进度。可是服务器仍要有事件历史，并根据这个 ID 决定从哪里重放。只在事件里加一个 <code>id</code>，却没有保存和重放逻辑，不能实现断点续传。</p>
-<p>而且浏览器记住“已经派发的事件 ID”，不代表你的业务已经成功保存了数据。比如事件回调里异步写数据库失败了，浏览器并不知道业务没有处理成功。对可靠性要求高的业务，要自己管理成功处理的游标、去重和恢复策略。</p>
-<p>如果刷新页面后重新创建 EventSource，也不能期待旧实例的游标自动持久化。应用可以保存业务游标，再通过约定的 URL 参数传给服务端；游标不应包含秘密，服务端仍要验证它所属的用户和订阅范围。历史过期时，应返回快照或让客户端重新查询完整状态。</p>
-<h2>为什么有时已经推送了，页面却一大段一起出现</h2>
-<p>SSE 会经过应用服务器、反向代理和可能存在的 CDN。任何一层如果把小块数据缓冲起来，浏览器就可能很久收不到事件，随后一次收到很多。需要检查服务端是否及时刷新输出、代理是否启用了响应缓冲、压缩层是否延迟输出，以及连接的空闲超时设置。</p>
-<p><code>X-Accel-Buffering: no</code> 是部分代理环境可识别的配置方式，不是所有服务器通用的 SSE 开关。HTTP/1.1 下每个来源的并发连接数也会限制多个标签页的长连接；HTTP/2 可以复用连接中的多个流，但仍受协商的并发流数量和服务端容量限制，不能理解成无限连接。</p>
-<p>原生 EventSource 不提供消费背压控制。服务端发送得太快时，仍要合并状态、限制消息频率或减少订阅内容。</p>
-<h2>需要 POST 或自定义认证头时怎么办</h2>
-<p>原生 EventSource 的请求配置能力有限。跨源携带 Cookie 可以使用 <code>{ withCredentials: true }</code>，同时服务端必须正确配置 CORS，浏览器的 Cookie 策略也仍然生效。</p>
-<p>如果接口要求 POST 请求体或自定义 <code>Authorization</code> 头，可以用 <code>fetch</code> 读取响应流，再交给成熟的 SSE 解析库。但这是“用 fetch 消费 SSE 格式”，并不自动具备 EventSource 的重连、<code>Last-Event-ID</code> 和事件派发行为；这些能力要由选用的库或应用实现。</p>
-<p>特别是生成类接口，重连时重新 POST 可能启动第二次任务。更稳妥的设计可以是先创建任务获得 ID，再订阅该任务的事件。传输能恢复和业务只执行一次，是两项需要分别设计的能力。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events" target="_blank" rel="noreferrer">MDN · 使用服务器发送事件<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+SSE+%E4%B8%8E+WebSocket+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ASSE+%E4%B8%8E+WebSocket+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ahttp-sse%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%BD%91%E7%BB%9C%E4%B8%8E%E5%AE%89%E5%85%A8%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fhttp-sse%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：SSE 与 WebSocket 有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/http-cache/">强缓存与协商缓存如何配合？</a></li><li><a href="/questions/http-cors/">什么是跨域？CORS 为什么需要服务端配合？</a></li><li><a href="/questions/http-xss/">XSS 和 CSRF 有什么区别？分别如何防范？</a></li><li><a href="/questions/http-https/">HTTPS 相比 HTTP 提供了哪些保障？</a></li></ul></nav></main></div></div>
+<li>SSE 怎么保证不丢消息？服务器为事件编号并保留一段历史，重连时按 <code>Last-Event-ID</code> 补发。</li>
+<li>WebSocket 的重连怎么做？见《WebSocket 适合什么场景，连接断开后怎样恢复？》。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events" target="_blank" rel="noreferrer">MDN · Using server-sent events<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+SSE+%E4%B8%8E+WebSocket+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ASSE+%E4%B8%8E+WebSocket+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ahttp-sse%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%BD%91%E7%BB%9C%E4%B8%8E%E5%AE%89%E5%85%A8%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fhttp-sse%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：SSE 与 WebSocket 有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/http-cache/">强缓存与协商缓存如何配合？</a></li><li><a href="/questions/http-cors/">什么是跨域？CORS 为什么需要服务端配合？</a></li><li><a href="/questions/http-https/">HTTPS 相比 HTTP 提供了哪些保障？</a></li><li><a href="/questions/http-versions/">HTTP/1.1、HTTP/2 和 HTTP/3 的主要区别是什么？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

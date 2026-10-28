@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="AI 应用前端面试题：模型输出始终是不可信内容。安全渲染要限制 Markdown 能力、过滤 URL 和 HTML，并把展示代码、富内容解释和可执行代码分成不同权限边界。" />
+    <meta name="description" content="AI 应用前端面试题：模型输出是不可信内容。默认关闭原始 HTML、只放行 http/https 链接、谨慎处理外部图片；确实需要 HTML 时对整条插件链的最终结果做净化；流式输出要按帧合并、保守处理未闭合的块。" />
     <title>AI 生成的 Markdown 应该怎样安全地渲染？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/ai-markdown-security/" />
     <meta name="robots" content="index,follow" />
@@ -19,30 +19,28 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="AI 生成的 Markdown 应该怎样安全地渲染？ · 前端知库" />
-    <meta property="og:description" content="AI 应用前端面试题：模型输出始终是不可信内容。安全渲染要限制 Markdown 能力、过滤 URL 和 HTML，并把展示代码、富内容解释和可执行代码分成不同权限边界。" />
+    <meta property="og:description" content="AI 应用前端面试题：模型输出是不可信内容。默认关闭原始 HTML、只放行 http/https 链接、谨慎处理外部图片；确实需要 HTML 时对整条插件链的最终结果做净化；流式输出要按帧合并、保守处理未闭合的块。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/ai-markdown-security/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ai-markdown-security/#webpage","url":"https://fe.hushifa.top/questions/ai-markdown-security/","name":"AI 生成的 Markdown 应该怎样安全地渲染？ · 前端知库","description":"AI 应用前端面试题：模型输出始终是不可信内容。安全渲染要限制 Markdown 能力、过滤 URL 和 HTML，并把展示代码、富内容解释和可执行代码分成不同权限边界。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ai-markdown-security/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ai-markdown-security/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"AI 应用前端面试题","item":"https://fe.hushifa.top/topics/ai-frontend/"},{"@type":"ListItem","position":3,"name":"AI 生成的 Markdown 应该怎样安全地渲染？","item":"https://fe.hushifa.top/questions/ai-markdown-security/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ai-markdown-security/#webpage","url":"https://fe.hushifa.top/questions/ai-markdown-security/","name":"AI 生成的 Markdown 应该怎样安全地渲染？ · 前端知库","description":"AI 应用前端面试题：模型输出是不可信内容。默认关闭原始 HTML、只放行 http/https 链接、谨慎处理外部图片；确实需要 HTML 时对整条插件链的最终结果做净化；流式输出要按帧合并、保守处理未闭合的块。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ai-markdown-security/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ai-markdown-security/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"AI 应用前端面试题","item":"https://fe.hushifa.top/topics/ai-frontend/"},{"@type":"ListItem","position":3,"name":"AI 生成的 Markdown 应该怎样安全地渲染？","item":"https://fe.hushifa.top/questions/ai-markdown-security/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/ai-frontend/">AI 应用前端面试题</a><span aria-hidden="true">/</span><span aria-current="page">AI 生成的 Markdown 应该怎样安全地渲染？</span></nav><h1 tabindex="-1">AI 生成的 Markdown 应该怎样安全地渲染？</h1><p class="reading-summary">模型输出始终是不可信内容。安全渲染要限制 Markdown 能力、过滤 URL 和 HTML，并把展示代码、富内容解释和可执行代码分成不同权限边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/ai-frontend/">AI 应用前端面试题</a><span aria-hidden="true">/</span><span aria-current="page">AI 生成的 Markdown 应该怎样安全地渲染？</span></nav><h1 tabindex="-1">AI 生成的 Markdown 应该怎样安全地渲染？</h1><p class="reading-summary">模型输出是不可信内容。默认关闭原始 HTML、只放行 http/https 链接、谨慎处理外部图片；确实需要 HTML 时对整条插件链的最终结果做净化；流式输出要按帧合并、保守处理未闭合的块。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>模型输出始终是不可信内容，提示词约束不是浏览器安全边界。</li>
-<li>默认关闭原始 HTML，只允许明确的链接协议，对图片采用保守策略。</li>
-<li>确实需要 HTML 时，要对整条插件链的最终结果做净化。</li>
-<li>流式输出时对未完成的块保守展示，结束后再完整渲染。</li>
+<li>模型可能复述网页里的恶意内容，或在注入攻击下生成钓鱼链接和 HTML，所以它的输出按用户输入对待。</li>
+<li>默认关闭原始 HTML，链接只允许 <code>http:</code> 和 <code>https:</code>，外部图片默认不加载。</li>
+<li>外部图片也是风险：图片 URL 可以把对话里的数据带到攻击者服务器。</li>
+<li>需要 HTML 时，用维护中的净化库处理最终进入 DOM 的结构；之后的插件不能再插入未净化的内容。</li>
+<li>代码块只展示，不执行；MDX、Mermaid、代码沙盒等能力要单独评估权限。</li>
 </ul>
-<h2>先把 Markdown 当成用户输入</h2>
-<p>模型可能引用网页中的恶意内容，也可能生成钓鱼链接、HTML、SVG 或代码。提示词要求“不要输出危险内容”只是模型偏好，不是浏览器安全边界。</p>
-<p>代码块里的 JavaScript 应该只被显示；生成的 JSX、MDX、模板或脚本不能因为来源是模型就编译执行。展示文字和执行内容必须有清晰的权限分界。</p>
-<h2>从受限 Markdown 开始</h2>
-<p>默认关闭原始 HTML，只允许明确的链接协议，并对图片采用保守策略：</p>
+<h2>受限渲染示例</h2>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> <span class="hljs-title class_">Markdown</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-markdown&#x27;</span>;
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">safeHref</span>(<span class="hljs-params">href</span>) {
   <span class="hljs-keyword">if</span> (!href) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
   <span class="hljs-keyword">try</span> {
+    <span class="hljs-comment">// 基地址由应用指定，不使用模型提供的值</span>
     <span class="hljs-keyword">const</span> url = <span class="hljs-keyword">new</span> <span class="hljs-title function_">URL</span>(href, <span class="hljs-string">&#x27;https://app.example.com/&#x27;</span>);
     <span class="hljs-keyword">return</span> [<span class="hljs-string">&#x27;http:&#x27;</span>, <span class="hljs-string">&#x27;https:&#x27;</span>].<span class="hljs-title function_">includes</span>(url.<span class="hljs-property">protocol</span>) ? url.<span class="hljs-property">href</span> : <span class="hljs-literal">null</span>;
   } <span class="hljs-keyword">catch</span> {
@@ -57,11 +55,15 @@
       <span class="hljs-attr">components</span>=<span class="hljs-string">{{</span>
         <span class="hljs-attr">a:</span> ({ <span class="hljs-attr">href</span>, <span class="hljs-attr">children</span> }) =&gt;</span> {
           const url = safeHref(href);
-          return url
-            ? <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">{url}</span> <span class="hljs-attr">target</span>=<span class="hljs-string">&quot;_blank&quot;</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;noopener noreferrer&quot;</span>&gt;</span>{children}<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
-            : <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>{children}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>;
+          return url ? (
+            <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">{url}</span> <span class="hljs-attr">target</span>=<span class="hljs-string">&quot;_blank&quot;</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;noopener noreferrer&quot;</span>&gt;</span>
+              {children}
+            <span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+          ) : (
+            <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>{children}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+          );
         },
-        img: ({ alt }) =&gt; <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>{alt || &#x27;图片未加载&#x27;}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>,
+        img: ({ alt }) =&gt; <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>[图片：{alt || &#x27;未命名&#x27;}]<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>,
       }}
     &gt;
       {text}
@@ -69,17 +71,24 @@
   );
 }
 </code></pre></div>
-<p>相对链接的基地址必须是应用明确选择的可信地址，不能使用模型提供的任意 base。允许 HTTP/HTTPS 只说明协议安全边界，不能证明目标站点没有钓鱼风险；可以显示域名、限制来源或在外链前提示用户。</p>
-<p>不要用自定义 <code>urlTransform</code> 把所有 URL 原样放行，也不要把未知输入属性全部 spread 到危险元素上。库默认安全行为会被插件和自定义组件改变，必须审查最终 DOM。</p>
-<h2>需要 HTML 时必须净化完整插件链</h2>
-<p>如果产品确实需要有限 HTML，应先定义允许的标签、属性和 URL 协议，再使用维护的净化工具处理最终进入 DOM 的结构。启用 <code>rehype-raw</code>、SVG、公式、iframe 或图表能力后，安全边界都会变化；不能继续沿用纯 Markdown 的判断。</p>
-<p>净化之后如果还有插件会重新插入 HTML、属性或 URL，漏洞可能被重新打开。安全检查要覆盖解析、净化、插件和自定义渲染的整个顺序。CSS、SVG、iframe 和外部资源各自都有新的能力和攻击面，不应为一个样式需求开放完整原始 HTML。</p>
-<p>MDX 包含 JSX 和表达式，不能直接把模型输出当成可信 MDX 编译。Mermaid、代码沙盒和公式渲染也需要单独评估内容大小、网络权限和执行隔离。用户主动运行代码时，应使用受限环境、明确确认和资源上限，iframe 也不天然安全。</p>
-<p>外部图片即使不执行脚本，也可能泄露访问时机、IP 或引用信息。可以要求用户确认、使用来源白名单或受控代理，并限制尺寸和数量。</p>
-<h2>流式输出要保守处理半成品</h2>
-<p>模型可能先输出半个链接、未闭合代码围栏或表格。每个 token 都完整解析会重复计算、造成布局跳动，并可能把半成品送进 DOM。可以按合理频率批量更新，对未完成块使用纯文本或保守展示，结束后再进行完整渲染。</p>
-<p>不要为了让半截 HTML 看起来正常，临时关闭过滤或把未经净化的字符串插进 DOM。还要限制总输出、代码块数量、嵌套深度和插件处理时间，避免巨大文本拖垮页面。</p>
-<p>安全 Markdown 只保护浏览器展示边界，不能替代服务端工具授权、数据权限、提示词注入防御和日志脱敏。模型输出最终仍要按不可信内容处理。</p></div><div class="answer-bottom"><a href="https://github.com/remarkjs/react-markdown#security" target="_blank" rel="noreferrer">react-markdown · 安全说明<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+AI+%E7%94%9F%E6%88%90%E7%9A%84+Markdown+%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%AE%89%E5%85%A8%E5%9C%B0%E6%B8%B2%E6%9F%93%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAI+%E7%94%9F%E6%88%90%E7%9A%84+Markdown+%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%AE%89%E5%85%A8%E5%9C%B0%E6%B8%B2%E6%9F%93%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aai-markdown-security%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AAI+%E5%BA%94%E7%94%A8%E5%89%8D%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fai-markdown-security%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：AI 生成的 Markdown 应该怎样安全地渲染？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ai-client-server-boundary/">AI 对话前端为什么不能直接内置服务商 API 密钥？</a></li><li><a href="/questions/ai-stream-protocol/">AI 流式响应为什么不能每收到一块就 JSON.parse？</a></li><li><a href="/questions/ai-chat-state/">AI 聊天界面为什么不能只有 loading 一个状态？</a></li><li><a href="/questions/ai-cancel-generation/">点击“停止生成”后，服务端一定停止调用模型吗？</a></li></ul></nav></main></div></div>
+<ul>
+<li>react-markdown 默认不渲染原始 HTML，并会过滤 <code>javascript:</code> 等危险协议。自定义 <code>urlTransform</code> 或启用 <code>rehype-raw</code> 会改变这个默认行为。</li>
+<li><code>http/https</code> 只排除了危险协议，不代表链接可信。可以在链接旁显示域名，或在跳转前提示。</li>
+<li>图片可以改成&quot;点击加载&quot;，或只允许受控代理和白名单域名。</li>
+</ul>
+<h2>需要 HTML 时</h2>
+<p>先列出允许的标签、属性和 URL 协议，再用 rehype-sanitize、DOMPurify 等维护中的工具净化。顺序很重要：净化之后的插件如果又添加了 HTML 或属性，前面的净化就失效了。SVG、iframe、内联样式各自有新的攻击面，不要为了一个样式需求放开全部 HTML。</p>
+<h2>流式渲染</h2>
+<ul>
+<li>模型会先输出半个链接、未闭合的代码围栏或表格。每个 token 都重新解析会导致布局跳动和大量重复计算，可以按动画帧合并更新。</li>
+<li>未闭合的块先按纯文本显示，结束后再完整渲染。</li>
+<li>限制总长度、代码块数量和嵌套深度，防止超长输出拖垮页面。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li><strong>在提示词里要求&quot;不要输出 HTML&quot;不就够了吗？</strong> 不够。那只是让模型尽量遵守，攻击者可以通过注入改变它，浏览器端的限制才是边界。</li>
+<li><strong>用户想运行模型生成的代码怎么办？</strong> 放进隔离的沙盒（跨源 iframe 或 Worker），限制网络和资源，并在用户明确点击后才运行。</li>
+</ul></div><div class="answer-bottom"><a href="https://github.com/remarkjs/react-markdown#security" target="_blank" rel="noreferrer">react-markdown · 安全说明<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+AI+%E7%94%9F%E6%88%90%E7%9A%84+Markdown+%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%AE%89%E5%85%A8%E5%9C%B0%E6%B8%B2%E6%9F%93%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAI+%E7%94%9F%E6%88%90%E7%9A%84+Markdown+%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%AE%89%E5%85%A8%E5%9C%B0%E6%B8%B2%E6%9F%93%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aai-markdown-security%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AAI+%E5%BA%94%E7%94%A8%E5%89%8D%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fai-markdown-security%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：AI 生成的 Markdown 应该怎样安全地渲染？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ai-client-server-boundary/">AI 对话前端为什么不能直接内置服务商 API 密钥？</a></li><li><a href="/questions/ai-stream-protocol/">AI 流式响应为什么不能每收到一块就 JSON.parse？</a></li><li><a href="/questions/ai-chat-state/">AI 聊天界面为什么不能只有 loading 一个状态？</a></li><li><a href="/questions/ai-cancel-generation/">点击“停止生成”后，服务端一定停止调用模型吗？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

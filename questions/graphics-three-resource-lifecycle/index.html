@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="图形与可视化面试题：从产品预览反复打开的场景出发，区分场景移除、GPU 资源释放和 JavaScript 引用，给出独占资源的挂载与清理示例，并解释共享纹理和异步加载的边界。" />
+    <meta name="description" content="图形与可视化面试题：scene.remove 只是把对象移出场景，几何体、材质和纹理的 GPU 资源要分别 dispose，动画循环和监听器也要停止。独占资源由页面清理，共享资源由资源管理层按引用计数释放；异步加载的结果可能在页面离开后才返回。" />
     <title>Three.js 页面退出后为什么还占内存？怎样管理模型和渲染器的生命周期？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/graphics-three-resource-lifecycle/" />
     <meta name="robots" content="index,follow" />
@@ -19,67 +19,57 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Three.js 页面退出后为什么还占内存？怎样管理模型和渲染器的生命周期？ · 前端知库" />
-    <meta property="og:description" content="图形与可视化面试题：从产品预览反复打开的场景出发，区分场景移除、GPU 资源释放和 JavaScript 引用，给出独占资源的挂载与清理示例，并解释共享纹理和异步加载的边界。" />
+    <meta property="og:description" content="图形与可视化面试题：scene.remove 只是把对象移出场景，几何体、材质和纹理的 GPU 资源要分别 dispose，动画循环和监听器也要停止。独占资源由页面清理，共享资源由资源管理层按引用计数释放；异步加载的结果可能在页面离开后才返回。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/graphics-three-resource-lifecycle/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/graphics-three-resource-lifecycle/#webpage","url":"https://fe.hushifa.top/questions/graphics-three-resource-lifecycle/","name":"Three.js 页面退出后为什么还占内存？怎样管理模型和渲染器的生命周期？ · 前端知库","description":"图形与可视化面试题：从产品预览反复打开的场景出发，区分场景移除、GPU 资源释放和 JavaScript 引用，给出独占资源的挂载与清理示例，并解释共享纹理和异步加载的边界。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/graphics-three-resource-lifecycle/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/graphics-three-resource-lifecycle/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"图形与可视化面试题","item":"https://fe.hushifa.top/topics/graphics/"},{"@type":"ListItem","position":3,"name":"Three.js 页面退出后为什么还占内存？怎样管理模型和渲染器的生命周期？","item":"https://fe.hushifa.top/questions/graphics-three-resource-lifecycle/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/graphics-three-resource-lifecycle/#webpage","url":"https://fe.hushifa.top/questions/graphics-three-resource-lifecycle/","name":"Three.js 页面退出后为什么还占内存？怎样管理模型和渲染器的生命周期？ · 前端知库","description":"图形与可视化面试题：scene.remove 只是把对象移出场景，几何体、材质和纹理的 GPU 资源要分别 dispose，动画循环和监听器也要停止。独占资源由页面清理，共享资源由资源管理层按引用计数释放；异步加载的结果可能在页面离开后才返回。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/graphics-three-resource-lifecycle/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/graphics-three-resource-lifecycle/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"图形与可视化面试题","item":"https://fe.hushifa.top/topics/graphics/"},{"@type":"ListItem","position":3,"name":"Three.js 页面退出后为什么还占内存？怎样管理模型和渲染器的生命周期？","item":"https://fe.hushifa.top/questions/graphics-three-resource-lifecycle/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/graphics/">图形与可视化面试题</a><span aria-hidden="true">/</span><span aria-current="page">Three.js 页面退出后为什么还占内存？怎样管理模型和渲染器的生命周期？</span></nav><h1 tabindex="-1">Three.js 页面退出后为什么还占内存？怎样管理模型和渲染器的生命周期？</h1><p class="reading-summary">从产品预览反复打开的场景出发，区分场景移除、GPU 资源释放和 JavaScript 引用，给出独占资源的挂载与清理示例，并解释共享纹理和异步加载的边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/graphics/">图形与可视化面试题</a><span aria-hidden="true">/</span><span aria-current="page">Three.js 页面退出后为什么还占内存？怎样管理模型和渲染器的生命周期？</span></nav><h1 tabindex="-1">Three.js 页面退出后为什么还占内存？怎样管理模型和渲染器的生命周期？</h1><p class="reading-summary">scene.remove 只是把对象移出场景，几何体、材质和纹理的 GPU 资源要分别 dispose，动画循环和监听器也要停止。独占资源由页面清理，共享资源由资源管理层按引用计数释放；异步加载的结果可能在页面离开后才返回。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>scene.remove 只把对象移出场景，不会释放 geometry、material 和 texture。</li>
-<li>独占资源由页面在卸载时 dispose，共享资源由资源管理层在最后一个使用者释放后处理。</li>
-<li>异步加载的结果可能在页面离开后才返回，完成时要先检查是否仍被需要。</li>
-<li>验证时重复挂载和卸载，比较多轮之后的 JS 堆和 renderer.info，不要求所有数字归零。</li>
+<li>删除 canvas 不会停止 <code>setAnimationLoop</code>，也不会释放 GPU 资源，所以多次进出页面后内存持续上涨。</li>
+<li><code>scene.remove(mesh)</code> 只让对象不再被渲染。<code>geometry.dispose()</code>、<code>material.dispose()</code>、<code>texture.dispose()</code> 要分别调用；<code>material.dispose()</code> 不会顺带释放它用到的纹理。</li>
+<li>清理顺序：先停动画循环和监听，再释放资源，最后 <code>renderer.dispose()</code> 并移除 canvas。</li>
+<li>多个对象共享的材质和纹理不能被某个页面直接释放，由资源管理层在最后一个使用者离开时释放。</li>
+<li>验证方法：重复挂载、卸载多轮，观察 JS 堆和 <code>renderer.info</code> 是否回到稳定水平，不要求全部归零。</li>
 </ul>
-<p>产品详情页打开三维预览，关闭后删掉 canvas，再打开另一个商品。几次切换后内存越来越高：DOM 已移除，但动画循环仍在调用 render，几何体和纹理的 GPU 资源也没有释放。浏览器垃圾回收与 Three.js 资源生命周期不是一回事。</p>
-<p>本文按 Three.js r180 官方资源释放说明编写。示例适用于安装对应版本 three 的浏览器模块项目，需要可用的 WebGL2；不是把题库网站改成三维应用，也不承诺所有设备都支持。</p>
-<h2>移除、释放、断开引用分别解决什么</h2>
-<p>scene.remove(mesh) 让对象不再参与该场景的遍历，但不会自动 dispose 它的 geometry、material 和 texture。因为这些对象可能被其他 mesh 共用，渲染器无法替业务决定是否还能使用。</p>
-<p>geometry.dispose() 释放关联的 GPU 缓冲；material.dispose() 通知释放材质相关资源，但不会递归释放纹理。texture.dispose() 要单独调用。若纹理由 ImageBitmap 提供，还需在确定没有其他消费者时调用 bitmap.close() 释放相应 CPU 侧资源。</p>
-<p>最后，JavaScript 数组、缓存、组件状态和闭包中的引用也应移除。dispose 并不意味着对象变量变成 null，更不意味着动画回调、ResizeObserver 或 DOM 监听器自动停止。</p>
-<h2>一个独占资源的完整挂载例子</h2>
-<p>假设容器由页面提供明确高度，例如 style=&quot;height: 320px&quot;。把函数放入浏览器模块，调用 <code>const cleanup = mountPreview(container)</code>，路由卸载时调用 cleanup。这个场景只有一个立方体，没有共享模型或外部资源，因而所有资源都由这次挂载独占。</p>
+<h2>一个可清理的预览组件</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> <span class="hljs-variable constant_">THREE</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;three&#x27;</span>;
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">mountPreview</span>(<span class="hljs-params">container</span>) {
   <span class="hljs-keyword">const</span> renderer = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">WebGLRenderer</span>({ <span class="hljs-attr">antialias</span>: <span class="hljs-literal">true</span> });
-  renderer.<span class="hljs-title function_">setPixelRatio</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(<span class="hljs-variable language_">window</span>.<span class="hljs-property">devicePixelRatio</span> || <span class="hljs-number">1</span>, <span class="hljs-number">2</span>));
-  renderer.<span class="hljs-property">domElement</span>.<span class="hljs-property">style</span>.<span class="hljs-property">display</span> = <span class="hljs-string">&#x27;block&#x27;</span>;
+  renderer.<span class="hljs-title function_">setPixelRatio</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(<span class="hljs-variable language_">window</span>.<span class="hljs-property">devicePixelRatio</span>, <span class="hljs-number">2</span>));
   container.<span class="hljs-title function_">append</span>(renderer.<span class="hljs-property">domElement</span>);
 
   <span class="hljs-keyword">const</span> scene = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Scene</span>();
   <span class="hljs-keyword">const</span> camera = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">PerspectiveCamera</span>(<span class="hljs-number">45</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">100</span>);
   camera.<span class="hljs-property">position</span>.<span class="hljs-property">z</span> = <span class="hljs-number">4</span>;
+
   <span class="hljs-keyword">const</span> geometry = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">BoxGeometry</span>(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);
   <span class="hljs-keyword">const</span> material = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">MeshNormalMaterial</span>();
   <span class="hljs-keyword">const</span> cube = <span class="hljs-keyword">new</span> <span class="hljs-variable constant_">THREE</span>.<span class="hljs-title class_">Mesh</span>(geometry, material);
   scene.<span class="hljs-title function_">add</span>(cube);
 
-  <span class="hljs-keyword">let</span> disposed = <span class="hljs-literal">false</span>;
-  <span class="hljs-keyword">function</span> <span class="hljs-title function_">resize</span>(<span class="hljs-params"></span>) {
-    <span class="hljs-keyword">if</span> (disposed) <span class="hljs-keyword">return</span>;
+  <span class="hljs-keyword">const</span> observer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ResizeObserver</span>(<span class="hljs-function">() =&gt;</span> {
     <span class="hljs-keyword">const</span> width = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(<span class="hljs-number">1</span>, container.<span class="hljs-property">clientWidth</span>);
     <span class="hljs-keyword">const</span> height = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(<span class="hljs-number">1</span>, container.<span class="hljs-property">clientHeight</span>);
     renderer.<span class="hljs-title function_">setSize</span>(width, height);
     camera.<span class="hljs-property">aspect</span> = width / height;
     camera.<span class="hljs-title function_">updateProjectionMatrix</span>();
-  }
-  <span class="hljs-keyword">const</span> observer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ResizeObserver</span>(resize);
+  });
   observer.<span class="hljs-title function_">observe</span>(container);
-  <span class="hljs-title function_">resize</span>();
 
   renderer.<span class="hljs-title function_">setAnimationLoop</span>(<span class="hljs-function">(<span class="hljs-params">time</span>) =&gt;</span> {
-    <span class="hljs-keyword">if</span> (disposed) <span class="hljs-keyword">return</span>;
     cube.<span class="hljs-property">rotation</span>.<span class="hljs-property">y</span> = time * <span class="hljs-number">0.0005</span>;
     renderer.<span class="hljs-title function_">render</span>(scene, camera);
   });
 
+  <span class="hljs-keyword">let</span> disposed = <span class="hljs-literal">false</span>;
   <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">cleanup</span>(<span class="hljs-params"></span>) {
     <span class="hljs-keyword">if</span> (disposed) <span class="hljs-keyword">return</span>;
     disposed = <span class="hljs-literal">true</span>;
-    renderer.<span class="hljs-title function_">setAnimationLoop</span>(<span class="hljs-literal">null</span>);
+    renderer.<span class="hljs-title function_">setAnimationLoop</span>(<span class="hljs-literal">null</span>); <span class="hljs-comment">// 先停止产生新帧</span>
     observer.<span class="hljs-title function_">disconnect</span>();
     scene.<span class="hljs-title function_">remove</span>(cube);
     geometry.<span class="hljs-title function_">dispose</span>();
@@ -89,24 +79,51 @@
   };
 }
 </code></pre></div>
-<p>顺序先停止生产新帧和回调，再释放被回调使用的资源。disposed 使重复清理安全，也保护已经排队的尺寸回调。宿主调用 cleanup 后还应删除保存它的引用，否则闭包仍保留相关 JavaScript 对象。</p>
-<p>创建 WebGLRenderer 可能失败，宿主需捕获异常并显示静态产品图或说明。示例聚焦正常挂载后的资源生命周期，没有实现初始化中途异常的逐项回滚。实际组件若还创建控制器、后处理目标或加载器，应让每一步成功创建的资源都登记到清理范围。</p>
-<h2>为什么不能遍历场景后无条件 dispose 所有东西</h2>
-<p>两个商品可能共享同一张环境贴图，多个 mesh 可能共享一个材质。关闭 A 时直接 dispose 共享资源，会让仍在显示的 B 重新上传或编译资源，产生卡顿。更合理的方式是明确所有者：页面独占资源由页面清理，共享资源由资源管理层在最后一个消费者释放后处理。</p>
-<p>同一个对象在遍历中出现多次，可以用 Set 去重；但 Set 只解决重复调用，不证明所有权。scene.environment、后处理 render target、控制器监听器和动画 mixer 也不一定包含在 mesh.material 的遍历路径里，要按所用类的文档分别管理。</p>
-<h2>异步加载结束时页面可能已经离开</h2>
-<p>用户切走后 glTF 请求仍可能完成。仅取消页面 render 不会让返回的模型自动释放。加载流程应记录所属页面或请求代次，完成时先检查是否仍被需要；过期结果不要加入场景，而应交给资源所有者释放。如果加载器支持取消就调用取消，但仍保留迟到结果检查。</p>
-<p>不要声称所有 Three.js loader 都接受同一个 AbortSignal。文件、纹理与解码 Worker 的取消能力需逐一确认。对用户模型限制文件大小、纹理尺寸和解码资源，并控制外部资源来源；跨源加载与 CORS 也要由资源服务器配合。</p>
-<h2>怎样判断修复有效</h2>
-<p>固定同一个模型，重复挂载、渲染、卸载，观察 JS 堆快照及 renderer.info 中的几何体、纹理和程序统计。比较多轮操作后的稳定基线，不要求所有数字归零：Three.js 官方说明部分内部缓存会复用，并可能在场景清理后仍显示。</p>
-<p>renderer.info 不是显存字节精确计量器。纹理尺寸、像素比和后处理目标都会增加实际资源成本；devicePixelRatio 翻倍可能使画布像素数约为四倍。真实 GPU、移动设备和上下文丢失行为需要另外验证，单元测试只能验证清理调用和生命周期协议。</p>
-<p>静态预览可考虑按需渲染而不是永久动画循环；大量页面共享一个 renderer 时，页面卸载只释放页面拥有的资源，不能把宿主 renderer 一并销毁。选择策略应从资源所有权和实际交互出发。</p>
-<h2>补充参考</h2>
+<p>页面卸载时调用返回的 <code>cleanup</code>，之后丢掉对它的引用。如果还用了 OrbitControls、后处理、动画混合器，它们各自也有 <code>dispose()</code> 或需要移除的监听器。</p>
+<h2>共享资源</h2>
+<p>两个商品页可能共用同一张环境贴图。关闭 A 时直接释放它，B 就要重新上传纹理、出现卡顿。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> cache = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>(); <span class="hljs-comment">// url -&gt; { texture, refs }</span>
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">acquireTexture</span>(<span class="hljs-params">url, loader</span>) {
+  <span class="hljs-keyword">let</span> entry = cache.<span class="hljs-title function_">get</span>(url);
+  <span class="hljs-keyword">if</span> (!entry) {
+    entry = { <span class="hljs-attr">texture</span>: loader.<span class="hljs-title function_">load</span>(url), <span class="hljs-attr">refs</span>: <span class="hljs-number">0</span> };
+    cache.<span class="hljs-title function_">set</span>(url, entry);
+  }
+  entry.<span class="hljs-property">refs</span>++;
+  <span class="hljs-keyword">return</span> entry.<span class="hljs-property">texture</span>;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">releaseTexture</span>(<span class="hljs-params">url</span>) {
+  <span class="hljs-keyword">const</span> entry = cache.<span class="hljs-title function_">get</span>(url);
+  <span class="hljs-keyword">if</span> (entry &amp;&amp; --entry.<span class="hljs-property">refs</span> === <span class="hljs-number">0</span>) {
+    entry.<span class="hljs-property">texture</span>.<span class="hljs-title function_">dispose</span>();
+    cache.<span class="hljs-title function_">delete</span>(url);
+  }
+}
+</code></pre></div>
+<p><code>scene.environment</code>、后处理的渲染目标不在 mesh 的遍历路径里，要单独管理。</p>
+<h2>异步加载</h2>
+<p>用户离开页面后，glTF 请求仍可能完成。加载完成时先检查页面是否已经清理，已清理就直接释放返回的资源，不要加进场景。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">loader.<span class="hljs-title function_">load</span>(url, <span class="hljs-function">(<span class="hljs-params">gltf</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (disposed) {
+    <span class="hljs-title function_">disposeObject</span>(gltf.<span class="hljs-property">scene</span>); <span class="hljs-comment">// 遍历并释放这份模型独占的资源</span>
+    <span class="hljs-keyword">return</span>;
+  }
+  scene.<span class="hljs-title function_">add</span>(gltf.<span class="hljs-property">scene</span>);
+});
+</code></pre></div>
+<h2>怎样确认修复有效</h2>
 <ul>
-<li><a href="https://github.com/mrdoob/three.js/blob/r180/manual/en/how-to-dispose-of-objects.html">Three.js r180 · 资源释放说明</a></li>
-<li><a href="https://threejs.org/docs/#WebGLRenderer">Three.js · WebGLRenderer</a></li>
-<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmap/close">MDN · ImageBitmap.close</a></li>
-</ul></div><div class="answer-bottom"><a href="https://github.com/mrdoob/three.js/blob/r180/manual/en/how-to-dispose-of-objects.html" target="_blank" rel="noreferrer">Three.js r180 · How to dispose of Objects<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Three.js+%E9%A1%B5%E9%9D%A2%E9%80%80%E5%87%BA%E5%90%8E%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%98%E5%8D%A0%E5%86%85%E5%AD%98%EF%BC%9F%E6%80%8E%E6%A0%B7%E7%AE%A1%E7%90%86%E6%A8%A1%E5%9E%8B%E5%92%8C%E6%B8%B2%E6%9F%93%E5%99%A8%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AThree.js+%E9%A1%B5%E9%9D%A2%E9%80%80%E5%87%BA%E5%90%8E%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%98%E5%8D%A0%E5%86%85%E5%AD%98%EF%BC%9F%E6%80%8E%E6%A0%B7%E7%AE%A1%E7%90%86%E6%A8%A1%E5%9E%8B%E5%92%8C%E6%B8%B2%E6%9F%93%E5%99%A8%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Agraphics-three-resource-lifecycle%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9B%BE%E5%BD%A2%E4%B8%8E%E5%8F%AF%E8%A7%86%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fgraphics-three-resource-lifecycle%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Three.js 页面退出后为什么还占内存？怎样管理模型和渲染器的生命周期？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/graphics-webgl-shader-pipeline/">WebGL 着色器如何工作？如何避免把 GPU 当成黑盒？</a></li><li><a href="/questions/graphics-webgl/">什么场景值得用 WebGL？GPU 加速有哪些成本？</a></li><li><a href="/questions/graphics-canvas-svg/">Canvas 和 SVG 怎样选择？</a></li><li><a href="/questions/graphics-webgpu/">WebGPU 与 WebGL 的关注点有哪些不同？</a></li></ul></nav></main></div></div>
+<li>用同一个模型重复挂载、卸载十几轮，比较 JS 堆快照。</li>
+<li>看 <code>renderer.info.memory</code> 里的 geometries、textures 数量是否稳定。Three.js 内部有缓存，部分数字不会归零。</li>
+<li><code>renderer.info</code> 不是显存字节数。像素比翻倍，画布像素数约变为四倍，显存会明显增加。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li><strong>只显示静态模型，需要一直跑动画循环吗？</strong> 不需要。可以只在相机移动或模型变化时调用 <code>render()</code>，省电也省 GPU。</li>
+<li><strong>多个页面共用一个 renderer 怎么办？</strong> 页面卸载时只释放自己的资源，renderer 由宿主管理，不要被某个页面销毁。</li>
+</ul></div><div class="answer-bottom"><a href="https://github.com/mrdoob/three.js/blob/r180/manual/en/how-to-dispose-of-objects.html" target="_blank" rel="noreferrer">Three.js r180 · How to dispose of Objects<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Three.js+%E9%A1%B5%E9%9D%A2%E9%80%80%E5%87%BA%E5%90%8E%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%98%E5%8D%A0%E5%86%85%E5%AD%98%EF%BC%9F%E6%80%8E%E6%A0%B7%E7%AE%A1%E7%90%86%E6%A8%A1%E5%9E%8B%E5%92%8C%E6%B8%B2%E6%9F%93%E5%99%A8%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AThree.js+%E9%A1%B5%E9%9D%A2%E9%80%80%E5%87%BA%E5%90%8E%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%98%E5%8D%A0%E5%86%85%E5%AD%98%EF%BC%9F%E6%80%8E%E6%A0%B7%E7%AE%A1%E7%90%86%E6%A8%A1%E5%9E%8B%E5%92%8C%E6%B8%B2%E6%9F%93%E5%99%A8%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Agraphics-three-resource-lifecycle%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9B%BE%E5%BD%A2%E4%B8%8E%E5%8F%AF%E8%A7%86%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fgraphics-three-resource-lifecycle%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Three.js 页面退出后为什么还占内存？怎样管理模型和渲染器的生命周期？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/graphics-webgl/">什么场景值得用 WebGL？GPU 加速有哪些成本？</a></li><li><a href="/questions/graphics-webgl-shader-pipeline/">WebGL 着色器如何工作？如何避免把 GPU 当成黑盒？</a></li><li><a href="/questions/graphics-canvas-svg/">Canvas 和 SVG 怎样选择？</a></li><li><a href="/questions/graphics-webgpu/">WebGPU 与 WebGL 的关注点有哪些不同？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

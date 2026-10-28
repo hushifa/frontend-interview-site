@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="React面试题：useActionState 把一次次 Action 的返回结果接到 React 状态上，并提供对应的 pending 信息。处理函数接收前一次结果和本次载荷，正常调用按队列关联，但请求、校验、异常与服务端能力仍需各自实现。" />
+    <meta name="description" content="React面试题：useActionState 接收一个 Action 函数和初始状态，返回当前状态、可以传给 form 的 dispatch 函数和 isPending。每次调用时 Action 收到上一次的返回值和本次参数，多次调用按顺序排队执行。" />
     <title>useActionState 如何把异步 Action 的结果变成组件状态？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/react-action-state/" />
     <meta name="robots" content="index,follow" />
@@ -19,80 +19,73 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="useActionState 如何把异步 Action 的结果变成组件状态？ · 前端知库" />
-    <meta property="og:description" content="React面试题：useActionState 把一次次 Action 的返回结果接到 React 状态上，并提供对应的 pending 信息。处理函数接收前一次结果和本次载荷，正常调用按队列关联，但请求、校验、异常与服务端能力仍需各自实现。" />
+    <meta property="og:description" content="React面试题：useActionState 接收一个 Action 函数和初始状态，返回当前状态、可以传给 form 的 dispatch 函数和 isPending。每次调用时 Action 收到上一次的返回值和本次参数，多次调用按顺序排队执行。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/react-action-state/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-action-state/#webpage","url":"https://fe.hushifa.top/questions/react-action-state/","name":"useActionState 如何把异步 Action 的结果变成组件状态？ · 前端知库","description":"React面试题：useActionState 把一次次 Action 的返回结果接到 React 状态上，并提供对应的 pending 信息。处理函数接收前一次结果和本次载荷，正常调用按队列关联，但请求、校验、异常与服务端能力仍需各自实现。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-action-state/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-action-state/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"useActionState 如何把异步 Action 的结果变成组件状态？","item":"https://fe.hushifa.top/questions/react-action-state/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-action-state/#webpage","url":"https://fe.hushifa.top/questions/react-action-state/","name":"useActionState 如何把异步 Action 的结果变成组件状态？ · 前端知库","description":"React面试题：useActionState 接收一个 Action 函数和初始状态，返回当前状态、可以传给 form 的 dispatch 函数和 isPending。每次调用时 Action 收到上一次的返回值和本次参数，多次调用按顺序排队执行。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-action-state/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-action-state/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"useActionState 如何把异步 Action 的结果变成组件状态？","item":"https://fe.hushifa.top/questions/react-action-state/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">useActionState 如何把异步 Action 的结果变成组件状态？</span></nav><h1 tabindex="-1">useActionState 如何把异步 Action 的结果变成组件状态？</h1><p class="reading-summary">useActionState 把一次次 Action 的返回结果接到 React 状态上，并提供对应的 pending 信息。处理函数接收前一次结果和本次载荷，正常调用按队列关联，但请求、校验、异常与服务端能力仍需各自实现。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<p>useActionState(action, initialState) 返回 [state, dispatch, isPending]。action 接收上一次结果和本次载荷，返回值成为新的 state。多次提交按队列依次执行，适合把表单提交结果（成功信息、校验错误）直接变成状态。它不负责校验、鉴权和取消请求，这些仍要在 action 里自己实现。</p>
-<p>表单提交常常需要同时维护结果、错误消息和是否正在处理。useActionState 提供一条直接的数据流：触发 Action，把载荷交给处理函数，处理函数返回的新结果成为组件状态，React 跟踪相关的 pending 过程。</p>
-<p>它与 useReducer 的外形相似，但处理函数可以异步等待并执行提交等副作用，而普通 reducer 必须保持纯计算。Action 也不天然等于 Server Function，客户端函数同样可以参与。</p>
-<h2>一个完整的客户端示例</h2>
-<p>下面仅通过本地延迟演示异步过程，不向服务器保存数据。输入草稿由普通 state 控制，上一次处理结果由 useActionState 保存。</p>
-<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { useActionState, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">useActionState 如何把异步 Action 的结果变成组件状态？</span></nav><h1 tabindex="-1">useActionState 如何把异步 Action 的结果变成组件状态？</h1><p class="reading-summary">useActionState 接收一个 Action 函数和初始状态，返回当前状态、可以传给 form 的 dispatch 函数和 isPending。每次调用时 Action 收到上一次的返回值和本次参数，多次调用按顺序排队执行。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>签名：<code>const [state, dispatch, isPending] = useActionState(action, initialState, permalink?)</code>。</li>
+<li><code>action(prevState, payload)</code> 的返回值（可以是 Promise）成为新的 <code>state</code>。</li>
+<li>把 <code>dispatch</code> 传给 <code>&lt;form action={dispatch}&gt;</code> 时，payload 是 <code>FormData</code>；React 会在 Transition 中执行它，并在成功后重置非受控表单字段。</li>
+<li>多次触发的调用按顺序排队，后一次拿到的 <code>prevState</code> 是前一次的结果。</li>
+<li>React 19 中它取代了 canary 时期的 <code>useFormState</code>；校验、权限、错误信息仍要在 Action 里自己实现。</li>
+</ul>
+<h2>表单示例</h2>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { useActionState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 
-<span class="hljs-keyword">const</span> initialResult = { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-attr">message</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-attr">completed</span>: <span class="hljs-number">0</span> };
-
-<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">processName</span>(<span class="hljs-params">previousResult, formData</span>) {
-  <span class="hljs-keyword">const</span> rawName = formData.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;name&#x27;</span>);
-  <span class="hljs-keyword">const</span> name = <span class="hljs-keyword">typeof</span> rawName === <span class="hljs-string">&#x27;string&#x27;</span> ? rawName.<span class="hljs-title function_">trim</span>() : <span class="hljs-string">&#x27;&#x27;</span>;
-  <span class="hljs-keyword">if</span> (name === <span class="hljs-string">&#x27;&#x27;</span>) {
-    <span class="hljs-keyword">return</span> { ...previousResult, <span class="hljs-attr">message</span>: <span class="hljs-string">&#x27;请输入姓名。&#x27;</span> };
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">subscribe</span>(<span class="hljs-params">prevState, formData</span>) {
+  <span class="hljs-keyword">const</span> email = <span class="hljs-title class_">String</span>(formData.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;email&#x27;</span>) ?? <span class="hljs-string">&#x27;&#x27;</span>).<span class="hljs-title function_">trim</span>();
+  <span class="hljs-keyword">if</span> (!email.<span class="hljs-title function_">includes</span>(<span class="hljs-string">&#x27;@&#x27;</span>)) {
+    <span class="hljs-keyword">return</span> { <span class="hljs-attr">ok</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">message</span>: <span class="hljs-string">&#x27;邮箱格式不正确&#x27;</span>, email };
   }
-
-  <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> <span class="hljs-built_in">setTimeout</span>(resolve, <span class="hljs-number">300</span>));
-  <span class="hljs-keyword">return</span> {
-    name,
-    <span class="hljs-attr">message</span>: <span class="hljs-string">&#x27;本次姓名已处理。&#x27;</span>,
-    <span class="hljs-attr">completed</span>: previousResult.<span class="hljs-property">completed</span> + <span class="hljs-number">1</span>,
-  };
+  <span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;/api/subscribe&#x27;</span>, {
+    <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
+    <span class="hljs-attr">body</span>: <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>({ email }),
+    <span class="hljs-attr">headers</span>: { <span class="hljs-string">&#x27;Content-Type&#x27;</span>: <span class="hljs-string">&#x27;application/json&#x27;</span> },
+  });
+  <span class="hljs-keyword">if</span> (!res.<span class="hljs-property">ok</span>) <span class="hljs-keyword">return</span> { <span class="hljs-attr">ok</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">message</span>: <span class="hljs-string">&#x27;订阅失败，请稍后重试&#x27;</span>, email };
+  <span class="hljs-keyword">return</span> { <span class="hljs-attr">ok</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">message</span>: <span class="hljs-string">&#x27;订阅成功&#x27;</span>, <span class="hljs-attr">email</span>: <span class="hljs-string">&#x27;&#x27;</span> };
 }
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">NameForm</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-keyword">const</span> [draft, setDraft] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
-  <span class="hljs-keyword">const</span> [result, formAction, isPending] = <span class="hljs-title function_">useActionState</span>(processName, initialResult);
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">SubscribeForm</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [state, formAction, isPending] = <span class="hljs-title function_">useActionState</span>(subscribe, {
+    <span class="hljs-attr">ok</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-attr">message</span>: <span class="hljs-string">&#x27;&#x27;</span>,
+    <span class="hljs-attr">email</span>: <span class="hljs-string">&#x27;&#x27;</span>,
+  });
 
   <span class="hljs-keyword">return</span> (
     <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">{formAction}</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>
-        姓名
-        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{draft}</span> <span class="hljs-attr">onChange</span>=<span class="hljs-string">{event</span> =&gt;</span> setDraft(event.target.value)} /&gt;
-      <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">disabled</span>=<span class="hljs-string">{isPending}</span>&gt;</span>
-        {isPending ? &#x27;处理中&#x27; : &#x27;处理姓名&#x27;}
-      <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">role</span>=<span class="hljs-string">&quot;status&quot;</span>&gt;</span>{result.message}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>上次成功处理：{result.name || &#x27;暂无&#x27;}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">output</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;成功次数&quot;</span>&gt;</span>{result.completed}<span class="hljs-tag">&lt;/<span class="hljs-name">output</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;email&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;email&quot;</span> <span class="hljs-attr">defaultValue</span>=<span class="hljs-string">{state.email}</span> <span class="hljs-attr">aria-describedby</span>=<span class="hljs-string">&quot;msg&quot;</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">disabled</span>=<span class="hljs-string">{isPending}</span>&gt;</span>{isPending ? &#x27;提交中…&#x27; : &#x27;订阅&#x27;}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;msg&quot;</span> <span class="hljs-attr">role</span>=<span class="hljs-string">&quot;status&quot;</span>&gt;</span>{state.message}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></span>
   );
 }
 </code></pre></div>
-<p>返回数组的三个位置分别是当前结果状态、触发函数和 pending 标记。处理函数的第一个参数是上一次结果，第二个参数才是本次提交的 FormData，这与直接写 <code>&lt;form action={普通表单函数}&gt;</code> 时的单参数习惯不同。</p>
-<p>校验失败时返回消息，但保留之前成功的姓名与计数；成功时返回新的完整结果。这里不会像某种对象补丁 API 一样自动合并字段，所以应把需要保留的字段明确带回来。</p>
-<h2>草稿与提交结果为什么分开</h2>
-<p>用户正在编辑的 draft 和已经成功处理的 result.name 代表不同时间点。提交后继续编辑，不应该立刻改写“上次成功处理”的结果；一次失败也不一定意味着要清空草稿。</p>
-<p>函数式 form Action 正常完成后，React 会对非受控表单字段执行重置。返回一个含 error 或 message 的对象，仍然可能是函数正常完成，因此不能只凭这个字段名推断输入一定不会被重置。</p>
-<p>本例采用受控草稿，重置不会自动替 React 把 draft 清空。若业务希望成功后清空、失败后保留，需要明确设计这套行为，不能把结果状态与输入当前值混成同一份含义。</p>
-<h2>触发函数需要在 Action 上下文中使用</h2>
-<p>把 formAction 传给 form 的 action 属性，React 会提供相关提交上下文。需要从其他交互手动触发时，可以按规则在 startTransition 等 Action 上下文中调用。</p>
-<p>普通 onClick 中直接调用异步触发函数，不等于已经建立相同的 pending 跟踪；在不符合约束的环境中，React 会给出诊断。也不要在渲染期间调用它，那会把状态更新放到不合适的阶段。</p>
-<p>触发函数不是把业务结果直接返回给调用方的普通 async 包装，不能依赖 <code>await formAction(...)</code> 读取最终状态。应从 Hook 提供的结果和相关边界组织界面。</p>
-<h2>多次触发的语义不是任意并发竞速</h2>
-<p>同一个 useActionState 的正常多次触发会按队列执行，后一次处理函数接收前一次返回的状态，因此可以表达连续修改、累计结果等流程。</p>
-<p>这不是把一组请求交给 Promise.all，也不应该被当作所有服务端并发冲突的解决方案。多个组件、多个标签页或其他客户端仍可能同时提交，后端的幂等性和并发控制仍需独立设计。</p>
-<p>禁用按钮能减少当前界面的重复触发，但不能作为唯一防重措施。初始状态也只负责初始化，父组件后来传来一个不同的 initialState，并不自然表示应重置当前 Action 状态；需要明确的重置动作或组件身份设计。</p>
-<h2>返回业务错误与抛出异常有什么区别</h2>
-<p>可预期的字段校验失败通常适合作为结构化结果返回，让表单保留输入并显示可修复提示。网络和服务端返回的数据也需要按业务规则解析，不应无条件相信 FormData 或响应类型。</p>
-<p>处理函数抛出异常时，React 会按 Action 的错误机制交给 Error Boundary，等待中的后续动作也可能被取消。不是在任意位置包一个同步 try/catch，就能把未来的 Action 错误全部留在当前表单里。</p>
-<p>如果决定在处理函数内部捕获某类错误并转成结果，应保留有用的诊断信息，并只对符合业务预期的失败这样做。不要把所有程序错误都伪装成“提交成功但没有内容”。</p>
-<h2>服务器与渐进增强需要额外环境支持</h2>
-<p>客户端 Action 可以只操作浏览器状态，也可以调用普通 API。它不会因为使用 useActionState 就自动在服务端运行，纯静态站点也不会因此获得服务器写入能力。</p>
-<p>配合 Server Function 与支持的框架时，可以利用表单集成和 permalink 等能力处理尚未完成客户端增强的提交。但这依赖相同表单与服务端函数在目标页面中的对应关系，不是给任意 SPA 加一个字符串参数就自动获得渐进增强。</p>
-<p>把处理函数的载荷、返回状态、错误策略和生命周期定义清楚之后，useActionState 才能减少重复状态代码，而不是把所有异步工作隐含地塞进一个 Hook。</p></div><div class="answer-bottom"><a href="https://react.dev/reference/react/useActionState" target="_blank" rel="noreferrer">React · useActionState<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+useActionState+%E5%A6%82%E4%BD%95%E6%8A%8A%E5%BC%82%E6%AD%A5+Action+%E7%9A%84%E7%BB%93%E6%9E%9C%E5%8F%98%E6%88%90%E7%BB%84%E4%BB%B6%E7%8A%B6%E6%80%81%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AuseActionState+%E5%A6%82%E4%BD%95%E6%8A%8A%E5%BC%82%E6%AD%A5+Action+%E7%9A%84%E7%BB%93%E6%9E%9C%E5%8F%98%E6%88%90%E7%BB%84%E4%BB%B6%E7%8A%B6%E6%80%81%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-action-state%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-action-state%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：useActionState 如何把异步 Action 的结果变成组件状态？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-optimistic/">useOptimistic 的临时状态怎样与真实结果收敛？</a></li><li><a href="/questions/react-state/">为什么调用 setState 后，当前变量还是旧值？</a></li><li><a href="/questions/react-effect/">useEffect 的依赖数组和清理函数应该怎么写？</a></li><li><a href="/questions/react-key/">列表中的 key 为什么不能随意使用数组下标？</a></li></ul></nav></main></div></div>
+<ul>
+<li>失败时把用户输入放进返回值，再用 <code>defaultValue</code> 回填，因为表单提交成功前后 React 会重置非受控字段。</li>
+<li>把可预期的错误作为返回值，而不是 <code>throw</code>。Action 中抛出的错误会交给最近的 Error Boundary，并且会取消队列中排在后面的调用。</li>
+</ul>
+<h2>在表单之外调用</h2>
+<p><code>dispatch</code> 也可以手动调用，但必须放在 Transition 里，<code>isPending</code> 才会更新：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { startTransition } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">onClick</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-title function_">startTransition</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">dispatch</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;increment&#x27;</span> }));
+}
+</code></pre></div>
+<h2>和 Server Functions 配合</h2>
+<p>在支持 RSC 的框架中，<code>action</code> 可以是 <code>&#x27;use server&#x27;</code> 标记的 Server Function。第三个参数 <code>permalink</code> 用于渐进增强：JavaScript 加载前提交表单时，浏览器跳转到这个 URL，由服务端处理后返回页面。</p>
+<h2>常见追问</h2>
+<ul>
+<li>和 <code>useFormStatus</code> 的区别？<code>useActionState</code> 管理 Action 的结果，<code>useFormStatus</code> 只让表单内部的子组件读取父表单是否在提交，见《React useFormStatus 适合管理什么表单状态？》。</li>
+<li>想立即显示结果怎么办？配合 <code>useOptimistic</code> 显示临时状态，见《useOptimistic 的临时状态怎样与真实结果收敛？》。</li>
+</ul></div><div class="answer-bottom"><a href="https://react.dev/reference/react/useActionState" target="_blank" rel="noreferrer">React · useActionState<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+useActionState+%E5%A6%82%E4%BD%95%E6%8A%8A%E5%BC%82%E6%AD%A5+Action+%E7%9A%84%E7%BB%93%E6%9E%9C%E5%8F%98%E6%88%90%E7%BB%84%E4%BB%B6%E7%8A%B6%E6%80%81%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AuseActionState+%E5%A6%82%E4%BD%95%E6%8A%8A%E5%BC%82%E6%AD%A5+Action+%E7%9A%84%E7%BB%93%E6%9E%9C%E5%8F%98%E6%88%90%E7%BB%84%E4%BB%B6%E7%8A%B6%E6%80%81%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-action-state%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-action-state%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：useActionState 如何把异步 Action 的结果变成组件状态？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-optimistic/">useOptimistic 的临时状态怎样与真实结果收敛？</a></li><li><a href="/questions/react-state/">为什么调用 setState 后，当前变量还是旧值？</a></li><li><a href="/questions/react-effect/">useEffect 的依赖数组和清理函数应该怎么写？</a></li><li><a href="/questions/react-key/">列表中的 key 为什么不能随意使用数组下标？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

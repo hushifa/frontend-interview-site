@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="React面试题：useRef 保存跨渲染的可变引用，不负责触发界面更新；Effect 与 Layout Effect 则安排外部同步，后者会在绘制前执行并阻塞绘制。是否需要测量与同步视觉修正，决定应该采用哪种时机。" />
+    <meta name="description" content="React面试题：useRef 保存跨渲染的可变值，修改它不会触发渲染；useEffect 在提交后执行，通常在浏览器绘制之后；useLayoutEffect 在绘制前同步执行，适合测量布局并立即修正，但会阻塞绘制。" />
     <title>useRef、useEffect 和 useLayoutEffect 有什么差别？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/react-ref-layout-effect/" />
     <meta name="robots" content="index,follow" />
@@ -19,88 +19,79 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="useRef、useEffect 和 useLayoutEffect 有什么差别？ · 前端知库" />
-    <meta property="og:description" content="React面试题：useRef 保存跨渲染的可变引用，不负责触发界面更新；Effect 与 Layout Effect 则安排外部同步，后者会在绘制前执行并阻塞绘制。是否需要测量与同步视觉修正，决定应该采用哪种时机。" />
+    <meta property="og:description" content="React面试题：useRef 保存跨渲染的可变值，修改它不会触发渲染；useEffect 在提交后执行，通常在浏览器绘制之后；useLayoutEffect 在绘制前同步执行，适合测量布局并立即修正，但会阻塞绘制。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/react-ref-layout-effect/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-ref-layout-effect/#webpage","url":"https://fe.hushifa.top/questions/react-ref-layout-effect/","name":"useRef、useEffect 和 useLayoutEffect 有什么差别？ · 前端知库","description":"React面试题：useRef 保存跨渲染的可变引用，不负责触发界面更新；Effect 与 Layout Effect 则安排外部同步，后者会在绘制前执行并阻塞绘制。是否需要测量与同步视觉修正，决定应该采用哪种时机。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-ref-layout-effect/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-ref-layout-effect/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"useRef、useEffect 和 useLayoutEffect 有什么差别？","item":"https://fe.hushifa.top/questions/react-ref-layout-effect/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-ref-layout-effect/#webpage","url":"https://fe.hushifa.top/questions/react-ref-layout-effect/","name":"useRef、useEffect 和 useLayoutEffect 有什么差别？ · 前端知库","description":"React面试题：useRef 保存跨渲染的可变值，修改它不会触发渲染；useEffect 在提交后执行，通常在浏览器绘制之后；useLayoutEffect 在绘制前同步执行，适合测量布局并立即修正，但会阻塞绘制。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-ref-layout-effect/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-ref-layout-effect/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"useRef、useEffect 和 useLayoutEffect 有什么差别？","item":"https://fe.hushifa.top/questions/react-ref-layout-effect/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">useRef、useEffect 和 useLayoutEffect 有什么差别？</span></nav><h1 tabindex="-1">useRef、useEffect 和 useLayoutEffect 有什么差别？</h1><p class="reading-summary">useRef 保存跨渲染的可变引用，不负责触发界面更新；Effect 与 Layout Effect 则安排外部同步，后者会在绘制前执行并阻塞绘制。是否需要测量与同步视觉修正，决定应该采用哪种时机。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<p>useRef 保存跨渲染持久的可变值或 DOM 引用，修改它不会触发重新渲染。useEffect 在浏览器绘制后异步执行，适合大多数副作用；useLayoutEffect 在 DOM 更新后、绘制前同步执行，会阻塞绘制。只有需要先测量布局、再同步修正位置以避免闪烁时，才用 useLayoutEffect。SSR 中 useLayoutEffect 不会执行。</p>
-<p>这三个 Hook 不是三个可以互换的生命周期函数。useRef 提供一个存放可变值的容器；useEffect 与 useLayoutEffect 则让 React 在阶段运行设置和清理逻辑。</p>
-<p>常见组合是：用 ref 找到已提交的 DOM，再用合适的 Effect 测量或同步它。不能因为都有 use 前缀，就认为 ref 修改会自动触发 Effect 或重新渲染。</p>
-<h2>ref 保存对象，但不负责刷新界面</h2>
-<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { useRef, useState, useLayoutEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">useRef、useEffect 和 useLayoutEffect 有什么差别？</span></nav><h1 tabindex="-1">useRef、useEffect 和 useLayoutEffect 有什么差别？</h1><p class="reading-summary">useRef 保存跨渲染的可变值，修改它不会触发渲染；useEffect 在提交后执行，通常在浏览器绘制之后；useLayoutEffect 在绘制前同步执行，适合测量布局并立即修正，但会阻塞绘制。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li><code>useRef</code> 返回一个在组件整个生命周期内不变的 <code>{ current }</code> 对象，常用来引用 DOM 节点或保存计时器 ID；修改 <code>current</code> 不会触发重新渲染。</li>
+<li><code>useEffect</code> 在 React 提交 DOM 之后执行，通常在浏览器绘制之后，不阻塞画面显示。</li>
+<li><code>useLayoutEffect</code> 在 DOM 更新后、浏览器绘制前同步执行，可以读取布局并在用户看到之前修正。</li>
+<li><code>useLayoutEffect</code> 会推迟绘制，默认用 <code>useEffect</code>，只有出现闪烁时才换成 <code>useLayoutEffect</code>。</li>
+<li>渲染期间不要读写 <code>ref.current</code>（初始化除外），否则渲染结果不再只由 props 和 state 决定。</li>
+</ul>
+<h2>用 useLayoutEffect 定位提示框</h2>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { useLayoutEffect, useRef, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">FocusInput</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-keyword">const</span> inputRef = <span class="hljs-title function_">useRef</span>(<span class="hljs-literal">null</span>);
-
-  <span class="hljs-keyword">return</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">section</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>
-        搜索
-        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">{inputRef}</span> /&gt;</span>
-      <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> inputRef.current?.focus()}&gt;
-        聚焦输入框
-      <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span></span>
-  );
-}
-</code></pre></div>
-<p>组件存活期间，useRef 返回的 ref 对象可以跨渲染保持。React 把实际输入 DOM 关联到 current，事件处理器就可以执行 focus 这样的命令式操作。</p>
-<p>首次渲染期间，DOM 还没有提交，current 可能是 null；卸载时也要考虑引用被清除。不能在组件函数刚开始执行时，就假定 ref.current 已经指向这轮要显示的节点。</p>
-<p>修改 ref.current 不会请求重新渲染。计时器 ID、外部实例等不直接决定显示的值可以放这里；如果值变化应该立即改变文字或组件结构，通常应放在 state，而不是等别的更新顺便把 ref 显示出来。</p>
-<h2>两种 Effect 的关键差别是绘制时机</h2>
-<p>useEffect 适合订阅、网络和其他不需要同步阻塞绘制的外部关系。它在提交之后运行，但不保证所有场景都严格晚于浏览器 paint。</p>
-<p>useLayoutEffect 在相关 DOM 已经应用后、浏览器重新绘制前执行。它适合必须先测量再修正位置的情况，例如避免浮层先画错位置再跳动，但其中的代码和同步更新会延迟绘制。</p>
-<p>因此 Layout Effect 不是“更高级的 Effect”。如果任务不需要挡住用户看到画面，就不应为了一点模糊的时序安全感把所有 Effect 都改成它。</p>
-<h2>测量应包括后续尺寸变化，而不只读一次</h2>
-<p>下面的组件沿用前面的导入，先在布局阶段测量标题，再使用 ResizeObserver 观察字体、内容布局等造成的尺寸变化：</p>
-<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">MeasuredTitle</span>(<span class="hljs-params">{ text, width = <span class="hljs-number">240</span> }</span>) {
-  <span class="hljs-keyword">const</span> titleRef = <span class="hljs-title function_">useRef</span>(<span class="hljs-literal">null</span>);
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Tooltip</span>(<span class="hljs-params">{ anchorRect, children }</span>) {
+  <span class="hljs-keyword">const</span> ref = <span class="hljs-title function_">useRef</span>(<span class="hljs-literal">null</span>);
   <span class="hljs-keyword">const</span> [height, setHeight] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
 
   <span class="hljs-title function_">useLayoutEffect</span>(<span class="hljs-function">() =&gt;</span> {
-    <span class="hljs-keyword">const</span> node = titleRef.<span class="hljs-property">current</span>;
-    <span class="hljs-keyword">if</span> (!node) <span class="hljs-keyword">return</span>;
+    <span class="hljs-title function_">setHeight</span>(ref.<span class="hljs-property">current</span>.<span class="hljs-title function_">getBoundingClientRect</span>().<span class="hljs-property">height</span>);
+  }, [children]);
 
-    <span class="hljs-keyword">function</span> <span class="hljs-title function_">measure</span>(<span class="hljs-params"></span>) {
-      <span class="hljs-keyword">const</span> nextHeight = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">round</span>(node.<span class="hljs-title function_">getBoundingClientRect</span>().<span class="hljs-property">height</span>);
-      <span class="hljs-title function_">setHeight</span>(<span class="hljs-function"><span class="hljs-params">previous</span> =&gt;</span> previous === nextHeight ? previous : nextHeight);
-    }
-
-    <span class="hljs-title function_">measure</span>();
-    <span class="hljs-keyword">const</span> observer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ResizeObserver</span>(measure);
-    observer.<span class="hljs-title function_">observe</span>(node);
-    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> observer.<span class="hljs-title function_">disconnect</span>();
-  }, [text, width]);
+  <span class="hljs-keyword">const</span> spaceAbove = anchorRect.<span class="hljs-property">top</span>;
+  <span class="hljs-keyword">const</span> top = spaceAbove &gt; height ? anchorRect.<span class="hljs-property">top</span> - height : anchorRect.<span class="hljs-property">bottom</span>;
 
   <span class="hljs-keyword">return</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">section</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">{titleRef}</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">width</span>, <span class="hljs-attr">fontSize:</span> <span class="hljs-attr">20</span>, <span class="hljs-attr">lineHeight:</span> &#x27;<span class="hljs-attr">24px</span>&#x27; }}&gt;</span>
-        {text}
-      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">output</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;标题高度&quot;</span>&gt;</span>{height}<span class="hljs-tag">&lt;/<span class="hljs-name">output</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span></span>
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">{ref}</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">position:</span> &#x27;<span class="hljs-attr">fixed</span>&#x27;, <span class="hljs-attr">left:</span> <span class="hljs-attr">anchorRect.left</span>, <span class="hljs-attr">top</span> }}&gt;</span>
+      {children}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
   );
 }
 </code></pre></div>
-<p>text 或 width 改变后，新 DOM 提交，再测量这一轮的高度；观察器处理后续尺寸变化。清理会断开上一轮观察，避免重复订阅。</p>
-<p>示例把测量结果显示在独立区域，没有反过来用这个高度不断改变被测量元素自身尺寸。真实浮层定位若形成“测量改变尺寸、尺寸又触发测量”的反馈循环，需要调整算法或约束，不能只靠加 Layout Effect 解决。</p>
-<p>getBoundingClientRect 会反映布局与变换后的几何结果。字体加载、图片尺寸、容器宽度和缩放都可能改变结果，所以一次挂载测量并不总够用。ResizeObserver 也不能替代对滚动位置、视口位置和所有定位条件的观察。</p>
-<h2>不要在渲染里用 ref 绕过状态模型</h2>
-<p>组件渲染应主要根据 props、state、context 计算 UI。随意读取或写入 ref.current 来影响渲染，会让结果依赖未被 React 调度管理的可变信息，尤其在重试或中断计算时更难推理。</p>
-<p>对于可预测、只在初始化时建立的纯粹值，可以按官方规则使用受控的 ref 初始化模式。但不要把网络连接、订阅或需要清理的副作用藏进这种“只初始化一次”的分支。</p>
-<p><code>useRef(createValue())</code> 的参数表达式仍可能在每次渲染时求值，React 忽略后续初始值不代表这个函数没被调用。把函数本身传给 useRef，也不会像 useState 的惰性初始化那样自动调用它，而是把函数作为 current 保存。</p>
-<h2>DOM ref 与自定义组件边界</h2>
-<p>给原生 input 传 ref，React 可以关联到该 DOM。给自定义组件传 ref，则需要组件按所用 React 版本的约定接收并继续暴露合适目标，不能期待 React 自动找到任意深处的输入框。</p>
-<p>较新 React 与旧版 forwardRef 用法存在差异，应按版本和组件 API 处理。若组件只希望暴露 focus、reset 等有限能力，可以设计命令式接口，而不必把全部内部 DOM 结构都泄漏给调用者。</p>
-<h2>服务端没有真实布局可以测量</h2>
-<p>useLayoutEffect 不在服务端执行，服务端也没有浏览器 DOM 尺寸。依赖测量才能确定位置的组件，需要合理的初始布局、客户端边界或回退，不能把服务端算出的 0 当作真实测量结果。</p>
-<p>开发 Strict Mode 还会检查设置与清理的配对，观察器和事件都应能正确断开。最后用浏览器工具确认布局、绘制与交互成本：如果只是延迟问题换成了同步阻塞，画面不闪了但操作更卡，也不能算完成优化。</p>
-<p>补充参考：<a href="https://react.dev/reference/react/useRef">React · useRef</a>。</p></div><div class="answer-bottom"><a href="https://react.dev/reference/react/useLayoutEffect" target="_blank" rel="noreferrer">React · useLayoutEffect<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+useRef%E3%80%81useEffect+%E5%92%8C+useLayoutEffect+%E6%9C%89%E4%BB%80%E4%B9%88%E5%B7%AE%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AuseRef%E3%80%81useEffect+%E5%92%8C+useLayoutEffect+%E6%9C%89%E4%BB%80%E4%B9%88%E5%B7%AE%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-ref-layout-effect%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-ref-layout-effect%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：useRef、useEffect 和 useLayoutEffect 有什么差别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-state/">为什么调用 setState 后，当前变量还是旧值？</a></li><li><a href="/questions/react-effect/">useEffect 的依赖数组和清理函数应该怎么写？</a></li><li><a href="/questions/react-key/">列表中的 key 为什么不能随意使用数组下标？</a></li><li><a href="/questions/react-memo/">memo、useMemo、useCallback 各自优化什么？</a></li></ul></nav></main></div></div>
+<p>流程是：第一次渲染用 <code>height = 0</code> 计算位置并提交；<code>useLayoutEffect</code> 读到真实高度并 <code>setHeight</code>；React 在绘制前同步重新渲染。用户只看到最终位置。换成 <code>useEffect</code> 的话，浏览器可能先画出错误位置，下一帧再跳过去。</p>
+<h2>在 ref 里保存不需要显示的值</h2>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">Stopwatch</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> intervalRef = <span class="hljs-title function_">useRef</span>(<span class="hljs-literal">null</span>);
+  <span class="hljs-keyword">const</span> [seconds, setSeconds] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">start</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-built_in">clearInterval</span>(intervalRef.<span class="hljs-property">current</span>);
+    intervalRef.<span class="hljs-property">current</span> = <span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">setSeconds</span>(<span class="hljs-function">(<span class="hljs-params">s</span>) =&gt;</span> s + <span class="hljs-number">1</span>), <span class="hljs-number">1000</span>);
+  }
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">stop</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-built_in">clearInterval</span>(intervalRef.<span class="hljs-property">current</span>);
+  }
+
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>{seconds}s<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{start}</span>&gt;</span>开始<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{stop}</span>&gt;</span>停止<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/&gt;</span></span>
+  );
+}
+</code></pre></div>
+<p>计时器 ID 不参与显示，放在 ref 里，改动它不会引起额外渲染。要显示的 <code>seconds</code> 放在 state 里。</p>
+<h2>服务端渲染</h2>
+<p>服务端不执行任何 Effect。<code>useLayoutEffect</code> 依赖的布局信息在服务端不存在，所以服务端渲染的 HTML 只能是测量前的样子。常见做法是让这类组件只在客户端渲染，或者首屏先显示不依赖测量的占位。</p>
+<h2>React 19 的 ref 变化</h2>
+<ul>
+<li>函数组件可以直接接收 <code>ref</code> 作为 prop，新代码不再需要 <code>forwardRef</code>。</li>
+<li>ref 回调可以返回清理函数，节点卸载时调用。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li>为什么不用普通变量代替 ref？普通变量每次渲染都会重新初始化，ref 能在多次渲染之间保留同一个值。</li>
+<li><code>useLayoutEffect</code> 和 <code>useEffect</code> 的清理时机一样吗？都在下一次执行前和卸载时清理，只是执行阶段不同。</li>
+</ul></div><div class="answer-bottom"><a href="https://react.dev/reference/react/useLayoutEffect" target="_blank" rel="noreferrer">React · useLayoutEffect<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+useRef%E3%80%81useEffect+%E5%92%8C+useLayoutEffect+%E6%9C%89%E4%BB%80%E4%B9%88%E5%B7%AE%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AuseRef%E3%80%81useEffect+%E5%92%8C+useLayoutEffect+%E6%9C%89%E4%BB%80%E4%B9%88%E5%B7%AE%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-ref-layout-effect%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-ref-layout-effect%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：useRef、useEffect 和 useLayoutEffect 有什么差别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-state/">为什么调用 setState 后，当前变量还是旧值？</a></li><li><a href="/questions/react-effect/">useEffect 的依赖数组和清理函数应该怎么写？</a></li><li><a href="/questions/react-key/">列表中的 key 为什么不能随意使用数组下标？</a></li><li><a href="/questions/react-memo/">memo、useMemo、useCallback 各自优化什么？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

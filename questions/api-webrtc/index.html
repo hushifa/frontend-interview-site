@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Web API面试题：WebRTC 负责实时媒体和数据通道，但应用仍需通过信令交换会话描述，借助 ICE、STUN 和 TURN 建立可用网络路径；这些组件解决的是不同问题。" />
+    <meta name="description" content="Web API面试题：WebRTC 只负责点对点传输，双方交换 SDP 和 ICE 候选需要自己实现信令通道；STUN 帮设备发现自己的公网地址，TURN 在无法直连时中转流量。" />
     <title>WebRTC 为什么需要信令、STUN 和 TURN？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/api-webrtc/" />
     <meta name="robots" content="index,follow" />
@@ -19,73 +19,52 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="WebRTC 为什么需要信令、STUN 和 TURN？ · 前端知库" />
-    <meta property="og:description" content="Web API面试题：WebRTC 负责实时媒体和数据通道，但应用仍需通过信令交换会话描述，借助 ICE、STUN 和 TURN 建立可用网络路径；这些组件解决的是不同问题。" />
+    <meta property="og:description" content="Web API面试题：WebRTC 只负责点对点传输，双方交换 SDP 和 ICE 候选需要自己实现信令通道；STUN 帮设备发现自己的公网地址，TURN 在无法直连时中转流量。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/api-webrtc/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/api-webrtc/#webpage","url":"https://fe.hushifa.top/questions/api-webrtc/","name":"WebRTC 为什么需要信令、STUN 和 TURN？ · 前端知库","description":"Web API面试题：WebRTC 负责实时媒体和数据通道，但应用仍需通过信令交换会话描述，借助 ICE、STUN 和 TURN 建立可用网络路径；这些组件解决的是不同问题。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/api-webrtc/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/api-webrtc/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Web API面试题","item":"https://fe.hushifa.top/topics/web-apis/"},{"@type":"ListItem","position":3,"name":"WebRTC 为什么需要信令、STUN 和 TURN？","item":"https://fe.hushifa.top/questions/api-webrtc/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/api-webrtc/#webpage","url":"https://fe.hushifa.top/questions/api-webrtc/","name":"WebRTC 为什么需要信令、STUN 和 TURN？ · 前端知库","description":"Web API面试题：WebRTC 只负责点对点传输，双方交换 SDP 和 ICE 候选需要自己实现信令通道；STUN 帮设备发现自己的公网地址，TURN 在无法直连时中转流量。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/api-webrtc/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/api-webrtc/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Web API面试题","item":"https://fe.hushifa.top/topics/web-apis/"},{"@type":"ListItem","position":3,"name":"WebRTC 为什么需要信令、STUN 和 TURN？","item":"https://fe.hushifa.top/questions/api-webrtc/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/web-apis/">Web API面试题</a><span aria-hidden="true">/</span><span aria-current="page">WebRTC 为什么需要信令、STUN 和 TURN？</span></nav><h1 tabindex="-1">WebRTC 为什么需要信令、STUN 和 TURN？</h1><p class="reading-summary">WebRTC 负责实时媒体和数据通道，但应用仍需通过信令交换会话描述，借助 ICE、STUN 和 TURN 建立可用网络路径；这些组件解决的是不同问题。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/web-apis/">Web API面试题</a><span aria-hidden="true">/</span><span aria-current="page">WebRTC 为什么需要信令、STUN 和 TURN？</span></nav><h1 tabindex="-1">WebRTC 为什么需要信令、STUN 和 TURN？</h1><p class="reading-summary">WebRTC 只负责点对点传输，双方交换 SDP 和 ICE 候选需要自己实现信令通道；STUN 帮设备发现自己的公网地址，TURN 在无法直连时中转流量。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>WebRTC 负责实时媒体和数据通道，但应用要自己实现信令。</li>
-<li>信令交换的是 SDP 会话描述和 ICE 候选，不传输媒体本身。</li>
-<li>ICE 借助 STUN 发现公网地址，打洞失败时通过 TURN 中继。</li>
-<li>多人会议通常需要媒体服务器；连接建立后仍要管理生命周期。</li>
+<li><strong>信令</strong>：建立连接前，双方要交换 SDP（媒体能力和编码参数）和 ICE 候选（可用的网络地址）。WebRTC 不规定信令方式，一般用 WebSocket 或 HTTP 实现。</li>
+<li><strong>STUN</strong>：设备通常在 NAT 后面，只知道自己的内网地址。STUN 服务器告诉它&quot;你在公网上看起来是哪个 IP 和端口&quot;，用于打洞直连。</li>
+<li><strong>TURN</strong>：对称型 NAT 或严格防火墙下无法直连时，TURN 服务器中转所有媒体数据。成本高，但保证能连上。</li>
+<li><strong>ICE</strong>：收集所有候选地址（本地、STUN 得到的、TURN 中继），逐对尝试连通，选出最好的一条路径。</li>
 </ul>
-<h2>WebRTC 连接不是“创建对象就通了”</h2>
-<p>两台浏览器要传视频，至少要解决三件事：双方如何找到彼此并交换协商信息，网络上是否存在可达路径，连接建立后如何传输和恢复媒体。WebRTC 提供后两部分的大量能力，但不负责账号、房间、邀请和业务权限。</p>
-<p>因此信令、ICE、STUN 和 TURN 不是同一个东西：信令负责传递信息，ICE 负责收集和检查候选路径，STUN 帮浏览器发现外部映射地址，TURN 在直连失败时中继流量。</p>
-<h2>信令交换的是描述，不是视频</h2>
-<p>应用可以用 WebSocket、HTTP 或其他自定义通道传递 offer、answer 和 ICE candidates。SDP 描述媒体能力、编码、方向和连接协商信息，不是摄像头视频本身。</p>
-<p>典型流程是：</p>
+<h2>连接流程</h2>
 <ol>
-<li>一方创建 <code>RTCPeerConnection</code> 和本地媒体轨道。</li>
-<li>创建 offer，设置本地描述并通过信令发送。</li>
-<li>对方设置远端描述，创建 answer，再发回。</li>
-<li>双方持续交换 ICE candidates。</li>
-<li>连接状态变化后开始播放或发送数据。</li>
+<li>A 创建 <code>RTCPeerConnection</code>，添加音视频轨道，生成 offer 并设为本地描述。</li>
+<li>A 通过信令把 offer 发给 B。</li>
+<li>B 设为远端描述，生成 answer，通过信令发回 A。</li>
+<li>双方在 <code>icecandidate</code> 事件中拿到候选，通过信令发给对方，对方调用 <code>addIceCandidate</code>。</li>
+<li>ICE 找到可用路径，<code>connectionState</code> 变为 <code>connected</code>，媒体开始传输。</li>
 </ol>
-<p>候选可能在远端描述设置前到达，因此信令层要暂存并按顺序处理：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> pendingCandidates = [];
-<span class="hljs-keyword">let</span> remoteDescriptionReady = <span class="hljs-literal">false</span>;
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> pc = <span class="hljs-keyword">new</span> <span class="hljs-title class_">RTCPeerConnection</span>({
+  <span class="hljs-attr">iceServers</span>: [
+    { <span class="hljs-attr">urls</span>: <span class="hljs-string">&#x27;stun:stun.example.com:3478&#x27;</span> },
+    { <span class="hljs-attr">urls</span>: <span class="hljs-string">&#x27;turn:turn.example.com:3478&#x27;</span>, <span class="hljs-attr">username</span>: <span class="hljs-string">&#x27;user&#x27;</span>, <span class="hljs-attr">credential</span>: <span class="hljs-string">&#x27;temp-token&#x27;</span> },
+  ],
+});
 
-<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">receiveCandidate</span>(<span class="hljs-params">candidate</span>) {
-  <span class="hljs-keyword">if</span> (!remoteDescriptionReady) {
-    pendingCandidates.<span class="hljs-title function_">push</span>(candidate);
-    <span class="hljs-keyword">return</span>;
-  }
-  <span class="hljs-keyword">await</span> peer.<span class="hljs-title function_">addIceCandidate</span>(candidate);
-}
-
-<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">markRemoteReady</span>(<span class="hljs-params">description</span>) {
-  <span class="hljs-keyword">await</span> peer.<span class="hljs-title function_">setRemoteDescription</span>(description);
-  remoteDescriptionReady = <span class="hljs-literal">true</span>;
-  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> candidate <span class="hljs-keyword">of</span> pendingCandidates.<span class="hljs-title function_">splice</span>(<span class="hljs-number">0</span>)) {
-    <span class="hljs-keyword">await</span> peer.<span class="hljs-title function_">addIceCandidate</span>(candidate);
-  }
-}
+pc.<span class="hljs-property">onicecandidate</span> = <span class="hljs-function">(<span class="hljs-params">{ candidate }</span>) =&gt;</span> signaling.<span class="hljs-title function_">send</span>({ candidate });
+pc.<span class="hljs-property">ontrack</span> = <span class="hljs-function">(<span class="hljs-params">{ streams }</span>) =&gt;</span> {
+  remoteVideo.<span class="hljs-property">srcObject</span> = streams[<span class="hljs-number">0</span>];
+};
 </code></pre></div>
-<p>真实应用还要处理双方同时发起协商、增加轨道、网络切换和冲突，通常采用 perfect negotiation 等成熟模式。信令服务必须做房间鉴权；允许浏览器访问麦克风不代表用户有权加入任意会议。</p>
-<h2>ICE 会寻找可用候选对</h2>
-<p>浏览器会收集不同类型的候选：本机网络接口地址、通过 STUN 得到的服务器反射地址，以及 TURN 分配的中继地址。ICE 对候选对进行连通性检查，选择一条可工作的路径。</p>
-<p>STUN 只是帮助浏览器了解自己在外部网络看到的映射地址。它不能保证 NAT 会允许入站连接，也不能解决企业防火墙、UDP 限制和对称 NAT。只在同一个 Wi-Fi 下测试成功，不能证明跨运营商和公司网络可用。</p>
-<h2>TURN 是可靠性成本，不是可选装饰</h2>
-<p>直连失败时，TURN 服务器可以作为中继转发媒体和数据。生产系统通常需要鉴权的 TURN 服务，而不是只配置一个公共 STUN 地址。TURN 会消耗服务器带宽，需要规划凭据、地域、容量、计费和过期时间。</p>
-<p>中继服务器负责传输，不自动理解房间、录制或业务协议。WebRTC 的传输加密也不等同于“服务器永远无法访问媒体”，尤其在 SFU、混流、录制等架构中，媒体可能在服务器侧被处理。安全声明必须结合实际拓扑和密钥设计。</p>
-<h2>多人会议通常需要媒体服务器</h2>
-<p>N 个浏览器两两建立连接时，每个用户的上传、编码和连接数量会迅速增加。多人会议常用 SFU 接收并转发各路媒体，或使用混流服务器生成一路视频。此时 <code>RTCPeerConnection</code> 的对端可能是媒体服务器，不一定是另一台浏览器。</p>
-<p><code>RTCDataChannel</code> 可以独立传输聊天、控制和协作数据，不要求先打开摄像头。可靠性、顺序、消息大小和拥塞策略要按业务选择，不能把媒体轨道的假设直接套到数据通道。</p>
-<h2>连接成功后仍要管理生命周期</h2>
-<p>监听 <code>iceConnectionState</code>、<code>connectionState</code> 和轨道事件，区分短暂 <code>disconnected</code> 与确定 <code>failed</code>。网络切换可能需要 ICE restart 或重新协商，不要一有抖动就销毁整个会话。重连仍要重新检查房间权限和会话有效期。</p>
-<p>结束通话时关闭 PeerConnection、移除信令监听和计时器，并停止不再使用的 <code>MediaStreamTrack</code>：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">closeCall</span>(<span class="hljs-params">stream, peer, cleanupSignal</span>) {
-  <span class="hljs-title function_">cleanupSignal</span>();
-  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> track <span class="hljs-keyword">of</span> stream?.<span class="hljs-title function_">getTracks</span>() ?? []) track.<span class="hljs-title function_">stop</span>();
-  peer.<span class="hljs-title function_">close</span>();
-}
-</code></pre></div>
-<p>关闭连接不会自动停止所有摄像头来源，也不会自动清空 <code>video.srcObject</code>。诊断可以使用 <code>getStats()</code> 查看候选路径、丢包和往返时间，但日志要避免暴露不必要的网络地址和媒体内容。验收应覆盖权限拒绝、跨网、TURN、设备切换、后台恢复和重连。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Protocols" target="_blank" rel="noreferrer">Introduction to WebRTC protocols - Web APIs | MDN<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+WebRTC+%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E4%BF%A1%E4%BB%A4%E3%80%81STUN+%E5%92%8C+TURN%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AWebRTC+%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E4%BF%A1%E4%BB%A4%E3%80%81STUN+%E5%92%8C+TURN%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aapi-webrtc%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AWeb+API%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fapi-webrtc%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：WebRTC 为什么需要信令、STUN 和 TURN？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/api-webrtc-perfect-negotiation/">WebRTC 的 perfect negotiation 如何避免协商碰撞？</a></li><li><a href="/questions/api-abort/">AbortController 能取消什么，不能取消什么？</a></li><li><a href="/questions/api-web-components/">Custom Elements、Shadow DOM 和 template 分别负责什么？</a></li><li><a href="/questions/api-files/">File、Blob 和 object URL 怎样用于文件预览？</a></li></ul></nav></main></div></div>
+<p>双方同时发起协商时容易冲突，处理方法见《WebRTC 的 perfect negotiation 如何避免协商碰撞？》。</p>
+<h2>TURN 的部署要点</h2>
+<ul>
+<li>生产环境一定要配置 TURN，否则一部分用户会连不上。</li>
+<li>TURN 凭据要由服务端按用户签发并设置短有效期，不要把长期密码写在前端代码里。</li>
+<li>只有 UDP 被封时还可以用 <code>turns:</code>（TLS over TCP 443 端口）穿透。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li>多人会议也是点对点吗：人数少可以网状互连，人数多时通常用 SFU 服务器转发，每个人只上传一路。</li>
+<li>数据通道：<code>pc.createDataChannel()</code> 可以在同一连接上传任意数据，支持可靠和不可靠两种模式。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Protocols" target="_blank" rel="noreferrer">MDN · Introduction to WebRTC protocols<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+WebRTC+%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E4%BF%A1%E4%BB%A4%E3%80%81STUN+%E5%92%8C+TURN%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AWebRTC+%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E4%BF%A1%E4%BB%A4%E3%80%81STUN+%E5%92%8C+TURN%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aapi-webrtc%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AWeb+API%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fapi-webrtc%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：WebRTC 为什么需要信令、STUN 和 TURN？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/api-webrtc-perfect-negotiation/">WebRTC 的 perfect negotiation 如何避免协商碰撞？</a></li><li><a href="/questions/api-abort/">AbortController 能取消什么，不能取消什么？</a></li><li><a href="/questions/api-web-components/">Custom Elements、Shadow DOM 和 template 分别负责什么？</a></li><li><a href="/questions/api-files/">File、Blob 和 object URL 怎样用于文件预览？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

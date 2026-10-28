@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="框架与选型面试题：Islands 把主要内容作为服务端 HTML 输出，只为需要交互的区域加载客户端代码。收益来自清晰的交互边界和合适的激活时机，不是把整个 SPA 随意拆成多个组件。" />
+    <meta name="description" content="框架与选型面试题：Astro 默认把组件在服务端渲染为 HTML，不发送 JavaScript；只有加了 client:* 指令的组件才作为&quot;岛屿&quot;在浏览器中加载和激活。岛屿彼此独立，可以使用不同框架。适合内容为主、交互局部化的站点。" />
     <title>Astro Islands 架构怎样减少客户端 JavaScript？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/frameworks-astro-islands/" />
     <meta name="robots" content="index,follow" />
@@ -19,45 +19,60 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Astro Islands 架构怎样减少客户端 JavaScript？ · 前端知库" />
-    <meta property="og:description" content="框架与选型面试题：Islands 把主要内容作为服务端 HTML 输出，只为需要交互的区域加载客户端代码。收益来自清晰的交互边界和合适的激活时机，不是把整个 SPA 随意拆成多个组件。" />
+    <meta property="og:description" content="框架与选型面试题：Astro 默认把组件在服务端渲染为 HTML，不发送 JavaScript；只有加了 client:* 指令的组件才作为&quot;岛屿&quot;在浏览器中加载和激活。岛屿彼此独立，可以使用不同框架。适合内容为主、交互局部化的站点。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/frameworks-astro-islands/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/frameworks-astro-islands/#webpage","url":"https://fe.hushifa.top/questions/frameworks-astro-islands/","name":"Astro Islands 架构怎样减少客户端 JavaScript？ · 前端知库","description":"框架与选型面试题：Islands 把主要内容作为服务端 HTML 输出，只为需要交互的区域加载客户端代码。收益来自清晰的交互边界和合适的激活时机，不是把整个 SPA 随意拆成多个组件。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/frameworks-astro-islands/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/frameworks-astro-islands/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"框架与选型面试题","item":"https://fe.hushifa.top/topics/frameworks/"},{"@type":"ListItem","position":3,"name":"Astro Islands 架构怎样减少客户端 JavaScript？","item":"https://fe.hushifa.top/questions/frameworks-astro-islands/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/frameworks-astro-islands/#webpage","url":"https://fe.hushifa.top/questions/frameworks-astro-islands/","name":"Astro Islands 架构怎样减少客户端 JavaScript？ · 前端知库","description":"框架与选型面试题：Astro 默认把组件在服务端渲染为 HTML，不发送 JavaScript；只有加了 client:* 指令的组件才作为\"岛屿\"在浏览器中加载和激活。岛屿彼此独立，可以使用不同框架。适合内容为主、交互局部化的站点。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/frameworks-astro-islands/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/frameworks-astro-islands/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"框架与选型面试题","item":"https://fe.hushifa.top/topics/frameworks/"},{"@type":"ListItem","position":3,"name":"Astro Islands 架构怎样减少客户端 JavaScript？","item":"https://fe.hushifa.top/questions/frameworks-astro-islands/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/frameworks/">框架与选型面试题</a><span aria-hidden="true">/</span><span aria-current="page">Astro Islands 架构怎样减少客户端 JavaScript？</span></nav><h1 tabindex="-1">Astro Islands 架构怎样减少客户端 JavaScript？</h1><p class="reading-summary">Islands 把主要内容作为服务端 HTML 输出，只为需要交互的区域加载客户端代码。收益来自清晰的交互边界和合适的激活时机，不是把整个 SPA 随意拆成多个组件。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<p>Astro 默认把页面渲染为纯 HTML，不发送 JavaScript；只有带 client:* 指令的组件会成为“岛屿”，在客户端单独激活。client:load 立即激活，client:idle 在浏览器空闲时激活，client:visible 在进入视口时激活。岛屿之间相互独立，可以使用不同框架。它适合内容为主的站点，交互密集的应用收益有限。</p>
-<h2>页面不需要整棵客户端应用</h2>
-<p>文章标题、正文、图片和目录通常只需要 HTML；搜索框、收藏按钮、图表和编辑器才需要状态、事件和浏览器 API。如果整页交给 React 或 Vue 接管，用户为了阅读正文也要下载、解析和执行整套客户端运行时。</p>
-<p>Astro Islands 的思路是先交付 HTML，再把交互区域作为独立岛加载和 hydration。减少 JavaScript 的关键是交互边界明确，而不是简单给大型 SPA 的每个区域改一个名字。</p>
-<h2>没有客户端指令的组件只负责输出</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/frameworks/">框架与选型面试题</a><span aria-hidden="true">/</span><span aria-current="page">Astro Islands 架构怎样减少客户端 JavaScript？</span></nav><h1 tabindex="-1">Astro Islands 架构怎样减少客户端 JavaScript？</h1><p class="reading-summary">Astro 默认把组件在服务端渲染为 HTML，不发送 JavaScript；只有加了 client:* 指令的组件才作为&quot;岛屿&quot;在浏览器中加载和激活。岛屿彼此独立，可以使用不同框架。适合内容为主、交互局部化的站点。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>没有 <code>client:*</code> 指令的组件只在服务端（或构建时）渲染为 HTML，浏览器不会收到它的 JavaScript。</li>
+<li>加了指令的组件是交互岛屿，各自独立加载和 hydration。</li>
+<li>激活时机：<code>client:load</code> 页面加载时，<code>client:idle</code> 浏览器空闲时，<code>client:visible</code> 进入视口时，<code>client:media</code> 媒体查询匹配时，<code>client:only</code> 跳过服务端渲染只在客户端渲染。</li>
+<li>不同岛屿可以用 React、Vue、Svelte 等不同框架，但岛屿之间不共享 Context，需要通过外部 store、URL 或事件通信。</li>
+<li>适合博客、文档、营销页、电商详情页；整页高度交互、状态紧密耦合的应用，收益有限。</li>
+</ul>
+<h2>示例</h2>
 <div class="not-prose code-block"><div class="code-language">astro</div><pre><code class="hljs language-astro">---
+import Header from &#x27;../components/Header.astro&#x27;;
 import SearchBox from &#x27;../components/SearchBox.jsx&#x27;;
-import Chart from &#x27;../components/Chart.jsx&#x27;;
+import Comments from &#x27;../components/Comments.vue&#x27;;
 ---
 
-&lt;main&gt;
-  &lt;h1&gt;前端学习资料&lt;/h1&gt;
-  &lt;p&gt;正文直接输出为 HTML，不需要客户端状态。&lt;/p&gt;
-  &lt;SearchBox client:load /&gt;
-  &lt;Chart client:visible /&gt;
-&lt;/main&gt;
+&lt;Header /&gt;
+&lt;article&gt;
+  &lt;h1&gt;文章标题&lt;/h1&gt;
+  &lt;p&gt;正文是纯 HTML，不需要 JavaScript。&lt;/p&gt;
+&lt;/article&gt;
+&lt;SearchBox client:load /&gt;
+&lt;Comments client:visible /&gt;
 </code></pre></div>
-<p><code>client:load</code> 让 SearchBox 在页面加载阶段准备交互；<code>client:visible</code> 让图表接近可见区域时再加载。正文不需要等 React 重建才能显示。项目仍需配置对应框架集成，<code>.astro</code> 的前置脚本也不是浏览器里会随点击执行的组件状态代码。</p>
-<h2>激活时机决定首次操作体验</h2>
-<p><code>client:load</code> 适合页面一打开就要操作的控件；<code>client:idle</code> 适合低优先级交互；<code>client:visible</code> 适合下方图表或评论；<code>client:media</code> 适合只在某类屏幕出现的功能。它们通常可以先显示服务端 HTML，再等待客户端代码接管。</p>
-<p>用户可能在 hydration 前点击一个按钮。可通过原生链接、禁用态、预取或轻量脚本保证行为可理解，不能把“看得见”误认为“已经可交互”。关键搜索、提交和首屏控制延后太久，会把节省的初始脚本变成第一次点击等待。</p>
-<p><code>client:only</code> 跳过该组件的服务端 HTML，适合确实依赖浏览器 API 或无法 SSR 的组件，但首屏内容、SEO 和等待体验会不同，必要时提供 fallback。</p>
-<h2>岛之间不会自动共享 Context</h2>
-<p>两个独立的 React 岛不能直接共享同一个 Context Provider。购物车、筛选条件和登录状态需要通过明确的外部状态、事件、URL、存储或服务端数据协调，并处理订阅、销毁和竞态。</p>
-<p>交互高度耦合的区域合并成一个岛可能更容易维护；只有一个小按钮需要状态时，把整页包成大岛又会失去架构收益。跨岛 props 必须符合序列化边界，服务端函数、复杂实例和秘密不能直接传给浏览器。</p>
-<h2>多框架和大组件仍有运行时成本</h2>
-<p>Astro 可以集成 React、Vue、Svelte 等框架，但每种运行时、图表库、编辑器和状态库都可能增加下载与执行。构建器可能共享部分依赖，不能假设混用完全免费。应查看真实 chunk 和请求瀑布，确认多个岛是否重复引入大型依赖。</p>
-<p>一个大编辑器作为独立岛仍然可能很重，只是它的成本不再阻塞文章正文。必要时还要在岛内部继续懒加载、虚拟化和分片。</p>
-<h2>客户端岛和服务端动态区域是两件事</h2>
-<p>客户端岛解决“哪些区域需要浏览器交互、何时激活”；服务端动态岛或延后服务端渲染解决的是另一类数据交付问题，需要服务端运行时。纯静态托管只能使用预渲染内容或外部 API，不能因为页面大部分是静态 HTML 就获得任意服务端能力。</p>
-<p>验收时要同时看首屏 HTML、关键交互可用时间、岛的激活等待、多个框架的总脚本和深链接刷新。内容占多数、交互局部化的站点最容易获得收益；整页都是连续共享状态的编辑器，应比较完整客户端应用的管理成本。</p></div><div class="answer-bottom"><a href="https://docs.astro.build/en/concepts/islands/" target="_blank" rel="noreferrer">Astro · Islands architecture<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Astro+Islands+%E6%9E%B6%E6%9E%84%E6%80%8E%E6%A0%B7%E5%87%8F%E5%B0%91%E5%AE%A2%E6%88%B7%E7%AB%AF+JavaScript%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAstro+Islands+%E6%9E%B6%E6%9E%84%E6%80%8E%E6%A0%B7%E5%87%8F%E5%B0%91%E5%AE%A2%E6%88%B7%E7%AB%AF+JavaScript%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aframeworks-astro-islands%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%86%E6%9E%B6%E4%B8%8E%E9%80%89%E5%9E%8B%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fframeworks-astro-islands%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Astro Islands 架构怎样减少客户端 JavaScript？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/framework-angular/">Angular Signals 的依赖追踪与 computed 有什么特点？</a></li><li><a href="/questions/framework-svelte/">Svelte 的编译思路与 Runes 模型如何理解？</a></li><li><a href="/questions/framework-selection/">选择前端框架时应该先比较哪些约束？</a></li><li><a href="/questions/frameworks-angular-di/">Angular 依赖注入的层级和作用域怎样理解？</a></li></ul></nav></main></div></div>
+<ul>
+<li><code>Header</code> 和正文只输出 HTML。</li>
+<li><code>SearchBox</code> 页面一打开就可以用。</li>
+<li><code>Comments</code> 滚动到评论区时才下载代码并激活。</li>
+</ul>
+<h2>激活前的交互</h2>
+<p>岛屿激活之前，服务端渲染的 HTML 已经可见但还不能响应事件。延后激活的组件里如果放了重要按钮，用户点击可能没有反应。处理方式：</p>
+<ul>
+<li>首屏关键交互用 <code>client:load</code>。</li>
+<li>尽量让基础功能不依赖脚本，例如用真正的 <code>&lt;a&gt;</code> 链接和 <code>&lt;form&gt;</code> 提交。</li>
+</ul>
+<h2>岛屿之间共享状态</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// store.js</span>
+<span class="hljs-keyword">import</span> { atom } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;nanostores&#x27;</span>;
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> cartCount = <span class="hljs-title function_">atom</span>(<span class="hljs-number">0</span>);
+</code></pre></div>
+<p>React 岛屿和 Vue 岛屿各自订阅同一个 store。Astro 官方文档推荐 Nano Stores 这类与框架无关的状态库。</p>
+<h2>服务器岛屿</h2>
+<p><code>server:defer</code> 指令让某个组件在页面主体之外单独在服务端渲染，例如个性化的用户头像，页面其余部分可以被缓存。它需要服务端运行时，纯静态托管无法使用。</p>
+<h2>常见追问</h2>
+<ul>
+<li>和 SSR + 全量 hydration 有什么区别？传统 SSR 框架会在客户端激活整个页面的组件树；Islands 只激活标记的部分，其余部分的组件代码根本不会发到浏览器。</li>
+<li>多个框架会让体积变大吗？会，每种框架的运行时都要下载，应尽量统一。</li>
+</ul></div><div class="answer-bottom"><a href="https://docs.astro.build/en/concepts/islands/" target="_blank" rel="noreferrer">Astro · Islands architecture<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Astro+Islands+%E6%9E%B6%E6%9E%84%E6%80%8E%E6%A0%B7%E5%87%8F%E5%B0%91%E5%AE%A2%E6%88%B7%E7%AB%AF+JavaScript%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAstro+Islands+%E6%9E%B6%E6%9E%84%E6%80%8E%E6%A0%B7%E5%87%8F%E5%B0%91%E5%AE%A2%E6%88%B7%E7%AB%AF+JavaScript%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aframeworks-astro-islands%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%86%E6%9E%B6%E4%B8%8E%E9%80%89%E5%9E%8B%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fframeworks-astro-islands%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Astro Islands 架构怎样减少客户端 JavaScript？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/framework-angular/">Angular Signals 的依赖追踪与 computed 有什么特点？</a></li><li><a href="/questions/framework-svelte/">Svelte 的编译思路与 Runes 模型如何理解？</a></li><li><a href="/questions/framework-selection/">选择前端框架时应该先比较哪些约束？</a></li><li><a href="/questions/frameworks-angular-di/">Angular 依赖注入的层级和作用域怎样理解？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

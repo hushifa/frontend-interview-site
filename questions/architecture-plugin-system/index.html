@@ -23,96 +23,98 @@
     <meta property="og:url" content="https://fe.hushifa.top/questions/architecture-plugin-system/" />
     <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/architecture-plugin-system/#webpage","url":"https://fe.hushifa.top/questions/architecture-plugin-system/","name":"前端插件系统怎样设计才能保持可维护？ · 前端知库","description":"架构设计面试题：从编辑器和后台扩展场景说明插件契约、生命周期、能力注入、版本兼容和故障隔离，区分同进程扩展与 iframe/Worker 隔离。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/architecture-plugin-system/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/architecture-plugin-system/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"架构设计面试题","item":"https://fe.hushifa.top/topics/architecture/"},{"@type":"ListItem","position":3,"name":"前端插件系统怎样设计才能保持可维护？","item":"https://fe.hushifa.top/questions/architecture-plugin-system/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
     <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/architecture/">架构设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">前端插件系统怎样设计才能保持可维护？</span></nav><h1 tabindex="-1">前端插件系统怎样设计才能保持可维护？</h1><p class="reading-summary">从编辑器和后台扩展场景说明插件契约、生命周期、能力注入、版本兼容和故障隔离，区分同进程扩展与 iframe/Worker 隔离。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>插件系统的核心是一份可演进的宿主与插件契约。</li>
-<li>宿主只提供受限上下文，不把 window、根组件或内部 store 交给插件。</li>
-<li>激活、停用、重载和销毁要有明确顺序，插件创建的资源都要能回收。</li>
-<li>插件返回值要经过版本化和校验。</li>
+<li>插件系统的核心是一份稳定的契约：插件声明自己是谁、需要什么能力、在哪些扩展点贡献内容。</li>
+<li>宿主只把插件需要的能力通过 API 对象注入，插件不能直接访问宿主内部状态。</li>
+<li>生命周期至少包括激活和停用，插件注册的监听器、定时器在停用时必须被宿主统一清理。</li>
+<li>契约要有版本号，宿主按版本判断兼容性，废弃 API 先警告再移除。</li>
+<li>运行不可信的第三方插件要放进 iframe 或 Worker 隔离；同进程运行只适合受信任的插件。</li>
 </ul>
-<p>编辑器、后台系统和低代码平台常需要让不同团队增加面板、命令或数据源。直接让插件读取宿主的全局对象，短期接入很快，长期却会出现版本耦合、权限失控、卸载不干净和一个插件拖垮整个页面的问题。</p>
-<p>插件系统的核心不是“动态 import 一个文件”，而是定义一份可演进的宿主与插件契约：插件能做什么、何时初始化、如何清理、失败时影响多大，以及不同版本怎样共存。</p>
-<h2>先设计最小契约和生命周期</h2>
-<p>一个插件入口可以接收宿主提供的受限上下文，并返回清理函数：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">activate</span>(<span class="hljs-params">context</span>) {
-  <span class="hljs-keyword">const</span> disposeCommand = context.<span class="hljs-property">commands</span>.<span class="hljs-title function_">register</span>(<span class="hljs-string">&#x27;notes.open&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-    context.<span class="hljs-property">ui</span>.<span class="hljs-title function_">openPanel</span>({ <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;笔记&#x27;</span>, <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;插件内容&#x27;</span> });
-  });
-
-  context.<span class="hljs-property">subscriptions</span>.<span class="hljs-title function_">add</span>(disposeCommand);
-  <span class="hljs-keyword">return</span> {
-    <span class="hljs-title function_">deactivate</span>(<span class="hljs-params"></span>) {
-      <span class="hljs-comment">// 释放插件自己创建的外部资源。</span>
-    },
-  };
-}
-</code></pre></div>
-<p>示例中的 <code>commands</code>、<code>ui</code> 和 <code>subscriptions</code> 是宿主定义的能力，不应把完整的 <code>window</code>、根组件实例或内部 store 直接传给插件。激活、停用、重新加载和宿主销毁都要有明确顺序；插件注册的监听器、计时器、Worker、连接和 DOM 必须能被回收。</p>
-<p>插件返回的对象也应经过版本化和校验。不能因为模块成功导出 <code>activate</code> 就相信它返回的任意字段；错误的插件应在激活阶段被拒绝，并提供可诊断的错误信息。</p>
-<p>初始化不是原子操作：插件可能先注册命令，再加载数据失败。即使 activate 没有成功返回，宿主也应清理该次激活已经登记的资源。下面给出只处理同步清理函数的资源作用域，先登记后续需要撤销的动作，失败和正常停用均调用 dispose：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">createScope</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-keyword">let</span> closed = <span class="hljs-literal">false</span>;
-  <span class="hljs-keyword">const</span> cleanups = [];
-  <span class="hljs-keyword">return</span> {
-    <span class="hljs-title function_">add</span>(<span class="hljs-params">cleanup</span>) {
-      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> cleanup !== <span class="hljs-string">&#x27;function&#x27;</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;清理项必须为函数&#x27;</span>);
-      <span class="hljs-keyword">if</span> (closed) <span class="hljs-title function_">cleanup</span>();
-      <span class="hljs-keyword">else</span> cleanups.<span class="hljs-title function_">push</span>(cleanup);
-    },
-    <span class="hljs-title function_">dispose</span>(<span class="hljs-params"></span>) {
-      <span class="hljs-keyword">if</span> (closed) <span class="hljs-keyword">return</span>;
-      closed = <span class="hljs-literal">true</span>;
-      <span class="hljs-keyword">const</span> errors = [];
-      <span class="hljs-comment">// 后创建的资源可能依赖早先的资源，按逆序释放。</span>
-      <span class="hljs-keyword">while</span> (cleanups.<span class="hljs-property">length</span>) {
-        <span class="hljs-keyword">try</span> { cleanups.<span class="hljs-title function_">pop</span>()(); }
-        <span class="hljs-keyword">catch</span> (error) { errors.<span class="hljs-title function_">push</span>(error); }
-      }
-      <span class="hljs-keyword">if</span> (errors.<span class="hljs-property">length</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AggregateError</span>(errors, <span class="hljs-string">&#x27;插件资源清理失败&#x27;</span>);
-    },
-  };
-}
-</code></pre></div>
-<p>清理时先标记 closed，使重入和重复调用不会再次释放；单个清理失败后仍尝试其余清理，最后再报告错误。关闭后才登记的迟到资源会立即清理，不能留在已经失效的作用域里。宿主需要分别记录原始激活错误和清理错误，避免清理异常覆盖真正的初始化原因。</p>
-<p>这个作用域不等待异步清理。若支持异步 deactivate，应另外定义 Promise、截止时间和失败报告协议，不可把 async 函数塞入本例后以为已经等待完成。资源也必须及时登记：创建后未登记就抛错，宿主无法凭空知道该释放什么。</p>
-<h2>能力注入比全局对象更容易治理</h2>
-<p>宿主应向插件注入最小能力，而不是让插件自行调用所有浏览器 API。文件读写、网络请求、用户数据、命令执行和设置修改都应通过显式能力入口，并根据插件权限决定是否提供。</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> context = {
-  <span class="hljs-attr">api</span>: {
-    <span class="hljs-attr">readDocument</span>: <span class="hljs-function">(<span class="hljs-params">id</span>) =&gt;</span> documentStore.<span class="hljs-title function_">readForPlugin</span>(pluginId, id),
+<h2>插件契约</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;word-count&#x27;</span>,
+  <span class="hljs-attr">apiVersion</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-title function_">activate</span>(<span class="hljs-params">api</span>) {
+    <span class="hljs-keyword">const</span> item = api.<span class="hljs-property">statusBar</span>.<span class="hljs-title function_">add</span>({ <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;0 字&#x27;</span> });
+    <span class="hljs-keyword">const</span> off = api.<span class="hljs-property">editor</span>.<span class="hljs-title function_">onChange</span>(<span class="hljs-function">(<span class="hljs-params">text</span>) =&gt;</span> {
+      item.<span class="hljs-title function_">setText</span>(<span class="hljs-string">`<span class="hljs-subst">${text.length}</span> 字`</span>);
+    });
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-title function_">off</span>();
+      item.<span class="hljs-title function_">remove</span>();
+    };
   },
-  <span class="hljs-attr">log</span>: <span class="hljs-title function_">createScopedLogger</span>(pluginId),
-  <span class="hljs-attr">commands</span>: <span class="hljs-title function_">createCommandRegistry</span>(pluginId, grantedPermissions),
 };
 </code></pre></div>
-<p>权限检查不能只在插件 UI 中隐藏按钮。宿主提供的能力函数和服务端接口仍要验证插件身份、当前用户和资源权限。插件 ID 只是路由和审计信息，不是用户授权凭据。</p>
-<p>如果插件可以加载远程 URL、执行脚本或读取任意文件，风险会显著扩大。要限制来源、内容安全策略、网络目标、资源大小和执行时间；不可信扩展应评估 iframe sandbox、独立 origin 或 Worker 等隔离方案。</p>
-<h2>同进程插件和隔离插件的代价不同</h2>
-<p>同进程 JavaScript 插件可以直接使用宿主提供的对象，交互简单、性能好，但插件异常可能影响宿主，且普通 JS 没有真正的安全隔离。限制 API 只能减少误用，不等于防住恶意代码。</p>
-<p>iframe 可以提供文档和部分来源隔离，但要设计消息协议、焦点、尺寸、认证和性能；sandbox 的允许项需要最小化，同源且同时开放脚本和来源时要特别谨慎。Worker 适合计算和消息通信，但不能直接操作 DOM。</p>
-<p>跨边界通信使用版本化消息和结构化数据：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> message = {
-  <span class="hljs-attr">version</span>: <span class="hljs-number">1</span>,
-  <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;panel:resize&#x27;</span>,
-  <span class="hljs-attr">payload</span>: { <span class="hljs-attr">height</span>: <span class="hljs-number">480</span> },
-};
+<p>插件只能使用 <code>api</code> 中提供的能力，<code>activate</code> 返回的清理函数在停用时调用。</p>
+<h2>宿主的实现要点</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">loadPlugin</span>(<span class="hljs-params">plugin, host</span>) {
+  <span class="hljs-keyword">if</span> (plugin.<span class="hljs-property">apiVersion</span> !== <span class="hljs-number">1</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">`不支持的 API 版本：<span class="hljs-subst">${plugin.apiVersion}</span>`</span>);
+
+  <span class="hljs-keyword">const</span> disposers = [];
+  <span class="hljs-keyword">const</span> api = {
+    <span class="hljs-attr">editor</span>: {
+      <span class="hljs-title function_">onChange</span>(<span class="hljs-params">fn</span>) {
+        <span class="hljs-keyword">const</span> off = host.<span class="hljs-property">editor</span>.<span class="hljs-title function_">subscribe</span>(<span class="hljs-title function_">safe</span>(fn, plugin.<span class="hljs-property">name</span>));
+        disposers.<span class="hljs-title function_">push</span>(off);
+        <span class="hljs-keyword">return</span> off;
+      },
+    },
+    <span class="hljs-attr">statusBar</span>: {
+      <span class="hljs-title function_">add</span>(<span class="hljs-params">options</span>) {
+        <span class="hljs-keyword">const</span> item = host.<span class="hljs-property">statusBar</span>.<span class="hljs-title function_">create</span>(options);
+        disposers.<span class="hljs-title function_">push</span>(<span class="hljs-function">() =&gt;</span> item.<span class="hljs-title function_">remove</span>());
+        <span class="hljs-keyword">return</span> item;
+      },
+    },
+  };
+
+  <span class="hljs-keyword">const</span> cleanup = plugin.<span class="hljs-title function_">activate</span>(api);
+  <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
+    cleanup?.();
+    disposers.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">dispose</span>) =&gt;</span> <span class="hljs-title function_">dispose</span>());
+  };
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">safe</span>(<span class="hljs-params">fn, name</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-function">(<span class="hljs-params">...args</span>) =&gt;</span> {
+    <span class="hljs-keyword">try</span> {
+      <span class="hljs-title function_">fn</span>(...args);
+    } <span class="hljs-keyword">catch</span> (error) {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">`插件 <span class="hljs-subst">${name}</span> 出错`</span>, error);
+    }
+  };
+}
 </code></pre></div>
-<p>接收端应检查来源、窗口、版本、字段类型和操作范围。不要把消息中的字符串交给 <code>eval</code> 或 <code>innerHTML</code>，也不要把收到的“支付成功”当成服务端事实。</p>
-<h2>版本兼容要写进契约</h2>
-<p>插件依赖的宿主 API 可能随着应用升级变化。宿主可以提供 API 版本、能力检测和弃用周期；插件应声明支持的范围，激活时发现能力不满足就显示清楚的兼容错误，而不是在运行中随机崩溃。</p>
-<p>共享 React、Vue 或其他运行时也要定义版本策略。强制所有插件使用同一个实例可以减少体积，但升级需要协调；每个插件携带自己的运行时可能增加体积和多份单例状态。依赖共享不是免费的性能优化，要用真实构建和版本组合验证。</p>
-<p>插件配置、消息和返回值要有 schema。新增可选字段通常更容易兼容，删除必填字段、改变事件语义和修改错误结构则需要迁移。不要让插件直接依赖宿主的私有 DOM、内部 class 或未声明的 store 字段。</p>
-<h2>一个插件失败不应拖垮整个应用</h2>
-<p>插件加载、初始化、运行时和停用都可能失败。宿主要区分加载中、不可用、初始化失败和运行时错误，给用户禁用、重试、查看日志或卸载入口。错误边界不一定能捕获远程脚本加载失败、资源超时和所有异步任务。</p>
-<p>插件创建的资源应有作用域清单，宿主销毁插件时统一调用 dispose；但强制终止 Worker 或 iframe 不会撤销已经发送到服务器的副作用。写操作仍需要幂等、权限和状态查询。</p>
-<p>日志应包含插件 ID、版本、宿主版本、操作关联 ID 和错误阶段，同时过滤用户内容、令牌和敏感响应。插件异常不能通过把所有错误吞掉来“保护主应用”，否则问题会变成静默的数据丢失。</p>
-<h2>发布和回滚需要考虑插件版本组合</h2>
-<p>插件远程清单、宿主入口和资源缓存可能形成多种版本组合。发布新宿主前要验证旧插件仍能工作，发布新插件前要确认旧宿主的能力；哈希资源和版本窗口能帮助旧页面恢复，但不能无限保留所有旧产物。</p>
-<p>插件清单应可验证来源和完整性，必要时签名或通过受控仓库发布。把任意用户提交的 JavaScript 直接当插件执行，相当于授予它宿主权限，不能只靠文件扩展名或名称判断安全。</p>
-<p>选型时先问插件是否真的需要独立团队和运行时扩展。如果只是在同一应用复用几个组件，清晰的模块契约或 monorepo 通常更简单；只有独立交付、第三方扩展或长期演进收益足以覆盖权限、版本、监控和隔离成本时，才值得建立插件平台。</p></div><div class="answer-bottom"><a href="https://code.visualstudio.com/api/references/vscode-api" target="_blank" rel="noreferrer">VS Code · Extension API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E6%8F%92%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E6%89%8D%E8%83%BD%E4%BF%9D%E6%8C%81%E5%8F%AF%E7%BB%B4%E6%8A%A4%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E6%8F%92%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E6%89%8D%E8%83%BD%E4%BF%9D%E6%8C%81%E5%8F%AF%E7%BB%B4%E6%8A%A4%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aarchitecture-plugin-system%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Farchitecture-plugin-system%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端插件系统怎样设计才能保持可维护？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/architecture-microfrontend/">微前端适合解决什么组织和部署问题？</a></li><li><a href="/questions/arch-design-system/">设计系统为什么不能只有一套视觉样式？</a></li><li><a href="/questions/arch-state-machine/">怎样避免加载、成功和失败状态互相矛盾？</a></li><li><a href="/questions/arch-progressive/">渐进增强和优雅降级怎样影响前端方案选择？</a></li></ul></nav></main></div></div>
+<ul>
+<li>宿主记录插件注册的所有资源，即使插件忘了清理，停用时也能回收。</li>
+<li>插件回调包一层错误捕获，一个插件出错不影响编辑器和其他插件。</li>
+<li>API 对象只暴露最小能力，例如只读的文档内容和受控的修改方法。</li>
+</ul>
+<h2>扩展点和懒激活</h2>
+<p>VS Code 等成熟系统让插件在清单中静态声明扩展点（命令、菜单、视图）和激活条件，宿主不加载代码也能显示菜单项，用户首次使用时才激活插件。插件多时，这能显著缩短启动时间。</p>
+<h2>版本兼容</h2>
+<ul>
+<li>宿主 API 只增不改；需要改变行为时新增 API，旧 API 标记废弃并在开发模式下警告。</li>
+<li>插件声明兼容的宿主版本范围，宿主拒绝加载不兼容的插件并提示原因。</li>
+<li>为宿主 API 提供 TypeScript 类型声明包，插件作者在编译期就能发现不兼容。</li>
+</ul>
+<h2>隔离不可信插件</h2>
+<p>同进程运行的插件可以访问 <code>window</code>、DOM 和 Cookie，等同于拥有页面全部权限。第三方插件应运行在：</p>
+<ul>
+<li><strong>沙箱 iframe</strong>（<code>sandbox</code> 属性，不同源）：可以渲染 UI，通过 <code>postMessage</code> 与宿主通信。</li>
+<li><strong>Web Worker</strong>：没有 DOM，适合纯计算或数据处理类插件。</li>
+</ul>
+<p>宿主在消息边界上校验来源和消息格式，只执行白名单中的操作。</p>
+<h2>常见追问</h2>
+<ul>
+<li>插件之间怎么通信？通过宿主提供的事件或服务注册机制，不直接互相导入。</li>
+<li>怎样避免插件拖慢宿主？限制同步回调的执行时间，耗时操作要求放到 Worker 或异步执行，并提供性能统计帮助定位。</li>
+</ul></div><div class="answer-bottom"><a href="https://code.visualstudio.com/api/references/vscode-api" target="_blank" rel="noreferrer">VS Code · Extension API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E6%8F%92%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E6%89%8D%E8%83%BD%E4%BF%9D%E6%8C%81%E5%8F%AF%E7%BB%B4%E6%8A%A4%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E6%8F%92%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E6%89%8D%E8%83%BD%E4%BF%9D%E6%8C%81%E5%8F%AF%E7%BB%B4%E6%8A%A4%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aarchitecture-plugin-system%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Farchitecture-plugin-system%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端插件系统怎样设计才能保持可维护？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/architecture-microfrontend/">微前端适合解决什么组织和部署问题？</a></li><li><a href="/questions/arch-design-system/">设计系统为什么不能只有一套视觉样式？</a></li><li><a href="/questions/arch-state-machine/">怎样避免加载、成功和失败状态互相矛盾？</a></li><li><a href="/questions/arch-progressive/">渐进增强和优雅降级怎样影响前端方案选择？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

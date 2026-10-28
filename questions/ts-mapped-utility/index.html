@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="TypeScript面试题：映射类型根据键集合生成新的属性类型，工具类型封装了常见的选取、排除和修饰符变换。它们通常只改变顶层静态结构，不会执行字段过滤、默认值填充或深度冻结。" />
+    <meta name="description" content="TypeScript面试题：映射类型 [K in keyof T] 遍历键生成新属性，可以用 +/- 增减 readonly 和 ? 修饰符，用 as 子句重命名或过滤键。Partial、Required、Readonly、Pick、Omit、Record 都建立在它之上，只作用于顶层，也只改变类型：Omit 不会删除对象上的真实字段。" />
     <title>映射类型与 Partial、Pick、Omit 如何用于接口建模？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/ts-mapped-utility/" />
     <meta name="robots" content="index,follow" />
@@ -19,40 +19,30 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="映射类型与 Partial、Pick、Omit 如何用于接口建模？ · 前端知库" />
-    <meta property="og:description" content="TypeScript面试题：映射类型根据键集合生成新的属性类型，工具类型封装了常见的选取、排除和修饰符变换。它们通常只改变顶层静态结构，不会执行字段过滤、默认值填充或深度冻结。" />
+    <meta property="og:description" content="TypeScript面试题：映射类型 [K in keyof T] 遍历键生成新属性，可以用 +/- 增减 readonly 和 ? 修饰符，用 as 子句重命名或过滤键。Partial、Required、Readonly、Pick、Omit、Record 都建立在它之上，只作用于顶层，也只改变类型：Omit 不会删除对象上的真实字段。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/ts-mapped-utility/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-mapped-utility/#webpage","url":"https://fe.hushifa.top/questions/ts-mapped-utility/","name":"映射类型与 Partial、Pick、Omit 如何用于接口建模？ · 前端知库","description":"TypeScript面试题：映射类型根据键集合生成新的属性类型，工具类型封装了常见的选取、排除和修饰符变换。它们通常只改变顶层静态结构，不会执行字段过滤、默认值填充或深度冻结。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-mapped-utility/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-mapped-utility/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"映射类型与 Partial、Pick、Omit 如何用于接口建模？","item":"https://fe.hushifa.top/questions/ts-mapped-utility/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-mapped-utility/#webpage","url":"https://fe.hushifa.top/questions/ts-mapped-utility/","name":"映射类型与 Partial、Pick、Omit 如何用于接口建模？ · 前端知库","description":"TypeScript面试题：映射类型 [K in keyof T] 遍历键生成新属性，可以用 +/- 增减 readonly 和 ? 修饰符，用 as 子句重命名或过滤键。Partial、Required、Readonly、Pick、Omit、Record 都建立在它之上，只作用于顶层，也只改变类型：Omit 不会删除对象上的真实字段。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-mapped-utility/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-mapped-utility/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"映射类型与 Partial、Pick、Omit 如何用于接口建模？","item":"https://fe.hushifa.top/questions/ts-mapped-utility/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">映射类型与 Partial、Pick、Omit 如何用于接口建模？</span></nav><h1 tabindex="-1">映射类型与 Partial、Pick、Omit 如何用于接口建模？</h1><p class="reading-summary">映射类型根据键集合生成新的属性类型，工具类型封装了常见的选取、排除和修饰符变换。它们通常只改变顶层静态结构，不会执行字段过滤、默认值填充或深度冻结。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">映射类型与 Partial、Pick、Omit 如何用于接口建模？</span></nav><h1 tabindex="-1">映射类型与 Partial、Pick、Omit 如何用于接口建模？</h1><p class="reading-summary">映射类型 [K in keyof T] 遍历键生成新属性，可以用 +/- 增减 readonly 和 ? 修饰符，用 as 子句重命名或过滤键。Partial、Required、Readonly、Pick、Omit、Record 都建立在它之上，只作用于顶层，也只改变类型：Omit 不会删除对象上的真实字段。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>映射类型用 [K in keyof T] 遍历键并变换属性，可以加减 readonly 和 ? 修饰符。</li>
-<li>Partial、Required、Readonly、Pick、Omit、Record 都是基于映射类型的内置工具。</li>
-<li>Omit 不检查要删除的键是否存在，联合类型上使用会丢失分支差异。</li>
-<li>用 as 子句可以在映射时重命名或过滤键。</li>
+<li><code>{ [K in keyof T]: X }</code> 为 T 的每个键生成一个属性，<code>T[K]</code> 取原属性类型。</li>
+<li><code>-readonly</code>、<code>-?</code> 移除修饰符，<code>+readonly</code>、<code>+?</code>（或省略加号）添加修饰符。</li>
+<li><code>Partial</code>、<code>Required</code>、<code>Readonly</code> 只改顶层，嵌套对象不受影响。</li>
+<li><code>Pick&lt;T, K&gt;</code> 要求 K 是 T 的键；<code>Omit&lt;T, K&gt;</code> 的 K 可以是任意字符串，拼错不报错，用在联合类型上还会丢失分支差异。</li>
+<li>这些工具只改变类型，<code>Omit&lt;User, &#x27;password&#x27;&gt;</code> 类型的变量运行时仍可能带着 <code>password</code>；要真正去掉字段必须构造新对象。</li>
 </ul>
-<p>一个 User 类型可能包含 ID、姓名、个人资料和内部字段。更新接口、展示组件和公开响应各需要不同部分，如果每个地方复制一份完整字段列表，很容易改了一处漏掉另一处。</p>
-<p>映射类型可以从已有键和属性类型推导新结构。它表达的是“这些字段在另一个契约里是什么样”，不负责修改真实对象或执行数据转换。</p>
-<h2>从遍历键到生成属性</h2>
-<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">BooleanFlags</span>&lt;T&gt; = {
-  [<span class="hljs-title class_">Key</span> <span class="hljs-keyword">in</span> keyof T]: <span class="hljs-built_in">boolean</span>;
-};
-
-<span class="hljs-keyword">type</span> <span class="hljs-title class_">Features</span> = { <span class="hljs-attr">search</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>; <span class="hljs-attr">exportFile</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span> };
-<span class="hljs-keyword">const</span> <span class="hljs-attr">enabled</span>: <span class="hljs-title class_">BooleanFlags</span>&lt;<span class="hljs-title class_">Features</span>&gt; = {
-  <span class="hljs-attr">search</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">exportFile</span>: <span class="hljs-literal">false</span>,
-};
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(enabled.<span class="hljs-property">search</span>); <span class="hljs-comment">// true</span>
+<h2>手写内置工具</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">MyPartial</span>&lt;T&gt; = { [K <span class="hljs-keyword">in</span> keyof T]?: T[K] };
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">MyRequired</span>&lt;T&gt; = { [K <span class="hljs-keyword">in</span> keyof T]-?: T[K] };
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">MyReadonly</span>&lt;T&gt; = { <span class="hljs-keyword">readonly</span> [K <span class="hljs-keyword">in</span> keyof T]: T[K] };
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">MyPick</span>&lt;T, K <span class="hljs-keyword">extends</span> keyof T&gt; = { [P <span class="hljs-keyword">in</span> K]: T[P] };
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">MyRecord</span>&lt;K <span class="hljs-keyword">extends</span> <span class="hljs-title class_">PropertyKey</span>, V&gt; = { [P <span class="hljs-keyword">in</span> K]: V };
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">MyOmit</span>&lt;T, K <span class="hljs-keyword">extends</span> <span class="hljs-title class_">PropertyKey</span>&gt; = <span class="hljs-title class_">Pick</span>&lt;T, <span class="hljs-title class_">Exclude</span>&lt;keyof T, K&gt;&gt;;
 </code></pre></div>
-<p>keyof T 提供键集合，映射逐个生成同名属性，并把属性类型统一改为 boolean。这并没有调用 Features 中的函数，只是在类型层建立一组对应开关。</p>
-<p>如果写 T[Key]，则可以沿用原属性类型，再改变可选、只读等修饰符。内置的很多工具类型都基于类似思路。</p>
-<h2>常见工具怎样选择</h2>
-<table><thead><tr><th>工具</th><th>类型层的作用</th><th>不会自动完成的工作</th></tr></thead><tbody><tr><td>Partial</td><td>顶层属性变为可选</td><td>不会让深层字段全部可选</td></tr><tr><td>Required</td><td>去掉顶层可选修饰</td><td>不会给缺失字段填默认值</td></tr><tr><td>Readonly</td><td>增加对应只读约束</td><td>不会执行运行时深冻结</td></tr><tr><td>Pick&lt;T, K&gt;</td><td>选择指定字段</td><td>不会从对象里复制这些字段</td></tr><tr><td>Omit&lt;T, K&gt;</td><td>排除指定字段</td><td>不会删除对象上的真实字段</td></tr><tr><td>Record&lt;K, V&gt;</td><td>用键集合 K 建立值类型为 V 的结构</td><td>不会在运行时创建这些键</td></tr></tbody></table>
-<p>Pick 的键需要来自目标类型，能帮助发现选取字段的拼写错误。Omit 的键约束更宽，省略一个本来不存在的名字未必报错，因此它不是万能的字段名检查器。</p>
-<h2>更新接口先限制能改哪些字段</h2>
+<h2>更新接口</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">User</span> = {
   <span class="hljs-keyword">readonly</span> <span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>;
   <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>;
@@ -61,62 +51,45 @@
 };
 
 <span class="hljs-keyword">type</span> <span class="hljs-title class_">UserPatch</span> = <span class="hljs-title class_">Partial</span>&lt;<span class="hljs-title class_">Pick</span>&lt;<span class="hljs-title class_">User</span>, <span class="hljs-string">&#x27;name&#x27;</span> | <span class="hljs-string">&#x27;profile&#x27;</span>&gt;&gt;;
-<span class="hljs-keyword">const</span> <span class="hljs-attr">rename</span>: <span class="hljs-title class_">UserPatch</span> = { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Lin&#x27;</span> };
 
+<span class="hljs-keyword">const</span> <span class="hljs-attr">rename</span>: <span class="hljs-title class_">UserPatch</span> = { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Lin&#x27;</span> };
 <span class="hljs-comment">// @ts-expect-error 更新契约没有开放 id</span>
 <span class="hljs-keyword">const</span> <span class="hljs-attr">changeId</span>: <span class="hljs-title class_">UserPatch</span> = { <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;user_2&#x27;</span> };
-
-<span class="hljs-comment">// @ts-expect-error Partial 只作用于顶层，profile 一旦提供仍需完整结构</span>
+<span class="hljs-comment">// @ts-expect-error Partial 只作用于顶层，profile 提供时仍需完整</span>
 <span class="hljs-keyword">const</span> <span class="hljs-attr">incompleteProfile</span>: <span class="hljs-title class_">UserPatch</span> = { <span class="hljs-attr">profile</span>: { <span class="hljs-attr">city</span>: <span class="hljs-string">&#x27;上海&#x27;</span> } };
 </code></pre></div>
-<p>直接 Partial 会把 ID、密码等字段也放进更新契约，可能偏离真实权限。先 Pick 出允许更新的部分，再决定是否可选，通常更贴近接口意图。</p>
-<p>如果业务允许只更新 profile.city，应明确为 profile 定义部分更新结构，并说明服务器采用替换还是合并语义。类型里写了深层可选，并不自动实现递归合并算法。</p>
-<p>Partial 还允许空对象。如果业务要求至少更新一个字段，应该增加类型建模或运行时检查，不能把“字段都可选”误当成“至少有一个字段”。</p>
-<h2>Omit 不是运行时脱敏</h2>
-<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">const</span> <span class="hljs-attr">full</span>: <span class="hljs-title class_">User</span> = {
-  <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;user_1&#x27;</span>,
-  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Lin&#x27;</span>,
-  <span class="hljs-attr">profile</span>: { <span class="hljs-attr">city</span>: <span class="hljs-string">&#x27;上海&#x27;</span>, <span class="hljs-attr">postalCode</span>: <span class="hljs-string">&#x27;200000&#x27;</span> },
-  <span class="hljs-attr">password</span>: <span class="hljs-string">&#x27;示例占位值&#x27;</span>,
-};
-
-<span class="hljs-keyword">const</span> <span class="hljs-attr">visibleType</span>: <span class="hljs-title class_">Omit</span>&lt;<span class="hljs-title class_">User</span>, <span class="hljs-string">&#x27;password&#x27;</span>&gt; = full;
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">hasOwn</span>(visibleType, <span class="hljs-string">&#x27;password&#x27;</span>)); <span class="hljs-comment">// true</span>
+<p>先 <code>Pick</code> 出允许修改的字段，再 <code>Partial</code>；直接 <code>Partial&lt;User&gt;</code> 会把 <code>id</code>、<code>password</code> 也放进更新契约。需要深层可选时自己写递归的 <code>DeepPartial</code>。</p>
+<h2>Omit 不是脱敏</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">full</span>: <span class="hljs-title class_">User</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-attr">visible</span>: <span class="hljs-title class_">Omit</span>&lt;<span class="hljs-title class_">User</span>, <span class="hljs-string">&#x27;password&#x27;</span>&gt; = full; <span class="hljs-comment">// 运行时仍是 full，带着 password</span>
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">toPublicUser</span>(<span class="hljs-params"><span class="hljs-attr">user</span>: <span class="hljs-title class_">User</span></span>): <span class="hljs-title class_">Pick</span>&lt;<span class="hljs-title class_">User</span>, <span class="hljs-string">&#x27;id&#x27;</span> | <span class="hljs-string">&#x27;name&#x27;</span>&gt; {
-  <span class="hljs-keyword">return</span> { <span class="hljs-attr">id</span>: user.<span class="hljs-property">id</span>, <span class="hljs-attr">name</span>: user.<span class="hljs-property">name</span> };
+  <span class="hljs-keyword">return</span> { <span class="hljs-attr">id</span>: user.<span class="hljs-property">id</span>, <span class="hljs-attr">name</span>: user.<span class="hljs-property">name</span> }; <span class="hljs-comment">// 白名单构造新对象</span>
 }
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(<span class="hljs-title function_">toPublicUser</span>(full)).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// id,name</span>
 </code></pre></div>
-<p>第一步只是让变量的静态类型不再提供 password 这个成员，真实对象仍是 full。直接 JSON.stringify 这个引用，仍可能包含敏感字段。</p>
-<p>第二步真正创建了只包含白名单字段的新对象，才完成实际数据选择。对于公开响应、日志或持久化数据，应把运行时映射与类型契约共同设计，而不是靠一个 Omit 或断言完成过滤。</p>
-<h2>修饰符可以明确增加或移除</h2>
-<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">MutableRequired</span>&lt;T&gt; = {
-  -<span class="hljs-keyword">readonly</span> [<span class="hljs-title class_">Key</span> <span class="hljs-keyword">in</span> keyof T]-?: T[<span class="hljs-title class_">Key</span>];
-};
+<p>接口响应、日志中要去掉敏感字段时，必须像 <code>toPublicUser</code> 这样复制白名单字段。</p>
+<h2>联合上的 Omit</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Shape</span> = { <span class="hljs-attr">kind</span>: <span class="hljs-string">&#x27;circle&#x27;</span>; <span class="hljs-attr">radius</span>: <span class="hljs-built_in">number</span> } | { <span class="hljs-attr">kind</span>: <span class="hljs-string">&#x27;square&#x27;</span>; <span class="hljs-attr">side</span>: <span class="hljs-built_in">number</span> };
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">NoKind</span> = <span class="hljs-title class_">Omit</span>&lt;<span class="hljs-title class_">Shape</span>, <span class="hljs-string">&#x27;kind&#x27;</span>&gt;; <span class="hljs-comment">// {}，只保留了公共键</span>
 
-<span class="hljs-keyword">type</span> <span class="hljs-title class_">Draft</span> = { <span class="hljs-keyword">readonly</span> <span class="hljs-attr">title</span>?: <span class="hljs-built_in">string</span> };
-<span class="hljs-keyword">const</span> <span class="hljs-attr">completed</span>: <span class="hljs-title class_">MutableRequired</span>&lt;<span class="hljs-title class_">Draft</span>&gt; = { <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;初稿&#x27;</span> };
-completed.<span class="hljs-property">title</span> = <span class="hljs-string">&#x27;定稿&#x27;</span>;
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(completed.<span class="hljs-property">title</span>); <span class="hljs-comment">// 定稿</span>
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">DistributiveOmit</span>&lt;T, K <span class="hljs-keyword">extends</span> <span class="hljs-title class_">PropertyKey</span>&gt; = T <span class="hljs-keyword">extends</span> <span class="hljs-built_in">unknown</span> ? <span class="hljs-title class_">Omit</span>&lt;T, K&gt; : <span class="hljs-built_in">never</span>;
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Fixed</span> = <span class="hljs-title class_">DistributiveOmit</span>&lt;<span class="hljs-title class_">Shape</span>, <span class="hljs-string">&#x27;kind&#x27;</span>&gt;; <span class="hljs-comment">// { radius: number } | { side: number }</span>
 </code></pre></div>
-<p>-readonly 移除只读修饰，-? 移除可选修饰。它们改变的是所生成类型的约束，不会给某个已冻结对象解除运行时冻结，也不会把缺失属性补到原对象上。</p>
-<p>可选属性是否允许显式写入 undefined，还受 exactOptionalPropertyTypes 等选项影响。解释工具类型结果时，应把原属性形式与编译配置一起考虑。</p>
-<h2>键重映射可以生成另一套命名接口</h2>
+<h2>键重映射</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Getters</span>&lt;T&gt; = {
-  [<span class="hljs-title class_">Key</span> <span class="hljs-keyword">in</span> keyof T <span class="hljs-keyword">as</span> <span class="hljs-title class_">Key</span> <span class="hljs-keyword">extends</span> <span class="hljs-built_in">string</span> ? <span class="hljs-string">`get<span class="hljs-subst">${Capitalize&lt;Key&gt;}</span>`</span> : <span class="hljs-built_in">never</span>]: <span class="hljs-function">() =&gt;</span> T[<span class="hljs-title class_">Key</span>];
+  [K <span class="hljs-keyword">in</span> keyof T <span class="hljs-keyword">as</span> K <span class="hljs-keyword">extends</span> <span class="hljs-built_in">string</span> ? <span class="hljs-string">`get<span class="hljs-subst">${Capitalize&lt;K&gt;}</span>`</span> : <span class="hljs-built_in">never</span>]: <span class="hljs-function">() =&gt;</span> T[K];
 };
-
 <span class="hljs-keyword">type</span> <span class="hljs-title class_">UserGetters</span> = <span class="hljs-title class_">Getters</span>&lt;<span class="hljs-title class_">Pick</span>&lt;<span class="hljs-title class_">User</span>, <span class="hljs-string">&#x27;id&#x27;</span> | <span class="hljs-string">&#x27;name&#x27;</span>&gt;&gt;;
-<span class="hljs-keyword">const</span> <span class="hljs-attr">access</span>: <span class="hljs-title class_">UserGetters</span> = {
-  <span class="hljs-attr">getId</span>: <span class="hljs-function">() =&gt;</span> full.<span class="hljs-property">id</span>,
-  <span class="hljs-attr">getName</span>: <span class="hljs-function">() =&gt;</span> full.<span class="hljs-property">name</span>,
-};
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(access.<span class="hljs-title function_">getName</span>()); <span class="hljs-comment">// Lin</span>
+<span class="hljs-comment">// { getId: () =&gt; string; getName: () =&gt; string }</span>
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">OnlyStrings</span>&lt;T&gt; = { [K <span class="hljs-keyword">in</span> keyof T <span class="hljs-keyword">as</span> T[K] <span class="hljs-keyword">extends</span> <span class="hljs-built_in">string</span> ? K : <span class="hljs-built_in">never</span>]: T[K] };
 </code></pre></div>
-<p>as 子句决定输出键，never 可以排除不适用的键。这里排除非字符串键，再把 id、name 映射成 getId、getName。真正的方法仍由对象实现，类型系统没有替你生成函数体。</p>
-<p>当 T 是联合类型时，还要留意工具是否按成员分发。比如普通 Omit 可能只围绕联合的公共键处理，不能默认保留每个分支所有特有字段；确实需要逐分支变换时，应显式设计分布式条件类型，并验证结果。</p>
-<p>工具类型的目的应该是让契约同步变化，而不是把所有接口都从一个巨大基础类型层层变换出来。若公开模型与内部模型职责不同，适当独立定义或显式映射，往往比复杂的 Pick、Omit、Partial 叠加更清楚。</p></div><div class="answer-bottom"><a href="https://www.typescriptlang.org/docs/handbook/utility-types.html" target="_blank" rel="noreferrer">TypeScript · Utility Types<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%98%A0%E5%B0%84%E7%B1%BB%E5%9E%8B%E4%B8%8E+Partial%E3%80%81Pick%E3%80%81Omit+%E5%A6%82%E4%BD%95%E7%94%A8%E4%BA%8E%E6%8E%A5%E5%8F%A3%E5%BB%BA%E6%A8%A1%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%98%A0%E5%B0%84%E7%B1%BB%E5%9E%8B%E4%B8%8E+Partial%E3%80%81Pick%E3%80%81Omit+%E5%A6%82%E4%BD%95%E7%94%A8%E4%BA%8E%E6%8E%A5%E5%8F%A3%E5%BB%BA%E6%A8%A1%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-mapped-utility%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-mapped-utility%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：映射类型与 Partial、Pick、Omit 如何用于接口建模？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-unknown/">any、unknown 和 never 分别适合什么场景？</a></li><li><a href="/questions/ts-interface-type/">type 和 interface 有哪些区别？</a></li><li><a href="/questions/ts-generics/">泛型解决了什么问题？如何约束泛型？</a></li><li><a href="/questions/ts-discriminated-union/">如何用可辨识联合避免不合理的状态组合？</a></li></ul></nav></main></div></div>
+<p><code>as</code> 返回 <code>never</code> 时该键被删除。</p>
+<h2>常见追问</h2>
+<ul>
+<li><code>Record&lt;string, T&gt;</code> 和索引签名有何不同？基本等价；<code>Record&lt;&#x27;a&#x27; | &#x27;b&#x27;, T&gt;</code> 则要求两个键都存在。</li>
+<li>为什么 <code>Object.keys(obj)</code> 返回 <code>string[]</code> 而不是 <code>(keyof T)[]</code>？结构类型允许对象带有类型中没有声明的额外键。</li>
+</ul></div><div class="answer-bottom"><a href="https://www.typescriptlang.org/docs/handbook/utility-types.html" target="_blank" rel="noreferrer">TypeScript · Utility Types<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%98%A0%E5%B0%84%E7%B1%BB%E5%9E%8B%E4%B8%8E+Partial%E3%80%81Pick%E3%80%81Omit+%E5%A6%82%E4%BD%95%E7%94%A8%E4%BA%8E%E6%8E%A5%E5%8F%A3%E5%BB%BA%E6%A8%A1%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%98%A0%E5%B0%84%E7%B1%BB%E5%9E%8B%E4%B8%8E+Partial%E3%80%81Pick%E3%80%81Omit+%E5%A6%82%E4%BD%95%E7%94%A8%E4%BA%8E%E6%8E%A5%E5%8F%A3%E5%BB%BA%E6%A8%A1%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-mapped-utility%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-mapped-utility%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：映射类型与 Partial、Pick、Omit 如何用于接口建模？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-unknown/">any、unknown 和 never 分别适合什么场景？</a></li><li><a href="/questions/ts-interface-type/">type 和 interface 有哪些区别？</a></li><li><a href="/questions/ts-generics/">泛型解决了什么问题？如何约束泛型？</a></li><li><a href="/questions/ts-discriminated-union/">如何用可辨识联合避免不合理的状态组合？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

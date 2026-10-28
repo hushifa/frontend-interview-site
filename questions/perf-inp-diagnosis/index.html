@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="性能优化面试题：从输入延迟、事件处理和呈现延迟三个阶段拆解 INP，结合 Event Timing、PerformanceObserver 和 DevTools 设计可复现、可验证的交互性能诊断流程。" />
+    <meta name="description" content="性能优化面试题：INP 衡量点击、轻触和按键到下一帧绘制的延迟，≤200ms 为良好、&gt;500ms 为较差，按 75 分位评估，2024 年取代 FID 成为 Core Web Vitals。每次交互分为输入延迟、处理时间、呈现延迟三段，先用 Event Timing 或 web-vitals 库找到最慢的交互和慢在哪段，再针对性优化。" />
     <title>INP 很高时，如何定位到底是哪一段交互变慢？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/perf-inp-diagnosis/" />
     <meta name="robots" content="index,follow" />
@@ -19,112 +19,73 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="INP 很高时，如何定位到底是哪一段交互变慢？ · 前端知库" />
-    <meta property="og:description" content="性能优化面试题：从输入延迟、事件处理和呈现延迟三个阶段拆解 INP，结合 Event Timing、PerformanceObserver 和 DevTools 设计可复现、可验证的交互性能诊断流程。" />
+    <meta property="og:description" content="性能优化面试题：INP 衡量点击、轻触和按键到下一帧绘制的延迟，≤200ms 为良好、&gt;500ms 为较差，按 75 分位评估，2024 年取代 FID 成为 Core Web Vitals。每次交互分为输入延迟、处理时间、呈现延迟三段，先用 Event Timing 或 web-vitals 库找到最慢的交互和慢在哪段，再针对性优化。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/perf-inp-diagnosis/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-inp-diagnosis/#webpage","url":"https://fe.hushifa.top/questions/perf-inp-diagnosis/","name":"INP 很高时，如何定位到底是哪一段交互变慢？ · 前端知库","description":"性能优化面试题：从输入延迟、事件处理和呈现延迟三个阶段拆解 INP，结合 Event Timing、PerformanceObserver 和 DevTools 设计可复现、可验证的交互性能诊断流程。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-inp-diagnosis/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-inp-diagnosis/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"INP 很高时，如何定位到底是哪一段交互变慢？","item":"https://fe.hushifa.top/questions/perf-inp-diagnosis/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-inp-diagnosis/#webpage","url":"https://fe.hushifa.top/questions/perf-inp-diagnosis/","name":"INP 很高时，如何定位到底是哪一段交互变慢？ · 前端知库","description":"性能优化面试题：INP 衡量点击、轻触和按键到下一帧绘制的延迟，≤200ms 为良好、>500ms 为较差，按 75 分位评估，2024 年取代 FID 成为 Core Web Vitals。每次交互分为输入延迟、处理时间、呈现延迟三段，先用 Event Timing 或 web-vitals 库找到最慢的交互和慢在哪段，再针对性优化。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-inp-diagnosis/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-inp-diagnosis/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"INP 很高时，如何定位到底是哪一段交互变慢？","item":"https://fe.hushifa.top/questions/perf-inp-diagnosis/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">INP 很高时，如何定位到底是哪一段交互变慢？</span></nav><h1 tabindex="-1">INP 很高时，如何定位到底是哪一段交互变慢？</h1><p class="reading-summary">从输入延迟、事件处理和呈现延迟三个阶段拆解 INP，结合 Event Timing、PerformanceObserver 和 DevTools 设计可复现、可验证的交互性能诊断流程。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">INP 很高时，如何定位到底是哪一段交互变慢？</span></nav><h1 tabindex="-1">INP 很高时，如何定位到底是哪一段交互变慢？</h1><p class="reading-summary">INP 衡量点击、轻触和按键到下一帧绘制的延迟，≤200ms 为良好、&gt;500ms 为较差，按 75 分位评估，2024 年取代 FID 成为 Core Web Vitals。每次交互分为输入延迟、处理时间、呈现延迟三段，先用 Event Timing 或 web-vitals 库找到最慢的交互和慢在哪段，再针对性优化。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>INP 衡量交互到下一次绘制的延迟，≤200ms 为良好，&gt;500ms 为较差，按 75 分位统计，2024 年 3 月取代 FID。</li>
-<li>一次交互分为输入延迟、处理时间和呈现延迟三段，要先判断慢在哪段。</li>
-<li>输入延迟高时减少主线程争用，处理时间高时缩小单次更新，呈现延迟高时检查样式、布局和绘制。</li>
-<li>Event Timing 需要特性检测；RUM 按交互类型和分位数上报，不只看平均值。</li>
+<li>阈值：≤200ms 良好，200–500ms 需要改进，&gt;500ms 较差，按页面访问的 75 分位评估。</li>
+<li>统计范围：页面生命周期内的点击、轻触和键盘交互，不包括滚动和缩放；交互达到 50 次及以上的页面取 98 分位，相当于每 50 次交互剔除一个最差值。</li>
+<li>三个阶段：输入延迟（等主线程空闲）、处理时间（事件回调执行）、呈现延迟（回调结束到下一帧绘制）。</li>
+<li>输入延迟高找长任务；处理时间高减少同步工作和更新范围；呈现延迟高检查样式、布局和 DOM 规模。</li>
+<li>生产环境用 web-vitals 库的 attribution 版本采集，开发环境用 DevTools Performance 面板复现。</li>
 </ul>
-<p>用户点击筛选按钮后，页面过了半秒才显示结果。把所有 JavaScript 都压到 50 毫秒以内并不能保证体验良好，因为浏览器可能先忙于处理其他任务，事件处理结束后又花很久做样式、布局和绘制。INP（Interaction to Next Paint）关注交互开始到下一次呈现之间的完整时间，诊断时必须把这段时间拆开。</p>
-<p>INP 在 2024 年 3 月取代 FID 成为 Core Web Vitals 指标。评估标准按页面访问的第 75 百分位统计：≤ 200 毫秒为良好，200 到 500 毫秒需要改进，超过 500 毫秒为较差。单次访问内，交互少于 50 次时取最慢的一次，交互更多时剔除少量极端值。</p>
-<h2>一次交互包含三个阶段</h2>
-<ol>
-<li><strong>输入延迟</strong>：浏览器收到用户操作后，等待主线程可以运行事件处理的时间。</li>
-<li><strong>处理时间</strong>：事件监听器及其同步调用执行的时间。</li>
-<li><strong>呈现延迟</strong>：处理结束后，浏览器完成样式计算、布局、绘制并提交下一帧的时间。</li>
-</ol>
-<p>长任务可能导致第一阶段变长；事件处理器可能触发大量组件更新；DOM 变化又可能让第三阶段变长。只看点击回调的耗时，无法解释后两种情况。</p>
-<h2>用 Event Timing 观察交互候选</h2>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">observeInteractions</span>(<span class="hljs-params">onInteraction</span>) {
-  <span class="hljs-keyword">if</span> (!(<span class="hljs-string">&#x27;PerformanceObserver&#x27;</span> <span class="hljs-keyword">in</span> <span class="hljs-variable language_">window</span>)) <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {};
-  <span class="hljs-keyword">const</span> types = <span class="hljs-title class_">PerformanceObserver</span>.<span class="hljs-property">supportedEntryTypes</span> ?? [];
-  <span class="hljs-keyword">if</span> (!types.<span class="hljs-title function_">includes</span>(<span class="hljs-string">&#x27;event&#x27;</span>)) <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {};
+<h2>采集</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { onINP } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;web-vitals/attribution&#x27;</span>;
 
-  <span class="hljs-keyword">const</span> observer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PerformanceObserver</span>(<span class="hljs-function">(<span class="hljs-params">list</span>) =&gt;</span> {
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> entry <span class="hljs-keyword">of</span> list.<span class="hljs-title function_">getEntries</span>()) {
-      <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Number</span>.<span class="hljs-built_in">isFinite</span>(entry.<span class="hljs-property">interactionId</span>) || entry.<span class="hljs-property">interactionId</span> === <span class="hljs-number">0</span>) <span class="hljs-keyword">continue</span>;
-      <span class="hljs-title function_">onInteraction</span>({
-        <span class="hljs-attr">name</span>: entry.<span class="hljs-property">name</span>,
-        <span class="hljs-attr">startTime</span>: entry.<span class="hljs-property">startTime</span>,
-        <span class="hljs-attr">duration</span>: entry.<span class="hljs-property">duration</span>,
-        <span class="hljs-attr">interactionId</span>: entry.<span class="hljs-property">interactionId</span>,
-        <span class="hljs-attr">processingStart</span>: entry.<span class="hljs-property">processingStart</span>,
-        <span class="hljs-attr">processingEnd</span>: entry.<span class="hljs-property">processingEnd</span>,
-        <span class="hljs-comment">// presentationTime 并非所有实现都提供</span>
-        <span class="hljs-attr">presentationTime</span>: entry.<span class="hljs-property">presentationTime</span> ?? <span class="hljs-literal">null</span>,
-      });
-    }
+<span class="hljs-title function_">onINP</span>(<span class="hljs-function">(<span class="hljs-params">{ value, rating, attribution }</span>) =&gt;</span> {
+  <span class="hljs-title function_">sendToAnalytics</span>({
+    <span class="hljs-attr">value</span>: <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">round</span>(value),
+    rating,
+    <span class="hljs-attr">target</span>: attribution.<span class="hljs-property">interactionTarget</span>,
+    <span class="hljs-attr">type</span>: attribution.<span class="hljs-property">interactionType</span>,
+    <span class="hljs-attr">inputDelay</span>: <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">round</span>(attribution.<span class="hljs-property">inputDelay</span>),
+    <span class="hljs-attr">processing</span>: <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">round</span>(attribution.<span class="hljs-property">processingDuration</span>),
+    <span class="hljs-attr">presentation</span>: <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">round</span>(attribution.<span class="hljs-property">presentationDelay</span>),
   });
-
-  observer.<span class="hljs-title function_">observe</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;event&#x27;</span>, <span class="hljs-attr">buffered</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">durationThreshold</span>: <span class="hljs-number">16</span> });
-  <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> observer.<span class="hljs-title function_">disconnect</span>();
-}
+});
 </code></pre></div>
-<p>不同浏览器对 Event Timing 字段、事件类型和缓冲行为的支持会变化，代码必须做特性检测。<code>duration</code> 是浏览器记录的事件持续时间，不能简单当成“业务函数执行时间”；同一交互可能产生多个事件条目，真实 RUM 计算需要使用规范和官方库定义的聚合方式。示例用于理解诊断字段，不应直接用一个条目替代完整 INP 计算。</p>
-<p>可以先拆分单个事件条目的阶段，帮助定位，而不自行实现整页 INP 聚合：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">splitEventTiming</span>(<span class="hljs-params">entry</span>) {
-  <span class="hljs-keyword">const</span> { startTime, processingStart, processingEnd, duration } = entry;
-  <span class="hljs-keyword">if</span> (![startTime, processingStart, processingEnd, duration].<span class="hljs-title function_">every</span>(<span class="hljs-title class_">Number</span>.<span class="hljs-property">isFinite</span>) ||
-      startTime &lt; <span class="hljs-number">0</span> || processingStart &lt; startTime || processingEnd &lt; processingStart || duration &lt; <span class="hljs-number">0</span>) {
-    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+<p>不用库时，可以直接观察 Event Timing：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">new</span> <span class="hljs-title class_">PerformanceObserver</span>(<span class="hljs-function">(<span class="hljs-params">list</span>) =&gt;</span> {
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> entry <span class="hljs-keyword">of</span> list.<span class="hljs-title function_">getEntries</span>()) {
+    <span class="hljs-keyword">if</span> (!entry.<span class="hljs-property">interactionId</span>) <span class="hljs-keyword">continue</span>;
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(entry.<span class="hljs-property">name</span>, {
+      <span class="hljs-attr">inputDelay</span>: entry.<span class="hljs-property">processingStart</span> - entry.<span class="hljs-property">startTime</span>,
+      <span class="hljs-attr">processing</span>: entry.<span class="hljs-property">processingEnd</span> - entry.<span class="hljs-property">processingStart</span>,
+      <span class="hljs-attr">presentation</span>: entry.<span class="hljs-property">startTime</span> + entry.<span class="hljs-property">duration</span> - entry.<span class="hljs-property">processingEnd</span>,
+    });
   }
-  <span class="hljs-keyword">return</span> {
-    <span class="hljs-attr">inputDelay</span>: processingStart - startTime,
-    <span class="hljs-attr">processingDuration</span>: processingEnd - processingStart,
-    <span class="hljs-comment">// duration 会被量化，差值只能作为估算；避免显示负延迟。</span>
-    <span class="hljs-attr">presentationDelayEstimate</span>: <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(<span class="hljs-number">0</span>, startTime + duration - processingEnd),
-  };
-}
+}).<span class="hljs-title function_">observe</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;event&#x27;</span>, <span class="hljs-attr">durationThreshold</span>: <span class="hljs-number">16</span>, <span class="hljs-attr">buffered</span>: <span class="hljs-literal">true</span> });
 </code></pre></div>
-<p>例如 startTime=100、processingStart=130、processingEnd=150、duration=80，得到约 30 毫秒输入等待、20 毫秒处理和 30 毫秒呈现等待。真实 duration 有精度限制，不能据此报告微秒级差异。连续拖动或滚动的流畅度也不能只靠 INP 判断；INP 主要关注点击、轻触和键盘等交互，动画帧问题另用性能时间线诊断。</p>
-<h2>先按交互类型复现，再看调用栈</h2>
-<p>开发环境先关闭无关扩展，使用固定数据和固定设备复现“点击筛选”“输入搜索”“打开菜单”等具体动作。DevTools Performance 录制应覆盖动作前后的完整时间线，观察：</p>
+<p>一次交互会产生多个事件条目（如 <code>pointerdown</code>、<code>pointerup</code>、<code>click</code>），共用一个 <code>interactionId</code>，整页 INP 的计算规则比较复杂，生产环境优先使用 web-vitals 库。<code>duration</code> 精度为 8ms，阶段拆分只是估算。</p>
+<h2>按阶段优化</h2>
+<p><strong>输入延迟高</strong>：交互发生时主线程被别的任务占用。</p>
 <ul>
-<li>事件开始前是否有长任务或大量脚本执行；</li>
-<li>事件处理器是否同步解析、排序或序列化大数据；</li>
-<li>框架提交是否更新了过多节点；</li>
-<li>样式、布局、绘制是否占据主要时间；</li>
-<li>是否因为同步读取布局属性触发强制布局；</li>
-<li>下一帧是否被图片解码、第三方脚本或动画占用。</li>
+<li>找出交互前后的长任务和长动画帧，见《如何用 Long Animation Frames API 定位卡顿来源？》。</li>
+<li>拆分初始化和第三方脚本，非关键工作推迟到空闲时段。</li>
 </ul>
-<p>先确定阶段，再决定优化方向。单纯增加防抖可能减少事件数量，却无法修复一次点击后的昂贵渲染；把任务丢进 <code>setTimeout</code> 也可能只是把呈现延迟推后。</p>
-<h2>输入延迟高：减少主线程争用</h2>
-<p>输入前的长任务通常来自初始化、第三方脚本、批量数据处理或大段同步渲染。可按任务拆分、延迟非关键初始化、使用 Worker 处理纯计算，或在空闲时段安排低优先级工作。不能把所有工作都搬进 Worker：DOM 和大部分框架渲染仍需要主线程，序列化大对象本身也有成本。</p>
-<p>避免同步 XHR 等阻塞操作，也不要在用户每次按键时执行全量搜索。await fetch 本身会让出执行，不是“网络等待期间一直占住主线程”；但结果返回后的解析、排序和渲染仍可能产生长任务。输入值可以先更新轻量 UI，再取消旧请求；服务端结果返回后还要验证请求序号，避免旧结果覆盖新输入。</p>
-<p>如果点击后立即显示加载反馈，下一帧可以很快出现，即使接口两秒后才完成，INP 仍可能良好。结果完成时间是另一个业务指标，需要分别测量；不能用低 INP 证明端到端操作已经足够快。</p>
-<h2>处理时间高：缩小一次更新的工作量</h2>
-<p>事件回调应尽快完成必要状态更新，把不影响下一帧的工作拆开。列表筛选可以先更新加载状态，再分页或虚拟化渲染；复杂排序可以在 Worker 中执行，或在服务端查询。框架中要检查组件是否因为父状态变化而全部重渲染，使用稳定 key、细粒度状态和合理的 memo 化，但不要盲目给每个组件套缓存。</p>
-<p>如果事件来自连续输入或拖动，应使用节流和合并更新；如果是必须响应的单次点击，重点是减少同步计算和 DOM 更新。任何优化都要重新录制，确认交互结果没有被延迟到下一次任务之后。</p>
-<h2>呈现延迟高：检查样式、布局和绘制</h2>
-<p>事件处理完成后仍然慢，常见原因包括大量 DOM、复杂选择器、布局抖动、图片解码、阴影和透明叠加。把 DOM 写入和读取交错执行会触发强制布局：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 容易产生布局抖动：写入后立即读取，再写入</span>
-<span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> item <span class="hljs-keyword">of</span> items) {
-  item.<span class="hljs-property">style</span>.<span class="hljs-property">width</span> = <span class="hljs-string">`<span class="hljs-subst">${nextWidth}</span>px`</span>;
-  <span class="hljs-keyword">const</span> height = item.<span class="hljs-property">offsetHeight</span>;
-  item.<span class="hljs-property">style</span>.<span class="hljs-property">transform</span> = <span class="hljs-string">`translateY(<span class="hljs-subst">${height}</span>px)`</span>;
-}
-</code></pre></div>
-<p>可以先批量读取需要的尺寸，再批量写入；对不需要立刻参与布局的内容使用合适的容器隔离、虚拟化或延迟渲染。<code>content-visibility</code>、合成层和 <code>will-change</code> 不是万能开关，滥用会增加内存或造成合成压力，必须通过录制验证。</p>
-<h2>RUM 中不要只上报平均值</h2>
-<p>INP 是长尾体验指标，平均值会掩盖低端设备和特定交互的问题。生产监测应按页面、交互名称、设备类别、连接类型和版本计算分位数，并记录输入到处理开始、处理结束到呈现的大致阶段。采集需采样并脱敏，交互名称使用固定白名单，不能把输入框内容或完整 URL 当作标签。</p>
-<p>开发环境的单次录制与 RUM 的统计用途不同：前者用来定位调用栈，后者用来判断问题是否普遍以及修复是否有效。发布新版本后应比较同一页面、同一交互和相近设备分布，避免把流量结构变化误判为代码优化。</p>
-<h2>兼容性和降级</h2>
-<p>Event Timing、<code>presentationTime</code> 和交互观察能力并非所有浏览器都完整支持。缺少这些 API 时，仍可以使用 DevTools、Long Task 观察、用户计时标记和框架性能工具做部分诊断。性能采集脚本失败不能阻断业务页面；关键交互应优先保持可用，再逐步增强数据采集。</p>
-<h2>参考资料</h2>
+<p><strong>处理时间高</strong>：事件回调本身慢。</p>
 <ul>
-<li><a href="https://web.dev/articles/inp">web.dev · Interaction to Next Paint</a></li>
-<li><a href="https://w3c.github.io/event-timing/">W3C · Event Timing</a></li>
-<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/PerformanceEventTiming">MDN · PerformanceEventTiming</a></li>
-<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/PerformanceObserver">MDN · PerformanceObserver</a></li>
-</ul></div><div class="answer-bottom"><a href="https://web.dev/articles/inp" target="_blank" rel="noreferrer">web.dev · Interaction to Next Paint<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+INP+%E5%BE%88%E9%AB%98%E6%97%B6%EF%BC%8C%E5%A6%82%E4%BD%95%E5%AE%9A%E4%BD%8D%E5%88%B0%E5%BA%95%E6%98%AF%E5%93%AA%E4%B8%80%E6%AE%B5%E4%BA%A4%E4%BA%92%E5%8F%98%E6%85%A2%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AINP+%E5%BE%88%E9%AB%98%E6%97%B6%EF%BC%8C%E5%A6%82%E4%BD%95%E5%AE%9A%E4%BD%8D%E5%88%B0%E5%BA%95%E6%98%AF%E5%93%AA%E4%B8%80%E6%AE%B5%E4%BA%A4%E4%BA%92%E5%8F%98%E6%85%A2%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aperf-inp-diagnosis%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fperf-inp-diagnosis%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：INP 很高时，如何定位到底是哪一段交互变慢？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/perf-diagnostics-case/">一个线上页面变慢后应该怎样完成性能诊断闭环？</a></li><li><a href="/questions/perf-rum/">真实用户监测与实验室性能测试为什么要结合？</a></li><li><a href="/questions/performance-longtask-observer/">Long Tasks API 怎样帮助定位主线程卡顿？</a></li><li><a href="/questions/performance-memory-diagnosis/">前端内存泄漏应该怎样定位？</a></li></ul></nav></main></div></div>
+<li>回调里先更新能立即给出反馈的状态，其余工作用 <code>scheduler.yield()</code> 或 <code>setTimeout</code> 延后，见《什么是长任务，为什么会影响交互响应？怎样观测和拆分？》。</li>
+<li>减少一次交互触发的组件重渲染范围，排序、过滤等纯计算移到 Worker。</li>
+</ul>
+<p><strong>呈现延迟高</strong>：回调结束后渲染慢。</p>
+<ul>
+<li>DOM 太大：虚拟列表、<code>content-visibility</code>。</li>
+<li>布局抖动：避免写样式后立即读 <code>offsetHeight</code> 等布局属性，先批量读再批量写。</li>
+<li>复杂选择器、大面积重绘：简化样式。</li>
+</ul>
+<h2>一个容易误解的点</h2>
+<p>INP 只算到下一帧绘制。点击后立即显示加载状态，下一帧很快出现，INP 就可能良好，即使数据两秒后才返回。端到端完成时间是另一个业务指标，需要单独测量。</p>
+<h2>常见追问</h2>
+<ul>
+<li>为什么实验室测不到高 INP？Lighthouse 等工具不模拟用户交互，INP 必须靠真实用户数据或手动录制；实验室可以用 Total Blocking Time 作为参考。</li>
+<li>只优化事件回调够吗？不够。输入延迟和呈现延迟常常占主要部分。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Glossary/Interaction_to_next_paint" target="_blank" rel="noreferrer">MDN · Interaction to Next Paint<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+INP+%E5%BE%88%E9%AB%98%E6%97%B6%EF%BC%8C%E5%A6%82%E4%BD%95%E5%AE%9A%E4%BD%8D%E5%88%B0%E5%BA%95%E6%98%AF%E5%93%AA%E4%B8%80%E6%AE%B5%E4%BA%A4%E4%BA%92%E5%8F%98%E6%85%A2%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AINP+%E5%BE%88%E9%AB%98%E6%97%B6%EF%BC%8C%E5%A6%82%E4%BD%95%E5%AE%9A%E4%BD%8D%E5%88%B0%E5%BA%95%E6%98%AF%E5%93%AA%E4%B8%80%E6%AE%B5%E4%BA%A4%E4%BA%92%E5%8F%98%E6%85%A2%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aperf-inp-diagnosis%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fperf-inp-diagnosis%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：INP 很高时，如何定位到底是哪一段交互变慢？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/perf-diagnostics-case/">一个线上页面变慢后应该怎样完成性能诊断闭环？</a></li><li><a href="/questions/perf-rum/">真实用户监测与实验室性能测试为什么要结合？</a></li><li><a href="/questions/performance-memory-diagnosis/">前端内存泄漏应该怎样定位？</a></li><li><a href="/questions/perf-longtasks/">什么是长任务，为什么会影响交互响应？怎样观测和拆分？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

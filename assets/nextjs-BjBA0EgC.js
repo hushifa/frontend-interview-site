@@ -1,2 +1,0 @@
-var e={notesHtml:`<p>Next.js 在 React 之上提供应用级约定，适合需要文件路由、服务端渲染或全栈功能的项目。文档按入门、指南和 API 组织，可以沿实际页面流程查数据如何获取与更新。</p>
-<p>App Router 与 Pages Router 要分开阅读。纯静态托管时，尤其要确认所用功能是否支持静态导出；使用 Next.js 不要求购买某个托管服务。</p>`};export{e as default};

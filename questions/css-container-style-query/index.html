@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="HTML / CSS面试题：容器样式查询通过 style() 判断祖先容器的样式条件，常见用法是查询自定义属性，把密度、主题等配置传给内部组件。它与查询容器宽高的尺寸查询不同。" />
+    <meta name="description" content="HTML / CSS面试题：@container style() 判断祖先容器上自定义属性的值，用来把主题、密度等配置传给内部组件；目前只能查询自定义属性。" />
     <title>容器样式查询怎样根据父级配置改变组件样式？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/css-container-style-query/" />
     <meta name="robots" content="index,follow" />
@@ -19,83 +19,53 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="容器样式查询怎样根据父级配置改变组件样式？ · 前端知库" />
-    <meta property="og:description" content="HTML / CSS面试题：容器样式查询通过 style() 判断祖先容器的样式条件，常见用法是查询自定义属性，把密度、主题等配置传给内部组件。它与查询容器宽高的尺寸查询不同。" />
+    <meta property="og:description" content="HTML / CSS面试题：@container style() 判断祖先容器上自定义属性的值，用来把主题、密度等配置传给内部组件；目前只能查询自定义属性。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/css-container-style-query/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-container-style-query/#webpage","url":"https://fe.hushifa.top/questions/css-container-style-query/","name":"容器样式查询怎样根据父级配置改变组件样式？ · 前端知库","description":"HTML / CSS面试题：容器样式查询通过 style() 判断祖先容器的样式条件，常见用法是查询自定义属性，把密度、主题等配置传给内部组件。它与查询容器宽高的尺寸查询不同。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-container-style-query/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-container-style-query/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"容器样式查询怎样根据父级配置改变组件样式？","item":"https://fe.hushifa.top/questions/css-container-style-query/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-container-style-query/#webpage","url":"https://fe.hushifa.top/questions/css-container-style-query/","name":"容器样式查询怎样根据父级配置改变组件样式？ · 前端知库","description":"HTML / CSS面试题：@container style() 判断祖先容器上自定义属性的值，用来把主题、密度等配置传给内部组件；目前只能查询自定义属性。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-container-style-query/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-container-style-query/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"容器样式查询怎样根据父级配置改变组件样式？","item":"https://fe.hushifa.top/questions/css-container-style-query/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">容器样式查询怎样根据父级配置改变组件样式？</span></nav><h1 tabindex="-1">容器样式查询怎样根据父级配置改变组件样式？</h1><p class="reading-summary">容器样式查询通过 style() 判断祖先容器的样式条件，常见用法是查询自定义属性，把密度、主题等配置传给内部组件。它与查询容器宽高的尺寸查询不同。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">容器样式查询怎样根据父级配置改变组件样式？</span></nav><h1 tabindex="-1">容器样式查询怎样根据父级配置改变组件样式？</h1><p class="reading-summary">@container style() 判断祖先容器上自定义属性的值，用来把主题、密度等配置传给内部组件；目前只能查询自定义属性。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>尺寸查询问容器有多大，样式查询问容器上的某项样式是否满足条件，常见写法是 <code>style(--属性: 值)</code>。</li>
-<li>MDN 目前写明样式查询只支持自定义属性；只做样式查询时不需要设置 <code>container-type</code>。</li>
-<li>未注册的自定义属性按字面比较，<code>#0000ff</code> 与 <code>blue</code> 不一定匹配，开关值应使用约定好的关键字。</li>
-<li>只传一个值时直接用 CSS 变量或后代选择器更简单；一个语义配置要触发多条规则时样式查询才更有价值。</li>
+<li><code>@container style(--variant: compact)</code> 在最近祖先上该自定义属性等于 <code>compact</code> 时生效。</li>
+<li>样式查询不需要 <code>container-type</code>，所有元素默认都是样式容器；查询的是祖先，元素不能查询自己。</li>
+<li>规范允许查询普通属性（如 <code>style(font-weight: bold)</code>），但目前浏览器只支持自定义属性。</li>
+<li>它适合“父级声明一个配置，多个子组件各自响应”，比给每个子组件加修饰类更集中。</li>
+<li>支持范围比尺寸查询窄，使用前查兼容表，不支持时组件应保持默认样式可用。</li>
 </ul>
-<p>同一组工具按钮，在文章页希望留白舒适，在数据表格旁希望紧凑。两处区域的宽度可能完全一样，因此尺寸查询不能表达这个区别。这里的依据是父级选择的“显示密度”，可以使用容器样式查询，让内部组件读取祖先的配置。</p>
-<p><strong>尺寸查询问“容器有多大”，样式查询问“容器上的某项样式是否满足条件”。</strong> 常见实现是通过 <code>style(--自定义属性: 值)</code> 查询 CSS 自定义属性。MDN 目前写明：样式查询唯一支持的特性是自定义属性（可带值或不带值），<code>style(font-weight: bold)</code> 这类对普通属性的查询还没有任何浏览器支持。样式查询也不需要设置 <code>container-type</code>，任何元素都可以作为样式容器。</p>
-<h2>一个紧凑工具栏的例子</h2>
-<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">section</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;workspace&quot;</span> <span class="hljs-attr">data-density</span>=<span class="hljs-string">&quot;compact&quot;</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;toolbar&quot;</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;文档操作&quot;</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span>&gt;</span>保存<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span>&gt;</span>预览<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span>
-</code></pre></div>
-<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.workspace</span> {
-  <span class="hljs-attribute">container-name</span>: workspace;
-  <span class="hljs-attr">--density</span>: comfortable;
-}
-
-<span class="hljs-selector-class">.workspace</span><span class="hljs-selector-attr">[data-density=<span class="hljs-string">&quot;compact&quot;</span>]</span> {
+<h2>示例</h2>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.sidebar</span> {
   <span class="hljs-attr">--density</span>: compact;
 }
 
-<span class="hljs-selector-class">.toolbar</span> {
-  <span class="hljs-attribute">display</span>: flex;
-  <span class="hljs-attribute">flex-wrap</span>: wrap;
-  <span class="hljs-attribute">gap</span>: <span class="hljs-number">0.75rem</span>;
-}
-
-<span class="hljs-selector-class">.toolbar</span> <span class="hljs-selector-tag">button</span> {
-  <span class="hljs-attribute">font</span>: inherit;
-  <span class="hljs-attribute">padding</span>: <span class="hljs-number">0.75rem</span> <span class="hljs-number">1rem</span>;
-}
-
-<span class="hljs-keyword">@container</span> workspace style(<span class="hljs-attribute">--density</span>: compact) {
-  <span class="hljs-selector-class">.toolbar</span> {
-    <span class="hljs-attribute">gap</span>: <span class="hljs-number">0.375rem</span>;
-  }
-
-  <span class="hljs-selector-class">.toolbar</span> <span class="hljs-selector-tag">button</span> {
-    <span class="hljs-attribute">padding</span>: <span class="hljs-number">0.5rem</span> <span class="hljs-number">0.75rem</span>;
+<span class="hljs-keyword">@container</span> style(<span class="hljs-attribute">--density</span>: compact) {
+  <span class="hljs-selector-class">.item</span> {
+    <span class="hljs-attribute">padding-block</span>: <span class="hljs-number">4px</span>;
+    <span class="hljs-attribute">font-size</span>: <span class="hljs-number">0.875rem</span>;
   }
 }
 </code></pre></div>
-<p>外层的 <code>data-density</code> 把配置写成 <code>--density: compact</code>。查询找到名为 <code>workspace</code> 的祖先，读取它的自定义属性；条件满足后，内部工具栏缩小间距和按钮内边距。移除 <code>data-density=&quot;compact&quot;</code>，就回到基础布局。</p>
-<p>这里没有 <code>container-type: inline-size</code>，因为我们没有查询宽度。仅做这种样式查询，不需要为了建立尺寸容器而给布局增加尺寸包含。<code>container-name</code> 的作用是明确读取哪一层祖先，特别适合页面上有多个可嵌套的配置区域时使用。</p>
-<p>规则仍然作用于容器里的元素，不能用这条查询让 <code>.workspace</code> 依据自己的 <code>--density</code> 再改变自己的该属性。选中 <code>.workspace</code> 时，查询会寻找它的祖先，而不是把它自身当作查询来源。</p>
-<h2>为什么不直接使用 CSS 变量</h2>
-<p>如果只需要改变一个间距，变量往往更简单：</p>
-<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.workspace</span> {
-  <span class="hljs-attr">--toolbar-gap</span>: <span class="hljs-number">0.75rem</span>;
-}
-
-<span class="hljs-selector-class">.workspace</span><span class="hljs-selector-attr">[data-density=<span class="hljs-string">&quot;compact&quot;</span>]</span> {
-  <span class="hljs-attr">--toolbar-gap</span>: <span class="hljs-number">0.375rem</span>;
-}
-
-<span class="hljs-selector-class">.toolbar</span> {
-  <span class="hljs-attribute">gap</span>: <span class="hljs-built_in">var</span>(--toolbar-gap, <span class="hljs-number">0.75rem</span>);
+<p>侧栏里的 <code>.item</code> 自动变紧凑，主内容区的 <code>.item</code> 保持默认，HTML 不用改。</p>
+<p>也可以只判断属性是否存在，或组合多个条件：</p>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-keyword">@container</span> style(<span class="hljs-attribute">--theme</span>: dark) <span class="hljs-keyword">or</span> style(<span class="hljs-attribute">--theme</span>: dim) {
+  <span class="hljs-selector-class">.card</span> {
+    <span class="hljs-attribute">background</span>: <span class="hljs-number">#222</span>;
+  }
 }
 </code></pre></div>
-<p>这已经足以解决“传一个值”的问题。样式查询更适合一个语义配置需要触发多条规则的情况，例如 <code>compact</code> 同时影响间距、说明文字的展示方式和工具栏布局。它让组件解释配置，而不是要求父级了解每个内部选择器。</p>
-<p>如果父子结构固定、没有复用需要，<code>.workspace[data-density=&quot;compact&quot;] .toolbar</code> 也完全合理。不能因为语法新，就把简单的后代选择器全部改成样式查询。</p>
-<h2>自定义属性的值如何比较</h2>
-<p>未注册的自定义属性通常不会被当成颜色、长度等具体类型理解。比如 <code>--accent: #0000ff</code> 与查询中的 <code>style(--accent: blue)</code>，不能只因为肉眼看到同一种蓝色，就认为一定匹配。通过 <code>@property</code> 注册类型会影响计算与比较规则，也会影响初始值和继承。</p>
-<p>对于密度、主题模式等开关，用 <code>compact</code>、<code>comfortable</code> 这样约定明确的值更容易维护。普通自定义属性默认会继承；如果不用容器名称，最近的祖先也可能已经继承了该值，因此要区分“值从哪儿继承”与“查询选中了哪个祖先”。</p>
-<p>兼容性要按 <code>style()</code> 的具体功能核对，支持尺寸查询不代表支持所有样式查询。在目标浏览器实测上述 <code>data-density</code> 切换；不支持时保留舒适的基础布局即可。若紧凑模式是必要功能，则使用类名或属性选择器作为实现或回退，不要让关键内容依赖查询成功才出现。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Containment/Container_size_and_style_queries" target="_blank" rel="noreferrer">MDN · Using container size and style queries<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%AE%B9%E5%99%A8%E6%A0%B7%E5%BC%8F%E6%9F%A5%E8%AF%A2%E6%80%8E%E6%A0%B7%E6%A0%B9%E6%8D%AE%E7%88%B6%E7%BA%A7%E9%85%8D%E7%BD%AE%E6%94%B9%E5%8F%98%E7%BB%84%E4%BB%B6%E6%A0%B7%E5%BC%8F%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%AE%B9%E5%99%A8%E6%A0%B7%E5%BC%8F%E6%9F%A5%E8%AF%A2%E6%80%8E%E6%A0%B7%E6%A0%B9%E6%8D%AE%E7%88%B6%E7%BA%A7%E9%85%8D%E7%BD%AE%E6%94%B9%E5%8F%98%E7%BB%84%E4%BB%B6%E6%A0%B7%E5%BC%8F%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-container-style-query%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-container-style-query%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：容器样式查询怎样根据父级配置改变组件样式？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-typed-custom-properties/">CSS @property 如何让自定义属性参与类型校验和动画？</a></li><li><a href="/questions/css-cascade-specificity/">层叠、优先级、继承和 !important 谁先决定样式？</a></li><li><a href="/questions/css-container-queries/">媒体查询和容器查询分别适合什么场景？</a></li><li><a href="/questions/css-modern-architecture/">CSS Modules、层叠层和自定义属性怎样帮助维护样式？</a></li></ul></nav></main></div></div>
+<h2>和直接用变量有什么区别</h2>
+<p>自定义属性本身就能继承，<code>padding: var(--item-padding)</code> 也能实现密度切换。样式查询的价值在于一个配置要改变多个不相关的属性，或者要切换整段规则，例如改变布局方向、隐藏某个子元素。只是传一个值时，直接用变量更简单。</p>
+<h2>注意</h2>
+<ul>
+<li>查询的是计算值，值的写法要完全一致，<code>compact</code> 和 <code>&quot;compact&quot;</code> 不同。</li>
+<li>用 <code>@property</code> 注册的属性可以做类型化比较，未注册属性按字符串比较。</li>
+<li>不支持样式查询的浏览器会忽略整段 <code>@container style()</code> 规则，把它当作增强写在默认样式之后。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li>能同时写尺寸和样式条件吗？可以，<code>@container card (inline-size &gt; 400px) and style(--layout: row)</code>，尺寸部分要求该容器设置了 <code>container-type</code>。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Containment/Container_size_and_style_queries" target="_blank" rel="noreferrer">MDN · Using container size and style queries<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%AE%B9%E5%99%A8%E6%A0%B7%E5%BC%8F%E6%9F%A5%E8%AF%A2%E6%80%8E%E6%A0%B7%E6%A0%B9%E6%8D%AE%E7%88%B6%E7%BA%A7%E9%85%8D%E7%BD%AE%E6%94%B9%E5%8F%98%E7%BB%84%E4%BB%B6%E6%A0%B7%E5%BC%8F%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%AE%B9%E5%99%A8%E6%A0%B7%E5%BC%8F%E6%9F%A5%E8%AF%A2%E6%80%8E%E6%A0%B7%E6%A0%B9%E6%8D%AE%E7%88%B6%E7%BA%A7%E9%85%8D%E7%BD%AE%E6%94%B9%E5%8F%98%E7%BB%84%E4%BB%B6%E6%A0%B7%E5%BC%8F%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-container-style-query%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-container-style-query%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：容器样式查询怎样根据父级配置改变组件样式？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-typed-custom-properties/">CSS @property 如何让自定义属性参与类型校验和动画？</a></li><li><a href="/questions/css-cascade-specificity/">层叠、优先级、继承和 !important 谁先决定样式？</a></li><li><a href="/questions/css-container-queries/">媒体查询和容器查询分别适合什么场景？</a></li><li><a href="/questions/css-modern-architecture/">CSS Modules、层叠层和自定义属性怎样帮助维护样式？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

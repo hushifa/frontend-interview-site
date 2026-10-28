@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="手写与算法面试题：用具体树和栈状态解释先访问父节点、再访问各子树的顺序，说明反向入栈、复杂度、深树与宽树差别，以及树和图的重复节点语义。" />
+    <meta name="description" content="手写与算法面试题：前序遍历先访问当前节点，再按从左到右的顺序完整遍历每棵子树。用数组模拟栈代替递归，可以避免深层树导致调用栈溢出；因为栈后进先出，子节点要逆序入栈。时间复杂度 O(n)，栈的峰值取决于树的形状。" />
     <title>怎样用显式栈实现树的前序遍历？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/alg-tree-traversal/" />
     <meta name="robots" content="index,follow" />
@@ -19,25 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="怎样用显式栈实现树的前序遍历？ · 前端知库" />
-    <meta property="og:description" content="手写与算法面试题：用具体树和栈状态解释先访问父节点、再访问各子树的顺序，说明反向入栈、复杂度、深树与宽树差别，以及树和图的重复节点语义。" />
+    <meta property="og:description" content="手写与算法面试题：前序遍历先访问当前节点，再按从左到右的顺序完整遍历每棵子树。用数组模拟栈代替递归，可以避免深层树导致调用栈溢出；因为栈后进先出，子节点要逆序入栈。时间复杂度 O(n)，栈的峰值取决于树的形状。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/alg-tree-traversal/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-tree-traversal/#webpage","url":"https://fe.hushifa.top/questions/alg-tree-traversal/","name":"怎样用显式栈实现树的前序遍历？ · 前端知库","description":"手写与算法面试题：用具体树和栈状态解释先访问父节点、再访问各子树的顺序，说明反向入栈、复杂度、深树与宽树差别，以及树和图的重复节点语义。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-tree-traversal/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-tree-traversal/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"怎样用显式栈实现树的前序遍历？","item":"https://fe.hushifa.top/questions/alg-tree-traversal/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-tree-traversal/#webpage","url":"https://fe.hushifa.top/questions/alg-tree-traversal/","name":"怎样用显式栈实现树的前序遍历？ · 前端知库","description":"手写与算法面试题：前序遍历先访问当前节点，再按从左到右的顺序完整遍历每棵子树。用数组模拟栈代替递归，可以避免深层树导致调用栈溢出；因为栈后进先出，子节点要逆序入栈。时间复杂度 O(n)，栈的峰值取决于树的形状。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-tree-traversal/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-tree-traversal/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"怎样用显式栈实现树的前序遍历？","item":"https://fe.hushifa.top/questions/alg-tree-traversal/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样用显式栈实现树的前序遍历？</span></nav><h1 tabindex="-1">怎样用显式栈实现树的前序遍历？</h1><p class="reading-summary">用具体树和栈状态解释先访问父节点、再访问各子树的顺序，说明反向入栈、复杂度、深树与宽树差别，以及树和图的重复节点语义。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样用显式栈实现树的前序遍历？</span></nav><h1 tabindex="-1">怎样用显式栈实现树的前序遍历？</h1><p class="reading-summary">前序遍历先访问当前节点，再按从左到右的顺序完整遍历每棵子树。用数组模拟栈代替递归，可以避免深层树导致调用栈溢出；因为栈后进先出，子节点要逆序入栈。时间复杂度 O(n)，栈的峰值取决于树的形状。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>前序遍历先访问节点，再访问它的子树。</li>
-<li>用显式栈代替递归，可以避免深层树导致的栈溢出。</li>
-<li>子节点要逆序入栈，才能保证从左到右访问。</li>
-<li>时间复杂度 O(n)，栈的最大深度取决于树的形状。</li>
+<li>前序遍历的顺序是&quot;当前节点 → 第一棵子树 → 第二棵子树……&quot;，一棵子树走完才轮到下一个兄弟，例如 <code>A、B、D、E、C、F</code>。</li>
+<li>递归版本把待返回的位置存在调用栈里，树很深时会抛出 <code>RangeError: Maximum call stack size exceeded</code>；显式栈把待访问节点存在数组里，深度只受内存限制。</li>
+<li>栈后进先出，子节点要从最后一个开始入栈，第一个子节点才会最先弹出。</li>
+<li>每个节点入栈出栈各一次，时间复杂度 O(n)。这个实现一次压入所有子节点，栈的峰值在宽树上可达 O(n)。</li>
+<li>遍历函数假定输入是树。同一个节点被多个父节点引用时会重复访问，有环时会无限循环，图需要用访问集合去重。</li>
 </ul>
-<p>前序遍历先访问当前节点，然后按约定顺序完整遍历它的每棵子树。对于普通 children 数组，通常按从左到右的顺序。</p>
-<p>它不是“先输出所有父节点，再输出所有子节点”。例如 A 的孩子是 B、C，B 下面还有 D、E，C 下面有 F，前序结果应当是 <code>A、B、D、E、C、F</code>。B 的子树处理完，才轮到 C。</p>
-<h2>用栈记录还没处理的节点</h2>
-<p>递归会把“之后还要回到哪里继续”保存在函数调用栈里。显式栈把待访问节点保存在数组中，用循环推进，避免深度完全依赖 JavaScript 的函数调用栈容量。</p>
-<p>下面约定节点是普通对象，children 缺失或为 null 时表示没有子节点；非空 children 必须是数组。输入应是无环树，遍历期间不修改它。</p>
+<h2>实现</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">preorder</span>(<span class="hljs-params">root</span>) {
   <span class="hljs-keyword">if</span> (root == <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> [];
   <span class="hljs-keyword">const</span> stack = [root];
@@ -63,14 +60,6 @@
   <span class="hljs-keyword">return</span> values;
 }
 </code></pre></div>
-<p>每次循环先弹出一个节点，再立即记录它的值，这对应前序的“先访问当前节点”。之后把子节点放进待处理栈，后续循环继续处理它们。</p>
-<p>这里只读取树结构，改变的是新建的 stack 和 values，不会通过 pop 或 reverse 去修改原来的 children 数组。value 若是对象，返回的是引用，不是自动做了深拷贝。</p>
-<h2>为什么必须把孩子反过来压入栈</h2>
-<p>栈后进先出。要让 B 在 C 之前弹出，就要先压 C，再压 B。</p>
-<p>下面把栈顶写在右边，沿例子走一遍：</p>
-<table><thead><tr><th>本次弹出的节点</th><th>记录后压入孩子</th><th>下一轮前的栈，右侧为栈顶</th></tr></thead><tbody><tr><td>A</td><td>先 C，再 B</td><td><code>[C, B]</code></td></tr><tr><td>B</td><td>先 E，再 D</td><td><code>[C, E, D]</code></td></tr><tr><td>D</td><td>没有孩子</td><td><code>[C, E]</code></td></tr><tr><td>E</td><td>没有孩子</td><td><code>[C]</code></td></tr><tr><td>C</td><td>压入 F</td><td><code>[F]</code></td></tr><tr><td>F</td><td>没有孩子</td><td><code>[]</code></td></tr></tbody></table>
-<p>如果按 children 的正序压栈，就会先弹出最右边的孩子，结果顺序被反转。反向的是“入栈动作”，不是树本身的逻辑访问顺序。</p>
-<p>可以直接运行这个数据：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> tree = {
   <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;A&#x27;</span>,
   <span class="hljs-attr">children</span>: [
@@ -82,20 +71,28 @@
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">preorder</span>(tree).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;、&#x27;</span>));
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">preorder</span>(<span class="hljs-literal">null</span>));
 </code></pre></div>
-<p>输出依次是 <code>A、B、D、E、C、F</code> 和空数组。只有根节点时，只输出根的值；children 为空数组时，不会再压入待访问节点。</p>
-<h2>复杂度不能只背“DFS 空间是树高”</h2>
-<p>对一棵包含 n 个节点的有限树，每个节点入栈、出栈和访问一次，边总数与节点数同阶，因此这份遍历的时间复杂度是 O(n)。这里不把读取自定义 getter 或处理复杂 value 的额外工作假定成免费。</p>
-<p>结果数组需要 O(n) 空间。待访问栈的峰值则与树形状有关：一条很深的单链，在这份实现中通常只需保留很少的待访问节点；但一个根节点带有 n-1 个孩子的宽树，会一下子把这些孩子全部压入栈，辅助栈可达到 O(n)。</p>
-<p>所以对这份“把所有孩子压入栈”的多叉树实现，不能直接宣称额外空间始终 O(h)。如果改成保存“当前节点与下一个孩子下标”的遍历帧，才可以用另一种状态组织方式让深度优先过程更接近按路径保存，复杂度分析也应跟着实现改变。</p>
-<p>若只需逐项处理或提前停止，不一定要收集完整 values，可以设计生成器或访问回调。但生成器是惰性输出接口，不会自动把每一步变成后台工作，也不会凭空取消算法的存储需求。</p>
-<h2>避开递归调用栈，不等于没有性能限制</h2>
-<p>深树递归可能报 Maximum call stack size exceeded 等错误，具体深度与引擎和调用内容有关，不能记成所有浏览器统一的一万层。显式循环避免了这类递归层数限制，但数据和结果仍占内存。</p>
-<p>遍历十万个节点也仍是同步计算，放在页面主线程可能造成卡顿。需要保持交互时，可以分片让出或在适合的数据场景中使用 Worker；这些调度选择与前序顺序本身是两层问题。</p>
-<h2>输入如果其实是图，需要先决定访问语义</h2>
-<p>真正的树没有环，普通树遍历也假定每个节点属于对应的树结构。如果某个节点既被 B 引用又被 C 引用，这份函数会沿两条路径访问它两次；如果还有环，就可能一直压栈，无法结束。</p>
-<p>可以用 Set 按对象身份记录已访问节点，但这样做改变了语义：共享节点只输出一次，而不是每条树路径都输出一次。两个内容相同但引用不同的对象，又不会因为值一样就被这个 Set 视为同一个节点。</p>
-<p>业务有时需要检测重复就报错，有时需要按节点 ID 去重，有时允许共享节点沿不同路径出现。应该先明确数据模型，再选择图遍历、环检测或树遍历，不能在不知道需求时随便加一个 visited 就声称全部问题解决。</p>
-<p>示例的类型检查只帮助拒绝明显不符合结构的输入，并不完整验证“无环且无共享子节点”。从外部导入层级数据时，还应有结构校验与大小上限，避免把错误数据交给一个假定它是树的循环。</p></div><div class="answer-bottom"><a href="https://en.wikipedia.org/wiki/Tree_traversal" target="_blank" rel="noreferrer">Wikipedia · Tree traversal<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E7%94%A8%E6%98%BE%E5%BC%8F%E6%A0%88%E5%AE%9E%E7%8E%B0%E6%A0%91%E7%9A%84%E5%89%8D%E5%BA%8F%E9%81%8D%E5%8E%86%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E7%94%A8%E6%98%BE%E5%BC%8F%E6%A0%88%E5%AE%9E%E7%8E%B0%E6%A0%91%E7%9A%84%E5%89%8D%E5%BA%8F%E9%81%8D%E5%8E%86%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-tree-traversal%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-tree-traversal%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样用显式栈实现树的前序遍历？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-promise-all/">怎样实现保持输入顺序的 Promise.all 教学版本？</a></li><li><a href="/questions/alg-concurrency-pool/">怎样实现有明确失败语义的异步并发池？</a></li><li><a href="/questions/alg-debounce/">怎样实现只在停止调用后执行的防抖函数？</a></li><li><a href="/questions/alg-throttle/">怎样实现首沿节流？它与尾沿节流、防抖有什么区别？</a></li></ul></nav></main></div></div>
+<p>输出 <code>A、B、D、E、C、F</code> 和 <code>[]</code>。函数只读取树，不修改 <code>children</code> 数组；<code>value</code> 是对象时返回的是原对象的引用。</p>
+<h2>栈的变化</h2>
+<p>栈顶写在右边：</p>
+<table><thead><tr><th>弹出</th><th>压入</th><th>弹出后栈的状态</th></tr></thead><tbody><tr><td>A</td><td>C、B</td><td><code>[C, B]</code></td></tr><tr><td>B</td><td>E、D</td><td><code>[C, E, D]</code></td></tr><tr><td>D</td><td>无</td><td><code>[C, E]</code></td></tr><tr><td>E</td><td>无</td><td><code>[C]</code></td></tr><tr><td>C</td><td>F</td><td><code>[F]</code></td></tr><tr><td>F</td><td>无</td><td><code>[]</code></td></tr></tbody></table>
+<p>如果按正序压入，C 会比 B 先弹出，结果变成 <code>A、C、F、B、E、D</code>。</p>
+<h2>递归写法对比</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">preorderRecursive</span>(<span class="hljs-params">node, values = []</span>) {
+  <span class="hljs-keyword">if</span> (node == <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> values;
+  values.<span class="hljs-title function_">push</span>(node.<span class="hljs-property">value</span>);
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> child <span class="hljs-keyword">of</span> node.<span class="hljs-property">children</span> ?? []) <span class="hljs-title function_">preorderRecursive</span>(child, values);
+  <span class="hljs-keyword">return</span> values;
+}
+</code></pre></div>
+<p>递归更直观，适合深度可控的树，例如组件树、菜单。处理用户导入的任意层级数据时，用显式栈更稳妥。递归能支持多深与引擎和每帧的大小有关，没有统一的层数。</p>
+<h2>其他遍历顺序</h2>
+<table><thead><tr><th>顺序</th><th>访问规则</th><th>典型用途</th></tr></thead><tbody><tr><td>前序</td><td>节点 → 子树</td><td>复制树、序列化、渲染目录</td></tr><tr><td>后序</td><td>子树 → 节点</td><td>计算文件夹总大小、按依赖顺序释放资源</td></tr><tr><td>层序</td><td>按深度一层层访问，用队列</td><td>找最浅的匹配节点、按层展示</td></tr></tbody></table>
+<h2>常见追问</h2>
+<ul>
+<li><strong>树有十万个节点，放在主线程会卡吗？</strong> 遍历本身是同步计算，耗时过长会阻塞交互。可以分批处理并让出主线程，或把数据交给 Worker。</li>
+<li><strong>怎样把扁平的 <code>{ id, parentId }</code> 列表转成树？</strong> 先用 Map 按 id 建立索引，再遍历一次把每个节点挂到父节点的 <code>children</code> 上，复杂度 O(n)。</li>
+<li><strong>图遍历有什么不同？</strong> 见《前端场景中的图遍历应该怎样建模？》。</li>
+</ul></div><div class="answer-bottom"><a href="https://en.wikipedia.org/wiki/Tree_traversal" target="_blank" rel="noreferrer">Wikipedia · Tree traversal<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E7%94%A8%E6%98%BE%E5%BC%8F%E6%A0%88%E5%AE%9E%E7%8E%B0%E6%A0%91%E7%9A%84%E5%89%8D%E5%BA%8F%E9%81%8D%E5%8E%86%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E7%94%A8%E6%98%BE%E5%BC%8F%E6%A0%88%E5%AE%9E%E7%8E%B0%E6%A0%91%E7%9A%84%E5%89%8D%E5%BA%8F%E9%81%8D%E5%8E%86%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-tree-traversal%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-tree-traversal%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样用显式栈实现树的前序遍历？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-promise-all/">怎样实现保持输入顺序的 Promise.all 教学版本？</a></li><li><a href="/questions/alg-concurrency-pool/">怎样实现有明确失败语义的异步并发池？</a></li><li><a href="/questions/alg-debounce/">怎样实现只在停止调用后执行的防抖函数？</a></li><li><a href="/questions/alg-throttle/">怎样实现首沿节流？它与尾沿节流、防抖有什么区别？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

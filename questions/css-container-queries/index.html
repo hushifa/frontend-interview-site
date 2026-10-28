@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="HTML / CSS面试题：媒体查询依据视口、设备能力或用户偏好，容器尺寸查询依据祖先容器的可用空间。前者适合页面级适配，后者让同一个组件在不同位置独立调整布局。" />
+    <meta name="description" content="HTML / CSS面试题：媒体查询依据视口、设备能力和用户偏好，适合页面级布局；容器尺寸查询依据祖先容器的尺寸，让同一个组件在不同位置自行调整。" />
     <title>媒体查询和容器查询分别适合什么场景？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/css-container-queries/" />
     <meta name="robots" content="index,follow" />
@@ -19,82 +19,55 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="媒体查询和容器查询分别适合什么场景？ · 前端知库" />
-    <meta property="og:description" content="HTML / CSS面试题：媒体查询依据视口、设备能力或用户偏好，容器尺寸查询依据祖先容器的可用空间。前者适合页面级适配，后者让同一个组件在不同位置独立调整布局。" />
+    <meta property="og:description" content="HTML / CSS面试题：媒体查询依据视口、设备能力和用户偏好，适合页面级布局；容器尺寸查询依据祖先容器的尺寸，让同一个组件在不同位置自行调整。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/css-container-queries/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-container-queries/#webpage","url":"https://fe.hushifa.top/questions/css-container-queries/","name":"媒体查询和容器查询分别适合什么场景？ · 前端知库","description":"HTML / CSS面试题：媒体查询依据视口、设备能力或用户偏好，容器尺寸查询依据祖先容器的可用空间。前者适合页面级适配，后者让同一个组件在不同位置独立调整布局。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-container-queries/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-container-queries/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"媒体查询和容器查询分别适合什么场景？","item":"https://fe.hushifa.top/questions/css-container-queries/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-container-queries/#webpage","url":"https://fe.hushifa.top/questions/css-container-queries/","name":"媒体查询和容器查询分别适合什么场景？ · 前端知库","description":"HTML / CSS面试题：媒体查询依据视口、设备能力和用户偏好，适合页面级布局；容器尺寸查询依据祖先容器的尺寸，让同一个组件在不同位置自行调整。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-container-queries/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-container-queries/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"媒体查询和容器查询分别适合什么场景？","item":"https://fe.hushifa.top/questions/css-container-queries/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">媒体查询和容器查询分别适合什么场景？</span></nav><h1 tabindex="-1">媒体查询和容器查询分别适合什么场景？</h1><p class="reading-summary">媒体查询依据视口、设备能力或用户偏好，容器尺寸查询依据祖先容器的可用空间。前者适合页面级适配，后者让同一个组件在不同位置独立调整布局。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">媒体查询和容器查询分别适合什么场景？</span></nav><h1 tabindex="-1">媒体查询和容器查询分别适合什么场景？</h1><p class="reading-summary">媒体查询依据视口、设备能力和用户偏好，适合页面级布局；容器尺寸查询依据祖先容器的尺寸，让同一个组件在不同位置自行调整。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>媒体查询看页面环境（视口、打印、用户偏好），容器查询看组件实际获得了多少空间。</li>
-<li><code>container-type: inline-size</code> 建立行内轴尺寸查询容器，单写 <code>container-name</code> 不会建立。</li>
-<li>查询的尺寸来自祖先，规则作用于里面的元素，所以需要一个从布局获得宽度的外层容器，避免循环依赖。</li>
-<li>不要随手用 <code>container-type: size</code>，它会对两个轴都施加尺寸包含。</li>
+<li>媒体查询回答“视口多宽、设备能不能悬停、用户是否偏好深色”，适合页面骨架和全局偏好。</li>
+<li>容器查询回答“我所在的容器多宽”，适合会被放进侧栏、主栏、弹窗等不同位置的组件。</li>
+<li>容器要先用 <code>container-type: inline-size</code> 声明，查询的是最近的、满足条件的祖先容器，元素不能查询自己。</li>
+<li><code>cqi</code>、<code>cqw</code> 等容器单位按容器尺寸计算，可用于字号和间距。</li>
+<li>容器尺寸查询已被主流浏览器支持，可以直接使用。</li>
 </ul>
-<p>假设一张课程卡片会同时出现在首页主栏和右侧推荐栏。电脑屏幕很宽，但右侧推荐栏仍然很窄。如果只写 <code>@media (min-width: 60rem)</code>，两处卡片都会采用“大屏布局”，推荐栏中的图片和文字就可能挤在一起。</p>
-<p><strong>媒体查询知道页面所处的环境，容器查询知道组件获得了多少空间。</strong> 选择哪一种，要看影响设计的因素来自哪里。</p>
-<h2>页面环境交给媒体查询</h2>
-<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.page</span> {
-  <span class="hljs-attribute">display</span>: grid;
-  <span class="hljs-attribute">gap</span>: <span class="hljs-number">2rem</span>;
+<h2>示例</h2>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.card-slot</span> {
+  <span class="hljs-attribute">container</span>: card / inline-size;
 }
 
-<span class="hljs-keyword">@media</span> (<span class="hljs-attribute">min-width</span>: <span class="hljs-number">60rem</span>) {
-  <span class="hljs-selector-class">.page</span> {
-    <span class="hljs-attribute">grid-template-columns</span>: <span class="hljs-built_in">minmax</span>(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>fr) <span class="hljs-number">18rem</span>;
+<span class="hljs-selector-class">.card</span> {
+  <span class="hljs-attribute">display</span>: grid;
+  <span class="hljs-attribute">gap</span>: <span class="hljs-number">12px</span>;
+}
+
+<span class="hljs-keyword">@container</span> card (inline-size &gt; <span class="hljs-number">480px</span>) {
+  <span class="hljs-selector-class">.card</span> {
+    <span class="hljs-attribute">grid-template-columns</span>: <span class="hljs-number">160px</span> <span class="hljs-number">1</span>fr;
   }
 }
 </code></pre></div>
-<p>这段规则表示：视口达到一定宽度，页面才分成主栏和侧栏。对于屏幕媒体，<code>width</code> 查询的是视口宽度，并不是显示器的物理宽度。</p>
-<p>媒体查询也不只管宽度。打印用 <code>@media print</code>，减少动画可查询 <code>prefers-reduced-motion</code>，深色偏好可查询 <code>prefers-color-scheme</code>。这些都不是某个卡片容器的尺寸，仍然应使用媒体查询。</p>
-<h2>组件内部根据容器改变排版</h2>
-<p>下面的卡片默认上下排列；外层容器足够宽时，图片和正文才左右排列。</p>
-<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;course-slot&quot;</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">article</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;course-card&quot;</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;course-cover&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/images/course.webp&quot;</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;&quot;</span> /&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;course-body&quot;</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>浏览器渲染原理<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>从 HTML 解析到布局与绘制，理解页面如何显示出来。<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">article</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-</code></pre></div>
-<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.course-slot</span> {
-  <span class="hljs-attribute">container-type</span>: inline-size;
-  <span class="hljs-attribute">container-name</span>: course;
+<p>同一个 <code>.card</code> 放在宽主栏里变为左右布局，放在窄侧栏里保持上下布局，不需要为每个位置写单独的类。</p>
+<h2>container-type 的代价</h2>
+<p><code>inline-size</code> 会给容器加上行内方向的尺寸包含：容器宽度不再由内容决定。容器本身如果是 <code>inline-block</code> 或浮动这类靠内容撑开的盒子，宽度可能变成 0。容器通常应该是宽度由外部决定的块。</p>
+<p><code>size</code> 同时包含两个方向，容器高度也不再由内容撑开，必须显式给高度，所以较少使用。</p>
+<h2>一起使用</h2>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-keyword">@media</span> (<span class="hljs-attribute">prefers-reduced-motion</span>: reduce) {
+  * { <span class="hljs-attribute">transition</span>: none; }
 }
 
-<span class="hljs-selector-class">.course-card</span> {
-  <span class="hljs-attribute">display</span>: grid;
-  <span class="hljs-attribute">gap</span>: <span class="hljs-number">1rem</span>;
-}
-
-<span class="hljs-selector-class">.course-cover</span> {
-  <span class="hljs-attribute">display</span>: block;
-  <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;
-  <span class="hljs-attribute">height</span>: auto;
-}
-
-<span class="hljs-selector-class">.course-body</span> {
-  <span class="hljs-attribute">min-width</span>: <span class="hljs-number">0</span>;
-  <span class="hljs-attribute">overflow-wrap</span>: anywhere;
-}
-
-<span class="hljs-keyword">@container</span> course (<span class="hljs-attribute">min-width</span>: <span class="hljs-number">32rem</span>) {
-  <span class="hljs-selector-class">.course-card</span> {
-    <span class="hljs-attribute">grid-template-columns</span>: <span class="hljs-number">10rem</span> <span class="hljs-built_in">minmax</span>(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>fr);
-  }
+<span class="hljs-keyword">@media</span> (<span class="hljs-attribute">width</span> &gt; <span class="hljs-number">1024px</span>) {
+  <span class="hljs-selector-class">.layout</span> { <span class="hljs-attribute">grid-template-columns</span>: <span class="hljs-number">240px</span> <span class="hljs-number">1</span>fr; }
 }
 </code></pre></div>
-<p>这里的 <code>32rem</code> 判断的是名为 <code>course</code> 的查询容器宽度，不是整个视口。主栏和侧栏各放一份这段结构，就能在同一个屏幕上出现不同的卡片排版。图片路径需要换成项目实际提供的文件，图片本身不影响查询机制。</p>
-<p><code>container-type: inline-size</code> 建立行内轴尺寸查询容器。在通常的横排文本中，行内轴对应水平方向。<code>container-name</code> 只给容器命名，<strong>单独写名字不能建立尺寸查询所需的包含关系</strong>。也可以把两行合成 <code>container: course / inline-size</code>。</p>
-<p>不写容器名时，浏览器会为目标元素寻找最近的、支持所查询尺寸特征的祖先容器。命名可以避免组件嵌套后误用内层容器；但名字不是全局 ID，多个区域可以使用同一个容器名。</p>
-<h2>为什么需要额外的外层容器</h2>
-<p>查询的尺寸来自祖先，规则影响里面的元素。如果让一张卡片因为“自己很宽”而变窄，又因为“自己变窄”而变宽，就会产生循环依赖。尺寸包含会限制后代内容对容器相应内在尺寸的影响，让浏览器能够确定布局。</p>
-<p>因此应让 <code>.course-slot</code> 从页面的 Grid、Flex 或正常流获得宽度，再让内部卡片适配它。不要为了查高度随手改成 <code>container-type: size</code>：这会引入两个轴的尺寸包含，如果容器原本完全依靠内容撑高，又没有其他尺寸安排，可能得到意外的高度。</p>
-<p>实现时保留可用的基础单列布局。旧环境忽略容器查询时，用户仍然能阅读内容；支持查询的环境再增强布局。媒体查询与容器查询可以同时生效，前者决定页面怎么分配区域，后者决定组件如何利用分到的空间。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Containment/Container_queries" target="_blank" rel="noreferrer">MDN · CSS container queries<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%AA%92%E4%BD%93%E6%9F%A5%E8%AF%A2%E5%92%8C%E5%AE%B9%E5%99%A8%E6%9F%A5%E8%AF%A2%E5%88%86%E5%88%AB%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%AA%92%E4%BD%93%E6%9F%A5%E8%AF%A2%E5%92%8C%E5%AE%B9%E5%99%A8%E6%9F%A5%E8%AF%A2%E5%88%86%E5%88%AB%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-container-queries%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-container-queries%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：媒体查询和容器查询分别适合什么场景？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-grid-sizing/">Grid 的 fr、minmax、auto-fit 和 auto-fill 如何使用？</a></li><li><a href="/questions/css-print/">网页打印样式应该怎样单独设计？</a></li><li><a href="/questions/css-container-style-query/">容器样式查询怎样根据父级配置改变组件样式？</a></li><li><a href="/questions/css-box/">标准盒模型和 border-box 有什么区别？</a></li></ul></nav></main></div></div>
+<p>页面级的栏数、导航形态和用户偏好继续用媒体查询；栏里的组件用容器查询。打印、指针类型（<code>hover</code>、<code>pointer</code>）这类设备信息只能用媒体查询。</p>
+<h2>常见追问</h2>
+<ul>
+<li>容器样式查询是什么？<code>@container style(--theme: dark)</code> 按祖先的自定义属性值切换样式，不依赖尺寸，见《容器样式查询怎样根据父级配置改变组件样式？》。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Containment/Container_queries" target="_blank" rel="noreferrer">MDN · CSS container queries<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%AA%92%E4%BD%93%E6%9F%A5%E8%AF%A2%E5%92%8C%E5%AE%B9%E5%99%A8%E6%9F%A5%E8%AF%A2%E5%88%86%E5%88%AB%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%AA%92%E4%BD%93%E6%9F%A5%E8%AF%A2%E5%92%8C%E5%AE%B9%E5%99%A8%E6%9F%A5%E8%AF%A2%E5%88%86%E5%88%AB%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-container-queries%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-container-queries%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：媒体查询和容器查询分别适合什么场景？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-grid-sizing/">Grid 的 fr、minmax、auto-fit 和 auto-fill 如何使用？</a></li><li><a href="/questions/css-print/">网页打印样式应该怎样单独设计？</a></li><li><a href="/questions/css-container-style-query/">容器样式查询怎样根据父级配置改变组件样式？</a></li><li><a href="/questions/css-box/">标准盒模型和 border-box 有什么区别？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

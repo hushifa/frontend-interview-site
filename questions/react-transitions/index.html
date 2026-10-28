@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="React面试题：Transition 标记可以让步的更新，useDeferredValue 提供某个值的可滞后版本，让紧急交互先反馈。它们调整渲染调度，不自动防抖请求、不减少所有计算，也不能抢占任意长同步函数。" />
+    <meta name="description" content="React面试题：Transition 把一次状态更新标记为可以被打断的低优先级更新，让输入、点击等紧急更新先响应；useDeferredValue 返回一个滞后于原值的副本，用它渲染开销大的部分。它们优化的是渲染调度，不能拆分单个耗时的同步函数，也不会减少网络请求。" />
     <title>useTransition 和 useDeferredValue 能优化哪些卡顿？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/react-transitions/" />
     <meta name="robots" content="index,follow" />
@@ -19,89 +19,77 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="useTransition 和 useDeferredValue 能优化哪些卡顿？ · 前端知库" />
-    <meta property="og:description" content="React面试题：Transition 标记可以让步的更新，useDeferredValue 提供某个值的可滞后版本，让紧急交互先反馈。它们调整渲染调度，不自动防抖请求、不减少所有计算，也不能抢占任意长同步函数。" />
+    <meta property="og:description" content="React面试题：Transition 把一次状态更新标记为可以被打断的低优先级更新，让输入、点击等紧急更新先响应；useDeferredValue 返回一个滞后于原值的副本，用它渲染开销大的部分。它们优化的是渲染调度，不能拆分单个耗时的同步函数，也不会减少网络请求。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/react-transitions/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-transitions/#webpage","url":"https://fe.hushifa.top/questions/react-transitions/","name":"useTransition 和 useDeferredValue 能优化哪些卡顿？ · 前端知库","description":"React面试题：Transition 标记可以让步的更新，useDeferredValue 提供某个值的可滞后版本，让紧急交互先反馈。它们调整渲染调度，不自动防抖请求、不减少所有计算，也不能抢占任意长同步函数。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-transitions/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-transitions/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"useTransition 和 useDeferredValue 能优化哪些卡顿？","item":"https://fe.hushifa.top/questions/react-transitions/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-transitions/#webpage","url":"https://fe.hushifa.top/questions/react-transitions/","name":"useTransition 和 useDeferredValue 能优化哪些卡顿？ · 前端知库","description":"React面试题：Transition 把一次状态更新标记为可以被打断的低优先级更新，让输入、点击等紧急更新先响应；useDeferredValue 返回一个滞后于原值的副本，用它渲染开销大的部分。它们优化的是渲染调度，不能拆分单个耗时的同步函数，也不会减少网络请求。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-transitions/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-transitions/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"useTransition 和 useDeferredValue 能优化哪些卡顿？","item":"https://fe.hushifa.top/questions/react-transitions/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">useTransition 和 useDeferredValue 能优化哪些卡顿？</span></nav><h1 tabindex="-1">useTransition 和 useDeferredValue 能优化哪些卡顿？</h1><p class="reading-summary">Transition 标记可以让步的更新，useDeferredValue 提供某个值的可滞后版本，让紧急交互先反馈。它们调整渲染调度，不自动防抖请求、不减少所有计算，也不能抢占任意长同步函数。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<p>useTransition 把某些状态更新标记为可中断的低优先级更新，让输入等紧急操作先响应，并提供 isPending 表示是否在进行中。useDeferredValue 在你拿不到 setter、只拿到值时使用，返回该值的滞后版本。它们调整的是 React 渲染调度，不会对请求防抖，也无法打断一段长时间运行的同步 JavaScript。重计算的子组件还要配合 memo，才能真正跳过渲染。</p>
-<p>输入框需要立即显示用户刚输入的字符，但几千行搜索结果可以稍后更新。如果把所有工作都当作同样紧急，昂贵结果区的重新计算就可能拖慢输入反馈。</p>
-<p>useTransition 与 useDeferredValue 用来表达这种优先级差异。它们不是让任务固定等几百毫秒，也不是自动把计算移到 Worker，而是让 React 在适当边界优先处理更紧急的工作。</p>
-<h2>能控制状态更新的位置，可以使用 Transition</h2>
-<p>useTransition 返回 isPending 和 startTransition。把更新放进 startTransition 的 Action 中，可以标记它们的过渡语义，并通过 isPending 显示相关等待状态。</p>
-<p>startTransition 的回调会被调用，并不意味着里面每一句 JavaScript 都被推迟执行。如果先在回调里同步计算很久，再调用 setter，前面那段计算仍然可能占住主线程。</p>
-<p>普通快速状态更新未必需要 Transition。应该将它用于允许暂时保留旧界面、又不希望阻塞更紧急交互的工作，而不是给每一个 setState 都套一层。</p>
-<h2>只有输入值可用时，可以让结果区读取延迟版本</h2>
-<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { memo, useDeferredValue, useState, useTransition } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">useTransition 和 useDeferredValue 能优化哪些卡顿？</span></nav><h1 tabindex="-1">useTransition 和 useDeferredValue 能优化哪些卡顿？</h1><p class="reading-summary">Transition 把一次状态更新标记为可以被打断的低优先级更新，让输入、点击等紧急更新先响应；useDeferredValue 返回一个滞后于原值的副本，用它渲染开销大的部分。它们优化的是渲染调度，不能拆分单个耗时的同步函数，也不会减少网络请求。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li><code>const [isPending, startTransition] = useTransition()</code>：包在 <code>startTransition</code> 里的状态更新是低优先级的，渲染过程中如果有新的紧急更新，React 会中断它、先处理紧急更新。</li>
+<li><code>useDeferredValue(value)</code>：先用旧值渲染，再在后台用新值重新渲染；新值渲染期间又有新输入，React 会放弃这次渲染。</li>
+<li>适合&quot;输入框要立即响应，下面的大列表可以晚一点更新&quot;这类场景。</li>
+<li>输入框自身的 <code>value</code> 不能放在 Transition 里，否则输入会卡住；只把派生的耗时渲染放进去。</li>
+<li>它们中断的是 React 的渲染工作，单个组件内部几百毫秒的同步计算仍会阻塞主线程；也不会自动防抖网络请求。</li>
+</ul>
+<h2>useDeferredValue：输入和列表分开</h2>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { memo, useDeferredValue, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 
-<span class="hljs-keyword">const</span> topics = [<span class="hljs-string">&#x27;HTML&#x27;</span>, <span class="hljs-string">&#x27;CSS&#x27;</span>, <span class="hljs-string">&#x27;JavaScript&#x27;</span>, <span class="hljs-string">&#x27;React&#x27;</span>, <span class="hljs-string">&#x27;TypeScript&#x27;</span>];
-
-<span class="hljs-keyword">const</span> <span class="hljs-title class_">Results</span> = <span class="hljs-title function_">memo</span>(<span class="hljs-keyword">function</span> <span class="hljs-title function_">Results</span>(<span class="hljs-params">{ query }</span>) {
-  <span class="hljs-keyword">const</span> matches = topics.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">topic</span> =&gt;</span> topic.<span class="hljs-title function_">toLowerCase</span>().<span class="hljs-title function_">includes</span>(query.<span class="hljs-title function_">toLowerCase</span>()));
-  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>{matches.map(topic =&gt; <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{topic}</span>&gt;</span>{topic}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>)}<span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span>;
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">SlowList</span> = <span class="hljs-title function_">memo</span>(<span class="hljs-keyword">function</span> <span class="hljs-title function_">SlowList</span>(<span class="hljs-params">{ query }</span>) {
+  <span class="hljs-keyword">const</span> items = <span class="hljs-title function_">filterLargeList</span>(query); <span class="hljs-comment">// 渲染很慢</span>
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>{items.map((i) =&gt; <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{i.id}</span>&gt;</span>{i.title}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>)}<span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span>;
 });
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">SearchDemo</span>(<span class="hljs-params"></span>) {
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Search</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">const</span> [query, setQuery] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
   <span class="hljs-keyword">const</span> deferredQuery = <span class="hljs-title function_">useDeferredValue</span>(query);
-  <span class="hljs-keyword">const</span> isStale = query !== deferredQuery;
+  <span class="hljs-keyword">const</span> stale = query !== deferredQuery;
 
   <span class="hljs-keyword">return</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">section</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>搜索<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{query}</span> <span class="hljs-attr">onChange</span>=<span class="hljs-string">{event</span> =&gt;</span> setQuery(event.target.value)} /&gt;<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">role</span>=<span class="hljs-string">&quot;status&quot;</span>&gt;</span>{isStale ? &#x27;正在更新结果&#x27; : &#x27;结果已更新&#x27;}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">aria-busy</span>=<span class="hljs-string">{isStale}</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">opacity:</span> <span class="hljs-attr">isStale</span> ? <span class="hljs-attr">0.6</span> <span class="hljs-attr">:</span> <span class="hljs-attr">1</span> }}&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">Results</span> <span class="hljs-attr">query</span>=<span class="hljs-string">{deferredQuery}</span> /&gt;</span>
+    <span class="xml"><span class="hljs-tag">&lt;&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{query}</span> <span class="hljs-attr">onChange</span>=<span class="hljs-string">{(e)</span> =&gt;</span> setQuery(e.target.value)} /&gt;
+      <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">opacity:</span> <span class="hljs-attr">stale</span> ? <span class="hljs-attr">0.6</span> <span class="hljs-attr">:</span> <span class="hljs-attr">1</span> }}&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">SlowList</span> <span class="hljs-attr">query</span>=<span class="hljs-string">{deferredQuery}</span> /&gt;</span>
       <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span></span>
+    <span class="hljs-tag">&lt;/&gt;</span></span>
   );
 }
 </code></pre></div>
-<p>输入框直接使用 query，及时接收用户输入；结果区使用 deferredQuery，允许在新的结果尚未提交时暂时显示旧查询对应的内容。isStale 提示用户这份结果还没有追上输入，避免把旧结果误认成最新结果。</p>
-<p>数据刻意很小，只用于展示组织方式，不能据此证明需要优化或观察到明显 pending。实际昂贵内容应放在合适的子组件边界，memo 或对应编译优化可以帮助它在紧急渲染中收到相同延迟值时跳过不必要计算。</p>
-<p>如果先在父组件执行一个很慢的筛选，再把筛选结果交给 useDeferredValue，昂贵工作已经发生，不能期待延迟返回值把刚才的成本消除。</p>
-<h2>延迟没有固定时长，也不是请求防抖</h2>
-<p>useDeferredValue 不定义一个固定的 300ms 等待窗口。React 可以尽快尝试后台渲染，并让新的紧急输入打断工作；如果计算本来就很快，差异可能几乎看不见。</p>
-<p>默认首次渲染通常使用传入值，后续更新才体现滞后机制；提供初始值等扩展用法应按所用版本理解。不要把它当成每次加载都固定慢一拍的工具。</p>
-<p>它也不会自动减少网络请求数量。每次输入是否发请求、是否缓存、是否取消旧请求，需要请求层设计。debounce 控制触发频率，Transition 调整 React 更新调度，二者解决的问题不同。</p>
-<h2>异步 Action 与 await 后的更新要明确</h2>
-<p>下面沿用前面的导入，用本地延迟观察 pending 与最终更新，不包含网络请求：</p>
-<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">AsyncIncrement</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+<p><code>SlowList</code> 必须用 <code>memo</code> 包裹。否则每次 <code>query</code> 变化，父组件重新渲染时也会以旧的 <code>deferredQuery</code> 再渲染一次 <code>SlowList</code>，延迟就没有意义。</p>
+<h2>useTransition：切换标签页</h2>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">Tabs</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [tab, setTab] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;about&#x27;</span>);
   <span class="hljs-keyword">const</span> [isPending, startTransition] = <span class="hljs-title function_">useTransition</span>();
 
-  <span class="hljs-keyword">function</span> <span class="hljs-title function_">increment</span>(<span class="hljs-params"></span>) {
-    <span class="hljs-title function_">startTransition</span>(<span class="hljs-title function_">async</span> () =&gt; {
-      <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> <span class="hljs-built_in">setTimeout</span>(resolve, <span class="hljs-number">300</span>));
-      <span class="hljs-title function_">startTransition</span>(<span class="hljs-function">() =&gt;</span> {
-        <span class="hljs-title function_">setCount</span>(<span class="hljs-function"><span class="hljs-params">current</span> =&gt;</span> current + <span class="hljs-number">1</span>);
-      });
-    });
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">select</span>(<span class="hljs-params">next</span>) {
+    <span class="hljs-title function_">startTransition</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">setTab</span>(next));
   }
 
   <span class="hljs-keyword">return</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">section</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">output</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;计数&quot;</span>&gt;</span>{count}<span class="hljs-tag">&lt;/<span class="hljs-name">output</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">disabled</span>=<span class="hljs-string">{isPending}</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{increment}</span>&gt;</span>
-        {isPending ? &#x27;处理中&#x27; : &#x27;延迟加一&#x27;}
-      <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span></span>
+    <span class="xml"><span class="hljs-tag">&lt;&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">TabButton</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> select(&#x27;posts&#x27;)}&gt;文章<span class="hljs-tag">&lt;/<span class="hljs-name">TabButton</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">TabButton</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> select(&#x27;contact&#x27;)}&gt;联系<span class="hljs-tag">&lt;/<span class="hljs-name">TabButton</span>&gt;</span>
+      {isPending &amp;&amp; <span class="hljs-tag">&lt;<span class="hljs-name">Spinner</span> /&gt;</span>}
+      {tab === &#x27;posts&#x27; ? <span class="hljs-tag">&lt;<span class="hljs-name">SlowPosts</span> /&gt;</span> : tab === &#x27;contact&#x27; ? <span class="hljs-tag">&lt;<span class="hljs-name">Contact</span> /&gt;</span> : <span class="hljs-tag">&lt;<span class="hljs-name">About</span> /&gt;</span>}
+    <span class="hljs-tag">&lt;/&gt;</span></span>
   );
 }
 </code></pre></div>
-<p>当前 React 的异步 Action 可以参与 pending 跟踪，但在 await 之后需要作为 Transition 处理的状态更新，仍要按文档用 startTransition 标记。示例第二层调用不代表重新等待一次，只标记最终状态更新。</p>
-<p>它也不是一个自动排队的业务请求系统。多个异步动作可能按不同顺序完成，旧响应是否还能写入状态，需要请求身份、取消或合适的 Action 状态机制处理。同一个 useTransition 发起的多个 Transition 共用一个 isPending：只要还有一项没完成，它就是 true，分不出是哪一项在等待。需要逐项显示状态时，要按请求 ID 自己维护。</p>
-<h2>受控输入本身不应该被延迟</h2>
-<p>直接控制文本框的状态应保持及时更新，否则用户可能看到输入回退、光标跳动或无法连续编辑。可以延后结果区、预览或其他昂贵内容，不应把同一受控 value 的 setter 当作可随意延后的工作。</p>
-<p>用户正在输入时，React 的并发渲染也不是任意抢占式线程。如果某个组件函数内部执行一个很长、不可中断的同步循环，它仍可能阻塞。需要进一步减少计算、拆分任务、虚拟化或使用 Worker，而不是只增加 Transition 标记。</p>
-<h2>与 Suspense 配合时，要表达旧内容的含义</h2>
-<p>过渡更新中遇到支持 Suspense 的等待，React 可以在适用条件下保留已显示内容，减少突然切换成大块 loading 的打断。首次加载或新的边界身份等情形仍可能显示 fallback，不能把这理解成“用了 Transition 就再也没有加载界面”。</p>
-<p>旧内容应配合清楚的更新反馈，特别是查询条件已经改变时。若数据涉及强一致性要求，也要评估继续展示旧内容是否符合业务，而不是只追求少闪一下。</p>
-<p>最后，用真实设备和输入流程测量响应延迟。把某个结果显示得更晚不必然更快，真正的目标是让重要交互先得到反馈，同时保持新旧内容关系清楚、请求结果正确。</p>
-<p>补充参考：<a href="https://react.dev/reference/react/useDeferredValue">React · useDeferredValue</a>。</p></div><div class="answer-bottom"><a href="https://react.dev/reference/react/useTransition" target="_blank" rel="noreferrer">React · useTransition<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+useTransition+%E5%92%8C+useDeferredValue+%E8%83%BD%E4%BC%98%E5%8C%96%E5%93%AA%E4%BA%9B%E5%8D%A1%E9%A1%BF%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AuseTransition+%E5%92%8C+useDeferredValue+%E8%83%BD%E4%BC%98%E5%8C%96%E5%93%AA%E4%BA%9B%E5%8D%A1%E9%A1%BF%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-transitions%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-transitions%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：useTransition 和 useDeferredValue 能优化哪些卡顿？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-state/">为什么调用 setState 后，当前变量还是旧值？</a></li><li><a href="/questions/react-effect/">useEffect 的依赖数组和清理函数应该怎么写？</a></li><li><a href="/questions/react-key/">列表中的 key 为什么不能随意使用数组下标？</a></li><li><a href="/questions/react-memo/">memo、useMemo、useCallback 各自优化什么？</a></li></ul></nav></main></div></div>
+<p>点击&quot;文章&quot;后再快速点&quot;联系&quot;，React 会放弃未完成的&quot;文章&quot;渲染，直接渲染&quot;联系&quot;。</p>
+<h2>和 Suspense 配合</h2>
+<p>在 Transition 中切换到会挂起的内容时，React 会继续显示当前已有的内容，而不是切回 Suspense 的 fallback。路由跳转通常利用这一点：新页面数据准备好之前，旧页面保持可见。</p>
+<h2>多个 Transition 共用一个 isPending</h2>
+<p>同一个 <code>useTransition</code> 返回的 <code>isPending</code> 只表示&quot;是否有进行中的 Transition&quot;，分不出是哪一个。需要按条目显示加载状态（例如每行的保存按钮），要自己按 ID 记录状态，或者给每个条目各自调用一次 <code>useTransition</code>。</p>
+<h2>和防抖的区别</h2>
+<table><thead><tr><th></th><th>防抖 / 节流</th><th>Transition / 延迟值</th></tr></thead><tbody><tr><td>作用对象</td><td>函数调用次数</td><td>渲染优先级</td></tr><tr><td>有固定延迟</td><td>是</td><td>否，设备快就几乎没有延迟</td></tr><tr><td>能减少请求</td><td>能</td><td>不能</td></tr></tbody></table>
+<p>搜索请求仍应防抖或用数据请求库去重；Transition 负责让渲染结果不阻塞输入。</p>
+<h2>常见追问</h2>
+<ul>
+<li><code>startTransition</code> 里能 <code>await</code> 吗？React 19 起可以传 async 函数，但 <code>await</code> 之后的 <code>setState</code> 需要再包一层 <code>startTransition</code> 才会被标记为 Transition。</li>
+<li>不需要 <code>isPending</code> 时，可以直接从 <code>react</code> 导入 <code>startTransition</code>。</li>
+</ul></div><div class="answer-bottom"><a href="https://react.dev/reference/react/useTransition" target="_blank" rel="noreferrer">React · useTransition<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+useTransition+%E5%92%8C+useDeferredValue+%E8%83%BD%E4%BC%98%E5%8C%96%E5%93%AA%E4%BA%9B%E5%8D%A1%E9%A1%BF%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AuseTransition+%E5%92%8C+useDeferredValue+%E8%83%BD%E4%BC%98%E5%8C%96%E5%93%AA%E4%BA%9B%E5%8D%A1%E9%A1%BF%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-transitions%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-transitions%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：useTransition 和 useDeferredValue 能优化哪些卡顿？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-state/">为什么调用 setState 后，当前变量还是旧值？</a></li><li><a href="/questions/react-effect/">useEffect 的依赖数组和清理函数应该怎么写？</a></li><li><a href="/questions/react-key/">列表中的 key 为什么不能随意使用数组下标？</a></li><li><a href="/questions/react-memo/">memo、useMemo、useCallback 各自优化什么？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

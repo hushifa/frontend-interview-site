@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="React面试题：Error Boundary 为后代的相关错误提供恢复界面，Suspense 为支持其协议的等待提供加载回退。失败、等待和空数据是不同状态，边界范围、重试条件及服务端行为都需要明确设计。" />
+    <meta name="description" content="React面试题：Error Boundary 捕获子树在渲染、生命周期中抛出的错误并显示备用界面；Suspense 在子树等待数据或代码加载时显示 fallback。两者常一起包在异步区域外，分别处理&quot;失败&quot;和&quot;等待&quot;。" />
     <title>Error Boundary 和 Suspense 分别处理什么？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/react-error-suspense/" />
     <meta name="robots" content="index,follow" />
@@ -19,109 +19,88 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Error Boundary 和 Suspense 分别处理什么？ · 前端知库" />
-    <meta property="og:description" content="React面试题：Error Boundary 为后代的相关错误提供恢复界面，Suspense 为支持其协议的等待提供加载回退。失败、等待和空数据是不同状态，边界范围、重试条件及服务端行为都需要明确设计。" />
+    <meta property="og:description" content="React面试题：Error Boundary 捕获子树在渲染、生命周期中抛出的错误并显示备用界面；Suspense 在子树等待数据或代码加载时显示 fallback。两者常一起包在异步区域外，分别处理&quot;失败&quot;和&quot;等待&quot;。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/react-error-suspense/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-error-suspense/#webpage","url":"https://fe.hushifa.top/questions/react-error-suspense/","name":"Error Boundary 和 Suspense 分别处理什么？ · 前端知库","description":"React面试题：Error Boundary 为后代的相关错误提供恢复界面，Suspense 为支持其协议的等待提供加载回退。失败、等待和空数据是不同状态，边界范围、重试条件及服务端行为都需要明确设计。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-error-suspense/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-error-suspense/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"Error Boundary 和 Suspense 分别处理什么？","item":"https://fe.hushifa.top/questions/react-error-suspense/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-error-suspense/#webpage","url":"https://fe.hushifa.top/questions/react-error-suspense/","name":"Error Boundary 和 Suspense 分别处理什么？ · 前端知库","description":"React面试题：Error Boundary 捕获子树在渲染、生命周期中抛出的错误并显示备用界面；Suspense 在子树等待数据或代码加载时显示 fallback。两者常一起包在异步区域外，分别处理\"失败\"和\"等待\"。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-error-suspense/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-error-suspense/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"Error Boundary 和 Suspense 分别处理什么？","item":"https://fe.hushifa.top/questions/react-error-suspense/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">Error Boundary 和 Suspense 分别处理什么？</span></nav><h1 tabindex="-1">Error Boundary 和 Suspense 分别处理什么？</h1><p class="reading-summary">Error Boundary 为后代的相关错误提供恢复界面，Suspense 为支持其协议的等待提供加载回退。失败、等待和空数据是不同状态，边界范围、重试条件及服务端行为都需要明确设计。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<p>Error Boundary 捕获后代在渲染、生命周期中抛出的错误并显示备用界面，但捕获不到事件处理函数和普通异步回调里的错误。Suspense 在后代挂起（读取未完成的 Promise、懒加载组件）时显示 fallback。两者通常搭配：Suspense 处理“还在等”，Error Boundary 处理“失败了”。边界放多大，决定失败或等待时影响的界面范围。</p>
-<p>一个区域正在等待模块加载，和它已经抛出错误，应该给用户不同反馈。Suspense 处理支持其机制的等待，Error Boundary 处理 React 流程中的错误；没有记录则通常是一个正常业务状态，不应该自动变成这两者中的任何一种。</p>
-<p>它们都可以提供 fallback，但触发原因和恢复方式不同。</p>
-<h2>Error Boundary 捕获后代错误并替换这部分界面</h2>
-<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Component</span>, <span class="hljs-title class_">Suspense</span>, lazy, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">Error Boundary 和 Suspense 分别处理什么？</span></nav><h1 tabindex="-1">Error Boundary 和 Suspense 分别处理什么？</h1><p class="reading-summary">Error Boundary 捕获子树在渲染、生命周期中抛出的错误并显示备用界面；Suspense 在子树等待数据或代码加载时显示 fallback。两者常一起包在异步区域外，分别处理&quot;失败&quot;和&quot;等待&quot;。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>Error Boundary 捕获后代组件在渲染、生命周期方法和构造函数中抛出的错误，显示备用 UI，避免整棵树卸载。</li>
+<li>Error Boundary 不捕获事件处理器、<code>setTimeout</code> 等异步回调里的错误，也不捕获服务端渲染的错误和它自身的错误。</li>
+<li>目前只能用类组件实现（<code>getDerivedStateFromError</code> + <code>componentDidCatch</code>），实践中常用 <code>react-error-boundary</code> 库。</li>
+<li>Suspense 在子树&quot;挂起&quot;时显示 <code>fallback</code>。能触发挂起的是 <code>lazy</code> 组件、<code>use(promise)</code> 和支持 Suspense 的框架数据加载，普通 Effect 里的 fetch 不会。</li>
+<li>已经显示过内容的 Suspense 边界，如果更新包在 Transition 里，React 会保留旧内容而不是切回 fallback。</li>
+</ul>
+<h2>组合使用</h2>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Suspense</span>, lazy } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">ErrorBoundary</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-error-boundary&#x27;</span>;
 
-<span class="hljs-keyword">class</span> <span class="hljs-title class_">ErrorBoundary</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Component</span> {
-  state = { <span class="hljs-attr">failed</span>: <span class="hljs-literal">false</span> };
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Chart</span> = <span class="hljs-title function_">lazy</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;./Chart.jsx&#x27;</span>));
 
-  <span class="hljs-keyword">static</span> <span class="hljs-title function_">getDerivedStateFromError</span>(<span class="hljs-params"></span>) {
-    <span class="hljs-keyword">return</span> { <span class="hljs-attr">failed</span>: <span class="hljs-literal">true</span> };
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Dashboard</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">ErrorBoundary</span>
+      <span class="hljs-attr">fallbackRender</span>=<span class="hljs-string">{({</span> <span class="hljs-attr">error</span>, <span class="hljs-attr">resetErrorBoundary</span> }) =&gt;</span> (
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">role</span>=<span class="hljs-string">&quot;alert&quot;</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>图表加载失败：{error.message}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{resetErrorBoundary}</span>&gt;</span>重试<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      )}
+    &gt;
+      <span class="hljs-tag">&lt;<span class="hljs-name">Suspense</span> <span class="hljs-attr">fallback</span>=<span class="hljs-string">{</span>&lt;<span class="hljs-attr">p</span>&gt;</span>图表加载中…<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>}&gt;
+        <span class="hljs-tag">&lt;<span class="hljs-name">Chart</span> /&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">Suspense</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">ErrorBoundary</span>&gt;</span></span>
+  );
+}
+</code></pre></div>
+<ul>
+<li>加载 <code>Chart</code> 的代码块时显示&quot;加载中&quot;；加载失败（如网络断开）时 Promise reject，错误交给 ErrorBoundary。</li>
+<li>ErrorBoundary 放在 Suspense 外面，等待和失败都只影响这一块区域。</li>
+</ul>
+<h2>手写 Error Boundary</h2>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ErrorBoundary</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">React.Component</span> {
+  state = { <span class="hljs-attr">error</span>: <span class="hljs-literal">null</span> };
+
+  <span class="hljs-keyword">static</span> <span class="hljs-title function_">getDerivedStateFromError</span>(<span class="hljs-params">error</span>) {
+    <span class="hljs-keyword">return</span> { error };
   }
 
-  <span class="hljs-title function_">componentDidCatch</span>(<span class="hljs-params">error</span>) {
-    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;内容渲染失败：&#x27;</span>, error);
+  <span class="hljs-title function_">componentDidCatch</span>(<span class="hljs-params">error, info</span>) {
+    <span class="hljs-title function_">reportError</span>(error, info.<span class="hljs-property">componentStack</span>);
   }
 
   <span class="hljs-title function_">render</span>(<span class="hljs-params"></span>) {
-    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">state</span>.<span class="hljs-property">failed</span>) {
-      <span class="hljs-keyword">return</span> (
-        <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">section</span> <span class="hljs-attr">role</span>=<span class="hljs-string">&quot;alert&quot;</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>这部分内容暂时无法显示。<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{this.props.onRetry}</span>&gt;</span>重试<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-        <span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span></span>
-      );
-    }
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">state</span>.<span class="hljs-property">error</span>) <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">props</span>.<span class="hljs-property">fallback</span>;
     <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">props</span>.<span class="hljs-property">children</span>;
   }
 }
-
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">Content</span>(<span class="hljs-params">{ broken }</span>) {
-  <span class="hljs-keyword">if</span> (broken) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;演示渲染错误&#x27;</span>);
-  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>内容正常显示<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>;
-}
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">ErrorDemo</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-keyword">const</span> [broken, setBroken] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">false</span>);
-  <span class="hljs-keyword">const</span> [attempt, setAttempt] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
-
-  <span class="hljs-keyword">function</span> <span class="hljs-title function_">retry</span>(<span class="hljs-params"></span>) {
-    <span class="hljs-title function_">setBroken</span>(<span class="hljs-literal">false</span>);
-    <span class="hljs-title function_">setAttempt</span>(<span class="hljs-function"><span class="hljs-params">value</span> =&gt;</span> value + <span class="hljs-number">1</span>);
+</code></pre></div>
+<p><code>getDerivedStateFromError</code> 在渲染阶段决定显示备用 UI，<code>componentDidCatch</code> 在提交阶段做上报。</p>
+<h2>边界放在哪里</h2>
+<ul>
+<li>按用户可以独立理解的区域划分：一个卡片、一个面板、一个路由页面。整个应用只有一个顶层边界的话，任何小错误都会让全屏变成错误页。</li>
+<li>多个并排的 Suspense 会各自显示 fallback；希望它们一起出现，就包在同一个 Suspense 里。</li>
+<li>嵌套 Suspense 可以逐级显示：外层先出页面骨架，内层再出详细数据。</li>
+</ul>
+<h2>事件处理器里的错误</h2>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">handleSave</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">save</span>(form);
+  } <span class="hljs-keyword">catch</span> (err) {
+    <span class="hljs-title function_">setError</span>(err.<span class="hljs-property">message</span>);
   }
-
-  <span class="hljs-keyword">return</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">section</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setBroken(true)}&gt;触发渲染错误<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">ErrorBoundary</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{attempt}</span> <span class="hljs-attr">onRetry</span>=<span class="hljs-string">{retry}</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">Content</span> <span class="hljs-attr">broken</span>=<span class="hljs-string">{broken}</span> /&gt;</span>
-      <span class="hljs-tag">&lt;/<span class="hljs-name">ErrorBoundary</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span></span>
-  );
 }
 </code></pre></div>
-<p>点击按钮只是更新 broken，真正的异常在下一次 Content 渲染时抛出，边界因此显示自己的回退。getDerivedStateFromError 负责决定回退状态，componentDidCatch 可以记录诊断信息。</p>
-<p>这里重试先把错误原因修正为 false，再更换边界身份使其重建。如果只清空边界状态，却继续传入必然抛错的 broken=true，下一次仍然会失败。</p>
-<p>实际项目不必都通过 key 重置，也可以使用库提供的 reset 机制或自行设计状态恢复，但都需要明确是否清理旧子树、如何处理用户未保存内容。</p>
-<h2>哪些错误不会被普通边界自动接住</h2>
-<p>边界可以处理后代渲染及 React 管理的相关生命周期错误，但不负责捕获任意普通事件处理器或独立 setTimeout 回调里的异常，也不能捕获它自己的回退界面内部再发生的错误。</p>
-<p>事件提交、普通 Promise 和计时器工作仍需在对应调用边界处理。现代 React 的 Action、useTransition 中的错误或 useActionState 抛错可以按其专门路径进入 Error Boundary，所以也不能反过来概括成“所有异步错误都绝不会到边界”。</p>
-<p>判断时应看任务有没有连接到 React 支持的错误流程，而不是只看函数前面有没有 async。意外的代码错误与可预期的字段校验失败，也应使用不同的产品反馈。</p>
-<h2>Suspense 不会自动观察所有请求</h2>
-<p>下面沿用前面的导入，用本地延迟模拟 lazy 模块变得可用，便于观察加载回退：</p>
-<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">const</span> <span class="hljs-title class_">DelayedPanel</span> = <span class="hljs-title function_">lazy</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> {
-  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
-    <span class="hljs-title function_">resolve</span>({ <span class="hljs-attr">default</span>: <span class="hljs-keyword">function</span> <span class="hljs-title function_">Panel</span>(<span class="hljs-params"></span>) { <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>面板已就绪<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>; } });
-  }, <span class="hljs-number">300</span>);
-}));
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">LoadingDemo</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-keyword">return</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Suspense</span> <span class="hljs-attr">fallback</span>=<span class="hljs-string">{</span>&lt;<span class="hljs-attr">p</span> <span class="hljs-attr">role</span>=<span class="hljs-string">&quot;status&quot;</span>&gt;</span>正在准备面板<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>}&gt;
-      <span class="hljs-tag">&lt;<span class="hljs-name">DelayedPanel</span> /&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">Suspense</span>&gt;</span></span>
-  );
-}
-</code></pre></div>
-<p>lazy 等待一个带有 default 组件的模块结果，未就绪时由附近的 Suspense 显示 fallback。真实的代码分割常采用动态 import，而不是本例中的模拟模块对象。</p>
-<p>模块就绪后 React 再尝试渲染内容。lazy 声明应保持在合适的模块级等稳定位置，不要每次父组件渲染都重新创建一个新的 lazy 组件身份。</p>
-<p>普通 useEffect 中启动的 fetch 不会因为外面包了 Suspense，就自动让边界显示加载状态。Effect 在提交之后执行，普通请求没有参与渲染阶段的等待协议。应使用框架集成、lazy、use 读取合适资源等支持方式，而不是随意把所有 Promise 当成同一种机制。</p>
-<h2>加载失败通常需要两个边界协作</h2>
-<p>模块或支持的资源等待期间使用 Suspense；最终失败时，需要 Error Boundary 告诉用户这部分内容出了问题。可以在一个可独立理解的区域外放错误边界，再在内部安排加载边界。</p>
-<p>只放 Suspense，不能保证所有错误都显示成它的 loading；只放 Error Boundary，也不会自然替你设计等待中的界面。</p>
-<p>lazy 会缓存加载过程与结果，加载失败后仅仅重新渲染或改一个外部 key，不一定重新发起模块加载。重试可能需要框架支持、重新建立合适资源或刷新页面，必须结合失败原因设计，不能给一个实际上无效的按钮随便写上“重试”。</p>
-<h2>边界范围应该与用户理解的内容区域对应</h2>
-<p>把整页都包在一个大加载边界里，一个小图表等待也可能替换整页；把每个小文本都拆成独立边界，又可能出现大量零碎占位和跳动。</p>
-<p>通常按用户可以独立阅读、独立失败或独立等待的区域组织，例如主内容、侧栏推荐或独立面板。错误边界也应让未失败区域尽量继续工作，并提供回到安全位置的入口。</p>
-<p>如果已经显示的内容在更新时再次等待，Transition 或延迟值在适用条件下可以帮助保留旧内容，而不是立即切回 fallback。但首次显示、新边界身份和其他情形仍有不同规则，应明确“旧内容正在更新”的状态。</p>
-<h2>服务端流程不是普通客户端边界的直接复制</h2>
-<p>经典的客户端 Error Boundary 并不在服务端渲染时以同样方式捕获并恢复所有错误。流式服务端渲染和框架可以借助 Suspense 的回退、客户端重试等机制处理部分服务端失败，但需要遵循具体渲染协议。</p>
-<p>不能只在浏览器里验证一个错误按钮，就认定服务器首屏失败、hydration 或资源缓存失效都已经处理。相反，服务端曾使用某个加载回退，也不必然意味着客户端最终无法成功显示内容。</p>
-<h2>回退界面本身也需要可用</h2>
-<p>加载提示应说明当前在等什么，错误提示应提供可执行的下一步，普通空结果则应说明确实没有内容。必要时处理焦点、读屏提示与恢复后的上下文，而不只是把整个区域替换成一行技术堆栈。</p>
-<p>日志需要保留版本与操作上下文，但不要直接向用户展示内部敏感数据。边界的价值是限制失败影响并支持恢复，不是把异常静默吞掉，让页面表面上没有白屏却失去真实功能。</p>
-<p>补充参考：<a href="https://react.dev/reference/react/Component">React · Component / Error Boundaries</a>。</p></div><div class="answer-bottom"><a href="https://react.dev/reference/react/Suspense" target="_blank" rel="noreferrer">React · Suspense<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Error+Boundary+%E5%92%8C+Suspense+%E5%88%86%E5%88%AB%E5%A4%84%E7%90%86%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AError+Boundary+%E5%92%8C+Suspense+%E5%88%86%E5%88%AB%E5%A4%84%E7%90%86%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-error-suspense%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-error-suspense%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Error Boundary 和 Suspense 分别处理什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-use-hook/">React use API 可以读取哪些值？</a></li><li><a href="/questions/react-state/">为什么调用 setState 后，当前变量还是旧值？</a></li><li><a href="/questions/react-effect/">useEffect 的依赖数组和清理函数应该怎么写？</a></li><li><a href="/questions/react-key/">列表中的 key 为什么不能随意使用数组下标？</a></li></ul></nav></main></div></div>
+<p>事件和异步回调的错误不会进入 Error Boundary，要自己 <code>try/catch</code> 并更新状态显示。</p>
+<h2>常见追问</h2>
+<ul>
+<li>错误恢复后怎么重新渲染？<code>react-error-boundary</code> 的 <code>resetErrorBoundary</code> 或 <code>resetKeys</code> 会清空错误状态，重新渲染子树。</li>
+<li>React 19 在错误处理上有什么变化？<code>createRoot</code> 新增 <code>onCaughtError</code>、<code>onUncaughtError</code> 选项，用于统一上报。</li>
+</ul></div><div class="answer-bottom"><a href="https://react.dev/reference/react/Suspense" target="_blank" rel="noreferrer">React · Suspense<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Error+Boundary+%E5%92%8C+Suspense+%E5%88%86%E5%88%AB%E5%A4%84%E7%90%86%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AError+Boundary+%E5%92%8C+Suspense+%E5%88%86%E5%88%AB%E5%A4%84%E7%90%86%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-error-suspense%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-error-suspense%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Error Boundary 和 Suspense 分别处理什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-use-hook/">React use API 可以读取哪些值？</a></li><li><a href="/questions/react-state/">为什么调用 setState 后，当前变量还是旧值？</a></li><li><a href="/questions/react-effect/">useEffect 的依赖数组和清理函数应该怎么写？</a></li><li><a href="/questions/react-key/">列表中的 key 为什么不能随意使用数组下标？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -23,64 +23,61 @@
     <meta property="og:url" content="https://fe.hushifa.top/questions/engineering-treeshaking/" />
     <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/engineering-treeshaking/#webpage","url":"https://fe.hushifa.top/questions/engineering-treeshaking/","name":"Tree shaking 如何工作？为什么有些代码无法移除？ · 前端知库","description":"工程化与性能面试题：从导出使用关系与模块副作用区分两类分析，解释 ESM、sideEffects 和纯调用标注的作用，并说明为什么优化结果必须结合真实构建验证。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/engineering-treeshaking/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/engineering-treeshaking/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"工程化与性能面试题","item":"https://fe.hushifa.top/topics/engineering/"},{"@type":"ListItem","position":3,"name":"Tree shaking 如何工作？为什么有些代码无法移除？","item":"https://fe.hushifa.top/questions/engineering-treeshaking/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
     <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/engineering/">工程化与性能面试题</a><span aria-hidden="true">/</span><span aria-current="page">Tree shaking 如何工作？为什么有些代码无法移除？</span></nav><h1 tabindex="-1">Tree shaking 如何工作？为什么有些代码无法移除？</h1><p class="reading-summary">从导出使用关系与模块副作用区分两类分析，解释 ESM、sideEffects 和纯调用标注的作用，并说明为什么优化结果必须结合真实构建验证。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>Tree shaking 移除确认不影响行为的未使用代码，不只是没被调用的导出。</li>
-<li>静态的 import/export 让工具容易分析用到了哪些绑定，ESM 因此更有利于优化。</li>
-<li>模块顶层副作用、动态属性访问和 CommonJS 的动态 require 会阻止或削弱移除。</li>
-<li><code>sideEffects</code> 声明要如实填写，写错会让必要的副作用代码被删掉。</li>
+<li>Tree shaking 依赖 ES 模块的静态 <code>import</code>/<code>export</code>，在构建时找出没被使用的导出并删除。</li>
+<li>删除一段代码有两个前提：它的导出没人用，并且执行它没有副作用。</li>
+<li><code>package.json</code> 的 <code>sideEffects: false</code> 告诉打包工具&quot;整个模块没人用时可以跳过&quot;；<code>/*#__PURE__*/</code> 标注单个调用没有副作用。</li>
+<li>CommonJS（<code>require</code>、<code>module.exports</code>）的导出是运行时决定的，通常无法精确摇树。</li>
+<li>只有生产构建才会真正删除，结果要看产物验证，不能只凭源码判断。</li>
 </ul>
-<p>一个工具模块导出了十个函数，应用只使用其中一个，理想情况下不必把其余九个函数都发给用户。Tree shaking 利用模块与代码分析，移除确认不影响程序行为的部分。</p>
-<p>关键是“确认不影响行为”，而不只是“这个导出没有被直接调用”。模块顶层可能注册事件、安装补丁或加载样式，即使没有使用它的导出，执行模块本身仍可能有意义。</p>
-<h2>ESM 为什么有利于分析</h2>
-<p>静态 import/export 让工具更容易知道模块导出了什么、哪个入口使用了哪个绑定。相比很多运行时拼装的导出对象，这提供了更清楚的使用关系。</p>
-<p>例如应用只导入 add：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// math.js</span>
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">a, b</span>) {
-  <span class="hljs-keyword">return</span> a + b;
-}
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">unusedMessage</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;不需要进入当前页面的功能&#x27;</span>;
-}
+<h2>两类分析</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// utils.js</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">used</span>(<span class="hljs-params"></span>) { <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>; }
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">unused</span>(<span class="hljs-params"></span>) { <span class="hljs-keyword">return</span> <span class="hljs-number">2</span>; }
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;utils loaded&#x27;</span>); <span class="hljs-comment">// 副作用</span>
 </code></pre></div>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// main.js</span>
-<span class="hljs-keyword">import</span> { add } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./math.js&#x27;</span>;
-
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">add</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>));
+<span class="hljs-keyword">import</span> { used } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./utils.js&#x27;</span>;
+<span class="hljs-title function_">used</span>();
 </code></pre></div>
-<p>在支持且正确配置的生产优化中，unusedMessage 可以成为可移除对象。但如果使用动态属性访问整个模块命名空间，工具可能无法证明哪些导出永远不用。</p>
-<p>CommonJS 并非绝对不能优化，某些模式可以被工具分析；但动态 require、条件导出或运行时修改对象会增加不确定性。不能只改成一个 ESM 文件后缀，就认定整条依赖链都具备相同的可分析性。</p>
-<h2>未使用导出与未使用模块是不同问题</h2>
-<p>考虑一个模块顶层写了 <code>globalThis.registered = true</code>，同时还导出一个没有被使用的函数。删除那个函数可能安全，删除整个模块却会丢掉顶层初始化。</p>
-<p>CSS、polyfill、全局事件注册和自动安装的插件，都可能依赖这种执行效果。工具保留相关内容，有时是在正确保护行为，不一定是优化失效。</p>
-<h2>sideEffects 是作者提供的文件级信息</h2>
-<p>包清单中的 sideEffects=false 声明这个包的相关模块在未使用时可以被安全跳过。它不是“里面的所有函数都没有副作用”，也不是强制工具删除任意未调用代码的开关。</p>
-<p>错误声明可能让样式或初始化被移除。例如库入口导入 setup.js 完成注册，但包声称所有文件都无副作用，生产构建就可能跳过这次初始化。</p>
-<p>如果只有部分文件需要保留执行，可以按打包器支持的规则列出它们。在这个由 index.js 入口承担初始化的例子里，还应保留相应入口执行：</p>
+<ul>
+<li><strong>导出级</strong>：<code>unused</code> 没被导入，可以删除。</li>
+<li><strong>模块级</strong>：如果 main.js 一个导出都不用，整个 utils.js 能否跳过？顶层的 <code>console.log</code> 是副作用，打包工具默认会保留这个模块。</li>
+</ul>
+<h2>为什么有些代码删不掉</h2>
+<ol>
+<li><strong>顶层副作用</strong>：修改全局对象、注册 polyfill、给原型添加方法、引入 CSS。打包工具无法确认删除后是否安全，只能保留。</li>
+<li><strong>无法判断纯度的调用</strong>：<code>export const Button = styled.button(...)</code> 是函数调用，工具不知道它是否修改外部状态。库可以在调用前加 <code>/*#__PURE__*/</code> 标注，返回值没被使用时就能删掉。</li>
+<li><strong>CommonJS</strong>：<code>module.exports = {...}</code> 和动态 <code>require</code> 让工具无法静态确定用到了哪些导出。选择依赖时优先使用提供 ESM 入口的版本（如 <code>lodash-es</code>）。</li>
+<li><strong>整体导入后动态访问</strong>：<code>import * as utils</code> 后写 <code>utils[name]()</code>，工具无法知道用到了哪个，只能全部保留。</li>
+<li><strong>类和对象的方法</strong>：一个类被使用，它的所有方法通常都会保留。</li>
+</ol>
+<h2>sideEffects 字段</h2>
 <div class="not-prose code-block"><div class="code-language">json</div><pre><code class="hljs language-json">{
-  &quot;sideEffects&quot;: [
-    &quot;./index.js&quot;,
-    &quot;./setup.js&quot;,
-    &quot;**/*.css&quot;
-  ]
+  &quot;name&quot;: &quot;my-lib&quot;,
+  &quot;sideEffects&quot;: [&quot;*.css&quot;, &quot;./src/polyfill.js&quot;]
 }
 </code></pre></div>
-<p>路径模式应与实际发布文件对应。把源码路径列进去，而归档里只有另一套 dist 路径，可能达不到预期。也要检查触发副作用的导入链：只标记最底层文件，不保证上游入口被跳过时它仍会执行；具体清单应以实际职责和构建结果为准。</p>
-<h2>纯调用标注也有具体范围</h2>
-<p>某些工具理解 <code>/*#__PURE__*/</code> 等标注，用来说明特定调用在结果未使用时可以移除。这是对某个表达式的提示，不是给整个函数或模块颁发“永远安全删除”的证明。</p>
-<p>如果被标注的调用实际上修改全局状态，错误标注就可能改变行为。应由了解该调用语义的工具或作者使用，不要为了让报告更小就到处添加 PURE。</p>
-<h2>为什么开发输出里还看得到未用代码</h2>
-<p>开发构建可能保留更多可读内容，导出使用分析与最终删除也可能由不同阶段完成。某个工具识别了未用导出，不代表你查看的那份中间代码已经被压缩器删除。</p>
-<p>应检查真正部署的生产产物和相应配置。只在源码中搜索函数名，或者只看 node_modules 中包的总大小，不能判断最终发送了多少代码。</p>
-<p>转译过程也要配合。如果在打包器分析之前就把 ESM 结构转换成不利于分析的形式，可能削弱后续优化；插件、包入口和条件导出也会影响选中了哪份代码。</p>
-<h2>优化结果需要同时检查体积和功能</h2>
-<p>可以建立一个最小消费者，只导入确定使用的 API，构建后检查未用内容是否移除，再验证必要初始化、样式和运行结果仍存在。包自身开发示例正常，不代表独立消费者的生产优化也正常。</p>
-<p>Tree shaking 关注可移除代码；代码分割则决定代码分到哪个块、何时获取。一个导出确实要使用，可以被懒加载而不是删除，两种技术解决的问题不同。</p>
-<p>目标是减少不必要的传输和执行，同时保留正确行为。产物更小但主题、注册或补丁失效，并不是成功的优化。</p></div><div class="answer-bottom"><a href="https://webpack.js.org/guides/tree-shaking/" target="_blank" rel="noreferrer">webpack · Tree Shaking<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Tree+shaking+%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E4%BA%9B%E4%BB%A3%E7%A0%81%E6%97%A0%E6%B3%95%E7%A7%BB%E9%99%A4%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ATree+shaking+%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E4%BA%9B%E4%BB%A3%E7%A0%81%E6%97%A0%E6%B3%95%E7%A7%BB%E9%99%A4%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aengineering-treeshaking%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%E4%B8%8E%E6%80%A7%E8%83%BD%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fengineering-treeshaking%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Tree shaking 如何工作？为什么有些代码无法移除？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/engineering-vitals/">LCP、INP、CLS 分别衡量什么？</a></li><li><a href="/questions/engineering-lazy/">代码分割与懒加载适合哪些场景？</a></li><li><a href="/questions/engineering-lockfile/">为什么需要提交 lockfile？npm ci 和 npm install 有何区别？</a></li><li><a href="/questions/eng-vite/">Vite 开发模式为什么启动快，生产环境为什么仍需要构建？</a></li></ul></nav></main></div></div>
+<ul>
+<li><code>false</code>：所有模块都没有副作用，未使用的模块可以整个跳过。</li>
+<li>数组：列出确实有副作用的文件，其余可以跳过。</li>
+<li>声明错误会出问题：CSS 文件被标成无副作用后，<code>import &#x27;./style.css&#x27;</code> 可能被删掉，样式丢失。</li>
+</ul>
+<h2>怎样验证</h2>
+<ul>
+<li>运行生产构建（开发模式通常不删代码），用产物分析工具查看某个库最终占了多少体积。</li>
+<li>在产物中搜索应被删除的函数名或字符串。</li>
+<li>webpack 的 <code>optimization.usedExports</code> 会在产物中留下 <code>unused harmony export</code> 注释，可以帮助定位。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li>Tree shaking 和压缩是什么关系？标记未使用的导出由打包工具完成，真正删除代码通常由压缩器（Terser、esbuild、Oxc）完成。</li>
+<li>为什么按需引入插件还有必要？有些旧库只提供 CommonJS 或依赖副作用注册，按需插件把整体导入改写成单文件导入。</li>
+</ul></div><div class="answer-bottom"><a href="https://webpack.js.org/guides/tree-shaking/" target="_blank" rel="noreferrer">webpack · Tree Shaking<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Tree+shaking+%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E4%BA%9B%E4%BB%A3%E7%A0%81%E6%97%A0%E6%B3%95%E7%A7%BB%E9%99%A4%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ATree+shaking+%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E4%BA%9B%E4%BB%A3%E7%A0%81%E6%97%A0%E6%B3%95%E7%A7%BB%E9%99%A4%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aengineering-treeshaking%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%E4%B8%8E%E6%80%A7%E8%83%BD%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fengineering-treeshaking%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Tree shaking 如何工作？为什么有些代码无法移除？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/engineering-vitals/">LCP、INP、CLS 分别衡量什么？</a></li><li><a href="/questions/engineering-lazy/">代码分割与懒加载适合哪些场景？</a></li><li><a href="/questions/engineering-lockfile/">为什么需要提交 lockfile？npm ci 和 npm install 有何区别？</a></li><li><a href="/questions/eng-vite/">Vite 开发模式为什么启动快，生产环境为什么仍需要构建？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

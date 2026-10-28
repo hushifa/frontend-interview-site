@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="HTML / CSS面试题：CSS Modules 管理局部类名，@layer 声明覆盖次序，自定义属性传递可被层叠和继承覆盖的样式值。三者可以协作，但都不是对所有样式影响的彻底隔离。" />
+    <meta name="description" content="HTML / CSS面试题：CSS Modules 在构建时生成唯一类名避免命名冲突，@layer 显式规定覆盖顺序，自定义属性传递可被继承和覆盖的设计值；三者分别处理命名、优先级和主题。" />
     <title>CSS Modules、层叠层和自定义属性怎样帮助维护样式？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/css-modern-architecture/" />
     <meta name="robots" content="index,follow" />
@@ -19,100 +19,69 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="CSS Modules、层叠层和自定义属性怎样帮助维护样式？ · 前端知库" />
-    <meta property="og:description" content="HTML / CSS面试题：CSS Modules 管理局部类名，@layer 声明覆盖次序，自定义属性传递可被层叠和继承覆盖的样式值。三者可以协作，但都不是对所有样式影响的彻底隔离。" />
+    <meta property="og:description" content="HTML / CSS面试题：CSS Modules 在构建时生成唯一类名避免命名冲突，@layer 显式规定覆盖顺序，自定义属性传递可被继承和覆盖的设计值；三者分别处理命名、优先级和主题。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/css-modern-architecture/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-modern-architecture/#webpage","url":"https://fe.hushifa.top/questions/css-modern-architecture/","name":"CSS Modules、层叠层和自定义属性怎样帮助维护样式？ · 前端知库","description":"HTML / CSS面试题：CSS Modules 管理局部类名，@layer 声明覆盖次序，自定义属性传递可被层叠和继承覆盖的样式值。三者可以协作，但都不是对所有样式影响的彻底隔离。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-modern-architecture/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-modern-architecture/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"CSS Modules、层叠层和自定义属性怎样帮助维护样式？","item":"https://fe.hushifa.top/questions/css-modern-architecture/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-modern-architecture/#webpage","url":"https://fe.hushifa.top/questions/css-modern-architecture/","name":"CSS Modules、层叠层和自定义属性怎样帮助维护样式？ · 前端知库","description":"HTML / CSS面试题：CSS Modules 在构建时生成唯一类名避免命名冲突，@layer 显式规定覆盖顺序，自定义属性传递可被继承和覆盖的设计值；三者分别处理命名、优先级和主题。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-modern-architecture/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-modern-architecture/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"CSS Modules、层叠层和自定义属性怎样帮助维护样式？","item":"https://fe.hushifa.top/questions/css-modern-architecture/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">CSS Modules、层叠层和自定义属性怎样帮助维护样式？</span></nav><h1 tabindex="-1">CSS Modules、层叠层和自定义属性怎样帮助维护样式？</h1><p class="reading-summary">CSS Modules 管理局部类名，@layer 声明覆盖次序，自定义属性传递可被层叠和继承覆盖的样式值。三者可以协作，但都不是对所有样式影响的彻底隔离。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">CSS Modules、层叠层和自定义属性怎样帮助维护样式？</span></nav><h1 tabindex="-1">CSS Modules、层叠层和自定义属性怎样帮助维护样式？</h1><p class="reading-summary">CSS Modules 在构建时生成唯一类名避免命名冲突，@layer 显式规定覆盖顺序，自定义属性传递可被继承和覆盖的设计值；三者分别处理命名、优先级和主题。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>CSS Modules 解决类名归属，<code>@layer</code> 解决冲突时谁优先，自定义属性解决样式值从哪里来，三者可以组合。</li>
-<li>CSS Modules 只局部化类名，不是 Shadow DOM，全局元素规则和继承仍会影响组件。</li>
-<li>层的顺序由首次声明决定；未分层的普通声明高于层内声明，<code>!important</code> 时层顺序反转。</li>
-<li>主题变量应使用语义名称（如 <code>--surface-color</code>），而不是外观名称（如 <code>--white</code>）。</li>
+<li>CSS Modules 把 <code>.button</code> 编译成类似 <code>.button_a1b2</code> 的类名，解决的是全局命名冲突，不影响优先级和继承。</li>
+<li><code>@layer reset, base, components, utilities;</code> 先声明顺序，后面的层覆盖前面的层，与选择器优先级无关。</li>
+<li>自定义属性（<code>--color-primary</code>）会继承，可以在任意祖先上重新赋值，适合主题、密度和组件可配置项。</li>
+<li>三者可以组合：组件样式用 Modules 写并放进 <code>components</code> 层，颜色和间距从自定义属性读取。</li>
+<li>它们都不是完全隔离：继承属性、全局元素选择器仍会影响组件，需要真正封装时用 Shadow DOM。</li>
 </ul>
-<p>一个项目的样式越来越难维护，通常不是同一个问题在反复出现。有时是两个组件都叫 <code>.title</code>，互相污染；有时是组件库规则总盖过业务规则；有时是颜色散落在几十个文件里，改主题要逐个查找。</p>
-<p>CSS Modules、层叠层和自定义属性分别处理这三类问题：<strong>名字属于谁、冲突时谁优先、样式值从哪里来。</strong> 它们可以一起用，不需要把其中一种当成包办所有问题的方案。</p>
-<h2>CSS Modules：把类名归到组件模块</h2>
-<p>以 Vite 项目为例，<code>Card.module.css</code> 会按 CSS Modules 处理，导入后得到源类名到构建类名的映射。</p>
-<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-comment">/* Card.module.css */</span>
-<span class="hljs-selector-class">.card</span> {
-  <span class="hljs-attribute">padding</span>: <span class="hljs-number">1rem</span>;
-  <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid <span class="hljs-built_in">var</span>(--border-color, <span class="hljs-number">#cbd5e1</span>);
-}
+<h2>层叠层管理覆盖</h2>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-keyword">@layer</span> reset, vendor, components, utilities;
 
-<span class="hljs-selector-class">.title</span> {
-  <span class="hljs-attribute">margin-block</span>: <span class="hljs-number">0</span> <span class="hljs-number">0.5rem</span>;
-  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">1.25rem</span>;
-}
-</code></pre></div>
-<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> styles <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./Card.module.css&#x27;</span>;
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Card</span>(<span class="hljs-params">{ title, children }</span>) {
-  <span class="hljs-keyword">return</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">section</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{styles.card}</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">h2</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{styles.title}</span>&gt;</span>{title}<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
-      {children}
-    <span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span></span>
-  );
-}
-</code></pre></div>
-<p>另一个文件也可以定义 <code>.title</code>，构建工具会按配置生成不同的局部映射，降低偶然重名的风险。生成后的具体类名格式是构建实现细节，不应该让测试和业务逻辑依赖某段固定哈希。</p>
-<p>这仍然是普通 DOM 和 CSS，不是 Shadow DOM。全局 <code>h2</code> 规则依然可能命中标题，祖先的 <code>color</code> 和自定义属性仍然可以继承进去，模块中直接写裸元素选择器也不会自动变成真正的 DOM 隔离。CSS Modules 主要管理局部标识符，不承诺隔绝所有外部样式。</p>
-<h2>@layer：让覆盖次序成为显式约定</h2>
-<p>假设第三方组件库有一个很长的按钮选择器，业务方不希望为了覆盖它而写得更长，可以给不同来源安排层次：</p>
-<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-keyword">@layer</span> reset, vendor, components, overrides;
-
-<span class="hljs-keyword">@layer</span> vendor {
-  <span class="hljs-selector-class">.panel</span> <span class="hljs-selector-class">.toolbar</span> <span class="hljs-selector-class">.button</span> {
-    <span class="hljs-attribute">color</span>: <span class="hljs-number">#64748b</span>;
-  }
-}
+<span class="hljs-keyword">@import</span> url(<span class="hljs-string">&#x27;vendor.css&#x27;</span>) layer(vendor);
 
 <span class="hljs-keyword">@layer</span> components {
   <span class="hljs-selector-class">.button</span> {
-    <span class="hljs-attribute">color</span>: <span class="hljs-number">#1d4ed8</span>;
+    <span class="hljs-attribute">padding</span>: <span class="hljs-number">8px</span> <span class="hljs-number">16px</span>;
+  }
+}
+
+<span class="hljs-keyword">@layer</span> utilities {
+  <span class="hljs-selector-class">.hidden</span> {
+    <span class="hljs-attribute">display</span>: none;
   }
 }
 </code></pre></div>
-<p>假设两条规则都匹配同一个按钮，而且都是普通作者声明，后面的 <code>components</code> 层优先。因此较短的 <code>.button</code> 可以覆盖前一层的长选择器，不需要通过堆叠 class 来赢得选择器特异性比较。</p>
-<p>层顺序由首次建立层的次序决定，开头的声明固定了架构。以后在其他文件追加 <code>@layer components { ... }</code>，是给同一层加规则，而不是把该层重新排到最后。</p>
-<p>需要注意两个例外：普通的未分层声明高于层内普通声明；<code>!important</code> 的层顺序会反转，早期层的重要声明更优先。因此只把业务代码放进层里、却把组件库留在层外，可能达不到“业务覆盖库”的目的。可以按构建方式把第三方 CSS 导入指定层，例如使用带 <code>layer(vendor)</code> 的 <code>@import</code>，并核对最终产物。</p>
-<p>层叠层也不是命名空间：两个层中同名的选择器仍然能匹配同一个元素，只是声明有了明确的排序位置。CSS Modules 和层叠层因而可以协作，前者减少误匹配，后者管理有意发生的覆盖。</p>
-<h2>自定义属性：把主题值从具体组件中提出来</h2>
+<p>第三方库放进 <code>vendor</code> 层后，业务组件不需要更高的选择器优先级就能覆盖它。未分层的样式优先于所有层，临时修复可以写在层外，但应尽快归位。</p>
+<h2>自定义属性做主题</h2>
 <div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-pseudo">:root</span> {
-  <span class="hljs-attr">--surface-color</span>: <span class="hljs-number">#fff</span>;
-  <span class="hljs-attr">--text-color</span>: <span class="hljs-number">#0f172a</span>;
-  <span class="hljs-attr">--border-color</span>: <span class="hljs-number">#cbd5e1</span>;
+  <span class="hljs-attr">--surface</span>: white;
+  <span class="hljs-attr">--text</span>: <span class="hljs-number">#1a1a1a</span>;
 }
 
-<span class="hljs-selector-attr">[data-theme=<span class="hljs-string">&quot;dark&quot;</span>]</span> {
-  <span class="hljs-attr">--surface-color</span>: <span class="hljs-number">#0f172a</span>;
-  <span class="hljs-attr">--text-color</span>: <span class="hljs-number">#e2e8f0</span>;
-  <span class="hljs-attr">--border-color</span>: <span class="hljs-number">#475569</span>;
+<span class="hljs-selector-attr">[data-theme=<span class="hljs-string">&#x27;dark&#x27;</span>]</span> {
+  <span class="hljs-attr">--surface</span>: <span class="hljs-number">#121212</span>;
+  <span class="hljs-attr">--text</span>: <span class="hljs-number">#eee</span>;
 }
 
 <span class="hljs-selector-class">.card</span> {
-  <span class="hljs-attribute">color</span>: <span class="hljs-built_in">var</span>(--text-color);
-  <span class="hljs-attribute">background</span>: <span class="hljs-built_in">var</span>(--surface-color);
-  <span class="hljs-attribute">border-color</span>: <span class="hljs-built_in">var</span>(--border-color);
+  <span class="hljs-attribute">background</span>: <span class="hljs-built_in">var</span>(--surface);
+  <span class="hljs-attribute">color</span>: <span class="hljs-built_in">var</span>(--text);
+  <span class="hljs-attribute">padding</span>: <span class="hljs-built_in">var</span>(--card-padding, <span class="hljs-number">16px</span>);
 }
 </code></pre></div>
-<p>把 <code>data-theme=&quot;dark&quot;</code> 放在整个页面或某个区域上，后代卡片就可以继承这一组值。普通的 <code>--name</code> 自定义属性参与层叠并默认继承，组件使用 <code>var()</code> 时读取的是自己所处位置的计算结果，不是构建时简单把一段文本全局替换掉。</p>
-<p>语义名字比外观名字更方便换主题。<code>--surface-color</code> 表示表面背景这一用途，换成深色仍然合理；<code>--white</code> 如果后来装入深灰色，名字就与实际语义脱节。另一方面，也不必把每一个只用一次的边距都升级为全局 token，应该暴露确实需要跨组件共享或由外部配置的值。</p>
-<h2>var 的回退值不是类型检查器</h2>
-<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.card</span> {
-  <span class="hljs-attr">--text-color</span>: <span class="hljs-number">16px</span>;
-  <span class="hljs-attribute">color</span>: red;
-  <span class="hljs-attribute">color</span>: <span class="hljs-built_in">var</span>(--text-color, blue);
+<p><code>var()</code> 的第二个参数是回退值。组件把可配置项暴露成自定义属性，使用方在外层赋值即可，不需要覆盖组件内部的选择器。</p>
+<h2>CSS Modules</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> styles <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./Button.module.css&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Button</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{styles.button}</span>&gt;</span>保存<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>;
 }
 </code></pre></div>
-<p><code>--text-color</code> 已有值 <code>16px</code>，所以 <code>blue</code> 不会因为它“不像颜色”就自动启用。替换进 <code>color</code> 后，这个声明在计算值阶段无效；对于可继承的 <code>color</code>，会按相关缺省规则继承，而不是重新返回前面那条 <code>color: red</code>。</p>
-<p><code>var(--name, fallback)</code> 主要处理被引用变量缺失或具有保证无效值等情况，不保证任意已定义值都适合目标属性。需要限定类型时可以考虑 <code>@property</code>，但注册也会改变初始值、继承等规则，必须有意识地设计。</p>
-<p>实践中可以把全局主题变量放在统一入口，组件内部用 CSS Modules，第三方、组件和业务覆盖通过层组织。出现样式冲突时，先判断是类名边界、层顺序还是变量作用域出了问题，不要把所有问题都归为“权重不够”。</p>
-<p>补充参考：<a href="https://vite.dev/guide/features.html#css-modules">Vite 的 CSS Modules 支持</a>、<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@layer">MDN 的 @layer 规则</a>。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Cascading_variables/Using_custom_properties" target="_blank" rel="noreferrer">MDN · Using CSS custom properties<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+CSS+Modules%E3%80%81%E5%B1%82%E5%8F%A0%E5%B1%82%E5%92%8C%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%9E%E6%80%A7%E6%80%8E%E6%A0%B7%E5%B8%AE%E5%8A%A9%E7%BB%B4%E6%8A%A4%E6%A0%B7%E5%BC%8F%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ACSS+Modules%E3%80%81%E5%B1%82%E5%8F%A0%E5%B1%82%E5%92%8C%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%9E%E6%80%A7%E6%80%8E%E6%A0%B7%E5%B8%AE%E5%8A%A9%E7%BB%B4%E6%8A%A4%E6%A0%B7%E5%BC%8F%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-modern-architecture%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-modern-architecture%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：CSS Modules、层叠层和自定义属性怎样帮助维护样式？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-container-style-query/">容器样式查询怎样根据父级配置改变组件样式？</a></li><li><a href="/questions/css-typed-custom-properties/">CSS @property 如何让自定义属性参与类型校验和动画？</a></li><li><a href="/questions/css-box/">标准盒模型和 border-box 有什么区别？</a></li><li><a href="/questions/css-flex-grid/">Flexbox 和 Grid 应该如何选择？</a></li></ul></nav></main></div></div>
+<p>Vite、webpack 等工具都内置支持。用 <code>:global(.x)</code> 可以写全局类，<code>composes</code> 可以复用其他模块的类。</p>
+<h2>常见追问</h2>
+<ul>
+<li>和 Tailwind 冲突吗？Tailwind 4 本身就把样式放在 <code>theme</code>、<code>base</code>、<code>components</code>、<code>utilities</code> 层里，自定义样式放进对应层即可按预期覆盖。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@layer" target="_blank" rel="noreferrer">MDN · @layer<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+CSS+Modules%E3%80%81%E5%B1%82%E5%8F%A0%E5%B1%82%E5%92%8C%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%9E%E6%80%A7%E6%80%8E%E6%A0%B7%E5%B8%AE%E5%8A%A9%E7%BB%B4%E6%8A%A4%E6%A0%B7%E5%BC%8F%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ACSS+Modules%E3%80%81%E5%B1%82%E5%8F%A0%E5%B1%82%E5%92%8C%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%9E%E6%80%A7%E6%80%8E%E6%A0%B7%E5%B8%AE%E5%8A%A9%E7%BB%B4%E6%8A%A4%E6%A0%B7%E5%BC%8F%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-modern-architecture%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-modern-architecture%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：CSS Modules、层叠层和自定义属性怎样帮助维护样式？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-container-style-query/">容器样式查询怎样根据父级配置改变组件样式？</a></li><li><a href="/questions/css-typed-custom-properties/">CSS @property 如何让自定义属性参与类型校验和动画？</a></li><li><a href="/questions/css-box/">标准盒模型和 border-box 有什么区别？</a></li><li><a href="/questions/css-flex-grid/">Flexbox 和 Grid 应该如何选择？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

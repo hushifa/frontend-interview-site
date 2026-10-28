@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Node.js面试题：从导出、转码和通知等后台任务出发，区分请求取消、任务取消、消息确认和业务回滚，说明 AbortSignal、租约、幂等键、重试和优雅排空如何协作。" />
+    <meta name="description" content="Node.js面试题：以前端触发的报表导出为例，说明异步任务的提交与查询接口、至少一次投递下的幂等处理、处理完成后再确认消息、用持久化状态实现取消、有上限的退避重试和死信队列，以及任务记录与消息发布之间的一致性。" />
     <title>消息队列任务怎样设计取消、超时、确认和重试？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/node-queue-cancellation/" />
     <meta name="robots" content="index,follow" />
@@ -19,176 +19,70 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="消息队列任务怎样设计取消、超时、确认和重试？ · 前端知库" />
-    <meta property="og:description" content="Node.js面试题：从导出、转码和通知等后台任务出发，区分请求取消、任务取消、消息确认和业务回滚，说明 AbortSignal、租约、幂等键、重试和优雅排空如何协作。" />
+    <meta property="og:description" content="Node.js面试题：以前端触发的报表导出为例，说明异步任务的提交与查询接口、至少一次投递下的幂等处理、处理完成后再确认消息、用持久化状态实现取消、有上限的退避重试和死信队列，以及任务记录与消息发布之间的一致性。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/node-queue-cancellation/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/node-queue-cancellation/#webpage","url":"https://fe.hushifa.top/questions/node-queue-cancellation/","name":"消息队列任务怎样设计取消、超时、确认和重试？ · 前端知库","description":"Node.js面试题：从导出、转码和通知等后台任务出发，区分请求取消、任务取消、消息确认和业务回滚，说明 AbortSignal、租约、幂等键、重试和优雅排空如何协作。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/node-queue-cancellation/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/node-queue-cancellation/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Node.js面试题","item":"https://fe.hushifa.top/topics/node/"},{"@type":"ListItem","position":3,"name":"消息队列任务怎样设计取消、超时、确认和重试？","item":"https://fe.hushifa.top/questions/node-queue-cancellation/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/node-queue-cancellation/#webpage","url":"https://fe.hushifa.top/questions/node-queue-cancellation/","name":"消息队列任务怎样设计取消、超时、确认和重试？ · 前端知库","description":"Node.js面试题：以前端触发的报表导出为例，说明异步任务的提交与查询接口、至少一次投递下的幂等处理、处理完成后再确认消息、用持久化状态实现取消、有上限的退避重试和死信队列，以及任务记录与消息发布之间的一致性。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/node-queue-cancellation/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/node-queue-cancellation/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Node.js面试题","item":"https://fe.hushifa.top/topics/node/"},{"@type":"ListItem","position":3,"name":"消息队列任务怎样设计取消、超时、确认和重试？","item":"https://fe.hushifa.top/questions/node-queue-cancellation/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/node/">Node.js面试题</a><span aria-hidden="true">/</span><span aria-current="page">消息队列任务怎样设计取消、超时、确认和重试？</span></nav><h1 tabindex="-1">消息队列任务怎样设计取消、超时、确认和重试？</h1><p class="reading-summary">从导出、转码和通知等后台任务出发，区分请求取消、任务取消、消息确认和业务回滚，说明 AbortSignal、租约、幂等键、重试和优雅排空如何协作。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/node/">Node.js面试题</a><span aria-hidden="true">/</span><span aria-current="page">消息队列任务怎样设计取消、超时、确认和重试？</span></nav><h1 tabindex="-1">消息队列任务怎样设计取消、超时、确认和重试？</h1><p class="reading-summary">以前端触发的报表导出为例，说明异步任务的提交与查询接口、至少一次投递下的幂等处理、处理完成后再确认消息、用持久化状态实现取消、有上限的退避重试和死信队列，以及任务记录与消息发布之间的一致性。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>消息队列一般是至少一次投递，消费者必须做幂等处理。</li>
-<li>处理完成后才确认消息；超时或崩溃后，消息会重新投递。</li>
-<li>取消是一种需要持久化的业务状态，消费者在检查点读取它。</li>
-<li>重试要有次数上限和退避，最终失败的消息进入死信队列。</li>
+<li>提交接口只校验输入、写任务记录、投递消息，然后返回 <code>202</code> 和任务 ID；前端轮询或订阅任务状态，HTTP 连接断开不会停止后台任务。</li>
+<li>主流队列提供至少一次投递，同一条消息可能被处理多次，消费者要用任务 ID 做幂等，副作用写入前检查是否已完成。</li>
+<li>消息在业务处理完成后才确认；消费者崩溃或超时未确认时，队列会重新投递。</li>
+<li>取消是写进数据库的任务状态，消费者在每个阶段开始前检查；<code>AbortSignal</code> 只能停止当前进程里还在等待的操作，撤销不了已经发出的邮件或外部写入。</li>
+<li>可重试的错误按退避重试并设次数上限，超过上限或不可重试的错误进入死信队列，等人工处理。</li>
 </ul>
-<p>用户点击“导出报表”后，前端可能在几秒内关闭页面、修改筛选条件或点击取消。若服务端已经把任务放进持久化队列，简单地把 HTTP 连接断开并不能让任务自动消失；消费者可能已经取到消息，数据库写入也可能已经发生。要把这条链路设计可靠，首先要把几个容易混淆的概念分开。</p>
-<table><thead><tr><th>概念</th><th>表示什么</th><th>能否自动撤销已经发生的副作用</th></tr></thead><tbody><tr><td>请求取消</td><td>调用方不再等待这次 HTTP 响应</td><td>不能保证服务端停止任务</td></tr><tr><td>执行取消</td><td>当前处理函数收到信号并主动停止</td><td>只能影响仍支持协作式取消的工作</td></tr><tr><td>消息确认</td><td>消费者告诉队列这条消息已处理或已接管</td><td>不等于数据库事务自动提交或回滚</td></tr><tr><td>业务撤销</td><td>领域状态明确记录“不要再继续”</td><td>需要任务代码在关键阶段检查并遵守</td></tr><tr><td>回滚</td><td>撤销同一事务中的数据库变更</td><td>不能撤销已经发送的邮件、外部 API 写入或文件上传</td></tr></tbody></table>
-<h2>HTTP 断开时不要直接删除任务</h2>
-<p>提交后台任务的接口通常只负责校验输入、保存任务记录和把消息放入可靠队列，然后返回任务 ID。客户端断开时，可以把“客户端不再等待”记录到日志或取消意图中，但是否真的取消要由任务类型决定：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { randomUUID } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:crypto&#x27;</span>;
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">createExport</span>(<span class="hljs-params">request, response, repository, queue</span>) {
-  <span class="hljs-keyword">const</span> taskId = <span class="hljs-title function_">randomUUID</span>();
-  <span class="hljs-keyword">const</span> input = <span class="hljs-keyword">await</span> <span class="hljs-title function_">readAndValidateJson</span>(request);
-
-  <span class="hljs-keyword">await</span> repository.<span class="hljs-title function_">insertTask</span>({
-    <span class="hljs-attr">id</span>: taskId,
-    <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;queued&#x27;</span>,
-    input,
-    <span class="hljs-attr">requestedAt</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(),
+<h2>提交与查询</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">createExport</span>(<span class="hljs-params">input, { db, outbox }</span>) {
+  <span class="hljs-keyword">const</span> taskId = crypto.<span class="hljs-title function_">randomUUID</span>();
+  <span class="hljs-keyword">await</span> db.<span class="hljs-title function_">transaction</span>(<span class="hljs-title function_">async</span> (tx) =&gt; {
+    <span class="hljs-keyword">await</span> tx.<span class="hljs-title function_">insert</span>(<span class="hljs-string">&#x27;tasks&#x27;</span>, { <span class="hljs-attr">id</span>: taskId, <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;queued&#x27;</span>, input });
+    <span class="hljs-comment">// 与任务记录在同一个事务里写入待发送消息，由后台进程投递到队列。</span>
+    <span class="hljs-keyword">await</span> outbox.<span class="hljs-title function_">add</span>(tx, { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;export.requested&#x27;</span>, taskId });
   });
-
-  <span class="hljs-keyword">await</span> queue.<span class="hljs-title function_">publish</span>({
-    <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;export.requested&#x27;</span>,
-    taskId,
-    <span class="hljs-attr">schemaVersion</span>: <span class="hljs-number">1</span>,
-  });
-
-  response.<span class="hljs-title function_">writeHead</span>(<span class="hljs-number">202</span>, { <span class="hljs-string">&#x27;content-type&#x27;</span>: <span class="hljs-string">&#x27;application/json&#x27;</span> });
-  response.<span class="hljs-title function_">end</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>({ taskId, <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;queued&#x27;</span> }));
+  <span class="hljs-keyword">return</span> { <span class="hljs-attr">status</span>: <span class="hljs-number">202</span>, <span class="hljs-attr">body</span>: { taskId, <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;queued&#x27;</span> } };
 }
 </code></pre></div>
-<p><code>202 Accepted</code> 表示服务端接受了异步处理请求，不表示报表已经生成。消息发布和任务记录必须有明确的一致性方案：如果先写数据库后发布消息，发布失败会留下“排队中但无人处理”的任务；如果先发布再写数据库，消费者可能先查不到任务。生产实现可以使用事务性 outbox、队列与数据库的原子能力，或由可靠的补偿任务扫描异常状态，不能只依赖两个独立的 <code>await</code>。</p>
-<h2>AbortSignal 需要贯穿同一执行链</h2>
-<p>如果任务只对当前请求有意义，<code>AbortSignal</code> 可以传给仍在等待的下游操作：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">loadReportData</span>(<span class="hljs-params">task, signal</span>) {
-  signal.<span class="hljs-title function_">throwIfAborted</span>();
+<p>如果先写数据库再单独发布消息，发布失败会留下&quot;排队中但没人处理&quot;的任务；先发布再写数据库，消费者可能查不到记录。事务性 outbox 把消息先写进同一个数据库事务，再由独立进程可靠地投递，避免两者不一致。</p>
+<p>前端拿到任务 ID 后查询 <code>GET /exports/:id</code>，显示 <code>queued</code>、<code>running</code>、<code>succeeded</code>、<code>failed</code>、<code>cancelled</code> 等状态。</p>
+<h2>消费者</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">handleExport</span>(<span class="hljs-params">message, { db, storage, signal }</span>) {
+  <span class="hljs-keyword">const</span> task = <span class="hljs-keyword">await</span> db.<span class="hljs-title function_">find</span>(<span class="hljs-string">&#x27;tasks&#x27;</span>, message.<span class="hljs-property">taskId</span>);
+  <span class="hljs-keyword">if</span> (!task || [<span class="hljs-string">&#x27;succeeded&#x27;</span>, <span class="hljs-string">&#x27;cancelled&#x27;</span>].<span class="hljs-title function_">includes</span>(task.<span class="hljs-property">status</span>)) <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;ack&#x27;</span>;
 
-  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(task.<span class="hljs-property">dataUrl</span>, {
-    signal,
-    <span class="hljs-attr">headers</span>: { <span class="hljs-attr">accept</span>: <span class="hljs-string">&#x27;application/json&#x27;</span> },
-  });
-  <span class="hljs-keyword">if</span> (!response.<span class="hljs-property">ok</span>) {
-    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">`下游返回 HTTP <span class="hljs-subst">${response.status}</span>`</span>);
+  <span class="hljs-keyword">await</span> db.<span class="hljs-title function_">update</span>(<span class="hljs-string">&#x27;tasks&#x27;</span>, task.<span class="hljs-property">id</span>, { <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;running&#x27;</span> });
+
+  <span class="hljs-keyword">const</span> rows = <span class="hljs-keyword">await</span> <span class="hljs-title function_">loadRows</span>(task.<span class="hljs-property">input</span>, signal);
+  <span class="hljs-keyword">if</span> ((<span class="hljs-keyword">await</span> db.<span class="hljs-title function_">find</span>(<span class="hljs-string">&#x27;tasks&#x27;</span>, task.<span class="hljs-property">id</span>)).<span class="hljs-property">status</span> === <span class="hljs-string">&#x27;cancel_requested&#x27;</span>) {
+    <span class="hljs-keyword">await</span> db.<span class="hljs-title function_">update</span>(<span class="hljs-string">&#x27;tasks&#x27;</span>, task.<span class="hljs-property">id</span>, { <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;cancelled&#x27;</span> });
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;ack&#x27;</span>;
   }
 
-  <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>();
-  signal.<span class="hljs-title function_">throwIfAborted</span>();
-  <span class="hljs-keyword">return</span> data;
+  <span class="hljs-comment">// 以任务 ID 作为对象名，重复执行只会覆盖同一个文件。</span>
+  <span class="hljs-keyword">await</span> storage.<span class="hljs-title function_">put</span>(<span class="hljs-string">`exports/<span class="hljs-subst">${task.id}</span>.csv`</span>, <span class="hljs-title function_">toCsv</span>(rows));
+  <span class="hljs-keyword">await</span> db.<span class="hljs-title function_">update</span>(<span class="hljs-string">&#x27;tasks&#x27;</span>, task.<span class="hljs-property">id</span>, { <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;succeeded&#x27;</span> });
+  <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;ack&#x27;</span>;
 }
 </code></pre></div>
-<p>只在最外层创建 controller、却不把 signal 传给 <code>fetch</code>、数据库驱动、文件流或自定义循环，实际上没有完成取消。<code>AbortSignal</code> 也不会强行中断任意同步 JavaScript；CPU 密集循环需要在可接受的检查点主动检查信号，外部库不支持取消时只能等待、隔离到可终止的 Worker，或让任务继续完成后丢弃结果。</p>
-<p>取消发生在 <code>fetch</code> 已经把请求发送出去之后，也不能保证远端没有处理请求。对于写入、扣款和创建资源，客户端取消只能停止等待，不能被解释成业务撤销。需要撤销时应设计独立的取消命令和领域状态，例如“生成任务取消请求”，由消费者在安全边界检查后决定是否停止。</p>
-<h2>消费消息时先建立租约，再决定确认时机</h2>
-<p>队列通常采用至少一次投递：消费者处理过程中崩溃，消息可能重新出现。一个通用的消费者状态可以是 <code>queued → running → succeeded/failed/canceled</code>，并为运行中的任务设置租约或可见性超时：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">consume</span>(<span class="hljs-params">message, repository, runExport, signal</span>) {
-  <span class="hljs-keyword">const</span> { taskId } = <span class="hljs-title function_">parseMessage</span>(message);
-  <span class="hljs-keyword">const</span> task = <span class="hljs-keyword">await</span> repository.<span class="hljs-title function_">claimTask</span>(taskId, {
-    <span class="hljs-attr">leaseMs</span>: <span class="hljs-number">30_000</span>,
-  });
-
-  <span class="hljs-keyword">if</span> (!task || task.<span class="hljs-property">status</span> === <span class="hljs-string">&#x27;succeeded&#x27;</span> || task.<span class="hljs-property">status</span> === <span class="hljs-string">&#x27;canceled&#x27;</span>) {
-    <span class="hljs-keyword">return</span> { <span class="hljs-attr">acknowledge</span>: <span class="hljs-literal">true</span> };
-  }
-
-  <span class="hljs-keyword">try</span> {
-    <span class="hljs-keyword">await</span> <span class="hljs-title function_">runExport</span>(task, signal);
-    <span class="hljs-keyword">await</span> repository.<span class="hljs-title function_">markSucceeded</span>(taskId, { <span class="hljs-attr">finishedAt</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>() });
-    <span class="hljs-keyword">return</span> { <span class="hljs-attr">acknowledge</span>: <span class="hljs-literal">true</span> };
-  } <span class="hljs-keyword">catch</span> (error) {
-    <span class="hljs-keyword">if</span> (signal.<span class="hljs-property">aborted</span> || error?.<span class="hljs-property">name</span> === <span class="hljs-string">&#x27;AbortError&#x27;</span>) {
-      <span class="hljs-keyword">await</span> repository.<span class="hljs-title function_">markCanceled</span>(taskId, { <span class="hljs-attr">reason</span>: signal.<span class="hljs-property">reason</span> });
-      <span class="hljs-keyword">return</span> { <span class="hljs-attr">acknowledge</span>: <span class="hljs-literal">true</span> };
-    }
-
-    <span class="hljs-keyword">await</span> repository.<span class="hljs-title function_">recordAttemptFailure</span>(taskId, <span class="hljs-title function_">summarize</span>(error));
-    <span class="hljs-keyword">return</span> { <span class="hljs-attr">acknowledge</span>: <span class="hljs-literal">false</span> };
-  }
-}
-</code></pre></div>
-<p>示例中的 <code>acknowledge: false</code> 代表交给队列的重投递策略；不同队列的 API 和语义不同，不能把这个对象直接当成某个厂商 SDK 的可运行代码。确认太早会在进程崩溃后丢任务，确认太晚则会使消息超时重复投递。消费者必须能承受同一任务同时被两个实例短暂处理，租约续期、版本条件更新和幂等状态转换要一起设计。</p>
-<p><code>claimTask</code> 不能只是“先查询再更新”两步无条件操作。应使用数据库事务、条件更新或锁，让只有一个消费者能把同一版本从 <code>queued</code> 改为 <code>running</code>。租约过期后的接管也要检查版本和持有者，旧消费者恢复后不能继续覆盖新消费者的结果。</p>
-<h2>幂等是重试的前提</h2>
-<p>网络超时、进程崩溃和确认响应丢失都会造成“业务可能成功，但消费者不知道”的状态。此时重新投递是正常的，不能简单把重试次数当成重复执行的安全保证。任务应使用稳定的操作 ID 或幂等键：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">saveExportResult</span>(<span class="hljs-params">repository, taskId, artifact</span>) {
-  <span class="hljs-keyword">return</span> repository.<span class="hljs-title function_">transaction</span>(<span class="hljs-title function_">async</span> (tx) =&gt; {
-    <span class="hljs-keyword">const</span> task = <span class="hljs-keyword">await</span> tx.<span class="hljs-title function_">getTaskForUpdate</span>(taskId);
-    <span class="hljs-keyword">if</span> (task.<span class="hljs-property">status</span> === <span class="hljs-string">&#x27;succeeded&#x27;</span>) <span class="hljs-keyword">return</span> task.<span class="hljs-property">result</span>;
-    <span class="hljs-keyword">if</span> (task.<span class="hljs-property">status</span> === <span class="hljs-string">&#x27;canceled&#x27;</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;任务已取消&#x27;</span>);
-
-    <span class="hljs-keyword">await</span> tx.<span class="hljs-title function_">insertArtifactIfAbsent</span>({
-      <span class="hljs-attr">idempotencyKey</span>: <span class="hljs-string">`export:<span class="hljs-subst">${taskId}</span>`</span>,
-      taskId,
-      <span class="hljs-attr">location</span>: artifact.<span class="hljs-property">location</span>,
-    });
-    <span class="hljs-keyword">await</span> tx.<span class="hljs-title function_">markSucceeded</span>(taskId, { <span class="hljs-attr">result</span>: artifact.<span class="hljs-property">location</span> });
-    <span class="hljs-keyword">return</span> artifact.<span class="hljs-property">location</span>;
-  });
-}
-</code></pre></div>
-<p>这个事务可以防止同一个任务重复登记结果，但它不能撤销已经发出的邮件、第三方支付请求或对象存储上传。外部副作用应使用幂等键、可查询状态、outbox 或补偿流程。生成文件时可以先写临时对象，数据库确认后再以原子命名或版本标记发布，避免用户看到半成品。</p>
-<h2>取消命令必须有版本和权限</h2>
-<p>取消接口不应只接受一个任务 ID 就把任意任务标成取消。服务端要验证当前用户、租户、任务版本和可取消状态；已经成功或进入不可逆外部副作用阶段的任务，可能只能标记“取消请求已收到”，而不能承诺完全撤销：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">requestCancel</span>(<span class="hljs-params">user, taskId, repository, queue</span>) {
-  <span class="hljs-keyword">const</span> task = <span class="hljs-keyword">await</span> repository.<span class="hljs-title function_">requestCancelIfAllowed</span>({
-    taskId,
-    <span class="hljs-attr">ownerId</span>: user.<span class="hljs-property">id</span>,
-    <span class="hljs-attr">allowedStatuses</span>: [<span class="hljs-string">&#x27;queued&#x27;</span>, <span class="hljs-string">&#x27;running&#x27;</span>],
-  });
-
-  <span class="hljs-keyword">if</span> (!task) {
-    <span class="hljs-keyword">return</span> { <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;unchanged&#x27;</span> };
-  }
-
-  <span class="hljs-keyword">await</span> queue.<span class="hljs-title function_">publish</span>({
-    <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;task.cancel-requested&#x27;</span>,
-    taskId,
-    <span class="hljs-attr">taskVersion</span>: task.<span class="hljs-property">version</span>,
-  });
-  <span class="hljs-keyword">return</span> { <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;cancel-requested&#x27;</span> };
-}
-</code></pre></div>
-<p>消费者处理取消消息时要比较版本，不能让旧的取消事件覆盖后来重新提交的新任务。取消状态和执行状态最好由同一状态机约束，避免出现数据库显示 <code>canceled</code>、但消费者仍发布成功结果的竞态。即使取消命令返回成功，响应也应说明是“已请求取消”还是“已确认未执行”，不要模糊地承诺副作用已经消失。</p>
-<h2>超时、重试和死信要按错误类型区分</h2>
-<p>超时是一个截止时间，不等于任务失败原因。可以把错误分为：</p>
+<p>要点：</p>
 <ul>
-<li>可暂时恢复的网络错误、限流和服务端 5xx：使用有上限的指数退避和随机抖动；</li>
-<li>参数错误、权限拒绝和资源不存在：通常不应无限重试，应尽快标记失败并通知用户；</li>
-<li>取消或过期任务：确认消息、停止后续工作，不要把用户主动取消记成系统故障；</li>
-<li>代码 bug、数据损坏和未知异常：记录脱敏诊断，进入死信或人工处理队列。</li>
+<li><strong>幂等</strong>：开头检查任务是否已完成；输出文件用任务 ID 命名，重复处理不会产生两份结果。发邮件这类不可覆盖的副作用，要先记录&quot;已发送&quot;再确认消息，或者让下游接口接受幂等键。</li>
+<li><strong>确认时机</strong>：函数返回 <code>ack</code> 后才确认消息。处理到一半进程崩溃，消息会重新投递，从头再做一遍。</li>
+<li><strong>取消检查点</strong>：在耗时阶段之间重新读取任务状态。用户点击取消只是把状态改成 <code>cancel_requested</code>，消费者在下一个检查点停下来。</li>
+<li><strong>超时</strong>：队列的确认超时（或可见性超时）要大于正常的处理时间，否则消息会在处理中途被投递给另一个消费者。耗时长的任务需要定期延长租约。</li>
 </ul>
-<p>每次重试都要增加尝试次数、下次执行时间和原因，设置任务总截止时间。只设置“最多重试 3 次”而没有全局时间、队列容量和死信处理，仍可能在高峰时造成重试风暴。错误日志要避免输出令牌、完整任务输入和个人数据。</p>
-<h2>优雅退出要停止接新消息并排空正在处理的任务</h2>
-<p>收到 <code>SIGTERM</code> 后，消费者通常应先停止拉取新消息，再给当前任务一个有限时间完成或协作取消；不能立即确认所有消息，也不能无限等待一个不支持取消的下游：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">let</span> accepting = <span class="hljs-literal">true</span>;
-<span class="hljs-keyword">const</span> running = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>();
-
-<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">onMessage</span>(<span class="hljs-params">message</span>) {
-  <span class="hljs-keyword">if</span> (!accepting) <span class="hljs-keyword">return</span> <span class="hljs-title function_">requeue</span>(message);
-
-  <span class="hljs-keyword">const</span> controller = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AbortController</span>();
-  <span class="hljs-keyword">const</span> job = <span class="hljs-title function_">consume</span>(message, repository, runExport, controller.<span class="hljs-property">signal</span>)
-    .<span class="hljs-title function_">finally</span>(<span class="hljs-function">() =&gt;</span> running.<span class="hljs-title function_">delete</span>(job));
-  running.<span class="hljs-title function_">add</span>(job);
-  <span class="hljs-keyword">return</span> job;
-}
-
-<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">shutdown</span>(<span class="hljs-params"></span>) {
-  accepting = <span class="hljs-literal">false</span>;
-  <span class="hljs-keyword">await</span> <span class="hljs-title function_">stopConsuming</span>();
-
-  <span class="hljs-keyword">const</span> deadline = <span class="hljs-title class_">AbortSignal</span>.<span class="hljs-title function_">timeout</span>(<span class="hljs-number">10_000</span>);
-  <span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">race</span>([
-    <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">allSettled</span>([...running]),
-    <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> deadline.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;abort&#x27;</span>, resolve, { <span class="hljs-attr">once</span>: <span class="hljs-literal">true</span> })),
-  ]);
-  <span class="hljs-keyword">await</span> <span class="hljs-title function_">closeDatabaseAndQueue</span>();
-}
-</code></pre></div>
-<p>示例只是生命周期示意，真实实现还要保存每个 controller，截止时向仍在运行的任务发出协作取消，并让队列根据确认结果重新投递未完成消息。<code>Promise.race</code> 返回后不代表另一组任务自动停止；关闭数据库前必须明确它们是完成、取消、重新入队还是失败。平台的 termination grace period、readiness 摘除延迟和消费者租约时间也要一起配置。</p>
-<p>可靠的后台任务系统不追求“取消按钮一按，所有代码立刻消失”。它要让用户看到真实状态，让仍可取消的工作尽快停止，让已经发生的副作用可查询、可重试或可补偿，并用幂等和版本条件承受重复投递。<code>AbortSignal</code> 是执行层的协作信号，队列确认是投递层协议，数据库事务和业务状态机才是结果可信度的基础。</p></div><div class="answer-bottom"><a href="https://nodejs.org/api/globals.html#class-abortcontroller" target="_blank" rel="noreferrer">Node.js · AbortController<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%BB%BB%E5%8A%A1%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E5%8F%96%E6%B6%88%E3%80%81%E8%B6%85%E6%97%B6%E3%80%81%E7%A1%AE%E8%AE%A4%E5%92%8C%E9%87%8D%E8%AF%95%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%BB%BB%E5%8A%A1%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E5%8F%96%E6%B6%88%E3%80%81%E8%B6%85%E6%97%B6%E3%80%81%E7%A1%AE%E8%AE%A4%E5%92%8C%E9%87%8D%E8%AF%95%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anode-queue-cancellation%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ANode.js%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnode-queue-cancellation%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：消息队列任务怎样设计取消、超时、确认和重试？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/node-eventloop/">Node.js 事件循环能完全照搬浏览器的执行顺序吗？</a></li><li><a href="/questions/node-bff/">前端工程师编写 Node 服务时需要守住哪些安全边界？</a></li><li><a href="/questions/node-worker-threads/">Node.js Worker Threads 适合解决什么问题？</a></li><li><a href="/questions/node-module-resolution/">Node.js 的 package exports 会怎样影响模块解析？</a></li></ul></nav></main></div></div>
+<h2>重试与死信</h2>
+<table><thead><tr><th>错误类型</th><th>处理</th></tr></thead><tbody><tr><td>下游 503、网络超时</td><td>指数退避加随机抖动后重试，例如最多 5 次</td></tr><tr><td>输入不合法、数据不存在</td><td>不重试，任务标记为 <code>failed</code>，确认消息</td></tr><tr><td>超过重试上限</td><td>进入死信队列，告警后人工排查</td></tr></tbody></table>
+<p>重试次数记录在消息头或任务记录里，不能依赖消费者进程的内存，因为每次重试可能由不同的进程处理。</p>
+<h2>优雅关闭</h2>
+<p>消费者进程收到 <code>SIGTERM</code> 时，先停止拉取新消息，等已取出的消息处理完并确认，再关闭连接。超过截止时间仍未完成的消息不确认，交给队列重新投递，靠幂等保证结果正确。HTTP 服务的关闭流程见《Node.js 服务如何实现优雅退出？》。</p>
+<h2>常见追问</h2>
+<ul>
+<li><strong>能做到恰好一次吗？</strong> 投递层面通常做不到。实际做法是&quot;至少一次投递加幂等处理&quot;，让多次处理的结果和一次相同。</li>
+<li><strong>前端怎样得知任务完成？</strong> 轮询状态接口最简单；需要即时性时用 SSE 或 WebSocket 推送，推送只是通知，最终状态以查询接口为准。</li>
+</ul></div><div class="answer-bottom"><a href="https://www.rabbitmq.com/docs/confirms" target="_blank" rel="noreferrer">RabbitMQ · Consumer Acknowledgements and Publisher Confirms<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%BB%BB%E5%8A%A1%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E5%8F%96%E6%B6%88%E3%80%81%E8%B6%85%E6%97%B6%E3%80%81%E7%A1%AE%E8%AE%A4%E5%92%8C%E9%87%8D%E8%AF%95%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%BB%BB%E5%8A%A1%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E5%8F%96%E6%B6%88%E3%80%81%E8%B6%85%E6%97%B6%E3%80%81%E7%A1%AE%E8%AE%A4%E5%92%8C%E9%87%8D%E8%AF%95%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anode-queue-cancellation%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ANode.js%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnode-queue-cancellation%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：消息队列任务怎样设计取消、超时、确认和重试？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/node-eventloop/">Node.js 事件循环和浏览器有什么不同？nextTick 一定先于 Promise 吗？</a></li><li><a href="/questions/node-bff/">前端工程师编写 Node 服务时需要守住哪些安全边界？</a></li><li><a href="/questions/node-worker-threads/">Node.js Worker Threads 适合解决什么问题？</a></li><li><a href="/questions/node-module-resolution/">Node.js 的 package exports 会怎样影响模块解析？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

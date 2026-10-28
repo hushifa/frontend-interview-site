@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="AI 应用前端面试题：reader.read 返回的是任意字节分块，不保证对应字符、SSE 事件或完整 JSON。必须先处理字符编码和协议分帧，再解析并校验业务事件。" />
+    <meta name="description" content="AI 应用前端面试题：reader.read 返回的是任意切分的字节块，不对应字符、SSE 事件或完整 JSON。要先流式解码，再按 SSE 协议分帧，最后解析并校验每个事件。" />
     <title>AI 流式响应为什么不能每收到一块就 JSON.parse？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/ai-stream-protocol/" />
     <meta name="robots" content="index,follow" />
@@ -19,26 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="AI 流式响应为什么不能每收到一块就 JSON.parse？ · 前端知库" />
-    <meta property="og:description" content="AI 应用前端面试题：reader.read 返回的是任意字节分块，不保证对应字符、SSE 事件或完整 JSON。必须先处理字符编码和协议分帧，再解析并校验业务事件。" />
+    <meta property="og:description" content="AI 应用前端面试题：reader.read 返回的是任意切分的字节块，不对应字符、SSE 事件或完整 JSON。要先流式解码，再按 SSE 协议分帧，最后解析并校验每个事件。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/ai-stream-protocol/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ai-stream-protocol/#webpage","url":"https://fe.hushifa.top/questions/ai-stream-protocol/","name":"AI 流式响应为什么不能每收到一块就 JSON.parse？ · 前端知库","description":"AI 应用前端面试题：reader.read 返回的是任意字节分块，不保证对应字符、SSE 事件或完整 JSON。必须先处理字符编码和协议分帧，再解析并校验业务事件。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ai-stream-protocol/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ai-stream-protocol/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"AI 应用前端面试题","item":"https://fe.hushifa.top/topics/ai-frontend/"},{"@type":"ListItem","position":3,"name":"AI 流式响应为什么不能每收到一块就 JSON.parse？","item":"https://fe.hushifa.top/questions/ai-stream-protocol/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ai-stream-protocol/#webpage","url":"https://fe.hushifa.top/questions/ai-stream-protocol/","name":"AI 流式响应为什么不能每收到一块就 JSON.parse？ · 前端知库","description":"AI 应用前端面试题：reader.read 返回的是任意切分的字节块，不对应字符、SSE 事件或完整 JSON。要先流式解码，再按 SSE 协议分帧，最后解析并校验每个事件。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ai-stream-protocol/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ai-stream-protocol/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"AI 应用前端面试题","item":"https://fe.hushifa.top/topics/ai-frontend/"},{"@type":"ListItem","position":3,"name":"AI 流式响应为什么不能每收到一块就 JSON.parse？","item":"https://fe.hushifa.top/questions/ai-stream-protocol/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/ai-frontend/">AI 应用前端面试题</a><span aria-hidden="true">/</span><span aria-current="page">AI 流式响应为什么不能每收到一块就 JSON.parse？</span></nav><h1 tabindex="-1">AI 流式响应为什么不能每收到一块就 JSON.parse？</h1><p class="reading-summary">reader.read 返回的是任意字节分块，不保证对应字符、SSE 事件或完整 JSON。必须先处理字符编码和协议分帧，再解析并校验业务事件。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/ai-frontend/">AI 应用前端面试题</a><span aria-hidden="true">/</span><span aria-current="page">AI 流式响应为什么不能每收到一块就 JSON.parse？</span></nav><h1 tabindex="-1">AI 流式响应为什么不能每收到一块就 JSON.parse？</h1><p class="reading-summary">reader.read 返回的是任意切分的字节块，不对应字符、SSE 事件或完整 JSON。要先流式解码，再按 SSE 协议分帧，最后解析并校验每个事件。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>reader.read 返回的是任意字节块，不对应字符、SSE 事件或完整 JSON。</li>
-<li>先用流式解码处理多字节字符，再按协议分帧。</li>
-<li>SSE 按行和空行组织事件，不能只用 split 切分。</li>
-<li>文本、工具参数和引用按各自的 ID 累积；测试要在任意字节位置切开流。</li>
+<li>网络可以把一条事件拆成多块，也可以把多条事件合成一块；一个中文字符或 emoji 也可能被拆在两块之间。</li>
+<li>解析分三层：字节解码成字符（<code>TextDecoder</code> 加 <code>stream: true</code>），字符按 SSE 规则分成事件，事件的 <code>data</code> 再解析成 JSON。</li>
+<li>SSE 支持 LF 和 CRLF 换行、多行 <code>data</code>、注释行，只用 <code>split(&#x27;\n\n&#x27;)</code> 会漏掉这些情况，用成熟的解析器更可靠。</li>
+<li>连接结束不等于生成完成，要以协议里的结束事件为准；没有结束事件就当作截断处理。</li>
 </ul>
-<h2>chunk 不是 token，也不是消息</h2>
-<p>网络层可以把服务端一次写出的 JSON 拆成多次读取，也可以把多次写入合并到一次读取。一个 UTF-8 中文字符或 emoji 还可能被拆在两个字节块之间。因此把每个 <code>reader.read()</code> 的结果直接解码并 <code>JSON.parse</code>，会在半个字符、半条事件和多条事件粘连时失败。</p>
-<p>流式解析至少有三层边界：字节到字符、传输协议到事件、事件 payload 到业务对象。每层都必须完成后才能交给下一层。</p>
-<h2>SSE 的分帧不能只用 <code>split(&#x27;\n\n&#x27;)</code></h2>
-<p>SSE 按行和空行组织事件，支持 LF、CRLF、多行 <code>data</code>、注释、<code>id</code> 和 <code>retry</code> 字段。一个事件的数据本身也不一定是 JSON，结束标记可能是 <code>[DONE]</code> 或服务商自定义文本。</p>
-<p>可以使用成熟解析器处理字符和 SSE framing，再在业务层解析。下面采用 eventsource-parser 4.1.3 的 createParser({ onEvent }) 接口；其他主版本应核对对应 API，不能照搬旧版回调签名：</p>
+<h2>一个可用的读取函数</h2>
+<p>下面用 eventsource-parser 4.x 的 <code>createParser({ onEvent })</code> 处理 SSE 分帧。示例约定服务端最后发送 <code>[DONE]</code> 作为结束标记，这是本例的协议，不同服务商的结束方式不同。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { createParser } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;eventsource-parser&#x27;</span>;
 
 <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">consume</span>(<span class="hljs-params">response, onEvent</span>) {
@@ -46,6 +42,7 @@
   <span class="hljs-keyword">const</span> reader = response.<span class="hljs-property">body</span>.<span class="hljs-title function_">getReader</span>();
   <span class="hljs-keyword">const</span> decoder = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TextDecoder</span>(<span class="hljs-string">&#x27;utf-8&#x27;</span>, { <span class="hljs-attr">fatal</span>: <span class="hljs-literal">true</span> });
   <span class="hljs-keyword">let</span> completed = <span class="hljs-literal">false</span>;
+
   <span class="hljs-keyword">const</span> parser = <span class="hljs-title function_">createParser</span>({
     <span class="hljs-title function_">onEvent</span>(<span class="hljs-params">event</span>) {
       <span class="hljs-keyword">if</span> (completed) <span class="hljs-keyword">return</span>;
@@ -54,47 +51,49 @@
         <span class="hljs-title function_">onEvent</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;done&#x27;</span> });
         <span class="hljs-keyword">return</span>;
       }
-      <span class="hljs-keyword">const</span> value = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(event.<span class="hljs-property">data</span>);
-      <span class="hljs-title function_">onEvent</span>({ <span class="hljs-attr">id</span>: event.<span class="hljs-property">id</span>, <span class="hljs-attr">event</span>: event.<span class="hljs-property">event</span>, value });
+      <span class="hljs-title function_">onEvent</span>({ <span class="hljs-attr">id</span>: event.<span class="hljs-property">id</span>, <span class="hljs-attr">event</span>: event.<span class="hljs-property">event</span>, <span class="hljs-attr">value</span>: <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(event.<span class="hljs-property">data</span>) });
     },
   });
 
   <span class="hljs-keyword">try</span> {
-    <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+    <span class="hljs-keyword">while</span> (!completed) {
       <span class="hljs-keyword">const</span> { value, done } = <span class="hljs-keyword">await</span> reader.<span class="hljs-title function_">read</span>();
       <span class="hljs-keyword">if</span> (done) {
-        parser.<span class="hljs-title function_">feed</span>(decoder.<span class="hljs-title function_">decode</span>());
-        <span class="hljs-keyword">if</span> (!completed) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;连接结束但没有业务完成标记&#x27;</span>);
+        parser.<span class="hljs-title function_">feed</span>(decoder.<span class="hljs-title function_">decode</span>()); <span class="hljs-comment">// 冲刷解码器里剩余的字节</span>
+        <span class="hljs-keyword">if</span> (!completed) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;连接结束但没有收到结束标记&#x27;</span>);
         <span class="hljs-keyword">break</span>;
       }
       parser.<span class="hljs-title function_">feed</span>(decoder.<span class="hljs-title function_">decode</span>(value, { <span class="hljs-attr">stream</span>: <span class="hljs-literal">true</span> }));
-      <span class="hljs-keyword">if</span> (completed) {
-        <span class="hljs-keyword">await</span> reader.<span class="hljs-title function_">cancel</span>();
-        <span class="hljs-keyword">break</span>;
-      }
     }
+    <span class="hljs-keyword">await</span> reader.<span class="hljs-title function_">cancel</span>(); <span class="hljs-comment">// 收到结束标记后丢弃剩余字节</span>
   } <span class="hljs-keyword">catch</span> (error) {
-    <span class="hljs-comment">// 解析或回调失败时取消读取，不只释放锁；保留原始错误。</span>
-    <span class="hljs-keyword">try</span> { <span class="hljs-keyword">await</span> reader.<span class="hljs-title function_">cancel</span>(error); } <span class="hljs-keyword">catch</span> {}
+    <span class="hljs-keyword">await</span> reader.<span class="hljs-title function_">cancel</span>(error).<span class="hljs-title function_">catch</span>(<span class="hljs-function">() =&gt;</span> {});
     <span class="hljs-keyword">throw</span> error;
   } <span class="hljs-keyword">finally</span> {
-    parser.<span class="hljs-title function_">reset</span>();
     reader.<span class="hljs-title function_">releaseLock</span>();
   }
 }
 </code></pre></div>
-<p>真实应用还要设置总字节数、事件大小和单个字段长度上限，避免无限流拖垮内存。<code>onEvent</code> 不应为每个事件启动无界异步任务；耗时处理要进入有界队列。</p>
-<p>示例约定 JSON SSE 事件后必须有独立的 [DONE] 事件，这是教学协议，不是所有 AI SDK 的通用格式。收到完成标记后停止处理后续事件并取消剩余读取；EOF 前未完成就拒绝。releaseLock 只解除读取器绑定，不等于取消底层流，因此解析失败时显式调用 cancel。同步 onEvent 回调如果抛错也会进入取消路径；异步回调的 Promise 不会被此解析器自动等待。</p>
-<p>连接 EOF 只表示字节流结束，不证明模型正常完成。半条事件不能猜着补齐，应该标记为截断或失败；业务协议需要明确的结束事件和错误事件。</p>
-<h2>文本、工具和引用不是同一种增量</h2>
-<p>一条 AI 流可能同时包含文本 delta、工具参数、工具结果、引用、错误和结束状态。文本 part 可以追加，工具参数应该按 call ID 累积，引用要按来源 ID 关联，错误不能继续把运行标记为成功。</p>
-<p>应用应使用 message ID、part ID 和序号定位更新目标，而不是把所有 payload 拼进一个字符串。工具参数尚未完整时，即使局部 JSON 恰好能解析，也不能提前执行有副作用操作。最终状态要等协议确认并通过 Schema 校验后冻结。</p>
-<h2>取消和断线恢复需要单独协议</h2>
-<p><code>reader.cancel()</code> 只关闭当前连接，服务端可能仍在生成，取消怎样逐层传播见“点击“停止生成”后，服务端一定停止调用模型吗？”。事件带 <code>id</code> 也不代表能续传，游标与幂等应用见“AI 流式输出断线后，怎样恢复同一条生成任务？”。原生 EventSource 有自己的重连行为，fetch 实现 SSE 不会自动继承它。</p>
-<p>如果使用 AI SDK 等库，应使用与服务端协议和版本匹配的解码器，不要把不同供应商的事件格式混用。协议层结束、模型完成、工具完成和消息持久化完成也可能是不同时间点。</p>
-<h2>测试要主动制造坏边界</h2>
-<p>把同一段流在任意字节位置切开，覆盖多字节字符、CRLF、多行 data、多个事件同块、空事件、非法 JSON、结束标记和尾部截断。再测试取消、重复事件、事件迟到、工具参数半截和断线恢复。</p>
-<p>只用“服务端一次写出、客户端一次读到”的本地演示，最容易掩盖真实网络中的分块和时序问题。</p></div><div class="answer-bottom"><a href="https://ai-sdk.dev/docs/ai-sdk-ui/stream-protocol" target="_blank" rel="noreferrer">AI SDK · 流协议<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+AI+%E6%B5%81%E5%BC%8F%E5%93%8D%E5%BA%94%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E6%AF%8F%E6%94%B6%E5%88%B0%E4%B8%80%E5%9D%97%E5%B0%B1+JSON.parse%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAI+%E6%B5%81%E5%BC%8F%E5%93%8D%E5%BA%94%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E6%AF%8F%E6%94%B6%E5%88%B0%E4%B8%80%E5%9D%97%E5%B0%B1+JSON.parse%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aai-stream-protocol%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AAI+%E5%BA%94%E7%94%A8%E5%89%8D%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fai-stream-protocol%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：AI 流式响应为什么不能每收到一块就 JSON.parse？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ai-stream-recovery/">AI 流式输出断线后，怎样恢复同一条生成任务？</a></li><li><a href="/questions/ai-client-server-boundary/">AI 对话前端为什么不能直接内置服务商 API 密钥？</a></li><li><a href="/questions/ai-chat-state/">AI 聊天界面为什么不能只有 loading 一个状态？</a></li><li><a href="/questions/ai-cancel-generation/">点击“停止生成”后，服务端一定停止调用模型吗？</a></li></ul></nav></main></div></div>
+<ul>
+<li><code>decoder.decode(value, { stream: true })</code> 会把被截断的多字节字符留到下一块再输出。</li>
+<li>解析或回调出错时调用 <code>reader.cancel()</code> 关闭底层流；<code>releaseLock()</code> 只解除读取器绑定，不会关闭连接。</li>
+<li>生产环境还要限制单个事件和总字节数，防止异常流耗尽内存。</li>
+</ul>
+<h2>事件按类型和 ID 分别累积</h2>
+<p>一条 AI 流里通常混有文本增量、工具调用参数、引用、错误和结束事件。</p>
+<ul>
+<li>文本增量按消息 ID 和片段 ID 追加。</li>
+<li>工具参数按调用 ID 累积，完整并通过 Schema 校验之前不执行。半截 JSON 即使恰好能解析也不算完成。</li>
+<li>错误事件到达后，这次生成标记为失败，不再追加文本。</li>
+</ul>
+<p>使用 AI SDK 这类库时，要用和服务端协议版本匹配的解码器，不要混用不同服务商的事件格式。</p>
+<h2>测试</h2>
+<p>把同一段流在任意字节位置切开再喂给解析器，覆盖：emoji 被切断、CRLF 换行、多行 <code>data</code>、多条事件在同一块、非法 JSON、只有半条事件就断开。只在本地&quot;一次写出、一次读到&quot;的环境测试，会掩盖这些问题。</p>
+<h2>常见追问</h2>
+<ul>
+<li><strong>为什么不直接用 <code>EventSource</code>？</strong> <code>EventSource</code> 只支持 GET，不能自定义请求头和请求体，AI 接口通常要 POST 并带认证头，所以多用 fetch 自己解析。代价是要自己处理重连。</li>
+<li><strong>停止和断线怎么处理？</strong> 见《点击“停止生成”后，服务端一定停止调用模型吗？》和&quot;AI 流式输出断线后，怎样恢复同一条生成任务？&quot;。</li>
+</ul></div><div class="answer-bottom"><a href="https://html.spec.whatwg.org/multipage/server.html#server-sent-events" target="_blank" rel="noreferrer">WHATWG · Server-sent events<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+AI+%E6%B5%81%E5%BC%8F%E5%93%8D%E5%BA%94%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E6%AF%8F%E6%94%B6%E5%88%B0%E4%B8%80%E5%9D%97%E5%B0%B1+JSON.parse%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAI+%E6%B5%81%E5%BC%8F%E5%93%8D%E5%BA%94%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E6%AF%8F%E6%94%B6%E5%88%B0%E4%B8%80%E5%9D%97%E5%B0%B1+JSON.parse%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aai-stream-protocol%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AAI+%E5%BA%94%E7%94%A8%E5%89%8D%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fai-stream-protocol%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：AI 流式响应为什么不能每收到一块就 JSON.parse？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ai-stream-recovery/">AI 流式输出断线后，怎样恢复同一条生成任务？</a></li><li><a href="/questions/ai-client-server-boundary/">AI 对话前端为什么不能直接内置服务商 API 密钥？</a></li><li><a href="/questions/ai-chat-state/">AI 聊天界面为什么不能只有 loading 一个状态？</a></li><li><a href="/questions/ai-cancel-generation/">点击“停止生成”后，服务端一定停止调用模型吗？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

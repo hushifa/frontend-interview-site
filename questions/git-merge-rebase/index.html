@@ -23,53 +23,53 @@
     <meta property="og:url" content="https://fe.hushifa.top/questions/git-merge-rebase/" />
     <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/git-merge-rebase/#webpage","url":"https://fe.hushifa.top/questions/git-merge-rebase/","name":"git merge 与 rebase 应该怎样选择？ · 前端知库","description":"Git 与部署面试题：merge 保留分叉和汇合过程，rebase 重新建立提交的父子关系。选择时要结合分支是否共享、审查需求、冲突成本和回滚方式，而不是只追求一条直线。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/git-merge-rebase/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/git-merge-rebase/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Git 与部署面试题","item":"https://fe.hushifa.top/topics/git-deploy/"},{"@type":"ListItem","position":3,"name":"git merge 与 rebase 应该怎样选择？","item":"https://fe.hushifa.top/questions/git-merge-rebase/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
     <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/git-deploy/">Git 与部署面试题</a><span aria-hidden="true">/</span><span aria-current="page">git merge 与 rebase 应该怎样选择？</span></nav><h1 tabindex="-1">git merge 与 rebase 应该怎样选择？</h1><p class="reading-summary">merge 保留分叉和汇合过程，rebase 重新建立提交的父子关系。选择时要结合分支是否共享、审查需求、冲突成本和回滚方式，而不是只追求一条直线。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>merge 把两条历史连接起来，rebase 把改动重新应用到新的基点。</li>
-<li>最终文件可能相同，但提交图表达的开发过程不同。</li>
-<li>merge 保留分叉与汇合；没有分叉时可以 fast-forward，不产生合并提交。</li>
-<li>rebase 会生成新的提交对象，已经共享的提交不要再 rebase。</li>
+<li>merge 创建一个有两个父提交的合并提交，原有提交不变，历史保留分叉过程。</li>
+<li>rebase 把当前分支的提交在新的基础上逐个重新应用，生成新的提交哈希，历史变成一条直线。</li>
+<li>已经推送并被别人使用的分支不要 rebase，否则会改写别人依赖的历史。</li>
+<li>常见做法：在自己的功能分支上 rebase 主分支保持更新，合入主分支时用 merge 或 squash merge。</li>
+<li>两种方式的最终代码可以完全相同，区别在于历史的形状、冲突处理方式和回滚方式。</li>
 </ul>
-<h2>先看提交图，而不是命令名称</h2>
-<p>假设主分支和功能分支从 A 分开：</p>
-<div class="not-prose code-block"><div class="code-language">text</div><pre><code class="hljs language-text">A---B       main
- \
-  C---D     feature
+<h2>两种历史</h2>
+<p>初始状态：功能分支从 B 分出，主分支之后又有了 C。</p>
+<div class="not-prose code-block"><div class="code-language">代码</div><pre><code>A---B---C          main
+     \
+      D---E        feature
 </code></pre></div>
-<p><code>merge</code> 会把两条历史连接起来；<code>rebase</code> 会把功能分支上的改动重新应用到新的基点。最终文件可能一样，但提交图表达的开发过程不同，这会影响审查、排错和协作。</p>
-<h2>merge 保留“分开开发再汇合”</h2>
-<p>在 <code>main</code> 上执行 <code>git merge feature</code>，如果两边都产生了提交，通常会得到一个合并提交：</p>
-<div class="not-prose code-block"><div class="code-language">text</div><pre><code class="hljs language-text">A---B-------M  main
- \
-  C---D---/
+<p>在 feature 上执行 <code>git merge main</code>（或在 main 上合并 feature）：</p>
+<div class="not-prose code-block"><div class="code-language">代码</div><pre><code>A---B---C-------M  main
+     \         /
+      D-------E    feature
 </code></pre></div>
-<p>M 有两个父提交，历史仍然能看出 C、D 是独立分支完成的。这样的历史适合需要保留发布分支、多人协作轨迹或审计信息的项目。</p>
-<p>如果目标分支只是功能分支之后没有新的提交，Git 可以 fast-forward，只把分支指针从 B 移到 D，不会额外产生 M。是否强制保留合并节点，应由团队规则决定。</p>
-<h2>rebase 改变提交身份</h2>
-<p>在 feature 上执行 <code>git rebase main</code>，Git 会把 C、D 的改动按顺序重新应用到 B 后面：</p>
-<div class="not-prose code-block"><div class="code-language">text</div><pre><code class="hljs language-text">A---B---C&#x27;---D&#x27;  feature
-    |
-   main
+<p>在 feature 上执行 <code>git rebase main</code>：</p>
+<div class="not-prose code-block"><div class="code-language">代码</div><pre><code>A---B---C          main
+         \
+          D&#x27;--E&#x27;   feature
 </code></pre></div>
-<p>C&#x27;、D&#x27; 通常是新的提交对象，因为父提交、时间或作者信息变化后哈希会改变。rebase 不是移动原来的提交，也不是把文件简单复制过去；它可能遇到冲突、空提交和已经存在的等价改动。</p>
-<p>整理个人分支时可以用交互式 rebase 合并、改名和调整提交顺序，让审查者看到更清晰的逻辑。但一旦这些提交已经被别人拉取，就相当于要求协作者重新对齐历史。</p>
-<h2>冲突处理时要验证每一层结果</h2>
-<p>merge 通常在一次汇合时解决冲突；rebase 可能在重放多个提交的不同阶段多次冲突。解决冲突后，先检查文件是否表达了正确业务，再执行：</p>
-<div class="not-prose code-block"><div class="code-language">bash</div><pre><code class="hljs language-bash">git add &lt;resolved-files&gt;
-git rebase --continue
-# 不想继续时：git rebase --abort
-</code></pre></div>
-<p><code>git rebase --skip</code> 会跳过当前提交，不是自动解决冲突。开始前先查看 <code>git status</code>，保存或处理未提交修改；中止操作只能撤销当前 rebase/merge 过程，不能替代备份。</p>
-<p>冲突解决成功也不等于程序正确。至少要检查最终 diff、运行相关测试，并确认没有把对方新增的逻辑误删。提交图变得整齐，不能代替行为验证。</p>
-<h2>共享分支为什么不能随意 rebase</h2>
-<p>如果同事已经基于 D 开发，你把历史改成 D&#x27;，对方本地的 D 不会自动变成 D&#x27;。强制推送后，他们同步时可能出现重复提交、冲突或误覆盖。</p>
-<p>个人尚未共享的分支可以按约定整理；公共分支、发布分支和别人正在依赖的分支通常应避免重写。确实需要更新远端时，<code>git push --force-with-lease</code> 会先检查远端是否仍是你预期的状态，比 <code>--force</code> 安全，但仍应提前沟通并准备恢复方案。</p>
-<h2>用团队目标做选择</h2>
-<p>选择 merge，如果需要保留真实汇合过程、分支已经共享、审计和回滚更看重原始关系。选择 rebase，如果是个人分支、希望在合并前整理提交、团队明确接受重写，并且能承担重新解决冲突的成本。</p>
-<p>无论选哪一种，都要确认当前分支和基点，阅读最终差异，检查提交是否包含不该带入的文件，并在合并后验证构建和关键流程。Git 命令成功只说明历史操作完成，不说明冲突后的程序行为正确。</p></div><div class="answer-bottom"><a href="https://git-scm.com/book/en/v2/Git-Branching-Rebasing" target="_blank" rel="noreferrer">Git · Rebasing<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+git+merge+%E4%B8%8E+rebase+%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E9%80%89%E6%8B%A9%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Agit+merge+%E4%B8%8E+rebase+%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E9%80%89%E6%8B%A9%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Agit-merge-rebase%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AGit+%E4%B8%8E%E9%83%A8%E7%BD%B2%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fgit-merge-rebase%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：git merge 与 rebase 应该怎样选择？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/git-rollback/">静态网站发布失败时怎样安全回滚？</a></li><li><a href="/questions/git-ci/">GitHub Actions 中 workflow、job、step 和 runner 是什么关系？</a></li><li><a href="/questions/git-static-deploy/">静态托管发布时为什么要检查资源路径和缓存？</a></li><li><a href="/questions/git-artifact-integrity/">前端发布怎样校验构建产物？文件哈希能证明发布安全吗？</a></li></ul></nav></main></div></div>
+<p>D&#x27; 和 E&#x27; 的内容改动与 D、E 相同，但父提交变了，所以是新的提交。</p>
+<h2>对比</h2>
+<table><thead><tr><th></th><th>merge</th><th>rebase</th></tr></thead><tbody><tr><td>原有提交</td><td>保留</td><td>被替换为新提交</td></tr><tr><td>历史形状</td><td>保留分叉和合并点</td><td>一条直线</td></tr><tr><td>冲突处理</td><td>一次性解决所有冲突</td><td>每个提交都可能要单独解决</td></tr><tr><td>共享分支</td><td>安全</td><td>会让别人的本地分支和远端分叉</td></tr><tr><td>回滚</td><td>用 <code>git revert -m 1 &lt;合并提交&gt;</code> 一次撤销整个功能</td><td>需要逐个撤销提交，或撤销 squash 后的单个提交</td></tr></tbody></table>
+<h2>什么时候用哪个</h2>
+<ul>
+<li><strong>个人功能分支同步主分支</strong>：<code>git pull --rebase</code> 或 <code>git rebase main</code>，避免出现大量无意义的合并提交。推送已推送过的分支时用 <code>git push --force-with-lease</code>，它会在远端被别人更新过时拒绝覆盖。</li>
+<li><strong>合入主分支</strong>：团队约定。squash merge 让每个 PR 在主分支上只有一个提交，便于阅读和回滚；merge commit 保留完整的开发过程。</li>
+<li><strong>多人协作的分支</strong>：只用 merge。</li>
+<li><strong>整理提交</strong>：合入前用 <code>git rebase -i</code> 合并、重排、修改提交信息，只在提交尚未被他人使用时这样做。</li>
+</ul>
+<h2>rebase 出错怎么办</h2>
+<ul>
+<li>冲突处理中想放弃：<code>git rebase --abort</code> 回到开始前的状态。</li>
+<li>rebase 完成后发现问题：<code>git reflog</code> 找到 rebase 之前的提交哈希，<code>git reset --hard &lt;哈希&gt;</code> 恢复（这会丢弃工作区未提交的修改，先确认）。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li>为什么有人坚持不用 rebase？担心改写历史造成混乱，以及逐个解决冲突的成本。只要不在共享分支上使用，风险可控。</li>
+<li><code>git pull</code> 默认是什么？默认先 fetch 再 merge，可以用 <code>git config pull.rebase true</code> 改为 rebase。</li>
+</ul></div><div class="answer-bottom"><a href="https://git-scm.com/book/en/v2/Git-Branching-Rebasing" target="_blank" rel="noreferrer">Git · Rebasing<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+git+merge+%E4%B8%8E+rebase+%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E9%80%89%E6%8B%A9%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Agit+merge+%E4%B8%8E+rebase+%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E9%80%89%E6%8B%A9%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Agit-merge-rebase%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AGit+%E4%B8%8E%E9%83%A8%E7%BD%B2%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fgit-merge-rebase%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：git merge 与 rebase 应该怎样选择？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/git-rollback/">静态网站发布失败时怎样安全回滚？</a></li><li><a href="/questions/git-ci/">GitHub Actions 中 workflow、job、step 和 runner 是什么关系？</a></li><li><a href="/questions/git-static-deploy/">静态托管发布时为什么要检查资源路径和缓存？</a></li><li><a href="/questions/git-artifact-integrity/">前端发布怎样校验构建产物？文件哈希能证明发布安全吗？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="TypeScript面试题：import type 表达纯类型依赖，verbatimModuleSyntax 让类型修饰符直接决定相关导入导出的保留方式。整条类型导入与普通导入中的 type 成员并不完全相同，模块副作用和运行时解析仍需显式设计。" />
+    <meta name="description" content="TypeScript面试题：import type 整条导入在编译后删除，模块不会被加载。开启 verbatimModuleSyntax 后，TypeScript 按源码写法保留导入：没有 type 修饰的名字一律保留，只用作类型却没标 type 会报错；import { type A } 只删除 A，留下 import {} 仍会执行模块副作用。Node.js 类型剥离、esbuild 等单文件转换器依赖这种显式标注。" />
     <title>import type 和 verbatimModuleSyntax 如何影响模块输出？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/ts-type-imports/" />
     <meta name="robots" content="index,follow" />
@@ -19,24 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="import type 和 verbatimModuleSyntax 如何影响模块输出？ · 前端知库" />
-    <meta property="og:description" content="TypeScript面试题：import type 表达纯类型依赖，verbatimModuleSyntax 让类型修饰符直接决定相关导入导出的保留方式。整条类型导入与普通导入中的 type 成员并不完全相同，模块副作用和运行时解析仍需显式设计。" />
+    <meta property="og:description" content="TypeScript面试题：import type 整条导入在编译后删除，模块不会被加载。开启 verbatimModuleSyntax 后，TypeScript 按源码写法保留导入：没有 type 修饰的名字一律保留，只用作类型却没标 type 会报错；import { type A } 只删除 A，留下 import {} 仍会执行模块副作用。Node.js 类型剥离、esbuild 等单文件转换器依赖这种显式标注。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/ts-type-imports/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-type-imports/#webpage","url":"https://fe.hushifa.top/questions/ts-type-imports/","name":"import type 和 verbatimModuleSyntax 如何影响模块输出？ · 前端知库","description":"TypeScript面试题：import type 表达纯类型依赖，verbatimModuleSyntax 让类型修饰符直接决定相关导入导出的保留方式。整条类型导入与普通导入中的 type 成员并不完全相同，模块副作用和运行时解析仍需显式设计。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-type-imports/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-type-imports/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"import type 和 verbatimModuleSyntax 如何影响模块输出？","item":"https://fe.hushifa.top/questions/ts-type-imports/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-type-imports/#webpage","url":"https://fe.hushifa.top/questions/ts-type-imports/","name":"import type 和 verbatimModuleSyntax 如何影响模块输出？ · 前端知库","description":"TypeScript面试题：import type 整条导入在编译后删除，模块不会被加载。开启 verbatimModuleSyntax 后，TypeScript 按源码写法保留导入：没有 type 修饰的名字一律保留，只用作类型却没标 type 会报错；import { type A } 只删除 A，留下 import {} 仍会执行模块副作用。Node.js 类型剥离、esbuild 等单文件转换器依赖这种显式标注。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-type-imports/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-type-imports/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"import type 和 verbatimModuleSyntax 如何影响模块输出？","item":"https://fe.hushifa.top/questions/ts-type-imports/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">import type 和 verbatimModuleSyntax 如何影响模块输出？</span></nav><h1 tabindex="-1">import type 和 verbatimModuleSyntax 如何影响模块输出？</h1><p class="reading-summary">import type 表达纯类型依赖，verbatimModuleSyntax 让类型修饰符直接决定相关导入导出的保留方式。整条类型导入与普通导入中的 type 成员并不完全相同，模块副作用和运行时解析仍需显式设计。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">import type 和 verbatimModuleSyntax 如何影响模块输出？</span></nav><h1 tabindex="-1">import type 和 verbatimModuleSyntax 如何影响模块输出？</h1><p class="reading-summary">import type 整条导入在编译后删除，模块不会被加载。开启 verbatimModuleSyntax 后，TypeScript 按源码写法保留导入：没有 type 修饰的名字一律保留，只用作类型却没标 type 会报错；import { type A } 只删除 A，留下 import {} 仍会执行模块副作用。Node.js 类型剥离、esbuild 等单文件转换器依赖这种显式标注。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>import type 只导入类型，编译后整体删除。</li>
-<li>verbatimModuleSyntax 让导入导出按写法保留：没有 type 修饰的导入一律保留。</li>
-<li>import { type A, b } 只删除 A，模块仍会被加载并执行副作用。</li>
-<li>Node.js 类型剥离不做导入省略，所以需要开启 verbatimModuleSyntax 并显式标注类型导入。</li>
+<li><code>import type { User } from &#x27;./model&#x27;</code> 编译后整条删除，<code>model</code> 不会因此被加载执行。</li>
+<li><code>verbatimModuleSyntax</code> 下，<code>import { type User } from &#x27;./model&#x27;</code> 会编译成 <code>import {} from &#x27;./model&#x27;</code>，模块仍被加载并执行顶层代码。</li>
+<li>开启 <code>verbatimModuleSyntax</code> 后，只用作类型却没写 <code>type</code> 的导入报 <code>TS1484</code>，从而保证源码中的导入与输出一一对应。</li>
+<li>Node.js 类型剥离、esbuild、SWC 逐文件转换，无法判断导入的名字是不是类型，所以项目需要开启 <code>verbatimModuleSyntax</code>，配合 TS 5.8 的 <code>erasableSyntaxOnly</code>。</li>
+<li>需要执行副作用（注册插件、引入样式）时写 <code>import &#x27;./register.js&#x27;</code>，不要依赖其他导入碰巧被保留。</li>
 </ul>
-<p>一个 TypeScript 模块可能同时导出接口和真实函数。接口只参与类型检查，函数则可能需要在运行时加载。import type 用语法明确说明“这份依赖只用来解释类型”，避免把是否保留导入完全交给后续使用情况推断。</p>
-<p>这不仅影响输出大小，也可能影响模块顶层副作用是否执行。因此类型依赖与初始化依赖应分别表达。</p>
-<h2>先准备一个同时有类型和运行时代码的模块</h2>
-<p>以下文件使用 ESM，并在编译时启用 verbatimModuleSyntax：</p>
+<h2>三种写法的输出</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-comment">// model.ts</span>
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">User</span> {
   <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>;
@@ -44,46 +42,44 @@
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> version = <span class="hljs-string">&#x27;1.0&#x27;</span>;
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;model 已执行&#x27;</span>);
 </code></pre></div>
-<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-comment">// type-only.ts</span>
-<span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> { <span class="hljs-title class_">User</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./model.js&#x27;</span>;
-
-<span class="hljs-keyword">const</span> <span class="hljs-attr">user</span>: <span class="hljs-title class_">User</span> = { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Lin&#x27;</span> };
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user.<span class="hljs-property">name</span>); <span class="hljs-comment">// Lin</span>
+<table><thead><tr><th>源码</th><th><code>verbatimModuleSyntax: true</code> 的输出</th></tr></thead><tbody><tr><td><code>import type { User } from &#x27;./model.js&#x27;</code></td><td>删除</td></tr><tr><td><code>import { type User } from &#x27;./model.js&#x27;</code></td><td><code>import {} from &#x27;./model.js&#x27;</code></td></tr><tr><td><code>import { User } from &#x27;./model.js&#x27;</code></td><td>报错 TS1484</td></tr><tr><td><code>import { version, type User } from &#x27;./model.js&#x27;</code></td><td><code>import { version } from &#x27;./model.js&#x27;</code></td></tr></tbody></table>
+<p>未开启时，TypeScript 会分析每个导入是否只作类型用，自动删掉未作为值使用的导入（导入省略），上面前三行都会被删除。</p>
+<h2>为什么单文件转换器需要它</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">User</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./model.ts&#x27;</span>;
 </code></pre></div>
-<p>整条 import type 会被擦除。若没有其他路径加载 model，运行 type-only 的编译产物不会执行 model 的那条日志。类型检查时仍然需要找到它的声明信息，但这不是运行时模块求值。</p>
-<p>ESM 输出中可能保留 export {} 来维持当前文件的模块身份，这也不等于重新加载 model。</p>
-<h2>普通 import 中的 type 成员可能留下空导入</h2>
-<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-comment">// inline-type.ts</span>
-<span class="hljs-keyword">import</span> { <span class="hljs-keyword">type</span> <span class="hljs-title class_">User</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./model.js&#x27;</span>;
-
-<span class="hljs-keyword">const</span> <span class="hljs-attr">user</span>: <span class="hljs-title class_">User</span> = { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Lin&#x27;</span> };
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user.<span class="hljs-property">name</span>);
+<p>Node.js 直接运行这一行时报 <code>SyntaxError</code>：<code>model.ts</code> 并没有导出名为 <code>User</code> 的值。转换器只看到当前文件，不知道 <code>User</code> 是接口。写成 <code>import type</code> 或 <code>import { type User }</code> 后才能运行。</p>
+<h2>Node.js 原生运行 TypeScript</h2>
+<p>Node.js 22.18+、23.6+ 默认开启类型剥离，24.12+、25.2+ 标为稳定。它的限制：</p>
+<ul>
+<li>只删除类型，不转换语法：<code>enum</code>、带运行时代码的 <code>namespace</code>、构造函数参数属性、<code>import x = require()</code> 会报错；装饰器无法解析。</li>
+<li>不读取 tsconfig，<code>paths</code> 不生效，用 <code>package.json</code> 的 <code>imports</code>（<code>#src/*</code>）替代。</li>
+<li>导入必须写 <code>.ts</code> 扩展名。</li>
+<li>不处理 <code>node_modules</code> 中的 <code>.ts</code> 文件。</li>
+</ul>
+<p>推荐的类型检查配置：</p>
+<div class="not-prose code-block"><div class="code-language">json</div><pre><code class="hljs language-json">{
+  &quot;compilerOptions&quot;: {
+    &quot;noEmit&quot;: true,
+    &quot;target&quot;: &quot;esnext&quot;,
+    &quot;module&quot;: &quot;nodenext&quot;,
+    &quot;rewriteRelativeImportExtensions&quot;: true,
+    &quot;erasableSyntaxOnly&quot;: true,
+    &quot;verbatimModuleSyntax&quot;: true
+  }
+}
 </code></pre></div>
-<p>在 verbatimModuleSyntax 规则下，类型成员被移除，但普通 import 语句可以保留为 <code>import {} from &#x27;./model.js&#x27;</code>。这个空导入仍然会加载并求值模块，所以运行时先输出“model 已执行”，再输出 Lin。</p>
-<p>因此 <code>import type { User }</code> 与 <code>import { type User }</code> 在只导入类型成员时，不能一概认为输出完全一样。如果目标明确是纯类型依赖，整条 import type 更直接；如果有必要执行模块，则应显式表达那个目的。</p>
-<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-comment">// mixed.ts</span>
-<span class="hljs-keyword">import</span> { version, <span class="hljs-keyword">type</span> <span class="hljs-title class_">User</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./model.js&#x27;</span>;
-
-<span class="hljs-keyword">const</span> <span class="hljs-attr">user</span>: <span class="hljs-title class_">User</span> = { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Lin&#x27;</span> };
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`<span class="hljs-subst">${version}</span>:<span class="hljs-subst">${user.name}</span>`</span>); <span class="hljs-comment">// 1.0:Lin</span>
-</code></pre></div>
-<p>这时输出会保留 version 的运行时导入，移除 User 的类型部分。模块执行日志仍然发生，是因为确实存在值依赖。</p>
-<h2>初始化副作用不要寄托在类型导入上</h2>
-<p>某个模块可能负责注册插件、安装补丁或初始化全局能力。如果这些行为是必要依赖，应使用明确的副作用导入，例如 <code>import &#x27;./register.js&#x27;</code>，而不是期待某个接口引用碰巧保留导入。</p>
-<p>类型导入被移除后，编译器也不允许把它直接当作运行时值使用。类同时有类型和构造器两种含义，若用 import type 导入类名，可以用来标注实例类型，却不能据此 new 一个实例。需要构造器、instanceof 或静态方法时，应导入实际值。</p>
-<p>导出也有类似区别：export type 明确只暴露类型，普通值导出则需要对应运行时实体。只看名字是否大写，不能准确区分这两种用途。</p>
-<h2>verbatimModuleSyntax 让模块格式错误更早暴露</h2>
-<p>该选项保留未标记为类型的模块语法，而不是在不匹配的模块环境中悄悄把 ESM import/export 改写成 CommonJS require。</p>
-<p>例如在按 CommonJS 解释的文件里编写不适合该设置的 ESM 值语法，会得到诊断。应统一 package.json 的 type、文件扩展名、module 与 moduleResolution，不能为了消除错误就随意关闭规则。</p>
-<p>确实面向 CommonJS 的代码，可以采用符合 TypeScript 与宿主约定的 CommonJS 表达方式或调整模块输出策略。正确配置的目标是让源码意图与运行时格式一致，不是让所有语法在任何文件里都被强行接受。</p>
-<h2>类型检查器、转换器和打包器分别承担不同工作</h2>
-<p>Vite、Babel、SWC 等链路可能按文件转换 TypeScript，而不进行完整跨文件类型检查。显式类型导入能减少它们判断导入性质的歧义，但不能因此省略独立的类型检查。</p>
-<p>该选项也不是 tree shaking 的替代。TypeScript 保留一个值导入后，打包器还可能根据实际使用和副作用规则进一步优化；如果副作用声明不准确，最终结果仍可能偏离意图。</p>
-<p>同样，编译器能找到模块类型，不代表浏览器能解析某个裸包名或路径别名。类型导入消失后不需要运行时解析，但真正保留下来的导入必须有可用的运行时目标。</p>
-<h2>验证时要同时看输出和执行顺序</h2>
-<p>可以编译上面的三个入口，检查 JavaScript 中是否仍有指向 model 的 import，再分别运行入口观察日志。只看 TypeScript 文件中“这个名字只用于类型”，不足以判断最终是否执行了依赖模块。</p>
-<p>Node.js 类型剥离和 ts-blank-space 等工具只删除类型、不做导入省略，因此通常与 <code>verbatimModuleSyntax</code>、<code>erasableSyntaxOnly</code>（TS 5.8+）一起开启，让 tsc 提前报出运行时会失败的写法。</p>
-<p>升级编译器或调整 verbatimModuleSyntax 时，应重点检查纯类型导入、混合导入、副作用入口与模块格式。把这些意图写清楚，通常比依赖历史导入擦除选项和偶然的转换行为更容易维护。</p></div><div class="answer-bottom"><a href="https://www.typescriptlang.org/tsconfig/verbatimModuleSyntax.html" target="_blank" rel="noreferrer">TypeScript · verbatimModuleSyntax<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+import+type+%E5%92%8C+verbatimModuleSyntax+%E5%A6%82%E4%BD%95%E5%BD%B1%E5%93%8D%E6%A8%A1%E5%9D%97%E8%BE%93%E5%87%BA%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Aimport+type+%E5%92%8C+verbatimModuleSyntax+%E5%A6%82%E4%BD%95%E5%BD%B1%E5%93%8D%E6%A8%A1%E5%9D%97%E8%BE%93%E5%87%BA%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-type-imports%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-type-imports%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：import type 和 verbatimModuleSyntax 如何影响模块输出？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-unknown/">any、unknown 和 never 分别适合什么场景？</a></li><li><a href="/questions/ts-interface-type/">type 和 interface 有哪些区别？</a></li><li><a href="/questions/ts-generics/">泛型解决了什么问题？如何约束泛型？</a></li><li><a href="/questions/ts-discriminated-union/">如何用可辨识联合避免不合理的状态组合？</a></li></ul></nav></main></div></div>
+<p><code>erasableSyntaxOnly</code> 让 tsc 对上述不可擦除语法报 <code>TS1294</code>。</p>
+<h2>其他细节</h2>
+<ul>
+<li><code>import type</code> 导入的类只能用作类型，不能 <code>new</code>，也不能用于 <code>instanceof</code>。</li>
+<li><code>export type { User }</code> 只导出类型；重新导出类型时也要标 <code>type</code>。</li>
+<li><code>verbatimModuleSyntax</code> 不会把 ESM 语法改写成 <code>require</code>，CommonJS 文件中写 <code>import</code> 会报错，要用 <code>import x = require()</code> 或把文件改成 ESM。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li>和 <code>isolatedModules</code> 的关系？<code>isolatedModules</code> 只禁止单文件无法正确转换的写法；<code>verbatimModuleSyntax</code> 规定导入导出按写法保留，取代了旧的 <code>importsNotUsedAsValues</code> 和 <code>preserveValueImports</code>。两者常一起开启。</li>
+<li>会影响 tree shaking 吗？<code>import {}</code> 会让打包器认为模块可能有副作用，除非包在 <code>package.json</code> 中声明了 <code>&quot;sideEffects&quot;: false</code>。</li>
+</ul></div><div class="answer-bottom"><a href="https://www.typescriptlang.org/tsconfig/verbatimModuleSyntax.html" target="_blank" rel="noreferrer">TypeScript · verbatimModuleSyntax<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+import+type+%E5%92%8C+verbatimModuleSyntax+%E5%A6%82%E4%BD%95%E5%BD%B1%E5%93%8D%E6%A8%A1%E5%9D%97%E8%BE%93%E5%87%BA%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Aimport+type+%E5%92%8C+verbatimModuleSyntax+%E5%A6%82%E4%BD%95%E5%BD%B1%E5%93%8D%E6%A8%A1%E5%9D%97%E8%BE%93%E5%87%BA%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-type-imports%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-type-imports%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：import type 和 verbatimModuleSyntax 如何影响模块输出？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-unknown/">any、unknown 和 never 分别适合什么场景？</a></li><li><a href="/questions/ts-interface-type/">type 和 interface 有哪些区别？</a></li><li><a href="/questions/ts-generics/">泛型解决了什么问题？如何约束泛型？</a></li><li><a href="/questions/ts-discriminated-union/">如何用可辨识联合避免不合理的状态组合？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

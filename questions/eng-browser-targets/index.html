@@ -23,61 +23,48 @@
     <meta property="og:url" content="https://fe.hushifa.top/questions/eng-browser-targets/" />
     <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/eng-browser-targets/#webpage","url":"https://fe.hushifa.top/questions/eng-browser-targets/","name":"编译目标、polyfill 和浏览器兼容性是什么关系？ · 前端知库","description":"工程化与性能面试题：用可选链与 toSorted 区分语法转换和运行时能力，说明 target、类型声明、polyfill、CSS 与安全上下文分别影响什么，以及怎样定义可验证的支持范围。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/eng-browser-targets/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/eng-browser-targets/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"工程化与性能面试题","item":"https://fe.hushifa.top/topics/engineering/"},{"@type":"ListItem","position":3,"name":"编译目标、polyfill 和浏览器兼容性是什么关系？","item":"https://fe.hushifa.top/questions/eng-browser-targets/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
     <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/engineering/">工程化与性能面试题</a><span aria-hidden="true">/</span><span aria-current="page">编译目标、polyfill 和浏览器兼容性是什么关系？</span></nav><h1 tabindex="-1">编译目标、polyfill 和浏览器兼容性是什么关系？</h1><p class="reading-summary">用可选链与 toSorted 区分语法转换和运行时能力，说明 target、类型声明、polyfill、CSS 与安全上下文分别影响什么，以及怎样定义可验证的支持范围。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>兼容性要分清语法能否解析、运行时 API 是否存在、平台能力是否可用。</li>
-<li>构建 target 让转换器把可选链等新语法降级，但不会补出 <code>toSorted</code> 这类运行时方法。</li>
-<li>运行时 API 需要 polyfill 或能力检测，权限和设备相关能力只能检测后降级。</li>
-<li>产物里没有 <code>?.</code> 只说明语法被处理过，不证明 API 都已兼容。</li>
+<li>编译目标（target）只决定语法怎样降级，例如把可选链改写成条件判断。</li>
+<li>新的内置 API（如 <code>Array.prototype.toSorted</code>）属于运行时能力，语法转换不会补上，需要 polyfill 或特性检测。</li>
+<li>TypeScript 的 <code>lib</code> 只影响类型检查，不会给运行环境增加任何 API。</li>
+<li>CSS 新特性、安全上下文要求和权限限制都不归 JavaScript 构建目标管。</li>
+<li>支持范围要写成可执行的浏览器列表，并在这些浏览器里实际测试。</li>
 </ul>
-<p>把构建 target 改成旧浏览器版本，不等于浏览器突然拥有所有新 API。兼容性至少要分清：代码能不能被解析，运行时有没有相应方法，以及浏览器是否具备完成这项功能的底层能力。</p>
-<p>例如可选链是一种语法，Array.prototype.toSorted 是运行时方法，Web Bluetooth 又涉及浏览器、权限和设备支持。它们不能靠同一种配置全部解决。</p>
-<h2>同一段源码里就有两类问题</h2>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">readName</span>(<span class="hljs-params">profile</span>) {
-  <span class="hljs-keyword">return</span> profile?.<span class="hljs-property">name</span> ?? <span class="hljs-string">&#x27;匿名&#x27;</span>;
-}
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">sortNumbers</span>(<span class="hljs-params">values</span>) {
-  <span class="hljs-keyword">return</span> values.<span class="hljs-title function_">toSorted</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a - b);
-}
+<h2>语法和 API 是两类问题</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> name = user?.<span class="hljs-property">profile</span>?.<span class="hljs-property">name</span>;
+<span class="hljs-keyword">const</span> sorted = list.<span class="hljs-title function_">toSorted</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a - b);
 </code></pre></div>
-<p>在工具支持的情况下，可选链和空值合并可以转换成较旧的判断表达式。toSorted 则只是一个方法调用，语法本身并不新到无法解析；旧环境如果没有这个方法，代码仍会在运行时失败。</p>
-<p>因此“产物里已经看不到 ?. ”只说明相关语法得到处理，不证明排序、网络、DOM 和其他 API 都已兼容。</p>
-<h2>target 告诉转换器面向什么环境</h2>
-<p>例如可以在 Vite 配置中设置一个明确目标：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { defineConfig } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vite&#x27;</span>;
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>({
-  <span class="hljs-attr">build</span>: {
-    <span class="hljs-attr">target</span>: <span class="hljs-string">&#x27;chrome70&#x27;</span>,
-  },
-});
-</code></pre></div>
-<p>这只是配置语法示例，不是建议所有产品都支持该版本。工具会按其支持的转换能力生成适当代码，但仍可能有无法合理转换的语法或运行模型，不能保证任意现代程序都能转换到任意旧环境。</p>
-<p>Vite 默认目标会随主要版本选定的 Baseline 范围演进，项目升级后应重新核对。生产 build.target 也不意味着开发服务器和每个第三方插件都自动采用完全相同的兼容策略。</p>
-<h2>polyfill 补的是运行时实现</h2>
-<p>对于能够以既有能力实现的标准方法，可以使用维护中的 polyfill 方案补充。应用还需要决定加载顺序、支持范围和注入成本，确保相关代码执行前能力已经准备好。</p>
-<p>全局 polyfill 通常修改对应全局或原型；只通过导入函数提供替代能力的方案则有不同的使用方式。两者对业务代码、第三方依赖和全局环境的影响不同，不能混为一种配置。</p>
-<p>对于本例中的普通数字数组，业务也可以选择复制后排序等已支持的写法。但这不代表一个简短的替代函数就完整实现了标准方法的所有稀疏数组、对象与边界语义，不能随意当作通用 polyfill 发布。</p>
-<h2>有些能力不能完整模拟</h2>
-<p>依赖浏览器底层权限、硬件、安全隔离或渲染机制的功能，往往不能仅通过添加 JavaScript 获得等价实现。即使存在库提供替代，也可能只是不同能力和体验的降级路径。</p>
-<p>例如缺少蓝牙访问能力时，添加同名函数不能让浏览器真正控制设备；缺少某些 CSS 布局能力时，脚本模拟也可能有性能和语义差异。</p>
-<p>这类功能应通过能力检测和产品降级设计处理，而不是把“有一个 polyfill 包”当成完整兼容证据。</p>
-<h2>TypeScript 类型通过并不证明环境支持</h2>
-<p>TypeScript 的 lib 可以让类型检查器知道某些标准 API，target 则影响相应输出语法，但类型声明不会向浏览器注入实现。</p>
-<p>把 ES2023 加进类型库后，toSorted 可能不再报类型错误，旧浏览器仍可能没有这个方法。Vite 等工具对 TypeScript 的语法转换与完整类型检查又是两件事，需要看整个构建与检查链。</p>
-<p>Browserslist、转换器目标、CSS 处理器和测试环境也要分别确认。只在一个文件中写了浏览器列表，不代表所有工具都会自动读取并执行同样的策略。</p>
-<h2>兼容性还包括 CSS、HTML 与运行条件</h2>
-<p>JavaScript 可以运行，页面仍可能因为 CSS 特性不支持而布局错误。HTML 控件、输入行为、媒体格式和网络策略，也各有自己的兼容范围。</p>
-<p>某个 API 只在安全上下文中提供，或需要用户激活与权限，即使浏览器版本够新也可能调用失败。特性存在与本次调用获准，仍要分开处理。</p>
-<p>特性检测通常比单纯猜 User-Agent 更可靠，但检测代码本身也必须能被目标环境解析。把新语法写在一个永远不会执行的分支中，并不能防止旧解析器在加载时就报错。</p>
-<h2>怎样选择和验证目标更实际</h2>
-<p>先根据真实用户设备、业务环境和维护成本定义支持范围，再决定哪些能力必须有、哪些可以增强。企业内嵌 WebView、老设备和桌面浏览器可能具有不同更新节奏，不能只看一个市场份额数字。</p>
-<p>然后检查生产产物中的语法和依赖，运行关键功能，并验证缺少能力时的反馈。模拟删除一个 API 可以帮助测试降级逻辑，但不等于已经覆盖真实旧浏览器的解析器、布局和权限行为。</p>
-<p>旧环境支持需要转换、运行时补充与产品取舍共同完成。设置 target 是其中一项输入，不是一份自动签发的全站兼容保证。</p></div><div class="answer-bottom"><a href="https://vite.dev/guide/build" target="_blank" rel="noreferrer">Vite · 生产构建与浏览器兼容性<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E7%BC%96%E8%AF%91%E7%9B%AE%E6%A0%87%E3%80%81polyfill+%E5%92%8C%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%BC%E5%AE%B9%E6%80%A7%E6%98%AF%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E7%BC%96%E8%AF%91%E7%9B%AE%E6%A0%87%E3%80%81polyfill+%E5%92%8C%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%BC%E5%AE%B9%E6%80%A7%E6%98%AF%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aeng-browser-targets%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%E4%B8%8E%E6%80%A7%E8%83%BD%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Feng-browser-targets%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：编译目标、polyfill 和浏览器兼容性是什么关系？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/engineering-treeshaking/">Tree shaking 如何工作？为什么有些代码无法移除？</a></li><li><a href="/questions/engineering-vitals/">LCP、INP、CLS 分别衡量什么？</a></li><li><a href="/questions/engineering-lazy/">代码分割与懒加载适合哪些场景？</a></li><li><a href="/questions/engineering-lockfile/">为什么需要提交 lockfile？npm ci 和 npm install 有何区别？</a></li></ul></nav></main></div></div>
+<p>第一行是语法。把 target 设得足够低，构建工具会把 <code>?.</code> 改写成旧浏览器能解析的代码。第二行是对内置方法的调用，语法很普通，旧浏览器能解析，但运行时找不到 <code>toSorted</code> 就会抛 TypeError。构建工具默认不会为它注入实现。</p>
+<p>所以&quot;降低 target 后旧浏览器还是报错&quot;很常见：报错往往来自缺失的 API，而不是语法。</p>
+<h2>各项配置分别管什么</h2>
+<table><thead><tr><th>配置</th><th>影响</th><th>不影响</th></tr></thead><tbody><tr><td>构建 target（Vite <code>build.target</code>、esbuild/Oxc 目标）</td><td>语法降级和压缩方式</td><td>内置 API 是否存在</td></tr><tr><td>TypeScript <code>lib</code></td><td>哪些 API 能通过类型检查</td><td>产物和运行环境</td></tr><tr><td>polyfill（如 core-js）</td><td>在运行时补齐缺失 API</td><td>无法补齐的能力（如新的 CSS 布局、硬件 API）</td></tr><tr><td>Browserslist</td><td>让支持它的工具共享同一份浏览器列表</td><td>工具自身不读它时无效</td></tr></tbody></table>
+<p>Vite 的默认构建目标面向支持原生 ES 模块和动态导入的浏览器。需要更旧的浏览器时，官方提供 <code>@vitejs/plugin-legacy</code>，它会额外生成旧浏览器产物并按需注入 polyfill。</p>
+<h2>polyfill 的取舍</h2>
+<p>全量引入 polyfill 会让所有用户为少数旧浏览器承担体积。常见做法：</p>
+<ul>
+<li>按目标浏览器和实际用到的 API 按需注入。</li>
+<li>对可选增强功能用特性检测，缺失时走降级路径，而不是补一个不完整的实现。</li>
+<li>有些能力没法 polyfill，例如 Service Worker、WebGPU、新的 CSS 选择器，只能检测后降级。</li>
+</ul>
+<h2>CSS 和环境限制</h2>
+<p>CSS 新语法由 PostCSS、Lightning CSS 等单独处理，可以加前缀或降级部分写法，但 <code>:has()</code>、容器查询这类能力在不支持的浏览器里补不出来，要用 <code>@supports</code> 提供回退。</p>
+<p>剪贴板、Service Worker、Web Crypto 的 <code>subtle</code> 等 API 要求安全上下文（HTTPS 或 localhost）。开发时在 localhost 正常，部署到 HTTP 内网地址就失效，这和构建目标无关。</p>
+<h2>怎样定义支持范围</h2>
+<p>把&quot;支持主流浏览器&quot;改成可检查的列表，例如&quot;最近两个大版本的 Chrome、Edge、Firefox、Safari，以及 iOS Safari 16.4+&quot;，写进 Browserslist 或构建配置。然后：</p>
+<ol>
+<li>构建配置和 polyfill 策略都从这份列表推导。</li>
+<li>CI 里至少在列表的最低版本上跑一遍关键流程。</li>
+<li>对列表外的浏览器给出明确的降级体验或提示。</li>
+</ol>
+<h2>常见追问</h2>
+<ul>
+<li>为什么类型检查通过，线上却报 <code>xxx is not a function</code>？因为 <code>lib</code> 声明了 API，但目标浏览器没有实现。</li>
+<li>可以只靠 target 解决兼容吗？不行，target 只处理语法。</li>
+</ul></div><div class="answer-bottom"><a href="https://vite.dev/guide/build" target="_blank" rel="noreferrer">Vite · 生产构建与浏览器兼容性<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E7%BC%96%E8%AF%91%E7%9B%AE%E6%A0%87%E3%80%81polyfill+%E5%92%8C%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%BC%E5%AE%B9%E6%80%A7%E6%98%AF%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E7%BC%96%E8%AF%91%E7%9B%AE%E6%A0%87%E3%80%81polyfill+%E5%92%8C%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%BC%E5%AE%B9%E6%80%A7%E6%98%AF%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aeng-browser-targets%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%E4%B8%8E%E6%80%A7%E8%83%BD%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Feng-browser-targets%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：编译目标、polyfill 和浏览器兼容性是什么关系？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/engineering-treeshaking/">Tree shaking 如何工作？为什么有些代码无法移除？</a></li><li><a href="/questions/engineering-vitals/">LCP、INP、CLS 分别衡量什么？</a></li><li><a href="/questions/engineering-lazy/">代码分割与懒加载适合哪些场景？</a></li><li><a href="/questions/engineering-lockfile/">为什么需要提交 lockfile？npm ci 和 npm install 有何区别？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

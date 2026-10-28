@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="React面试题：useId 为组件内部的可访问关联生成实例级 ID，并在匹配的服务端与客户端树中支持 hydration 一致性。它不提供业务实体身份，不适合作为列表 key 或持久化标识，多根应用还需要协调前缀。" />
+    <meta name="description" content="React面试题：useId 为组件实例生成唯一且在服务端和客户端一致的 ID，用于 label、aria-describedby 等无障碍属性关联。它不能用作列表 key，也不适合作为业务数据的 ID 或 CSS 选择器。" />
     <title>React useId 解决什么 ID 生成问题？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/react-use-id/" />
     <meta name="robots" content="index,follow" />
@@ -19,68 +19,54 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="React useId 解决什么 ID 生成问题？ · 前端知库" />
-    <meta property="og:description" content="React面试题：useId 为组件内部的可访问关联生成实例级 ID，并在匹配的服务端与客户端树中支持 hydration 一致性。它不提供业务实体身份，不适合作为列表 key 或持久化标识，多根应用还需要协调前缀。" />
+    <meta property="og:description" content="React面试题：useId 为组件实例生成唯一且在服务端和客户端一致的 ID，用于 label、aria-describedby 等无障碍属性关联。它不能用作列表 key，也不适合作为业务数据的 ID 或 CSS 选择器。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/react-use-id/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-use-id/#webpage","url":"https://fe.hushifa.top/questions/react-use-id/","name":"React useId 解决什么 ID 生成问题？ · 前端知库","description":"React面试题：useId 为组件内部的可访问关联生成实例级 ID，并在匹配的服务端与客户端树中支持 hydration 一致性。它不提供业务实体身份，不适合作为列表 key 或持久化标识，多根应用还需要协调前缀。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-use-id/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-use-id/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"React useId 解决什么 ID 生成问题？","item":"https://fe.hushifa.top/questions/react-use-id/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-use-id/#webpage","url":"https://fe.hushifa.top/questions/react-use-id/","name":"React useId 解决什么 ID 生成问题？ · 前端知库","description":"React面试题：useId 为组件实例生成唯一且在服务端和客户端一致的 ID，用于 label、aria-describedby 等无障碍属性关联。它不能用作列表 key，也不适合作为业务数据的 ID 或 CSS 选择器。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-use-id/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-use-id/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"React useId 解决什么 ID 生成问题？","item":"https://fe.hushifa.top/questions/react-use-id/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">React useId 解决什么 ID 生成问题？</span></nav><h1 tabindex="-1">React useId 解决什么 ID 生成问题？</h1><p class="reading-summary">useId 为组件内部的可访问关联生成实例级 ID，并在匹配的服务端与客户端树中支持 hydration 一致性。它不提供业务实体身份，不适合作为列表 key 或持久化标识，多根应用还需要协调前缀。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<p>useId 生成组件实例唯一、且服务端与客户端一致的 ID，用于关联 label 与 input、aria-describedby 等可访问性属性，避免 hydration 不一致。不要用它做列表 key 或业务数据 ID。同一页面挂载多个 React 根时，用 createRoot 的 identifierPrefix 选项避免 ID 冲突。</p>
-<p>封装一个输入组件时，label 需要通过 htmlFor 指向 input，说明文字又可能通过 aria-describedby 与它关联。如果在组件里写死 id=&quot;email&quot;，页面放两份组件就会出现重复 ID，标签和说明可能关联到错误位置。</p>
-<p>useId 主要解决这种组件内部关联，不是为数据库记录或用户会话生成新的业务身份。</p>
-<h2>一份组件，多次使用仍有各自的关联</h2>
-<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { useId, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">React useId 解决什么 ID 生成问题？</span></nav><h1 tabindex="-1">React useId 解决什么 ID 生成问题？</h1><p class="reading-summary">useId 为组件实例生成唯一且在服务端和客户端一致的 ID，用于 label、aria-describedby 等无障碍属性关联。它不能用作列表 key，也不适合作为业务数据的 ID 或 CSS 选择器。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li><code>const id = useId()</code> 返回当前组件实例专属的字符串，同一组件渲染多次时各不相同。</li>
+<li>只要服务端和客户端的组件树结构一致，生成的 ID 就一致，因此不会造成 hydration 不匹配；用自增计数器或 <code>Math.random()</code> 都做不到这点。</li>
+<li>主要用于把元素关联起来：<code>htmlFor</code>、<code>aria-describedby</code>、<code>aria-labelledby</code>、<code>aria-controls</code>。</li>
+<li>不要用它生成列表 key，key 应来自数据本身。</li>
+<li>一个组件需要多个 ID 时，只调用一次，再拼接后缀：<code>${id}-hint</code>、<code>${id}-error</code>。</li>
+</ul>
+<h2>表单字段</h2>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { useId } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">EmailField</span>(<span class="hljs-params">{ label, name }</span>) {
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">PasswordField</span>(<span class="hljs-params">{ error }</span>) {
   <span class="hljs-keyword">const</span> id = <span class="hljs-title function_">useId</span>();
-  <span class="hljs-keyword">const</span> inputId = <span class="hljs-string">`<span class="hljs-subst">${id}</span>-input`</span>;
   <span class="hljs-keyword">const</span> hintId = <span class="hljs-string">`<span class="hljs-subst">${id}</span>-hint`</span>;
+  <span class="hljs-keyword">const</span> errorId = <span class="hljs-string">`<span class="hljs-subst">${id}</span>-error`</span>;
 
   <span class="hljs-keyword">return</span> (
     <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">htmlFor</span>=<span class="hljs-string">{inputId}</span>&gt;</span>{label}<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">id</span>=<span class="hljs-string">{inputId}</span> <span class="hljs-attr">name</span>=<span class="hljs-string">{name}</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;email&quot;</span> <span class="hljs-attr">aria-describedby</span>=<span class="hljs-string">{hintId}</span> /&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">id</span>=<span class="hljs-string">{hintId}</span>&gt;</span>请输入完整的邮箱地址。<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">htmlFor</span>=<span class="hljs-string">{id}</span>&gt;</span>密码<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span>
+        <span class="hljs-attr">id</span>=<span class="hljs-string">{id}</span>
+        <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;password&quot;</span>
+        <span class="hljs-attr">aria-describedby</span>=<span class="hljs-string">{error</span> ? `${<span class="hljs-attr">hintId</span>} ${<span class="hljs-attr">errorId</span>}` <span class="hljs-attr">:</span> <span class="hljs-attr">hintId</span>}
+        <span class="hljs-attr">aria-invalid</span>=<span class="hljs-string">{Boolean(error)}</span>
+      /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">id</span>=<span class="hljs-string">{hintId}</span>&gt;</span>至少 8 位，包含字母和数字<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      {error &amp;&amp; <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">id</span>=<span class="hljs-string">{errorId}</span> <span class="hljs-attr">role</span>=<span class="hljs-string">&quot;alert&quot;</span>&gt;</span>{error}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>}
     <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
   );
 }
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">ContactFields</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-keyword">const</span> [revision, setRevision] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
-  <span class="hljs-keyword">return</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">section</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>显示版本：{revision}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">EmailField</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;联系邮箱&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;contactEmail&quot;</span> /&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">EmailField</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;备用邮箱&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;backupEmail&quot;</span> /&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setRevision(value =&gt; value + 1)}&gt;刷新显示<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span></span>
-  );
-}
 </code></pre></div>
-<p>每个 EmailField 调用 useId，得到属于该组件实例的关联前缀，再派生 input 与提示文字的不同 ID。两份组件不会因为复用同一段代码就共享同一个硬编码 ID。</p>
-<p>父级重新渲染时，同一组件实例的关联仍保持稳定。name 则继续表达表单提交字段名，与 DOM 的 id 是不同职责，不应拿生成的 ID 自动替代稳定的接口字段名。</p>
-<h2>为什么不用随机数或模块级计数器</h2>
-<p>渲染时使用随机数，会让同一组件不同渲染拿到不同 ID，也难以使服务端 HTML 与客户端首次输出一致。模块级自增计数器则容易受到执行顺序、多根应用和不同服务器请求的影响。</p>
-<p>useId 根据 React 所管理的组件树关系生成适合这种关联的 ID。即使服务端生成与客户端 hydration 的执行顺序不完全一样，只要对应树结构符合要求，React 就能保持需要的匹配。</p>
-<p>但它不能修复所有 hydration 问题。服务端和客户端渲染了不同组件、不同条件分支或不同文本，仍然可能不匹配；不能一加 useId 就忽略整个初始界面的一致性。</p>
-<h2>多个相关元素可以共用一个前缀</h2>
-<p>输入、说明、错误信息通常属于同一组件，用一次 useId 再拼接不同后缀即可。重点是每个实际 DOM 元素的完整 ID 唯一，关联属性指向真实存在的目标。</p>
-<p>条件错误提示可以按状态显示，并调整 aria-describedby，而 useId 本身仍应按 Hook 规则在顶层调用。不能在“有错误时”才临时插入这个 Hook，改变调用结构。</p>
-<p>这个 Hook 只是生成关联标识。标签文案是否清楚、错误是否可读、焦点是否合理，以及控件是否使用正确原生语义，仍需独立设计。</p>
-<h2>它与列表 key 的职责不同</h2>
-<p>key 帮助 React 判断同级数据项身份，应该来自那条记录的稳定业务标识。useId 是组件实例里的关联工具，不能在 map 中动态调用它给每项生成 key，也不能用它替代服务端 ID。</p>
-<p>当列表重排时，React 先需要正确的 key 来保留对应组件实例；如果这个身份关系已经错误，组件内生成的 ID 不会倒过来替你修复列表映射。</p>
-<p>同一个 ID 也不应该写进数据库、跨请求缓存键或长期分享协议。组件卸载重建、树结构改变或根配置变化后，不应再把旧值视为外部系统可依赖的永久标识。</p>
-<h2>同页多个 React 根要协调 identifierPrefix</h2>
-<p>页面上有多个独立 createRoot 或 hydrateRoot 时，可以给各自设置不同的 identifierPrefix，避免独立应用生成的关联 ID 相互冲突。</p>
-<p>若某个根来自服务端渲染，服务端渲染 API 与客户端 hydrateRoot 需要使用对应一致的前缀。前缀属于根级协议，不是仅在客户端临时补一个随机字符串就足够。</p>
-<p>不同框架可能封装了根与服务端入口，需要通过框架支持的方式配置，不应绕开框架再创建第二个重复根。</p>
-<h2>不依赖 ID 的字符串格式</h2>
-<p>生成值应被当作不透明标识。不要解析里面的字符来推导组件层级，也不要假定它一定只有字母数字。若手动拼 CSS 选择器，应按需使用 CSS.escape；通过 document.getElementById 查询则不需要把它先解释成选择器语法。</p>
-<p>useId 在一般同步组件中可用于服务端渲染流程，但当前 API 对异步 Server Component 等场景仍有约束，应按所用 React 版本文档处理。它不是任意函数都能调用的全局 ID 工具。</p>
-<p>验证时可以重复放置组件、触发无关重渲染，再检查 label、描述文字和 input 是否仍正确关联。需要 SSR 的页面还应真正执行 hydration，确认初始 ID 与前缀匹配，而不是只看客户端页面没有报重复 ID。</p></div><div class="answer-bottom"><a href="https://react.dev/reference/react/useId" target="_blank" rel="noreferrer">React · useId<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+useId+%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88+ID+%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+useId+%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88+ID+%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-use-id%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-use-id%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React useId 解决什么 ID 生成问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-server-cache/">React 的 cache API 解决什么问题？</a></li><li><a href="/questions/react-use-effect-event/">React useEffectEvent 适合解决什么依赖问题？</a></li><li><a href="/questions/react-use-hook/">React use API 可以读取哪些值？</a></li><li><a href="/questions/react-server-actions/">React Server Functions/Actions 的边界是什么？</a></li></ul></nav></main></div></div>
+<p>页面上放两个 <code>PasswordField</code>，它们的 ID 互不冲突，屏幕阅读器能正确读出各自的提示。</p>
+<h2>生成格式</h2>
+<p>ID 的具体格式是 React 内部实现，会随版本变化：19.0 使用 <code>:r:</code> 形式，19.1 改为 <code>«r»</code>，19.2 改为 <code>_r_</code>，后者可以直接用于 <code>view-transition-name</code> 和 XML 名称。不要依赖格式，也不要拿它写 CSS 选择器。</p>
+<h2>多个 React 根</h2>
+<p>同一页面有多个独立的 React 根时，ID 可能重复。用 <code>createRoot</code> 或 <code>hydrateRoot</code> 的 <code>identifierPrefix</code> 选项为每个根设置不同前缀；服务端渲染时两端要使用相同的前缀。</p>
+<h2>常见追问</h2>
+<ul>
+<li>为什么不能做 key？<code>useId</code> 的值取决于组件在树中的位置，而 key 需要在列表重排时跟随数据，二者的目的相反。</li>
+<li>组件外部需要这个 ID 怎么办？由父组件调用 <code>useId</code> 再通过 props 传下去。</li>
+</ul></div><div class="answer-bottom"><a href="https://react.dev/reference/react/useId" target="_blank" rel="noreferrer">React · useId<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+useId+%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88+ID+%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+useId+%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88+ID+%E7%94%9F%E6%88%90%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-use-id%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-use-id%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React useId 解决什么 ID 生成问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-server-cache/">React 的 cache API 解决什么问题？</a></li><li><a href="/questions/react-use-effect-event/">React useEffectEvent 适合解决什么依赖问题？</a></li><li><a href="/questions/react-use-hook/">React use API 可以读取哪些值？</a></li><li><a href="/questions/react-server-actions/">React Server Functions/Actions 的边界是什么？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

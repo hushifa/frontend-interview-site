@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="前端安全面试题：区分 OAuth 的授权和 OIDC 的身份认证，理解 ID Token、UserInfo 与 access token 的用途边界。" />
+    <meta name="description" content="前端安全面试题：OAuth 2.0 解决&quot;授权第三方应用访问资源&quot;，access token 是给 API 用的；OIDC 在 OAuth 之上增加身份认证，通过 ID Token 告诉客户端&quot;谁登录了&quot;。客户端要校验 ID Token 的签名、iss、aud、exp 和 nonce，并用 iss 加 sub 识别用户。" />
     <title>OpenID Connect 和 OAuth 2.0 分别解决什么问题？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/security-oidc/" />
     <meta name="robots" content="index,follow" />
@@ -19,46 +19,59 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="OpenID Connect 和 OAuth 2.0 分别解决什么问题？ · 前端知库" />
-    <meta property="og:description" content="前端安全面试题：区分 OAuth 的授权和 OIDC 的身份认证，理解 ID Token、UserInfo 与 access token 的用途边界。" />
+    <meta property="og:description" content="前端安全面试题：OAuth 2.0 解决&quot;授权第三方应用访问资源&quot;，access token 是给 API 用的；OIDC 在 OAuth 之上增加身份认证，通过 ID Token 告诉客户端&quot;谁登录了&quot;。客户端要校验 ID Token 的签名、iss、aud、exp 和 nonce，并用 iss 加 sub 识别用户。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/security-oidc/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/security-oidc/#webpage","url":"https://fe.hushifa.top/questions/security-oidc/","name":"OpenID Connect 和 OAuth 2.0 分别解决什么问题？ · 前端知库","description":"前端安全面试题：区分 OAuth 的授权和 OIDC 的身份认证，理解 ID Token、UserInfo 与 access token 的用途边界。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/security-oidc/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/security-oidc/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"前端安全面试题","item":"https://fe.hushifa.top/topics/security/"},{"@type":"ListItem","position":3,"name":"OpenID Connect 和 OAuth 2.0 分别解决什么问题？","item":"https://fe.hushifa.top/questions/security-oidc/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/security-oidc/#webpage","url":"https://fe.hushifa.top/questions/security-oidc/","name":"OpenID Connect 和 OAuth 2.0 分别解决什么问题？ · 前端知库","description":"前端安全面试题：OAuth 2.0 解决\"授权第三方应用访问资源\"，access token 是给 API 用的；OIDC 在 OAuth 之上增加身份认证，通过 ID Token 告诉客户端\"谁登录了\"。客户端要校验 ID Token 的签名、iss、aud、exp 和 nonce，并用 iss 加 sub 识别用户。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/security-oidc/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/security-oidc/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"前端安全面试题","item":"https://fe.hushifa.top/topics/security/"},{"@type":"ListItem","position":3,"name":"OpenID Connect 和 OAuth 2.0 分别解决什么问题？","item":"https://fe.hushifa.top/questions/security-oidc/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/security/">前端安全面试题</a><span aria-hidden="true">/</span><span aria-current="page">OpenID Connect 和 OAuth 2.0 分别解决什么问题？</span></nav><h1 tabindex="-1">OpenID Connect 和 OAuth 2.0 分别解决什么问题？</h1><p class="reading-summary">区分 OAuth 的授权和 OIDC 的身份认证，理解 ID Token、UserInfo 与 access token 的用途边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/security/">前端安全面试题</a><span aria-hidden="true">/</span><span aria-current="page">OpenID Connect 和 OAuth 2.0 分别解决什么问题？</span></nav><h1 tabindex="-1">OpenID Connect 和 OAuth 2.0 分别解决什么问题？</h1><p class="reading-summary">OAuth 2.0 解决&quot;授权第三方应用访问资源&quot;，access token 是给 API 用的；OIDC 在 OAuth 之上增加身份认证，通过 ID Token 告诉客户端&quot;谁登录了&quot;。客户端要校验 ID Token 的签名、iss、aud、exp 和 nonce，并用 iss 加 sub 识别用户。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>OAuth 2.0 解决授权访问资源，OIDC 在其上增加身份认证。</li>
-<li>OIDC 请求带 openid scope，得到的 ID Token 用于确认身份，access token 用于调用 API。</li>
-<li>ID Token 必须校验签名、iss、aud、exp 和 nonce。</li>
-<li>用 (iss, sub) 关联本地账号，登录后还要管理应用自己的会话。</li>
+<li>OAuth 2.0：用户授权客户端访问资源，客户端拿到 access token 调用 API。规范没有定义&quot;用户是谁&quot;，客户端不应从 access token 推断登录身份。</li>
+<li>OIDC：请求中带 <code>scope=openid</code>，授权服务器额外返回 ID Token（JWT），内容是身份声明。</li>
+<li>ID Token 给客户端看，access token 给资源服务器用，不要把 ID Token 当作调用 API 的凭证。</li>
+<li>校验 ID Token：签名（用发现文档中的 JWKS）、<code>iss</code> 是预期的发行方、<code>aud</code> 包含自己的 <code>client_id</code>、<code>exp</code> 未过期、<code>nonce</code> 与请求时一致。</li>
+<li>用 <code>iss</code> 和 <code>sub</code> 的组合关联本地账号，<code>email</code> 可能变化或未验证，不能作为唯一标识。</li>
 </ul>
-<p>“允许一个应用读取我的网盘文件”和“让我用网盘账号登录这个应用”看起来都可能经过同一个登录页面，但它们不是同一个协议目标。OAuth 2.0 主要解决授权访问资源，OIDC 在它之上增加标准化的身份认证层。</p>
-<p>OAuth 流程中授权服务器可能先让用户登录，但这并不意味着客户端可以随意从任意 access token 推断“当前登录用户是谁”。OIDC 明确定义了客户端如何得到和验证身份声明。</p>
-<h2>三种结果不能混着用</h2>
-<table><thead><tr><th>数据</th><th>主要接收方</th><th>用途</th></tr></thead><tbody><tr><td>access token</td><td>API 等资源服务器</td><td>根据令牌对应的权限访问资源</td></tr><tr><td>ID Token</td><td>发起认证的客户端</td><td>描述身份提供方认证用户的结果</td></tr><tr><td>UserInfo 响应</td><td>获得许可的客户端</td><td>获取协议允许提供的用户声明</td></tr></tbody></table>
-<p>OIDC 请求包含 <code>openid</code> scope，通常采用授权码流程。客户端完成 code 兑换后会得到 ID Token，并可能用 access token 调用 UserInfo。UserInfo 不是一次新的独立登录，其 sub 必须与对应 ID Token 的 sub 一致，才能把返回资料归到同一个主体。</p>
-<p>ID Token 通常是 JWT，但 access token 不一定是 JWT，也可能是客户端不应解析的 opaque 字符串。不要写一个“只要能解码 JWT 就当作登录成功”的通用函数。</p>
-<h2>ID Token 中的身份也必须验证</h2>
-<p>假设一个令牌解码后包含：</p>
+<h2>授权码流程中的 OIDC</h2>
+<div class="not-prose code-block"><div class="code-language">text</div><pre><code class="hljs language-text">/authorize?response_type=code
+  &amp;client_id=shop
+  &amp;redirect_uri=https://shop.example/callback
+  &amp;scope=openid profile email
+  &amp;state=随机值
+  &amp;nonce=随机值
+  &amp;code_challenge=...&amp;code_challenge_method=S256
+</code></pre></div>
+<p>换令牌后得到：</p>
 <div class="not-prose code-block"><div class="code-language">json</div><pre><code class="hljs language-json">{
-  &quot;iss&quot;: &quot;https://login.example.com&quot;,
-  &quot;sub&quot;: &quot;user-42&quot;,
-  &quot;aud&quot;: &quot;frontend-client&quot;,
-  &quot;exp&quot;: 2000000000,
-  &quot;nonce&quot;: &quot;本次认证请求的随机值&quot;
+  &quot;access_token&quot;: &quot;...&quot;,
+  &quot;id_token&quot;: &quot;eyJhbGciOiJSUzI1NiIs...&quot;,
+  &quot;token_type&quot;: &quot;Bearer&quot;,
+  &quot;expires_in&quot;: 3600
 }
 </code></pre></div>
-<p>这些只是声明，示例并不是一个可用令牌。Base64URL 解码只是读取数据，攻击者也可以构造同样的 JSON。客户端需要按所用流程与提供方要求验证签名或协议规定的可信验证条件、issuer、audience、有效期和事务关联。</p>
-<p>iss 必须是预期身份提供方；aud 必须包含当前客户端标识；使用多个 audience 或 azp 时还有相应校验要求。如果请求发送了 nonce，返回的 nonce 必须与本次保存值匹配。不能因为签名数学上有效，就接受签给别的客户端或由陌生提供方签发的令牌。</p>
-<p>签名密钥应来自预先信任的提供方配置及其密钥发布机制，并处理轮换；不能盲目信任令牌中任意 URL 指向的密钥。实际项目优先采用维护良好的 OIDC 库，而不是自己拼接一组 JWT 判断。</p>
-<h2>用哪个字段关联本地账号</h2>
-<p>通常使用经过验证的 <code>(iss, sub)</code> 组合关联身份。sub 是发行者范围内的主体标识，不是跨所有身份提供方全局唯一的用户 ID。某些提供方还会使用按客户端关系区分的 pairwise subject，不能假设多个应用看到的 sub 一定相同。</p>
-<p>邮箱和昵称适合展示，但可能变化，也不一定已验证。不要仅因为两个提供方返回相同邮箱，就自动合并两个本地账号；账号绑定应有明确的所有权验证流程。</p>
-<h2>登录成功以后，还有应用自己的会话</h2>
-<p>浏览器客户端通常使用授权码加 PKCE，并依赖 SDK 处理重定向、state、nonce、错误和令牌生命周期。有后端的应用也可以由后端处理协议，浏览器使用应用会话 Cookie。两种架构的凭证存储和 CSRF 风险不同，不能把后端机密直接搬到前端。</p>
-<p>ID Token 不是调用任意 API 的万能通行证。API 应验证发给自己的 access token 或应用会话，再执行资源级权限判断。即使身份认证证明用户是 user-42，也不代表他有权读取 user-43 的订单。</p>
-<p>注销同样有多个层次：清除当前应用的登录状态，不一定会结束身份提供方的单点登录会话；结束提供方会话，也不一定立即撤销所有已签发令牌。应根据提供方支持的注销、撤销和会话机制设计，而不是只删除一个 localStorage 字段就宣称完全退出。</p></div><div class="answer-bottom"><a href="https://openid.net/specs/openid-connect-core-1_0.html" target="_blank" rel="noreferrer">OpenID Connect Core 1.0<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+OpenID+Connect+%E5%92%8C+OAuth+2.0+%E5%88%86%E5%88%AB%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AOpenID+Connect+%E5%92%8C+OAuth+2.0+%E5%88%86%E5%88%AB%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Asecurity-oidc%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fsecurity-oidc%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：OpenID Connect 和 OAuth 2.0 分别解决什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/security-oauth-pkce/">OAuth 2.0 的 PKCE 解决了什么问题？</a></li><li><a href="/questions/security-webauthn-passkeys/">WebAuthn 和 Passkey 登录的安全边界是什么？</a></li><li><a href="/questions/sec-csp/">CSP 的 nonce、hash 与 Report-Only 如何使用？</a></li><li><a href="/questions/sec-cookies/">HttpOnly、Secure 和 SameSite 分别保护什么？</a></li></ul></nav></main></div></div>
+<p>ID Token 的载荷示例：</p>
+<div class="not-prose code-block"><div class="code-language">json</div><pre><code class="hljs language-json">{
+  &quot;iss&quot;: &quot;https://id.example&quot;,
+  &quot;sub&quot;: &quot;248289761001&quot;,
+  &quot;aud&quot;: &quot;shop&quot;,
+  &quot;exp&quot;: 1793000000,
+  &quot;iat&quot;: 1792996400,
+  &quot;nonce&quot;: &quot;随机值&quot;,
+  &quot;email&quot;: &quot;user@example.com&quot;,
+  &quot;email_verified&quot;: true
+}
+</code></pre></div>
+<h2>几个容易混淆的点</h2>
+<table><thead><tr><th>概念</th><th>用途</th></tr></thead><tbody><tr><td><code>state</code></td><td>防止回调被伪造（CSRF），客户端自己比较</td></tr><tr><td><code>nonce</code></td><td>绑定 ID Token 和本次登录请求，防重放</td></tr><tr><td>PKCE</td><td>防止授权码被截获后兑换，见《OAuth 2.0 的 PKCE 解决了什么问题？》</td></tr><tr><td>UserInfo 端点</td><td>用 access token 获取更多用户信息</td></tr><tr><td>发现文档</td><td><code>/.well-known/openid-configuration</code>，列出端点和 JWKS 地址</td></tr></tbody></table>
+<h2>登录之后</h2>
+<p>拿到 ID Token 只说明身份提供方认证了用户。应用还需要创建自己的会话（通常是 <code>HttpOnly</code> Cookie），并处理过期、登出和账号关联。单页应用推荐通过 BFF 在服务端完成兑换和校验，浏览器不直接持有令牌。</p>
+<h2>常见追问</h2>
+<ul>
+<li>能在前端校验 ID Token 吗？可以做展示用途的解码，但决定权限的校验应在服务端。</li>
+<li>社交登录都是 OIDC 吗？主流身份提供方大多支持 OIDC，部分只提供 OAuth 加自定义的用户信息接口，需要按各自文档处理。</li>
+</ul></div><div class="answer-bottom"><a href="https://openid.net/specs/openid-connect-core-1_0.html" target="_blank" rel="noreferrer">OpenID Connect Core 1.0<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+OpenID+Connect+%E5%92%8C+OAuth+2.0+%E5%88%86%E5%88%AB%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AOpenID+Connect+%E5%92%8C+OAuth+2.0+%E5%88%86%E5%88%AB%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Asecurity-oidc%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fsecurity-oidc%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：OpenID Connect 和 OAuth 2.0 分别解决什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/security-oauth-pkce/">OAuth 2.0 的 PKCE 解决了什么问题？</a></li><li><a href="/questions/security-webauthn-passkeys/">WebAuthn 和 Passkey 登录的安全边界是什么？</a></li><li><a href="/questions/http-xss/">XSS 和 CSRF 有什么区别？分别如何防范？</a></li><li><a href="/questions/sec-csp/">CSP 的 nonce、hash 与 Report-Only 如何使用？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

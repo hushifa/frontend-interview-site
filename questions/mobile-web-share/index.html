@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="移动端与 PWA面试题：了解 navigator.share 的用户激活、权限和平台支持边界，为分享按钮设计复制链接等降级方案。" />
+    <meta name="description" content="移动端与 PWA面试题：了解 navigator.share 的用户激活、安全上下文和平台支持边界，区分用户取消与真正失败，为分享按钮设计复制链接等降级方案。" />
     <title>Web Share API 使用时要处理哪些降级？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/mobile-web-share/" />
     <meta name="robots" content="index,follow" />
@@ -19,64 +19,71 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Web Share API 使用时要处理哪些降级？ · 前端知库" />
-    <meta property="og:description" content="移动端与 PWA面试题：了解 navigator.share 的用户激活、权限和平台支持边界，为分享按钮设计复制链接等降级方案。" />
+    <meta property="og:description" content="移动端与 PWA面试题：了解 navigator.share 的用户激活、安全上下文和平台支持边界，区分用户取消与真正失败，为分享按钮设计复制链接等降级方案。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/mobile-web-share/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/mobile-web-share/#webpage","url":"https://fe.hushifa.top/questions/mobile-web-share/","name":"Web Share API 使用时要处理哪些降级？ · 前端知库","description":"移动端与 PWA面试题：了解 navigator.share 的用户激活、权限和平台支持边界，为分享按钮设计复制链接等降级方案。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/mobile-web-share/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/mobile-web-share/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"移动端与 PWA面试题","item":"https://fe.hushifa.top/topics/mobile/"},{"@type":"ListItem","position":3,"name":"Web Share API 使用时要处理哪些降级？","item":"https://fe.hushifa.top/questions/mobile-web-share/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/mobile-web-share/#webpage","url":"https://fe.hushifa.top/questions/mobile-web-share/","name":"Web Share API 使用时要处理哪些降级？ · 前端知库","description":"移动端与 PWA面试题：了解 navigator.share 的用户激活、安全上下文和平台支持边界，区分用户取消与真正失败，为分享按钮设计复制链接等降级方案。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/mobile-web-share/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/mobile-web-share/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"移动端与 PWA面试题","item":"https://fe.hushifa.top/topics/mobile/"},{"@type":"ListItem","position":3,"name":"Web Share API 使用时要处理哪些降级？","item":"https://fe.hushifa.top/questions/mobile-web-share/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/mobile/">移动端与 PWA面试题</a><span aria-hidden="true">/</span><span aria-current="page">Web Share API 使用时要处理哪些降级？</span></nav><h1 tabindex="-1">Web Share API 使用时要处理哪些降级？</h1><p class="reading-summary">了解 navigator.share 的用户激活、权限和平台支持边界，为分享按钮设计复制链接等降级方案。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/mobile/">移动端与 PWA面试题</a><span aria-hidden="true">/</span><span aria-current="page">Web Share API 使用时要处理哪些降级？</span></nav><h1 tabindex="-1">Web Share API 使用时要处理哪些降级？</h1><p class="reading-summary">了解 navigator.share 的用户激活、安全上下文和平台支持边界，区分用户取消与真正失败，为分享按钮设计复制链接等降级方案。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>Web Share API 把标题、文字、链接或文件交给系统分享面板，由用户选择目标。</li>
-<li>页面不能指定分享对象，Promise 成功也不代表对方已收到。</li>
-<li>需要安全上下文和临时用户激活，应在点击时直接调用。</li>
-<li>能力检测后仍要处理错误，并提供复制链接等备用方案。</li>
+<li><code>navigator.share()</code> 打开系统分享面板，只能在安全上下文中、由用户点击等手势触发调用。</li>
+<li>移动端浏览器和部分桌面浏览器支持，桌面版 Firefox 等不支持，要先检测 <code>navigator.share</code> 是否存在。</li>
+<li>分享文件前用 <code>navigator.canShare({ files })</code> 检查，部分平台只支持分享链接和文本。</li>
+<li>用户关闭分享面板时 Promise 以 <code>AbortError</code> 拒绝，这不是错误，不应提示失败。</li>
+<li>不支持时降级为复制链接（<code>navigator.clipboard.writeText</code>），复制也失败时显示可选中的链接文本。</li>
 </ul>
-<p>Web Share API 让网页把标题、文字、链接或支持的文件交给系统分享面板，由用户选择目标应用。它不要求网页为每个社交平台维护一套跳转地址，但可用性仍取决于浏览器、系统与分享数据类型。</p>
-<p>页面不能指定用户必须分享到哪个联系人，也不能把分享 Promise 成功当作“对方已经收到并阅读”。不同平台完成 Promise 的时机也可能不同。</p>
-<h2>从用户点击直接触发</h2>
-<p>navigator.share 通常要求安全上下文、临时用户激活，并受 web-share Permissions Policy 等条件限制。页面加载后自动调用，或先等待一个很慢的请求再调用，都可能因缺少有效激活而失败。</p>
-<p>因此最好先准备好分享数据，用户点击后直接调用。文件生成较慢时，可先完成生成，再提供一个明确的“分享文件”按钮，而不是假设用户激活能无限保留。</p>
-<h2>能力检测之后仍需处理错误</h2>
-<p>下面约定 title 和 url 已由应用准备，url 是适合公开分享的地址；showFallback 用来展示可复制链接等界面，不自动执行剪贴板操作：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">bindShareButton</span>(<span class="hljs-params">button, { title, url, showFallback }</span>) {
-  <span class="hljs-keyword">let</span> sharing = <span class="hljs-literal">false</span>;
-  <span class="hljs-keyword">const</span> controller = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AbortController</span>();
-
-  button.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
-    <span class="hljs-keyword">if</span> (sharing) <span class="hljs-keyword">return</span>;
-    <span class="hljs-keyword">const</span> data = { title, url };
-    <span class="hljs-keyword">if</span> (!navigator.<span class="hljs-property">share</span> || (navigator.<span class="hljs-property">canShare</span> &amp;&amp; !navigator.<span class="hljs-title function_">canShare</span>(data))) {
-      <span class="hljs-title function_">showFallback</span>(url);
-      <span class="hljs-keyword">return</span>;
-    }
-
-    sharing = <span class="hljs-literal">true</span>;
+<h2>完整的分享按钮</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">share</span>(<span class="hljs-params">{ title, url }</span>) {
+  <span class="hljs-keyword">if</span> (navigator.<span class="hljs-property">share</span>) {
     <span class="hljs-keyword">try</span> {
-      <span class="hljs-keyword">await</span> navigator.<span class="hljs-title function_">share</span>(data);
+      <span class="hljs-keyword">await</span> navigator.<span class="hljs-title function_">share</span>({ title, url });
+      <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;shared&#x27;</span>;
     } <span class="hljs-keyword">catch</span> (error) {
-      <span class="hljs-keyword">if</span> (error?.<span class="hljs-property">name</span> !== <span class="hljs-string">&#x27;AbortError&#x27;</span>) <span class="hljs-title function_">showFallback</span>(url);
-    } <span class="hljs-keyword">finally</span> {
-      sharing = <span class="hljs-literal">false</span>;
+      <span class="hljs-keyword">if</span> (error.<span class="hljs-property">name</span> === <span class="hljs-string">&#x27;AbortError&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;cancelled&#x27;</span>;
+      <span class="hljs-comment">// 其他错误继续走降级</span>
     }
-  }, { <span class="hljs-attr">signal</span>: controller.<span class="hljs-property">signal</span> });
+  }
 
-  <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> controller.<span class="hljs-title function_">abort</span>();
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">await</span> navigator.<span class="hljs-property">clipboard</span>.<span class="hljs-title function_">writeText</span>(url);
+    <span class="hljs-title function_">showToast</span>(<span class="hljs-string">&#x27;链接已复制&#x27;</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;copied&#x27;</span>;
+  } <span class="hljs-keyword">catch</span> {
+    <span class="hljs-title function_">showLinkDialog</span>(url); <span class="hljs-comment">// 让用户手动复制</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;manual&#x27;</span>;
+  }
+}
+
+shareButton.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">share</span>({ <span class="hljs-attr">title</span>: <span class="hljs-variable language_">document</span>.<span class="hljs-property">title</span>, <span class="hljs-attr">url</span>: location.<span class="hljs-property">href</span> });
+});
+</code></pre></div>
+<ul>
+<li>调用必须直接发生在点击处理中。先 <code>await</code> 一个网络请求再调用 <code>share()</code>，用户激活可能已经失效，会抛 <code>NotAllowedError</code>。</li>
+<li>同一时间只能有一个分享面板，重复点击会抛 <code>InvalidStateError</code>，可以在分享期间禁用按钮。</li>
+</ul>
+<h2>分享文件</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> file = <span class="hljs-keyword">new</span> <span class="hljs-title class_">File</span>([blob], <span class="hljs-string">&#x27;poster.png&#x27;</span>, { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;image/png&#x27;</span> });
+
+<span class="hljs-keyword">if</span> (navigator.<span class="hljs-property">canShare</span>?.({ <span class="hljs-attr">files</span>: [file] })) {
+  <span class="hljs-keyword">await</span> navigator.<span class="hljs-title function_">share</span>({ <span class="hljs-attr">files</span>: [file], <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;活动海报&#x27;</span> });
+} <span class="hljs-keyword">else</span> {
+  <span class="hljs-title function_">downloadFile</span>(file);
 }
 </code></pre></div>
-<p>sharing 防止系统面板未结束时重复发起。AbortError 可能表示用户取消，也可能没有可用目标，不能简单当作严重错误并不断弹窗重试。</p>
-<p>移除监听只阻止之后的点击处理，不保证取消已经打开的系统面板。若组件在分享期间卸载，回调还可能继续完成，真实应用应避免对已销毁界面执行更新。</p>
-<h2>复制链接也是有条件的能力</h2>
-<p>navigator.clipboard.writeText 也可能要求安全上下文和相应授权。分享失败后再异步自动复制，原来的用户激活可能已经失效，而且用户取消分享不一定代表希望复制。</p>
-<p>更稳妥的降级是展示链接和明确的“复制”按钮，让用户重新触发；复制失败时仍提供可选中的文本。二维码适合跨设备使用，但也应保证链接可见并有适当替代说明。</p>
-<h2>文件分享要检查实际文件集合</h2>
-<p>有 navigator.share 不代表支持 files。分享文件前可使用 <code>navigator.canShare({ files })</code> 检查当前集合，文件类型和大小仍可能受平台或目标应用限制。</p>
-<p>canShare 返回 true 只表示数据在当前实现下可被接受，不保证用户最终选到目标，也不保证传输成功。无论检测结果如何，share 的拒绝都要处理。文件名、MIME 类型和内容应与实际文件一致，不要仅改后缀期待支持。</p>
-<h2>分享地址需要独立审核</h2>
-<p>location.href 可能包含一次性令牌、内部筛选状态或私人标识，不应不加判断地分享出去。通常由应用生成公开的规范链接，并确保接收者有权限看到相应内容。</p>
-<p>分享出去的链接也应能独立打开，而不是依赖当前页面内存中的临时状态。若内容本身需要授权，应让接收者走正常认证流程，而不是把当前用户凭证附在 URL 中。</p>
-<p>验收应覆盖支持和不支持的浏览器、取消、无目标、文件不支持、重复点击以及从目标应用返回。测试替身能验证分支和回调，但系统面板、分享目标与最终交接体验仍需要真实设备检查。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Share_API" target="_blank" rel="noreferrer">MDN · Web Share API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Web+Share+API+%E4%BD%BF%E7%94%A8%E6%97%B6%E8%A6%81%E5%A4%84%E7%90%86%E5%93%AA%E4%BA%9B%E9%99%8D%E7%BA%A7%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AWeb+Share+API+%E4%BD%BF%E7%94%A8%E6%97%B6%E8%A6%81%E5%A4%84%E7%90%86%E5%93%AA%E4%BA%9B%E9%99%8D%E7%BA%A7%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Amobile-web-share%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E4%B8%8E+PWA%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fmobile-web-share%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Web Share API 使用时要处理哪些降级？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/mobile-pointer-events/">Pointer Events 为什么适合统一鼠标、触摸和触控笔交互？</a></li><li><a href="/questions/mobile-virtual-keyboard/">移动端虚拟键盘出现时怎样避免布局被遮挡？</a></li><li><a href="/questions/mobile-safe-area/">移动端安全区域怎样避免内容被刘海和底部手势条遮挡？</a></li><li><a href="/questions/mobile-screen-orientation/">Screen Orientation API 的锁定和解锁有什么限制？</a></li></ul></nav></main></div></div>
+<p>允许分享的文件类型由浏览器决定，常见图片、PDF、文本一般支持。</p>
+<h2>安全与隐私</h2>
+<ul>
+<li>分享内容会交给用户选择的其他应用，不要在 URL 中带上会话令牌或个人信息。</li>
+<li>在 iframe 中调用需要父页面通过 <code>allow=&quot;web-share&quot;</code> 授权。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li>怎样让分享出去的链接显示标题和图片？这由目标应用抓取页面的 Open Graph 元信息决定，与 Web Share API 无关。</li>
+<li>可以接收别的应用分享过来的内容吗？安装后的 PWA 可以在 Manifest 中声明 <code>share_target</code>，目前主要在 Chromium 中支持。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Share_API" target="_blank" rel="noreferrer">MDN · Web Share API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Web+Share+API+%E4%BD%BF%E7%94%A8%E6%97%B6%E8%A6%81%E5%A4%84%E7%90%86%E5%93%AA%E4%BA%9B%E9%99%8D%E7%BA%A7%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AWeb+Share+API+%E4%BD%BF%E7%94%A8%E6%97%B6%E8%A6%81%E5%A4%84%E7%90%86%E5%93%AA%E4%BA%9B%E9%99%8D%E7%BA%A7%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Amobile-web-share%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E4%B8%8E+PWA%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fmobile-web-share%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Web Share API 使用时要处理哪些降级？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/mobile-pointer-events/">Pointer Events 为什么适合统一鼠标、触摸和触控笔交互？</a></li><li><a href="/questions/mobile-virtual-keyboard/">移动端虚拟键盘出现时怎样避免布局被遮挡？</a></li><li><a href="/questions/mobile-safe-area/">移动端安全区域怎样避免内容被刘海和底部手势条遮挡？</a></li><li><a href="/questions/mobile-screen-orientation/">Screen Orientation API 的锁定和解锁有什么限制？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

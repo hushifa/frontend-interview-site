@@ -23,34 +23,42 @@
     <meta property="og:url" content="https://fe.hushifa.top/questions/engineering-bundle-analysis/" />
     <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/engineering-bundle-analysis/#webpage","url":"https://fe.hushifa.top/questions/engineering-bundle-analysis/","name":"前端构建产物应该怎样分析体积？ · 前端知库","description":"工程化与性能面试题：产物分析要把文件大小、网络传输、解析执行和真实入口联系起来，找到不必要的提前加载、重复依赖和错误分块，再用同口径数据验证收益。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/engineering-bundle-analysis/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/engineering-bundle-analysis/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"工程化与性能面试题","item":"https://fe.hushifa.top/topics/engineering/"},{"@type":"ListItem","position":3,"name":"前端构建产物应该怎样分析体积？","item":"https://fe.hushifa.top/questions/engineering-bundle-analysis/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
     <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/engineering/">工程化与性能面试题</a><span aria-hidden="true">/</span><span aria-current="page">前端构建产物应该怎样分析体积？</span></nav><h1 tabindex="-1">前端构建产物应该怎样分析体积？</h1><p class="reading-summary">产物分析要把文件大小、网络传输、解析执行和真实入口联系起来，找到不必要的提前加载、重复依赖和错误分块，再用同口径数据验证收益。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>产物总体积变大不一定让首屏变慢，要看谁在什么时候付出下载、解析和执行成本。</li>
-<li>比较时统一口径：使用真实生产构建，区分原始体积、压缩后传输体积和执行耗时。</li>
-<li>从真实页面的入口和用户流程向下追踪初始请求的脚本和异步块。</li>
-<li>常见问题是入口静态导入了低频的大模块，或同一个库因版本或入口不同被打进多个 chunk。</li>
+<li>先看首屏入口实际加载了哪些 chunk，再看总产物大小；总大小对用户体验的意义有限。</li>
+<li>同时关注三个数字：原始大小（影响解析执行）、压缩后传输大小（影响下载）、请求数量。</li>
+<li>常见问题是：首屏引入了只在某个页面用到的大依赖、同一依赖被打包多份、分块太碎或太粗。</li>
+<li>优化后用同样的构建和测量方式对比，并在 CI 设置体积预算防止回退。</li>
 </ul>
-<h2>先问“谁在什么时候付出成本”</h2>
-<p><code>dist</code> 目录变大不一定意味着首屏变慢；一个很大的编辑器如果只在用户打开编辑页时加载，影响和首页立即执行的小脚本不同。反过来，文件传输很小，解析、编译和执行仍可能阻塞低端手机。</p>
-<p>因此分析不能只追求总 KB 数字，要同时看：当前入口请求了什么、压缩后传了多少、浏览器解析和执行多久、后续功能第一次打开要等多久、资源是否能被缓存复用。</p>
-<h2>先统一比较口径</h2>
-<table><thead><tr><th>口径</th><th>能回答</th><th>不能单独回答</th></tr></thead><tbody><tr><td>生成文件大小</td><td>产物占磁盘多少</td><td>用户实际传输和执行成本</td></tr><tr><td>gzip/Brotli 大小</td><td>特定压缩条件下传输多少</td><td>所有平台都使用同样压缩</td></tr><tr><td>Bundle 分析图</td><td>模块怎样进入 chunk</td><td>浏览器一定下载了几份</td></tr><tr><td>网络请求</td><td>当前流程拿到哪些资源</td><td>解析、执行和内存成本</td></tr></tbody></table>
-<p>开发构建、生产构建、Source Map 分析器和实际网络面板的体积口径可能不同。应使用真实生产配置和目标环境生成报告，并记录压缩方式、浏览器缓存、设备和网络条件。npm 包安装体积也不能直接当成浏览器包体积。</p>
-<h2>从入口和用户流程向下追踪</h2>
-<p>先选择一个真实页面，例如首页、题目详情或编辑器，再确认它初始请求的脚本和异步块。沿引用关系追踪“大模块为什么进入这个入口”，而不是看到最大的依赖就立即删除。</p>
-<p>常见发现包括：根入口静态导入了只在编辑页使用的编辑器；同一个库因为版本或入口不同被打进多个 chunk；完整语言包和图标包进入了只需要少量资源的页面；公共 chunk 把互不相关页面的依赖强行合并。分析图发现重复后，还要核对最终 chunk 内容和浏览器请求，避免把可视化中的引用重复误认为网络重复下载。</p>
-<h2>删除、分割和延后是不同动作</h2>
-<p>确认完全不使用的代码，可以删除依赖或修复 Tree shaking。确实需要但不在当前流程使用的代码，可以动态导入并在合适时机加载。已经在关键路径中的代码，则要减少数据、替换实现或降低执行成本。</p>
-<p>把模块移动到 <code>shared</code> 文件不会自动变小；把所有功能拆成大量小块又可能增加请求、调度和首次使用等待。懒加载后立即预加载所有块，也只是把成本从入口推迟几毫秒。优化必须比较首屏和后续交互的总体验。</p>
-<h2>分块与缓存要一起设计</h2>
-<p>内容哈希让未改变的资源可以长期复用，但一个包含很多频繁变化模块的公共 chunk 会因为小改动整体失效。分块边界要根据真实依赖和更新频率决定，而不是只追求文件名稳定。</p>
-<p>还要验证新旧版本资源同时存在时的行为，处理方式见“静态托管发布时为什么要检查资源路径和缓存？”中“HTML 和哈希资源需要配套缓存”一节。</p>
-<h2>预算应绑定产品流程</h2>
-<p>可以分别设置初始 JS、关键路由增量、低频功能首次加载、长任务和交互延迟预算。预算是变化的预警线，不是所有页面共用的神奇阈值。构建工具的大块警告只是线索，调高阈值不会减少用户成本。</p>
-<p>验证优化时要用同一生产配置、同一数据和相近设备网络，比较网络、解析执行、首屏内容和后续功能完成时间。最终报告应说明用户少下载了什么、少等待了什么、缓存复用了什么，以及是否把成本转移到了另一个流程，而不只是说分析图里的矩形变小了。</p></div><div class="answer-bottom"><a href="https://webpack.js.org/api/stats/" target="_blank" rel="noreferrer">webpack · Stats 数据<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E6%9E%84%E5%BB%BA%E4%BA%A7%E7%89%A9%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%88%86%E6%9E%90%E4%BD%93%E7%A7%AF%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E6%9E%84%E5%BB%BA%E4%BA%A7%E7%89%A9%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%88%86%E6%9E%90%E4%BD%93%E7%A7%AF%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aengineering-bundle-analysis%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%E4%B8%8E%E6%80%A7%E8%83%BD%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fengineering-bundle-analysis%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端构建产物应该怎样分析体积？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/engineering-treeshaking/">Tree shaking 如何工作？为什么有些代码无法移除？</a></li><li><a href="/questions/engineering-vitals/">LCP、INP、CLS 分别衡量什么？</a></li><li><a href="/questions/engineering-lazy/">代码分割与懒加载适合哪些场景？</a></li><li><a href="/questions/engineering-lockfile/">为什么需要提交 lockfile？npm ci 和 npm install 有何区别？</a></li></ul></nav></main></div></div>
+<h2>用什么工具看</h2>
+<ul>
+<li>webpack：输出 stats JSON（<code>--json</code>），用 webpack-bundle-analyzer 可视化。</li>
+<li>Vite / Rolldown：使用 rollup-plugin-visualizer 一类插件生成树图；<code>vite build</code> 的终端输出也会列出各 chunk 的大小和 gzip 大小。</li>
+<li>浏览器 DevTools 的 Network 面板和 Coverage 面板：看首屏真正请求了什么、加载后有多少代码没被执行。</li>
+</ul>
+<p>构建分析告诉你&quot;包里有什么&quot;，DevTools 告诉你&quot;用户实际下载和执行了什么&quot;，两者要结合。</p>
+<h2>按顺序排查</h2>
+<ol>
+<li><strong>首屏入口</strong>：入口 chunk 和它同步依赖的 chunk 加起来有多大？里面有没有只在弹窗、图表、编辑器里才用的库？这些应改为动态导入。</li>
+<li><strong>大依赖</strong>：日期库、图标库、工具库是否整包引入？换成按需导入或更小的替代品。检查是否命中了 CommonJS 版本导致 tree shaking 失效。</li>
+<li><strong>重复依赖</strong>：同一个包的多个版本（如两个 lodash）同时出现，通常来自依赖的版本范围不一致，可以用包管理器的去重或 overrides 解决。</li>
+<li><strong>分块策略</strong>：变化频繁的业务代码和稳定的第三方库分开，利于缓存；但把所有第三方库合成一个巨大的 vendor 块，会让每个页面都下载用不到的库。</li>
+<li><strong>非 JS 资源</strong>：内联进 JS 的图片、字体、大型 JSON 也会增加脚本体积。</li>
+</ol>
+<h2>衡量收益</h2>
+<ul>
+<li>固定比较口径：同一构建模式、同样的压缩方式、同一个入口。</li>
+<li>关注用户指标：LCP、INP 和首屏 JS 执行时间，而不是只看文件变小了多少 KB。</li>
+<li>在 CI 中设置预算，例如入口 JS gzip 后不超过某个值，超出时构建失败或给出警告。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li>gzip 后很小，还需要优化吗？需要。浏览器要解压后解析和执行原始代码，低端手机上这部分耗时常常超过下载。</li>
+<li>分块越细越好吗？不是。请求过多会增加调度开销，HTTP/2 下也一样有成本，应以页面和功能边界分块。</li>
+</ul></div><div class="answer-bottom"><a href="https://webpack.js.org/api/stats/" target="_blank" rel="noreferrer">webpack · Stats 数据<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E6%9E%84%E5%BB%BA%E4%BA%A7%E7%89%A9%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%88%86%E6%9E%90%E4%BD%93%E7%A7%AF%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E6%9E%84%E5%BB%BA%E4%BA%A7%E7%89%A9%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%88%86%E6%9E%90%E4%BD%93%E7%A7%AF%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aengineering-bundle-analysis%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%E4%B8%8E%E6%80%A7%E8%83%BD%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fengineering-bundle-analysis%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端构建产物应该怎样分析体积？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/engineering-treeshaking/">Tree shaking 如何工作？为什么有些代码无法移除？</a></li><li><a href="/questions/engineering-vitals/">LCP、INP、CLS 分别衡量什么？</a></li><li><a href="/questions/engineering-lazy/">代码分割与懒加载适合哪些场景？</a></li><li><a href="/questions/engineering-lockfile/">为什么需要提交 lockfile？npm ci 和 npm install 有何区别？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

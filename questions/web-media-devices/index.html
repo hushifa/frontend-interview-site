@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Web API面试题：理解摄像头、麦克风权限、设备约束、MediaStreamTrack 停止和安全上下文要求。" />
+    <meta name="description" content="Web API面试题：getUserMedia 在安全上下文中请求摄像头或麦克风，返回 MediaStream；要区分权限拒绝、设备不存在和设备被占用等错误，不用时对每条轨道调用 stop() 释放设备，指示灯才会熄灭。" />
     <title>MediaDevices.getUserMedia 的权限和资源生命周期怎样处理？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/web-media-devices/" />
     <meta name="robots" content="index,follow" />
@@ -19,76 +19,60 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="MediaDevices.getUserMedia 的权限和资源生命周期怎样处理？ · 前端知库" />
-    <meta property="og:description" content="Web API面试题：理解摄像头、麦克风权限、设备约束、MediaStreamTrack 停止和安全上下文要求。" />
+    <meta property="og:description" content="Web API面试题：getUserMedia 在安全上下文中请求摄像头或麦克风，返回 MediaStream；要区分权限拒绝、设备不存在和设备被占用等错误，不用时对每条轨道调用 stop() 释放设备，指示灯才会熄灭。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/web-media-devices/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/web-media-devices/#webpage","url":"https://fe.hushifa.top/questions/web-media-devices/","name":"MediaDevices.getUserMedia 的权限和资源生命周期怎样处理？ · 前端知库","description":"Web API面试题：理解摄像头、麦克风权限、设备约束、MediaStreamTrack 停止和安全上下文要求。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/web-media-devices/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/web-media-devices/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Web API面试题","item":"https://fe.hushifa.top/topics/web-apis/"},{"@type":"ListItem","position":3,"name":"MediaDevices.getUserMedia 的权限和资源生命周期怎样处理？","item":"https://fe.hushifa.top/questions/web-media-devices/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/web-media-devices/#webpage","url":"https://fe.hushifa.top/questions/web-media-devices/","name":"MediaDevices.getUserMedia 的权限和资源生命周期怎样处理？ · 前端知库","description":"Web API面试题：getUserMedia 在安全上下文中请求摄像头或麦克风，返回 MediaStream；要区分权限拒绝、设备不存在和设备被占用等错误，不用时对每条轨道调用 stop() 释放设备，指示灯才会熄灭。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/web-media-devices/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/web-media-devices/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Web API面试题","item":"https://fe.hushifa.top/topics/web-apis/"},{"@type":"ListItem","position":3,"name":"MediaDevices.getUserMedia 的权限和资源生命周期怎样处理？","item":"https://fe.hushifa.top/questions/web-media-devices/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/web-apis/">Web API面试题</a><span aria-hidden="true">/</span><span aria-current="page">MediaDevices.getUserMedia 的权限和资源生命周期怎样处理？</span></nav><h1 tabindex="-1">MediaDevices.getUserMedia 的权限和资源生命周期怎样处理？</h1><p class="reading-summary">理解摄像头、麦克风权限、设备约束、MediaStreamTrack 停止和安全上下文要求。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/web-apis/">Web API面试题</a><span aria-hidden="true">/</span><span aria-current="page">MediaDevices.getUserMedia 的权限和资源生命周期怎样处理？</span></nav><h1 tabindex="-1">MediaDevices.getUserMedia 的权限和资源生命周期怎样处理？</h1><p class="reading-summary">getUserMedia 在安全上下文中请求摄像头或麦克风，返回 MediaStream；要区分权限拒绝、设备不存在和设备被占用等错误，不用时对每条轨道调用 stop() 释放设备，指示灯才会熄灭。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>getUserMedia 需要安全上下文和用户授权，权限请求可能一直没有结果。</li>
-<li>约束可以表达偏好（ideal）或硬性要求（exact）。</li>
-<li>预览播放可能单独失败；静音、停止 track 和设备断开是三种不同状态。</li>
-<li>结束时要对每个 MediaStreamTrack 调用 stop；采集授权不等于用户同意上传。</li>
+<li><code>navigator.mediaDevices.getUserMedia({ video, audio })</code> 只在安全上下文中可用，首次调用会弹出授权框。</li>
+<li>常见错误：<code>NotAllowedError</code> 用户或策略拒绝，<code>NotFoundError</code> 没有对应设备，<code>NotReadableError</code> 设备被其他程序占用，<code>OverconstrainedError</code> 约束无法满足。</li>
+<li>停止使用时调用 <code>stream.getTracks().forEach((t) =&gt; t.stop())</code>，只把 <code>video.srcObject</code> 置空不会释放摄像头。</li>
+<li><code>enumerateDevices()</code> 列出设备，授权前设备的 <code>label</code> 是空字符串。</li>
+<li>设备插拔时触发 <code>devicechange</code> 事件。</li>
 </ul>
-<p>getUserMedia 请求摄像头或麦克风，并返回包含媒体轨道的 MediaStream。它负责取得采集源，不会自动把音视频上传，也不等于已经开始录制或建立通话。</p>
-<p>应用要分别管理授权、采集、预览、录制或传输，以及结束时的轨道释放。只把 video 元素从 DOM 删除，并不能替代停止采集。</p>
-<h2>约束包含偏好与硬要求</h2>
-<p><code>{ video: true, audio: false }</code> 请求视频而不请求音频。更详细的约束可以指定分辨率、朝向或设备 ID，ideal 表达偏好，exact、min、max 等可能构成必须满足的条件。</p>
-<p>如果硬性要求某个设备或分辨率，而当前环境没有满足条件的轨道，可能得到 OverconstrainedError。普通用户预览通常适合先表达偏好，再读取 track.getSettings 查看实际结果，而不是用一组过严约束排除大量设备。</p>
-<p>浏览器需要安全上下文与相应权限；iframe 还可能受策略限制。NotAllowedError 不一定是用户刚刚拒绝，也可能来自上下文限制；NotFoundError、NotReadableError 等则帮助区分设备缺失与读取问题。</p>
-<h2>权限请求可能一直没有结果</h2>
-<p>用户可以不处理权限提示，因此 Promise 可能长期 pending。标准 getUserMedia 没有一个可通用依赖的 AbortSignal 取消参数。</p>
-<p>如果用户已经关闭预览界面，之后才批准权限，应用仍可能拿到 stream。必须识别这个结果已经过期，并立即停止它，不能让隐藏页面继续采集。</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">createCameraSession</span>(<span class="hljs-params">onStream, onError</span>) {
-  <span class="hljs-keyword">let</span> stopped = <span class="hljs-literal">false</span>;
-  <span class="hljs-keyword">let</span> stream = <span class="hljs-literal">null</span>;
-  <span class="hljs-keyword">let</span> started = <span class="hljs-literal">false</span>;
-
-  <span class="hljs-keyword">function</span> <span class="hljs-title function_">stop</span>(<span class="hljs-params"></span>) {
-    stopped = <span class="hljs-literal">true</span>;
-    stream?.<span class="hljs-title function_">getTracks</span>().<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">track</span>) =&gt;</span> track.<span class="hljs-title function_">stop</span>());
-    stream = <span class="hljs-literal">null</span>;
-  }
-
-  <span class="hljs-keyword">return</span> {
-    <span class="hljs-keyword">async</span> <span class="hljs-title function_">start</span>(<span class="hljs-params"></span>) {
-      <span class="hljs-keyword">if</span> (started || stopped) <span class="hljs-keyword">return</span>;
-      started = <span class="hljs-literal">true</span>;
-      <span class="hljs-keyword">try</span> {
-        <span class="hljs-keyword">const</span> acquired = <span class="hljs-keyword">await</span> navigator.<span class="hljs-property">mediaDevices</span>.<span class="hljs-title function_">getUserMedia</span>({
-          <span class="hljs-attr">video</span>: { <span class="hljs-attr">facingMode</span>: { <span class="hljs-attr">ideal</span>: <span class="hljs-string">&#x27;user&#x27;</span> } },
-          <span class="hljs-attr">audio</span>: <span class="hljs-literal">false</span>,
-        });
-        <span class="hljs-keyword">if</span> (stopped) {
-          acquired.<span class="hljs-title function_">getTracks</span>().<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">track</span>) =&gt;</span> track.<span class="hljs-title function_">stop</span>());
-          <span class="hljs-keyword">return</span>;
-        }
-        stream = acquired;
-        <span class="hljs-title function_">onStream</span>(stream);
-      } <span class="hljs-keyword">catch</span> (error) {
-        <span class="hljs-keyword">if</span> (stopped) <span class="hljs-keyword">return</span>;
-        <span class="hljs-title function_">stop</span>();
-        <span class="hljs-title function_">onError</span>(error);
-      }
-    },
-    stop,
+<h2>示例</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">startCamera</span>(<span class="hljs-params">video, deviceId</span>) {
+  <span class="hljs-keyword">const</span> stream = <span class="hljs-keyword">await</span> navigator.<span class="hljs-property">mediaDevices</span>.<span class="hljs-title function_">getUserMedia</span>({
+    <span class="hljs-attr">video</span>: deviceId ? { <span class="hljs-attr">deviceId</span>: { <span class="hljs-attr">exact</span>: deviceId } } : { <span class="hljs-attr">width</span>: { <span class="hljs-attr">ideal</span>: <span class="hljs-number">1280</span> }, <span class="hljs-attr">facingMode</span>: <span class="hljs-string">&#x27;user&#x27;</span> },
+    <span class="hljs-attr">audio</span>: <span class="hljs-literal">false</span>,
+  });
+  video.<span class="hljs-property">srcObject</span> = stream;
+  <span class="hljs-keyword">await</span> video.<span class="hljs-title function_">play</span>();
+  <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
+    stream.<span class="hljs-title function_">getTracks</span>().<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">track</span>) =&gt;</span> track.<span class="hljs-title function_">stop</span>());
+    video.<span class="hljs-property">srcObject</span> = <span class="hljs-literal">null</span>;
   };
 }
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">describeError</span>(<span class="hljs-params">error</span>) {
+  <span class="hljs-keyword">switch</span> (error.<span class="hljs-property">name</span>) {
+    <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;NotAllowedError&#x27;</span>:
+      <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;摄像头权限被拒绝，请在浏览器设置中允许&#x27;</span>;
+    <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;NotFoundError&#x27;</span>:
+      <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;没有找到摄像头&#x27;</span>;
+    <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;NotReadableError&#x27;</span>:
+      <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;摄像头正在被其他程序使用&#x27;</span>;
+    <span class="hljs-attr">default</span>:
+      <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;无法打开摄像头&#x27;</span>;
+  }
+}
 </code></pre></div>
-<p>这是单次会话辅助函数；重试可创建新会话。调用前应检测相关能力，onError 应避免在组件已卸载时更新界面。stop 不能关闭浏览器仍显示的权限提示，它负责已有轨道和迟到结果的处理。</p>
-<h2>预览与播放也可能单独失败</h2>
-<p>取得 stream 后，常用 <code>video.srcObject = stream</code> 预览。移动端可根据需求设置 playsInline，本地预览通常静音以避免回声；video.play 返回的 Promise 仍可能因播放策略失败。</p>
-<p>预览失败不能意味着忽略 stream：界面若放弃使用，应停止所有轨道并清空 srcObject。否则用户看不到画面，但设备仍可能保持采集。</p>
-<h2>静音、停止与断开设备不同</h2>
-<p>把 track.enabled 设为 false 常用于临时静音或关闭输出内容，并不等同于永久释放该轨道。track.stop 会结束当前轨道的使用，之后不能把它重新启用当成新采集。</p>
-<p>同一个底层源可能被其他轨道或标签页使用，所以停止一条轨道不保证系统设备指示灯立刻全部熄灭。应用应停止自己拥有的所有不再需要轨道，但不能承诺控制其他使用者。</p>
-<p>还应监听设备相关状态变化，例如轨道因外部原因结束，并在切换设备时释放旧轨道。自己调用 stop 时，不能依赖一定触发 ended 事件来执行全部清理。</p>
-<h2>采集授权不等于上传同意或业务授权</h2>
-<p>若要录制可使用对应录制方案，通话则涉及 WebRTC，帧处理可能接入 Canvas 或其他管道。每条后续链路都需要停止与清理，不能只关预览却保留上传任务。</p>
-<p>界面应说明正在采集什么、是否发送给别人，并提供明确停止入口。真实验收覆盖拒绝、迟到批准、设备占用、拔出、切换以及前后台行为；测试替身可以验证生命周期逻辑，但不能证明相机、麦克风与系统权限体验正常。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia" target="_blank" rel="noreferrer">MDN · MediaDevices.getUserMedia()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+MediaDevices.getUserMedia+%E7%9A%84%E6%9D%83%E9%99%90%E5%92%8C%E8%B5%84%E6%BA%90%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%80%8E%E6%A0%B7%E5%A4%84%E7%90%86%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AMediaDevices.getUserMedia+%E7%9A%84%E6%9D%83%E9%99%90%E5%92%8C%E8%B5%84%E6%BA%90%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%80%8E%E6%A0%B7%E5%A4%84%E7%90%86%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aweb-media-devices%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AWeb+API%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fweb-media-devices%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：MediaDevices.getUserMedia 的权限和资源生命周期怎样处理？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/api-abort/">AbortController 能取消什么，不能取消什么？</a></li><li><a href="/questions/api-web-components/">Custom Elements、Shadow DOM 和 template 分别负责什么？</a></li><li><a href="/questions/api-files/">File、Blob 和 object URL 怎样用于文件预览？</a></li><li><a href="/questions/api-readable-streams/">怎样正确消费 Fetch 返回的 ReadableStream？</a></li></ul></nav></main></div></div>
+<ul>
+<li><code>ideal</code> 是期望值，满足不了时浏览器选最接近的；<code>exact</code> 必须满足，否则抛 <code>OverconstrainedError</code>。</li>
+<li><code>&lt;video&gt;</code> 要加 <code>playsinline</code> 和 <code>muted</code>（播放本地预览时），iOS 才不会强制全屏，并允许自动播放。</li>
+</ul>
+<h2>生命周期</h2>
+<ul>
+<li>页面切到后台时，移动端系统可能暂停摄像头，轨道触发 <code>mute</code> 事件；回到前台后触发 <code>unmute</code>。</li>
+<li>轨道被系统或用户停止时触发 <code>ended</code> 事件，界面应更新状态并允许重新开启。</li>
+<li>SPA 中切换路由时一定要调用停止函数，否则摄像头指示灯一直亮着。</li>
+</ul>
+<h2>屏幕共享</h2>
+<p><code>navigator.mediaDevices.getDisplayMedia()</code> 获取屏幕或窗口画面，必须由用户手势触发，每次都会显示选择界面，不能记住授权。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia" target="_blank" rel="noreferrer">MDN · MediaDevices.getUserMedia()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+MediaDevices.getUserMedia+%E7%9A%84%E6%9D%83%E9%99%90%E5%92%8C%E8%B5%84%E6%BA%90%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%80%8E%E6%A0%B7%E5%A4%84%E7%90%86%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AMediaDevices.getUserMedia+%E7%9A%84%E6%9D%83%E9%99%90%E5%92%8C%E8%B5%84%E6%BA%90%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E6%80%8E%E6%A0%B7%E5%A4%84%E7%90%86%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aweb-media-devices%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AWeb+API%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fweb-media-devices%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：MediaDevices.getUserMedia 的权限和资源生命周期怎样处理？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/api-abort/">AbortController 能取消什么，不能取消什么？</a></li><li><a href="/questions/api-web-components/">Custom Elements、Shadow DOM 和 template 分别负责什么？</a></li><li><a href="/questions/api-files/">File、Blob 和 object URL 怎样用于文件预览？</a></li><li><a href="/questions/api-readable-streams/">怎样正确消费 Fetch 返回的 ReadableStream？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

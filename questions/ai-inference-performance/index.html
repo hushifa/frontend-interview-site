@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="AI 应用前端面试题：用户等待的是下载、初始化、预处理、推理、后处理和界面更新的总时间。WebGPU 与 Worker 只优化其中一部分，模型复用、数据传输、内存和任务队列同样决定体验。" />
+    <meta name="description" content="AI 应用前端面试题：用户等待的是下载、初始化、预处理、推理、后处理和渲染的总和。Worker 只让主线程不被阻塞，WebGPU 只加速部分算子；会话复用、数据拷贝、任务队列和量化取舍同样决定体验。" />
     <title>浏览器端 AI 为什么用了 WebGPU 或 Worker 仍可能卡顿？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/ai-inference-performance/" />
     <meta name="robots" content="index,follow" />
@@ -19,52 +19,55 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="浏览器端 AI 为什么用了 WebGPU 或 Worker 仍可能卡顿？ · 前端知库" />
-    <meta property="og:description" content="AI 应用前端面试题：用户等待的是下载、初始化、预处理、推理、后处理和界面更新的总时间。WebGPU 与 Worker 只优化其中一部分，模型复用、数据传输、内存和任务队列同样决定体验。" />
+    <meta property="og:description" content="AI 应用前端面试题：用户等待的是下载、初始化、预处理、推理、后处理和渲染的总和。Worker 只让主线程不被阻塞，WebGPU 只加速部分算子；会话复用、数据拷贝、任务队列和量化取舍同样决定体验。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/ai-inference-performance/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ai-inference-performance/#webpage","url":"https://fe.hushifa.top/questions/ai-inference-performance/","name":"浏览器端 AI 为什么用了 WebGPU 或 Worker 仍可能卡顿？ · 前端知库","description":"AI 应用前端面试题：用户等待的是下载、初始化、预处理、推理、后处理和界面更新的总时间。WebGPU 与 Worker 只优化其中一部分，模型复用、数据传输、内存和任务队列同样决定体验。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ai-inference-performance/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ai-inference-performance/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"AI 应用前端面试题","item":"https://fe.hushifa.top/topics/ai-frontend/"},{"@type":"ListItem","position":3,"name":"浏览器端 AI 为什么用了 WebGPU 或 Worker 仍可能卡顿？","item":"https://fe.hushifa.top/questions/ai-inference-performance/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ai-inference-performance/#webpage","url":"https://fe.hushifa.top/questions/ai-inference-performance/","name":"浏览器端 AI 为什么用了 WebGPU 或 Worker 仍可能卡顿？ · 前端知库","description":"AI 应用前端面试题：用户等待的是下载、初始化、预处理、推理、后处理和渲染的总和。Worker 只让主线程不被阻塞，WebGPU 只加速部分算子；会话复用、数据拷贝、任务队列和量化取舍同样决定体验。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ai-inference-performance/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ai-inference-performance/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"AI 应用前端面试题","item":"https://fe.hushifa.top/topics/ai-frontend/"},{"@type":"ListItem","position":3,"name":"浏览器端 AI 为什么用了 WebGPU 或 Worker 仍可能卡顿？","item":"https://fe.hushifa.top/questions/ai-inference-performance/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/ai-frontend/">AI 应用前端面试题</a><span aria-hidden="true">/</span><span aria-current="page">浏览器端 AI 为什么用了 WebGPU 或 Worker 仍可能卡顿？</span></nav><h1 tabindex="-1">浏览器端 AI 为什么用了 WebGPU 或 Worker 仍可能卡顿？</h1><p class="reading-summary">用户等待的是下载、初始化、预处理、推理、后处理和界面更新的总时间。WebGPU 与 Worker 只优化其中一部分，模型复用、数据传输、内存和任务队列同样决定体验。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/ai-frontend/">AI 应用前端面试题</a><span aria-hidden="true">/</span><span aria-current="page">浏览器端 AI 为什么用了 WebGPU 或 Worker 仍可能卡顿？</span></nav><h1 tabindex="-1">浏览器端 AI 为什么用了 WebGPU 或 Worker 仍可能卡顿？</h1><p class="reading-summary">用户等待的是下载、初始化、预处理、推理、后处理和渲染的总和。Worker 只让主线程不被阻塞，WebGPU 只加速部分算子；会话复用、数据拷贝、任务队列和量化取舍同样决定体验。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>用户等待的是下载、初始化、预处理、推理、后处理和渲染的总时间。</li>
-<li>Worker 主要改善主线程响应，不保证总耗时下降。</li>
-<li>GPU 和量化都不会自动让所有设备变快，还要看算子支持和质量影响。</li>
-<li>连续输入时优先处理最新任务，用分阶段数据定位真正的瓶颈。</li>
+<li>先分阶段计时：下载、初始化、预处理、推理、后处理、渲染。瓶颈常常不在推理本身。</li>
+<li>Worker 解决的是主线程卡顿，消息传递和数据拷贝还会增加少量总耗时。大数组用 Transferable 转移所有权可以避免拷贝。</li>
+<li>WebGPU 只加速它支持的算子。算子回退 CPU、中间结果频繁读回、任务太小，都可能让它比 WASM 还慢。</li>
+<li>量化缩小体积，但速度取决于后端是否高效支持该精度，还可能降低质量，要用真实样本验证。</li>
+<li>连续输入时只保留最新任务，过期任务取消或丢弃，避免排队和设备争用。</li>
 </ul>
-<h2>先测完整用户流程</h2>
-<p>一次浏览器端推理通常包含模型下载、权重解码、运行时初始化、输入预处理、推理、输出转换和界面渲染。即使核心算子只用 30ms，如果每次输入都重新创建会话、复制几百 MB 数据或重新编译 GPU 管线，用户仍然会等待很久。</p>
-<p>性能报告至少要区分：首次可用时间、模型已经就绪后的单次延迟、首个结果时间和完整结果时间。网络缓存、模型缓存、会话复用和运行时内部缓存不是同一种缓存，换设备、清理存储或升级模型后，冷启动成本会重新出现。</p>
-<h2>Worker 主要改善主线程响应</h2>
-<p>把预处理和推理放进 Worker，目标通常是让输入、滚动和绘制少被长任务阻塞，不保证总耗时一定下降。Worker 启动、消息序列化、结果传回和内存复制都可能增加时间。</p>
-<p>大数组可以评估 transferables 或共享缓冲区，但转移后发送方失去那块内存的所有权，不能继续按原对象使用。每次请求创建 Worker、加载模型并立即销毁，也会丢失初始化复用收益；更常见的做法是复用有上限的 Worker，并用队列控制任务。</p>
-<h2>GPU 不是把所有工作自动变快</h2>
-<p>算子支持、张量形状、精度、驱动和显存会决定运行时能否留在 GPU。部分算子落回 CPU、频繁把中间结果读回、任务太小或 GPU 与页面绘制争用，都可能抵消收益。</p>
-<p>应尽量让连续计算的数据留在适合的设备侧，减少不必要往返，但不能只因为数据类型标记为 GPU 就假设复制消失。浏览器中的推理还可能与 Canvas、WebGL 或 WebGPU 绘制争用设备，持续高负载会影响帧率、温度和电量。</p>
-<h2>缩小模型要同时看速度和质量</h2>
-<p>量化可以减少权重体积和部分内存，但实际速度取决于后端是否有高效支持。模型文件更小，不代表每台设备都更快；量化还可能影响准确率、长文本、边缘输入和生成稳定性。</p>
-<p>应使用真实任务样本比较质量、首 Token、总生成时间、内存峰值和下载成本。对生成模型，输入上下文越长会增加预填充和 KV cache，占用；输出越长会增加持续解码。只看每秒 Token 会忽略首结果等待，只看首 Token 又会忽略长回答总时间。</p>
-<h2>队列要优先服务最新有效任务</h2>
-<p>用户连续输入时，无限并发会增加内存和设备争用。搜索建议、实时摘要等场景通常可以取消或丢弃过期任务：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">let</span> running;
-<span class="hljs-keyword">let</span> version = <span class="hljs-number">0</span>;
+<h2>常见的慢在哪里</h2>
+<table><thead><tr><th>现象</th><th>常见原因</th></tr></thead><tbody><tr><td>每次推理都慢</td><td>每次都重新创建会话或 Worker</td></tr><tr><td>首次特别慢、之后正常</td><td>权重下载和 GPU 着色器编译，属于冷启动成本</td></tr><tr><td>推理快但界面卡</td><td>后处理或大量 DOM 更新在主线程</td></tr><tr><td>GPU 比 CPU 还慢</td><td>算子回退、张量在 CPU 和 GPU 之间来回复制、批量太小</td></tr><tr><td>越用越慢</td><td>张量、会话、图像对象没有释放</td></tr></tbody></table>
+<p>生成模型还要分开看两个指标：首 token 时间主要由输入长度决定（预填充），总时间还取决于输出长度（逐 token 解码）。只看每秒 token 数会忽略首字等待。</p>
+<h2>只处理最新任务</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">let</span> current = <span class="hljs-literal">null</span>;
 
 <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">inferLatest</span>(<span class="hljs-params">input</span>) {
-  running?.<span class="hljs-title function_">abort</span>();
+  current?.<span class="hljs-title function_">abort</span>();
   <span class="hljs-keyword">const</span> controller = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AbortController</span>();
-  running = controller;
-  <span class="hljs-keyword">const</span> current = ++version;
+  current = controller;
 
-  <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> inferenceWorker.<span class="hljs-title function_">run</span>(input, controller.<span class="hljs-property">signal</span>);
-  <span class="hljs-keyword">if</span> (current !== version || controller.<span class="hljs-property">signal</span>.<span class="hljs-property">aborted</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
-  <span class="hljs-keyword">return</span> result;
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> inferenceWorker.<span class="hljs-title function_">run</span>(input, controller.<span class="hljs-property">signal</span>);
+    <span class="hljs-keyword">return</span> controller.<span class="hljs-property">signal</span>.<span class="hljs-property">aborted</span> ? <span class="hljs-literal">null</span> : result;
+  } <span class="hljs-keyword">catch</span> (error) {
+    <span class="hljs-keyword">if</span> (controller.<span class="hljs-property">signal</span>.<span class="hljs-property">aborted</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; <span class="hljs-comment">// 被新任务取代，不算错误</span>
+    <span class="hljs-keyword">throw</span> error;
+  }
 }
 </code></pre></div>
-<p>取消 Promise 不一定能立即停止 GPU 内核；运行时可能只在阶段边界检查信号。界面要允许这段延迟，避免用户以为取消已经释放全部资源。模型会话、输出张量、图像、Worker 和 GPU 对象也要在不再使用时释放，否则越用越慢可能被误认为模型性能下降。</p>
-<h2>用阶段数据定位真正瓶颈</h2>
-<p>记录下载、初始化、预处理、推理、后处理和渲染各阶段，以及输入规模、设备、后端、内存峰值、主线程长任务和缓存条件。比较同一设备和同一任务，不要拿高端桌面冷启动与低端手机热运行混在一起。</p>
-<p>最终优化目标是用户完成任务的等待减少，同时没有用质量下降、流量上升、电量消耗或首屏变慢来交换。WebGPU 和 Worker 是工具，不是完整的性能方案。</p></div><div class="answer-bottom"><a href="https://onnxruntime.ai/docs/tutorials/web/performance-diagnosis.html" target="_blank" rel="noreferrer">ONNX Runtime Web · 性能诊断<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%B5%8F%E8%A7%88%E5%99%A8%E7%AB%AF+AI+%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8%E4%BA%86+WebGPU+%E6%88%96+Worker+%E4%BB%8D%E5%8F%AF%E8%83%BD%E5%8D%A1%E9%A1%BF%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E7%AB%AF+AI+%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8%E4%BA%86+WebGPU+%E6%88%96+Worker+%E4%BB%8D%E5%8F%AF%E8%83%BD%E5%8D%A1%E9%A1%BF%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aai-inference-performance%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AAI+%E5%BA%94%E7%94%A8%E5%89%8D%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fai-inference-performance%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：浏览器端 AI 为什么用了 WebGPU 或 Worker 仍可能卡顿？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ai-client-server-boundary/">AI 对话前端为什么不能直接内置服务商 API 密钥？</a></li><li><a href="/questions/ai-stream-protocol/">AI 流式响应为什么不能每收到一块就 JSON.parse？</a></li><li><a href="/questions/ai-chat-state/">AI 聊天界面为什么不能只有 loading 一个状态？</a></li><li><a href="/questions/ai-cancel-generation/">点击“停止生成”后，服务端一定停止调用模型吗？</a></li></ul></nav></main></div></div>
+<p>运行时通常只在阶段之间检查取消信号，已经提交给 GPU 的计算会跑完。所以取消后资源不会立刻释放，界面不必等待它。</p>
+<h2>Worker 与数据传递</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 主线程：转移 ArrayBuffer 的所有权，避免复制</span>
+worker.<span class="hljs-title function_">postMessage</span>({ <span class="hljs-attr">pixels</span>: buffer }, [buffer]);
+<span class="hljs-comment">// 之后 buffer.byteLength 变为 0，主线程不能再使用它</span>
+</code></pre></div>
+<p>Worker 和会话都应常驻复用，用有上限的队列控制并发。</p>
+<h2>验证优化是否有效</h2>
+<p>在同一台设备、同样的缓存条件下对比各阶段耗时，同时记录内存峰值、主线程长任务和输出质量。用高端桌面机的热启动数据去推断低端手机的冷启动表现，结论通常不成立。</p>
+<h2>常见追问</h2>
+<ul>
+<li><strong>SharedArrayBuffer 能用来共享张量吗？</strong> 可以，但页面要启用跨源隔离（COOP 和 COEP），并且自己处理读写同步。</li>
+<li><strong>能不能让 GPU 同时渲染页面和推理？</strong> 可以，但会争用同一块 GPU，推理负载高时动画帧率可能下降。</li>
+</ul></div><div class="answer-bottom"><a href="https://onnxruntime.ai/docs/tutorials/web/performance-diagnosis.html" target="_blank" rel="noreferrer">ONNX Runtime Web · 性能诊断<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%B5%8F%E8%A7%88%E5%99%A8%E7%AB%AF+AI+%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8%E4%BA%86+WebGPU+%E6%88%96+Worker+%E4%BB%8D%E5%8F%AF%E8%83%BD%E5%8D%A1%E9%A1%BF%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E7%AB%AF+AI+%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8%E4%BA%86+WebGPU+%E6%88%96+Worker+%E4%BB%8D%E5%8F%AF%E8%83%BD%E5%8D%A1%E9%A1%BF%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aai-inference-performance%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AAI+%E5%BA%94%E7%94%A8%E5%89%8D%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fai-inference-performance%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：浏览器端 AI 为什么用了 WebGPU 或 Worker 仍可能卡顿？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ai-client-server-boundary/">AI 对话前端为什么不能直接内置服务商 API 密钥？</a></li><li><a href="/questions/ai-stream-protocol/">AI 流式响应为什么不能每收到一块就 JSON.parse？</a></li><li><a href="/questions/ai-chat-state/">AI 聊天界面为什么不能只有 loading 一个状态？</a></li><li><a href="/questions/ai-cancel-generation/">点击“停止生成”后，服务端一定停止调用模型吗？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

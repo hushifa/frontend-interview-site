@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="图形与可视化面试题：用 Path2D、isPointInPath 和坐标转换判断点击图形，理解绘制像素和交互区域不是同一件事。" />
+    <meta name="description" content="图形与可视化面试题：Canvas 只有一个 DOM 元素，点中了哪个图形要应用自己判断。用 Path2D 让绘制和命中共用同一份几何，统一坐标系后用 isPointInPath 检测，重叠时从最上层往下找，对象多时先用包围盒或空间索引粗筛。" />
     <title>Canvas 图形命中测试应该怎样实现？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/graphics-canvas-hit-test/" />
     <meta name="robots" content="index,follow" />
@@ -19,52 +19,74 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Canvas 图形命中测试应该怎样实现？ · 前端知库" />
-    <meta property="og:description" content="图形与可视化面试题：用 Path2D、isPointInPath 和坐标转换判断点击图形，理解绘制像素和交互区域不是同一件事。" />
+    <meta property="og:description" content="图形与可视化面试题：Canvas 只有一个 DOM 元素，点中了哪个图形要应用自己判断。用 Path2D 让绘制和命中共用同一份几何，统一坐标系后用 isPointInPath 检测，重叠时从最上层往下找，对象多时先用包围盒或空间索引粗筛。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/graphics-canvas-hit-test/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/graphics-canvas-hit-test/#webpage","url":"https://fe.hushifa.top/questions/graphics-canvas-hit-test/","name":"Canvas 图形命中测试应该怎样实现？ · 前端知库","description":"图形与可视化面试题：用 Path2D、isPointInPath 和坐标转换判断点击图形，理解绘制像素和交互区域不是同一件事。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/graphics-canvas-hit-test/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/graphics-canvas-hit-test/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"图形与可视化面试题","item":"https://fe.hushifa.top/topics/graphics/"},{"@type":"ListItem","position":3,"name":"Canvas 图形命中测试应该怎样实现？","item":"https://fe.hushifa.top/questions/graphics-canvas-hit-test/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/graphics-canvas-hit-test/#webpage","url":"https://fe.hushifa.top/questions/graphics-canvas-hit-test/","name":"Canvas 图形命中测试应该怎样实现？ · 前端知库","description":"图形与可视化面试题：Canvas 只有一个 DOM 元素，点中了哪个图形要应用自己判断。用 Path2D 让绘制和命中共用同一份几何，统一坐标系后用 isPointInPath 检测，重叠时从最上层往下找，对象多时先用包围盒或空间索引粗筛。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/graphics-canvas-hit-test/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/graphics-canvas-hit-test/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"图形与可视化面试题","item":"https://fe.hushifa.top/topics/graphics/"},{"@type":"ListItem","position":3,"name":"Canvas 图形命中测试应该怎样实现？","item":"https://fe.hushifa.top/questions/graphics-canvas-hit-test/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/graphics/">图形与可视化面试题</a><span aria-hidden="true">/</span><span aria-current="page">Canvas 图形命中测试应该怎样实现？</span></nav><h1 tabindex="-1">Canvas 图形命中测试应该怎样实现？</h1><p class="reading-summary">用 Path2D、isPointInPath 和坐标转换判断点击图形，理解绘制像素和交互区域不是同一件事。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/graphics/">图形与可视化面试题</a><span aria-hidden="true">/</span><span aria-current="page">Canvas 图形命中测试应该怎样实现？</span></nav><h1 tabindex="-1">Canvas 图形命中测试应该怎样实现？</h1><p class="reading-summary">Canvas 只有一个 DOM 元素，点中了哪个图形要应用自己判断。用 Path2D 让绘制和命中共用同一份几何，统一坐标系后用 isPointInPath 检测，重叠时从最上层往下找，对象多时先用包围盒或空间索引粗筛。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>Path2D 可以同时用于绘制和命中检测，保证几何只定义一次。</li>
-<li>isPointInPath 的检测点不受当前变换矩阵再次变换，Path2D 则按当前变换参与测试，两者要用同一套坐标。</li>
-<li>重叠对象按逆绘制顺序检测，第一个命中的可交互对象胜出。</li>
-<li>对象很多时先用包围盒或空间索引粗筛，再做精确几何检测。</li>
+<li>浏览器不会把点击分发给 Canvas 里的某个圆，要根据保存的几何信息自己判断。</li>
+<li>用 <code>Path2D</code> 定义形状，同一个对象既用于 <code>fill()</code> 也用于 <code>isPointInPath()</code>，绘制和命中不会不一致。</li>
+<li><code>isPointInPath(path, x, y)</code> 中的 <code>x</code>、<code>y</code> 是位图坐标，不受当前变换影响；<code>path</code> 则按当前变换参与检测。</li>
+<li>图形重叠时按绘制的逆序检测，第一个命中的可交互对象胜出。</li>
+<li>对象很多时先用包围盒、网格或四叉树缩小候选，再做精确检测。</li>
 </ul>
-<p>Canvas 上看见十个图形，页面里通常仍只有一个 canvas 元素。浏览器不会自动把点击事件分发给“第三个圆”，应用需要根据保存的几何信息，判断点击位置属于哪个对象。</p>
-<p>命中测试应先统一坐标，再筛选候选对象，最后按业务定义决定选谁。直接比较 event.clientX 与绘图坐标，往往会在页面滚动、CSS 缩放或高 DPI 下出错。</p>
-<h2>Path2D 可以复用绘制几何</h2>
-<p>下面在未缩放的内部坐标中创建圆形路径：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> canvas = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;canvas&#x27;</span>);
-<span class="hljs-keyword">const</span> context = canvas.<span class="hljs-title function_">getContext</span>(<span class="hljs-string">&#x27;2d&#x27;</span>);
+<h2>基本用法</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> canvas = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;canvas&#x27;</span>);
+<span class="hljs-keyword">const</span> ctx = canvas.<span class="hljs-title function_">getContext</span>(<span class="hljs-string">&#x27;2d&#x27;</span>);
+
 <span class="hljs-keyword">const</span> circle = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Path2D</span>();
 circle.<span class="hljs-title function_">arc</span>(<span class="hljs-number">50</span>, <span class="hljs-number">50</span>, <span class="hljs-number">20</span>, <span class="hljs-number">0</span>, <span class="hljs-title class_">Math</span>.<span class="hljs-property">PI</span> * <span class="hljs-number">2</span>);
-context.<span class="hljs-title function_">fill</span>(circle);
+ctx.<span class="hljs-title function_">fill</span>(circle);
 
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(context.<span class="hljs-title function_">isPointInPath</span>(circle, <span class="hljs-number">50</span>, <span class="hljs-number">50</span>)); <span class="hljs-comment">// true</span>
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(context.<span class="hljs-title function_">isPointInPath</span>(circle, <span class="hljs-number">80</span>, <span class="hljs-number">50</span>)); <span class="hljs-comment">// false</span>
+ctx.<span class="hljs-title function_">isPointInPath</span>(circle, <span class="hljs-number">50</span>, <span class="hljs-number">50</span>); <span class="hljs-comment">// true</span>
+ctx.<span class="hljs-title function_">isPointInPath</span>(circle, <span class="hljs-number">80</span>, <span class="hljs-number">50</span>); <span class="hljs-comment">// false</span>
 </code></pre></div>
-<p>isPointInPath 检查填充区域，不是对最终像素颜色做检测。路径即使没有实际填充，也可以参与判断；透明度、遮挡和裁剪后的可见效果还需要业务额外考虑。</p>
-<p>只画线的路径通常使用 isPointInStroke，结果会受到线宽、端点和连接方式等状态影响。可以为触摸交互设置比视觉线条更宽的命中范围，但应与相邻对象的选择规则协调。</p>
-<h2>检测点不会自动套用当前矩阵</h2>
-<p>isPointInPath 的 x、y 表示待检查点，参数本身不受当前变换矩阵再次变换。传入的 Path2D 则按当前上下文变换参与测试。两者混淆会导致“画在哪里”和“点哪里算命中”不一致。</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">context.<span class="hljs-title function_">setTransform</span>(<span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">100</span>, <span class="hljs-number">0</span>);
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(context.<span class="hljs-title function_">isPointInPath</span>(circle, <span class="hljs-number">200</span>, <span class="hljs-number">100</span>)); <span class="hljs-comment">// true</span>
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(context.<span class="hljs-title function_">isPointInPath</span>(circle, <span class="hljs-number">50</span>, <span class="hljs-number">50</span>)); <span class="hljs-comment">// false</span>
+<p><code>isPointInPath</code> 检查的是路径的填充区域，与像素颜色无关。只描边的线条用 <code>isPointInStroke</code>，结果受 <code>lineWidth</code> 影响；触摸操作可以临时加大线宽来放大命中范围。带孔洞的路径要传入和绘制时相同的填充规则（<code>&#x27;nonzero&#x27;</code> 或 <code>&#x27;evenodd&#x27;</code>）。</p>
+<h2>坐标转换</h2>
+<p>指针事件给的是 client 坐标，要先换算成位图坐标：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">toBitmap</span>(<span class="hljs-params">canvas, event</span>) {
+  <span class="hljs-keyword">const</span> rect = canvas.<span class="hljs-title function_">getBoundingClientRect</span>();
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">x</span>: ((event.<span class="hljs-property">clientX</span> - rect.<span class="hljs-property">left</span>) * canvas.<span class="hljs-property">width</span>) / rect.<span class="hljs-property">width</span>,
+    <span class="hljs-attr">y</span>: ((event.<span class="hljs-property">clientY</span> - rect.<span class="hljs-property">top</span>) * canvas.<span class="hljs-property">height</span>) / rect.<span class="hljs-property">height</span>,
+  };
+}
 </code></pre></div>
-<p>圆心从局部的 50、50 变到位图的 200、100。此时应传位图坐标；另一种可行做法是把点击点用逆矩阵转回局部坐标，再在单位矩阵下检测原始路径。不要同时反变换点又保留同一场景变换，让补偿发生两次。</p>
-<p>client 坐标通常先减去 canvas 的内容区域位置，再按内部位图尺寸与显示尺寸之比换算。边框、内边距和复杂 CSS 变换需要单独处理，简单 getBoundingClientRect 比例不能覆盖所有情况。</p>
-<h2>重叠对象通常从上往下找</h2>
-<p>如果绘制顺序是背景、圆形、按钮，那么按钮在视觉上最上层。单选交互一般按逆绘制顺序测试，第一个命中的可交互对象胜出；否则可能点击按钮时选中了底下的大背景。</p>
-<p>但透明图层、锁定对象、穿透操作或多选可能有不同规则。这些是业务语义，不是 isPointInPath 自动决定的。应在对象模型里记录是否可选和层级，而不是只根据像素可见性猜测。</p>
-<p>填充路径存在孔洞时，还要使用与绘制一致的 nonzero 或 evenodd 规则。描边状态也应与目标对象一致，不能让上一个对象的 lineWidth 影响当前检测。</p>
-<h2>对象很多时先做粗筛</h2>
-<p>逐个复杂路径检测会随着对象数量增长。可以先检查包围盒，再用网格、四叉树等空间索引缩小候选，最后做精确几何检测。</p>
-<p>包围盒通过不代表一定命中，例如圆的外接矩形四角不属于圆。相反，空间索引若没有随着对象移动、缩放或删除更新，会让正确图形根本进不了候选集合。</p>
-<p>像素颜色拾取也是一种方法，但要维护独立绘制、处理抗锯齿和读回开销，跨源污染还可能禁止像素读取。它不是对所有场景都比几何检测简单。</p>
-<p>最后，命中判断只回答“指针选中了什么”。拖动状态、捕获、取消以及键盘操作仍需另外实现。重要图形操作应有文字或普通控件入口，不能因为 Canvas 能点中就认为所有用户都能使用。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/isPointInPath" target="_blank" rel="noreferrer">MDN · isPointInPath()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Canvas+%E5%9B%BE%E5%BD%A2%E5%91%BD%E4%B8%AD%E6%B5%8B%E8%AF%95%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ACanvas+%E5%9B%BE%E5%BD%A2%E5%91%BD%E4%B8%AD%E6%B5%8B%E8%AF%95%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Agraphics-canvas-hit-test%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9B%BE%E5%BD%A2%E4%B8%8E%E5%8F%AF%E8%A7%86%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fgraphics-canvas-hit-test%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Canvas 图形命中测试应该怎样实现？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/graphics-canvas-svg/">Canvas 和 SVG 怎样选择？</a></li><li><a href="/questions/graphics-canvas-transform/">Canvas 的 transform 怎样影响坐标和绘制？</a></li><li><a href="/questions/graphics-chart-accessibility/">前端图表如何同时满足无障碍和高性能？</a></li><li><a href="/questions/graphics-webgl/">什么场景值得用 WebGL？GPU 加速有哪些成本？</a></li></ul></nav></main></div></div>
+<p>这里假设 canvas 没有边框和内边距，也没有 CSS 旋转。</p>
+<p>绘制时如果设置了变换，检测时要用同一个变换：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">ctx.<span class="hljs-title function_">setTransform</span>(<span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">100</span>, <span class="hljs-number">0</span>);
+ctx.<span class="hljs-title function_">isPointInPath</span>(circle, <span class="hljs-number">200</span>, <span class="hljs-number">100</span>); <span class="hljs-comment">// true，圆心 (50,50) 映射到位图 (200,100)</span>
+</code></pre></div>
+<p>另一种做法是把指针坐标用变换的逆矩阵转回局部坐标，再在单位矩阵下检测，见&quot;Canvas 的 transform 怎样影响坐标和绘制？&quot;。两种做法只能选一种，混用会补偿两次。</p>
+<h2>重叠与粗筛</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">hitTest</span>(<span class="hljs-params">ctx, shapes, x, y</span>) {
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = shapes.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i--) {
+    <span class="hljs-keyword">const</span> shape = shapes[i];
+    <span class="hljs-keyword">if</span> (!shape.<span class="hljs-property">selectable</span>) <span class="hljs-keyword">continue</span>;
+    <span class="hljs-keyword">const</span> { left, top, right, bottom } = shape.<span class="hljs-property">bounds</span>;
+    <span class="hljs-keyword">if</span> (x &lt; left || x &gt; right || y &lt; top || y &gt; bottom) <span class="hljs-keyword">continue</span>; <span class="hljs-comment">// 包围盒粗筛</span>
+    ctx.<span class="hljs-title function_">setTransform</span>(shape.<span class="hljs-property">matrix</span>);
+    <span class="hljs-keyword">if</span> (ctx.<span class="hljs-title function_">isPointInPath</span>(shape.<span class="hljs-property">path</span>, x, y)) <span class="hljs-keyword">return</span> shape;
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+}
+</code></pre></div>
+<ul>
+<li><code>shapes</code> 按绘制顺序存放，逆序遍历就是从上往下。</li>
+<li>锁定、不可选、允许穿透的对象由业务模型标记。</li>
+<li>空间索引要在对象移动、缩放、删除时同步更新。</li>
+</ul>
+<h2>其他方案</h2>
+<p>颜色拾取：在离屏画布上用唯一颜色绘制每个对象，读取点击处像素的颜色得到对象 ID。它适合形状复杂、数量巨大的场景，但要关掉抗锯齿，<code>getImageData</code> 有读回开销，而且画布被跨源图片污染后无法读取。</p>
+<h2>常见追问</h2>
+<ul>
+<li><strong>命中检测之外还要做什么？</strong> 拖动要配合 <code>setPointerCapture</code>；重要操作要提供键盘或普通控件入口。</li>
+<li><strong>能用 <code>isPointInPath</code> 判断像素是否透明吗？</strong> 不能，它只看几何。需要按透明度判断时用颜色拾取或读取像素。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/isPointInPath" target="_blank" rel="noreferrer">MDN · isPointInPath()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Canvas+%E5%9B%BE%E5%BD%A2%E5%91%BD%E4%B8%AD%E6%B5%8B%E8%AF%95%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ACanvas+%E5%9B%BE%E5%BD%A2%E5%91%BD%E4%B8%AD%E6%B5%8B%E8%AF%95%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Agraphics-canvas-hit-test%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9B%BE%E5%BD%A2%E4%B8%8E%E5%8F%AF%E8%A7%86%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fgraphics-canvas-hit-test%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Canvas 图形命中测试应该怎样实现？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/graphics-canvas-svg/">Canvas 和 SVG 怎样选择？</a></li><li><a href="/questions/graphics-canvas-transform/">Canvas 的 transform 怎样影响坐标和绘制？</a></li><li><a href="/questions/graphics-chart-accessibility/">前端图表如何同时满足无障碍和高性能？</a></li><li><a href="/questions/graphics-webgl/">什么场景值得用 WebGL？GPU 加速有哪些成本？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

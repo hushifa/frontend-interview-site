@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="React面试题：React Compiler 在构建阶段分析符合 React 规则的组件与 Hook，自动添加适用的记忆化，减少重复计算和不必要渲染。它不是运行时开关，也不替代请求、布局、状态边界与真实性能测量。" />
+    <meta name="description" content="React面试题：React Compiler 在构建时分析遵守 React 规则的组件和 Hook，自动插入记忆化，减少不必要的重新渲染和重复计算。它需要构建工具接入，会跳过违反规则的代码，也不能解决渲染内容过多、请求慢这类问题。" />
     <title>React Compiler 解决了哪些优化问题？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/react-compiler/" />
     <meta name="robots" content="index,follow" />
@@ -19,74 +19,58 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="React Compiler 解决了哪些优化问题？ · 前端知库" />
-    <meta property="og:description" content="React面试题：React Compiler 在构建阶段分析符合 React 规则的组件与 Hook，自动添加适用的记忆化，减少重复计算和不必要渲染。它不是运行时开关，也不替代请求、布局、状态边界与真实性能测量。" />
+    <meta property="og:description" content="React面试题：React Compiler 在构建时分析遵守 React 规则的组件和 Hook，自动插入记忆化，减少不必要的重新渲染和重复计算。它需要构建工具接入，会跳过违反规则的代码，也不能解决渲染内容过多、请求慢这类问题。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/react-compiler/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-compiler/#webpage","url":"https://fe.hushifa.top/questions/react-compiler/","name":"React Compiler 解决了哪些优化问题？ · 前端知库","description":"React面试题：React Compiler 在构建阶段分析符合 React 规则的组件与 Hook，自动添加适用的记忆化，减少重复计算和不必要渲染。它不是运行时开关，也不替代请求、布局、状态边界与真实性能测量。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-compiler/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-compiler/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"React Compiler 解决了哪些优化问题？","item":"https://fe.hushifa.top/questions/react-compiler/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-compiler/#webpage","url":"https://fe.hushifa.top/questions/react-compiler/","name":"React Compiler 解决了哪些优化问题？ · 前端知库","description":"React面试题：React Compiler 在构建时分析遵守 React 规则的组件和 Hook，自动插入记忆化，减少不必要的重新渲染和重复计算。它需要构建工具接入，会跳过违反规则的代码，也不能解决渲染内容过多、请求慢这类问题。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-compiler/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-compiler/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"React Compiler 解决了哪些优化问题？","item":"https://fe.hushifa.top/questions/react-compiler/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">React Compiler 解决了哪些优化问题？</span></nav><h1 tabindex="-1">React Compiler 解决了哪些优化问题？</h1><p class="reading-summary">React Compiler 在构建阶段分析符合 React 规则的组件与 Hook，自动添加适用的记忆化，减少重复计算和不必要渲染。它不是运行时开关，也不替代请求、布局、状态边界与真实性能测量。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<p>React Compiler 是一个构建期 Babel 插件，自动为组件和 Hook 插入记忆化，效果相当于自动写 memo、useMemo、useCallback。前提是代码遵守 React 规则，违反规则的组件会被跳过。它不是运行时开关，要接入构建链才生效。它只减少重复渲染计算，网络、布局和状态设计问题仍要单独处理。</p>
-<p>普通 React 代码在父级更新时，可能重复执行筛选、构造对象、创建回调或重新计算子树。以前常用 useMemo、useCallback、memo 手工表达哪些结果可以复用；React Compiler 则尝试在构建时从代码的数据依赖中自动生成适用的记忆化。</p>
-<p>它需要真正进入编译链。仅仅安装 React 19、升级 react-dom 或在文件里随手写一句指令，不代表源码已经被 Compiler 处理。</p>
-<h2>不用手写缓存，也能让编译器分析依赖</h2>
-<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
-
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">OrderSummary</span>(<span class="hljs-params">{ items, currency }</span>) {
-  <span class="hljs-keyword">const</span> total = items.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">sum, item</span>) =&gt;</span> sum + item.<span class="hljs-property">price</span> * item.<span class="hljs-property">quantity</span>, <span class="hljs-number">0</span>);
-  <span class="hljs-keyword">const</span> formatter = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Intl</span>.<span class="hljs-title class_">NumberFormat</span>(<span class="hljs-string">&#x27;zh-CN&#x27;</span>, { <span class="hljs-attr">style</span>: <span class="hljs-string">&#x27;currency&#x27;</span>, currency });
-  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>合计：{formatter.format(total)}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>;
-}
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Cart</span>(<span class="hljs-params">{ items }</span>) {
-  <span class="hljs-keyword">const</span> [note, setNote] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
-  <span class="hljs-keyword">return</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">form</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">OrderSummary</span> <span class="hljs-attr">items</span>=<span class="hljs-string">{items}</span> <span class="hljs-attr">currency</span>=<span class="hljs-string">&quot;CNY&quot;</span> /&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>备注<span class="hljs-tag">&lt;<span class="hljs-name">textarea</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{note}</span> <span class="hljs-attr">onChange</span>=<span class="hljs-string">{event</span> =&gt;</span> setNote(event.target.value)} /&gt;<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></span>
-  );
-}
-</code></pre></div>
-<p>源码里没有 memo、useMemo。输入备注只改变 note；编译后，<code>OrderSummary</code> 的 JSX 依赖的是 items 和 currency，这两者没变时，编译器生成的缓存可以直接复用上次的元素，求和与 formatter 的创建也会跳过。手写版本需要用 memo 包住子组件，并对 total、formatter 分别写 useMemo。</p>
-<p>这个小列表用于说明依赖关系，不是一个性能基准。是否产生用户可感知收益，需要结合实际数据规模与渲染成本测量。</p>
-<h2>它生成缓存逻辑，不改变状态的业务含义</h2>
-<p>Compiler 分析组件和 Hook 中的数据流，在合适位置生成缓存读取与更新代码。它可能减少局部计算、稳定引用或复用子树，目标与一些手工记忆化有重叠，但不必逐行对应某个 useMemo 调用。</p>
-<p>优化仍需要保持输入与行为的正确关系。状态 setter 的快照语义、Effect 清理、列表 key 和请求身份不会因此被重新定义。一个本来就错误的闭包或可变共享状态，不应指望 Compiler 自动修复。</p>
-<p>记忆化也通常有自己的实例和生命周期边界，不是把所有用户、所有页面的相同计算塞进一个永久全局缓存。</p>
-<h2>代码纯度与 React 规则是分析前提</h2>
-<p>渲染中修改 props、共享对象或外部状态，会让“相同输入能否复用结果”的假设失效。条件调用常规 Hook、依赖不准确以及不兼容的库模式，也可能导致诊断或某些函数无法被优化。</p>
-<p>这不表示每个问题都会让整个构建立即失败。有些情况下编译器会跳过不适合的部分，保留其余可优化代码。因此构建成功与“目标组件已经成功优化”是两份不同证据。</p>
-<p>应处理 lint 规则和编译诊断，理解为什么被跳过，而不是为了提高一个表面上的覆盖率就隐藏警告。</p>
-<h2>接入方式取决于当前构建工具版本</h2>
-<p>React Compiler 以 Babel 插件 <code>babel-plugin-react-compiler</code> 发布，官方要求它在 Babel 插件链中<strong>最先</strong>运行。配套的 lint 规则已并入 eslint-plugin-react-hooks 的 <code>recommended-latest</code> 预设，会标出违反 React 规则、因而会被编译器跳过的组件。</p>
-<p>@vitejs/plugin-react 6 移除了内联的 <code>babel</code> 选项，改为导出 <code>reactCompilerPreset</code>，与 @rolldown/plugin-babel 配合使用（低于 6 的版本仍写 <code>react({ babel: { plugins: [...] } })</code>）。安装 <code>babel-plugin-react-compiler</code> 和 <code>@rolldown/plugin-babel</code> 后：</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">React Compiler 解决了哪些优化问题？</span></nav><h1 tabindex="-1">React Compiler 解决了哪些优化问题？</h1><p class="reading-summary">React Compiler 在构建时分析遵守 React 规则的组件和 Hook，自动插入记忆化，减少不必要的重新渲染和重复计算。它需要构建工具接入，会跳过违反规则的代码，也不能解决渲染内容过多、请求慢这类问题。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>React Compiler 是构建期的 Babel 插件（<code>babel-plugin-react-compiler</code>），1.0 已稳定发布，自动完成过去手写的 <code>memo</code>、<code>useMemo</code>、<code>useCallback</code>。</li>
+<li>它只编译遵守 React 规则的代码：渲染是纯函数、不修改 props 和 state、Hook 在顶层调用。违反规则的组件会被跳过，不会报错。</li>
+<li>主要面向 React 19，也支持 React 17、18，后者需要额外安装 <code>react-compiler-runtime</code> 并配置 <code>target</code>。</li>
+<li>配套的 lint 规则在 <code>eslint-plugin-react-hooks</code> 的推荐预设中，可以提前发现会被编译器跳过的代码。</li>
+<li>它减少的是重复渲染和重复计算；DOM 数量太多、接口慢、包体积大，仍要靠虚拟列表、数据加载策略和代码拆分。</li>
+</ul>
+<h2>在 Vite 中接入</h2>
+<p><code>@vitejs/plugin-react</code> 6.0 起移除了内联的 <code>babel</code> 选项，改为配合 <code>@rolldown/plugin-babel</code> 使用预设：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// vite.config.js</span>
 <span class="hljs-keyword">import</span> { defineConfig } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vite&#x27;</span>;
 <span class="hljs-keyword">import</span> react, { reactCompilerPreset } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@vitejs/plugin-react&#x27;</span>;
 <span class="hljs-keyword">import</span> babel <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@rolldown/plugin-babel&#x27;</span>;
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>({
-  <span class="hljs-attr">plugins</span>: [
-    <span class="hljs-title function_">react</span>(),
-    <span class="hljs-title function_">babel</span>({ <span class="hljs-attr">presets</span>: [<span class="hljs-title function_">reactCompilerPreset</span>()] }),
-  ],
+  <span class="hljs-attr">plugins</span>: [<span class="hljs-title function_">react</span>(), <span class="hljs-title function_">babel</span>({ <span class="hljs-attr">presets</span>: [<span class="hljs-title function_">reactCompilerPreset</span>()] })],
 });
 </code></pre></div>
-<p>旧版本插件的内联 Babel 配置方式不一定能直接搬到新版本。使用 Next.js、其他框架或不同打包工具时，也应采用它们当前支持的接入方式，而不是把这段 Vite 配置复制到任意项目。</p>
-<p>编译目标还需要与 React 运行时匹配。面向 React 17、18 等版本时，可能需要对应 target 与额外运行时包；不能让产物依赖目标环境没有的缓存运行时接口。</p>
-<h2>use memo 与 use no memo 是编译指令，不是 Hook</h2>
-<p>在配置下，&#x27;use memo&#x27; 可以标记需要优化的函数，尤其适合 annotation 模式；常见 infer 模式会按组件和 Hook 的命名及结构进行识别，并不要求所有组件都加这句话。</p>
-<p>&#x27;use no memo&#x27; 可以在需要时局部退出相关编译优化。它应当用于有原因的排查或兼容处理，而不是作为解决不纯代码的永久替代。</p>
-<p>这些字符串只有被编译器解释才有效，不会在浏览器里自动启动缓存。命名错误、构建插件没有运行或被排除的文件，也不应靠随意添加指令来猜测修复。</p>
-<h2>已有手工 memoization 不要盲目删除</h2>
-<p>接入后，很多原来需要手工维护的缓存可能不再必要，但应先确认编译覆盖和真实行为，再逐步简化。依赖某份稳定身份才能正确管理资源的代码，本来就应有清楚生命周期设计，不能只靠某个缓存永远不被丢弃来维持正确性。</p>
-<p>编译器对已有 useMemo、useCallback 等信息也有处理与诊断规则。升级时大量机械删除，可能同时掩盖原先的依赖问题与新的兼容问题，最好按可验证的组件边界逐步迁移。</p>
-<h2>它不能替代其他性能工作</h2>
-<p>图片太大、网络瀑布、首屏脚本过重、DOM 数量过多、布局抖动或一段必须执行的昂贵计算，仍然需要对应优化。Compiler 主要减少不必要的重复工作，不会自动给每个请求做缓存、给列表做虚拟化，或把同步循环搬进 Worker。</p>
-<p>验证时先确认目标文件确实经过编译，再检查产物或诊断中是否有预期优化，最后比较用户交互延迟与 Profiler、浏览器性能数据。只看到插件在 package.json 中，或者某个示例日志变少，都不足以证明整个平台已经更快。</p>
-<p>补充参考：<a href="https://react.dev/learn/react-compiler/installation">React Compiler 安装</a>、<a href="https://react.dev/reference/react-compiler/directives/use-memo">use memo 指令</a>。</p></div><div class="answer-bottom"><a href="https://react.dev/learn/react-compiler" target="_blank" rel="noreferrer">React · React Compiler<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+Compiler+%E8%A7%A3%E5%86%B3%E4%BA%86%E5%93%AA%E4%BA%9B%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+Compiler+%E8%A7%A3%E5%86%B3%E4%BA%86%E5%93%AA%E4%BA%9B%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-compiler%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-compiler%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React Compiler 解决了哪些优化问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-memo/">memo、useMemo、useCallback 各自优化什么？</a></li><li><a href="/questions/react-server-cache/">React 的 cache API 解决什么问题？</a></li><li><a href="/questions/react-use-effect-event/">React useEffectEvent 适合解决什么依赖问题？</a></li><li><a href="/questions/react-use-hook/">React use API 可以读取哪些值？</a></li></ul></nav></main></div></div>
+<p>6.0 之前的版本写成 <code>react({ babel: { plugins: [&#x27;babel-plugin-react-compiler&#x27;] } })</code>。使用自定义 Babel 配置时，编译器插件必须排在第一个，因为它要分析未经其他插件改写的源码。</p>
+<h2>编译器做了什么</h2>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">CartSummary</span>(<span class="hljs-params">{ items, currency }</span>) {
+  <span class="hljs-keyword">const</span> total = items.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">sum, item</span>) =&gt;</span> sum + item.<span class="hljs-property">price</span> * item.<span class="hljs-property">count</span>, <span class="hljs-number">0</span>);
+  <span class="hljs-keyword">const</span> formatted = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Intl</span>.<span class="hljs-title class_">NumberFormat</span>(<span class="hljs-string">&#x27;zh-CN&#x27;</span>, { <span class="hljs-attr">style</span>: <span class="hljs-string">&#x27;currency&#x27;</span>, currency }).<span class="hljs-title function_">format</span>(total);
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Price</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{formatted}</span> <span class="hljs-attr">onCopy</span>=<span class="hljs-string">{()</span> =&gt;</span> navigator.clipboard.writeText(formatted)} /&gt;</span>;
+}
+</code></pre></div>
+<p>编译后，<code>total</code>、<code>formatted</code>、传给 <code>Price</code> 的回调和 JSX 都按依赖（<code>items</code>、<code>currency</code>）缓存。<code>items</code> 和 <code>currency</code> 不变时，即使父组件重新渲染，<code>Price</code> 也收到相同的 props 并被跳过。手写的话需要两个 <code>useMemo</code>、一个 <code>useCallback</code>，再给 <code>Price</code> 套 <code>memo</code>。</p>
+<h2>验证是否生效</h2>
+<ul>
+<li>React DevTools 中被编译的组件名旁会显示 &quot;Memo ✨&quot; 标记。</li>
+<li>构建产物里会出现从 <code>react/compiler-runtime</code> 导入的缓存函数。</li>
+<li>某个组件编译后行为异常，可以在函数体第一行写 <code>&quot;use no memo&quot;</code> 临时跳过，修好根本问题后删掉。</li>
+</ul>
+<h2>迁移已有项目</h2>
+<ol>
+<li>先启用 lint 规则，修复违反 React 规则的代码。</li>
+<li>可以按目录逐步启用编译。</li>
+<li>手写的 <code>useMemo</code>、<code>useCallback</code> 不必一次删光，编译器能和它们共存；确认组件已被编译、行为不变后再清理。</li>
+</ol>
+<h2>常见追问</h2>
+<ul>
+<li>编译器会改变程序行为吗？对遵守规则的代码不会，它只增加缓存。依赖&quot;每次渲染都重新执行&quot;这类副作用的代码可能表现不同，这类代码本身就违反了规则。</li>
+<li>和 <code>memo</code> 的对比见《memo、useMemo、useCallback 各自优化什么？》。</li>
+</ul></div><div class="answer-bottom"><a href="https://react.dev/learn/react-compiler" target="_blank" rel="noreferrer">React · React Compiler<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+Compiler+%E8%A7%A3%E5%86%B3%E4%BA%86%E5%93%AA%E4%BA%9B%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+Compiler+%E8%A7%A3%E5%86%B3%E4%BA%86%E5%93%AA%E4%BA%9B%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-compiler%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-compiler%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React Compiler 解决了哪些优化问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-memo/">memo、useMemo、useCallback 各自优化什么？</a></li><li><a href="/questions/react-server-cache/">React 的 cache API 解决什么问题？</a></li><li><a href="/questions/react-use-effect-event/">React useEffectEvent 适合解决什么依赖问题？</a></li><li><a href="/questions/react-use-hook/">React use API 可以读取哪些值？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

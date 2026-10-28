@@ -1,2 +1,0 @@
-var e={notesHtml:`<p>适合统一 base URL、请求头、超时、重试和响应解析的项目。它保留 Fetch 的 Promise 与 AbortSignal 语义，HTTP 错误是否抛出要按库配置理解。</p>
-<p>自动重试对写操作可能造成重复副作用，超时和重试策略应结合接口幂等性设置；仓库 README 还要与安装版本对应。</p>`};export{e as default};

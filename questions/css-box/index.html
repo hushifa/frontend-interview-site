@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="HTML / CSS面试题：content-box 把声明尺寸分配给内容区，border-box 把内边距和边框也计入声明尺寸；外边距始终在外面。最终尺寸仍需结合布局约束、最小尺寸与实际内容计算。" />
+    <meta name="description" content="HTML / CSS面试题：content-box 中 width 只是内容区宽度，border-box 中 width 包含内边距和边框；外边距在两种模式下都不计入。" />
     <title>标准盒模型和 border-box 有什么区别？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/css-box/" />
     <meta name="robots" content="index,follow" />
@@ -19,70 +19,52 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="标准盒模型和 border-box 有什么区别？ · 前端知库" />
-    <meta property="og:description" content="HTML / CSS面试题：content-box 把声明尺寸分配给内容区，border-box 把内边距和边框也计入声明尺寸；外边距始终在外面。最终尺寸仍需结合布局约束、最小尺寸与实际内容计算。" />
+    <meta property="og:description" content="HTML / CSS面试题：content-box 中 width 只是内容区宽度，border-box 中 width 包含内边距和边框；外边距在两种模式下都不计入。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/css-box/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-box/#webpage","url":"https://fe.hushifa.top/questions/css-box/","name":"标准盒模型和 border-box 有什么区别？ · 前端知库","description":"HTML / CSS面试题：content-box 把声明尺寸分配给内容区，border-box 把内边距和边框也计入声明尺寸；外边距始终在外面。最终尺寸仍需结合布局约束、最小尺寸与实际内容计算。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-box/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-box/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"标准盒模型和 border-box 有什么区别？","item":"https://fe.hushifa.top/questions/css-box/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-box/#webpage","url":"https://fe.hushifa.top/questions/css-box/","name":"标准盒模型和 border-box 有什么区别？ · 前端知库","description":"HTML / CSS面试题：content-box 中 width 只是内容区宽度，border-box 中 width 包含内边距和边框；外边距在两种模式下都不计入。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-box/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-box/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"标准盒模型和 border-box 有什么区别？","item":"https://fe.hushifa.top/questions/css-box/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">标准盒模型和 border-box 有什么区别？</span></nav><h1 tabindex="-1">标准盒模型和 border-box 有什么区别？</h1><p class="reading-summary">content-box 把声明尺寸分配给内容区，border-box 把内边距和边框也计入声明尺寸；外边距始终在外面。最终尺寸仍需结合布局约束、最小尺寸与实际内容计算。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">标准盒模型和 border-box 有什么区别？</span></nav><h1 tabindex="-1">标准盒模型和 border-box 有什么区别？</h1><p class="reading-summary">content-box 中 width 只是内容区宽度，border-box 中 width 包含内边距和边框；外边距在两种模式下都不计入。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>盒子从里到外是内容区、padding、border、margin。</li>
-<li><code>content-box</code> 下 width 只给内容区，<code>border-box</code> 下 width 包含 padding 和 border，两者都不含 margin。</li>
-<li><code>width: 100%</code> 再加 padding 容易溢出，改用 border-box 通常能解决。</li>
-<li>常见全局约定是给 <code>*</code>、<code>::before</code>、<code>::after</code> 设 <code>box-sizing: border-box</code>，初始值仍是 content-box。</li>
+<li>盒子由内容区、内边距、边框和外边距组成。</li>
+<li>默认的 <code>content-box</code> 中，<code>width</code> 指内容区，实际占位宽度是 <code>width + padding + border</code>。</li>
+<li><code>border-box</code> 中，<code>width</code> 包含内边距和边框，内容区会相应变窄。</li>
+<li>外边距始终在 <code>width</code> 之外，两种模式都一样。</li>
+<li>项目里通常全局设置 <code>border-box</code>，让声明的尺寸就是看到的尺寸。</li>
 </ul>
-<p>一个元素写了 <code>width: 300px</code>，浏览器画出来却可能宽 342px。原因不一定是 width 没生效，而是声明的 300px 只分配给了内容区域，内边距和边框还需要额外占空间。</p>
-<p>CSS 盒子从里到外可以分成内容区、padding、border、margin。<code>box-sizing</code> 决定 width、height 等尺寸约束主要针对哪一层盒子，并不会把这几层本身删除。</p>
-<h2>用同一组数值算两遍</h2>
-<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;box content&quot;</span>&gt;</span>content-box<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;box border&quot;</span>&gt;</span>border-box<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-</code></pre></div>
+<h2>计算示例</h2>
 <div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.box</span> {
-  <span class="hljs-attribute">width</span>: <span class="hljs-number">300px</span>;
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">200px</span>;
   <span class="hljs-attribute">padding</span>: <span class="hljs-number">20px</span>;
-  <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid <span class="hljs-number">#64748b</span>;
-  <span class="hljs-attribute">margin</span>: <span class="hljs-number">10px</span>;
-}
-
-<span class="hljs-selector-class">.content</span> {
-  <span class="hljs-attribute">box-sizing</span>: content-box;
-}
-
-<span class="hljs-selector-class">.border</span> {
-  <span class="hljs-attribute">box-sizing</span>: border-box;
+  <span class="hljs-attribute">border</span>: <span class="hljs-number">5px</span> solid;
 }
 </code></pre></div>
-<p>先限定为普通布局、没有其他最小最大宽度或 Flex 收缩的情况：</p>
-<table><thead><tr><th>项目</th><th>content-box</th><th>border-box</th></tr></thead><tbody><tr><td>声明 width</td><td>300px</td><td>300px</td></tr><tr><td>内容区宽度</td><td>300px</td><td>258px</td></tr><tr><td>左右 padding 合计</td><td>40px</td><td>40px</td></tr><tr><td>左右 border 合计</td><td>2px</td><td>2px</td></tr><tr><td>border box 宽度</td><td>342px</td><td>300px</td></tr><tr><td>再计入左右 margin 后的水平占用</td><td>362px</td><td>320px</td></tr></tbody></table>
-<p>content-box 下，<code>300 + 40 + 2 = 342</code>；border-box 下，先从 300 中扣掉 40 和 2，剩余 258 给内容。两种模式都没有把 margin 放进 width。</p>
-<p>所以 border-box 更容易表达“这个组件包含边框和留白后，总共宽 300px”。它并不是没有 padding，而是把 padding 算在同一份宽度预算中。</p>
-<h2>为什么 100% 加 padding 经常溢出</h2>
-<p>一个普通块盒子写 <code>width: 100%</code> 时，百分比通常根据包含块的宽度计算。假设父级内容区为 500px，在 content-box 下，子级再加左右各 20px padding，就会至少需要 540px，加边框后还会更宽。</p>
-<p>改为 border-box 后，500px 包含了 padding 和 border，通常能解决这一类溢出。常见的全局约定是：</p>
+<ul>
+<li><code>content-box</code>：内容区 200px，盒子总宽 200 + 40 + 10 = 250px。</li>
+<li><code>border-box</code>：盒子总宽 200px，内容区 200 − 40 − 10 = 150px。</li>
+</ul>
+<p><code>border-box</code> 下，如果内边距和边框加起来超过 <code>width</code>，内容区宽度为 0，盒子会被撑到内边距加边框的宽度。</p>
+<h2>全局设置</h2>
 <div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css">*,
 *<span class="hljs-selector-pseudo">::before</span>,
 *<span class="hljs-selector-pseudo">::after</span> {
   <span class="hljs-attribute">box-sizing</span>: border-box;
 }
 </code></pre></div>
-<p>伪元素也会生成盒子，所以一并设置可以减少装饰结构里的尺寸意外。box-sizing 的初始值是 content-box，不过浏览器默认样式可能已经为部分控件设置 border-box，不能假定所有元素最终计算值都与初始值相同。</p>
-<p>普通非替换块在正常流中的 <code>width: auto</code>，本来就会结合 margin、padding、border 分配可用宽度。它和“明确写 100% 后再向外加 padding”不是同一个计算过程，因此并不是每个撑满父级的块都需要声明 width:100%。</p>
-<h2>border-box 为什么仍然可能比 width 大</h2>
-<p>内容区尺寸不能被减成负数。假设 <code>width: 10px</code>，左右 padding 已经共 40px，边框又共 2px，即使使用 border-box，浏览器也不能把内容区算成 -32px。内容区会以 0 为下限，最终盒子仍需要容纳这些内边距和边框。</p>
-<p>此外，width 不总是最终使用宽度的唯一来源：</p>
+<p>这样写便于两栏布局：<code>width: 50%</code> 加上内边距也不会超出父元素。</p>
+<h2>最终尺寸还受什么影响</h2>
 <ul>
-<li><code>min-width</code>、<code>max-width</code> 可以限制结果。</li>
-<li>Flex 项可能增长、收缩，且自动最小尺寸受内容影响。</li>
-<li>Grid 轨道分配和项目对齐会改变可用空间。</li>
-<li>长文本、不换行内容和图片可能超出内容区，形成溢出，即便盒子自身宽度没变。</li>
+<li><code>min-width</code>、<code>max-width</code> 同样按 <code>box-sizing</code> 解释。</li>
+<li>flex 和 grid 项目的尺寸会被容器重新分配，<code>width</code> 只是参考值。</li>
+<li>内容过长（例如长 URL）可能撑开盒子，需要 <code>min-width: 0</code> 或 <code>overflow-wrap: anywhere</code>。</li>
+<li>行内元素的 <code>width</code>、<code>height</code> 不生效，要改为 <code>inline-block</code> 或块级。</li>
 </ul>
-<p>因此“border-box 下最终一定等于 CSS 文件里的 width”仍然是过度概括。应区分盒子的布局尺寸变大，还是内容在固定盒子里面溢出。</p>
-<h2>两列、间隙和测量还要另算</h2>
-<p>两个 border-box 元素各写 width:50%，已经分完父级宽度；如果中间再加 gap 或外边距，仍然可能超出。border-box 不会自动从每个 50% 中扣除额外间隙。Grid 的 fr、Flex 的空间分配或明确的 calc 才负责这一层安排。</p>
-<p>调试时看 DevTools 的盒模型和计算样式，而不只看规则中的 width。<code>getBoundingClientRect().width</code> 通常反映变换后的 border box 几何范围，包含 padding、border，但不包含 margin；如果有 scale 或 rotate，它也不能直接当成未变换时的内容宽度。</p>
-<p>布局计算、绘制变换与滚动条也会影响不同 DOM 测量接口的结果。先说清自己要测哪一层盒子，再选择接口，才能避免把正常的盒模型差异误判成浏览器计算错误。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/box-sizing" target="_blank" rel="noreferrer">MDN · box-sizing<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%A0%87%E5%87%86%E7%9B%92%E6%A8%A1%E5%9E%8B%E5%92%8C+border-box+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%A0%87%E5%87%86%E7%9B%92%E6%A8%A1%E5%9E%8B%E5%92%8C+border-box+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-box%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-box%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：标准盒模型和 border-box 有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-flex-grid/">Flexbox 和 Grid 应该如何选择？</a></li><li><a href="/questions/html-accessibility/">触发操作为什么应优先使用 button，而不是可点击的 div？</a></li><li><a href="/questions/css-stacking/">为什么 z-index 设置很大，元素还是被遮挡？</a></li><li><a href="/questions/html-semantics/">HTML 语义化对阅读、搜索与无障碍有什么价值？</a></li></ul></nav></main></div></div>
+<h2>常见追问</h2>
+<ul>
+<li>怪异模式的盒模型是什么？缺少 DOCTYPE 时，浏览器进入怪异模式，部分元素按类似 <code>border-box</code> 的方式计算。现代页面都要写 <code>&lt;!DOCTYPE html&gt;</code>。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/box-sizing" target="_blank" rel="noreferrer">MDN · box-sizing<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%A0%87%E5%87%86%E7%9B%92%E6%A8%A1%E5%9E%8B%E5%92%8C+border-box+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%A0%87%E5%87%86%E7%9B%92%E6%A8%A1%E5%9E%8B%E5%92%8C+border-box+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-box%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-box%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：标准盒模型和 border-box 有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-flex-grid/">Flexbox 和 Grid 应该如何选择？</a></li><li><a href="/questions/html-accessibility/">触发操作为什么应优先使用 button，而不是可点击的 div？</a></li><li><a href="/questions/css-stacking/">为什么 z-index 设置很大，元素还是被遮挡？</a></li><li><a href="/questions/html-semantics/">HTML 语义化对阅读、搜索与无障碍有什么价值？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Web API面试题：ResizeObserver 观察元素盒尺寸的变化，适合组件尺寸由容器而非单纯窗口大小决定的场景。观察目标的内容盒、边框盒等需要按 API 选项和支持情况明确区分。" />
+    <meta name="description" content="Web API面试题：ResizeObserver 在布局后报告元素尺寸变化；回调里又改变了被观察元素的尺寸时，浏览器会在同一帧内重复通知，超过限制后跳过并报告 &quot;ResizeObserver loop completed with undelivered notifications&quot;。" />
     <title>ResizeObserver 为什么可能出现循环通知错误？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/api-resize-observer/" />
     <meta name="robots" content="index,follow" />
@@ -19,59 +19,47 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="ResizeObserver 为什么可能出现循环通知错误？ · 前端知库" />
-    <meta property="og:description" content="Web API面试题：ResizeObserver 观察元素盒尺寸的变化，适合组件尺寸由容器而非单纯窗口大小决定的场景。观察目标的内容盒、边框盒等需要按 API 选项和支持情况明确区分。" />
+    <meta property="og:description" content="Web API面试题：ResizeObserver 在布局后报告元素尺寸变化；回调里又改变了被观察元素的尺寸时，浏览器会在同一帧内重复通知，超过限制后跳过并报告 &quot;ResizeObserver loop completed with undelivered notifications&quot;。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/api-resize-observer/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/api-resize-observer/#webpage","url":"https://fe.hushifa.top/questions/api-resize-observer/","name":"ResizeObserver 为什么可能出现循环通知错误？ · 前端知库","description":"Web API面试题：ResizeObserver 观察元素盒尺寸的变化，适合组件尺寸由容器而非单纯窗口大小决定的场景。观察目标的内容盒、边框盒等需要按 API 选项和支持情况明确区分。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/api-resize-observer/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/api-resize-observer/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Web API面试题","item":"https://fe.hushifa.top/topics/web-apis/"},{"@type":"ListItem","position":3,"name":"ResizeObserver 为什么可能出现循环通知错误？","item":"https://fe.hushifa.top/questions/api-resize-observer/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/api-resize-observer/#webpage","url":"https://fe.hushifa.top/questions/api-resize-observer/","name":"ResizeObserver 为什么可能出现循环通知错误？ · 前端知库","description":"Web API面试题：ResizeObserver 在布局后报告元素尺寸变化；回调里又改变了被观察元素的尺寸时，浏览器会在同一帧内重复通知，超过限制后跳过并报告 \"ResizeObserver loop completed with undelivered notifications\"。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/api-resize-observer/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/api-resize-observer/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Web API面试题","item":"https://fe.hushifa.top/topics/web-apis/"},{"@type":"ListItem","position":3,"name":"ResizeObserver 为什么可能出现循环通知错误？","item":"https://fe.hushifa.top/questions/api-resize-observer/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/web-apis/">Web API面试题</a><span aria-hidden="true">/</span><span aria-current="page">ResizeObserver 为什么可能出现循环通知错误？</span></nav><h1 tabindex="-1">ResizeObserver 为什么可能出现循环通知错误？</h1><p class="reading-summary">ResizeObserver 观察元素盒尺寸的变化，适合组件尺寸由容器而非单纯窗口大小决定的场景。观察目标的内容盒、边框盒等需要按 API 选项和支持情况明确区分。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/web-apis/">Web API面试题</a><span aria-hidden="true">/</span><span aria-current="page">ResizeObserver 为什么可能出现循环通知错误？</span></nav><h1 tabindex="-1">ResizeObserver 为什么可能出现循环通知错误？</h1><p class="reading-summary">ResizeObserver 在布局后报告元素尺寸变化；回调里又改变了被观察元素的尺寸时，浏览器会在同一帧内重复通知，超过限制后跳过并报告 &quot;ResizeObserver loop completed with undelivered notifications&quot;。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>ResizeObserver 观察元素盒的尺寸变化，适合尺寸由容器决定的组件。</li>
-<li>要明确观察 content-box、border-box 等哪种盒。</li>
-<li>回调中改变被观察元素的尺寸可能引发循环，浏览器会报错跳过，但不会替你修复。</li>
-<li>修复应改变依赖关系或让尺寸收敛，requestAnimationFrame 只改变执行时机。</li>
+<li>ResizeObserver 在布局完成、绘制之前回调，报告元素的内容框、边框框等尺寸。</li>
+<li>回调里修改了尺寸，浏览器会在同一帧内再次检查并通知，但只处理比上一轮更深层的元素，避免死循环。</li>
+<li>仍有未送达的通知时，浏览器把它们留到下一帧，并在 <code>window</code> 上触发 <code>&quot;ResizeObserver loop completed with undelivered notifications&quot;</code> 错误。</li>
+<li>这个错误通常不影响功能，但说明存在&quot;尺寸变化 → 改尺寸 → 再变化&quot;的循环，应该消除。</li>
 </ul>
-<p>一个图表容器变窄，可能是侧栏展开了，并不是 window 发生 resize。ResizeObserver 让组件直接观察自身或容器的盒尺寸，因此更适合容器驱动的布局与绘制。</p>
-<p>循环问题出现在“读取尺寸后又改变导致该尺寸的布局”。如果回调把目标宽度每次加 10 像素，目标会再次变大，下一轮又加 10，形成没有终点的反馈。</p>
-<h2>先确定观察哪种盒</h2>
-<p>content-box 对应内容盒，border-box 包含内容、padding 和 border；device-pixel-content-box 提供设备像素相关的内容尺寸，但支持情况需要单独核对。</p>
-<p>entry.contentBoxSize、borderBoxSize 等使用 inlineSize 与 blockSize，它们是逻辑方向尺寸，不应永久理解为物理 width 与 height。多片段布局也可能涉及多个 size 记录，不能在复杂排版中无条件只取第一个。</p>
-<p>contentRect 是常用的兼容读取方式，主要反映内容区域。若观察 border-box 却用 contentRect.width 与边框尺寸比较，会因为两者语义不同产生误判。</p>
-<h2>一个只报告尺寸变化的观察器</h2>
-<p>下面使用内容盒，并用 contentRect 读取物理宽高，适合这里的普通组件场景：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">watchSize</span>(<span class="hljs-params">element, onSize</span>) {
-  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-title class_">ResizeObserver</span> === <span class="hljs-string">&#x27;undefined&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {};
-  <span class="hljs-keyword">let</span> previousWidth;
-  <span class="hljs-keyword">let</span> previousHeight;
-  <span class="hljs-keyword">const</span> observer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ResizeObserver</span>(<span class="hljs-function">(<span class="hljs-params">entries</span>) =&gt;</span> {
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> entry <span class="hljs-keyword">of</span> entries) {
-      <span class="hljs-keyword">const</span> { width, height } = entry.<span class="hljs-property">contentRect</span>;
-      <span class="hljs-keyword">if</span> (width === previousWidth &amp;&amp; height === previousHeight) <span class="hljs-keyword">continue</span>;
-      previousWidth = width;
-      previousHeight = height;
-      <span class="hljs-title function_">onSize</span>({ width, height });
-    }
-  });
-  observer.<span class="hljs-title function_">observe</span>(element);
-  <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> observer.<span class="hljs-title function_">disconnect</span>();
-}
+<h2>正常用法</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> observer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ResizeObserver</span>(<span class="hljs-function">(<span class="hljs-params">entries</span>) =&gt;</span> {
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> entry <span class="hljs-keyword">of</span> entries) {
+    <span class="hljs-keyword">const</span> width = entry.<span class="hljs-property">contentBoxSize</span>[<span class="hljs-number">0</span>].<span class="hljs-property">inlineSize</span>;
+    entry.<span class="hljs-property">target</span>.<span class="hljs-property">dataset</span>.<span class="hljs-property">size</span> = width &lt; <span class="hljs-number">480</span> ? <span class="hljs-string">&#x27;small&#x27;</span> : <span class="hljs-string">&#x27;large&#x27;</span>;
+  }
+});
+observer.<span class="hljs-title function_">observe</span>(card);
 </code></pre></div>
-<p>保存上次值减少重复业务更新，但不保证调用方不会制造循环。如果 onSize 每次把该元素宽度设成 width + 10，下一次宽度确实不同，去重仍然挡不住。</p>
-<p>回调通常会在初次观察获得尺寸后通知，但隐藏、零尺寸和渲染状态会影响实际交付时机，不要把 observe 当成同步读取函数。</p>
-<h2>浏览器避免锁死，不代表替你修复循环</h2>
-<p>ResizeObserver 通知与绘制前的布局流程相关。回调触发布局后，浏览器可能继续发现尺寸变化，并按规则把部分通知推迟，报告类似“loop completed with undelivered notifications”的错误。</p>
-<p>这表示当前处理没有把所有通知在本轮交付，并不自动证明观察器 API 有 bug。某次有限的调整可能最终稳定；如果每帧重复报错，就应检查反馈链。</p>
-<p>一个复杂例子是：宽度小于阈值时添加 class，class 改变 padding 后宽度又跨过阈值，于是移除 class，再次回到原宽度。两个状态来回跳，不一定表现为单调增大，却同样不收敛。</p>
-<h2>修复应改变依赖关系或让它收敛</h2>
-<p>优先使用 CSS 媒体或容器查询表达纯样式适配，避免用 JavaScript 反复测量再设置。必须测量时，可观察稳定的外层容器，把结果用于不会反过来改变容器尺寸的内部绘制。</p>
-<p>例如 Canvas 需要同步内部位图尺寸时，应先用 CSS 明确展示尺寸，避免设置 width/height 属性又改变布局尺寸。还应比较目标位图尺寸，没变化就不重设，因为重设会清空画布与绘制状态。</p>
-<p>对于断点切换，可以采用稳定条件或适当滞回，避免临界值抖动。不能只用任意四舍五入掩盖真正的尺寸依赖错误。</p>
-<h2>requestAnimationFrame 只改变时机</h2>
-<p>把写操作推迟到 requestAnimationFrame 可能打断同一轮反馈，但如果逻辑仍然每次增加宽度，就会变成跨帧无限增长。它可以帮助调度，不会证明算法收敛。</p>
-<p>若使用待执行动画帧，组件销毁时除了 disconnect，还要取消尚未执行的帧回调，避免在卸载后继续写 DOM。多个目标可以共享观察器，但尺寸缓存应按目标分别管理。</p>
-<p>排查时记录是哪一个元素、读取了哪种盒、回调写了什么属性，以及该写入怎样影响下一次测量。只有把这条反馈链画清楚，才能修复循环，而不是在控制台过滤掉错误消息。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver" target="_blank" rel="noreferrer">ResizeObserver - Web APIs | MDN<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+ResizeObserver+%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E5%BE%AA%E7%8E%AF%E9%80%9A%E7%9F%A5%E9%94%99%E8%AF%AF%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AResizeObserver+%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E5%BE%AA%E7%8E%AF%E9%80%9A%E7%9F%A5%E9%94%99%E8%AF%AF%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aapi-resize-observer%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AWeb+API%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fapi-resize-observer%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：ResizeObserver 为什么可能出现循环通知错误？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/api-abort/">AbortController 能取消什么，不能取消什么？</a></li><li><a href="/questions/api-web-components/">Custom Elements、Shadow DOM 和 template 分别负责什么？</a></li><li><a href="/questions/api-files/">File、Blob 和 object URL 怎样用于文件预览？</a></li><li><a href="/questions/api-readable-streams/">怎样正确消费 Fetch 返回的 ReadableStream？</a></li></ul></nav></main></div></div>
+<p>只改 <code>data-size</code>，样式里根据它调整内部元素，卡片自身尺寸不变，就不会循环。</p>
+<h2>会产生循环的写法</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">new</span> <span class="hljs-title class_">ResizeObserver</span>(<span class="hljs-function">(<span class="hljs-params">[entry]</span>) =&gt;</span> {
+  entry.<span class="hljs-property">target</span>.<span class="hljs-property">style</span>.<span class="hljs-property">height</span> = <span class="hljs-string">`<span class="hljs-subst">${entry.contentRect.width / <span class="hljs-number">2</span>}</span>px`</span>;
+}).<span class="hljs-title function_">observe</span>(box);
+</code></pre></div>
+<p>修改高度又改变了尺寸。如果宽度也依赖高度（例如有滚动条出现），就会反复变化。</p>
+<h2>解决办法</h2>
+<ul>
+<li>只在尺寸真的变化时更新，并比较新旧值，避免重复写入。</li>
+<li>用 CSS 解决：<code>aspect-ratio</code>、容器查询 <code>@container</code> 能处理大部分&quot;按容器宽度调整&quot;的需求，不需要 JavaScript。</li>
+<li>必须修改尺寸时放到 <code>requestAnimationFrame</code> 里，推迟到下一帧，打破同一帧内的循环。</li>
+</ul>
+<h2>和窗口 resize 事件的区别</h2>
+<ul>
+<li><code>window</code> 的 <code>resize</code> 只在视口变化时触发；ResizeObserver 能感知侧边栏收起、内容加载等导致的单个元素尺寸变化。</li>
+<li>测试框架里出现这个错误时，可以在全局错误处理中按消息过滤，但不要在生产环境里吞掉所有错误。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver" target="_blank" rel="noreferrer">MDN · ResizeObserver<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+ResizeObserver+%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E5%BE%AA%E7%8E%AF%E9%80%9A%E7%9F%A5%E9%94%99%E8%AF%AF%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AResizeObserver+%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E5%BE%AA%E7%8E%AF%E9%80%9A%E7%9F%A5%E9%94%99%E8%AF%AF%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aapi-resize-observer%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AWeb+API%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fapi-resize-observer%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：ResizeObserver 为什么可能出现循环通知错误？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/api-abort/">AbortController 能取消什么，不能取消什么？</a></li><li><a href="/questions/api-web-components/">Custom Elements、Shadow DOM 和 template 分别负责什么？</a></li><li><a href="/questions/api-files/">File、Blob 和 object URL 怎样用于文件预览？</a></li><li><a href="/questions/api-readable-streams/">怎样正确消费 Fetch 返回的 ReadableStream？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

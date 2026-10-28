@@ -23,26 +23,24 @@
     <meta property="og:url" content="https://fe.hushifa.top/questions/git-ci/" />
     <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/git-ci/#webpage","url":"https://fe.hushifa.top/questions/git-ci/","name":"GitHub Actions 中 workflow、job、step 和 runner 是什么关系？ · 前端知库","description":"Git 与部署面试题：用前端检查流程解释自动化层级、执行环境和数据传递，区分顺序、缓存与产物，并说明检查成功不等于已经部署。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/git-ci/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/git-ci/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Git 与部署面试题","item":"https://fe.hushifa.top/topics/git-deploy/"},{"@type":"ListItem","position":3,"name":"GitHub Actions 中 workflow、job、step 和 runner 是什么关系？","item":"https://fe.hushifa.top/questions/git-ci/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
     <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/git-deploy/">Git 与部署面试题</a><span aria-hidden="true">/</span><span aria-current="page">GitHub Actions 中 workflow、job、step 和 runner 是什么关系？</span></nav><h1 tabindex="-1">GitHub Actions 中 workflow、job、step 和 runner 是什么关系？</h1><p class="reading-summary">用前端检查流程解释自动化层级、执行环境和数据传递，区分顺序、缓存与产物，并说明检查成功不等于已经部署。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>workflow 定义触发事件和任务，job 是可独立调度的任务，step 是任务内的步骤，runner 是执行环境。</li>
-<li>同一 job 的步骤顺序执行，共享工作目录。</li>
-<li>每个 run 步骤是独立的 shell，局部变量不会传到下一步。</li>
-<li>只做检查的 workflow 应把权限限制为 contents: read。</li>
+<li>workflow 是 <code>.github/workflows/</code> 下的一个 YAML 文件，由事件（push、pull_request、定时等）触发。</li>
+<li>一个 workflow 包含多个 job，job 默认并行执行，用 <code>needs</code> 声明先后顺序。</li>
+<li>每个 job 在独立的 runner（虚拟机或容器）上运行，job 之间不共享文件系统。</li>
+<li>job 由一系列 step 顺序组成，step 可以运行 shell 命令或调用现成的 action，同一 job 内的 step 共享工作目录。</li>
+<li>缓存用于加速依赖安装，产物（artifact）用于在 job 之间或流水线结束后传递构建结果，两者用途不同。</li>
 </ul>
-<p>可以把 workflow 看成一份自动化流程说明，job 是其中可独立调度的任务，step 是任务内部的执行步骤，runner 则是实际运行这些步骤的机器或执行环境。</p>
-<p>例如一次推送触发“检查前端” workflow，它安排一个检查 job，在 Linux runner 上依次检出代码、准备 Node、安装依赖、测试和构建。</p>
-<h2>四层对象各负责什么</h2>
-<table><thead><tr><th>对象</th><th>作用</th></tr></thead><tbody><tr><td>workflow</td><td>定义触发事件、任务及整体配置，通常位于 .github/workflows</td></tr><tr><td>job</td><td>组织一组步骤，并决定执行环境与任务依赖</td></tr><tr><td>step</td><td>运行 shell 命令，或通过 uses 调用可复用 action</td></tr><tr><td>runner</td><td>执行任务，提供操作系统、工具、文件系统和计算资源</td></tr></tbody></table>
-<p>同一个 job 中的步骤通常顺序执行并共享相应工作目录，但每个 run 步骤是独立的 shell 过程。上一步创建的文件可以继续使用，普通 shell 局部变量却不会自动变成下一步的环境变量。</p>
-<h2>一个只检查、不发布的例子</h2>
-<p>下面假设项目已经定义 format:check、check 和 build 脚本，并提交了 npm 锁文件：</p>
-<div class="not-prose code-block"><div class="code-language">yaml</div><pre><code class="hljs language-yaml">name: 前端检查
-
-on: [push, pull_request, workflow_dispatch]
+<h2>一个前端检查流程</h2>
+<div class="not-prose code-block"><div class="code-language">yaml</div><pre><code class="hljs language-yaml"># .github/workflows/ci.yml
+name: 检查与构建
+on:
+  pull_request:
+  push:
+    branches: [main]
 
 permissions:
   contents: read
@@ -51,39 +49,52 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - name: 检出代码
-        uses: actions/checkout@v7
-      - name: 准备 Node
-        uses: actions/setup-node@v7
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          node-version: &#x27;24&#x27;
+          node-version: 24
           cache: npm
-      - name: 安装与检查
-        run: |
-          npm ci
-          npm run format:check
-          npm run check
-          npm run build
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run check
+      - run: npm run build
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist
+
+  e2e:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist
+      - run: npx playwright test
 </code></pre></div>
-<p>workflow_dispatch 允许手动触发；push 和 pull_request 对应仓库事件。uses 复用 action，run 执行命令，二者不是不同类型的 runner。</p>
-<p>例子固定了 Node 主版本，不等于固定精确补丁版本；ubuntu-latest 镜像也会更新。要求更强复现时，还应按项目需要明确版本文件、工具和环境。action 的主版本标签同样可能更新，要求固定具体实现时可以使用审核过的提交 SHA。</p>
-<h2>Job 之间怎样决定先后</h2>
-<p>没有声明依赖的 job 可以并行调度，是否立即执行还受可用 runner 和并发限制影响。需要先检查后部署时，应通过 needs 等机制表达关系，而不是依赖它们在 YAML 中的排列顺序。</p>
-<p>GitHub 托管 runner 通常为 job 提供新的环境；自托管 runner 的持久状态与清理策略又由维护者负责。无论哪种，都不要假设另一个 job 的本地目录一定还能直接访问。</p>
-<p>跨 job 传文件通常使用 artifact，传少量值可以使用相应输出机制。配置 needs 只建立执行依赖，不会顺便把前一个 job 的文件复制过来。</p>
-<h2>缓存与构建产物不能混用</h2>
-<p>缓存主要用于加速，例如复用包管理器的下载缓存。setup-node 的 npm 缓存不等于把一份永远正确的 node_modules 带到所有任务中，依赖安装仍需要执行并检查锁文件。</p>
-<p>artifact 则用于保存和传递这次任务产生的文件，例如 dist 或测试报告。部署若要使用已经验证的产物，应明确取得同一次构建的 artifact，而不是在另一个步骤中悄悄用不同环境重新生成。</p>
-<p>缓存命中也不等于构建正确，缓存键和失效条件不合理时反而可能保留旧结果。</p>
-<h2>绿色检查不代表网站已经上线</h2>
-<p>上面的流程只证明相应命令成功，没有配置部署任务，所以不会自动发布网站。真正发布还需要明确目标环境、所需权限、产物来源和发布后的验证。</p>
-<p>PR 检查与正式发布可以具有不同权限。来自外部分支的代码、秘密变量和可写令牌，应按平台事件与权限模型分别设计，不能把一个部署配置无条件用于所有来源的检查。</p>
-<p>不要为了让外部 PR 读取 secrets，改用 pull_request_target 后再检出并运行该 PR 的不可信代码；这个事件的信任上下文不同，安装脚本和测试代码也可能执行任意命令。构建检查通常只需要读取源码，发布权限应放在受保护的发布流程中。来自 PR 标题、分支名或其他外部字段的文本，也不能直接插入 shell 命令。</p>
-<h2>自动发布还需要处理新旧运行竞争</h2>
-<p>同一分支先后提交 A、B，如果 A 构建慢，B 已上线后 A 才执行部署，就可能把旧版本重新覆盖回去。可以按目标环境设置 concurrency 分组，并在部署前核对当前要发布的提交与产物身份。concurrency 不是保证严格 FIFO 的发布队列，设计时要明确是否允许跳过中间版本。</p>
-<p>cancel-in-progress 适合中止过期检查，但发布中途取消可能留下部分上传状态。生产部署应采用平台支持的完整版本切换或明确的失败恢复方案，而不是认为“旧运行取消了”就自动回滚了外部副作用。</p>
-<p>secrets 也不应被打包进前端静态文件。GitHub 在日志中遮蔽某些值，不会净化 dist；构建时注入到客户端代码的环境变量仍可能被访问者读取。要分别审查 CI 的运行权限、构建输出内容和部署目标权限。</p>
-<p>排查失败时沿着 workflow run、job、具体 step 和日志定位。先区分没有触发、等待 runner、环境准备失败、命令失败或部署失败，通常比把所有情况统称为“Actions 坏了”更容易解决。</p></div><div class="answer-bottom"><a href="https://docs.github.com/en/actions/get-started/understand-github-actions" target="_blank" rel="noreferrer">GitHub Docs · 理解 GitHub Actions<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+GitHub+Actions+%E4%B8%AD+workflow%E3%80%81job%E3%80%81step+%E5%92%8C+runner+%E6%98%AF%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AGitHub+Actions+%E4%B8%AD+workflow%E3%80%81job%E3%80%81step+%E5%92%8C+runner+%E6%98%AF%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Agit-ci%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AGit+%E4%B8%8E%E9%83%A8%E7%BD%B2%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fgit-ci%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：GitHub Actions 中 workflow、job、step 和 runner 是什么关系？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/git-merge-rebase/">git merge 与 rebase 应该怎样选择？</a></li><li><a href="/questions/git-static-deploy/">静态托管发布时为什么要检查资源路径和缓存？</a></li><li><a href="/questions/git-rollback/">静态网站发布失败时怎样安全回滚？</a></li><li><a href="/questions/git-artifact-integrity/">前端发布怎样校验构建产物？文件哈希能证明发布安全吗？</a></li></ul></nav></main></div></div>
+<h2>层级关系</h2>
+<table><thead><tr><th>层级</th><th>作用</th><th>隔离性</th></tr></thead><tbody><tr><td>workflow</td><td>定义何时触发、包含哪些 job</td><td>每次触发是一次独立运行</td></tr><tr><td>job</td><td>一组在同一台机器上执行的步骤</td><td>每个 job 一台全新的 runner</td></tr><tr><td>step</td><td>一条命令或一个 action</td><td>同一 job 内共享文件和环境</td></tr><tr><td>runner</td><td>实际执行的机器</td><td>GitHub 托管或自托管</td></tr></tbody></table>
+<p>某个 step 失败，后续 step 默认跳过，job 失败；依赖它的 job 也不会运行。</p>
+<h2>缓存和产物</h2>
+<ul>
+<li><strong>缓存</strong>：<code>setup-node</code> 的 <code>cache: npm</code> 按锁文件哈希缓存 npm 下载目录，命中后安装更快。缓存可能失效或被清除，流程不能依赖它一定存在。</li>
+<li><strong>产物</strong>：<code>upload-artifact</code> 保存构建结果，供后续 job 下载，或在运行页面上手动下载。上例中 e2e job 直接使用 check job 构建出的 <code>dist</code>，避免重复构建。</li>
+</ul>
+<h2>检查成功不等于已部署</h2>
+<p>这个 workflow 只做检查和构建，产物在运行结束后按保留期过期。部署需要单独的步骤或 workflow，例如推送到托管仓库、上传到对象存储，或使用 GitHub Pages 的部署 action，通常还会配置环境（environment）审批和单独的权限。</p>
+<h2>权限与安全</h2>
+<ul>
+<li>用 <code>permissions</code> 把默认的 <code>GITHUB_TOKEN</code> 权限降到最低，只在需要时授予写权限。</li>
+<li>来自 fork 的 pull_request 默认拿不到仓库 secrets，不要为了方便改用 <code>pull_request_target</code> 去运行不可信代码。</li>
+<li>第三方 action 可以固定到提交哈希，防止标签被改指向恶意代码。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li>怎样同时在多个 Node 版本上测试？用 <code>strategy.matrix</code> 声明版本列表，GitHub 会为每个组合启动一个 job。</li>
+<li>job 之间怎么传递一个字符串值？用 <code>outputs</code> 声明输出，下游 job 通过 <code>needs.&lt;job&gt;.outputs.&lt;name&gt;</code> 读取。</li>
+</ul></div><div class="answer-bottom"><a href="https://docs.github.com/en/actions/get-started/understand-github-actions" target="_blank" rel="noreferrer">GitHub Docs · 理解 GitHub Actions<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+GitHub+Actions+%E4%B8%AD+workflow%E3%80%81job%E3%80%81step+%E5%92%8C+runner+%E6%98%AF%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AGitHub+Actions+%E4%B8%AD+workflow%E3%80%81job%E3%80%81step+%E5%92%8C+runner+%E6%98%AF%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Agit-ci%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AGit+%E4%B8%8E%E9%83%A8%E7%BD%B2%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fgit-ci%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：GitHub Actions 中 workflow、job、step 和 runner 是什么关系？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/git-merge-rebase/">git merge 与 rebase 应该怎样选择？</a></li><li><a href="/questions/git-static-deploy/">静态托管发布时为什么要检查资源路径和缓存？</a></li><li><a href="/questions/git-rollback/">静态网站发布失败时怎样安全回滚？</a></li><li><a href="/questions/git-artifact-integrity/">前端发布怎样校验构建产物？文件哈希能证明发布安全吗？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

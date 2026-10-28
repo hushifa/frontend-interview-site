@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="HTML / CSS面试题：原生 button 提供按钮语义、焦点和键盘激活等基础行为，减少自行模拟交互时的遗漏。导航应使用带 href 的链接，按钮则仍需明确类型、名称、状态和焦点样式。" />
+    <meta name="description" content="HTML / CSS面试题：原生 button 自带按钮角色、可聚焦、Enter 和空格激活、禁用状态和表单提交行为；用 div 模拟要自己补齐这些，很容易漏。跳转页面用带 href 的 a。" />
     <title>触发操作为什么应优先使用 button，而不是可点击的 div？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/html-accessibility/" />
     <meta name="robots" content="index,follow" />
@@ -19,74 +19,57 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="触发操作为什么应优先使用 button，而不是可点击的 div？ · 前端知库" />
-    <meta property="og:description" content="HTML / CSS面试题：原生 button 提供按钮语义、焦点和键盘激活等基础行为，减少自行模拟交互时的遗漏。导航应使用带 href 的链接，按钮则仍需明确类型、名称、状态和焦点样式。" />
+    <meta property="og:description" content="HTML / CSS面试题：原生 button 自带按钮角色、可聚焦、Enter 和空格激活、禁用状态和表单提交行为；用 div 模拟要自己补齐这些，很容易漏。跳转页面用带 href 的 a。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/html-accessibility/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/html-accessibility/#webpage","url":"https://fe.hushifa.top/questions/html-accessibility/","name":"触发操作为什么应优先使用 button，而不是可点击的 div？ · 前端知库","description":"HTML / CSS面试题：原生 button 提供按钮语义、焦点和键盘激活等基础行为，减少自行模拟交互时的遗漏。导航应使用带 href 的链接，按钮则仍需明确类型、名称、状态和焦点样式。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/html-accessibility/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/html-accessibility/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"触发操作为什么应优先使用 button，而不是可点击的 div？","item":"https://fe.hushifa.top/questions/html-accessibility/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/html-accessibility/#webpage","url":"https://fe.hushifa.top/questions/html-accessibility/","name":"触发操作为什么应优先使用 button，而不是可点击的 div？ · 前端知库","description":"HTML / CSS面试题：原生 button 自带按钮角色、可聚焦、Enter 和空格激活、禁用状态和表单提交行为；用 div 模拟要自己补齐这些，很容易漏。跳转页面用带 href 的 a。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/html-accessibility/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/html-accessibility/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"触发操作为什么应优先使用 button，而不是可点击的 div？","item":"https://fe.hushifa.top/questions/html-accessibility/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">触发操作为什么应优先使用 button，而不是可点击的 div？</span></nav><h1 tabindex="-1">触发操作为什么应优先使用 button，而不是可点击的 div？</h1><p class="reading-summary">原生 button 提供按钮语义、焦点和键盘激活等基础行为，减少自行模拟交互时的遗漏。导航应使用带 href 的链接，按钮则仍需明确类型、名称、状态和焦点样式。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">触发操作为什么应优先使用 button，而不是可点击的 div？</span></nav><h1 tabindex="-1">触发操作为什么应优先使用 button，而不是可点击的 div？</h1><p class="reading-summary">原生 button 自带按钮角色、可聚焦、Enter 和空格激活、禁用状态和表单提交行为；用 div 模拟要自己补齐这些，很容易漏。跳转页面用带 href 的 a。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>给 div 加 click 只完成了点击处理，焦点、键盘激活和读屏语义都要另外补。</li>
-<li>执行操作用 button，跳转到可定位地址用带 href 的 a。</li>
-<li>原生按钮会把 Enter 和空格转成激活行为，不要再在 keydown 里重复调用同一逻辑。</li>
-<li>按状态类型选择属性：开关用 <code>aria-pressed</code>，展开用 <code>aria-expanded</code>，复选框用自身的 checked。</li>
+<li><code>&lt;button&gt;</code> 会被读屏识别为“按钮”，能被 Tab 聚焦，按 Enter 或空格都会触发 <code>click</code>。</li>
+<li><code>div</code> 加 <code>onclick</code> 只有鼠标能用；要补 <code>role=&quot;button&quot;</code>、<code>tabindex=&quot;0&quot;</code>、键盘事件和禁用逻辑，才接近原生按钮。</li>
+<li>在表单里，<code>&lt;button&gt;</code> 默认 <code>type=&quot;submit&quot;</code>，不需要提交的按钮要写 <code>type=&quot;button&quot;</code>。</li>
+<li>改变页面地址用 <code>&lt;a href&gt;</code>，执行动作用 <code>&lt;button&gt;</code>。链接支持新标签打开和复制地址，按钮不支持。</li>
+<li>按钮要有可访问名称；只有图标时用 <code>aria-label</code> 或视觉隐藏的文字。</li>
 </ul>
-<p>给 div 加上 click 监听，只完成了“收到点击事件时运行代码”。用户用 Tab 能不能到达它，用 Enter 或空格能不能激活它，屏幕阅读器会不会把它当成按钮，仍然是没解决的问题。</p>
-<p>原生 button 已经提供了这些基础语义和交互规则。使用它不是只为了通过检查工具，而是让鼠标、触摸、键盘和辅助技术都能通过各自习惯的方式完成同一个操作。</p>
-<h2>先区分操作和导航</h2>
-<p>提交表单、打开对话框、切换收藏状态，通常用 button。跳转到另一张页面或某个可定位地址，通常用带 href 的 a。即使视觉上都设计成长方形，也应该根据行为选择元素。</p>
-<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;/questions/js-this/&quot;</span>&gt;</span>阅读 this 题解<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;open-settings&quot;</span>&gt;</span>打开阅读设置<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<h2>div 模拟需要补什么</h2>
+<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">role</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">tabindex</span>=<span class="hljs-string">&quot;0&quot;</span> <span class="hljs-attr">aria-disabled</span>=<span class="hljs-string">&quot;false&quot;</span>&gt;</span>保存<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 </code></pre></div>
-<p>链接有复制地址、在新标签页打开、浏览器状态栏预览等行为。用 button 加 <code>location.href</code> 模拟导航，会丢掉或需要重做其中一部分；用 <code>href=&quot;#&quot;</code> 的链接触发纯操作，则可能额外改变 URL 或滚动位置。</p>
-<h2>一个开关按钮不需要手写 Enter 与空格</h2>
-<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;favorite&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">aria-pressed</span>=<span class="hljs-string">&quot;false&quot;</span>&gt;</span>
-  收藏
-<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-</code></pre></div>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> favorite = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;#favorite&#x27;</span>);
-
-favorite.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> pressed = favorite.<span class="hljs-title function_">getAttribute</span>(<span class="hljs-string">&#x27;aria-pressed&#x27;</span>) === <span class="hljs-string">&#x27;true&#x27;</span>;
-  favorite.<span class="hljs-title function_">setAttribute</span>(<span class="hljs-string">&#x27;aria-pressed&#x27;</span>, <span class="hljs-title class_">String</span>(!pressed));
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">el.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;keydown&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (event.<span class="hljs-property">key</span> === <span class="hljs-string">&#x27;Enter&#x27;</span>) el.<span class="hljs-title function_">click</span>();
+  <span class="hljs-keyword">if</span> (event.<span class="hljs-property">key</span> === <span class="hljs-string">&#x27; &#x27;</span>) event.<span class="hljs-title function_">preventDefault</span>();
+});
+el.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;keyup&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (event.<span class="hljs-property">key</span> === <span class="hljs-string">&#x27; &#x27;</span>) el.<span class="hljs-title function_">click</span>();
 });
 </code></pre></div>
-<p>原生按钮会把相应的键盘激活转成按钮激活行为，click 监听器可以处理这些入口，不仅仅处理鼠标。这里用 aria-pressed 表示一个可切换的按下状态，标签“收藏”保持稳定，辅助技术可以结合状态解释它。</p>
-<p>不要再不加区分地同时监听 keydown，在 Enter 或空格时又调用一次相同逻辑，否则可能与原生激活重复，出现一次按键切换两次、最后看起来没有变化的问题。不同按键的激活时机也不应该用一个随意的键盘事件处理器模拟。</p>
-<p>aria-pressed 不适合所有状态。展开说明通常用 aria-expanded，复选框使用它自身的 checked 状态，异步保存是否完成则需要相应的状态反馈。ARIA 表达的是具体语义，而不是万能的布尔开关。</p>
-<h2>type 和可访问名称是两项基本配置</h2>
-<p>在表单中，普通 button 没有明确写 type 时通常会作为提交按钮。非提交操作应写 <code>type=&quot;button&quot;</code>，提交表单则写 <code>type=&quot;submit&quot;</code>。否则点“打开说明”也可能触发提交和校验，甚至跳转页面。</p>
-<p>文字按钮通常可以从文字内容获得可访问名称。只有图标时，应补充名称，例如：</p>
-<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;关闭设置&quot;</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">svg</span> <span class="hljs-attr">aria-hidden</span>=<span class="hljs-string">&quot;true&quot;</span> <span class="hljs-attr">focusable</span>=<span class="hljs-string">&quot;false&quot;</span> <span class="hljs-attr">viewBox</span>=<span class="hljs-string">&quot;0 0 24 24&quot;</span>
-       <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;20&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;20&quot;</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">path</span> <span class="hljs-attr">d</span>=<span class="hljs-string">&quot;M6 6 18 18M18 6 6 18&quot;</span> <span class="hljs-attr">fill</span>=<span class="hljs-string">&quot;none&quot;</span>
-          <span class="hljs-attr">stroke</span>=<span class="hljs-string">&quot;currentColor&quot;</span> <span class="hljs-attr">stroke-width</span>=<span class="hljs-string">&quot;2&quot;</span> /&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">svg</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-</code></pre></div>
-<p>这里 SVG 是装饰，操作名称来自按钮的 aria-label。也可以使用视觉隐藏的文本。不要只依赖鼠标悬停才出现的 title；触屏和不同辅助技术下，它不一定提供同样的可发现体验。</p>
-<p>按钮已经有可见文字时，通常不需要再写一个不同含义的 aria-label。覆盖后可能让用户看到“保存”，语音操作和辅助技术却面对另一个名称。名称应尽量与用户看到的操作一致。</p>
-<h2>disabled 与 aria-disabled 不能互换</h2>
-<p><code>disabled</code> 会让原生按钮不可激活，并通常将它移出正常焦点导航；相关表单数据也按禁用控件规则处理。它适合真正不可用的操作，但需要确保用户能理解为什么不可用。</p>
-<p><code>aria-disabled=&quot;true&quot;</code> 只向辅助技术表达禁用状态，不会自动阻止点击、键盘激活或代码执行。如果为了让用户仍能聚焦并了解不可用原因而选用它，应用就必须同时阻止实际操作并提供视觉提示，不能只改属性。</p>
-<p>异步操作中，也不要只靠禁用按钮解决所有重复请求问题。点击入口、快捷键入口和请求状态都可能参与，业务仍应设计相应的防重复与幂等处理。</p>
-<h2>自定义外观不必放弃原生行为</h2>
-<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-tag">button</span><span class="hljs-selector-pseudo">:focus-visible</span> {
-  <span class="hljs-attribute">outline</span>: <span class="hljs-number">3px</span> solid <span class="hljs-number">#2563eb</span>;
-  <span class="hljs-attribute">outline-offset</span>: <span class="hljs-number">3px</span>;
+<p>原生按钮在空格键松开时激活，Enter 按下时激活，空格还要阻止页面滚动。还要处理禁用时不响应、焦点样式、表单提交。这些 <code>&lt;button&gt;</code> 全部自带。</p>
+<h2>样式</h2>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.icon-button</span> {
+  <span class="hljs-attribute">all</span>: unset;
+  <span class="hljs-attribute">display</span>: inline-grid;
+  <span class="hljs-attribute">place-items</span>: center;
+  <span class="hljs-attribute">cursor</span>: pointer;
 }
 
-<span class="hljs-selector-tag">button</span><span class="hljs-selector-attr">[aria-pressed=<span class="hljs-string">&quot;true&quot;</span>]</span> {
-  <span class="hljs-attribute">background</span>: <span class="hljs-number">#1d4ed8</span>;
-  <span class="hljs-attribute">color</span>: white;
+<span class="hljs-selector-class">.icon-button</span><span class="hljs-selector-pseudo">:focus-visible</span> {
+  <span class="hljs-attribute">outline</span>: <span class="hljs-number">2px</span> solid currentColor;
+  <span class="hljs-attribute">outline-offset</span>: <span class="hljs-number">2px</span>;
 }
 </code></pre></div>
-<p>可以使用 CSS 改颜色、边框、布局和图标，不必为了摆脱默认样式改成 div。保留可见焦点，给触摸操作足够面积，并保证状态不是只有细微颜色差别。</p>
-<p>不应在 button 内再嵌套链接、另一个 button 等交互元素。如果整个卡片可导航，同时又有收藏按钮，应把导航和收藏设计成相互独立的可操作元素，避免嵌套交互造成激活目标混乱。</p>
-<p>如果确实无法使用原生元素，<code>role=&quot;button&quot;</code> 也只补充角色，并不会附赠键盘激活、Tab 顺序或 disabled 行为。还需要处理 tabindex、键盘默认行为、名称、状态和焦点等细节。既然大多数普通操作都能用 button，优先采用原生控件通常更可靠，也更容易维护。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/button" target="_blank" rel="noreferrer">MDN · &lt;button&gt;<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E8%A7%A6%E5%8F%91%E6%93%8D%E4%BD%9C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BA%94%E4%BC%98%E5%85%88%E4%BD%BF%E7%94%A8+button%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E5%8F%AF%E7%82%B9%E5%87%BB%E7%9A%84+div%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E8%A7%A6%E5%8F%91%E6%93%8D%E4%BD%9C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BA%94%E4%BC%98%E5%85%88%E4%BD%BF%E7%94%A8+button%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E5%8F%AF%E7%82%B9%E5%87%BB%E7%9A%84+div%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ahtml-accessibility%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fhtml-accessibility%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：触发操作为什么应优先使用 button，而不是可点击的 div？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/html-semantics/">HTML 语义化对阅读、搜索与无障碍有什么价值？</a></li><li><a href="/questions/css-content-visibility/">content-visibility: auto 与移除 DOM 有什么区别？</a></li><li><a href="/questions/css-box/">标准盒模型和 border-box 有什么区别？</a></li><li><a href="/questions/css-flex-grid/">Flexbox 和 Grid 应该如何选择？</a></li></ul></nav></main></div></div>
+<p><code>all: unset</code> 会清除默认的焦点轮廓，一定要用 <code>:focus-visible</code> 补回来。</p>
+<h2>状态</h2>
+<ul>
+<li>切换按钮用 <code>aria-pressed=&quot;true&quot;</code>，例如“静音”。</li>
+<li>展开控件用 <code>aria-expanded</code>，并用 <code>aria-controls</code> 指向被控制的区域。</li>
+<li><code>disabled</code> 的按钮不能聚焦，读屏用户可能找不到它；需要让用户知道为什么不可用时，可以用 <code>aria-disabled=&quot;true&quot;</code> 保留焦点，并在点击处理里拦截。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li>整张卡片都要能点怎么办？卡片标题用一个真正的链接，再用伪元素把链接的点击区域扩展到整张卡片，卡片里的其他按钮提高层级，避免嵌套交互元素。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/button" target="_blank" rel="noreferrer">MDN · &lt;button&gt;<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E8%A7%A6%E5%8F%91%E6%93%8D%E4%BD%9C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BA%94%E4%BC%98%E5%85%88%E4%BD%BF%E7%94%A8+button%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E5%8F%AF%E7%82%B9%E5%87%BB%E7%9A%84+div%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E8%A7%A6%E5%8F%91%E6%93%8D%E4%BD%9C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BA%94%E4%BC%98%E5%85%88%E4%BD%BF%E7%94%A8+button%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E5%8F%AF%E7%82%B9%E5%87%BB%E7%9A%84+div%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ahtml-accessibility%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fhtml-accessibility%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：触发操作为什么应优先使用 button，而不是可点击的 div？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/html-semantics/">HTML 语义化对阅读、搜索与无障碍有什么价值？</a></li><li><a href="/questions/css-content-visibility/">content-visibility: auto 与移除 DOM 有什么区别？</a></li><li><a href="/questions/css-box/">标准盒模型和 border-box 有什么区别？</a></li><li><a href="/questions/css-flex-grid/">Flexbox 和 Grid 应该如何选择？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Vue面试题：defineModel 在 script setup 中声明模型 prop、更新事件和对应访问引用，简化组件 v-model 的实现。模型名称、父级初始化、修饰符转换和对象更新方式仍是组件契约，不能由宏自动推断完整业务含义。" />
+    <meta name="description" content="Vue面试题：defineModel 是 Vue 3.4 起稳定的 script setup 宏，自动声明模型 prop 和更新事件，返回可读写的 ref。修改这个 ref 会 emit 更新事件；子组件的 default 值不会同步给父组件，修改对象模型的内部属性也不会触发事件。" />
     <title>Vue 3 defineModel 的双向绑定边界是什么？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/vue-define-model/" />
     <meta name="robots" content="index,follow" />
@@ -19,100 +19,63 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Vue 3 defineModel 的双向绑定边界是什么？ · 前端知库" />
-    <meta property="og:description" content="Vue面试题：defineModel 在 script setup 中声明模型 prop、更新事件和对应访问引用，简化组件 v-model 的实现。模型名称、父级初始化、修饰符转换和对象更新方式仍是组件契约，不能由宏自动推断完整业务含义。" />
+    <meta property="og:description" content="Vue面试题：defineModel 是 Vue 3.4 起稳定的 script setup 宏，自动声明模型 prop 和更新事件，返回可读写的 ref。修改这个 ref 会 emit 更新事件；子组件的 default 值不会同步给父组件，修改对象模型的内部属性也不会触发事件。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/vue-define-model/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-define-model/#webpage","url":"https://fe.hushifa.top/questions/vue-define-model/","name":"Vue 3 defineModel 的双向绑定边界是什么？ · 前端知库","description":"Vue面试题：defineModel 在 script setup 中声明模型 prop、更新事件和对应访问引用，简化组件 v-model 的实现。模型名称、父级初始化、修饰符转换和对象更新方式仍是组件契约，不能由宏自动推断完整业务含义。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-define-model/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-define-model/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"Vue 3 defineModel 的双向绑定边界是什么？","item":"https://fe.hushifa.top/questions/vue-define-model/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-define-model/#webpage","url":"https://fe.hushifa.top/questions/vue-define-model/","name":"Vue 3 defineModel 的双向绑定边界是什么？ · 前端知库","description":"Vue面试题：defineModel 是 Vue 3.4 起稳定的 script setup 宏，自动声明模型 prop 和更新事件，返回可读写的 ref。修改这个 ref 会 emit 更新事件；子组件的 default 值不会同步给父组件，修改对象模型的内部属性也不会触发事件。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-define-model/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-define-model/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"Vue 3 defineModel 的双向绑定边界是什么？","item":"https://fe.hushifa.top/questions/vue-define-model/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue 3 defineModel 的双向绑定边界是什么？</span></nav><h1 tabindex="-1">Vue 3 defineModel 的双向绑定边界是什么？</h1><p class="reading-summary">defineModel 在 script setup 中声明模型 prop、更新事件和对应访问引用，简化组件 v-model 的实现。模型名称、父级初始化、修饰符转换和对象更新方式仍是组件契约，不能由宏自动推断完整业务含义。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<p>defineModel（Vue 3.4 起稳定）是 script setup 中的编译宏，自动声明 modelValue prop 和 update:modelValue 事件，返回一个可读写的 ref。defineModel(&#x27;title&#x27;) 声明命名模型，对应 v-model:title。修饰符通过解构 [model, modifiers] 读取，并在 set 选项里实现转换。子组件的 default 不会回写父级；修改对象模型的深层属性不会触发更新事件。</p>
-<p>defineModel 是 Vue 3.4 起提供的 script setup 编译宏。默认模型对应 modelValue 与 update:modelValue，提供字符串名称时则对应那个名称的 prop 与更新事件。</p>
-<p>它返回的模型引用让子组件可以用类似 ref 的方式读取和写入，但背后仍然要与父级绑定协作。宏减少的是重复声明代码，不是取消数据所有权。</p>
-<h2>多个命名模型可以各自建立契约</h2>
-<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;!-- ModelEditor.vue --&gt;
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue 3 defineModel 的双向绑定边界是什么？</span></nav><h1 tabindex="-1">Vue 3 defineModel 的双向绑定边界是什么？</h1><p class="reading-summary">defineModel 是 Vue 3.4 起稳定的 script setup 宏，自动声明模型 prop 和更新事件，返回可读写的 ref。修改这个 ref 会 emit 更新事件；子组件的 default 值不会同步给父组件，修改对象模型的内部属性也不会触发事件。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li><code>const model = defineModel()</code> 等价于声明 <code>modelValue</code> prop 和 <code>update:modelValue</code> 事件；给 <code>model.value</code> 赋值就会 emit。</li>
+<li><code>defineModel(&#x27;title&#x27;)</code> 声明命名模型，对应父组件的 <code>v-model:title</code>。</li>
+<li>修饰符通过解构读取：<code>const [model, modifiers] = defineModel()</code>，再在 <code>set</code> 选项里根据 <code>modifiers</code> 转换写入的值。</li>
+<li>父组件没有绑定值时，子组件用 <code>default</code> 显示，但这个默认值不会回传给父组件，两边可能不一致。</li>
+<li>模型是对象时，<code>model.value.name = &#x27;x&#x27;</code> 直接修改了父组件的对象，不会 emit；需要通知父组件时整体赋新对象。</li>
+</ul>
+<h2>基本用法</h2>
+<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;!-- Rating.vue --&gt;
 &lt;script setup&gt;
-const [title, titleModifiers] = defineModel(&#x27;title&#x27;, {
-  type: String,
-  required: true,
+const score = defineModel({ type: Number, required: true });
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;button v-for=&quot;n in 5&quot; :key=&quot;n&quot; :aria-pressed=&quot;n &lt;= score&quot; @click=&quot;score = n&quot;&gt;★&lt;/button&gt;
+&lt;/template&gt;
+</code></pre></div>
+<p>父组件写 <code>&lt;Rating v-model=&quot;rating&quot; /&gt;</code> 即可。<code>required: true</code> 让父组件必须提供值，避免出现子组件用默认值、父组件却是 <code>undefined</code> 的情况。</p>
+<h2>自定义修饰符</h2>
+<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;!-- TitleInput.vue --&gt;
+&lt;script setup&gt;
+const [title, modifiers] = defineModel(&#x27;title&#x27;, {
   set(value) {
-    return titleModifiers.uppercase ? value.toUpperCase() : value;
+    return modifiers.capitalize ? value.charAt(0).toUpperCase() + value.slice(1) : value;
   },
 });
-const enabled = defineModel(&#x27;enabled&#x27;, { type: Boolean, required: true });
 &lt;/script&gt;
 
 &lt;template&gt;
-  &lt;section&gt;
-    &lt;label&gt;标题&lt;input v-model=&quot;title&quot; /&gt;&lt;/label&gt;
-    &lt;label&gt;&lt;input v-model=&quot;enabled&quot; type=&quot;checkbox&quot; /&gt;启用&lt;/label&gt;
-  &lt;/section&gt;
+  &lt;input v-model=&quot;title&quot; /&gt;
 &lt;/template&gt;
 </code></pre></div>
-<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;!-- Parent.vue --&gt;
-&lt;script setup&gt;
-import { ref } from &#x27;vue&#x27;;
-import ModelEditor from &#x27;./ModelEditor.vue&#x27;;
-const title = ref(&#x27;Vue&#x27;);
-const enabled = ref(true);
+<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;TitleInput v-model:title.capitalize=&quot;pageTitle&quot; /&gt;
+</code></pre></div>
+<p><code>set</code> 只作用于子组件写入的值。父组件直接给 <code>pageTitle</code> 赋小写字符串，不会被转换。</p>
+<h2>多个模型</h2>
+<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;script setup&gt;
+const first = defineModel(&#x27;first&#x27;);
+const last = defineModel(&#x27;last&#x27;);
 &lt;/script&gt;
-
-&lt;template&gt;
-  &lt;section&gt;
-    &lt;ModelEditor v-model:title.uppercase=&quot;title&quot; v-model:enabled=&quot;enabled&quot; /&gt;
-    &lt;p&gt;父级标题：{{ title }}&lt;/p&gt;
-    &lt;p&gt;父级启用：{{ enabled }}&lt;/p&gt;
-    &lt;button type=&quot;button&quot; @click=&quot;title = &#x27;from parent&#x27;&quot;&gt;父级赋值&lt;/button&gt;
-  &lt;/section&gt;
-&lt;/template&gt;
 </code></pre></div>
-<p>title 模型对应 title/update:title，enabled 模型对应 enabled/update:enabled。子组件用模板绑定模型引用，更新后通过生成的协议把值交给父级；父级自己赋值，也会沿 prop 路径反映到子组件。</p>
-<p>在 JavaScript 中操作模型引用仍通常使用 .value，模板则遵循 ref 解包规则。defineModel 不是在普通 JavaScript 文件里随便调用的运行时函数，不需要像 ref 那样从 vue 导入，应由 SFC 编译器处理。</p>
-<h2>修饰符只会执行你定义的含义</h2>
-<p>uppercase 是本例自定义的修饰符，宏把修饰符信息交给组件，set 转换决定从子级发出的值怎样处理。用户输入 react，会把 REACT 交给父级。</p>
-<p>但父级按钮直接写入 from parent，不会因为存在 set 转换就自动变成大写。set 处理的是写入路径，不是所有值进入系统时都强制执行的全局规则。若需要对读取展示也做变换，可以设计 get 转换，并明确显示值与实际模型值的区别。</p>
-<p>大小写、去空白、数值化等转换也会影响光标和输入法体验。不能仅因为宏允许转换，就在每个中间输入状态都强制采用最终业务格式。</p>
-<h2>子级默认值不会自动初始化父级</h2>
-<p>下面展示一个应当理解并有意处理的边界：</p>
-<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;!-- DefaultCounter.vue --&gt;
-&lt;script setup&gt;
-const model = defineModel({ type: Number, default: 1 });
-&lt;/script&gt;
-
-&lt;template&gt;
-  &lt;section&gt;
-    &lt;output aria-label=&quot;子级模型&quot;&gt;{{ model }}&lt;/output&gt;
-    &lt;button type=&quot;button&quot; @click=&quot;model++&quot;&gt;子级增加&lt;/button&gt;
-  &lt;/section&gt;
-&lt;/template&gt;
-</code></pre></div>
-<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;!-- DefaultParent.vue --&gt;
-&lt;script setup&gt;
-import { ref } from &#x27;vue&#x27;;
-import DefaultCounter from &#x27;./DefaultCounter.vue&#x27;;
-const count = ref();
-&lt;/script&gt;
-
-&lt;template&gt;
-  &lt;section&gt;
-    &lt;p&gt;父级模型：{{ count === undefined ? &#x27;undefined&#x27; : count }}&lt;/p&gt;
-    &lt;DefaultCounter v-model=&quot;count&quot; /&gt;
-  &lt;/section&gt;
-&lt;/template&gt;
-</code></pre></div>
-<p>初始时子级可以显示 1，而父级 count 仍是 undefined。子级默认值不等于已经向父级发出了一次初始化更新。之后操作模型，父级才可能通过更新事件接收到新的值。</p>
-<p>更清楚的设计通常是在状态所有者处初始化，或明确要求父级提供值。required 可以表达契约和辅助开发检查，但也不是生成父级状态或阻止所有错误运行时输入的自动机制。</p>
-<h2>对象模型的深层修改不一定经过模型 setter</h2>
-<p>模型中存的是对象时，直接修改 model.value.name 可能只是修改共享对象的嵌套属性，并没有给 model.value 重新赋值。不能因此保证 update 事件、set 转换或你希望记录的提交动作都按预期发生。</p>
-<p>如果接口约定通过模型更新提交新对象，可以复制修改路径后给模型赋值；如果是复杂表单草稿，也可以用显式保存事件，把局部编辑与正式父级状态分开。选择取决于双方约定，而不只是“写起来更像双向绑定”。</p>
-<h2>多个模型不代表更新天然原子化</h2>
-<p>把起止日期拆成两个命名模型，可以改善接口表达，但它们仍可能先后变化。如果两个字段必须始终满足共同条件，父级可能需要统一校验，或改为一个整体值、草稿提交流程。</p>
-<p>校验错误、请求 pending、服务器确认结果也不是输入模型本身。把它们全部混成一个随时双向写入的大对象，往往会让状态来源更加混乱。</p>
-<h2>它仍依赖完整的父子绑定与编译链</h2>
-<p>没有正确的 prop/update 绑定关系时，子级的本地模型行为不能被理解成父级已经同步。命名不匹配、忘记监听或把只读来源当写入目标，都可能让两边出现不同结果。</p>
-<p>相关类型参数、默认值、修饰符和转换选项也需要匹配编译器与 Vue 版本。旧运行环境或没有 SFC 编译支持的工具，不会仅因为函数名字叫 defineModel 就生成这些能力。</p>
-<p>验证时应覆盖父级改值、子级输入、默认值未初始化、自定义修饰符、清空与组合输入，还要检查是否产生多余更新或隐藏的对象修改。只有这些边界明确，defineModel 才真正减少维护工作，而不是把通信规则藏得更深。</p></div><div class="answer-bottom"><a href="https://vuejs.org/guide/components/v-model.html" target="_blank" rel="noreferrer">Vue · Component v-model<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vue+3+defineModel+%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A%E8%BE%B9%E7%95%8C%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVue+3+defineModel+%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A%E8%BE%B9%E7%95%8C%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-define-model%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-define-model%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vue 3 defineModel 的双向绑定边界是什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-vmodel/">组件 v-model 的本质是什么？</a></li><li><a href="/questions/vue-complex-form/">Vue 复杂表单怎样组织状态、校验和提交？</a></li><li><a href="/questions/vue-suspense/">Vue Suspense 适合处理什么异步组件边界？</a></li><li><a href="/questions/vue-ref-reactive/">Vue 3 中 ref 和 reactive 有什么区别？</a></li></ul></nav></main></div></div>
+<p>父组件写 <code>&lt;NameEditor v-model:first=&quot;f&quot; v-model:last=&quot;l&quot; /&gt;</code>。两个模型各自 emit，父组件分两次收到更新；需要两个字段必须同时生效时，改用单个对象模型并整体赋值。</p>
+<h2>编译结果</h2>
+<p><code>defineModel</code> 只能在 <code>&lt;script setup&gt;</code> 中使用，不需要导入，由编译器处理。它展开后就是 prop、emit 和一个本地 ref：父组件传入的值变化时同步到 ref，ref 被赋值时 emit。原理见《组件 v-model 的本质是什么？》。</p>
+<h2>常见追问</h2>
+<ul>
+<li>父组件没有用 v-model 时，子组件赋值会怎样？本地 ref 会更新并显示新值，但父组件不知道，像一个非受控组件。</li>
+<li>能在普通组合式函数里调用吗？不能，它是编译宏，只在 SFC 的 <code>&lt;script setup&gt;</code> 顶层有效。</li>
+</ul></div><div class="answer-bottom"><a href="https://vuejs.org/guide/components/v-model.html" target="_blank" rel="noreferrer">Vue · Component v-model<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vue+3+defineModel+%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A%E8%BE%B9%E7%95%8C%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVue+3+defineModel+%E7%9A%84%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A%E8%BE%B9%E7%95%8C%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-define-model%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-define-model%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vue 3 defineModel 的双向绑定边界是什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-ref-reactive/">Vue 3 中 ref 和 reactive 有什么区别？</a></li><li><a href="/questions/vue-reactivity-tracking/">Vue 3 响应式依赖是怎样收集和触发的？</a></li><li><a href="/questions/vue-vmodel/">组件 v-model 的本质是什么？</a></li><li><a href="/questions/vue-compiler-optimizations/">Vue 模板编译如何减少运行时更新工作？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

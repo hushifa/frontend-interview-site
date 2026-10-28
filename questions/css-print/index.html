@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="HTML / CSS面试题：打印面向有限纸张与分页阅读，需要单独处理交互区域、滚动内容、固定定位、分页和资源就绪。@media print 与 @page 提供样式入口，但仍受层叠规则、浏览器和用户打印设置影响。" />
+    <meta name="description" content="HTML / CSS面试题：用 @media print 隐藏导航和交互控件、展开滚动区域、改用适合纸张的字号和颜色，用 @page 设置页边距，用 break-* 控制分页位置。" />
     <title>网页打印样式应该怎样单独设计？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/css-print/" />
     <meta name="robots" content="index,follow" />
@@ -19,101 +19,74 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="网页打印样式应该怎样单独设计？ · 前端知库" />
-    <meta property="og:description" content="HTML / CSS面试题：打印面向有限纸张与分页阅读，需要单独处理交互区域、滚动内容、固定定位、分页和资源就绪。@media print 与 @page 提供样式入口，但仍受层叠规则、浏览器和用户打印设置影响。" />
+    <meta property="og:description" content="HTML / CSS面试题：用 @media print 隐藏导航和交互控件、展开滚动区域、改用适合纸张的字号和颜色，用 @page 设置页边距，用 break-* 控制分页位置。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/css-print/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-print/#webpage","url":"https://fe.hushifa.top/questions/css-print/","name":"网页打印样式应该怎样单独设计？ · 前端知库","description":"HTML / CSS面试题：打印面向有限纸张与分页阅读，需要单独处理交互区域、滚动内容、固定定位、分页和资源就绪。@media print 与 @page 提供样式入口，但仍受层叠规则、浏览器和用户打印设置影响。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-print/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-print/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"网页打印样式应该怎样单独设计？","item":"https://fe.hushifa.top/questions/css-print/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-print/#webpage","url":"https://fe.hushifa.top/questions/css-print/","name":"网页打印样式应该怎样单独设计？ · 前端知库","description":"HTML / CSS面试题：用 @media print 隐藏导航和交互控件、展开滚动区域、改用适合纸张的字号和颜色，用 @page 设置页边距，用 break-* 控制分页位置。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-print/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-print/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"网页打印样式应该怎样单独设计？","item":"https://fe.hushifa.top/questions/css-print/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">网页打印样式应该怎样单独设计？</span></nav><h1 tabindex="-1">网页打印样式应该怎样单独设计？</h1><p class="reading-summary">打印面向有限纸张与分页阅读，需要单独处理交互区域、滚动内容、固定定位、分页和资源就绪。@media print 与 @page 提供样式入口，但仍受层叠规则、浏览器和用户打印设置影响。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">网页打印样式应该怎样单独设计？</span></nav><h1 tabindex="-1">网页打印样式应该怎样单独设计？</h1><p class="reading-summary">用 @media print 隐藏导航和交互控件、展开滚动区域、改用适合纸张的字号和颜色，用 @page 设置页边距，用 break-* 控制分页位置。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>打印样式先决定用户需要带走哪些内容，再调整排版，可用 <code>@media print</code> 或 <code>media=&quot;print&quot;</code> 的样式表。</li>
-<li>要取消滚动区域的高度限制和吸顶定位，隐藏导航与按钮，让正文能连续分页。</li>
-<li><code>@page</code> 控制纸张尺寸和页边距，不能普遍控制浏览器自动添加的页眉页脚。</li>
-<li><code>break-*</code> 是分页约束不是承诺；虚拟列表、未挂载或懒加载的内容不在 DOM 里，CSS 无法打印出来。</li>
+<li><code>@media print</code> 里隐藏导航、按钮、广告等纸上无用的内容。</li>
+<li>固定高度加滚动条的区域要改成 <code>height: auto; overflow: visible</code>，否则纸上只打印可见的那一部分。</li>
+<li><code>@page { margin: 2cm; }</code> 设置页边距，<code>size</code> 设置纸张方向；用户的打印设置可能覆盖这些值。</li>
+<li><code>break-inside: avoid</code> 防止表格行、图片被分页切开，<code>break-before: page</code> 强制换页。</li>
+<li>浏览器默认不打印背景色，重要信息不要只靠背景色表达；必要时用 <code>print-color-adjust: exact</code>。</li>
 </ul>
-<p>屏幕上可以滚动、展开、点击，纸张和普通导出的 PDF 却不会替用户继续操作页面。一个在屏幕里很舒服的“固定导航 + 高度受限表格 + 横向滚动代码区”，直接打印后可能只剩几行数据，导航还覆盖在正文上。</p>
-<p>打印样式首先要决定“用户需要带走哪些内容”，再调整排版。不是把屏幕页面按比例缩小，就自动得到了可读的文档。</p>
-<h2>使用专门的打印样式入口</h2>
-<p>小规模规则可以放在现有样式表的 <code>@media print</code> 中；规则多时，也可以通过 <code>&lt;link rel=&quot;stylesheet&quot; href=&quot;/print.css&quot; media=&quot;print&quot;&gt;</code> 拆成独立文件。</p>
-<p>下面假设页面的正文容器叫 <code>.report</code>，内部滚动区域叫 <code>.scroll-region</code>，按钮栏和导航分别有对应类名：</p>
+<h2>基本样式</h2>
 <div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-keyword">@media</span> print {
-  <span class="hljs-selector-class">.site-nav</span>,
-  <span class="hljs-selector-class">.action-bar</span>,
-  <span class="hljs-selector-class">.no-print</span> {
+  <span class="hljs-selector-tag">nav</span>,
+  <span class="hljs-selector-class">.toolbar</span>,
+  <span class="hljs-selector-class">.ad</span> {
     <span class="hljs-attribute">display</span>: none;
   }
 
   <span class="hljs-selector-tag">body</span> {
-    <span class="hljs-attribute">color</span>: <span class="hljs-number">#000</span>;
-    <span class="hljs-attribute">background</span>: <span class="hljs-number">#fff</span>;
     <span class="hljs-attribute">font-size</span>: <span class="hljs-number">11pt</span>;
-    <span class="hljs-attribute">line-height</span>: <span class="hljs-number">1.5</span>;
+    <span class="hljs-attribute">color</span>: black;
   }
 
-  <span class="hljs-selector-class">.report</span> {
-    <span class="hljs-attribute">display</span>: block;
-    <span class="hljs-attribute">width</span>: auto;
-    <span class="hljs-attribute">max-width</span>: none;
-    <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span>;
-    <span class="hljs-attribute">padding</span>: <span class="hljs-number">0</span>;
-    <span class="hljs-attribute">box-shadow</span>: none;
-  }
-
-  <span class="hljs-selector-class">.report</span>,
-  <span class="hljs-selector-class">.scroll-region</span> {
+  <span class="hljs-selector-class">.scroll-area</span> {
     <span class="hljs-attribute">height</span>: auto;
-    <span class="hljs-attribute">max-height</span>: none;
     <span class="hljs-attribute">overflow</span>: visible;
   }
 
-  <span class="hljs-selector-class">.report</span> <span class="hljs-selector-class">.sticky-title</span> {
-    <span class="hljs-attribute">position</span>: static;
+  <span class="hljs-selector-tag">a</span><span class="hljs-selector-attr">[href^=<span class="hljs-string">&#x27;http&#x27;</span>]</span><span class="hljs-selector-pseudo">::after</span> {
+    <span class="hljs-attribute">content</span>: <span class="hljs-string">&#x27; (&#x27;</span> <span class="hljs-built_in">attr</span>(href) <span class="hljs-string">&#x27;)&#x27;</span>;
   }
 
-  <span class="hljs-selector-class">.report</span> pre {
-    <span class="hljs-attribute">white-space</span>: pre-wrap;
-    <span class="hljs-attribute">overflow-wrap</span>: anywhere;
-  }
-
-  <span class="hljs-selector-class">.report</span> <span class="hljs-selector-tag">img</span> {
-    <span class="hljs-attribute">max-width</span>: <span class="hljs-number">100%</span>;
-    <span class="hljs-attribute">height</span>: auto;
-  }
-
-  <span class="hljs-selector-class">.report</span> <span class="hljs-selector-tag">h2</span> {
+  <span class="hljs-selector-tag">h2</span> {
     <span class="hljs-attribute">break-after</span>: avoid;
   }
 
-  <span class="hljs-selector-class">.report</span> <span class="hljs-selector-tag">figure</span> {
+  <span class="hljs-selector-tag">tr</span>,
+  <span class="hljs-selector-tag">img</span> {
     <span class="hljs-attribute">break-inside</span>: avoid;
+  }
+
+  <span class="hljs-selector-tag">thead</span> {
+    <span class="hljs-attribute">display</span>: table-header-group;
   }
 }
 
 <span class="hljs-keyword">@page</span> {
-  size: A4 portrait;
-  <span class="hljs-attribute">margin</span>: <span class="hljs-number">15mm</span>;
+  <span class="hljs-attribute">margin</span>: <span class="hljs-number">2cm</span>;
 }
 </code></pre></div>
-<p>这段代码的主要目的不是增加装饰，而是把正文重新变成可以连续分页的内容。取消滚动区域的高度限制，让内容有机会完整排出；取消吸顶定位，避免把屏幕交互布局带到纸上；代码允许折行，避免长行伸出纸张。</p>
-<p><code>@media print</code> 不会给里面的选择器额外加权重。若屏幕规则使用更强的选择器、行内样式或 <code>!important</code>，打印规则仍可能被覆盖。应先统一层叠设计；确需覆盖局部第三方样式时，才有针对性地使用更高优先级，而不是全局到处加 <code>!important</code>。</p>
-<h2>@page 管纸面，正文仍由普通 CSS 排版</h2>
-<p><code>@page</code> 可以表达纸张尺寸、方向、页边距等要求。例子选择 A4 纵向和 15mm 页边距；横向大表格可以考虑 <code>size: A4 landscape</code>，但不能因此假定用户一定选择同样的纸张或缩放设置。</p>
-<p>页面尺寸还要扣除页边距，剩下的才是正文可用区域。不要一边指定 15mm 页边距，一边仍把正文固定成 210mm 宽度，那相当于拿整张 A4 的宽度去塞已经缩窄的内容区域。</p>
-<p>浏览器打印对话框、打印机可打印区域和用户设置都会影响结果。CSS 不能普遍、无条件地控制浏览器自动添加的日期、网址等页眉页脚；相关选项可能需要用户在打印设置中调整。</p>
-<h2>分页规则是约束，不是绝对承诺</h2>
-<p><code>break-before</code>、<code>break-after</code> 控制元素前后的分页倾向，<code>break-inside: avoid</code> 请求尽量不要把元素拆开。标题使用 <code>break-after: avoid</code>，是为了避免标题落在一页最后、正文却全在下一页。</p>
-<p>但一个比整张纸内容区还高的卡片，不可能完整塞进一页。浏览器可能必须断开，过度使用 <code>avoid</code> 也可能让页面留下大片空白。因此适合小图片说明块的规则，不应无差别套到整篇文章、全部表格或所有容器上。</p>
-<p>长表格应保留正确的 <code>table</code>、<code>thead</code>、<code>tbody</code> 结构，检查表头重复和行拆分在目标浏览器中的表现；给表格外层设置 <code>overflow: auto</code> 并不能在纸上提供横向滚动。列太多时需要缩短文案、调整列宽、横向纸张，或者单独提供打印视图。</p>
-<h2>内容还没在 DOM 里，CSS 不能把它打印出来</h2>
-<p>虚拟列表通常只渲染屏幕附近的几行。解除外层高度限制，不会凭空生成其余几千行数据。折叠区域可能根本没挂载，懒加载图片也可能尚未请求。此时需要在打印前明确准备内容：渲染所需数据、展开必要区域、等待关键资源就绪，再调用 <code>window.print()</code>。</p>
-<p><code>beforeprint</code> 可用于同步调整已准备好的界面，<code>afterprint</code> 可用于恢复。但不能假设在 <code>beforeprint</code> 中发起的任意异步请求，浏览器都会等待；更稳妥的方式是让“打印”按钮先完成数据准备，失败时给出提示，准备完成后才打开打印流程。</p>
-<p><code>afterprint</code> 也不是“用户已经成功拿到纸张”的凭据。关闭或取消预览等情况同样可能结束打印流程，网页无法据此确认打印机是否有纸、输出是否成功。</p>
-<h2>可读性不能只靠背景色</h2>
-<p>有的用户不会打印背景图形。图表、状态标签和深色主题若只靠背景颜色表达信息，打印时可能丢失含义。应保留文字、边框或其他识别方式；<code>print-color-adjust: exact</code> 可以表达保留颜色的意图，但用户与浏览器设置仍可能优先。</p>
-<p>链接也需要按文档用途决定是否展示地址。学习资料可以给外部引用补充可读网址，操作后台里的内部链接则未必适合把一长串参数印出来。不能无差别给所有链接附上完整 <code>href</code>。</p>
-<p>验证时先用 DevTools 的 print 媒体模拟检查规则是否命中，再打开真实打印预览或导出 PDF，检查第一页、中间分页和最后一页是否缺内容。媒体模拟不会完整复现实际纸张分页，因此不能只看模拟页面就宣称打印完成。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Media_queries/Printing" target="_blank" rel="noreferrer">MDN · Printing<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E7%BD%91%E9%A1%B5%E6%89%93%E5%8D%B0%E6%A0%B7%E5%BC%8F%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%8D%95%E7%8B%AC%E8%AE%BE%E8%AE%A1%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E7%BD%91%E9%A1%B5%E6%89%93%E5%8D%B0%E6%A0%B7%E5%BC%8F%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%8D%95%E7%8B%AC%E8%AE%BE%E8%AE%A1%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-print%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-print%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：网页打印样式应该怎样单独设计？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-container-queries/">媒体查询和容器查询分别适合什么场景？</a></li><li><a href="/questions/css-box/">标准盒模型和 border-box 有什么区别？</a></li><li><a href="/questions/css-flex-grid/">Flexbox 和 Grid 应该如何选择？</a></li><li><a href="/questions/html-accessibility/">触发操作为什么应优先使用 button，而不是可点击的 div？</a></li></ul></nav></main></div></div>
+<p>链接后打印出网址，读者在纸上也能找到来源。<code>thead</code> 设为 <code>table-header-group</code> 后，长表格的表头会在每页重复。</p>
+<h2>常见问题</h2>
+<ul>
+<li><code>position: fixed</code> 的元素会在每一页重复出现，打印时通常改为 <code>static</code> 或隐藏。</li>
+<li>懒加载的图片如果没进入过视口，打印时可能是空白；打印前可以在 <code>beforeprint</code> 事件里触发加载。</li>
+<li>flex 和 grid 容器里的分页控制支持较弱，需要分页的长内容尽量用普通块布局。</li>
+</ul>
+<h2>测试</h2>
+<p>开发者工具的 Rendering 面板可以模拟 <code>print</code> 媒体类型，最终效果要用浏览器的打印预览确认，并分别检查 A4 和 Letter 纸张。</p>
+<h2>常见追问</h2>
+<ul>
+<li>要不要单独生成 PDF？需要固定格式（发票、合同）时，用服务端生成 PDF 更可控；普通文章用打印样式就够了。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Media_queries/Printing" target="_blank" rel="noreferrer">MDN · Printing<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E7%BD%91%E9%A1%B5%E6%89%93%E5%8D%B0%E6%A0%B7%E5%BC%8F%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%8D%95%E7%8B%AC%E8%AE%BE%E8%AE%A1%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E7%BD%91%E9%A1%B5%E6%89%93%E5%8D%B0%E6%A0%B7%E5%BC%8F%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%8D%95%E7%8B%AC%E8%AE%BE%E8%AE%A1%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-print%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-print%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：网页打印样式应该怎样单独设计？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-container-queries/">媒体查询和容器查询分别适合什么场景？</a></li><li><a href="/questions/css-box/">标准盒模型和 border-box 有什么区别？</a></li><li><a href="/questions/css-flex-grid/">Flexbox 和 Grid 应该如何选择？</a></li><li><a href="/questions/html-accessibility/">触发操作为什么应优先使用 button，而不是可点击的 div？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

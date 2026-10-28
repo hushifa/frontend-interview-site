@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="AI 应用前端面试题：把模型输出当成不可信的候选补丁，建立需求约束、类型检查、测试、依赖和安全审查的验证链，区分代码能运行与代码适合合并。" />
+    <meta name="description" content="AI 应用前端面试题：把模型生成的代码当作外部贡献者提交的候选补丁：先写清可检查的需求约束，再读差异和数据流，跑类型检查、lint 和覆盖失败与竞态的测试，并审查新增依赖与许可证。" />
     <title>AI 生成的前端代码应该怎样审查和验证？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/ai-code-review/" />
     <meta name="robots" content="index,follow" />
@@ -19,63 +19,58 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="AI 生成的前端代码应该怎样审查和验证？ · 前端知库" />
-    <meta property="og:description" content="AI 应用前端面试题：把模型输出当成不可信的候选补丁，建立需求约束、类型检查、测试、依赖和安全审查的验证链，区分代码能运行与代码适合合并。" />
+    <meta property="og:description" content="AI 应用前端面试题：把模型生成的代码当作外部贡献者提交的候选补丁：先写清可检查的需求约束，再读差异和数据流，跑类型检查、lint 和覆盖失败与竞态的测试，并审查新增依赖与许可证。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/ai-code-review/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ai-code-review/#webpage","url":"https://fe.hushifa.top/questions/ai-code-review/","name":"AI 生成的前端代码应该怎样审查和验证？ · 前端知库","description":"AI 应用前端面试题：把模型输出当成不可信的候选补丁，建立需求约束、类型检查、测试、依赖和安全审查的验证链，区分代码能运行与代码适合合并。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ai-code-review/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ai-code-review/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"AI 应用前端面试题","item":"https://fe.hushifa.top/topics/ai-frontend/"},{"@type":"ListItem","position":3,"name":"AI 生成的前端代码应该怎样审查和验证？","item":"https://fe.hushifa.top/questions/ai-code-review/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ai-code-review/#webpage","url":"https://fe.hushifa.top/questions/ai-code-review/","name":"AI 生成的前端代码应该怎样审查和验证？ · 前端知库","description":"AI 应用前端面试题：把模型生成的代码当作外部贡献者提交的候选补丁：先写清可检查的需求约束，再读差异和数据流，跑类型检查、lint 和覆盖失败与竞态的测试，并审查新增依赖与许可证。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ai-code-review/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ai-code-review/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"AI 应用前端面试题","item":"https://fe.hushifa.top/topics/ai-frontend/"},{"@type":"ListItem","position":3,"name":"AI 生成的前端代码应该怎样审查和验证？","item":"https://fe.hushifa.top/questions/ai-code-review/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/ai-frontend/">AI 应用前端面试题</a><span aria-hidden="true">/</span><span aria-current="page">AI 生成的前端代码应该怎样审查和验证？</span></nav><h1 tabindex="-1">AI 生成的前端代码应该怎样审查和验证？</h1><p class="reading-summary">把模型输出当成不可信的候选补丁，建立需求约束、类型检查、测试、依赖和安全审查的验证链，区分代码能运行与代码适合合并。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/ai-frontend/">AI 应用前端面试题</a><span aria-hidden="true">/</span><span aria-current="page">AI 生成的前端代码应该怎样审查和验证？</span></nav><h1 tabindex="-1">AI 生成的前端代码应该怎样审查和验证？</h1><p class="reading-summary">把模型生成的代码当作外部贡献者提交的候选补丁：先写清可检查的需求约束，再读差异和数据流，跑类型检查、lint 和覆盖失败与竞态的测试，并审查新增依赖与许可证。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>把模型生成的代码当作不可信的候选补丁。</li>
-<li>审查前先把需求写成可检查的约束，再读差异和数据流。</li>
-<li>类型检查和 lint 只能证明一部分事实，测试要覆盖失败、取消和竞态。</li>
-<li>还要审查新增依赖的真实性和许可证，以及提示词注入带来的安全风险。</li>
+<li>生成的代码可能用了过时 API、漏掉取消和清理、引入不必要的依赖，或者把用户输入直接插进 HTML。它是候选补丁，不是成品。</li>
+<li>审查前先把需求写成可检查的约束：错误怎么处理、请求能否取消、卸载时清理什么、允许哪些依赖。</li>
+<li>先读差异和数据流，追踪输入最终进入哪里（DOM、URL、存储、网络请求），再看演示效果。</li>
+<li>类型检查和 lint 只能发现一部分问题，测试要覆盖失败、取消、快速切换和组件卸载后的迟到响应。</li>
+<li>新增依赖要确认包真实存在、来源可信、许可证可用。模型可能编造一个不存在的包名，攻击者可以抢注它。</li>
 </ul>
-<p>AI 可以很快生成一个表单、请求封装或 React 组件，但“代码看起来像对的”不等于它符合项目约束。模型可能使用过时 API、遗漏取消和清理、引入未经批准的依赖，甚至把用户输入直接插入 HTML。</p>
-<p>因此生成代码的正确流程不是复制到仓库，而是把它当成一个外部贡献者提交的候选补丁：先明确需求和边界，再用自动化检查和人工审查共同验证。</p>
-<h2>先把需求写成可检查的约束</h2>
-<p>“写一个搜索组件”太宽泛。审查前至少要明确：</p>
+<h2>需求约束示例</h2>
+<p>&quot;写一个搜索组件&quot;太宽泛。至少明确：</p>
 <ul>
-<li>输入变化是否防抖，旧请求是否取消或丢弃；</li>
-<li>结果接口的状态码、数据结构和错误文案；</li>
-<li>组件卸载时要清理哪些监听、计时器和请求；</li>
-<li>是否允许新增依赖、目标浏览器和 TypeScript 版本；</li>
-<li>用户输入是否能进入 HTML、URL、命令或权限接口；</li>
-<li>哪些行为必须通过键盘、读屏和窄屏验收。</li>
+<li>输入防抖多久，旧请求是取消还是丢弃结果。</li>
+<li>接口错误、空结果、加载中分别显示什么。</li>
+<li>卸载时清理哪些监听、计时器和请求。</li>
+<li>是否允许新增依赖，目标浏览器和 TypeScript 版本。</li>
+<li>键盘和读屏器怎样操作。</li>
 </ul>
-<p>没有这些约束，审查者只能判断代码是否“像一个实现”，无法判断它是否解决了真实问题。</p>
-<h2>先读差异和数据流，不先看演示截图</h2>
-<p>AI 生成代码应以小提交或补丁进入分支，先看它修改了哪些文件、引入了哪些包、改变了哪些入口。重点追踪数据从哪里来、经过什么转换、最终进入哪个副作用：DOM、网络请求、存储、日志、权限或第三方 SDK。</p>
-<p>例如下面这种代码可能能显示文字，但把不可信输入送进了 HTML 解释器：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">preview.<span class="hljs-property">innerHTML</span> = modelOutput;
+<h2>读数据流</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">preview.<span class="hljs-property">innerHTML</span> = modelOutput; <span class="hljs-comment">// 不可信内容进入 HTML 解析器</span>
 </code></pre></div>
-<p>改成 <code>textContent</code> 可能是正确方向；如果产品确实需要富文本，还要使用明确允许标签和协议的净化流程，并检查后续插件是否重新插入危险节点。仅仅让模型补一句“请注意 XSS”不能替代代码审查。</p>
-<p>URL、命令参数、SQL、文件路径、模板和权限判断都要做同样的数据流审查。AI 输出的变量名叫 <code>safeHtml</code> 或 <code>trustedUrl</code>，不代表它已经经过验证。</p>
-<h2>类型检查和 lint 只能证明一部分事实</h2>
-<p>TypeScript 可以发现参数类型、缺失字段和部分错误分支，但不能证明服务器真的返回了声明类型，也不能证明权限、取消、内存或 XSS 处理正确。ESLint 可以发现规则问题，却不知道“这个请求是否能覆盖新搜索结果”。</p>
-<p>生成代码应运行项目已有的类型检查、lint、格式检查和构建，并把新增依赖锁进正确的 lockfile。不要为了让 AI 代码通过而大面积关闭规则、加入 <code>any</code> 或删除测试；这通常只是隐藏了问题。</p>
-<h2>测试要覆盖失败和竞态，不只测成功截图</h2>
-<p>一个异步组件至少应测试：成功、HTTP 错误、格式错误、用户取消、快速切换输入、组件卸载后迟到响应、重复提交和空结果。对浏览器 API 还要测试不支持、权限拒绝和用户未激活等分支。</p>
-<p>如果模型只生成了“点击按钮后显示成功”的测试，不能据此认为实现可靠。Mock 要匹配真实接口契约，关键流程还要有集成或端到端测试；视觉截图通过也不能证明键盘、读屏和网络失败正确。</p>
-<h2>依赖和许可证同样要审查</h2>
-<p>模型可能为了一个很小的功能引入一套大型库，或生成一个实际上不存在的包名。安装前应确认包的官方仓库、版本、维护状态、许可证、传递依赖和发布内容；执行安装脚本和构建脚本时还要考虑供应链风险。</p>
-<p>“网上常见的代码”也可能复制了带限制的商业代码、过时的 polyfill 或包含不明许可证的片段。项目需要保留依赖变更记录，不要把模型引用来源当成许可证证明。</p>
-<h2>安全审查要关注模型特有的输入路径</h2>
-<p>如果 AI 根据 issue、网页、文档或用户提示生成代码，外部文本可能包含提示词注入，诱导模型关闭校验、泄露环境变量或添加恶意依赖。工具调用型代码还可能获得文件、终端或网络权限。</p>
-<p>模型输出应先放在隔离分支或临时目录，限制可访问的文件和命令，禁止把秘密、生产令牌或完整私有数据直接放入提示。任何自动修改、执行测试或创建 Pull Request 的 Agent 都应有明确的工具权限、审批和日志。</p>
-<h2>人工审核不能只看功能是否通过</h2>
-<p>审查者要比较项目现有的状态管理、错误处理、无障碍、性能和安全约定，确认新代码没有引入一套风格和生命周期完全不同的做法。尤其要检查：</p>
+<p>纯文本用 <code>textContent</code>；确实需要富文本，就走白名单净化流程。变量叫 <code>safeHtml</code> 不代表它真的安全。URL、文件路径、SQL、权限判断都按同样方式追踪。</p>
+<h2>自动化检查</h2>
 <ul>
-<li>Effect 或事件监听是否成对清理；</li>
-<li>请求是否有过期结果和幂等处理；</li>
-<li>loading、空数据、错误和取消是否被区分；</li>
-<li>受控组件、焦点和键盘操作是否保持一致；</li>
-<li>是否把客户端配置误当成秘密；</li>
-<li>是否扩大了 CSP、CORS、权限或文件访问范围。</li>
+<li>跑项目已有的类型检查、lint、格式检查和构建。不要为了让代码通过而加 <code>any</code>、关规则或删测试。</li>
+<li>异步组件的测试至少覆盖：成功、HTTP 错误、格式错误、取消、快速切换输入、卸载后响应、重复提交、空结果。</li>
+<li>测试也可能由模型生成，要检查它是不是只测了成功路径，mock 是否符合真实接口。</li>
 </ul>
-<p>AI 适合帮助探索实现和生成测试草稿，但最终合并依据应是需求、源码、验证结果和团队约束。只有“代码运行了”说明语法和一条路径成立；能够解释数据流、失败路径、权限和维护成本，才达到可合并的质量。</p></div><div class="answer-bottom"><a href="https://owasp.org/www-project-top-10-for-large-language-model-applications/" target="_blank" rel="noreferrer">OWASP · Top 10 for LLM Applications<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+AI+%E7%94%9F%E6%88%90%E7%9A%84%E5%89%8D%E7%AB%AF%E4%BB%A3%E7%A0%81%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%AE%A1%E6%9F%A5%E5%92%8C%E9%AA%8C%E8%AF%81%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAI+%E7%94%9F%E6%88%90%E7%9A%84%E5%89%8D%E7%AB%AF%E4%BB%A3%E7%A0%81%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%AE%A1%E6%9F%A5%E5%92%8C%E9%AA%8C%E8%AF%81%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aai-code-review%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AAI+%E5%BA%94%E7%94%A8%E5%89%8D%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fai-code-review%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：AI 生成的前端代码应该怎样审查和验证？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ai-client-server-boundary/">AI 对话前端为什么不能直接内置服务商 API 密钥？</a></li><li><a href="/questions/ai-stream-protocol/">AI 流式响应为什么不能每收到一块就 JSON.parse？</a></li><li><a href="/questions/ai-chat-state/">AI 聊天界面为什么不能只有 loading 一个状态？</a></li><li><a href="/questions/ai-cancel-generation/">点击“停止生成”后，服务端一定停止调用模型吗？</a></li></ul></nav></main></div></div>
+<h2>依赖与安全</h2>
+<ul>
+<li>安装前查看包的官方仓库、维护状态、下载量和许可证。</li>
+<li>让 Agent 修改代码、运行命令时，限制它能访问的文件和网络，不给生产密钥。</li>
+<li>issue、网页、文档里的内容可能藏有提示词注入，诱导模型关闭校验或加入恶意依赖。</li>
+</ul>
+<h2>人工审查重点</h2>
+<ul>
+<li>监听和 effect 是否成对清理。</li>
+<li>loading、空数据、错误、取消是否区分。</li>
+<li>是否符合项目现有的状态管理和错误处理方式，而不是另起一套。</li>
+<li>客户端配置有没有被误当成秘密。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li><strong>让模型自己审查自己的代码可行吗？</strong> 可以作为辅助，帮助发现明显问题，但不能替代测试和人工审查，它可能沿用同样的错误假设。</li>
+<li><strong>生成代码的版权怎么处理？</strong> 遵守公司政策；如果代码明显来自某个已有项目，要核对原许可证。</li>
+</ul></div><div class="answer-bottom"><a href="https://owasp.org/www-project-top-10-for-large-language-model-applications/" target="_blank" rel="noreferrer">OWASP · Top 10 for LLM Applications<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+AI+%E7%94%9F%E6%88%90%E7%9A%84%E5%89%8D%E7%AB%AF%E4%BB%A3%E7%A0%81%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%AE%A1%E6%9F%A5%E5%92%8C%E9%AA%8C%E8%AF%81%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAI+%E7%94%9F%E6%88%90%E7%9A%84%E5%89%8D%E7%AB%AF%E4%BB%A3%E7%A0%81%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%AE%A1%E6%9F%A5%E5%92%8C%E9%AA%8C%E8%AF%81%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aai-code-review%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AAI+%E5%BA%94%E7%94%A8%E5%89%8D%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fai-code-review%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：AI 生成的前端代码应该怎样审查和验证？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ai-client-server-boundary/">AI 对话前端为什么不能直接内置服务商 API 密钥？</a></li><li><a href="/questions/ai-stream-protocol/">AI 流式响应为什么不能每收到一块就 JSON.parse？</a></li><li><a href="/questions/ai-chat-state/">AI 聊天界面为什么不能只有 loading 一个状态？</a></li><li><a href="/questions/ai-cancel-generation/">点击“停止生成”后，服务端一定停止调用模型吗？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

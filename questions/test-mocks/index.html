@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="测试面试题：mock 适合控制外部网络、时间、随机数和难以稳定复现的失败条件，使测试能集中验证目标逻辑。但如果把所有依赖和内部调用都替换，测试可能只证明模拟对象彼此配合，无法发现真实集成问题。" />
+    <meta name="description" content="测试面试题：mock 用来替换慢、不稳定或不受控的外部边界，例如网络、时间、随机数和第三方服务；mock 掉被测代码自己的模块，测试就只验证了 mock 本身。每个测试后要清理 mock，并让模拟数据与真实契约保持一致。" />
     <title>什么时候应该 mock，mock 太多有什么问题？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/test-mocks/" />
     <meta name="robots" content="index,follow" />
@@ -19,58 +19,66 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="什么时候应该 mock，mock 太多有什么问题？ · 前端知库" />
-    <meta property="og:description" content="测试面试题：mock 适合控制外部网络、时间、随机数和难以稳定复现的失败条件，使测试能集中验证目标逻辑。但如果把所有依赖和内部调用都替换，测试可能只证明模拟对象彼此配合，无法发现真实集成问题。" />
+    <meta property="og:description" content="测试面试题：mock 用来替换慢、不稳定或不受控的外部边界，例如网络、时间、随机数和第三方服务；mock 掉被测代码自己的模块，测试就只验证了 mock 本身。每个测试后要清理 mock，并让模拟数据与真实契约保持一致。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/test-mocks/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/test-mocks/#webpage","url":"https://fe.hushifa.top/questions/test-mocks/","name":"什么时候应该 mock，mock 太多有什么问题？ · 前端知库","description":"测试面试题：mock 适合控制外部网络、时间、随机数和难以稳定复现的失败条件，使测试能集中验证目标逻辑。但如果把所有依赖和内部调用都替换，测试可能只证明模拟对象彼此配合，无法发现真实集成问题。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/test-mocks/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/test-mocks/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"测试面试题","item":"https://fe.hushifa.top/topics/testing/"},{"@type":"ListItem","position":3,"name":"什么时候应该 mock，mock 太多有什么问题？","item":"https://fe.hushifa.top/questions/test-mocks/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/test-mocks/#webpage","url":"https://fe.hushifa.top/questions/test-mocks/","name":"什么时候应该 mock，mock 太多有什么问题？ · 前端知库","description":"测试面试题：mock 用来替换慢、不稳定或不受控的外部边界，例如网络、时间、随机数和第三方服务；mock 掉被测代码自己的模块，测试就只验证了 mock 本身。每个测试后要清理 mock，并让模拟数据与真实契约保持一致。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/test-mocks/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/test-mocks/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"测试面试题","item":"https://fe.hushifa.top/topics/testing/"},{"@type":"ListItem","position":3,"name":"什么时候应该 mock，mock 太多有什么问题？","item":"https://fe.hushifa.top/questions/test-mocks/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/testing/">测试面试题</a><span aria-hidden="true">/</span><span aria-current="page">什么时候应该 mock，mock 太多有什么问题？</span></nav><h1 tabindex="-1">什么时候应该 mock，mock 太多有什么问题？</h1><p class="reading-summary">mock 适合控制外部网络、时间、随机数和难以稳定复现的失败条件，使测试能集中验证目标逻辑。但如果把所有依赖和内部调用都替换，测试可能只证明模拟对象彼此配合，无法发现真实集成问题。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/testing/">测试面试题</a><span aria-hidden="true">/</span><span aria-current="page">什么时候应该 mock，mock 太多有什么问题？</span></nav><h1 tabindex="-1">什么时候应该 mock，mock 太多有什么问题？</h1><p class="reading-summary">mock 用来替换慢、不稳定或不受控的外部边界，例如网络、时间、随机数和第三方服务；mock 掉被测代码自己的模块，测试就只验证了 mock 本身。每个测试后要清理 mock，并让模拟数据与真实契约保持一致。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>Mock 用来控制外部不确定性，让测试稳定触发目标场景。</li>
-<li>替换得太深时，测试只证明假对象之间的调用，真实代码几乎没参与。</li>
-<li>选择离目标行为合适的边界，常见做法是在网络边界提供响应。</li>
-<li>clear 清调用记录，reset 还清替代实现，restore 恢复原始方法。</li>
+<li>适合 mock：HTTP 请求、当前时间、随机数、浏览器 API（地理位置、剪贴板）、支付等第三方服务。</li>
+<li>不适合 mock：被测模块内部的函数、纯计算逻辑、和被测代码一起交付的子组件。</li>
+<li>mock 越多，测试越接近“复述实现”：重构后测试失败，真实 bug 却测不出来。</li>
+<li><code>mockClear</code> 只清调用记录；<code>mockReset</code> 还清除自定义实现，<code>vi.fn()</code> 变成返回 <code>undefined</code>，<code>vi.fn(impl)</code> 和 <code>spyOn</code> 回到原实现；<code>mockRestore</code> 再把 <code>spyOn</code> 的对象恢复成原方法。</li>
+<li>模拟数据要来自真实契约（OpenAPI 类型、录制的响应），否则接口改了测试仍会通过。</li>
 </ul>
-<p>测试订单超时提示时，不必真的等待第三方服务偶发超时；测试随机抽样逻辑时，也不应让随机结果决定用例是否通过。Mock 可以控制这些外部不确定性，让测试稳定触发目标场景。</p>
-<p>问题在于替换得太深：如果请求函数、数据转换、状态管理和子组件全被替换，测试可能只证明几个假对象按预设方式互相调用，真实代码反而几乎没参与。</p>
-<h2>选择离目标行为合适的边界</h2>
-<p>测试纯计算时通常直接传入数据，不需要 Mock。测试组件的错误提示，可以在网络边界提供失败响应，让真实请求处理与 UI 状态继续运行。测试一次通知是否发出，可以替换公开通知接口并检查参数。</p>
-<p>替身不一定都用复杂 Mock 框架。一个返回固定值的函数、一个内存仓库或一个可控时钟都可能足够。关键是替身代替了什么真实能力，以及哪些行为仍由真实代码完成。</p>
-<p>例如要验证“失败后重试”，可以让依赖第一次拒绝、第二次成功，但仍应验证成功结果和错误恢复。只断言被调用两次，无法证明重试的是正确请求，也无法证明结果最终到达用户。</p>
-<h2>clear、reset、restore 不要混为一谈</h2>
-<p>下面是当前 Vitest 行为的独立用例：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { expect, test, vi } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vitest&#x27;</span>;
+<h2>选择 mock 的边界</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-comment">// 被测函数</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">loadUser</span>(<span class="hljs-params"><span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>, fetcher = fetch</span>) {
+  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetcher</span>(<span class="hljs-string">`/api/users/<span class="hljs-subst">${id}</span>`</span>);
+  <span class="hljs-keyword">if</span> (!response.<span class="hljs-property">ok</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">`HTTP <span class="hljs-subst">${response.status}</span>`</span>);
+  <span class="hljs-keyword">return</span> response.<span class="hljs-title function_">json</span>();
+}
+</code></pre></div>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">import</span> { expect, test, vi } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vitest&#x27;</span>;
 
-<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;区分调用记录、替代实现和原始方法&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> service = { <span class="hljs-attr">read</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;真实结果&#x27;</span> };
-  <span class="hljs-keyword">const</span> original = service.<span class="hljs-property">read</span>;
-  <span class="hljs-keyword">const</span> spy = vi.<span class="hljs-title function_">spyOn</span>(service, <span class="hljs-string">&#x27;read&#x27;</span>).<span class="hljs-title function_">mockReturnValue</span>(<span class="hljs-string">&#x27;模拟结果&#x27;</span>);
-
-  <span class="hljs-title function_">expect</span>(service.<span class="hljs-title function_">read</span>()).<span class="hljs-title function_">toBe</span>(<span class="hljs-string">&#x27;模拟结果&#x27;</span>);
-  spy.<span class="hljs-title function_">mockClear</span>();
-  <span class="hljs-title function_">expect</span>(spy).<span class="hljs-property">not</span>.<span class="hljs-title function_">toHaveBeenCalled</span>();
-  <span class="hljs-title function_">expect</span>(service.<span class="hljs-title function_">read</span>()).<span class="hljs-title function_">toBe</span>(<span class="hljs-string">&#x27;模拟结果&#x27;</span>);
-
-  spy.<span class="hljs-title function_">mockReset</span>();
-  <span class="hljs-title function_">expect</span>(service.<span class="hljs-property">read</span>).<span class="hljs-title function_">toBe</span>(spy);
-  <span class="hljs-title function_">expect</span>(service.<span class="hljs-title function_">read</span>()).<span class="hljs-title function_">toBe</span>(<span class="hljs-string">&#x27;真实结果&#x27;</span>);
-
-  spy.<span class="hljs-title function_">mockRestore</span>();
-  <span class="hljs-title function_">expect</span>(service.<span class="hljs-property">read</span>).<span class="hljs-title function_">toBe</span>(original);
+<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;非 2xx 响应时抛错&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> fetcher = vi.<span class="hljs-title function_">fn</span>().<span class="hljs-title function_">mockResolvedValue</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Response</span>(<span class="hljs-literal">null</span>, { <span class="hljs-attr">status</span>: <span class="hljs-number">404</span> }));
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(<span class="hljs-title function_">loadUser</span>(<span class="hljs-string">&#x27;1&#x27;</span>, fetcher)).<span class="hljs-property">rejects</span>.<span class="hljs-title function_">toThrow</span>(<span class="hljs-string">&#x27;HTTP 404&#x27;</span>);
+  <span class="hljs-title function_">expect</span>(fetcher).<span class="hljs-title function_">toHaveBeenCalledWith</span>(<span class="hljs-string">&#x27;/api/users/1&#x27;</span>);
 });
 </code></pre></div>
-<p>mockClear 清除调用记录，保留当前实现；mockReset 还重置实现和一次性返回队列，但 spy 仍在对象上；mockRestore 对 spy 恢复原始属性。</p>
-<p>对于 vi.fn()，重置后通常回到返回 undefined 的空实现；对于 vi.fn(impl)，当前 Vitest 会回到初始 impl。不能把其他测试工具或旧版本的 reset 规则直接套过来。独立 vi.fn 没有被 spy 替换的对象属性，因此 restore 也不是凭空找回某个真实业务方法。</p>
-<h2>时间和全局替身更需要清理</h2>
-<p>假定时器适合测试防抖、超时和重试，但推进计时器不一定等于相关 Promise、网络和组件更新都已经完成。应使用所选工具支持的异步推进方式，并等待可观察结果。</p>
-<p>测试结束后恢复真实计时器、全局对象和 spy，避免后面的测试继承冻结时间或错误实现。清理应放在可靠的生命周期钩子或 finally 中，而不是只写在最后一条成功断言后面。</p>
-<p>模块级 Mock 还可能有导入提升、模块缓存和 Browser Mode 限制。比如同一模块内部函数之间的直接调用，不一定会经过你替换的导出属性；不要为了绕过这一点就把所有私有函数都暴露成公共 API。</p>
-<h2>模拟数据必须维护契约</h2>
-<p>真实接口返回分页对象，Mock 却返回裸数组，可能让测试覆盖了一条根本不存在的成功路径。状态码、错误结构、空结果和字段类型都要与实际契约一致。</p>
-<p>但模拟整个真实服务也不是目标。保留完成场景所需的语义，并用少量集成或契约测试确认接口没有分叉。依赖升级时，也要检查替身是否仍符合新版本行为。</p>
-<p>判断是否 Mock 过度，可以问：真实依赖改错了，这个测试有机会失败吗？被替换的是不确定边界，还是正要验证的核心逻辑？前者有助于聚焦，后者常让测试产生虚假的安全感。</p></div><div class="answer-bottom"><a href="https://vitest.dev/guide/mocking" target="_blank" rel="noreferrer">Mocking | Guide | Vitest<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%BA%94%E8%AF%A5+mock%EF%BC%8Cmock+%E5%A4%AA%E5%A4%9A%E6%9C%89%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%BA%94%E8%AF%A5+mock%EF%BC%8Cmock+%E5%A4%AA%E5%A4%9A%E6%9C%89%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Atest-mocks%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%B5%8B%E8%AF%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Ftest-mocks%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：什么时候应该 mock，mock 太多有什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/test-user-behavior/">组件测试为什么应优先测试用户可见行为？</a></li><li><a href="/questions/test-e2e/">如何减少 Playwright 端到端测试的不稳定？</a></li><li><a href="/questions/test-visual-regression/">视觉回归测试如何减少无意义的截图差异？</a></li><li><a href="/questions/test-api-mocks/">Playwright 接口模拟怎样覆盖稳定的成功和失败场景？</a></li></ul></nav></main></div></div>
+<p>通过参数注入依赖，比用 <code>vi.mock</code> 替换整个模块更直接。模拟返回的是真实的 <code>Response</code> 对象，<code>ok</code> 和 <code>status</code> 的行为与浏览器一致。</p>
+<h2>模块 mock</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts">vi.<span class="hljs-title function_">mock</span>(<span class="hljs-string">&#x27;./analytics&#x27;</span>, <span class="hljs-function">() =&gt;</span> ({ <span class="hljs-attr">track</span>: vi.<span class="hljs-title function_">fn</span>() }));
+</code></pre></div>
+<p><code>vi.mock</code> 会被提升到文件顶部，在所有 import 之前执行。工厂里不能直接使用外部变量，需要时用 <code>vi.hoisted</code> 声明。</p>
+<h2>清理</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-comment">// vitest.config.ts</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>({
+  <span class="hljs-attr">test</span>: {
+    <span class="hljs-attr">restoreMocks</span>: <span class="hljs-literal">true</span>,
+  },
+});
+</code></pre></div>
+<p>开启 <code>restoreMocks</code> 后，每个测试前自动调用 <code>mockRestore</code>，避免一个测试设置的返回值或替换的全局方法影响下一个测试。修改了 <code>globalThis</code>、<code>Date</code> 或环境变量时，用 <code>vi.stubGlobal</code>、<code>vi.stubEnv</code> 并配合 <code>unstubGlobals</code>、<code>unstubEnvs</code>。</p>
+<h2>用 MSW 模拟网络层</h2>
+<p>组件内部直接调用 <code>fetch</code> 时，可以用 MSW 在网络层拦截，组件代码不用改，同一套处理器还能用于开发环境和浏览器测试：</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">import</span> { http, <span class="hljs-title class_">HttpResponse</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;msw&#x27;</span>;
+<span class="hljs-keyword">import</span> { setupServer } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;msw/node&#x27;</span>;
+
+<span class="hljs-keyword">const</span> server = <span class="hljs-title function_">setupServer</span>(
+  http.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/api/users/:id&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">{ params }</span>) =&gt;</span>
+    <span class="hljs-title class_">HttpResponse</span>.<span class="hljs-title function_">json</span>({ <span class="hljs-attr">id</span>: params.<span class="hljs-property">id</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;张三&#x27;</span> }),
+  ),
+);
+</code></pre></div>
+<h2>常见追问</h2>
+<ul>
+<li>怎样判断 mock 过多？如果改了一个内部函数名，要同时改很多测试的 mock，或者测试里的 mock 设置比断言还长，就说明边界选得太靠里了。</li>
+</ul></div><div class="answer-bottom"><a href="https://vitest.dev/guide/mocking" target="_blank" rel="noreferrer">Vitest · Mocking<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%BA%94%E8%AF%A5+mock%EF%BC%8Cmock+%E5%A4%AA%E5%A4%9A%E6%9C%89%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%BA%94%E8%AF%A5+mock%EF%BC%8Cmock+%E5%A4%AA%E5%A4%9A%E6%9C%89%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Atest-mocks%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%B5%8B%E8%AF%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Ftest-mocks%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：什么时候应该 mock，mock 太多有什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/test-coverage-limits/">为什么 100% 代码覆盖率也可能漏掉严重问题？</a></li><li><a href="/questions/testing-property-based/">属性测试和示例测试应该怎样搭配？</a></li><li><a href="/questions/testing-time-and-fake-timers/">前端怎样测试定时器、重试和超时，避免 Fake Timers 造成假通过？</a></li><li><a href="/questions/test-e2e/">如何减少 Playwright 端到端测试的不稳定？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

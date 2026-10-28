@@ -23,24 +23,28 @@
     <meta property="og:url" content="https://fe.hushifa.top/questions/arch-state-machine/" />
     <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/arch-state-machine/#webpage","url":"https://fe.hushifa.top/questions/arch-state-machine/","name":"怎样避免加载、成功和失败状态互相矛盾？ · 前端知库","description":"架构设计面试题：从合法业务状态与转换出发组织请求界面，给出能拒绝过期完成事件的纯状态转换函数，并区分互斥状态、刷新中的旧数据和外部副作用。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/arch-state-machine/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/arch-state-machine/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"架构设计面试题","item":"https://fe.hushifa.top/topics/architecture/"},{"@type":"ListItem","position":3,"name":"怎样避免加载、成功和失败状态互相矛盾？","item":"https://fe.hushifa.top/questions/arch-state-machine/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
     <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/architecture/">架构设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样避免加载、成功和失败状态互相矛盾？</span></nav><h1 tabindex="-1">怎样避免加载、成功和失败状态互相矛盾？</h1><p class="reading-summary">从合法业务状态与转换出发组织请求界面，给出能拒绝过期完成事件的纯状态转换函数，并区分互斥状态、刷新中的旧数据和外部副作用。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>多个独立布尔值会组合出业务不允许的界面状态。</li>
-<li>先列出流程真实允许的状态，再定义哪些事件能改变它。</li>
-<li>每个状态携带自己需要的数据，界面派生值由状态推导。</li>
-<li>状态机的价值在于约束转换，不需要必须用某个库。</li>
+<li>用 <code>loading</code>、<code>success</code>、<code>error</code> 三个独立布尔值会组合出业务不允许的状态，例如同时显示错误和结果。</li>
+<li>改为一个 <code>status</code> 字段表示互斥的状态，每个状态只携带自己需要的数据。</li>
+<li>状态转换集中在一个纯函数里，只有在合法状态下收到当前请求的事件才改变状态。</li>
+<li>按钮是否禁用、是否显示重试这类派生值从状态推导，不要另存一份。</li>
+<li>&quot;有旧数据同时正在刷新&quot;是合法组合，应作为单独的维度或嵌套状态表达。</li>
 </ul>
-<p>三个布尔值 loading、success、error 可以表达很多组合，但“同时正在首次加载、已经成功、又失败”未必是业务允许的界面。代码每多一条更新路径，就要记得同步清理其他标志，遗漏后容易出现错误提示和成功结果一起显示。</p>
-<p>可以先列出这个流程真实允许的状态，再定义哪些事件能改变它。简单的一次性加载可能只有 idle、loading、success、error；状态机的价值在于约束转换，不在于必须安装某个库。</p>
-<h2>先把每个状态需要的数据放在一起</h2>
-<p>idle 不需要结果，loading 需要知道当前是哪次请求，success 携带数据，error 携带错误说明。这样读取成功数据前先判断 status，就不必猜 data、loading 和 error 三个独立字段是否已经同步。</p>
-<p>在 TypeScript 中可以用可辨识联合进一步表达这些约束；在 JavaScript 中，也可以保持相同的对象结构，并在数据入口做必要校验。</p>
-<p>按钮是否禁用、是否显示重试，通常可以由当前状态推导。若再各自保存一份布尔值，就重新引入了不同步的机会。</p>
-<h2>只在合法状态接收对应结果</h2>
-<p>下面是一个请求状态转换函数。事件由应用内部产生，requestId 用于标识当前尝试；新的 start 可以取代旧请求，旧结果不再有资格更新界面。</p>
+<h2>布尔值组合的问题</h2>
+<p>常见写法是请求开始时 <code>setLoading(true)</code>，成功后 <code>setSuccess(true)</code>，失败时 <code>setError(e)</code>，最后在 <code>finally</code> 里 <code>setLoading(false)</code>。如果失败分支忘了把 <code>success</code> 清掉，上一次的结果和这次的错误就会同时显示。</p>
+<p>三个布尔值有 8 种组合，真正合法的只有 4 种。每条更新路径都要记得同步清理其他标志，遗漏一处就会出现错误提示和成功结果同时显示。</p>
+<h2>每个状态带自己的数据</h2>
+<div class="not-prose code-block"><div class="code-language">text</div><pre><code class="hljs language-text">{ status: &#x27;idle&#x27; }
+{ status: &#x27;loading&#x27;, requestId: 2 }
+{ status: &#x27;success&#x27;, data: [...] }
+{ status: &#x27;error&#x27;, message: &#x27;网络错误&#x27; }
+</code></pre></div>
+<p>读取数据前先判断 <code>status</code>，不存在&quot;<code>data</code> 有值但已经失败&quot;的情况。TypeScript 中可以用可辨识联合让编译器检查这些约束。</p>
+<h2>状态转换函数</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">reduceRequest</span>(<span class="hljs-params">state, event</span>) {
   <span class="hljs-keyword">if</span> (event.<span class="hljs-property">type</span> === <span class="hljs-string">&#x27;start&#x27;</span>) {
     <span class="hljs-keyword">return</span> { <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;loading&#x27;</span>, <span class="hljs-attr">requestId</span>: event.<span class="hljs-property">requestId</span> };
@@ -62,24 +66,26 @@
   }
 }
 </code></pre></div>
-<p>它只计算下一个状态，不发请求、不读取时钟，也不创建计时器。调用方从 <code>{ status: &#x27;idle&#x27; }</code> 开始，把经过校验的内部事件传入，并保存返回的状态。</p>
-<p>假设依次发生 start(1)、start(2)、succeed(1)、succeed(2)：第三个事件不会把第二次请求的 loading 覆盖掉，最后才展示第二次请求的数据。已经成功后重复收到完成事件，也不会再次改变状态。</p>
-<p>这里的 start 代表应用明确接受的新操作，不是把任意外部消息直接当成新请求。请求编号应由发起层可靠生成；如果输入来自消息通道，还需要协议与重复事件检查。</p>
-<h2>可以用转换表检查遗漏</h2>
-<table><thead><tr><th>当前情况</th><th>事件</th><th>示例的处理</th></tr></thead><tbody><tr><td>任意已有状态</td><td>新的 start</td><td>进入新请求的 loading</td></tr><tr><td>loading</td><td>当前请求 succeed</td><td>进入 success</td></tr><tr><td>loading</td><td>当前请求 fail</td><td>进入 error</td></tr><tr><td>loading</td><td>当前请求 cancel</td><td>回到 idle</td></tr><tr><td>loading</td><td>旧请求完成</td><td>保持当前状态</td></tr><tr><td>非 loading</td><td>重复完成或取消</td><td>保持当前状态</td></tr></tbody></table>
-<p>表里的规则是本例的选择，不是所有产品的统一答案。比如取消后是否回到 idle、保留旧结果，还是显示 canceled，应该根据实际流程决定。</p>
-<p>重要的是这些决定集中且可测试，而不是散在多个 catch、finally 和组件 effect 中，各自修改一部分布尔值。</p>
-<h2>“有数据，同时正在刷新”可能完全合法</h2>
-<p>不是所有看起来并存的状态都是矛盾。用户已经看到列表，后台刷新正在进行，这时 data 存在且 fetching 为 true 很合理；刷新失败也可能继续展示旧数据并附加错误提示。</p>
-<p>可以把“是否已有可用数据”与“刷新任务状态”分成真正独立的维度，或建立嵌套状态，例如 ready 状态内部再有 idle、refreshing、refreshError。</p>
-<p>不要为了只有一个 status 字段，就每次刷新都清空旧内容；也不要为了支持后台刷新，让首次加载的模型出现任意组合。状态结构应表达产品允许的情形。</p>
-<h2>状态转换不能替代取消和清理</h2>
-<p>把状态改成 idle，并不会自动终止 fetch。上面的 requestId 检查能防止旧结果进入当前 UI，但旧请求仍可能占用网络或在服务器产生副作用。</p>
-<p>发起层还应管理 AbortController、计时器和资源释放。finally 中也要判断是否仍属于当前请求，避免旧请求结束时把新请求的加载状态清掉。</p>
-<p>对于支付、提交等写操作，前端显示 canceled 不等于服务器已经撤销。需要依照业务协议查询最终状态或处理幂等，不能只靠 UI 状态机保证服务端一致性。</p>
-<h2>什么时候需要更完整的状态机工具</h2>
-<p>单个请求用这样的 reducer 往往足够。多步审批、并行上传、超时恢复和嵌套弹层等流程，如果事件与分支越来越多，可以使用显式状态图或成熟状态机工具表达进入动作、守卫条件和并行区域。</p>
-<p>工具不会替你决定业务规则。先说明事件的含义、允许的转换、过期事件的处理和失败后的下一步，再选择实现方式，通常比先引入库后把原来的布尔值全部搬进去更有效。</p></div><div class="answer-bottom"><a href="https://react.dev/learn/reacting-to-input-with-state" target="_blank" rel="noreferrer">React · 使用状态响应输入<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E9%81%BF%E5%85%8D%E5%8A%A0%E8%BD%BD%E3%80%81%E6%88%90%E5%8A%9F%E5%92%8C%E5%A4%B1%E8%B4%A5%E7%8A%B6%E6%80%81%E4%BA%92%E7%9B%B8%E7%9F%9B%E7%9B%BE%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E9%81%BF%E5%85%8D%E5%8A%A0%E8%BD%BD%E3%80%81%E6%88%90%E5%8A%9F%E5%92%8C%E5%A4%B1%E8%B4%A5%E7%8A%B6%E6%80%81%E4%BA%92%E7%9B%B8%E7%9F%9B%E7%9B%BE%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aarch-state-machine%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Farch-state-machine%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样避免加载、成功和失败状态互相矛盾？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/arch-design-system/">设计系统为什么不能只有一套视觉样式？</a></li><li><a href="/questions/arch-progressive/">渐进增强和优雅降级怎样影响前端方案选择？</a></li><li><a href="/questions/architecture-feature-boundaries/">前端大型项目怎样划分功能边界？</a></li><li><a href="/questions/architecture-design-tokens/">设计 token 为什么比散落的颜色变量更适合大型前端项目？</a></li></ul></nav></main></div></div>
+<p>依次发生 <code>start(1)</code>、<code>start(2)</code>、<code>succeed(1)</code>、<code>succeed(2)</code> 时：第三个事件的 <code>requestId</code> 不是当前请求，状态保持不变；第四个事件才进入 success。已经成功后再收到重复的完成事件，也会被忽略。</p>
+<p>函数不发请求、不读时钟、不修改传入的对象，可以直接写单元测试。发起请求和取消请求的一侧见《事件驱动 UI 怎样避免状态互相覆盖？》。</p>
+<h2>转换表</h2>
+<table><thead><tr><th>当前状态</th><th>事件</th><th>结果</th></tr></thead><tbody><tr><td>任意</td><td><code>start</code></td><td>新请求的 loading</td></tr><tr><td>loading</td><td>当前请求 <code>succeed</code></td><td>success</td></tr><tr><td>loading</td><td>当前请求 <code>fail</code></td><td>error</td></tr><tr><td>loading</td><td>当前请求 <code>cancel</code></td><td>idle</td></tr><tr><td>loading</td><td>旧请求的任何事件</td><td>不变</td></tr><tr><td>非 loading</td><td><code>succeed</code> / <code>fail</code> / <code>cancel</code></td><td>不变</td></tr></tbody></table>
+<p>这些规则是本例的选择。取消后回到 idle、保留旧结果还是显示&quot;已取消&quot;，要按产品需求决定，重要的是集中写在一处。</p>
+<h2>刷新时保留旧数据</h2>
+<p>用户已经看到列表，后台刷新正在进行，此时&quot;有数据&quot;和&quot;正在请求&quot;同时成立是合理的。可以拆成两个维度：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">{ <span class="hljs-attr">data</span>: [...], <span class="hljs-attr">refresh</span>: { <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;loading&#x27;</span>, <span class="hljs-attr">requestId</span>: <span class="hljs-number">5</span> } }
+</code></pre></div>
+<p>或者在 success 状态内部再分 idle / refreshing / refreshError。不要为了只保留一个 <code>status</code> 字段，每次刷新都清空列表。</p>
+<h2>状态机管不到的事</h2>
+<ul>
+<li>状态变回 idle 不会终止网络请求，取消要用 AbortController。</li>
+<li>支付、提交等写操作，前端显示&quot;已取消&quot;不代表服务端已撤销，需要查询最终状态或依靠幂等设计。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li>什么时候需要 XState 这类库？流程有多步、并行区域、超时和守卫条件时，可视化状态图更易维护；单个请求用上面的 reducer 就够了。</li>
+<li>React 中怎么用？把 <code>reduceRequest</code> 传给 <code>useReducer</code>，组件根据 <code>state.status</code> 渲染不同界面。</li>
+</ul></div><div class="answer-bottom"><a href="https://react.dev/learn/reacting-to-input-with-state" target="_blank" rel="noreferrer">React · 使用状态响应输入<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E9%81%BF%E5%85%8D%E5%8A%A0%E8%BD%BD%E3%80%81%E6%88%90%E5%8A%9F%E5%92%8C%E5%A4%B1%E8%B4%A5%E7%8A%B6%E6%80%81%E4%BA%92%E7%9B%B8%E7%9F%9B%E7%9B%BE%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E9%81%BF%E5%85%8D%E5%8A%A0%E8%BD%BD%E3%80%81%E6%88%90%E5%8A%9F%E5%92%8C%E5%A4%B1%E8%B4%A5%E7%8A%B6%E6%80%81%E4%BA%92%E7%9B%B8%E7%9F%9B%E7%9B%BE%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aarch-state-machine%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Farch-state-machine%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样避免加载、成功和失败状态互相矛盾？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/arch-design-system/">设计系统为什么不能只有一套视觉样式？</a></li><li><a href="/questions/arch-progressive/">渐进增强和优雅降级怎样影响前端方案选择？</a></li><li><a href="/questions/architecture-feature-boundaries/">前端大型项目怎样划分功能边界？</a></li><li><a href="/questions/architecture-design-tokens/">设计 token 为什么比散落的颜色变量更适合大型前端项目？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

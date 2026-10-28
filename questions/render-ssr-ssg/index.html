@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="SSR 与渲染面试题：按页面 HTML 的生成时机比较客户端渲染、请求时渲染和构建时生成，结合内容时效、个性化、交互与部署条件选择组合，并说明缓存和搜索收录的边界。" />
+    <meta name="description" content="SSR 与渲染面试题：按页面主要内容在什么时候生成 HTML 来区分：CSR 在浏览器中生成，SSR 在每次请求时由服务器生成，SSG 在构建时生成。内容变化频率、是否个性化、是否需要搜索收录和部署条件决定选择；实际项目通常按页面混合使用。" />
     <title>CSR、SSR、SSG 和混合渲染如何选择？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/render-ssr-ssg/" />
     <meta name="robots" content="index,follow" />
@@ -19,44 +19,49 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="CSR、SSR、SSG 和混合渲染如何选择？ · 前端知库" />
-    <meta property="og:description" content="SSR 与渲染面试题：按页面 HTML 的生成时机比较客户端渲染、请求时渲染和构建时生成，结合内容时效、个性化、交互与部署条件选择组合，并说明缓存和搜索收录的边界。" />
+    <meta property="og:description" content="SSR 与渲染面试题：按页面主要内容在什么时候生成 HTML 来区分：CSR 在浏览器中生成，SSR 在每次请求时由服务器生成，SSG 在构建时生成。内容变化频率、是否个性化、是否需要搜索收录和部署条件决定选择；实际项目通常按页面混合使用。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/render-ssr-ssg/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/render-ssr-ssg/#webpage","url":"https://fe.hushifa.top/questions/render-ssr-ssg/","name":"CSR、SSR、SSG 和混合渲染如何选择？ · 前端知库","description":"SSR 与渲染面试题：按页面 HTML 的生成时机比较客户端渲染、请求时渲染和构建时生成，结合内容时效、个性化、交互与部署条件选择组合，并说明缓存和搜索收录的边界。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/render-ssr-ssg/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/render-ssr-ssg/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"SSR 与渲染面试题","item":"https://fe.hushifa.top/topics/rendering/"},{"@type":"ListItem","position":3,"name":"CSR、SSR、SSG 和混合渲染如何选择？","item":"https://fe.hushifa.top/questions/render-ssr-ssg/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/render-ssr-ssg/#webpage","url":"https://fe.hushifa.top/questions/render-ssr-ssg/","name":"CSR、SSR、SSG 和混合渲染如何选择？ · 前端知库","description":"SSR 与渲染面试题：按页面主要内容在什么时候生成 HTML 来区分：CSR 在浏览器中生成，SSR 在每次请求时由服务器生成，SSG 在构建时生成。内容变化频率、是否个性化、是否需要搜索收录和部署条件决定选择；实际项目通常按页面混合使用。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/render-ssr-ssg/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/render-ssr-ssg/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"SSR 与渲染面试题","item":"https://fe.hushifa.top/topics/rendering/"},{"@type":"ListItem","position":3,"name":"CSR、SSR、SSG 和混合渲染如何选择？","item":"https://fe.hushifa.top/questions/render-ssr-ssg/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/rendering/">SSR 与渲染面试题</a><span aria-hidden="true">/</span><span aria-current="page">CSR、SSR、SSG 和混合渲染如何选择？</span></nav><h1 tabindex="-1">CSR、SSR、SSG 和混合渲染如何选择？</h1><p class="reading-summary">按页面 HTML 的生成时机比较客户端渲染、请求时渲染和构建时生成，结合内容时效、个性化、交互与部署条件选择组合，并说明缓存和搜索收录的边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<p>CSR 在浏览器中渲染，服务器只需静态托管，但首屏慢、SEO 差。SSR 每次请求时在服务器渲染，内容实时、可以个性化，代价是需要运行服务器，TTFB 依赖数据速度。SSG 在构建时生成 HTML，速度最快、可以放在 CDN，适合不常变的内容，内容更新需要重新构建或使用 ISR。实际项目通常混合使用：按页面选择渲染方式，公共页面用 SSG，个性化页面用 SSR 或 CSR。</p>
-<p>选择渲染方式，先问“用户要看的主要内容在哪里、什么时候变成 HTML”，再问“交互需要下载和执行多少代码”。这两个问题相关，但不是一回事。</p>
-<p>例如题解正文很少变化，可以提前生成 HTML；筛选和展开交互仍由浏览器完成。并不需要因为页面有按钮，就把全部内容改成只在浏览器生成。</p>
-<h2>三种常见方式的差别</h2>
-<table><thead><tr><th>方式</th><th>主要 HTML 的生成时机</th><th>常见成本与约束</th></tr></thead><tbody><tr><td>CSR</td><td>浏览器取得并执行脚本后生成主体界面</td><td>客户端代码和数据准备可能形成首屏等待</td></tr><tr><td>SSR</td><td>通常在服务器处理请求时生成，也可复用缓存</td><td>需要服务运行与容量，数据等待可能增加响应时间</td></tr><tr><td>SSG</td><td>构建或预生成阶段产生页面文件</td><td>适合静态托管，内容更新需要重新生成产物</td></tr></tbody></table>
-<p>实际框架会有不同名称和扩展，不能只凭缩写推断所有缓存行为。SSR 页面被 CDN 缓存后，后续请求也可能直接取到生成好的响应，而不重新执行一次完整渲染。</p>
-<h2>沿第一次访问看等待发生在哪里</h2>
-<p>典型 CSR 页面先返回基本文档和脚本入口，浏览器下载脚本、执行应用，再根据需要获取数据与生成内容。如果数据请求必须等大包执行后才开始，容易形成串行等待。</p>
-<p>SSR 可以在响应中提供主要 HTML，让用户和抓取程序更早获得内容。但服务器自己也可能在等数据库或接口，若把所有数据都等齐再输出，首字节仍可能很慢。</p>
-<p>SSG 则把这部分生成工作提前到发布之前，访问时可以直接分发静态文件。它减少请求时的生成成本，但不适合把每个用户的私有结果都预先生成成公开文件。</p>
-<p>这些是时间与职责的分配，不是“SSR 永远更快”或“CSR 一定很慢”的排名。包体积、缓存、数据依赖、设备和部署位置都会影响实际体验。</p>
-<h2>看得到页面不等于已经完成交互</h2>
-<p>服务器或构建产出 HTML 后，依赖客户端框架的交互通常还要加载代码并 hydration。SSR 不会自动消除这些 JavaScript，也可能出现内容已经显示、按钮暂时还不能按应用逻辑工作的阶段。</p>
-<p>但也不是所有 SSR/SSG 页面都必须 hydration。纯内容和原生链接、表单等可以不依赖整页客户端框架；需要哪些交互，就应评估为哪些部分提供客户端代码。</p>
-<p>性能判断应同时看内容出现、布局稳定和输入响应，不能只优化 HTML 到达时间而忽略之后的主线程工作。</p>
-<h2>内容更新频率决定生成和失效策略</h2>
-<p>文档、博客和稳定题库适合评估 SSG，更新后重建并发布。规模很大时，还要考虑构建时间、受影响页面数量、资源版本和发布一致性。</p>
-<p>库存、报价或登录后的动态页面，需要更明确的时效规则。可以采用请求时渲染、客户端获取，或按业务允许的时间窗口缓存；关键数据仍应在真正执行操作时由服务端校验。</p>
-<p>一些框架支持增量、按需或定期重新生成，但通常需要平台或服务端运行能力。把静态文件上传到普通静态托管，并不会自动获得这些更新机制。</p>
-<h2>个性化内容首先要避免错误共享</h2>
-<p>把用户 A 的个性化 HTML 当成公共响应缓存给用户 B 是安全问题，缓存键与 Cache-Control 的选择见渲染缓存语义一题。</p>
-<p>SSG 产物和客户端包里的数据通常会被访问者取得，不能把私密资料或服务端密钥放进去，再认为源码仓库私有就能保护它们。</p>
-<p>常见组合是公共内容预生成，登录后的局部数据按身份获取。是否这样分层，取决于首屏需求与业务安全，而不是所有页面统一选择同一标签。</p>
-<h2>搜索收录更容易准备好，但不会自动保证</h2>
-<p>初始 HTML 包含正文、标题、正常链接和元信息，通常更方便搜索引擎和其他内容消费者读取。不能绝对断言搜索引擎无法处理 CSR，但执行脚本和等待数据可能有额外限制与延迟。</p>
-<p>采用 SSR 或 SSG 后，仍需要正确的状态码、canonical、可访问链接、内容质量和抓取配置。一个预渲染的空壳或统一返回 200 的错误页，并没有因为“服务端渲染”就自然获得良好收录。</p>
-<h2>混合渲染应该对应页面差异</h2>
-<p>可以让公开文章采用 SSG，账户页面按需获取私有数据，复杂编辑器主要采用 CSR；某些请求时页面还可以流式输出不同内容区域。</p>
-<p>同一应用首次访问可能使用服务端 HTML，后续路由切换由客户端完成，数据与状态规则要能支持这两条入口。刷新、直达深链接、后退和客户端导航都应展示一致的页面身份与错误结果。</p>
-<p>选型可以从三个事实开始：内容能接受多旧、是否因用户而不同、部署平台能运行什么。再测量实际的首屏与交互成本，选择足够解决问题的组合，不必为了使用更复杂的渲染名词而增加服务器和维护负担。</p></div><div class="answer-bottom"><a href="https://web.dev/articles/rendering-on-the-web" target="_blank" rel="noreferrer">web.dev · Rendering on the Web<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+CSR%E3%80%81SSR%E3%80%81SSG+%E5%92%8C%E6%B7%B7%E5%90%88%E6%B8%B2%E6%9F%93%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ACSR%E3%80%81SSR%E3%80%81SSG+%E5%92%8C%E6%B7%B7%E5%90%88%E6%B8%B2%E6%9F%93%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Arender-ssr-ssg%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ASSR+%E4%B8%8E%E6%B8%B2%E6%9F%93%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Frender-ssr-ssg%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：CSR、SSR、SSG 和混合渲染如何选择？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/rendering-cache-semantics/">SSR 和 SSG 中的缓存层应该怎样区分？</a></li><li><a href="/questions/render-seo-deploy/">前端渲染方式怎样影响 SEO 和部署？</a></li><li><a href="/questions/render-hydration/">Hydration mismatch 为什么发生，应该怎样修复？</a></li><li><a href="/questions/rendering-streaming-ssr/">React 流式 SSR 解决什么问题？</a></li></ul></nav></main></div></div>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/rendering/">SSR 与渲染面试题</a><span aria-hidden="true">/</span><span aria-current="page">CSR、SSR、SSG 和混合渲染如何选择？</span></nav><h1 tabindex="-1">CSR、SSR、SSG 和混合渲染如何选择？</h1><p class="reading-summary">按页面主要内容在什么时候生成 HTML 来区分：CSR 在浏览器中生成，SSR 在每次请求时由服务器生成，SSG 在构建时生成。内容变化频率、是否个性化、是否需要搜索收录和部署条件决定选择；实际项目通常按页面混合使用。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>CSR：服务器返回空壳 HTML 和脚本，浏览器执行后渲染内容；只需静态托管，首屏内容依赖脚本下载和执行，搜索收录存在额外的不确定性。</li>
+<li>SSR：每次请求在服务器渲染 HTML；内容实时、可以个性化，需要运行服务器，首字节时间受数据请求速度影响。</li>
+<li>SSG：构建时生成 HTML，可以放在 CDN 上，速度快、成本低；内容更新需要重新构建，或使用 ISR 等增量更新。</li>
+<li>三者之后通常都要在客户端 hydration 才能交互，SSR 和 SSG 并不会减少客户端 JavaScript。</li>
+<li>按页面选择：公开的文档和商品页用 SSG 或带缓存的 SSR，个性化页面用 SSR，登录后的后台可以用 CSR。</li>
+</ul>
+<h2>对比</h2>
+<table><thead><tr><th></th><th>CSR</th><th>SSR</th><th>SSG</th></tr></thead><tbody><tr><td>HTML 生成时机</td><td>浏览器</td><td>每次请求</td><td>构建时</td></tr><tr><td>首屏内容</td><td>等脚本执行</td><td>响应中直接包含</td><td>响应中直接包含</td></tr><tr><td>个性化</td><td>支持</td><td>支持</td><td>需要客户端补充</td></tr><tr><td>部署</td><td>静态托管</td><td>需要服务器 / 边缘函数</td><td>静态托管</td></tr><tr><td>数据新鲜度</td><td>实时</td><td>实时</td><td>构建时</td></tr></tbody></table>
+<h2>典型场景</h2>
+<ul>
+<li>文档站、博客：SSG。内容在构建时确定，CDN 直接返回。</li>
+<li>电商商品详情：SSG 或 ISR 生成公共部分，价格、库存在客户端或请求时补充。</li>
+<li>新闻首页、搜索结果：SSR，配合短时间的 CDN 缓存。</li>
+<li>登录后的管理后台：CSR。不需要搜索收录，交互密集。</li>
+</ul>
+<h2>更细的组合</h2>
+<ul>
+<li>ISR（增量静态再生）：页面先按 SSG 提供，过期后在后台重新生成，下一位访问者拿到新版本。</li>
+<li>流式 SSR：先发送页面外壳，慢的部分就绪后再流式补上，见《React 流式 SSR 解决什么问题？》。</li>
+<li>部分预渲染：静态外壳在构建时生成，动态部分在请求时填充，Next.js 的 Cache Components 采用这种方式。</li>
+<li>Islands：大部分页面是静态 HTML，只有交互区域加载 JavaScript，见《Astro Islands 架构怎样减少客户端 JavaScript？》。</li>
+</ul>
+<h2>不要忽略的成本</h2>
+<ul>
+<li>SSR 和 SSG 都有 hydration：首屏可见但还不能点击的时间，取决于客户端脚本的大小。</li>
+<li>SSR 的服务器要承担渲染开销，流量大时需要缓存和扩容。</li>
+<li>SSG 页面数量很多时构建时间会变长，可以只预生成热门页面，其余按需生成。</li>
+</ul>
+<p>缓存层的区分见《SSR 和 SSG 中的缓存层应该怎样区分？》，SEO 相关要求见《前端渲染方式怎样影响 SEO 和部署？》。</p>
+<h2>常见追问</h2>
+<ul>
+<li>SSR 一定比 CSR 快吗？首屏内容通常更早出现，但服务器响应慢时首字节会更晚，能交互的时间也不一定更早。</li>
+<li>静态托管能做 SSR 吗？不能，静态托管只能提供预先生成的文件。</li>
+</ul></div><div class="answer-bottom"><a href="https://web.dev/articles/rendering-on-the-web" target="_blank" rel="noreferrer">web.dev · Rendering on the Web<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+CSR%E3%80%81SSR%E3%80%81SSG+%E5%92%8C%E6%B7%B7%E5%90%88%E6%B8%B2%E6%9F%93%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ACSR%E3%80%81SSR%E3%80%81SSG+%E5%92%8C%E6%B7%B7%E5%90%88%E6%B8%B2%E6%9F%93%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Arender-ssr-ssg%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ASSR+%E4%B8%8E%E6%B8%B2%E6%9F%93%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Frender-ssr-ssg%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：CSR、SSR、SSG 和混合渲染如何选择？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/render-hydration/">Hydration mismatch 为什么发生，应该怎样修复？</a></li><li><a href="/questions/render-server-components/">React Server Components 和 SSR 是同一件事吗？</a></li><li><a href="/questions/rendering-streaming-ssr/">React 流式 SSR 解决什么问题？</a></li><li><a href="/questions/rendering-cache-semantics/">SSR 和 SSG 中的缓存层应该怎样区分？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="状态与路由面试题：解释 action、reducer 与订阅如何组成单向更新流程，用 Redux Toolkit 示例说明不可变更新和 Immer 草稿，并区分副作用、派生值与服务端缓存。" />
+    <meta name="description" content="状态与路由面试题：Redux 中状态只能通过 dispatch(action) 改变，reducer 根据旧 state 和 action 计算新 state。reducer 必须是纯函数且不修改原 state，这样变化才能通过引用比较检测，也才能被记录、重放和测试。Redux Toolkit 用 Immer 让&quot;可变&quot;写法生成不可变更新。" />
     <title>Redux 的单向数据流为什么强调 reducer 的纯粹性？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/state-redux/" />
     <meta name="robots" content="index,follow" />
@@ -19,68 +19,94 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Redux 的单向数据流为什么强调 reducer 的纯粹性？ · 前端知库" />
-    <meta property="og:description" content="状态与路由面试题：解释 action、reducer 与订阅如何组成单向更新流程，用 Redux Toolkit 示例说明不可变更新和 Immer 草稿，并区分副作用、派生值与服务端缓存。" />
+    <meta property="og:description" content="状态与路由面试题：Redux 中状态只能通过 dispatch(action) 改变，reducer 根据旧 state 和 action 计算新 state。reducer 必须是纯函数且不修改原 state，这样变化才能通过引用比较检测，也才能被记录、重放和测试。Redux Toolkit 用 Immer 让&quot;可变&quot;写法生成不可变更新。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/state-redux/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/state-redux/#webpage","url":"https://fe.hushifa.top/questions/state-redux/","name":"Redux 的单向数据流为什么强调 reducer 的纯粹性？ · 前端知库","description":"状态与路由面试题：解释 action、reducer 与订阅如何组成单向更新流程，用 Redux Toolkit 示例说明不可变更新和 Immer 草稿，并区分副作用、派生值与服务端缓存。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/state-redux/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/state-redux/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"状态与路由面试题","item":"https://fe.hushifa.top/topics/state-routing/"},{"@type":"ListItem","position":3,"name":"Redux 的单向数据流为什么强调 reducer 的纯粹性？","item":"https://fe.hushifa.top/questions/state-redux/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/state-redux/#webpage","url":"https://fe.hushifa.top/questions/state-redux/","name":"Redux 的单向数据流为什么强调 reducer 的纯粹性？ · 前端知库","description":"状态与路由面试题：Redux 中状态只能通过 dispatch(action) 改变，reducer 根据旧 state 和 action 计算新 state。reducer 必须是纯函数且不修改原 state，这样变化才能通过引用比较检测，也才能被记录、重放和测试。Redux Toolkit 用 Immer 让\"可变\"写法生成不可变更新。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/state-redux/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/state-redux/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"状态与路由面试题","item":"https://fe.hushifa.top/topics/state-routing/"},{"@type":"ListItem","position":3,"name":"Redux 的单向数据流为什么强调 reducer 的纯粹性？","item":"https://fe.hushifa.top/questions/state-redux/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/state-routing/">状态与路由面试题</a><span aria-hidden="true">/</span><span aria-current="page">Redux 的单向数据流为什么强调 reducer 的纯粹性？</span></nav><h1 tabindex="-1">Redux 的单向数据流为什么强调 reducer 的纯粹性？</h1><p class="reading-summary">解释 action、reducer 与订阅如何组成单向更新流程，用 Redux Toolkit 示例说明不可变更新和 Immer 草稿，并区分副作用、派生值与服务端缓存。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<p>Redux 的数据流是：dispatch(action) → reducer 根据旧 state 和 action 计算新 state → 订阅者收到通知并更新界面。reducer 必须是纯函数，并且不能修改原 state，这样才能通过引用比较判断变化，也才能支持时间旅行调试。Redux Toolkit 的 createSlice 内置 Immer，可以用“可变”写法生成不可变更新。副作用放在 thunk 或 listener 中，服务端数据缓存推荐使用 RTK Query。</p>
-<p>当很多组件共享状态时，如果每个组件都能直接改任意对象，就很难回答“这项数据为什么变了”。Redux 把更新集中为一条路径：发出 action，reducer 依据旧状态计算新状态，订阅者读取新的结果。</p>
-<p>reducer 的纯粹性让这一步可以被独立理解：相同的 state 和 action 应得到相同结果，计算过程中不修改外部世界，也不破坏旧状态。这样记录一次 action 后，才能更可靠地测试、追踪和重现状态变化。</p>
-<h2>Action 是描述，reducer 决定状态怎样变化</h2>
-<p>Action 通常是带 type 的普通对象，必要时包含 payload。它描述发生了什么或应用接受了什么意图，不应该把一整个不可观察的后台流程藏进 reducer。</p>
-<p>reducer 可以进行判断和数据转换，但不应该在其中发请求、启动计时器、读写浏览器存储，或根据当前时间、随机数生成不确定结果。如果更新需要一个时间或随机 ID，可以在生成 action 时确定，再把结果作为数据交给 reducer。</p>
-<p>这里的纯粹不意味着逻辑只能有一行，而是输入与输出关系明确、副作用在层处理。</p>
-<h2>Redux Toolkit 为什么允许“看起来直接修改”的代码</h2>
-<p>现代 Redux 通常使用 Redux Toolkit。下面创建一个收藏 slice，并通过工厂创建应用 store：</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/state-routing/">状态与路由面试题</a><span aria-hidden="true">/</span><span aria-current="page">Redux 的单向数据流为什么强调 reducer 的纯粹性？</span></nav><h1 tabindex="-1">Redux 的单向数据流为什么强调 reducer 的纯粹性？</h1><p class="reading-summary">Redux 中状态只能通过 dispatch(action) 改变，reducer 根据旧 state 和 action 计算新 state。reducer 必须是纯函数且不修改原 state，这样变化才能通过引用比较检测，也才能被记录、重放和测试。Redux Toolkit 用 Immer 让&quot;可变&quot;写法生成不可变更新。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>数据流：组件 <code>dispatch(action)</code> → reducer 计算新 state → store 通知订阅者 → 组件用选择器读取需要的部分并重新渲染。</li>
+<li>reducer 是纯函数：相同输入得到相同输出，不发请求、不读时间和随机数、不修改参数。</li>
+<li>必须返回新对象而不是修改旧 state，<code>react-redux</code> 靠引用比较判断选择器结果是否变化，原地修改会导致界面不更新。</li>
+<li>Redux Toolkit 的 <code>createSlice</code> 内置 Immer，可以写 <code>state.items.push(x)</code>，Immer 会生成新的不可变对象。</li>
+<li>副作用放在 thunk（<code>createAsyncThunk</code>）或 listener middleware 中；服务端数据的请求和缓存推荐用 RTK Query。</li>
+</ul>
+<h2>Redux Toolkit 示例</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { configureStore, createSlice } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@reduxjs/toolkit&#x27;</span>;
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> bookmarksSlice = <span class="hljs-title function_">createSlice</span>({
+<span class="hljs-keyword">const</span> bookmarksSlice = <span class="hljs-title function_">createSlice</span>({
   <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;bookmarks&#x27;</span>,
   <span class="hljs-attr">initialState</span>: { <span class="hljs-attr">ids</span>: [] },
   <span class="hljs-attr">reducers</span>: {
     <span class="hljs-title function_">toggled</span>(<span class="hljs-params">state, action</span>) {
       <span class="hljs-keyword">const</span> id = action.<span class="hljs-property">payload</span>;
-      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> id !== <span class="hljs-string">&#x27;string&#x27;</span> || id.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>) {
-        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;题目 ID 不能为空&#x27;</span>);
-      }
       <span class="hljs-keyword">const</span> index = state.<span class="hljs-property">ids</span>.<span class="hljs-title function_">indexOf</span>(id);
       <span class="hljs-keyword">if</span> (index === -<span class="hljs-number">1</span>) state.<span class="hljs-property">ids</span>.<span class="hljs-title function_">push</span>(id);
       <span class="hljs-keyword">else</span> state.<span class="hljs-property">ids</span>.<span class="hljs-title function_">splice</span>(index, <span class="hljs-number">1</span>);
     },
-    <span class="hljs-title function_">cleared</span>(<span class="hljs-params"></span>) {
-      <span class="hljs-keyword">return</span> { <span class="hljs-attr">ids</span>: [] };
-    },
   },
 });
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> { toggled, cleared } = bookmarksSlice.<span class="hljs-property">actions</span>;
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title function_">createAppStore</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">configureStore</span>({
-  <span class="hljs-attr">reducer</span>: { <span class="hljs-attr">bookmarks</span>: bookmarksSlice.<span class="hljs-property">reducer</span> },
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> { toggled } = bookmarksSlice.<span class="hljs-property">actions</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">makeStore</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">configureStore</span>({ <span class="hljs-attr">reducer</span>: { <span class="hljs-attr">bookmarks</span>: bookmarksSlice.<span class="hljs-property">reducer</span> } });
+}
+</code></pre></div>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { useDispatch, useSelector } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-redux&#x27;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">BookmarkButton</span>(<span class="hljs-params">{ id }</span>) {
+  <span class="hljs-keyword">const</span> saved = <span class="hljs-title function_">useSelector</span>(<span class="hljs-function">(<span class="hljs-params">s</span>) =&gt;</span> s.<span class="hljs-property">bookmarks</span>.<span class="hljs-property">ids</span>.<span class="hljs-title function_">includes</span>(id));
+  <span class="hljs-keyword">const</span> dispatch = <span class="hljs-title function_">useDispatch</span>();
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> dispatch(toggled(id))}&gt;{saved ? &#x27;取消收藏&#x27; : &#x27;收藏&#x27;}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>;
+}
+</code></pre></div>
+<p>用 <code>makeStore()</code> 工厂函数创建 store，SSR 时每个请求创建一个新实例，避免不同用户共享状态。</p>
+<h2>不确定的值放在 action 里</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> todosSlice = <span class="hljs-title function_">createSlice</span>({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;todos&#x27;</span>,
+  <span class="hljs-attr">initialState</span>: [],
+  <span class="hljs-attr">reducers</span>: {
+    <span class="hljs-attr">added</span>: {
+      <span class="hljs-title function_">reducer</span>(<span class="hljs-params">state, action</span>) {
+        state.<span class="hljs-title function_">push</span>(action.<span class="hljs-property">payload</span>);
+      },
+      <span class="hljs-title function_">prepare</span>(<span class="hljs-params">text</span>) {
+        <span class="hljs-keyword">return</span> { <span class="hljs-attr">payload</span>: { <span class="hljs-attr">id</span>: crypto.<span class="hljs-title function_">randomUUID</span>(), text, <span class="hljs-attr">createdAt</span>: <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>() } };
+      },
+    },
+  },
 });
 </code></pre></div>
-<p>createSlice 的这些 reducer 由 Immer 包装，state 是可以记录修改的草稿。push 和 splice 会被用于产生不可变的新状态，不等于修改了调用者持有的旧状态对象。</p>
-<p>cleared 则选择直接返回新的状态。通常一条处理路径应选择修改草稿或返回替代值，不要又修改草稿又返回另一个结果。例如把 push 的返回长度作为箭头函数的隐式返回值，可能意外与草稿修改冲突。</p>
-<p>这种写法依赖 Toolkit/Immer 的包装。普通 reducer 中直接修改原对象，或拿到 store.getState() 的结果后在外部修改，都不会因为项目使用 Redux 就自动变成正确操作。</p>
-<h2>为什么不可变更新不只是风格问题</h2>
-<p>保留旧状态有助于比较前后变化、测试和调试。订阅与 selector 也常通过引用判断是否需要重新计算或更新；原地改了同一个对象，可能让这些判断失去依据。</p>
-<p>正确的不可变更新不等于每次深拷贝整棵状态树。没有改变的部分可以保留引用，改变的路径产生新引用。Immer 帮助维护这种结构共享，但对象结构和更新范围仍会影响成本。</p>
-<p>也不要把外部 payload 对象当成可以随便修改的自有草稿。应用应明确对象所有权，避免状态更新顺便改变了调用者或其他模块持有的数据。</p>
-<h2>异步请求放在哪里</h2>
-<p>可以通过 thunk、listener middleware 或数据查询工具协调副作用，再 dispatch 请求开始、成功或失败等 action。reducer 负责把这些事实映射成状态，而不是自己等待网络。</p>
-<p>同样需要处理过期请求、取消和重复提交。Redux 统一了写入路径，但不会自动判断某个成功 action 是否已经落后于用户最新的搜索意图，可以在状态里记录当前请求身份并检查。</p>
-<p>store.dispatch 默认处理普通 action；使用中间件后支持的输入和返回值由中间件约定。不能把普通 action 的 dispatch 返回值一概当成服务器确认完成的 Promise。</p>
-<h2>派生值与请求缓存不必手工复制</h2>
-<p>收藏数量可以从 ids.length 取得，不必再保存一个 count 字段，然后要求每个 reducer 同时维护它。组件可以通过 selector 读取所需部分，复杂计算再考虑合理的记忆化。</p>
-<p>React 组件通常使用 React-Redux 的绑定读取和订阅状态，而不是自己每次调用 getState 后期待界面自动更新。若 selector 每次都返回新的对象，也要考虑引用比较与更新范围，不能因为 reducer 是纯函数就认为渲染已经最优。</p>
-<p>服务端数据缓存还有去重、失效、刷新、订阅和重新获取等需求。RTK Query 等工具可以承担这一层，不必把每个接口都复制成一组手工维护的全局字段；它与本地 UI 状态管理又不是完全相同的问题。</p>
-<h2>可记录不等于任何东西都适合塞进状态</h2>
-<p>普通可序列化数据更容易被记录、持久化和调试。DOM 节点、函数、Promise、AbortController 等运行资源通常不适合放在通用状态里；时间可以按业务需要保存为明确的数据形式，而不是依赖一个不断变化的外部对象。</p>
-<p>回放 reducer 也不等于回放或撤销所有外部副作用。已经提交的请求、写入和支付不能靠 DevTools 回到旧状态就被取消，业务仍需要自己的幂等和恢复机制。</p>
-<p>浏览器应用通常为当前应用创建一个 store；SSR 则要管理每个请求的实例与公开初始状态，避免用户数据串用。是否需要 Redux，最终取决于共享状态与更新流程是否值得采用这些约束，而不是所有项目都必须有一个全局 store。</p></div><div class="answer-bottom"><a href="https://redux.js.org/tutorials/essentials/part-1-overview-concepts" target="_blank" rel="noreferrer">Redux · 概念与数据流<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Redux+%E7%9A%84%E5%8D%95%E5%90%91%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BC%BA%E8%B0%83+reducer+%E7%9A%84%E7%BA%AF%E7%B2%B9%E6%80%A7%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ARedux+%E7%9A%84%E5%8D%95%E5%90%91%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BC%BA%E8%B0%83+reducer+%E7%9A%84%E7%BA%AF%E7%B2%B9%E6%80%A7%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Astate-redux%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%8A%B6%E6%80%81%E4%B8%8E%E8%B7%AF%E7%94%B1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fstate-redux%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Redux 的单向数据流为什么强调 reducer 的纯粹性？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/state-router/">前端路由除切换组件外还需要管理什么？</a></li><li><a href="/questions/state-pinia/">Pinia 中 state、getter 和 action 应如何分工？</a></li><li><a href="/questions/state-offline-sync/">前端离线同步怎样处理重试和数据冲突？</a></li><li><a href="/questions/state-route-concurrency/">路由并发导航和权限变化应该怎样处理？</a></li></ul></nav></main></div></div>
+<p>ID 和时间在创建 action 时生成，reducer 本身仍然是确定的，重放同一个 action 会得到相同结果。</p>
+<h2>选择器与派生数据</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { createSelector } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@reduxjs/toolkit&#x27;</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">selectTodos</span> = (<span class="hljs-params">s</span>) =&gt; s.<span class="hljs-property">todos</span>;
+<span class="hljs-keyword">const</span> selectDone = <span class="hljs-title function_">createSelector</span>([selectTodos], <span class="hljs-function">(<span class="hljs-params">todos</span>) =&gt;</span> todos.<span class="hljs-title function_">filter</span>(<span class="hljs-function">(<span class="hljs-params">t</span>) =&gt;</span> t.<span class="hljs-property">done</span>));
+</code></pre></div>
+<p>state 中只存原始数据，派生数据用 memoized 选择器计算。如果 <code>useSelector</code> 中直接写 <code>s.todos.filter(...)</code>，每次都返回新数组，组件会在任何 action 后重新渲染。</p>
+<h2>异步逻辑</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> fetchTodos = <span class="hljs-title function_">createAsyncThunk</span>(<span class="hljs-string">&#x27;todos/fetch&#x27;</span>, <span class="hljs-title function_">async</span> (_, { signal }) =&gt; {
+  <span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;/api/todos&#x27;</span>, { signal });
+  <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">json</span>();
+});
+</code></pre></div>
+<p><code>createAsyncThunk</code> 自动派发 pending、fulfilled、rejected 三个 action，reducer 在 <code>extraReducers</code> 中处理它们。</p>
+<h2>什么时候用 Redux</h2>
+<ul>
+<li>很多组件共享、频繁更新的客户端状态，需要调试工具追踪每次变化。</li>
+<li>只是缓存接口数据：用 RTK Query 或 TanStack Query。</li>
+<li>只是少量全局状态：Context、Zustand 更轻。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li>为什么不能在 reducer 里 <code>fetch</code>？请求是副作用，结果不确定，记录和重放 action 时无法得到相同的 state。</li>
+<li>Immer 有什么限制？要么修改草稿，要么返回新值，不能两者同时做。</li>
+</ul></div><div class="answer-bottom"><a href="https://redux.js.org/tutorials/essentials/part-1-overview-concepts" target="_blank" rel="noreferrer">Redux · Redux Essentials<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Redux+%E7%9A%84%E5%8D%95%E5%90%91%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BC%BA%E8%B0%83+reducer+%E7%9A%84%E7%BA%AF%E7%B2%B9%E6%80%A7%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ARedux+%E7%9A%84%E5%8D%95%E5%90%91%E6%95%B0%E6%8D%AE%E6%B5%81%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BC%BA%E8%B0%83+reducer+%E7%9A%84%E7%BA%AF%E7%B2%B9%E6%80%A7%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Astate-redux%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%8A%B6%E6%80%81%E4%B8%8E%E8%B7%AF%E7%94%B1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fstate-redux%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Redux 的单向数据流为什么强调 reducer 的纯粹性？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/state-pinia/">Pinia 中 state、getter 和 action 应如何分工？</a></li><li><a href="/questions/state-router/">前端路由除切换组件外还需要管理什么？</a></li><li><a href="/questions/state-offline-sync/">前端离线同步怎样处理重试和数据冲突？</a></li><li><a href="/questions/state-route-concurrency/">路由并发导航和权限变化应该怎样处理？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="JavaScript面试题：错误处理要沿真实控制流建立边界：同步异常由当前栈上的 catch 处理，异步任务需要通过 Promise 或回调传递失败，全局事件用于兜底观察。恢复、清理和诊断不能简单合并成“所有错误都返回空值”。" />
+    <meta name="description" content="JavaScript面试题：catch 只能捕获当前调用栈上抛出的错误，或在 try 内 await 的 Promise 拒绝。定时器和事件回调里的错误发生在之后的任务中，注册时的 try 捕获不到，需要在回调内部处理或转成拒绝。异步失败未被处理时由 window 的 error 和 unhandledrejection 兜底上报，但它们不负责业务恢复。" />
     <title>同步错误、Promise 拒绝和全局异常应该怎样处理？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/js-errors-event-handling/" />
     <meta name="robots" content="index,follow" />
@@ -19,23 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="同步错误、Promise 拒绝和全局异常应该怎样处理？ · 前端知库" />
-    <meta property="og:description" content="JavaScript面试题：错误处理要沿真实控制流建立边界：同步异常由当前栈上的 catch 处理，异步任务需要通过 Promise 或回调传递失败，全局事件用于兜底观察。恢复、清理和诊断不能简单合并成“所有错误都返回空值”。" />
+    <meta property="og:description" content="JavaScript面试题：catch 只能捕获当前调用栈上抛出的错误，或在 try 内 await 的 Promise 拒绝。定时器和事件回调里的错误发生在之后的任务中，注册时的 try 捕获不到，需要在回调内部处理或转成拒绝。异步失败未被处理时由 window 的 error 和 unhandledrejection 兜底上报，但它们不负责业务恢复。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/js-errors-event-handling/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-errors-event-handling/#webpage","url":"https://fe.hushifa.top/questions/js-errors-event-handling/","name":"同步错误、Promise 拒绝和全局异常应该怎样处理？ · 前端知库","description":"JavaScript面试题：错误处理要沿真实控制流建立边界：同步异常由当前栈上的 catch 处理，异步任务需要通过 Promise 或回调传递失败，全局事件用于兜底观察。恢复、清理和诊断不能简单合并成“所有错误都返回空值”。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-errors-event-handling/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-errors-event-handling/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"同步错误、Promise 拒绝和全局异常应该怎样处理？","item":"https://fe.hushifa.top/questions/js-errors-event-handling/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-errors-event-handling/#webpage","url":"https://fe.hushifa.top/questions/js-errors-event-handling/","name":"同步错误、Promise 拒绝和全局异常应该怎样处理？ · 前端知库","description":"JavaScript面试题：catch 只能捕获当前调用栈上抛出的错误，或在 try 内 await 的 Promise 拒绝。定时器和事件回调里的错误发生在之后的任务中，注册时的 try 捕获不到，需要在回调内部处理或转成拒绝。异步失败未被处理时由 window 的 error 和 unhandledrejection 兜底上报，但它们不负责业务恢复。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-errors-event-handling/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-errors-event-handling/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"同步错误、Promise 拒绝和全局异常应该怎样处理？","item":"https://fe.hushifa.top/questions/js-errors-event-handling/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">同步错误、Promise 拒绝和全局异常应该怎样处理？</span></nav><h1 tabindex="-1">同步错误、Promise 拒绝和全局异常应该怎样处理？</h1><p class="reading-summary">错误处理要沿真实控制流建立边界：同步异常由当前栈上的 catch 处理，异步任务需要通过 Promise 或回调传递失败，全局事件用于兜底观察。恢复、清理和诊断不能简单合并成“所有错误都返回空值”。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">同步错误、Promise 拒绝和全局异常应该怎样处理？</span></nav><h1 tabindex="-1">同步错误、Promise 拒绝和全局异常应该怎样处理？</h1><p class="reading-summary">catch 只能捕获当前调用栈上抛出的错误，或在 try 内 await 的 Promise 拒绝。定时器和事件回调里的错误发生在之后的任务中，注册时的 try 捕获不到，需要在回调内部处理或转成拒绝。异步失败未被处理时由 window 的 error 和 unhandledrejection 兜底上报，但它们不负责业务恢复。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>同步错误用 try/catch，Promise 拒绝要在等待它的地方用 await 或 catch 处理。</li>
-<li>注册定时器时的 try 捕获不到回调里稍后抛出的错误。</li>
-<li>then 的第二个参数不捕获同一个 then 成功回调中的错误。</li>
-<li>window 的 error、unhandledrejection 只用于兜底上报，不能替代业务恢复。</li>
+<li>同步错误沿调用栈传播，被最近的 <code>try/catch</code> 捕获。</li>
+<li>Promise 拒绝要在观察它的地方处理：<code>await</code> 在 <code>try</code> 中，或 <code>.catch()</code> 接在链尾。</li>
+<li>定时器、事件监听器的回调在之后的任务中执行，注册时外层的 <code>try</code> 捕获不到其中的错误。</li>
+<li><code>.then(onOk, onErr)</code> 的 <code>onErr</code> 不会捕获同一个 <code>then</code> 里 <code>onOk</code> 抛出的错误。</li>
+<li><code>window</code> 的 <code>error</code> 和 <code>unhandledrejection</code> 事件用于兜底上报遗漏的错误，恢复要在了解业务上下文的地方做。</li>
 </ul>
-<p>判断一个 catch 能不能接住错误，首先看错误发生时是否仍在它对应的执行路径里。代码文本写在某个 try 里面，不意味着之后执行的所有回调也自动受这个 try 保护。</p>
-<p>同步函数在 try 内抛错，会沿当前调用栈进入 catch；Promise 拒绝则需要在链上连接处理，或在 try 内用 await 等待它恢复为异常。</p>
-<h2>把拒绝接入正在等待它的边界</h2>
+<h2>await 让拒绝变成异常</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">demonstrate</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">try</span> {
     <span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
@@ -50,11 +49,15 @@
 
 <span class="hljs-title function_">demonstrate</span>();
 </code></pre></div>
-<p>then 回调抛错，会让 then 返回的新 Promise 拒绝。await 等待的是这个 Promise，因此拒绝会在 await 位置恢复为异常，进入当前 catch，最后执行清理。</p>
-<p>async 函数内部抛错也通常表现为它返回的 Promise 拒绝。调用方如果既不 await，也不接 catch，这个拒绝不会因为函数名字叫“异步任务”就自动得到处理。给返回 Promise 的函数明确责任边界，是避免未处理拒绝的第一步。</p>
-<h2>定时器回调为什么不能靠注册时的 try 保护</h2>
-<p>setTimeout 注册后，当前函数可以先结束。真正的回调在后续任务中执行，它抛出的错误不会穿越时间回到已经结束的外层 try。</p>
-<p>如果要把定时器中的工作建模成可等待任务，需要主动将回调失败转成拒绝：</p>
+<p>调用 async 函数却既不 <code>await</code> 也不 <code>.catch()</code>，拒绝就会成为未处理拒绝。</p>
+<h2>回调里的错误</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">try</span> {
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;稍后失败&#x27;</span>); <span class="hljs-comment">// 外层 try 已经结束，捕获不到</span>
+  }, <span class="hljs-number">0</span>);
+} <span class="hljs-keyword">catch</span> {}
+</code></pre></div>
+<p>要让调用方能等待并捕获，就把回调包装成 Promise：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">runTimerTask</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
     <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
@@ -70,34 +73,45 @@
 
 <span class="hljs-title function_">runTimerTask</span>().<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(error.<span class="hljs-property">name</span>)); <span class="hljs-comment">// SyntaxError</span>
 </code></pre></div>
-<p>Promise 构造器会捕获其执行器同步执行期间的抛错，但不会自动捕获执行器所注册的后续定时器回调异常。因此示例中的内层 try/catch 不能随便删掉。</p>
-<p>事件监听也是类似边界。一个 async 事件处理器返回 Promise，事件系统通常不会像业务代码一样自动 await 它；需要在处理器内部或明确的调用包装中处理拒绝。仅写 void 来忽略返回值，不会使实际失败消失。</p>
-<h2>then 的第二个参数不捕获同一 then 成功回调里的错误</h2>
+<p>Promise 构造器只捕获执行器同步阶段的异常，定时器回调内部仍需自己 <code>try/catch</code>。<code>async</code> 事件处理器返回的 Promise 不会被事件系统等待，处理器内部要捕获错误。</p>
+<h2>then 的第二个参数</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> result = <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>(<span class="hljs-number">1</span>).<span class="hljs-title function_">then</span>(
   <span class="hljs-function">() =&gt;</span> {
     <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;后处理失败&#x27;</span>);
   },
-  <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;已处理原 Promise 的拒绝&#x27;</span>,
+  <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;只处理原 Promise 的拒绝&#x27;</span>,
 );
-
 result.<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(error.<span class="hljs-property">message</span>)); <span class="hljs-comment">// 后处理失败</span>
 </code></pre></div>
-<p>两个回调都是对前一个 Promise 的反应。原 Promise 已经成功，就执行第一个回调；这个回调抛错使返回的 result 拒绝，不会再倒回去调用并列的第二个回调。</p>
-<p>在整段链尾添加 catch，能处理传递到这里的拒绝，但 catch 自己如果又抛错，也会产生一个新的拒绝。要确保最终负责处理的边界确实观察了最后返回的 Promise，而不只是链条中某个较早的节点。</p>
-<h2>清理失败也要避免掩盖主要错误</h2>
-<p>finally 适合恢复加载状态、归还局部资源或移除临时监听。它通常不应该 return 一个业务值或随意抛出另一个错误，否则会覆盖前面的结果或异常。</p>
-<p>return 与 return await 对 catch、finally 时机的影响见《async/await 如何处理异常和并发？》。</p>
-<p>如果业务执行与清理都可能失败，需要决定主要错误如何传播、清理错误怎样记录。显式资源管理的 SuppressedError 等机制也有自己的规则，不能把不同协议的错误优先级想当然地视为相同。</p>
-<h2>全局事件是兜底观测，不是业务恢复策略</h2>
-<p>浏览器的 error 事件可以观察未被正常处理的运行时异常；资源加载失败也有 error 事件，但事件对象与传播方式不同。资源元素的错误通常不冒泡，统一观察时可能需要捕获阶段监听，并区分 ErrorEvent 与图片、脚本等资源元素的事件。</p>
-<p>unhandledrejection 用于观察尚未得到拒绝处理的 Promise。之后补上处理器还可能触发 rejectionhandled，所以它不总等同于“这个拒绝以后永远不会被处理”。跨源脚本等场景也可能受到错误信息暴露限制，拿不到完整堆栈不必然说明代码没有失败。</p>
-<p>全局处理器不知道用户当前操作是否可以重试，也不能自动把页面恢复到正确业务状态。需要恢复的错误，应在能理解上下文的边界处理；全局层负责汇总遗漏和诊断线索。</p>
-<p>仅调用 preventDefault 隐藏默认控制台输出，不代表错误已经被修复。日志上报函数自身也要处理失败，避免它再次产生未处理拒绝，形成不断报告自己的循环。</p>
-<h2>错误信息要帮助定位，也要表达给用户可执行的下一步</h2>
-<p>网络暂时失败可以提示重试，表单字段错误应定位到字段，取消操作通常不必按系统故障处理；程序状态不符合约束则需要保留诊断信息，而不是统一回退成“成功但没有数据”。</p>
-<p><code>catch(() =&gt; [])</code> 只有在业务明确把失败视为可接受的空结果时才合适。否则页面会把“请求失败”伪装成“确实没有记录”，既误导用户，也让监控丢失真实故障。</p>
-<p>包装错误时可以使用 Error 的 cause 保留原始原因。记录操作类型、版本、请求关联标识和必要堆栈时，应避免直接上传整个表单、访问令牌或完整敏感响应。错误原因也不保证总是 Error 实例，来自第三方或任意 Promise 的拒绝值应先安全归一化。</p>
-<p>最后，浏览器全局错误事件与 Node.js 的未捕获异常、未处理拒绝策略不是同一套接口。不要把前端的全局监听写法或“程序还能继续运行”的观察，直接推广到所有服务端进程；每个运行环境都需要明确最终失败策略。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises" target="_blank" rel="noreferrer">MDN · Using promises<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%90%8C%E6%AD%A5%E9%94%99%E8%AF%AF%E3%80%81Promise+%E6%8B%92%E7%BB%9D%E5%92%8C%E5%85%A8%E5%B1%80%E5%BC%82%E5%B8%B8%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%A4%84%E7%90%86%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%90%8C%E6%AD%A5%E9%94%99%E8%AF%AF%E3%80%81Promise+%E6%8B%92%E7%BB%9D%E5%92%8C%E5%85%A8%E5%B1%80%E5%BC%82%E5%B8%B8%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%A4%84%E7%90%86%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-errors-event-handling%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-errors-event-handling%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：同步错误、Promise 拒绝和全局异常应该怎样处理？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-this/">普通函数和箭头函数的 this 有什么区别？</a></li><li><a href="/questions/js-promise-combinators/">Promise.all、allSettled、race 和 any 如何选择？</a></li></ul></nav></main></div></div>
+<p>两个参数都是针对前一个 Promise 的。链尾的 <code>.catch()</code> 才能捕获前面所有步骤的错误。</p>
+<h2>全局兜底</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;error&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+  <span class="hljs-title function_">report</span>({ <span class="hljs-attr">message</span>: event.<span class="hljs-property">message</span>, <span class="hljs-attr">stack</span>: event.<span class="hljs-property">error</span>?.<span class="hljs-property">stack</span> });
+});
+
+<span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;unhandledrejection&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+  <span class="hljs-title function_">report</span>({ <span class="hljs-attr">reason</span>: <span class="hljs-title class_">String</span>(event.<span class="hljs-property">reason</span>) });
+});
+</code></pre></div>
+<ul>
+<li>图片、脚本等资源加载失败也触发 <code>error</code>，但不冒泡，要在捕获阶段监听：<code>addEventListener(&#x27;error&#x27;, fn, true)</code>。</li>
+<li>跨源脚本的错误只显示 <code>Script error.</code>，需要脚本带 <code>crossorigin</code> 属性且服务器返回 CORS 头才能看到详情。</li>
+<li>之后补上处理器的拒绝会触发 <code>rejectionhandled</code>。</li>
+<li><code>report</code> 自身要捕获异常，避免上报失败又产生新的未处理拒绝。</li>
+</ul>
+<h2>业务层处理</h2>
+<ul>
+<li>网络失败提示重试；字段校验错误定位到字段；用户取消（<code>AbortError</code>）通常不提示。</li>
+<li><code>catch(() =&gt; [])</code> 只在失败确实等同于&quot;没有数据&quot;时才合适，否则会把故障显示成空列表。</li>
+<li>包装错误时用 <code>new Error(&#x27;加载订单失败&#x27;, { cause: error })</code> 保留原因；上报时不要带令牌和完整表单。</li>
+<li><code>finally</code> 中不要 <code>return</code> 或抛新错误，否则会覆盖原结果。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li>Node.js 的未处理拒绝怎样处理？默认会让进程以错误退出，可以监听 <code>process.on(&#x27;unhandledRejection&#x27;)</code>，这和浏览器的事件不是同一套接口。</li>
+<li>React 渲染错误怎样处理？用错误边界组件，它不捕获事件处理器和异步代码中的错误。</li>
+<li><code>return</code> 和 <code>return await</code> 对 catch 的影响，见《async/await 如何处理异常和并发？》。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises" target="_blank" rel="noreferrer">MDN · Using promises<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%90%8C%E6%AD%A5%E9%94%99%E8%AF%AF%E3%80%81Promise+%E6%8B%92%E7%BB%9D%E5%92%8C%E5%85%A8%E5%B1%80%E5%BC%82%E5%B8%B8%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%A4%84%E7%90%86%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%90%8C%E6%AD%A5%E9%94%99%E8%AF%AF%E3%80%81Promise+%E6%8B%92%E7%BB%9D%E5%92%8C%E5%85%A8%E5%B1%80%E5%BC%82%E5%B8%B8%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%A4%84%E7%90%86%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-errors-event-handling%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-errors-event-handling%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：同步错误、Promise 拒绝和全局异常应该怎样处理？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-this/">普通函数和箭头函数的 this 有什么区别？</a></li><li><a href="/questions/js-promise-combinators/">Promise.all、allSettled、race 和 any 如何选择？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

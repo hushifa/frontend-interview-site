@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="网络与安全面试题：fetch 区分取得响应、读取正文和业务验证。404/500 通常仍会兑现请求 Promise，HTTP 失败需主动判断；网络、策略、取消与正文解析又有不同拒绝路径，响应体也不是可无限重复读取的字符串。" />
+    <meta name="description" content="网络与安全面试题：fetch 只在拿不到响应时拒绝 Promise，例如网络中断、CORS 拦截、请求被取消。404、500 都是正常响应，需要检查 response.ok 自己抛错；读取正文和解析 JSON 是另外的失败点。" />
     <title>为什么 fetch 收到 404 不一定进入 catch？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/http-fetch-errors/" />
     <meta name="robots" content="index,follow" />
@@ -19,92 +19,63 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="为什么 fetch 收到 404 不一定进入 catch？ · 前端知库" />
-    <meta property="og:description" content="网络与安全面试题：fetch 区分取得响应、读取正文和业务验证。404/500 通常仍会兑现请求 Promise，HTTP 失败需主动判断；网络、策略、取消与正文解析又有不同拒绝路径，响应体也不是可无限重复读取的字符串。" />
+    <meta property="og:description" content="网络与安全面试题：fetch 只在拿不到响应时拒绝 Promise，例如网络中断、CORS 拦截、请求被取消。404、500 都是正常响应，需要检查 response.ok 自己抛错；读取正文和解析 JSON 是另外的失败点。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/http-fetch-errors/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/http-fetch-errors/#webpage","url":"https://fe.hushifa.top/questions/http-fetch-errors/","name":"为什么 fetch 收到 404 不一定进入 catch？ · 前端知库","description":"网络与安全面试题：fetch 区分取得响应、读取正文和业务验证。404/500 通常仍会兑现请求 Promise，HTTP 失败需主动判断；网络、策略、取消与正文解析又有不同拒绝路径，响应体也不是可无限重复读取的字符串。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/http-fetch-errors/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/http-fetch-errors/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"网络与安全面试题","item":"https://fe.hushifa.top/topics/network/"},{"@type":"ListItem","position":3,"name":"为什么 fetch 收到 404 不一定进入 catch？","item":"https://fe.hushifa.top/questions/http-fetch-errors/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/http-fetch-errors/#webpage","url":"https://fe.hushifa.top/questions/http-fetch-errors/","name":"为什么 fetch 收到 404 不一定进入 catch？ · 前端知库","description":"网络与安全面试题：fetch 只在拿不到响应时拒绝 Promise，例如网络中断、CORS 拦截、请求被取消。404、500 都是正常响应，需要检查 response.ok 自己抛错；读取正文和解析 JSON 是另外的失败点。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/http-fetch-errors/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/http-fetch-errors/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"网络与安全面试题","item":"https://fe.hushifa.top/topics/network/"},{"@type":"ListItem","position":3,"name":"为什么 fetch 收到 404 不一定进入 catch？","item":"https://fe.hushifa.top/questions/http-fetch-errors/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/network/">网络与安全面试题</a><span aria-hidden="true">/</span><span aria-current="page">为什么 fetch 收到 404 不一定进入 catch？</span></nav><h1 tabindex="-1">为什么 fetch 收到 404 不一定进入 catch？</h1><p class="reading-summary">fetch 区分取得响应、读取正文和业务验证。404/500 通常仍会兑现请求 Promise，HTTP 失败需主动判断；网络、策略、取消与正文解析又有不同拒绝路径，响应体也不是可无限重复读取的字符串。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/network/">网络与安全面试题</a><span aria-hidden="true">/</span><span aria-current="page">为什么 fetch 收到 404 不一定进入 catch？</span></nav><h1 tabindex="-1">为什么 fetch 收到 404 不一定进入 catch？</h1><p class="reading-summary">fetch 只在拿不到响应时拒绝 Promise，例如网络中断、CORS 拦截、请求被取消。404、500 都是正常响应，需要检查 response.ok 自己抛错；读取正文和解析 JSON 是另外的失败点。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>fetch 兑现只说明拿到了响应，404、500 通常不会让它拒绝，需要自己检查 response.ok。</li>
-<li>把流程拆成取得响应、判断状态、读取解析正文、校验业务结构四步，每步都可能失败。</li>
-<li>204/205 没有正文，不能无条件调用 json；正文读取与解析也要放进错误边界。</li>
-<li>取消只是停止等待，不保证服务器没执行写操作；正文通常只能消费一次，需要时提前 clone。</li>
+<li><code>fetch()</code> 返回的 Promise 只要收到 HTTP 响应就会兑现，状态码是 404、500 也一样。</li>
+<li>拒绝的情况是拿不到可用响应：网络错误、DNS 失败、CORS 拦截、CSP 拦截、<code>AbortController</code> 取消，此时抛 <code>TypeError</code> 或 <code>AbortError</code>。</li>
+<li>要用 <code>response.ok</code>（状态码 200–299）判断 HTTP 成功，不成功时自己抛错。</li>
+<li><code>response.json()</code> 也可能失败，例如正文不是 JSON；正文是流，只能读一次。</li>
 </ul>
-<p>fetch 的 Promise 兑现，通常说明已经取得可供处理的响应，而不是说明 HTTP 状态一定成功，更不代表业务已经完成。404、500 仍然是服务器发回的 HTTP 响应，所以通常不会仅因状态码就让 fetch 拒绝。</p>
-<p>可以把过程拆开：发送与取得响应，判断状态，读取和解析正文，检查业务结构。失败可能发生在其中任意一步，处理方式也不同。</p>
-<h2>用一个契约明确的 JSON 读取函数</h2>
-<p>下面只演示 GET JSON 读取：接受正常 JSON 响应，204/205 返回 null，其他非成功 HTTP 状态保留为明确错误。</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">HttpError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Error</span> {
-  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">response</span>) {
-    <span class="hljs-variable language_">super</span>(<span class="hljs-string">`HTTP <span class="hljs-subst">${response.status}</span>`</span>);
-    <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = <span class="hljs-string">&#x27;HttpError&#x27;</span>;
-    <span class="hljs-variable language_">this</span>.<span class="hljs-property">status</span> = response.<span class="hljs-property">status</span>;
-    <span class="hljs-variable language_">this</span>.<span class="hljs-property">retryAfter</span> = response.<span class="hljs-property">headers</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;Retry-After&#x27;</span>);
-  }
-}
-
-<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">fetchJson</span>(<span class="hljs-params">url, { signal } = {}</span>) {
+<h2>一个完整的封装</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">getJSON</span>(<span class="hljs-params">url, { signal } = {}</span>) {
   <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(url, { signal });
-  <span class="hljs-keyword">if</span> (!response.<span class="hljs-property">ok</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">HttpError</span>(response);
-  <span class="hljs-keyword">if</span> (response.<span class="hljs-property">status</span> === <span class="hljs-number">204</span> || response.<span class="hljs-property">status</span> === <span class="hljs-number">205</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
 
-  <span class="hljs-keyword">const</span> mediaType = response.<span class="hljs-property">headers</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;Content-Type&#x27;</span>)?.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;;&#x27;</span>)[<span class="hljs-number">0</span>].<span class="hljs-title function_">trim</span>().<span class="hljs-title function_">toLowerCase</span>();
-  <span class="hljs-keyword">const</span> jsonType = mediaType === <span class="hljs-string">&#x27;application/json&#x27;</span> ||
-    (mediaType?.<span class="hljs-title function_">startsWith</span>(<span class="hljs-string">&#x27;application/&#x27;</span>) &amp;&amp; mediaType.<span class="hljs-title function_">endsWith</span>(<span class="hljs-string">&#x27;+json&#x27;</span>));
-  <span class="hljs-keyword">if</span> (!jsonType) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;响应类型不符合 JSON 接口约定&#x27;</span>);
+  <span class="hljs-keyword">if</span> (!response.<span class="hljs-property">ok</span>) {
+    <span class="hljs-keyword">const</span> text = <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">text</span>();
+    <span class="hljs-keyword">const</span> error = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">`HTTP <span class="hljs-subst">${response.status}</span>`</span>);
+    error.<span class="hljs-property">status</span> = response.<span class="hljs-property">status</span>;
+    error.<span class="hljs-property">body</span> = text;
+    <span class="hljs-keyword">throw</span> error;
+  }
 
-  <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>();
+  <span class="hljs-keyword">if</span> (response.<span class="hljs-property">status</span> === <span class="hljs-number">204</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">return</span> response.<span class="hljs-title function_">json</span>();
 }
-</code></pre></div>
-<p>response.ok 主要检查状态是否在 200–299 范围。本例主动把 404 等状态转成 HttpError，所以调用方的 catch 才能按这个约定处理它们。</p>
-<p>204/205 没有普通 JSON 正文，不能无条件调用 json。200 的空正文或格式错误则仍然会在 JSON 解析阶段失败，不能因为前面已经通过 ok 检查就忽略。</p>
-<p>Content-Type 检查帮助发现“接口实际返回了 HTML 登录页”等契约错误，但它不会证明 JSON 中有需要的业务字段。解析后还应按领域模型验证。</p>
-<h2>fetch 可以在正文尚未完整读取时兑现</h2>
-<p>取得响应后，正文通常仍以流的形式等待消费。response.json、text、blob 等方法有自己的异步过程，读取中断、解码或格式解析问题都可能使它们拒绝。</p>
-<p>因此只在 await fetch 周围记录“请求成功”，可能过早。如果业务需要完整数据，应把正文读取与解析也包含在相应错误边界中。</p>
-<p>网络中断、无效请求、浏览器策略和取消等情况，则可能让 fetch 本身拒绝。在浏览器里，CORS 失败常常只向脚本提供有限的错误信息，不能仅凭一个 TypeError 就精确诊断全部原因，应结合控制台与 Network。</p>
-<h2>取消应在任务进行中发出</h2>
-<p>下面接在前面的函数定义后，在浏览器模块中运行。示例地址应属于当前页面的实际 HTTP 服务：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> controller = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AbortController</span>();
-<span class="hljs-keyword">const</span> request = <span class="hljs-title function_">fetchJson</span>(<span class="hljs-string">&#x27;/api/data&#x27;</span>, { <span class="hljs-attr">signal</span>: controller.<span class="hljs-property">signal</span> });
-<span class="hljs-keyword">const</span> handled = request.<span class="hljs-title function_">catch</span>(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> {
-  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(error.<span class="hljs-property">name</span>); <span class="hljs-comment">// 默认主动取消时通常为 AbortError</span>
-});
 
-controller.<span class="hljs-title function_">abort</span>();
-<span class="hljs-keyword">await</span> handled;
-</code></pre></div>
-<p>先启动请求、连接错误处理，再发出取消。若已经 await 完整请求后才调用 abort，就不能拿它演示中途终止。</p>
-<p>同一个已取消 signal 不会自动恢复成可再次使用的新状态，下一次独立请求通常需要新的控制器。取消也可能发生在 fetch 已取得响应之后，此时继续读取正文仍可能失败。</p>
-<p>默认 abort 常见的是 AbortError，但超时信号或自定义取消原因可能有不同表现。需要结合自己的 signal 与 API 约定识别原因，不要只靠一个错误名字处理所有情况。</p>
-<p>客户端取消不保证服务器没有执行写操作。对于创建订单等结果不确定的变更，仍需幂等或状态查询；停止等待与撤销业务不是同一个操作。</p>
-<h2>正文通常只能消费一次</h2>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> response = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Response</span>(<span class="hljs-string">&#x27;{&quot;ok&quot;:true}&#x27;</span>, {
-  <span class="hljs-attr">headers</span>: { <span class="hljs-string">&#x27;Content-Type&#x27;</span>: <span class="hljs-string">&#x27;application/json&#x27;</span> },
-});
-<span class="hljs-keyword">const</span> copy = response.<span class="hljs-title function_">clone</span>();
+<span class="hljs-keyword">const</span> controller = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AbortController</span>();
+<span class="hljs-keyword">const</span> timer = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> controller.<span class="hljs-title function_">abort</span>(), <span class="hljs-number">8000</span>);
 
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>((<span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>()).<span class="hljs-property">ok</span>); <span class="hljs-comment">// true</span>
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-keyword">await</span> copy.<span class="hljs-title function_">text</span>()); <span class="hljs-comment">// {&quot;ok&quot;:true}</span>
 <span class="hljs-keyword">try</span> {
-  <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">text</span>();
+  <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getJSON</span>(<span class="hljs-string">&#x27;/api/items&#x27;</span>, { <span class="hljs-attr">signal</span>: controller.<span class="hljs-property">signal</span> });
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(data);
 } <span class="hljs-keyword">catch</span> (error) {
-  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(error.<span class="hljs-property">name</span>); <span class="hljs-comment">// TypeError</span>
+  <span class="hljs-keyword">if</span> (error.<span class="hljs-property">name</span> === <span class="hljs-string">&#x27;AbortError&#x27;</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;已取消或超时&#x27;</span>);
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (error.<span class="hljs-property">status</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;服务器返回错误&#x27;</span>, error.<span class="hljs-property">status</span>);
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;网络或解析失败&#x27;</span>, error);
+  }
+} <span class="hljs-keyword">finally</span> {
+  <span class="hljs-built_in">clearTimeout</span>(timer);
 }
 </code></pre></div>
-<p>response 的流已经被 json 消费，再读取同一个正文会失败。clone 需要在原正文被消费或锁定之前建立，并通过分支提供另一次读取路径。</p>
-<p>克隆并不是免费复制一个已经在内存里的小字符串。对于大正文或流，一条分支消费很慢时可能造成额外缓冲；日志与业务解析应尽量采用清楚的单次读取策略。</p>
-<h2>不同业务不一定都适合统一抛同一种错误</h2>
-<p>某个查询的 404 可能表示正常的“没有记录”，另一个页面的 404 则需要提示资源不存在。202 可能需要后续等待，429 可能需要读取限流信息，认证失败又涉及会话流程。</p>
-<p>上面的辅助函数只定义了一个有限读取约定。真实请求层可以解析受控的错误结构并保留状态、请求关联标识等信息，但不应把所有失败都自动转换为空数组或把服务器原始正文直接展示给用户。</p>
-<p>跨源响应要读取 Retry-After 等非默认暴露头时，还需相应 CORS 配置。脚本读取到 null 不一定表示网络响应里绝对没有这个头。</p>
-<h2>浏览器的过滤响应与普通 HTTP 错误不同</h2>
-<p>no-cors 得到的 opaque 响应或手动重定向得到的 opaqueredirect，可能对脚本呈现 status:0、不可读正文和受限头信息。它们不能直接当作正常 JSON 接口结果，也不是服务器真的返回了一个“HTTP 0”。</p>
-<p>Node 和浏览器的缓存、CORS 与重定向可见性并不完全相同。调试前应明确环境，再判断是 HTTP 状态、浏览器过滤、连接失败、正文读取还是业务结构的问题。</p>
-<p>把这些阶段分开后，catch 才能承担有意义的恢复，而不是把所有不符合预期的结果都笼统叫作“网络错误”。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch" target="_blank" rel="noreferrer">MDN · Using the Fetch API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%B8%BA%E4%BB%80%E4%B9%88+fetch+%E6%94%B6%E5%88%B0+404+%E4%B8%8D%E4%B8%80%E5%AE%9A%E8%BF%9B%E5%85%A5+catch%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88+fetch+%E6%94%B6%E5%88%B0+404+%E4%B8%8D%E4%B8%80%E5%AE%9A%E8%BF%9B%E5%85%A5+catch%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ahttp-fetch-errors%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%BD%91%E7%BB%9C%E4%B8%8E%E5%AE%89%E5%85%A8%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fhttp-fetch-errors%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：为什么 fetch 收到 404 不一定进入 catch？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/http-cache/">强缓存与协商缓存如何配合？</a></li><li><a href="/questions/http-cors/">什么是跨域？CORS 为什么需要服务端配合？</a></li><li><a href="/questions/http-xss/">XSS 和 CSRF 有什么区别？分别如何防范？</a></li><li><a href="/questions/http-https/">HTTPS 相比 HTTP 提供了哪些保障？</a></li></ul></nav></main></div></div>
+<p>超时也可以直接用 <code>AbortSignal.timeout(8000)</code>，超时时抛出的错误名是 <code>TimeoutError</code>。</p>
+<h2>正文只能读一次</h2>
+<p><code>Response</code> 的正文是 <code>ReadableStream</code>，<code>json()</code>、<code>text()</code> 读过之后 <code>bodyUsed</code> 变成 <code>true</code>，再读会拒绝。需要读两次时，先 <code>response.clone()</code>。</p>
+<h2>常见追问</h2>
+<ul>
+<li>为什么 CORS 错误拿不到具体原因？浏览器有意不把跨源失败细节暴露给脚本，只能在 DevTools 的 Network 和控制台查看。</li>
+<li>业务错误码放在 200 响应里怎么办？封装时同时检查 <code>response.ok</code> 和业务字段，两类错误分开处理。</li>
+<li>axios 为什么 404 会进入 catch？axios 默认用 <code>validateStatus</code> 把 2xx 以外视为错误，这是库的约定，不是 HTTP 的行为。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch" target="_blank" rel="noreferrer">MDN · Using the Fetch API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%B8%BA%E4%BB%80%E4%B9%88+fetch+%E6%94%B6%E5%88%B0+404+%E4%B8%8D%E4%B8%80%E5%AE%9A%E8%BF%9B%E5%85%A5+catch%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88+fetch+%E6%94%B6%E5%88%B0+404+%E4%B8%8D%E4%B8%80%E5%AE%9A%E8%BF%9B%E5%85%A5+catch%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ahttp-fetch-errors%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%BD%91%E7%BB%9C%E4%B8%8E%E5%AE%89%E5%85%A8%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fhttp-fetch-errors%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：为什么 fetch 收到 404 不一定进入 catch？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/http-cache/">强缓存与协商缓存如何配合？</a></li><li><a href="/questions/http-cors/">什么是跨域？CORS 为什么需要服务端配合？</a></li><li><a href="/questions/http-https/">HTTPS 相比 HTTP 提供了哪些保障？</a></li><li><a href="/questions/http-versions/">HTTP/1.1、HTTP/2 和 HTTP/3 的主要区别是什么？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

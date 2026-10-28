@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="框架与选型面试题：React 通常重新执行组件函数并协调视图，Solid 通过 signal 读取建立细粒度依赖，更新时只触发相关计算和 DOM。两者 JSX 相似，但状态读取、派生和清理规则不同。" />
+    <meta name="description" content="框架与选型面试题：React 在状态变化后重新执行组件函数并协调虚拟 DOM；Solid 的组件函数只执行一次，之后由 signal 的读取关系直接更新对应的 DOM 节点。因此在 Solid 中必须在 JSX、createMemo 或 createEffect 里调用 signal 才能建立依赖，解构 props 会丢失响应性。" />
     <title>Solid 的 Signals 和 React 状态更新有什么不同？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/frameworks-solid-signals/" />
     <meta name="robots" content="index,follow" />
@@ -19,72 +19,81 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Solid 的 Signals 和 React 状态更新有什么不同？ · 前端知库" />
-    <meta property="og:description" content="框架与选型面试题：React 通常重新执行组件函数并协调视图，Solid 通过 signal 读取建立细粒度依赖，更新时只触发相关计算和 DOM。两者 JSX 相似，但状态读取、派生和清理规则不同。" />
+    <meta property="og:description" content="框架与选型面试题：React 在状态变化后重新执行组件函数并协调虚拟 DOM；Solid 的组件函数只执行一次，之后由 signal 的读取关系直接更新对应的 DOM 节点。因此在 Solid 中必须在 JSX、createMemo 或 createEffect 里调用 signal 才能建立依赖，解构 props 会丢失响应性。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/frameworks-solid-signals/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/frameworks-solid-signals/#webpage","url":"https://fe.hushifa.top/questions/frameworks-solid-signals/","name":"Solid 的 Signals 和 React 状态更新有什么不同？ · 前端知库","description":"框架与选型面试题：React 通常重新执行组件函数并协调视图，Solid 通过 signal 读取建立细粒度依赖，更新时只触发相关计算和 DOM。两者 JSX 相似，但状态读取、派生和清理规则不同。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/frameworks-solid-signals/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/frameworks-solid-signals/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"框架与选型面试题","item":"https://fe.hushifa.top/topics/frameworks/"},{"@type":"ListItem","position":3,"name":"Solid 的 Signals 和 React 状态更新有什么不同？","item":"https://fe.hushifa.top/questions/frameworks-solid-signals/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/frameworks-solid-signals/#webpage","url":"https://fe.hushifa.top/questions/frameworks-solid-signals/","name":"Solid 的 Signals 和 React 状态更新有什么不同？ · 前端知库","description":"框架与选型面试题：React 在状态变化后重新执行组件函数并协调虚拟 DOM；Solid 的组件函数只执行一次，之后由 signal 的读取关系直接更新对应的 DOM 节点。因此在 Solid 中必须在 JSX、createMemo 或 createEffect 里调用 signal 才能建立依赖，解构 props 会丢失响应性。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/frameworks-solid-signals/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/frameworks-solid-signals/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"框架与选型面试题","item":"https://fe.hushifa.top/topics/frameworks/"},{"@type":"ListItem","position":3,"name":"Solid 的 Signals 和 React 状态更新有什么不同？","item":"https://fe.hushifa.top/questions/frameworks-solid-signals/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/frameworks/">框架与选型面试题</a><span aria-hidden="true">/</span><span aria-current="page">Solid 的 Signals 和 React 状态更新有什么不同？</span></nav><h1 tabindex="-1">Solid 的 Signals 和 React 状态更新有什么不同？</h1><p class="reading-summary">React 通常重新执行组件函数并协调视图，Solid 通过 signal 读取建立细粒度依赖，更新时只触发相关计算和 DOM。两者 JSX 相似，但状态读取、派生和清理规则不同。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<p>React 在状态变化时重新执行整个组件函数，再进行协调；Solid 的组件函数只执行一次，之后由 signal 的读取关系直接更新对应的 DOM 节点。因此在 Solid 中，必须在 JSX 或 createMemo、createEffect 中调用 count() 才能建立依赖；解构 props 或把值提前存进变量，会丢失响应性。</p>
-<h2>相同的 JSX 不代表相同的更新模型</h2>
-<p>React 通常在状态变化后重新执行组件函数，得到新的界面描述，再协调实际 DOM。Solid 的组件函数通常在实例建立时执行，之后由编译器和响应式系统更新真正读取了 signal 的表达式。</p>
-<p>因此把 React 中“组件函数每次都会重新计算局部变量”的直觉搬到 Solid，容易得到初始化快照而不是持续响应式值。</p>
-<h2>signal 的读取方式决定是否建立依赖</h2>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { createRoot, createSignal, createMemo } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;solid-js&#x27;</span>;
-
-<span class="hljs-title function_">createRoot</span>(<span class="hljs-function">(<span class="hljs-params">dispose</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title function_">createSignal</span>(<span class="hljs-number">1</span>);
-  <span class="hljs-keyword">const</span> doubled = <span class="hljs-title function_">createMemo</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">count</span>() * <span class="hljs-number">2</span>);
-  <span class="hljs-keyword">const</span> initial = <span class="hljs-title function_">count</span>();
-
-  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">doubled</span>(), initial); <span class="hljs-comment">// 2, 1</span>
-  <span class="hljs-title function_">setCount</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value + <span class="hljs-number">1</span>);
-  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">doubled</span>(), initial); <span class="hljs-comment">// 4, 1</span>
-  <span class="hljs-title function_">dispose</span>();
-});
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/frameworks/">框架与选型面试题</a><span aria-hidden="true">/</span><span aria-current="page">Solid 的 Signals 和 React 状态更新有什么不同？</span></nav><h1 tabindex="-1">Solid 的 Signals 和 React 状态更新有什么不同？</h1><p class="reading-summary">React 在状态变化后重新执行组件函数并协调虚拟 DOM；Solid 的组件函数只执行一次，之后由 signal 的读取关系直接更新对应的 DOM 节点。因此在 Solid 中必须在 JSX、createMemo 或 createEffect 里调用 signal 才能建立依赖，解构 props 会丢失响应性。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li><code>const [count, setCount] = createSignal(0)</code>：<code>count()</code> 是读取函数，<code>setCount</code> 修改值。</li>
+<li>Solid 组件函数只在创建时执行一次，没有&quot;重新渲染组件&quot;的概念；JSX 中的 <code>{count()}</code> 被编译成只更新这一个文本节点的订阅。</li>
+<li>在组件主体里写 <code>const n = count()</code> 得到的是初始值，之后不会变化；要在 JSX、<code>createMemo</code>、<code>createEffect</code> 这些追踪作用域中读取。</li>
+<li>解构 props（<code>const { name } = props</code>）会读出当时的值、丢失响应性，应写 <code>props.name</code>，或用 <code>splitProps</code>、<code>mergeProps</code>。</li>
+<li>没有依赖数组，也没有过期闭包问题；但只有同步读取会被追踪，<code>await</code> 之后的读取不算。以下示例基于 Solid 1.x。</li>
+</ul>
+<h2>对比</h2>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-comment">// React：每次点击，Counter 整个函数重新执行</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Counter</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;render&#x27;</span>); <span class="hljs-comment">// 每次点击都打印</span>
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setCount(count + 1)}&gt;{count}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>;
+}
 </code></pre></div>
-<p><code>count()</code> 读取当前值，<code>setCount</code> 更新它；<code>createMemo</code> 在追踪上下文中读取 <code>count()</code>，所以会重新计算；<code>initial</code> 只是执行那一行时保存的数字，不会自己变化。</p>
-<p>关键不是“是否放进函数”，而是读取发生时是否处在受追踪的计算中。<code>createMemo</code>、<code>createEffect</code> 和编译后的 JSX 表达式会记录同步读取。<code>setTimeout</code> 或 <code>await</code> 之后的读取，不应默认认为属于原来的依赖收集。</p>
-<p>分支还会改变依赖集合：当前分支没有读到的 signal，不会因为它变化就强制重跑。需要排除某个读取时可以使用 <code>untrack</code>，但应明确这样做不会自动更新。</p>
-<h2>JSX 表达式和组件主体的边界不同</h2>
-<p>模板中直接写 <code>count()</code>，编译器可以把依赖绑定到局部 DOM；组件主体中先写 <code>const text = count()</code>，再渲染 <code>text</code>，通常得到的是初始化值。Props 也要保持响应式读取，随意解构可能切断后续更新关系。</p>
-<p><code>createMemo</code> 适合昂贵或需要缓存的派生计算，内部应保持纯计算，不要通过写状态制造循环。Signal 存对象时，直接修改内部字段并用同一引用写回，也不能假设存在深层代理；复杂嵌套状态应评估 Solid Store 或明确替换引用。</p>
-<h2>effect 负责同步外部系统</h2>
-<p><code>createEffect</code> 适合订阅、DOM API、计时器和网络等副作用，并用 <code>onCleanup</code> 清理。以下示例基于 Solid 1.x API：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { createEffect, createSignal, onCleanup } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;solid-js&#x27;</span>;
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-comment">// Solid：Counter 只执行一次</span>
+<span class="hljs-keyword">import</span> { createSignal } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;solid-js&#x27;</span>;
 
-<span class="hljs-keyword">const</span> [query, setQuery] = <span class="hljs-title function_">createSignal</span>(<span class="hljs-string">&#x27;&#x27;</span>);
-<span class="hljs-keyword">const</span> [results, setResults] = <span class="hljs-title function_">createSignal</span>([]);
-
-<span class="hljs-title function_">createEffect</span>(<span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> queryValue = <span class="hljs-title function_">query</span>();
-  <span class="hljs-keyword">const</span> controller = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AbortController</span>();
-
-  <span class="hljs-title function_">fetch</span>(<span class="hljs-string">`/api/search?q=<span class="hljs-subst">${<span class="hljs-built_in">encodeURIComponent</span>(queryValue)}</span>`</span>, {
-    <span class="hljs-attr">signal</span>: controller.<span class="hljs-property">signal</span>,
-  })
-    .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">response</span>) =&gt;</span> {
-      <span class="hljs-keyword">if</span> (!response.<span class="hljs-property">ok</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">`HTTP <span class="hljs-subst">${response.status}</span>`</span>);
-      <span class="hljs-keyword">return</span> response.<span class="hljs-title function_">json</span>();
-    })
-    .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
-      <span class="hljs-keyword">if</span> (!controller.<span class="hljs-property">signal</span>.<span class="hljs-property">aborted</span>) <span class="hljs-title function_">setResults</span>(data);
-    })
-    .<span class="hljs-title function_">catch</span>(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> {
-      <span class="hljs-comment">// 取消旧请求属于预期结果，不能当成失败上报</span>
-      <span class="hljs-keyword">if</span> (error.<span class="hljs-property">name</span> !== <span class="hljs-string">&#x27;AbortError&#x27;</span>) <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(error);
-    });
-
-  <span class="hljs-title function_">onCleanup</span>(<span class="hljs-function">() =&gt;</span> controller.<span class="hljs-title function_">abort</span>());
-});
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Counter</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title function_">createSignal</span>(<span class="hljs-number">0</span>);
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;setup&#x27;</span>); <span class="hljs-comment">// 只打印一次</span>
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setCount(count() + 1)}&gt;{count()}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>;
+}
 </code></pre></div>
-<p>组件销毁或依赖变化时取消旧请求，但第三方 Promise 不一定真正停止；旧结果提交前仍要检查任务身份或取消状态。测试中手动创建 <code>createRoot</code> 时，也必须调用 <code>dispose</code>，否则订阅和 effect 可能泄漏。</p>
-<p>不要机械复制 React Hook 的依赖数组和闭包补丁。Solid 的依赖追踪、批处理和 owner 生命周期有自己的规则。<code>batch</code> 可以合并下游更新，但不会让计算自动移出主线程，也不能替代请求取消。</p>
-<h2>细粒度不等于没有性能成本</h2>
-<p>一个 memo 里遍历几十万条数据、一次更新造成大量 DOM 变化或第三方图表重绘，仍然会慢。列表规模、对象身份、数据结构和外部库成本不会因为没有常规虚拟 DOM 就消失。</p>
-<p>迁移到 Solid 时，重点重新理解读取发生的位置、派生和副作用的生命周期，以及哪些数据需要共享。纯业务函数通常容易复用，依赖 React 渲染时机、组件重执行或 Hook 语义的代码则要重新设计和验证。</p></div><div class="answer-bottom"><a href="https://docs.solidjs.com/concepts/signals" target="_blank" rel="noreferrer">Solid · Signals<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Solid+%E7%9A%84+Signals+%E5%92%8C+React+%E7%8A%B6%E6%80%81%E6%9B%B4%E6%96%B0%E6%9C%89%E4%BB%80%E4%B9%88%E4%B8%8D%E5%90%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ASolid+%E7%9A%84+Signals+%E5%92%8C+React+%E7%8A%B6%E6%80%81%E6%9B%B4%E6%96%B0%E6%9C%89%E4%BB%80%E4%B9%88%E4%B8%8D%E5%90%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aframeworks-solid-signals%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%86%E6%9E%B6%E4%B8%8E%E9%80%89%E5%9E%8B%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fframeworks-solid-signals%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Solid 的 Signals 和 React 状态更新有什么不同？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/framework-angular/">Angular Signals 的依赖追踪与 computed 有什么特点？</a></li><li><a href="/questions/frameworks-angular-rxjs/">Angular 中 Observable 和 Signals 怎样协作？</a></li><li><a href="/questions/framework-svelte/">Svelte 的编译思路与 Runes 模型如何理解？</a></li><li><a href="/questions/framework-selection/">选择前端框架时应该先比较哪些约束？</a></li></ul></nav></main></div></div>
+<h2>派生值</h2>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">const</span> [items, setItems] = <span class="hljs-title function_">createSignal</span>([]);
+<span class="hljs-keyword">const</span> total = <span class="hljs-title function_">createMemo</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">items</span>().<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">s, i</span>) =&gt;</span> s + i.<span class="hljs-property">price</span>, <span class="hljs-number">0</span>));
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">count</span> = (<span class="hljs-params"></span>) =&gt; <span class="hljs-title function_">items</span>().<span class="hljs-property">length</span>; <span class="hljs-comment">// 便宜的派生可以直接写成函数</span>
+</code></pre></div>
+<p><code>createMemo</code> 缓存结果，多处读取只计算一次；简单的派生写成函数即可，它在 JSX 中被调用时也会被追踪。</p>
+<h2>副作用与清理</h2>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { createEffect, createSignal, onCleanup } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;solid-js&#x27;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Search</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [query, setQuery] = <span class="hljs-title function_">createSignal</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+  <span class="hljs-keyword">const</span> [results, setResults] = <span class="hljs-title function_">createSignal</span>([]);
+
+  <span class="hljs-title function_">createEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> q = <span class="hljs-title function_">query</span>();
+    <span class="hljs-keyword">const</span> controller = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AbortController</span>();
+    <span class="hljs-title function_">fetch</span>(<span class="hljs-string">`/api/search?q=<span class="hljs-subst">${<span class="hljs-built_in">encodeURIComponent</span>(q)}</span>`</span>, { <span class="hljs-attr">signal</span>: controller.<span class="hljs-property">signal</span> })
+      .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">r</span>) =&gt;</span> (r.<span class="hljs-property">ok</span> ? r.<span class="hljs-title function_">json</span>() : <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">reject</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">`HTTP <span class="hljs-subst">${r.status}</span>`</span>))))
+      .<span class="hljs-title function_">then</span>(setResults)
+      .<span class="hljs-title function_">catch</span>(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> {
+        <span class="hljs-keyword">if</span> (err.<span class="hljs-property">name</span> !== <span class="hljs-string">&#x27;AbortError&#x27;</span>) <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(err);
+      });
+    <span class="hljs-title function_">onCleanup</span>(<span class="hljs-function">() =&gt;</span> controller.<span class="hljs-title function_">abort</span>());
+  });
+
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{query()}</span> <span class="hljs-attr">onInput</span>=<span class="hljs-string">{(e)</span> =&gt;</span> setQuery(e.currentTarget.value)} /&gt;</span>;
+}
+</code></pre></div>
+<p><code>query</code> 变化时，先执行 <code>onCleanup</code> 取消旧请求，再重新运行 effect。实际项目中异步数据通常用 <code>createResource</code>。</p>
+<h2>条件和列表</h2>
+<p>因为组件不会重新执行，条件渲染和列表要用 Solid 提供的控制流组件：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx">&lt;<span class="hljs-title class_">Show</span> when={<span class="hljs-title function_">user</span>()} fallback={<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>请登录<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>}&gt;
+  {<span class="hljs-function">(<span class="hljs-params">u</span>) =&gt;</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>你好，{u().name}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>}
+&lt;/<span class="hljs-title class_">Show</span>&gt;
+
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">For</span> <span class="hljs-attr">each</span>=<span class="hljs-string">{todos()}</span>&gt;</span>{(todo) =&gt; <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>{todo.text}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>}<span class="hljs-tag">&lt;/<span class="hljs-name">For</span>&gt;</span></span>
+</code></pre></div>
+<p><code>&lt;For&gt;</code> 按对象引用复用 DOM 节点，相当于自动带 key。</p>
+<h2>常见追问</h2>
+<ul>
+<li>嵌套对象怎么处理？用 <code>createStore</code> 创建深层响应式对象，配合 <code>setStore(&#x27;user&#x27;, &#x27;name&#x27;, &#x27;Lin&#x27;)</code> 按路径更新。</li>
+<li>和 Vue 的响应式像吗？原理接近，都是读取时收集依赖、写入时通知；区别在于 Vue 组件有渲染函数和虚拟 DOM，Solid 直接更新 DOM。</li>
+</ul></div><div class="answer-bottom"><a href="https://docs.solidjs.com/concepts/signals" target="_blank" rel="noreferrer">Solid · Signals<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Solid+%E7%9A%84+Signals+%E5%92%8C+React+%E7%8A%B6%E6%80%81%E6%9B%B4%E6%96%B0%E6%9C%89%E4%BB%80%E4%B9%88%E4%B8%8D%E5%90%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ASolid+%E7%9A%84+Signals+%E5%92%8C+React+%E7%8A%B6%E6%80%81%E6%9B%B4%E6%96%B0%E6%9C%89%E4%BB%80%E4%B9%88%E4%B8%8D%E5%90%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aframeworks-solid-signals%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%86%E6%9E%B6%E4%B8%8E%E9%80%89%E5%9E%8B%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fframeworks-solid-signals%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Solid 的 Signals 和 React 状态更新有什么不同？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/framework-angular/">Angular Signals 的依赖追踪与 computed 有什么特点？</a></li><li><a href="/questions/frameworks-angular-rxjs/">Angular 中 Observable 和 Signals 怎样协作？</a></li><li><a href="/questions/framework-svelte/">Svelte 的编译思路与 Runes 模型如何理解？</a></li><li><a href="/questions/framework-selection/">选择前端框架时应该先比较哪些约束？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="性能优化面试题：解释 speculationrules 中 prefetch 与 prerender 的工作边界，说明触发时机、隐藏页面副作用、缓存和隐私成本，以及如何安全地为导航加速。" />
+    <meta name="description" content="性能优化面试题：用 &lt;script type=&quot;speculationrules&quot;&gt; 声明哪些链接可以提前处理。prefetch 只下载目标页面的 HTML，不下载子资源；prerender 在隐藏标签页里完整加载并执行页面，切换时几乎瞬间显示。eagerness 控制触发时机。它不是 Baseline，不支持的浏览器会忽略规则。" />
     <title>Speculation Rules API 的预取和预渲染有什么区别？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/perf-speculation-rules/" />
     <meta name="robots" content="index,follow" />
@@ -19,116 +19,78 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Speculation Rules API 的预取和预渲染有什么区别？ · 前端知库" />
-    <meta property="og:description" content="性能优化面试题：解释 speculationrules 中 prefetch 与 prerender 的工作边界，说明触发时机、隐藏页面副作用、缓存和隐私成本，以及如何安全地为导航加速。" />
+    <meta property="og:description" content="性能优化面试题：用 &lt;script type=&quot;speculationrules&quot;&gt; 声明哪些链接可以提前处理。prefetch 只下载目标页面的 HTML，不下载子资源；prerender 在隐藏标签页里完整加载并执行页面，切换时几乎瞬间显示。eagerness 控制触发时机。它不是 Baseline，不支持的浏览器会忽略规则。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/perf-speculation-rules/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-speculation-rules/#webpage","url":"https://fe.hushifa.top/questions/perf-speculation-rules/","name":"Speculation Rules API 的预取和预渲染有什么区别？ · 前端知库","description":"性能优化面试题：解释 speculationrules 中 prefetch 与 prerender 的工作边界，说明触发时机、隐藏页面副作用、缓存和隐私成本，以及如何安全地为导航加速。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-speculation-rules/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-speculation-rules/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"Speculation Rules API 的预取和预渲染有什么区别？","item":"https://fe.hushifa.top/questions/perf-speculation-rules/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-speculation-rules/#webpage","url":"https://fe.hushifa.top/questions/perf-speculation-rules/","name":"Speculation Rules API 的预取和预渲染有什么区别？ · 前端知库","description":"性能优化面试题：用 \u003cscript type=\"speculationrules\"> 声明哪些链接可以提前处理。prefetch 只下载目标页面的 HTML，不下载子资源；prerender 在隐藏标签页里完整加载并执行页面，切换时几乎瞬间显示。eagerness 控制触发时机。它不是 Baseline，不支持的浏览器会忽略规则。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-speculation-rules/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-speculation-rules/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"Speculation Rules API 的预取和预渲染有什么区别？","item":"https://fe.hushifa.top/questions/perf-speculation-rules/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">Speculation Rules API 的预取和预渲染有什么区别？</span></nav><h1 tabindex="-1">Speculation Rules API 的预取和预渲染有什么区别？</h1><p class="reading-summary">解释 speculationrules 中 prefetch 与 prerender 的工作边界，说明触发时机、隐藏页面副作用、缓存和隐私成本，以及如何安全地为导航加速。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">Speculation Rules API 的预取和预渲染有什么区别？</span></nav><h1 tabindex="-1">Speculation Rules API 的预取和预渲染有什么区别？</h1><p class="reading-summary">用 &lt;script type=&quot;speculationrules&quot;&gt; 声明哪些链接可以提前处理。prefetch 只下载目标页面的 HTML，不下载子资源；prerender 在隐藏标签页里完整加载并执行页面，切换时几乎瞬间显示。eagerness 控制触发时机。它不是 Baseline，不支持的浏览器会忽略规则。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>prefetch 只提前获取目标文档本身，不取子资源也不执行脚本；prerender 会完整渲染页面。</li>
-<li>eagerness 决定浏览器多早开始推测，越早浪费率越高。</li>
-<li>预渲染页面要用 document.prerendering 和 prerenderingchange 推迟统计等副作用。</li>
-<li>目前只有 Chromium 系支持，普通导航必须始终可用。</li>
+<li><code>prefetch</code>：只取目标文档的响应正文，不取子资源，成本低，可以较广泛使用。</li>
+<li><code>prerender</code>：取文档、加载所有子资源、执行 JavaScript，资源消耗接近渲染一个 iframe，只用于高概率访问的页面。</li>
+<li><code>eagerness</code>：<code>immediate</code> 立即执行，<code>moderate</code> 在桌面端悬停约 200ms 或按下指针时，<code>conservative</code> 在按下指针或触摸时。列表规则默认 <code>immediate</code>，文档规则默认 <code>conservative</code>。</li>
+<li>预渲染默认只限同源；同站跨源需要目标页面返回 <code>Supports-Loading-Mode: credentialed-prerender</code>，跨站不支持。</li>
+<li>预渲染的页面会执行代码，统计、广告曝光等副作用要等页面真正被用户看到再执行。</li>
 </ul>
-<p>用户把鼠标移到“课程详情”链接上时，应用可能猜测他马上会点击，并提前准备下一个页面。普通 <code>prefetch</code> 主要提前获取资源；<code>prerender</code> 则可能在隐藏的文档中运行页面脚本、建立 DOM 和执行数据请求。两者都能降低点击后的等待，却也会提前消耗带宽、CPU、缓存和服务端资源。</p>
-<p>Speculation Rules API 用一个 <code>type=&quot;speculationrules&quot;</code> 的 JSON 脚本声明哪些导航值得预取或预渲染：</p>
+<h2>规则示例</h2>
 <div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;speculationrules&quot;</span>&gt;</span><span class="javascript">
-{
-  <span class="hljs-string">&quot;prefetch&quot;</span>: [
-    {
-      <span class="hljs-string">&quot;where&quot;</span>: { <span class="hljs-string">&quot;href_matches&quot;</span>: <span class="hljs-string">&quot;/courses/*&quot;</span> },
-      <span class="hljs-string">&quot;eagerness&quot;</span>: <span class="hljs-string">&quot;moderate&quot;</span>
-    }
-  ],
-  <span class="hljs-string">&quot;prerender&quot;</span>: [
-    {
-      <span class="hljs-string">&quot;where&quot;</span>: { <span class="hljs-string">&quot;href_matches&quot;</span>: <span class="hljs-string">&quot;/courses/featured&quot;</span> },
-      <span class="hljs-string">&quot;eagerness&quot;</span>: <span class="hljs-string">&quot;conservative&quot;</span>
-    }
-  ]
-}
+  {
+    <span class="hljs-string">&quot;prerender&quot;</span>: [
+      {
+        <span class="hljs-string">&quot;where&quot;</span>: {
+          <span class="hljs-string">&quot;and&quot;</span>: [
+            { <span class="hljs-string">&quot;href_matches&quot;</span>: <span class="hljs-string">&quot;/questions/*&quot;</span> },
+            { <span class="hljs-string">&quot;not&quot;</span>: { <span class="hljs-string">&quot;selector_matches&quot;</span>: <span class="hljs-string">&quot;.no-prerender&quot;</span> } }
+          ]
+        },
+        <span class="hljs-string">&quot;eagerness&quot;</span>: <span class="hljs-string">&quot;moderate&quot;</span>
+      }
+    ],
+    <span class="hljs-string">&quot;prefetch&quot;</span>: [{ <span class="hljs-string">&quot;urls&quot;</span>: [<span class="hljs-string">&quot;/questions/&quot;</span>], <span class="hljs-string">&quot;eagerness&quot;</span>: <span class="hljs-string">&quot;immediate&quot;</span> }]
+  }
 </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 </code></pre></div>
-<p>这是声明，不是保证。浏览器可以因为网络、设备内存、用户设置、页面策略或当前资源压力而不执行规则。规则也不能替应用保证“下次点击一定秒开”；上线前应通过实际导航指标比较启用与未启用的结果。</p>
-<h2>prefetch 和 prerender 的成本不同</h2>
-<p>Speculation Rules 的 <code>prefetch</code> 只提前获取目标文档本身，不获取它引用的子资源，也不执行页面脚本。它更适合低成本、可缓存、用户很可能马上访问的公共页面。</p>
-<p><code>prerender</code> 会创建一个隐藏的页面执行上下文。目标页面可能执行 JavaScript、解析组件、发出数据请求、读取公开缓存、创建 WebSocket 或注册计时器，直到用户真正激活它。它适合极高概率的下一步导航和能安全在隐藏状态运行的页面，成本和副作用都更大。</p>
-<p>不要把 prerender 理解成“只下载 HTML”：</p>
 <ul>
-<li>目标页面可能执行数据请求和客户端初始化；</li>
-<li>计时器、分析脚本、广告、推送和 WebSocket 可能在激活前发生；</li>
-<li>目标页面中的写操作或自动播放逻辑不能因为页面暂时不可见就假设没有影响；</li>
-<li>页面可能因为内存压力被丢弃，预渲染工作不一定最终被用户使用。</li>
+<li>退出登录、加入购物车这类会改变状态的链接必须排除。</li>
+<li>使用 CSP 时，内联规则需要 <code>&#x27;inline-speculation-rules&#x27;</code>、nonce 或 hash。</li>
+<li>也可以通过响应头 <code>Speculation-Rules: &quot;/rules.json&quot;</code> 下发，文件类型为 <code>application/speculationrules+json</code>。</li>
 </ul>
-<p>如果页面有登录、购物车、实时会话或用户特有数据，必须重新评估是否可以预渲染。服务端不要把“这是一次预渲染请求”当成用户已经明确点击了页面，也不要仅依赖用户代理字符串决定是否执行敏感操作。</p>
-<h2>触发策略决定浪费率</h2>
-<p><code>eagerness</code> 用来表达浏览器可以多早开始推测，常见值包括 <code>immediate</code>、<code>eager</code>、<code>moderate</code> 和 <code>conservative</code>。越积极，潜在收益越高，误猜成本也越高。规则中的 <code>where</code> 可以按链接匹配；它不是一套完整的业务权限或推荐系统。</p>
-<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;speculationrules&quot;</span>&gt;</span><span class="javascript">
-{
-  <span class="hljs-string">&quot;prefetch&quot;</span>: [
-    {
-      <span class="hljs-string">&quot;where&quot;</span>: {
-        <span class="hljs-string">&quot;and&quot;</span>: [
-          { <span class="hljs-string">&quot;href_matches&quot;</span>: <span class="hljs-string">&quot;/docs/*&quot;</span> },
-          { <span class="hljs-string">&quot;not&quot;</span>: { <span class="hljs-string">&quot;selector_matches&quot;</span>: <span class="hljs-string">&quot;.external&quot;</span> } }
-        ]
-      },
-      <span class="hljs-string">&quot;eagerness&quot;</span>: <span class="hljs-string">&quot;conservative&quot;</span>
-    }
-  ]
-}
-</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-</code></pre></div>
-<p>真实项目还应筛掉下载链接、登出、删除、支付、一次性回调和带明显副作用的地址。公共文章、文档和详情页通常比账户设置更适合预取。不能因为链接在首屏就全部预渲染，否则大量猜测会与当前页面的关键资源竞争。</p>
-<p>同一页面的链接还可能随着用户筛选、权限和实验分组变化。规则脚本是声明性输入，应用要确保它匹配的 URL 与当前导航策略一致；动态插入规则、更新规则和浏览器支持范围应按目标版本验证，不要把某个 Chromium 版本的行为当成跨浏览器标准保证。</p>
-<h2>预渲染页面要处理激活前后的生命周期</h2>
-<p>页面可以通过 <code>document.prerendering</code> 判断当前文档是否正在以预渲染状态运行，并在激活时响应 <code>prerenderingchange</code>：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">startUserVisibleWork</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-comment">// 只在页面真正对用户可见后启动分析、声音和实时连接。</span>
+<h2>处理预渲染的副作用</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">whenVisible</span>(<span class="hljs-params">callback</span>) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">document</span>.<span class="hljs-property">prerendering</span>) {
+    <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;prerenderingchange&#x27;</span>, callback, { <span class="hljs-attr">once</span>: <span class="hljs-literal">true</span> });
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-title function_">callback</span>();
+  }
 }
 
-<span class="hljs-keyword">if</span> (<span class="hljs-variable language_">document</span>.<span class="hljs-property">prerendering</span>) {
-  <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;prerenderingchange&#x27;</span>, startUserVisibleWork, {
-    <span class="hljs-attr">once</span>: <span class="hljs-literal">true</span>,
-  });
-} <span class="hljs-keyword">else</span> {
-  <span class="hljs-title function_">startUserVisibleWork</span>();
+<span class="hljs-title function_">whenVisible</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">sendPageView</span>());
+</code></pre></div>
+<ul>
+<li>预渲染期间，地理位置、通知、<code>getUserMedia</code> 等 API 会延迟到激活后执行。</li>
+<li>服务器可以通过 <code>Sec-Purpose: prefetch</code> 或 <code>Sec-Purpose: prefetch;prerender</code> 请求头识别推测请求。</li>
+<li>判断页面是否经过预渲染：<code>performance.getEntriesByType(&#x27;navigation&#x27;)[0].activationStart &gt; 0</code>。</li>
+</ul>
+<h2>兼容性</h2>
+<p>MDN 标注其为实验性、有限可用。检测支持：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">if</span> (<span class="hljs-title class_">HTMLScriptElement</span>.<span class="hljs-property">supports</span>?.(<span class="hljs-string">&#x27;speculationrules&#x27;</span>)) {
+  <span class="hljs-comment">// 动态插入规则</span>
 }
 </code></pre></div>
-<p>这只是页面自身的生命周期处理。组件中的动画、轮询、WebSocket、媒体播放和分析 SDK 也要遵守同样的边界。<code>visibilityState</code>、页面生命周期和 <code>document.prerendering</code> 解决的问题不同，不能只监听 <code>visibilitychange</code> 就认为隐藏预渲染页面的所有工作都安全。</p>
-<p>需要用户明确动作的代码应延后到激活或真实交互之后，例如提交表单、创建订单、请求摄像头、播放声音和发送“已阅读”事件。预渲染期间可以准备只读数据，但不能把准备请求当作业务确认。服务端也应让 GET 读取保持无副作用，不能依赖“用户点击后才会访问这个 GET”来保护写操作。</p>
-<h2>缓存、认证和隐私要一起设计</h2>
-<p>预取请求可能先于用户点击到达服务端，甚至最终没有被使用。它可能进入浏览器、CDN 或应用缓存，影响缓存命中率和服务端负载。带 Cookie 的私有页面要特别谨慎：提前获取用户特有数据会扩大无效请求和缓存配置错误的影响。</p>
-<p>页面输出要根据响应的公共性设置缓存。不能把带用户身份的响应误放进共享 CDN，也不能因为 URL 匹配了“详情页”就省略授权。预取/预渲染不绕过 CORS、CSP、Cookie、SameSite 或权限策略；它只是改变请求可能发生的时间。</p>
-<p>分析和广告系统也要区分“预渲染加载”和“用户真正查看”。如果页面一启动就上报曝光、转化或播放，预渲染会夸大业务指标。可以等待激活、用户可见或真实交互后再记录，并在服务端和数据仓库中区分导航类型。不要为了修正统计而把所有预渲染请求简单丢弃，先明确指标定义。</p>
-<h2>与 link prefetch 和资源提示不是同一层</h2>
-<p><code>&lt;link rel=&quot;prefetch&quot;&gt;</code> 是资源提示，<code>preconnect</code> 只准备连接，<code>preload</code> 提前获取当前页面确定需要的资源；Speculation Rules 面向未来导航的文档级预取和预渲染。它们可以同时出现，但不能互相替代：</p>
+<p>不支持的浏览器会忽略规则，页面照常工作，可以用 <code>&lt;link rel=&quot;prefetch&quot;&gt;</code> 作为下一页资源的降级方案。浏览器也可能因为省电、省流量模式或内存不足不执行推测。</p>
+<h2>验证</h2>
 <ul>
-<li>当前页面确定需要的字体或首屏图片，优先评估 preload；</li>
-<li>未来用户可能访问的公共文档，才考虑 prefetch；</li>
-<li>下一步导航概率很高且页面无隐藏副作用，才考虑 prerender；</li>
-<li>任何提示都可能被浏览器忽略，不能代替正确的缓存、代码分割和服务端响应。</li>
+<li>DevTools 的 Application 面板有 Speculative loads 视图，可以看到规则和每个 URL 的状态。</li>
+<li>用真实用户数据对比被预渲染导航和普通导航的 LCP。</li>
+<li>返回 2xx 以外的状态码时预取或预渲染不会生效，204 和 205 还会阻止预渲染。</li>
 </ul>
-<p>如果点击后的主要等待来自当前页面长任务、布局或数据接口，预渲染未来页面不一定能解决问题，甚至会争用主线程和网络。应先用 Navigation Timing、PerformanceObserver、网络瀑布和真实用户数据定位瓶颈，再决定是否增加推测。</p>
-<h2>失败、回退和导航竞态</h2>
-<p>预取或预渲染被取消、资源失败、规则不支持或目标页面发生版本变化时，普通导航仍必须能正常工作。不能让页面只在推测成功时才正确显示。目标文档使用新的静态资源版本时，缓存和 HTML 兼容策略也要支持普通请求与预渲染请求的切换。</p>
-<p>用户可能在推测过程中点击另一个链接。应用不能把第一个目标的迟到数据写入第二个页面；路由层仍要使用当前导航身份、AbortSignal 或版本检查。预渲染文档被激活后，客户端状态接管要避免重复请求、重复事件监听和错误的滚动/焦点恢复。</p>
-<h2>兼容性和验收</h2>
-<p>Speculation Rules API 目前只有 Chromium 系浏览器支持；其他浏览器会忽略 <code>&lt;script type=&quot;speculationrules&quot;&gt;</code>，页面必须在没有预取的情况下照常工作。</p>
-<p>Speculation Rules API 的支持和具体规则能力取决于浏览器版本、平台和页面策略。旧浏览器会忽略脚本或继续走普通导航，因此 HTML、链接和路由必须先在无推测环境下可用。能力检测不能只看脚本标签是否成功插入，还要观察实际导航和页面生命周期。</p>
-<p>验收至少包括：</p>
+<h2>常见追问</h2>
 <ul>
-<li>规则不匹配、浏览器不支持、网络慢和内存紧张时的普通导航；</li>
-<li>预取与预渲染的请求数量、缓存命中、服务端负载和未使用比例；</li>
-<li>登录、登出、支付、删除、下载和一次性回调不会被提前执行；</li>
-<li>预渲染期间的分析、动画、音频、WebSocket 和用户可见工作只在合适时机启动；</li>
-<li>目标页面激活、被丢弃、快速切换和资源版本更新后的状态一致性；</li>
-<li>低端设备、移动网络、数据节省模式和无痕模式下的性能与隐私影响。</li>
-</ul>
-<p>推测规则的目标是减少用户已经决定导航后的等待，不是让浏览器无条件提前运行更多页面。把页面副作用、缓存、认证、统计和生命周期都纳入设计，才可能在真实用户中获得净收益；否则“预渲染更快”很容易变成更高的流量和更难解释的数据。</p></div><div class="answer-bottom"><a href="https://developer.chrome.com/docs/web-platform/prerender-pages" target="_blank" rel="noreferrer">Chrome for Developers · Prerender pages<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Speculation+Rules+API+%E7%9A%84%E9%A2%84%E5%8F%96%E5%92%8C%E9%A2%84%E6%B8%B2%E6%9F%93%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ASpeculation+Rules+API+%E7%9A%84%E9%A2%84%E5%8F%96%E5%92%8C%E9%A2%84%E6%B8%B2%E6%9F%93%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aperf-speculation-rules%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fperf-speculation-rules%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Speculation Rules API 的预取和预渲染有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/perf-long-animation-frames/">如何用 Long Animation Frames API 定位卡顿来源？</a></li><li><a href="/questions/perf-third-party-scripts/">第三方脚本怎样接入，才能控制性能和安全风险？</a></li><li><a href="/questions/perf-longtasks/">什么是长任务，为什么会影响交互响应？</a></li><li><a href="/questions/perf-lazy-images/">懒加载为什么有时反而让首屏和首次交互变慢？</a></li></ul></nav></main></div></div>
+<li>和 <code>&lt;link rel=&quot;prefetch&quot;&gt;</code> 有什么区别？后者预取任意资源并放入 HTTP 缓存；Speculation Rules 针对整页导航，结果存在按文档隔离的内存缓存里。</li>
+<li>会不会浪费流量？<code>prerender</code> 会，要配合 <code>moderate</code> 或 <code>conservative</code>，并限制匹配范围。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Speculation_Rules_API" target="_blank" rel="noreferrer">MDN · Speculation Rules API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Speculation+Rules+API+%E7%9A%84%E9%A2%84%E5%8F%96%E5%92%8C%E9%A2%84%E6%B8%B2%E6%9F%93%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ASpeculation+Rules+API+%E7%9A%84%E9%A2%84%E5%8F%96%E5%92%8C%E9%A2%84%E6%B8%B2%E6%9F%93%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aperf-speculation-rules%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fperf-speculation-rules%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Speculation Rules API 的预取和预渲染有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/perf-long-animation-frames/">如何用 Long Animation Frames API 定位卡顿来源？</a></li><li><a href="/questions/perf-third-party-scripts/">第三方脚本怎样接入，才能控制性能和安全风险？</a></li><li><a href="/questions/perf-longtasks/">什么是长任务，为什么会影响交互响应？怎样观测和拆分？</a></li><li><a href="/questions/perf-lazy-images/">懒加载为什么有时反而让首屏和首次交互变慢？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

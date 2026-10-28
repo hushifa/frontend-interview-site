@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="AI 应用前端面试题：实时语音同时包含麦克风、网络会话、转写、模型生成和音频播放，输入、生成和播放必须分别建模，打断与恢复也要有明确协议。" />
+    <meta name="description" content="AI 应用前端面试题：实时语音同时涉及麦克风、网络会话、转写、生成和播放。这些状态要分开建模；用户打断时要同时清空本地播放队列并通知服务端停止生成；关闭时释放整条链路。" />
     <title>AI 实时语音界面需要关注哪些前端状态？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/ai-realtime-voice/" />
     <meta name="robots" content="index,follow" />
@@ -19,41 +19,54 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="AI 实时语音界面需要关注哪些前端状态？ · 前端知库" />
-    <meta property="og:description" content="AI 应用前端面试题：实时语音同时包含麦克风、网络会话、转写、模型生成和音频播放，输入、生成和播放必须分别建模，打断与恢复也要有明确协议。" />
+    <meta property="og:description" content="AI 应用前端面试题：实时语音同时涉及麦克风、网络会话、转写、生成和播放。这些状态要分开建模；用户打断时要同时清空本地播放队列并通知服务端停止生成；关闭时释放整条链路。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/ai-realtime-voice/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ai-realtime-voice/#webpage","url":"https://fe.hushifa.top/questions/ai-realtime-voice/","name":"AI 实时语音界面需要关注哪些前端状态？ · 前端知库","description":"AI 应用前端面试题：实时语音同时包含麦克风、网络会话、转写、模型生成和音频播放，输入、生成和播放必须分别建模，打断与恢复也要有明确协议。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ai-realtime-voice/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ai-realtime-voice/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"AI 应用前端面试题","item":"https://fe.hushifa.top/topics/ai-frontend/"},{"@type":"ListItem","position":3,"name":"AI 实时语音界面需要关注哪些前端状态？","item":"https://fe.hushifa.top/questions/ai-realtime-voice/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ai-realtime-voice/#webpage","url":"https://fe.hushifa.top/questions/ai-realtime-voice/","name":"AI 实时语音界面需要关注哪些前端状态？ · 前端知库","description":"AI 应用前端面试题：实时语音同时涉及麦克风、网络会话、转写、生成和播放。这些状态要分开建模；用户打断时要同时清空本地播放队列并通知服务端停止生成；关闭时释放整条链路。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ai-realtime-voice/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ai-realtime-voice/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"AI 应用前端面试题","item":"https://fe.hushifa.top/topics/ai-frontend/"},{"@type":"ListItem","position":3,"name":"AI 实时语音界面需要关注哪些前端状态？","item":"https://fe.hushifa.top/questions/ai-realtime-voice/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/ai-frontend/">AI 应用前端面试题</a><span aria-hidden="true">/</span><span aria-current="page">AI 实时语音界面需要关注哪些前端状态？</span></nav><h1 tabindex="-1">AI 实时语音界面需要关注哪些前端状态？</h1><p class="reading-summary">实时语音同时包含麦克风、网络会话、转写、模型生成和音频播放，输入、生成和播放必须分别建模，打断与恢复也要有明确协议。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/ai-frontend/">AI 应用前端面试题</a><span aria-hidden="true">/</span><span aria-current="page">AI 实时语音界面需要关注哪些前端状态？</span></nav><h1 tabindex="-1">AI 实时语音界面需要关注哪些前端状态？</h1><p class="reading-summary">实时语音同时涉及麦克风、网络会话、转写、生成和播放。这些状态要分开建模；用户打断时要同时清空本地播放队列并通知服务端停止生成；关闭时释放整条链路。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>实时语音跨越麦克风、网络会话、转写、生成和播放多条链路。</li>
-<li>权限和设备状态要真实反映，并提供文字输入替代。</li>
-<li>WebRTC 适合实时媒体，WebSocket 传音频要自己处理编码、缓冲和播放时钟。</li>
-<li>打断时要同时停止本地播放和服务端生成；关闭会话要释放整条链路。</li>
+<li>一次对话经过麦克风采集、网络传输、服务端语音检测与转写、模型生成、语音合成、浏览器播放。连接建立了，不代表模型收到了音频。</li>
+<li>至少分开维护输入（权限、采集中）、连接、当前轮次、生成、播放五类状态，并用轮次 ID 关联。</li>
+<li>WebRTC 自带媒体传输和网络自适应；用 WebSocket 传音频，编码、缓冲、播放时钟都要自己处理。</li>
+<li>打断时要停止播放、清空待播队列，并通知服务端取消生成。只静音扬声器，模型仍在计算。</li>
+<li>浏览器直连语音服务时，用服务端签发的短期令牌，不要把长期密钥放进前端。</li>
 </ul>
-<h2>一个“说话”动作跨越多条链路</h2>
-<p>用户点击开始后，浏览器要申请麦克风、创建音频轨道、建立网络会话，服务端再进行语音活动检测、转写、模型推理和语音合成，最后由浏览器解码并播放。连接已经建立，不代表模型已经收到音频；麦克风已经授权，也不代表扬声器允许播放。</p>
-<p>因此不要只维护一个 <code>isRecording</code>。至少要分别表示输入状态、连接状态、当前轮次、生成状态和播放状态，并用 turn ID、message ID 和片段序号把它们关联起来。</p>
-<h2>权限和设备状态必须可解释</h2>
-<p>界面应区分请求权限、设备就绪、正在采集、正在发送、等待回应和正在播放。麦克风亮起必须反映真实轨道状态，而不是用户曾经点击过按钮。用户拒绝权限、设备被占用、耳机拔出和系统撤销权限都要有文字提示和输入替代方式。</p>
-<p><code>getUserMedia()</code> 返回 stream 后，组件可能已经被关闭。如果迟到的 Promise 仍返回轨道，应立即停止并释放它，不能让离开的页面继续采集。权限本身也会受浏览器、HTTPS、iframe 权限策略和系统设置影响。</p>
-<h2>选择 WebRTC 或 WebSocket 要看协议支持</h2>
-<p>WebRTC 适合实时媒体传输和网络适应，WebSocket 更适合通用消息。用 WebSocket 传音频时，应用或服务协议要自己处理编码、分帧、缓冲、播放时钟和背压；使用 WebRTC 也仍需信令、鉴权和服务端模型协议。</p>
-<p>浏览器直连语音服务时，应使用服务端签发的短期、受限凭据，不能把长期服务商密钥打包进前端。连接成功只说明传输层建立，转写、推理和合成仍可能分别失败或超时。</p>
-<h2>转写和生成要按轮次更新</h2>
-<p>语音转写常先返回临时片段，再返回修正后的最终文本。前端应根据片段 ID 替换同一轮的临时内容，而不是每次事件都追加，避免文字重复。模型音频也可能分片到达，必须按顺序、时间戳和完成状态排队。</p>
-<p>语音活动检测容易受噪声、停顿和语言节奏影响。自动判断结束后，可以提供按键说话或手动结束作为补充；短暂停顿不能永远被当成用户说完。重连后收到重复或旧轮次片段时，应按 turn ID 去重并拒绝覆盖新轮次。</p>
-<h2>打断要同时停止播放和生成</h2>
-<p>用户开始说话时，通常希望立即听不到上一段回答。前端要停止当前音频、清空尚未播放队列；服务端还要收到取消或截断通知，停止继续生成。只把扬声器静音不会停止模型计算，只取消服务端也不会清空浏览器已经缓冲的音频。</p>
-<p>如果协议支持记录已播放位置，应把用户实际听到的片段告诉服务端，否则下一轮上下文可能假设用户已经听完。打断不能撤销已经执行的工具副作用；付款、发信等动作仍要按独立业务状态确认和补偿。</p>
-<h2>播放队列要在连续性和延迟之间取舍</h2>
-<p>音频片段需要解码、排队和按时间线输出。缓冲过小会断续，过大则增加打断延迟和内存。<code>AudioContext</code> 的时间线与 <code>setTimeout</code> 不同，不能用普通计时器保证精确衔接；还要处理自动播放策略、后台限制和输出设备变化。</p>
-<p>回声消除、噪声抑制和自动增益可以改善输入，但不同设备效果不同。外放声音被麦克风再次采集，可能触发错误轮次，必须在真实耳机、外放、弱网和后台场景测试。</p>
-<h2>关闭要释放整条链路</h2>
-<p>结束会话时，停止自己拥有的 MediaStreamTrack，关闭传输和信令，停止音频源与队列，释放解码资源、监听器和计时器。共享 <code>AudioContext</code> 时按所有权清理，不能关闭仍被其他功能使用的上下文。</p>
-<p>监控至少区分首段可听音频延迟、首段转写、完整回答、打断响应和断续率。音频属于敏感数据，采集、传输、保存和删除都要有明确用途。验收覆盖权限拒绝、沉默、连续打断、弱网、耳机切换、后台恢复和设备切换，模拟音频只能验证部分状态机。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API" target="_blank" rel="noreferrer">MDN · WebRTC API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+AI+%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E7%95%8C%E9%9D%A2%E9%9C%80%E8%A6%81%E5%85%B3%E6%B3%A8%E5%93%AA%E4%BA%9B%E5%89%8D%E7%AB%AF%E7%8A%B6%E6%80%81%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAI+%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E7%95%8C%E9%9D%A2%E9%9C%80%E8%A6%81%E5%85%B3%E6%B3%A8%E5%93%AA%E4%BA%9B%E5%89%8D%E7%AB%AF%E7%8A%B6%E6%80%81%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aai-realtime-voice%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AAI+%E5%BA%94%E7%94%A8%E5%89%8D%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fai-realtime-voice%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：AI 实时语音界面需要关注哪些前端状态？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ai-evaluation-observability/">AI 前端应用为什么需要评测和可观测性？</a></li><li><a href="/questions/ai-multimodal-ui/">多模态 AI 前端界面需要怎样管理附件状态？</a></li><li><a href="/questions/ai-structured-output/">AI 结构化输出为什么仍需要 Schema 校验？</a></li><li><a href="/questions/ai-agent-state/">Agent 前端界面怎样展示计划、工具调用和人工确认？</a></li></ul></nav></main></div></div>
+<h2>状态模型</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">VoiceSession</span> = {
+  <span class="hljs-attr">mic</span>: <span class="hljs-string">&#x27;idle&#x27;</span> | <span class="hljs-string">&#x27;requesting&#x27;</span> | <span class="hljs-string">&#x27;denied&#x27;</span> | <span class="hljs-string">&#x27;capturing&#x27;</span>;
+  <span class="hljs-attr">connection</span>: <span class="hljs-string">&#x27;connecting&#x27;</span> | <span class="hljs-string">&#x27;open&#x27;</span> | <span class="hljs-string">&#x27;reconnecting&#x27;</span> | <span class="hljs-string">&#x27;closed&#x27;</span>;
+  <span class="hljs-attr">turnId</span>: <span class="hljs-built_in">string</span> | <span class="hljs-literal">null</span>;
+  <span class="hljs-attr">generation</span>: <span class="hljs-string">&#x27;idle&#x27;</span> | <span class="hljs-string">&#x27;thinking&#x27;</span> | <span class="hljs-string">&#x27;speaking&#x27;</span> | <span class="hljs-string">&#x27;cancelled&#x27;</span>;
+  <span class="hljs-attr">playback</span>: { <span class="hljs-attr">queued</span>: <span class="hljs-built_in">number</span>; <span class="hljs-attr">playing</span>: <span class="hljs-built_in">boolean</span> };
+};
+</code></pre></div>
+<p>麦克风指示灯反映 track 的真实状态，而不是按钮点击过与否。权限被拒、设备被占用、耳机拔出都要有文字提示，并提供文字输入替代。</p>
+<p><code>getUserMedia()</code> 返回时组件可能已经关闭。这时要立即停止返回的 track，不要让离开的页面继续采集。</p>
+<h2>转写与轮次</h2>
+<ul>
+<li>转写通常先给出临时文本，再给出修正后的最终文本。按片段 ID 替换同一轮的临时内容，不要追加，否则文字会重复。</li>
+<li>自动判断用户说完（语音活动检测）会受噪声和停顿影响，可以提供&quot;按住说话&quot;或手动结束作为补充。</li>
+<li>重连后收到旧轮次的片段，按轮次 ID 丢弃。</li>
+</ul>
+<h2>打断</h2>
+<ol>
+<li>停止当前播放，清空本地缓冲的音频队列。</li>
+<li>通知服务端取消当前生成。</li>
+<li>如果协议支持，告诉服务端用户实际听到了哪里，让下一轮上下文准确。</li>
+</ol>
+<p>打断不会撤销已经执行的工具操作。</p>
+<h2>播放</h2>
+<p>用 <code>AudioContext</code> 的时间线按顺序衔接音频片段，<code>setTimeout</code> 无法精确衔接。缓冲太小会断续，太大会让打断反应变慢。外放时声音可能被麦克风采集回来，开启回声消除并在外放、耳机、弱网环境下实测。</p>
+<h2>关闭会话</h2>
+<p>停止自己创建的 MediaStreamTrack，关闭 RTCPeerConnection 或 WebSocket，停止音频源，清理监听器和计时器。<code>AudioContext</code> 如果和其他功能共用，就不要直接关闭。</p>
+<h2>常见追问</h2>
+<ul>
+<li><strong>要监控哪些指标？</strong> 用户说完到听到第一段回复的延迟、打断后停止播放的延迟、播放断续率。</li>
+<li><strong>音频数据要保存吗？</strong> 音频属于敏感数据，采集、传输、保存和删除都要有明确用途并告知用户。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API" target="_blank" rel="noreferrer">MDN · WebRTC API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+AI+%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E7%95%8C%E9%9D%A2%E9%9C%80%E8%A6%81%E5%85%B3%E6%B3%A8%E5%93%AA%E4%BA%9B%E5%89%8D%E7%AB%AF%E7%8A%B6%E6%80%81%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAI+%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E7%95%8C%E9%9D%A2%E9%9C%80%E8%A6%81%E5%85%B3%E6%B3%A8%E5%93%AA%E4%BA%9B%E5%89%8D%E7%AB%AF%E7%8A%B6%E6%80%81%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aai-realtime-voice%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AAI+%E5%BA%94%E7%94%A8%E5%89%8D%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fai-realtime-voice%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：AI 实时语音界面需要关注哪些前端状态？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ai-evaluation-observability/">AI 前端应用为什么需要评测和可观测性？</a></li><li><a href="/questions/ai-multimodal-ui/">多模态 AI 前端界面需要怎样管理附件状态？</a></li><li><a href="/questions/ai-structured-output/">AI 结构化输出为什么仍需要 Schema 校验？</a></li><li><a href="/questions/ai-prompt-caching/">AI Prompt Caching 对前端请求设计有什么影响？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

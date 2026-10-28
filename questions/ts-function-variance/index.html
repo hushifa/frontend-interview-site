@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="TypeScript面试题：联合参数适合统一处理不同输入，泛型保留输入输出关系，重载描述不同调用形式。函数赋值还要考虑参数方向、返回值和 strictFunctionTypes，不能只看某个参数类型是否更具体。" />
+    <meta name="description" content="TypeScript面试题：多种输入走同一逻辑、返回同一类型时用联合参数；返回类型由输入类型决定时用泛型；几种离散调用形式各自返回不同类型时用重载，实现签名对调用方不可见。函数赋值时参数按逆变检查（strictFunctionTypes），返回值按协变检查；方法简写语法的参数仍按双变检查。" />
     <title>函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/ts-function-variance/" />
     <meta name="robots" content="index,follow" />
@@ -19,92 +19,77 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？ · 前端知库" />
-    <meta property="og:description" content="TypeScript面试题：联合参数适合统一处理不同输入，泛型保留输入输出关系，重载描述不同调用形式。函数赋值还要考虑参数方向、返回值和 strictFunctionTypes，不能只看某个参数类型是否更具体。" />
+    <meta property="og:description" content="TypeScript面试题：多种输入走同一逻辑、返回同一类型时用联合参数；返回类型由输入类型决定时用泛型；几种离散调用形式各自返回不同类型时用重载，实现签名对调用方不可见。函数赋值时参数按逆变检查（strictFunctionTypes），返回值按协变检查；方法简写语法的参数仍按双变检查。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/ts-function-variance/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-function-variance/#webpage","url":"https://fe.hushifa.top/questions/ts-function-variance/","name":"函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？ · 前端知库","description":"TypeScript面试题：联合参数适合统一处理不同输入，泛型保留输入输出关系，重载描述不同调用形式。函数赋值还要考虑参数方向、返回值和 strictFunctionTypes，不能只看某个参数类型是否更具体。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-function-variance/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-function-variance/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？","item":"https://fe.hushifa.top/questions/ts-function-variance/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-function-variance/#webpage","url":"https://fe.hushifa.top/questions/ts-function-variance/","name":"函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？ · 前端知库","description":"TypeScript面试题：多种输入走同一逻辑、返回同一类型时用联合参数；返回类型由输入类型决定时用泛型；几种离散调用形式各自返回不同类型时用重载，实现签名对调用方不可见。函数赋值时参数按逆变检查（strictFunctionTypes），返回值按协变检查；方法简写语法的参数仍按双变检查。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-function-variance/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-function-variance/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？","item":"https://fe.hushifa.top/questions/ts-function-variance/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？</span></nav><h1 tabindex="-1">函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？</h1><p class="reading-summary">联合参数适合统一处理不同输入，泛型保留输入输出关系，重载描述不同调用形式。函数赋值还要考虑参数方向、返回值和 strictFunctionTypes，不能只看某个参数类型是否更具体。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？</span></nav><h1 tabindex="-1">函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？</h1><p class="reading-summary">多种输入走同一逻辑、返回同一类型时用联合参数；返回类型由输入类型决定时用泛型；几种离散调用形式各自返回不同类型时用重载，实现签名对调用方不可见。函数赋值时参数按逆变检查（strictFunctionTypes），返回值按协变检查；方法简写语法的参数仍按双变检查。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>联合参数适合同一实现处理多种输入；泛型保留输入与输出之间的类型关系；重载描述返回类型随参数形式变化的调用。</li>
-<li>重载签名对外可见，实现签名对调用方不可见。</li>
-<li>strictFunctionTypes 下，函数类型的参数按逆变检查，返回值按协变检查。</li>
-<li>方法简写语法的参数仍按双变检查，这是为了兼容数组等内置类型。</li>
+<li>联合参数：<code>(value: string | unknown[]) =&gt; number</code>，输入不同但返回契约相同。</li>
+<li>泛型：<code>&lt;T&gt;(value: T) =&gt; { value: T }</code>，返回类型跟随输入类型。</li>
+<li>重载：几条公开签名加一个实现签名，调用方只能看到公开签名，传入 <code>string | number</code> 这样的联合不会匹配任何一条。</li>
+<li>函数类型赋值：参数位置要求&quot;能接受更宽的输入&quot;（逆变），返回值要求&quot;产出更窄的结果&quot;（协变）。</li>
+<li><code>strictFunctionTypes</code> 只对函数类型属性 <code>handle: (v: T) =&gt; void</code> 生效，方法简写 <code>handle(v: T): void</code> 仍是双变的，以兼容数组等内置类型。</li>
 </ul>
-<p>设计函数类型时，先看调用方式与返回关系。如果不同输入都执行同一种操作、返回同一种结果，联合参数通常足够。若需要保留“返回值与传入类型对应”，考虑泛型；若调用形式确实分成几组，可以用重载把它们分别列出。</p>
-<p>不要先写一长串重载，再为了让实现通过检查加入 any。类型签名应当把业务接口讲清楚，而不是让调用者猜应该命中哪一条。</p>
-<h2>同一种返回契约，联合参数最直接</h2>
+<h2>联合参数</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">lengthOf</span>(<span class="hljs-params"><span class="hljs-attr">value</span>: <span class="hljs-built_in">string</span> | <span class="hljs-keyword">readonly</span> <span class="hljs-built_in">unknown</span>[]</span>): <span class="hljs-built_in">number</span> {
   <span class="hljs-keyword">return</span> value.<span class="hljs-property">length</span>;
 }
-
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">lengthOf</span>(<span class="hljs-string">&#x27;HTML&#x27;</span>)); <span class="hljs-comment">// 4</span>
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">lengthOf</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>])); <span class="hljs-comment">// 2</span>
 </code></pre></div>
-<p>字符串和数组都提供 length，返回值统一是 number，不需要分别维护两条重载。调用方如果手里已经是 string | readonly unknown[]，也能直接传入。</p>
-<p>如果不同类型需要不同处理，可以在函数体里收窄。联合并不意味着实现必须用同一段代码，只是公共输入可以用同一个契约清楚表达。</p>
-<h2>需要保留输入类型关系，使用泛型</h2>
+<h2>泛型</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">function</span> wrap&lt;T&gt;(<span class="hljs-attr">value</span>: T): { <span class="hljs-attr">value</span>: T } {
   <span class="hljs-keyword">return</span> { value };
 }
-
-<span class="hljs-keyword">const</span> wrapped = <span class="hljs-title function_">wrap</span>(<span class="hljs-number">12</span>);
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(wrapped.<span class="hljs-property">value</span>.<span class="hljs-title function_">toFixed</span>(<span class="hljs-number">0</span>)); <span class="hljs-comment">// 12</span>
+<span class="hljs-title function_">wrap</span>(<span class="hljs-number">12</span>).<span class="hljs-property">value</span>.<span class="hljs-title function_">toFixed</span>(<span class="hljs-number">0</span>);
 </code></pre></div>
-<p>泛型说明容器内的值与输入是同一种 T。若把返回类型统一写成 <code>{ value: unknown }</code>，这层关系就丢失，调用方又需要额外检查。</p>
-<p>泛型不一定适合表达所有“输入 A 返回 B，输入 C 返回 D”的情况。条件类型与实现签名过于复杂时，少量清楚的重载可能更容易阅读；但接口有很多组合时，也要防止重载数量不断膨胀。</p>
-<h2>重载签名面向调用者，实现签名不是额外入口</h2>
+<h2>重载</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">convert</span>(<span class="hljs-params"><span class="hljs-attr">value</span>: <span class="hljs-built_in">string</span></span>): <span class="hljs-built_in">number</span>;
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">convert</span>(<span class="hljs-params"><span class="hljs-attr">value</span>: <span class="hljs-built_in">number</span></span>): <span class="hljs-built_in">string</span>;
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">convert</span>(<span class="hljs-params"><span class="hljs-attr">value</span>: <span class="hljs-built_in">string</span> | <span class="hljs-built_in">number</span></span>): <span class="hljs-built_in">string</span> | <span class="hljs-built_in">number</span> {
   <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> value === <span class="hljs-string">&#x27;string&#x27;</span> ? value.<span class="hljs-property">length</span> : <span class="hljs-title class_">String</span>(value);
 }
 
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">convert</span>(<span class="hljs-string">&#x27;HTML&#x27;</span>).<span class="hljs-title function_">toFixed</span>(<span class="hljs-number">0</span>)); <span class="hljs-comment">// 4</span>
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">convert</span>(<span class="hljs-number">12</span>).<span class="hljs-title function_">toUpperCase</span>()); <span class="hljs-comment">// 12</span>
+<span class="hljs-title function_">convert</span>(<span class="hljs-string">&#x27;HTML&#x27;</span>).<span class="hljs-title function_">toFixed</span>(<span class="hljs-number">0</span>);
+<span class="hljs-title function_">convert</span>(<span class="hljs-number">12</span>).<span class="hljs-title function_">toUpperCase</span>();
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params"><span class="hljs-attr">value</span>: <span class="hljs-built_in">string</span> | <span class="hljs-built_in">number</span></span>) {
-  <span class="hljs-comment">// @ts-expect-error 两条公开重载都不单独接受 string | number</span>
+  <span class="hljs-comment">// @ts-expect-error 两条公开签名都不接受 string | number</span>
   <span class="hljs-keyword">return</span> <span class="hljs-title function_">convert</span>(value);
 }
 </code></pre></div>
-<p>调用者看到前面两条重载，最后一条宽签名用于检查实现。即使实现能接收联合，调用方也不会自动把它当成第三条公共调用形式。</p>
-<p>如果确实要接受联合输入，需要增加公开重载，或改用更合适的联合/泛型接口。这也解释了为什么不应在本来只需统一返回类型时过度使用重载。</p>
-<p>实现必须兼容所有公开签名，但宽泛的实现返回联合，不一定让编译器证明每个运行时分支都精确符合你承诺的那条重载。字符串输入是否真的返回数字，仍应通过实现与测试保证。</p>
-<h2>参数数量和可选参数要反映实际调用</h2>
-<p>有些 API 只允许一参数或三参数形式，重载可以表达这种离散约束；实现里为了共享代码写了两个可选参数，不代表外部就能合法传两个参数。</p>
-<p>回调的可选参数也容易写错。如果库保证每次调用都传 index，回调类型应把 index 声明为必需，而不是为了允许调用方只接收 item 就写成 index?:number。JavaScript 函数本来可以忽略多余参数，少写一个形参通常不需要把库的传参保证削弱。</p>
-<p>返回 void 的回调契约通常表示调用方不使用返回值，并不等于所有赋进去的函数在运行时都必须返回 undefined。这个规则与函数体显式标注 void 后的返回检查，也需要按具体语境区分。</p>
-<h2>回调参数更具体，反而可能不能替换更宽的回调</h2>
-<p>以下示例以 strictFunctionTypes 开启为前提：</p>
+<p>需要接受联合时再加一条 <code>function convert(value: string | number): string | number;</code>。重载按书写顺序匹配，具体的签名要写在前面。很多场景用条件类型返回值也能表达，但实现内部常需要断言。</p>
+<h2>参数逆变</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Animal</span> = { <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span> };
 <span class="hljs-keyword">type</span> <span class="hljs-title class_">Dog</span> = <span class="hljs-title class_">Animal</span> &amp; { <span class="hljs-title function_">bark</span>(): <span class="hljs-built_in">void</span> };
 <span class="hljs-keyword">type</span> <span class="hljs-title class_">Handler</span>&lt;T&gt; = <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">value</span>: T</span>) =&gt;</span> <span class="hljs-built_in">void</span>;
 
-<span class="hljs-keyword">const</span> <span class="hljs-attr">handleAnimal</span>: <span class="hljs-title class_">Handler</span>&lt;<span class="hljs-title class_">Animal</span>&gt; = <span class="hljs-function"><span class="hljs-params">animal</span> =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(animal.<span class="hljs-property">name</span>);
-<span class="hljs-keyword">const</span> <span class="hljs-attr">handleDog</span>: <span class="hljs-title class_">Handler</span>&lt;<span class="hljs-title class_">Dog</span>&gt; = <span class="hljs-function"><span class="hljs-params">dog</span> =&gt;</span> dog.<span class="hljs-title function_">bark</span>();
+<span class="hljs-keyword">const</span> <span class="hljs-attr">handleAnimal</span>: <span class="hljs-title class_">Handler</span>&lt;<span class="hljs-title class_">Animal</span>&gt; = <span class="hljs-function">(<span class="hljs-params">animal</span>) =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(animal.<span class="hljs-property">name</span>);
+<span class="hljs-keyword">const</span> <span class="hljs-attr">handleDog</span>: <span class="hljs-title class_">Handler</span>&lt;<span class="hljs-title class_">Dog</span>&gt; = <span class="hljs-function">(<span class="hljs-params">dog</span>) =&gt;</span> dog.<span class="hljs-title function_">bark</span>();
 
-<span class="hljs-keyword">const</span> <span class="hljs-attr">usableForDog</span>: <span class="hljs-title class_">Handler</span>&lt;<span class="hljs-title class_">Dog</span>&gt; = handleAnimal;
-
-<span class="hljs-comment">// @ts-expect-error 只会处理 Dog 的函数，不能承诺处理任意 Animal</span>
-<span class="hljs-keyword">const</span> <span class="hljs-attr">unsafeForAnimal</span>: <span class="hljs-title class_">Handler</span>&lt;<span class="hljs-title class_">Animal</span>&gt; = handleDog;
+<span class="hljs-keyword">const</span> <span class="hljs-attr">forDog</span>: <span class="hljs-title class_">Handler</span>&lt;<span class="hljs-title class_">Dog</span>&gt; = handleAnimal; <span class="hljs-comment">// 能处理任意 Animal，当然能处理 Dog</span>
+<span class="hljs-comment">// @ts-expect-error 只会处理 Dog，不能承诺处理任意 Animal</span>
+<span class="hljs-keyword">const</span> <span class="hljs-attr">forAnimal</span>: <span class="hljs-title class_">Handler</span>&lt;<span class="hljs-title class_">Animal</span>&gt; = handleDog;
 </code></pre></div>
-<p>需要处理 Dog 的位置，可以使用能处理所有 Animal 的函数，因为 Dog 也有 name。反过来，只会处理 Dog 的函数会调用 bark，若调用方真的传了一个普通 Animal，就会失败。</p>
-<p>这就是参数位置常说的逆变方向：替代函数要能接受接口可能交给它的输入，而不是要求更苛刻的输入。返回值方向则通常相反，一个保证返回 Dog 的函数可以满足“返回 Animal”的需求。</p>
-<h2>方法语法有兼容性例外，不能据此认定安全</h2>
-<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">MethodHandler</span>&lt;T&gt; = {
-  <span class="hljs-title function_">handle</span>(<span class="hljs-attr">value</span>: T): <span class="hljs-built_in">void</span>;
-};
-
+<h2>方法语法的双变</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">MethodHandler</span>&lt;T&gt; = { <span class="hljs-title function_">handle</span>(<span class="hljs-attr">value</span>: T): <span class="hljs-built_in">void</span> };
 <span class="hljs-keyword">const</span> <span class="hljs-attr">dogMethods</span>: <span class="hljs-title class_">MethodHandler</span>&lt;<span class="hljs-title class_">Dog</span>&gt; = { <span class="hljs-attr">handle</span>: handleDog };
-<span class="hljs-keyword">const</span> <span class="hljs-attr">widerMethods</span>: <span class="hljs-title class_">MethodHandler</span>&lt;<span class="hljs-title class_">Animal</span>&gt; = dogMethods;
+<span class="hljs-keyword">const</span> <span class="hljs-attr">widerMethods</span>: <span class="hljs-title class_">MethodHandler</span>&lt;<span class="hljs-title class_">Animal</span>&gt; = dogMethods; <span class="hljs-comment">// 允许，但不安全</span>
 </code></pre></div>
-<p>在 TypeScript 的规则下，方法与构造器声明并不完全采用普通函数属性相同的严格参数检查，因此这种方法形式可能允许前面函数属性形式拒绝的关系。它是类型系统为兼容现有代码保留的取舍，不是证明 dogMethods 真的能处理任意 Animal。</p>
-<p>设计公共回调接口时，要留意 <code>handle(value: T): void</code> 与 <code>handle: (value: T) =&gt; void</code> 的差异。不要为了消掉一个合理报错就切换成更宽松的形式，而不修正真实的输入承诺。</p>
-<p>最后，选签名时可以写出三类调用：正常使用、应该被拒绝的输入、已经是联合类型的调用方变量。再用严格配置验证推导结果。这样的接口测试比仅检查实现函数能否编译，更能反映公共 API 是否容易正确使用。</p>
-<p>补充参考：<a href="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-6.html">TypeScript · strictFunctionTypes</a>。</p></div><div class="answer-bottom"><a href="https://www.typescriptlang.org/docs/handbook/2/functions.html" target="_blank" rel="noreferrer">TypeScript · More on Functions<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%87%BD%E6%95%B0%E9%87%8D%E8%BD%BD%E3%80%81%E8%81%94%E5%90%88%E5%8F%82%E6%95%B0%E4%B8%8E%E6%B3%9B%E5%9E%8B%E6%80%8E%E6%A0%B7%E9%80%89%E6%8B%A9%EF%BC%9F%E5%87%BD%E6%95%B0%E7%B1%BB%E5%9E%8B%E4%BD%95%E6%97%B6%E5%8F%AF%E8%B5%8B%E5%80%BC%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%87%BD%E6%95%B0%E9%87%8D%E8%BD%BD%E3%80%81%E8%81%94%E5%90%88%E5%8F%82%E6%95%B0%E4%B8%8E%E6%B3%9B%E5%9E%8B%E6%80%8E%E6%A0%B7%E9%80%89%E6%8B%A9%EF%BC%9F%E5%87%BD%E6%95%B0%E7%B1%BB%E5%9E%8B%E4%BD%95%E6%97%B6%E5%8F%AF%E8%B5%8B%E5%80%BC%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-function-variance%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-function-variance%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-generics/">泛型解决了什么问题？如何约束泛型？</a></li><li><a href="/questions/ts-type-testing/">TypeScript 复杂类型应该怎样测试？</a></li><li><a href="/questions/ts-unknown/">any、unknown 和 never 分别适合什么场景？</a></li><li><a href="/questions/ts-interface-type/">type 和 interface 有哪些区别？</a></li></ul></nav></main></div></div>
+<p>设计回调类型时写成属性形式 <code>handle: (value: T) =&gt; void</code>，才能得到严格检查。</p>
+<h2>其他赋值规则</h2>
+<ul>
+<li>参数少的函数可以赋给参数多的类型：<code>[1, 2].map((x) =&gt; x * 2)</code>。</li>
+<li>返回 <code>void</code> 的函数类型可以接受有返回值的函数，返回值被忽略。</li>
+<li>回调中由调用方保证传入的参数，类型应声明为必需而不是可选。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li>TypeScript 4.7 的 <code>in</code>/<code>out</code> 方差注解有什么用？<code>interface Box&lt;out T&gt;</code> 显式声明方差，可以加快复杂泛型的检查，并在实现与声明不符时报错。</li>
+<li>箭头函数能写重载吗？不能直接写，可以把函数类型声明为带多个调用签名的接口或类型字面量。</li>
+</ul></div><div class="answer-bottom"><a href="https://www.typescriptlang.org/docs/handbook/2/functions.html" target="_blank" rel="noreferrer">TypeScript · More on Functions<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%87%BD%E6%95%B0%E9%87%8D%E8%BD%BD%E3%80%81%E8%81%94%E5%90%88%E5%8F%82%E6%95%B0%E4%B8%8E%E6%B3%9B%E5%9E%8B%E6%80%8E%E6%A0%B7%E9%80%89%E6%8B%A9%EF%BC%9F%E5%87%BD%E6%95%B0%E7%B1%BB%E5%9E%8B%E4%BD%95%E6%97%B6%E5%8F%AF%E8%B5%8B%E5%80%BC%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%87%BD%E6%95%B0%E9%87%8D%E8%BD%BD%E3%80%81%E8%81%94%E5%90%88%E5%8F%82%E6%95%B0%E4%B8%8E%E6%B3%9B%E5%9E%8B%E6%80%8E%E6%A0%B7%E9%80%89%E6%8B%A9%EF%BC%9F%E5%87%BD%E6%95%B0%E7%B1%BB%E5%9E%8B%E4%BD%95%E6%97%B6%E5%8F%AF%E8%B5%8B%E5%80%BC%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-function-variance%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-function-variance%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-generics/">泛型解决了什么问题？如何约束泛型？</a></li><li><a href="/questions/ts-type-testing/">TypeScript 复杂类型应该怎样测试？</a></li><li><a href="/questions/ts-unknown/">any、unknown 和 never 分别适合什么场景？</a></li><li><a href="/questions/ts-interface-type/">type 和 interface 有哪些区别？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

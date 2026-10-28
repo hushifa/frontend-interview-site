@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="框架与选型面试题：Signal 通过读取函数记录响应式消费者，computed 从实际读取到的 Signal 推导并缓存只读结果。依赖会随执行分支变化，但对象突变、异步边界和副作用仍需显式设计。" />
+    <meta name="description" content="框架与选型面试题：Signal 是包装值的响应式容器，读取时调用函数，读取过程会被记录为依赖。computed 根据实际读取的 Signal 惰性计算并缓存；effect 在依赖变化后执行副作用。linkedSignal、resource、input() 和 model() 都建立在同一套机制上。" />
     <title>Angular Signals 的依赖追踪与 computed 有什么特点？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/framework-angular/" />
     <meta name="robots" content="index,follow" />
@@ -19,69 +19,90 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Angular Signals 的依赖追踪与 computed 有什么特点？ · 前端知库" />
-    <meta property="og:description" content="框架与选型面试题：Signal 通过读取函数记录响应式消费者，computed 从实际读取到的 Signal 推导并缓存只读结果。依赖会随执行分支变化，但对象突变、异步边界和副作用仍需显式设计。" />
+    <meta property="og:description" content="框架与选型面试题：Signal 是包装值的响应式容器，读取时调用函数，读取过程会被记录为依赖。computed 根据实际读取的 Signal 惰性计算并缓存；effect 在依赖变化后执行副作用。linkedSignal、resource、input() 和 model() 都建立在同一套机制上。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/framework-angular/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/framework-angular/#webpage","url":"https://fe.hushifa.top/questions/framework-angular/","name":"Angular Signals 的依赖追踪与 computed 有什么特点？ · 前端知库","description":"框架与选型面试题：Signal 通过读取函数记录响应式消费者，computed 从实际读取到的 Signal 推导并缓存只读结果。依赖会随执行分支变化，但对象突变、异步边界和副作用仍需显式设计。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/framework-angular/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/framework-angular/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"框架与选型面试题","item":"https://fe.hushifa.top/topics/frameworks/"},{"@type":"ListItem","position":3,"name":"Angular Signals 的依赖追踪与 computed 有什么特点？","item":"https://fe.hushifa.top/questions/framework-angular/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/framework-angular/#webpage","url":"https://fe.hushifa.top/questions/framework-angular/","name":"Angular Signals 的依赖追踪与 computed 有什么特点？ · 前端知库","description":"框架与选型面试题：Signal 是包装值的响应式容器，读取时调用函数，读取过程会被记录为依赖。computed 根据实际读取的 Signal 惰性计算并缓存；effect 在依赖变化后执行副作用。linkedSignal、resource、input() 和 model() 都建立在同一套机制上。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/framework-angular/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/framework-angular/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"框架与选型面试题","item":"https://fe.hushifa.top/topics/frameworks/"},{"@type":"ListItem","position":3,"name":"Angular Signals 的依赖追踪与 computed 有什么特点？","item":"https://fe.hushifa.top/questions/framework-angular/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/frameworks/">框架与选型面试题</a><span aria-hidden="true">/</span><span aria-current="page">Angular Signals 的依赖追踪与 computed 有什么特点？</span></nav><h1 tabindex="-1">Angular Signals 的依赖追踪与 computed 有什么特点？</h1><p class="reading-summary">Signal 通过读取函数记录响应式消费者，computed 从实际读取到的 Signal 推导并缓存只读结果。依赖会随执行分支变化，但对象突变、异步边界和副作用仍需显式设计。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<p>Angular Signal 是一个可调用的值容器：signal() 创建可写信号，用 set 或 update 修改；computed() 派生只读值，按需懒计算，并缓存结果；effect() 用于同步到外部系统。依赖在每次执行时根据实际读取到的信号动态收集。直接修改信号中对象的内部属性不会通知更新，要用 update 返回新对象。新版本还提供 linkedSignal、resource 和基于信号的 input()。</p>
-<h2>Signal 只追踪发生在响应式上下文中的读取</h2>
-<p>Signal 不是对所有 JavaScript 变量的全局监控。模板、<code>computed</code> 和 <code>effect</code> 等消费者在执行时调用 <code>count()</code>，Angular 才知道这个消费者依赖当前值；之后通过 <code>set</code> 或 <code>update</code> 改变它，相关消费者才会重新计算或更新。</p>
-<p>仅仅在普通函数里提到某个 Signal，或改变一个普通变量，不会自动建立通知关系。</p>
-<h2><code>computed</code> 是只读的派生状态</h2>
-<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">const</span> price = <span class="hljs-title function_">signal</span>(<span class="hljs-number">10</span>);
-<span class="hljs-keyword">const</span> quantity = <span class="hljs-title function_">signal</span>(<span class="hljs-number">2</span>);
-<span class="hljs-keyword">const</span> total = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">price</span>() * <span class="hljs-title function_">quantity</span>());
-
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">total</span>()); <span class="hljs-comment">// 20</span>
-quantity.<span class="hljs-title function_">update</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value + <span class="hljs-number">1</span>);
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">total</span>()); <span class="hljs-comment">// 30</span>
-</code></pre></div>
-<p><code>price</code> 和 <code>quantity</code> 是可写 Signal，<code>total</code> 是只读派生值。<code>computed</code> 通常惰性计算并缓存：第一次读取时求值，依赖没有变化时复用，依赖变化后让缓存失效，下一次读取再计算。</p>
-<p>缓存不会把昂贵计算移到后台。对大量数据过滤、排序和格式化仍要测量执行成本，必要时拆分数据或使用更合适的结构。</p>
-<h2>依赖由当前分支决定</h2>
-<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">const</span> expanded = <span class="hljs-title function_">signal</span>(<span class="hljs-literal">false</span>);
-<span class="hljs-keyword">const</span> detail = <span class="hljs-title function_">signal</span>(<span class="hljs-string">&#x27;原始内容&#x27;</span>);
-<span class="hljs-keyword">const</span> display = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">expanded</span>() ? <span class="hljs-title function_">detail</span>() : <span class="hljs-string">&#x27;已折叠&#x27;</span>);
-
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">display</span>());
-detail.<span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;新内容&#x27;</span>); <span class="hljs-comment">// 折叠时不会触发 display 重新计算</span>
-expanded.<span class="hljs-title function_">set</span>(<span class="hljs-literal">true</span>); <span class="hljs-comment">// 重新执行后 detail 才进入依赖</span>
-</code></pre></div>
-<p>第一次执行走折叠分支，没有读取 <code>detail</code>，所以它变化时不会使 <code>display</code> 失效；展开后，<code>detail</code> 加入依赖集合。再次改变分支时，依赖也可能被移除。依赖不是“函数文本中出现过的所有 Signal 永久固定”。</p>
-<p>异步 <code>await</code> 或计时器之后的读取不能自动算作同一次同步依赖收集。异步任务需要自己的状态、取消和过期结果处理。</p>
-<h2>通过写入创建明确的新值</h2>
-<p>Signal 常用引用相等判断。如果保存数组，直接执行 <code>items().push(value)</code> 没有通过 Signal 写入，消费者不应期待收到更新；把同一引用重新 <code>set</code> 也可能被视为没有变化：</p>
-<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts">items.<span class="hljs-title function_">update</span>(<span class="hljs-function">(<span class="hljs-params">previous</span>) =&gt;</span> [...previous, value]);
-</code></pre></div>
-<p><code>asReadonly</code> 只隐藏写入 API，不会递归冻结对象。自定义 <code>equal</code> 可以减少无意义更新，但如果错误地判断两个对象相等，也会隐藏真实变化。复杂嵌套数据需要明确不可变更新、Store 或其他状态策略。</p>
-<h2>派生不要用 effect 来回同步</h2>
-<p>如果 <code>total</code> 完全由价格和数量决定，<code>computed</code> 比 effect 读取后再写另一个 Signal 更直接。后者多出一份需要保持一致的状态，还可能产生调度延迟和循环更新。</p>
-<p><code>effect</code> 更适合把状态同步到外部系统，例如日志、非 Angular 图表或浏览器 API。它有自己的创建上下文、调度和清理规则，不应被当作同步函数，也不应拿来传播所有状态。<code>untracked</code> 适合明确排除某个依赖的场景，不能用来掩盖状态设计错误。</p>
-<p>模板读取 Signal 时 Angular 可以把它和组件视图关联，但 Signals 不会自动解决请求竞态、共享对象、权限、生命周期或服务作用域。真正可靠的设计仍要把同步派生、异步流程和外部副作用分开。</p>
-<h2>可写派生、异步资源与信号输入</h2>
-<p>当前文档（v22）还有几类常被追问的 Signal API：</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/frameworks/">框架与选型面试题</a><span aria-hidden="true">/</span><span aria-current="page">Angular Signals 的依赖追踪与 computed 有什么特点？</span></nav><h1 tabindex="-1">Angular Signals 的依赖追踪与 computed 有什么特点？</h1><p class="reading-summary">Signal 是包装值的响应式容器，读取时调用函数，读取过程会被记录为依赖。computed 根据实际读取的 Signal 惰性计算并缓存；effect 在依赖变化后执行副作用。linkedSignal、resource、input() 和 model() 都建立在同一套机制上。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li><code>linkedSignal(() =&gt; options()[0])</code>：值跟随计算结果，同时允许 <code>set</code> 手动覆盖；源变化时会重置成新的计算结果。需要在源变化后保留用户选择时，改用 <code>{ source, computation }</code> 写法，<code>computation</code> 可以读到上一次的值。</li>
-<li><code>resource({ params, loader })</code>：<code>params</code> 变化时重新执行 <code>loader</code>，进行中的请求通过 <code>abortSignal</code> 取消；<code>status</code> 取值为 <code>idle</code>、<code>loading</code>、<code>reloading</code>、<code>resolved</code>、<code>error</code>、<code>local</code>。处于 <code>error</code> 状态时读取 <code>value()</code> 会抛错，应先调用 <code>hasValue()</code>。<code>httpResource</code> 是基于 HttpClient 的封装，请求会经过拦截器。</li>
-<li><code>input()</code> / <code>input.required()</code> / <code>model()</code>：用信号声明组件输入。<code>model()</code> 可以在组件内部写入，并自动生成 <code>xxxChange</code> 输出以支持 <code>[(x)]</code> 双向绑定；它不支持 <code>transform</code>。</li>
+<li><code>signal(initial)</code> 创建可写 Signal，<code>count()</code> 读取，<code>count.set(v)</code> 或 <code>count.update(fn)</code> 修改。</li>
+<li><code>computed(() =&gt; ...)</code> 是只读的派生 Signal：第一次读取时才计算，结果被缓存，依赖变化后下次读取才重新计算。</li>
+<li>依赖按实际执行路径收集：条件分支没有读取的 Signal 不会成为依赖。</li>
+<li><code>effect()</code> 在依赖变化后执行副作用，用于同步到 localStorage、日志、第三方库，不要用它来同步另一个 Signal。</li>
+<li>Signal 用 <code>Object.is</code> 判断是否变化，直接修改对象内部属性不会通知；要用 <code>update</code> 返回新对象。</li>
 </ul>
-<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Component</span>, input, model } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/core&#x27;</span>;
+<h2>基本用法</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Component</span>, computed, signal } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/core&#x27;</span>;
 
-<span class="hljs-meta">@Component</span>({ <span class="hljs-attr">selector</span>: <span class="hljs-string">&#x27;app-counter&#x27;</span>, <span class="hljs-attr">template</span>: <span class="hljs-string">`{{ title() }}: {{ count() }}`</span> })
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Counter</span> {
-  title = input.<span class="hljs-property">required</span>&lt;<span class="hljs-built_in">string</span>&gt;();
-  step = <span class="hljs-title function_">input</span>(<span class="hljs-number">1</span>);
-  count = <span class="hljs-title function_">model</span>(<span class="hljs-number">0</span>);
+<span class="hljs-meta">@Component</span>({
+  <span class="hljs-attr">selector</span>: <span class="hljs-string">&#x27;app-cart&#x27;</span>,
+  <span class="hljs-attr">template</span>: <span class="hljs-string">`
+    &lt;p&gt;共 {{ count() }} 件，合计 {{ total() }}&lt;/p&gt;
+    &lt;button (click)=&quot;add()&quot;&gt;加一件&lt;/button&gt;
+  `</span>,
+})
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CartComponent</span> {
+  <span class="hljs-keyword">readonly</span> items = <span class="hljs-title function_">signal</span>([{ <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;书&#x27;</span>, <span class="hljs-attr">price</span>: <span class="hljs-number">30</span> }]);
+  <span class="hljs-keyword">readonly</span> count = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">items</span>().<span class="hljs-property">length</span>);
+  <span class="hljs-keyword">readonly</span> total = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">items</span>().<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">s, i</span>) =&gt;</span> s + i.<span class="hljs-property">price</span>, <span class="hljs-number">0</span>));
 
-  <span class="hljs-title function_">bump</span>(<span class="hljs-params"></span>) {
-    <span class="hljs-variable language_">this</span>.<span class="hljs-property">count</span>.<span class="hljs-title function_">update</span>(<span class="hljs-function">(<span class="hljs-params">c</span>) =&gt;</span> c + <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">step</span>());
+  <span class="hljs-title function_">add</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>.<span class="hljs-title function_">update</span>(<span class="hljs-function">(<span class="hljs-params">list</span>) =&gt;</span> [...list, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;笔&#x27;</span>, <span class="hljs-attr">price</span>: <span class="hljs-number">5</span> }]);
   }
 }
-</code></pre></div></div><div class="answer-bottom"><a href="https://angular.dev/guide/signals" target="_blank" rel="noreferrer">Signals • Overview • Angular<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Angular+Signals+%E7%9A%84%E4%BE%9D%E8%B5%96%E8%BF%BD%E8%B8%AA%E4%B8%8E+computed+%E6%9C%89%E4%BB%80%E4%B9%88%E7%89%B9%E7%82%B9%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAngular+Signals+%E7%9A%84%E4%BE%9D%E8%B5%96%E8%BF%BD%E8%B8%AA%E4%B8%8E+computed+%E6%9C%89%E4%BB%80%E4%B9%88%E7%89%B9%E7%82%B9%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aframework-angular%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%86%E6%9E%B6%E4%B8%8E%E9%80%89%E5%9E%8B%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fframework-angular%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Angular Signals 的依赖追踪与 computed 有什么特点？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/frameworks-solid-signals/">Solid 的 Signals 和 React 状态更新有什么不同？</a></li><li><a href="/questions/frameworks-angular-rxjs/">Angular 中 Observable 和 Signals 怎样协作？</a></li><li><a href="/questions/frameworks-angular-di/">Angular 依赖注入的层级和作用域怎样理解？</a></li><li><a href="/questions/frameworks-angular-hydration/">Angular Hydration 解决什么问题？</a></li></ul></nav></main></div></div>
+</code></pre></div>
+<p>模板读取了 <code>count()</code> 和 <code>total()</code>，<code>items</code> 变化时 Angular 只标记这个组件需要更新。</p>
+<h2>依赖随分支变化</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">const</span> showDetail = <span class="hljs-title function_">signal</span>(<span class="hljs-literal">false</span>);
+<span class="hljs-keyword">const</span> name = <span class="hljs-title function_">signal</span>(<span class="hljs-string">&#x27;Lin&#x27;</span>);
+<span class="hljs-keyword">const</span> detail = <span class="hljs-title function_">signal</span>(<span class="hljs-string">&#x27;...&#x27;</span>);
+<span class="hljs-keyword">const</span> label = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> (<span class="hljs-title function_">showDetail</span>() ? <span class="hljs-string">`<span class="hljs-subst">${name()}</span>：<span class="hljs-subst">${detail()}</span>`</span> : <span class="hljs-title function_">name</span>()));
+</code></pre></div>
+<p><code>showDetail</code> 为 <code>false</code> 时，<code>detail</code> 变化不会让 <code>label</code> 重新计算。</p>
+<h2>linkedSignal：随来源重置的可写状态</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">import</span> { linkedSignal } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/core&#x27;</span>;
+
+<span class="hljs-keyword">const</span> options = <span class="hljs-title function_">signal</span>([<span class="hljs-string">&#x27;标准&#x27;</span>, <span class="hljs-string">&#x27;加急&#x27;</span>]);
+<span class="hljs-keyword">const</span> selected = <span class="hljs-title function_">linkedSignal</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">options</span>()[<span class="hljs-number">0</span>]);
+
+selected.<span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;加急&#x27;</span>); <span class="hljs-comment">// 用户手动选择</span>
+options.<span class="hljs-title function_">set</span>([<span class="hljs-string">&#x27;自提&#x27;</span>, <span class="hljs-string">&#x27;标准&#x27;</span>]); <span class="hljs-comment">// 来源变化，selected 重置为 &#x27;自提&#x27;</span>
+</code></pre></div>
+<p>用于&quot;默认值来自另一个 Signal，用户也可以修改&quot;的场景，不用写 effect 去同步。</p>
+<h2>resource：异步数据</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">import</span> { resource } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/core&#x27;</span>;
+
+<span class="hljs-keyword">const</span> userId = <span class="hljs-title function_">signal</span>(<span class="hljs-number">1</span>);
+<span class="hljs-keyword">const</span> user = <span class="hljs-title function_">resource</span>({
+  <span class="hljs-attr">params</span>: <span class="hljs-function">() =&gt;</span> ({ <span class="hljs-attr">id</span>: <span class="hljs-title function_">userId</span>() }),
+  <span class="hljs-attr">loader</span>: <span class="hljs-function">(<span class="hljs-params">{ params, abortSignal }</span>) =&gt;</span>
+    <span class="hljs-title function_">fetch</span>(<span class="hljs-string">`/api/users/<span class="hljs-subst">${params.id}</span>`</span>, { <span class="hljs-attr">signal</span>: abortSignal }).<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">r</span>) =&gt;</span> r.<span class="hljs-title function_">json</span>()),
+});
+</code></pre></div>
+<ul>
+<li><code>userId</code> 变化时自动重新请求，旧请求通过 <code>abortSignal</code> 取消。</li>
+<li><code>user.status()</code> 的取值包括 <code>&#x27;idle&#x27;</code>、<code>&#x27;loading&#x27;</code>、<code>&#x27;reloading&#x27;</code>、<code>&#x27;resolved&#x27;</code>、<code>&#x27;error&#x27;</code>、<code>&#x27;local&#x27;</code>；<code>user.hasValue()</code> 可以作为类型守卫。</li>
+<li>在 error 状态读取 <code>user.value()</code> 会抛错，读取前先判断 <code>hasValue()</code>。</li>
+<li><code>httpResource</code> 是基于 <code>HttpClient</code> 的版本，请求会经过拦截器。</li>
+</ul>
+<h2>组件输入输出</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">import</span> { input, model, output } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/core&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Slider</span> {
+  <span class="hljs-keyword">readonly</span> max = <span class="hljs-title function_">input</span>(<span class="hljs-number">100</span>); <span class="hljs-comment">// 只读 Signal 输入</span>
+  <span class="hljs-keyword">readonly</span> label = input.<span class="hljs-property">required</span>&lt;<span class="hljs-built_in">string</span>&gt;(); <span class="hljs-comment">// 必填</span>
+  <span class="hljs-keyword">readonly</span> value = <span class="hljs-title function_">model</span>(<span class="hljs-number">0</span>); <span class="hljs-comment">// 双向绑定：[(value)]=&quot;v&quot;</span>
+  <span class="hljs-keyword">readonly</span> changed = output&lt;<span class="hljs-built_in">number</span>&gt;();
+}
+</code></pre></div>
+<h2>常见追问</h2>
+<ul>
+<li>和 RxJS 的关系？Signal 表示&quot;当前值&quot;，Observable 表示&quot;随时间到达的事件流&quot;，可以用 <code>toSignal</code>、<code>toObservable</code> 互转，见《Angular 中 Observable 和 Signals 怎样协作？》。</li>
+<li>Signals 对变更检测有什么影响？模板读取的 Signal 变化时，Angular 能精确知道哪个组件需要检查，是 zoneless 模式的基础，见《Angular Zoneless 模式会改变哪些更新假设？》。</li>
+</ul></div><div class="answer-bottom"><a href="https://angular.dev/guide/signals" target="_blank" rel="noreferrer">Angular · Signals<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Angular+Signals+%E7%9A%84%E4%BE%9D%E8%B5%96%E8%BF%BD%E8%B8%AA%E4%B8%8E+computed+%E6%9C%89%E4%BB%80%E4%B9%88%E7%89%B9%E7%82%B9%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAngular+Signals+%E7%9A%84%E4%BE%9D%E8%B5%96%E8%BF%BD%E8%B8%AA%E4%B8%8E+computed+%E6%9C%89%E4%BB%80%E4%B9%88%E7%89%B9%E7%82%B9%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aframework-angular%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%86%E6%9E%B6%E4%B8%8E%E9%80%89%E5%9E%8B%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fframework-angular%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Angular Signals 的依赖追踪与 computed 有什么特点？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/frameworks-angular-rxjs/">Angular 中 Observable 和 Signals 怎样协作？</a></li><li><a href="/questions/frameworks-angular-di/">Angular 依赖注入的层级和作用域怎样理解？</a></li><li><a href="/questions/frameworks-solid-signals/">Solid 的 Signals 和 React 状态更新有什么不同？</a></li><li><a href="/questions/frameworks-angular-hydration/">Angular Hydration 解决什么问题？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

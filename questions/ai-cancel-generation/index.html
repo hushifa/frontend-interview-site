@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="AI 应用前端面试题：不一定。停止前端显示、取消浏览器请求、服务端停止任务和上游模型中止是不同层次，必须逐层传播取消并区分已完成、未知和仍在执行的工作。" />
+    <meta name="description" content="AI 应用前端面试题：不一定。停止显示、取消浏览器请求、服务端停止任务和上游模型中止是四个层次，取消信号要逐层传递；已经执行的工具副作用不会因此撤销。" />
     <title>点击“停止生成”后，服务端一定停止调用模型吗？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/ai-cancel-generation/" />
     <meta name="robots" content="index,follow" />
@@ -19,25 +19,21 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="点击“停止生成”后，服务端一定停止调用模型吗？ · 前端知库" />
-    <meta property="og:description" content="AI 应用前端面试题：不一定。停止前端显示、取消浏览器请求、服务端停止任务和上游模型中止是不同层次，必须逐层传播取消并区分已完成、未知和仍在执行的工作。" />
+    <meta property="og:description" content="AI 应用前端面试题：不一定。停止显示、取消浏览器请求、服务端停止任务和上游模型中止是四个层次，取消信号要逐层传递；已经执行的工具副作用不会因此撤销。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/ai-cancel-generation/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ai-cancel-generation/#webpage","url":"https://fe.hushifa.top/questions/ai-cancel-generation/","name":"点击“停止生成”后，服务端一定停止调用模型吗？ · 前端知库","description":"AI 应用前端面试题：不一定。停止前端显示、取消浏览器请求、服务端停止任务和上游模型中止是不同层次，必须逐层传播取消并区分已完成、未知和仍在执行的工作。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ai-cancel-generation/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ai-cancel-generation/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"AI 应用前端面试题","item":"https://fe.hushifa.top/topics/ai-frontend/"},{"@type":"ListItem","position":3,"name":"点击“停止生成”后，服务端一定停止调用模型吗？","item":"https://fe.hushifa.top/questions/ai-cancel-generation/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ai-cancel-generation/#webpage","url":"https://fe.hushifa.top/questions/ai-cancel-generation/","name":"点击“停止生成”后，服务端一定停止调用模型吗？ · 前端知库","description":"AI 应用前端面试题：不一定。停止显示、取消浏览器请求、服务端停止任务和上游模型中止是四个层次，取消信号要逐层传递；已经执行的工具副作用不会因此撤销。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ai-cancel-generation/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ai-cancel-generation/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"AI 应用前端面试题","item":"https://fe.hushifa.top/topics/ai-frontend/"},{"@type":"ListItem","position":3,"name":"点击“停止生成”后，服务端一定停止调用模型吗？","item":"https://fe.hushifa.top/questions/ai-cancel-generation/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/ai-frontend/">AI 应用前端面试题</a><span aria-hidden="true">/</span><span aria-current="page">点击“停止生成”后，服务端一定停止调用模型吗？</span></nav><h1 tabindex="-1">点击“停止生成”后，服务端一定停止调用模型吗？</h1><p class="reading-summary">不一定。停止前端显示、取消浏览器请求、服务端停止任务和上游模型中止是不同层次，必须逐层传播取消并区分已完成、未知和仍在执行的工作。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/ai-frontend/">AI 应用前端面试题</a><span aria-hidden="true">/</span><span aria-current="page">点击“停止生成”后，服务端一定停止调用模型吗？</span></nav><h1 tabindex="-1">点击“停止生成”后，服务端一定停止调用模型吗？</h1><p class="reading-summary">不一定。停止显示、取消浏览器请求、服务端停止任务和上游模型中止是四个层次，取消信号要逐层传递；已经执行的工具副作用不会因此撤销。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>停止显示、取消浏览器请求、服务端停止任务和上游模型中止是不同层次。</li>
-<li>取消函数要在任务开始时就暴露，取消信号要逐层传给上游。</li>
-<li>停止后保留的部分答案要标记为中断，迟到的旧回调不能覆盖新消息。</li>
-<li>已经执行的工具副作用不会被撤销，要按调用 ID 查询真实状态。</li>
+<li>停止有四层：前端停止显示、中止浏览器到自己服务的请求、服务端停止任务、服务端中止对模型服务商的请求。前一层停了，后一层不一定停。</li>
+<li>前端用 <code>AbortController</code> 中止 fetch，同时关闭结果回调，让迟到的数据不再写进界面。</li>
+<li>服务端要把请求的取消信号传给模型 SDK；生成已经转成后台任务时，需要一个按任务 ID 取消的接口。</li>
+<li>停止后保留已收到的文字并标记为中断；已经执行的工具调用要按调用 ID 查询真实状态，停止按钮不能回滚它们。</li>
 </ul>
-<h2>一个停止按钮可能只停止了观看</h2>
-<p>用户点击停止后，前端可以立刻停止接收和显示增量，但服务端可能仍在调用模型；服务端收到断连后，也可能只能停止后续输出，已经完成的计算和工具副作用不会被撤销。</p>
-<p>因此界面要区分“客户端停止显示”“取消请求已发送”“服务端确认任务结束”和“结果未知”，不能隐藏 loading 后就告诉用户整个任务已经停止。</p>
-<h2>前端先关闭结果通道，再发出取消</h2>
-<p>取消函数必须在任务开始时就暴露，而不是等一个很长的 <code>await</code> 完成后才创建：</p>
+<h2>前端：中止请求并关闭回调</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">startGeneration</span>(<span class="hljs-params">run, onChunk</span>) {
   <span class="hljs-keyword">const</span> controller = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AbortController</span>();
   <span class="hljs-keyword">let</span> accepting = <span class="hljs-literal">true</span>;
@@ -48,12 +44,14 @@
       <span class="hljs-keyword">if</span> (accepting) <span class="hljs-title function_">onChunk</span>(chunk);
     },
   })
-    .<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> ({ <span class="hljs-attr">status</span>: controller.<span class="hljs-property">signal</span>.<span class="hljs-property">aborted</span> ? <span class="hljs-string">&#x27;cancelled&#x27;</span> : <span class="hljs-string">&#x27;completed&#x27;</span> }))
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> ({ <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;completed&#x27;</span> }))
     .<span class="hljs-title function_">catch</span>(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> {
-      <span class="hljs-keyword">if</span> (controller.<span class="hljs-property">signal</span>.<span class="hljs-property">aborted</span>) <span class="hljs-keyword">return</span> { <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;cancelled&#x27;</span> };
-      <span class="hljs-keyword">throw</span> error;
+      <span class="hljs-keyword">if</span> (controller.<span class="hljs-property">signal</span>.<span class="hljs-property">aborted</span>) <span class="hljs-keyword">return</span> { <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;stopped&#x27;</span> };
+      <span class="hljs-keyword">throw</span> error; <span class="hljs-comment">// 真正的错误继续抛出</span>
     })
-    .<span class="hljs-title function_">finally</span>(<span class="hljs-function">() =&gt;</span> { accepting = <span class="hljs-literal">false</span>; });
+    .<span class="hljs-title function_">finally</span>(<span class="hljs-function">() =&gt;</span> {
+      accepting = <span class="hljs-literal">false</span>;
+    });
 
   <span class="hljs-keyword">return</span> {
     done,
@@ -64,19 +62,25 @@
   };
 }
 </code></pre></div>
-<p>关闭 <code>emit</code> 通道是 UI 层保护，即使底层任务不响应 signal，迟到结果也不会继续追加旧回答。它不等于底层函数被强制终止；不支持取消的 SDK、同步计算或代理任务仍可能继续运行。调用方要处理 <code>done</code> 的拒绝，不能把真实错误都吞成“已停止”。</p>
-<h2>取消必须逐层传播</h2>
-<p>客户端的 <code>AbortController</code> 可以中止浏览器到自己服务的 HTTP 请求。服务端运行环境需要感知连接断开，再把 request signal 或独立任务取消信号传给上游模型调用。代理缓冲、边缘平台和后台队列可能让断连无法自动传播。</p>
-<p>如果生成已经变成独立后台任务，关闭浏览器连接不应默认等同于取消。产品要提供带任务 ID 的显式取消接口，服务端状态机返回 <code>cancelling</code>、<code>cancelled</code>、<code>completed</code> 或 <code>unknown</code>。供应商也可能只停止继续生成，不能承诺点击停止就一定没有新增费用。</p>
-<h2>部分答案不等于完整答案</h2>
-<p>停止后可以保留已收到的文本，但要标记为中断，并保存结束原因。主动停止、网络错误、模型拒绝和正常完成不能显示成同一种状态。新一轮生成要有新的 request ID；旧回调即使迟到，也不能覆盖当前消息。</p>
-<p>持久化时保存任务 ID、消息 ID、已有片段和结束原因。刷新后不要把半截答案显示成已完成，也不要因为重新打开页面就自动重新执行原请求。</p>
-<h2>工具副作用需要独立处理</h2>
-<p>生成过程中可能已经发邮件、创建订单或写入文件。停止模型输出不会撤销这些动作，已提交的工具可能继续完成。取消时只阻止尚未开始的后续步骤，并用调用 ID 查询执行中工具的真实状态。</p>
-<p>需要撤销时使用业务提供的补偿或撤销接口，不能简单执行一个“相反操作”就假设绝对恢复。高风险动作更依赖执行前授权、幂等键和审计，停止按钮不是事务回滚按钮。</p>
-<h2>明确“取消任务”和“停止观看”</h2>
-<p>有的产品希望关闭页面后任务继续，用户回来再查看；有的产品希望断连就节省模型资源。这是两种不同协议，不能靠一个隐含的断连行为同时实现。前者要支持任务持久化和恢复，后者要提供可靠取消并报告结果未知。</p>
-<p>测试至少覆盖首个输出前停止、流中停止、停止后立即重试、服务端迟到确认、网络断开、模型仍在运行和工具已执行。按钮文字变化只是最浅的一层验证。</p></div><div class="answer-bottom"><a href="https://ai-sdk.dev/docs/advanced/stopping-streams" target="_blank" rel="noreferrer">AI SDK · 停止流式生成<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E7%82%B9%E5%87%BB%E2%80%9C%E5%81%9C%E6%AD%A2%E7%94%9F%E6%88%90%E2%80%9D%E5%90%8E%EF%BC%8C%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%B8%80%E5%AE%9A%E5%81%9C%E6%AD%A2%E8%B0%83%E7%94%A8%E6%A8%A1%E5%9E%8B%E5%90%97%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E7%82%B9%E5%87%BB%E2%80%9C%E5%81%9C%E6%AD%A2%E7%94%9F%E6%88%90%E2%80%9D%E5%90%8E%EF%BC%8C%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%B8%80%E5%AE%9A%E5%81%9C%E6%AD%A2%E8%B0%83%E7%94%A8%E6%A8%A1%E5%9E%8B%E5%90%97%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aai-cancel-generation%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AAI+%E5%BA%94%E7%94%A8%E5%89%8D%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fai-cancel-generation%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：点击“停止生成”后，服务端一定停止调用模型吗？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ai-client-server-boundary/">AI 对话前端为什么不能直接内置服务商 API 密钥？</a></li><li><a href="/questions/ai-stream-protocol/">AI 流式响应为什么不能每收到一块就 JSON.parse？</a></li><li><a href="/questions/ai-chat-state/">AI 聊天界面为什么不能只有 loading 一个状态？</a></li><li><a href="/questions/ai-tool-approval/">模型提出工具调用后，前端应该怎样展示和确认？</a></li></ul></nav></main></div></div>
+<p><code>accepting</code> 保证即使底层代码不响应 <code>signal</code>，旧结果也不会继续追加到界面。</p>
+<h2>服务端：把取消传下去</h2>
+<ul>
+<li>浏览器中止 fetch 后，服务端会看到连接关闭。服务端代码要监听请求的取消信号，并把它传给调用模型的 SDK。</li>
+<li>中间有代理、边缘平台缓冲或任务队列时，断连可能传不到模型调用这一层。</li>
+<li>有的产品希望关掉页面后任务继续跑，用户回来再看。这时断连不应等于取消，而要提供 <code>POST /runs/:id/cancel</code> 这样的显式接口，返回 <code>cancelling</code>、<code>cancelled</code> 或 <code>completed</code>。</li>
+</ul>
+<p>服务商在收到中止前已经生成的 token 通常仍会计费。</p>
+<h2>停止之后的数据</h2>
+<ul>
+<li>已收到的文字保留，消息记录里写明结束原因（用户停止、网络错误、服务端拒绝），刷新后不显示成完整回答。</li>
+<li>下一次生成用新的请求 ID，旧请求的迟到回调直接丢弃。</li>
+<li>生成过程中已经发出的工具调用（发邮件、写文件）不会被撤销。只能阻止还没开始的步骤，进行中的按调用 ID 查询结果，需要撤销时调用业务的撤销接口。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li><strong><code>reader.cancel()</code> 和 <code>controller.abort()</code> 有什么区别？</strong> <code>reader.cancel()</code> 取消对响应体的读取；<code>abort()</code> 中止整个 fetch，包括还没开始的响应。两者都只影响浏览器到服务端这一段连接。</li>
+<li><strong>测试哪些情况？</strong> 首字前停止、流中停止、停止后立即重试、模型 SDK 不支持取消、工具已经执行。</li>
+</ul></div><div class="answer-bottom"><a href="https://ai-sdk.dev/docs/advanced/stopping-streams" target="_blank" rel="noreferrer">AI SDK · 停止流式生成<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E7%82%B9%E5%87%BB%E2%80%9C%E5%81%9C%E6%AD%A2%E7%94%9F%E6%88%90%E2%80%9D%E5%90%8E%EF%BC%8C%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%B8%80%E5%AE%9A%E5%81%9C%E6%AD%A2%E8%B0%83%E7%94%A8%E6%A8%A1%E5%9E%8B%E5%90%97%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E7%82%B9%E5%87%BB%E2%80%9C%E5%81%9C%E6%AD%A2%E7%94%9F%E6%88%90%E2%80%9D%E5%90%8E%EF%BC%8C%E6%9C%8D%E5%8A%A1%E7%AB%AF%E4%B8%80%E5%AE%9A%E5%81%9C%E6%AD%A2%E8%B0%83%E7%94%A8%E6%A8%A1%E5%9E%8B%E5%90%97%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aai-cancel-generation%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AAI+%E5%BA%94%E7%94%A8%E5%89%8D%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fai-cancel-generation%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：点击“停止生成”后，服务端一定停止调用模型吗？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ai-client-server-boundary/">AI 对话前端为什么不能直接内置服务商 API 密钥？</a></li><li><a href="/questions/ai-stream-protocol/">AI 流式响应为什么不能每收到一块就 JSON.parse？</a></li><li><a href="/questions/ai-chat-state/">AI 聊天界面为什么不能只有 loading 一个状态？</a></li><li><a href="/questions/ai-tool-approval/">模型提出工具调用后，前端应该怎样展示和确认？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

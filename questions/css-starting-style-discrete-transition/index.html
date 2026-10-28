@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="HTML / CSS面试题：解释新元素为什么无法从 display:none 过渡到可见状态，说明 @starting-style、allow-discrete 与 opacity/transform 的配合方式，以及退出动画、DOM 时机、兼容性和渐进增强边界。" />
+    <meta name="description" content="HTML / CSS面试题：@starting-style 为首次渲染或从 display: none 出现的元素提供过渡起点；transition-behavior: allow-discrete 让 display、overlay 这类离散属性在过渡结束时才切换，从而实现进入和退出动画。" />
     <title>@starting-style 和离散属性过渡解决了什么问题？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/css-starting-style-discrete-transition/" />
     <meta name="robots" content="index,follow" />
@@ -19,95 +19,65 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="@starting-style 和离散属性过渡解决了什么问题？ · 前端知库" />
-    <meta property="og:description" content="HTML / CSS面试题：解释新元素为什么无法从 display:none 过渡到可见状态，说明 @starting-style、allow-discrete 与 opacity/transform 的配合方式，以及退出动画、DOM 时机、兼容性和渐进增强边界。" />
+    <meta property="og:description" content="HTML / CSS面试题：@starting-style 为首次渲染或从 display: none 出现的元素提供过渡起点；transition-behavior: allow-discrete 让 display、overlay 这类离散属性在过渡结束时才切换，从而实现进入和退出动画。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/css-starting-style-discrete-transition/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-starting-style-discrete-transition/#webpage","url":"https://fe.hushifa.top/questions/css-starting-style-discrete-transition/","name":"@starting-style 和离散属性过渡解决了什么问题？ · 前端知库","description":"HTML / CSS面试题：解释新元素为什么无法从 display:none 过渡到可见状态，说明 @starting-style、allow-discrete 与 opacity/transform 的配合方式，以及退出动画、DOM 时机、兼容性和渐进增强边界。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-starting-style-discrete-transition/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-starting-style-discrete-transition/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"@starting-style 和离散属性过渡解决了什么问题？","item":"https://fe.hushifa.top/questions/css-starting-style-discrete-transition/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-starting-style-discrete-transition/#webpage","url":"https://fe.hushifa.top/questions/css-starting-style-discrete-transition/","name":"@starting-style 和离散属性过渡解决了什么问题？ · 前端知库","description":"HTML / CSS面试题：@starting-style 为首次渲染或从 display: none 出现的元素提供过渡起点；transition-behavior: allow-discrete 让 display、overlay 这类离散属性在过渡结束时才切换，从而实现进入和退出动画。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-starting-style-discrete-transition/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-starting-style-discrete-transition/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"@starting-style 和离散属性过渡解决了什么问题？","item":"https://fe.hushifa.top/questions/css-starting-style-discrete-transition/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">@starting-style 和离散属性过渡解决了什么问题？</span></nav><h1 tabindex="-1">@starting-style 和离散属性过渡解决了什么问题？</h1><p class="reading-summary">解释新元素为什么无法从 display:none 过渡到可见状态，说明 @starting-style、allow-discrete 与 opacity/transform 的配合方式，以及退出动画、DOM 时机、兼容性和渐进增强边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">@starting-style 和离散属性过渡解决了什么问题？</span></nav><h1 tabindex="-1">@starting-style 和离散属性过渡解决了什么问题？</h1><p class="reading-summary">@starting-style 为首次渲染或从 display: none 出现的元素提供过渡起点；transition-behavior: allow-discrete 让 display、overlay 这类离散属性在过渡结束时才切换，从而实现进入和退出动画。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>新插入的元素或从 <code>display: none</code> 变为可见的元素，浏览器只看到最终样式，没有起点，所以 transition 不播放。</li>
-<li><code>@starting-style</code> 为“没有前一帧样式”的元素声明过渡起点，替代过去“先加类、下一帧再删类”的 JavaScript 时序。</li>
-<li><code>display</code> 是离散属性，不能插值；<code>transition-behavior: allow-discrete</code> 让它在合适时刻切换，退出时 opacity 等动画才有机会播完。</li>
-<li>动画只是表现层，焦点、<code>inert</code>、资源清理仍由组件状态负责；不支持时内容照常显示，只是没有动画。</li>
+<li>元素从 <code>display: none</code> 变为可见时没有“上一帧样式”，普通 transition 不会触发；<code>@starting-style</code> 补上这个起点。</li>
+<li>离散属性默认在过渡开始时立即切换；加 <code>allow-discrete</code> 后，<code>display</code> 会推迟到退出动画结束才变成 <code>none</code>。</li>
+<li>对 popover 和模态 dialog，退出动画还要过渡 <code>overlay</code>，否则元素会提前离开顶层。</li>
+<li><code>@starting-style</code> 和原规则优先级相同，单独写时要放在原规则之后，嵌套写法没有这个问题。</li>
+<li><code>@starting-style</code> 自 2024 年 8 月起进入 Baseline，不支持时元素直接出现和消失。</li>
 </ul>
-<h2>首次插入为什么没有起始帧</h2>
-<p>传统写法依赖 JavaScript 等一次渲染再移除初始类：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-variable language_">document</span>.<span class="hljs-property">body</span>.<span class="hljs-title function_">append</span>(notice); <span class="hljs-comment">// notice 带 notice--entering 类</span>
-<span class="hljs-title function_">requestAnimationFrame</span>(<span class="hljs-function">() =&gt;</span> notice.<span class="hljs-property">classList</span>.<span class="hljs-title function_">remove</span>(<span class="hljs-string">&#x27;notice--entering&#x27;</span>));
-</code></pre></div>
-<p>组件重渲染、批量插入或 SSR 激活都可能打乱这段时序。用 <code>@starting-style</code> 改由 CSS 声明起点：</p>
-<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.notice</span> {
-  <span class="hljs-attribute">opacity</span>: <span class="hljs-number">1</span>;
-  <span class="hljs-attribute">transform</span>: none;
-  <span class="hljs-attribute">transition</span>: opacity <span class="hljs-number">180ms</span> ease, transform <span class="hljs-number">180ms</span> ease;
+<h2>Popover 的进入和退出</h2>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-attr">[popover]</span> {
+  <span class="hljs-attribute">opacity</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translateY</span>(<span class="hljs-number">8px</span>);
+  <span class="hljs-attribute">transition</span>:
+    opacity <span class="hljs-number">200ms</span>,
+    transform <span class="hljs-number">200ms</span>,
+    overlay <span class="hljs-number">200ms</span> allow-discrete,
+    display <span class="hljs-number">200ms</span> allow-discrete;
 }
 
-<span class="hljs-keyword">@starting-style</span> {
-  <span class="hljs-selector-class">.notice</span> {
+<span class="hljs-selector-attr">[popover]</span>:popover-open {
+  <span class="hljs-attribute">opacity</span>: <span class="hljs-number">1</span>;
+  <span class="hljs-attribute">transform</span>: none;
+
+  <span class="hljs-keyword">@starting-style</span> {
     <span class="hljs-attribute">opacity</span>: <span class="hljs-number">0</span>;
     <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translateY</span>(<span class="hljs-number">8px</span>);
   }
 }
 </code></pre></div>
-<p>起始规则只在元素第一次获得样式时生效；元素已存在、只是修改属性时，仍由普通 transition 处理。</p>
-<h2>进入和退出都要处理 display</h2>
-<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.dialog</span> {
-  <span class="hljs-attribute">display</span>: none;
-  <span class="hljs-attribute">opacity</span>: <span class="hljs-number">0</span>;
-  <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translateY</span>(<span class="hljs-number">12px</span>) <span class="hljs-built_in">scale</span>(<span class="hljs-number">0.98</span>);
-  <span class="hljs-attribute">transition</span>:
-    opacity <span class="hljs-number">180ms</span> ease,
-    transform <span class="hljs-number">180ms</span> ease,
-    display <span class="hljs-number">180ms</span> allow-discrete;
-}
-
-<span class="hljs-selector-class">.dialog</span><span class="hljs-selector-attr">[open]</span> {
-  <span class="hljs-attribute">display</span>: block;
+<ul>
+<li>打开时：元素先按 <code>@starting-style</code> 里的值计算一次，再过渡到打开状态。</li>
+<li>关闭时：元素从打开状态过渡回 <code>[popover]</code> 的基础样式，而不是回到 <code>@starting-style</code>。<code>display</code> 和 <code>overlay</code> 在 200ms 后才切换，退出动画因此可见。</li>
+</ul>
+<p><code>::backdrop</code> 不能嵌套 <code>@starting-style</code>，要单独写一个块，放在 <code>[popover]:popover-open::backdrop</code> 规则之后。dialog 的写法相同，选择器换成 <code>dialog</code> 和 <code>dialog[open]</code>。</p>
+<h2>以前为什么难做</h2>
+<p>不用这两个特性时，常见写法是先移除 <code>display: none</code>，等浏览器完成一次样式计算后再加上可见状态的类。只用一次 <code>requestAnimationFrame</code> 往往不够，因为回调运行在同一帧的样式计算之前，起点和终点被合并成一次计算，过渡不会播放。实践中要用两次 rAF，或者在中间读取 <code>offsetHeight</code> 强制计算样式。退出时还要监听 <code>transitionend</code> 再设置 <code>display: none</code>，并处理动画中途再次打开的情况。</p>
+<p>现在这些步骤由 CSS 完成，JavaScript 只负责切换状态，例如调用 <code>showPopover()</code>。</p>
+<h2>动态插入的元素</h2>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.toast</span> {
   <span class="hljs-attribute">opacity</span>: <span class="hljs-number">1</span>;
-  <span class="hljs-attribute">transform</span>: none;
-}
-
-<span class="hljs-keyword">@starting-style</span> {
-  <span class="hljs-selector-class">.dialog</span><span class="hljs-selector-attr">[open]</span> {
-    <span class="hljs-attribute">opacity</span>: <span class="hljs-number">0</span>;
-    <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translateY</span>(<span class="hljs-number">12px</span>) <span class="hljs-built_in">scale</span>(<span class="hljs-number">0.98</span>);
-  }
-}
-</code></pre></div>
-<p>进入时 <code>display</code> 立刻切到 <code>block</code>，再从 starting-style 过渡；退出时 <code>display: none</code> 会推迟到动画结束才生效。模态框本身仍应使用原生 <code>&lt;dialog&gt;</code> 的 <code>showModal()</code>，这段 CSS 只负责视觉。</p>
-<h2>退出动画不能承担业务清理</h2>
-<p><code>transitionend</code> 可能因为属性被再次修改、元素被移除、页面进入后台或减少动态效果而不触发。释放监听、定时器和焦点应由组件状态在进入关闭阶段时完成，不要等动画事件。</p>
-<p>淡出期间元素仍在页面上，要同步禁止交互：</p>
-<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.toast</span><span class="hljs-selector-attr">[data-closing=<span class="hljs-string">&#x27;true&#x27;</span>]</span> {
-  <span class="hljs-attribute">pointer-events</span>: none;
-}
-
-<span class="hljs-keyword">@media</span> (<span class="hljs-attribute">prefers-reduced-motion</span>: reduce) {
-  <span class="hljs-selector-class">.toast</span>,
-  <span class="hljs-selector-class">.dialog</span> {
-    <span class="hljs-attribute">transition-duration</span>: <span class="hljs-number">1ms</span>;
-    <span class="hljs-attribute">transform</span>: none;
-  }
-}
-</code></pre></div>
-<p><code>pointer-events: none</code> 不影响键盘焦点和读屏，还需要配合 <code>inert</code> 和 ARIA 状态。SSR 首屏已经处于最终样式的内容，通常不应再播放入场动画。</p>
-<h2>兼容与渐进增强</h2>
-<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-keyword">@supports</span> (<span class="hljs-attribute">transition-behavior</span>: allow-discrete) {
-  <span class="hljs-selector-class">.notice</span> {
-    <span class="hljs-attribute">transition</span>: opacity <span class="hljs-number">180ms</span> ease, display <span class="hljs-number">180ms</span> allow-discrete;
-  }
+  <span class="hljs-attribute">transition</span>: opacity <span class="hljs-number">150ms</span>;
 
   <span class="hljs-keyword">@starting-style</span> {
-    <span class="hljs-selector-class">.notice</span> {
-      <span class="hljs-attribute">opacity</span>: <span class="hljs-number">0</span>;
-    }
+    <span class="hljs-attribute">opacity</span>: <span class="hljs-number">0</span>;
   }
 }
 </code></pre></div>
-<p>支持范围以 MDN 兼容表为准。验收覆盖插入、关闭、快速重复打开、减少动态效果，以及不支持时内容、关闭按钮和焦点是否仍然正常。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@starting-style" target="_blank" rel="noreferrer">MDN · @starting-style<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%40starting-style+%E5%92%8C%E7%A6%BB%E6%95%A3%E5%B1%9E%E6%80%A7%E8%BF%87%E6%B8%A1%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%40starting-style+%E5%92%8C%E7%A6%BB%E6%95%A3%E5%B1%9E%E6%80%A7%E8%BF%87%E6%B8%A1%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-starting-style-discrete-transition%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-starting-style-discrete-transition%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：@starting-style 和离散属性过渡解决了什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-cascade-specificity/">层叠、优先级、继承和 !important 谁先决定样式？</a></li><li><a href="/questions/css-container-style-query/">容器样式查询怎样根据父级配置改变组件样式？</a></li><li><a href="/questions/css-typography/">Web 排版中的字体、行高和布局稳定性怎样处理？</a></li><li><a href="/questions/css-masonry/">CSS Masonry 和传统瀑布流方案应该怎样选择？</a></li></ul></nav></main></div></div>
+<p>新插入 DOM 的 <code>.toast</code> 会从透明淡入。移除节点时仍然没有退出动画，因为节点已经不在页面上；需要退出效果时，先切换一个隐藏状态，等 <code>transitionend</code> 后再移除。</p>
+<h2>常见追问</h2>
+<ul>
+<li>和 <code>prefers-reduced-motion</code> 怎样配合？在减少动画的媒体查询里把 <code>transition</code> 设为 <code>none</code>，状态切换仍然正常。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@starting-style" target="_blank" rel="noreferrer">MDN · @starting-style<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%40starting-style+%E5%92%8C%E7%A6%BB%E6%95%A3%E5%B1%9E%E6%80%A7%E8%BF%87%E6%B8%A1%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%40starting-style+%E5%92%8C%E7%A6%BB%E6%95%A3%E5%B1%9E%E6%80%A7%E8%BF%87%E6%B8%A1%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-starting-style-discrete-transition%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-starting-style-discrete-transition%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：@starting-style 和离散属性过渡解决了什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-anchor-positioning/">CSS Anchor Positioning 适合解决哪些浮层布局问题？</a></li><li><a href="/questions/css-box/">标准盒模型和 border-box 有什么区别？</a></li><li><a href="/questions/css-flex-grid/">Flexbox 和 Grid 应该如何选择？</a></li><li><a href="/questions/html-accessibility/">触发操作为什么应优先使用 button，而不是可点击的 div？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

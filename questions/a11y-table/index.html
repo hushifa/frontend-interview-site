@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="无障碍面试题：区分真正的数据表格与布局结构，说明 caption、表头关联、排序状态、筛选结果和响应式处理，避免只靠 ARIA 属性拼出不可用的表格。" />
+    <meta name="description" content="无障碍面试题：数据表用原生 table，caption 给出表名，th 加 scope 标明是行表头还是列表头；读屏在单元格间移动时会读出对应表头。不要用 div 拼表格，也不要用 table 做布局。" />
     <title>数据表格怎样设计才方便键盘和读屏用户理解？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/a11y-table/" />
     <meta name="robots" content="index,follow" />
@@ -19,96 +19,71 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="数据表格怎样设计才方便键盘和读屏用户理解？ · 前端知库" />
-    <meta property="og:description" content="无障碍面试题：区分真正的数据表格与布局结构，说明 caption、表头关联、排序状态、筛选结果和响应式处理，避免只靠 ARIA 属性拼出不可用的表格。" />
+    <meta property="og:description" content="无障碍面试题：数据表用原生 table，caption 给出表名，th 加 scope 标明是行表头还是列表头；读屏在单元格间移动时会读出对应表头。不要用 div 拼表格，也不要用 table 做布局。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/a11y-table/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/a11y-table/#webpage","url":"https://fe.hushifa.top/questions/a11y-table/","name":"数据表格怎样设计才方便键盘和读屏用户理解？ · 前端知库","description":"无障碍面试题：区分真正的数据表格与布局结构，说明 caption、表头关联、排序状态、筛选结果和响应式处理，避免只靠 ARIA 属性拼出不可用的表格。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/a11y-table/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/a11y-table/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"无障碍面试题","item":"https://fe.hushifa.top/topics/accessibility/"},{"@type":"ListItem","position":3,"name":"数据表格怎样设计才方便键盘和读屏用户理解？","item":"https://fe.hushifa.top/questions/a11y-table/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/a11y-table/#webpage","url":"https://fe.hushifa.top/questions/a11y-table/","name":"数据表格怎样设计才方便键盘和读屏用户理解？ · 前端知库","description":"无障碍面试题：数据表用原生 table，caption 给出表名，th 加 scope 标明是行表头还是列表头；读屏在单元格间移动时会读出对应表头。不要用 div 拼表格，也不要用 table 做布局。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/a11y-table/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/a11y-table/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"无障碍面试题","item":"https://fe.hushifa.top/topics/accessibility/"},{"@type":"ListItem","position":3,"name":"数据表格怎样设计才方便键盘和读屏用户理解？","item":"https://fe.hushifa.top/questions/a11y-table/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/accessibility/">无障碍面试题</a><span aria-hidden="true">/</span><span aria-current="page">数据表格怎样设计才方便键盘和读屏用户理解？</span></nav><h1 tabindex="-1">数据表格怎样设计才方便键盘和读屏用户理解？</h1><p class="reading-summary">区分真正的数据表格与布局结构，说明 caption、表头关联、排序状态、筛选结果和响应式处理，避免只靠 ARIA 属性拼出不可用的表格。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/accessibility/">无障碍面试题</a><span aria-hidden="true">/</span><span aria-current="page">数据表格怎样设计才方便键盘和读屏用户理解？</span></nav><h1 tabindex="-1">数据表格怎样设计才方便键盘和读屏用户理解？</h1><p class="reading-summary">数据表用原生 table，caption 给出表名，th 加 scope 标明是行表头还是列表头；读屏在单元格间移动时会读出对应表头。不要用 div 拼表格，也不要用 table 做布局。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>只有内容真正具有行列二维关系时才用表格，字段列表用普通结构。</li>
-<li>原生表格用 caption 作为标题，列标题用 <code>th scope=&quot;col&quot;</code>，行标题用 <code>th scope=&quot;row&quot;</code>。</li>
-<li>多层或跨行跨列表头可能需要 <code>headers</code> 与 <code>id</code>，不要堆叠互相矛盾的 scope、headers 和 ARIA。</li>
-<li>每行的操作按钮要有可区分的名称，例如“查看订单 A-1024”，而不是都叫“操作”。</li>
+<li><code>&lt;caption&gt;</code> 是表格的名称，读屏进入表格时读出。</li>
+<li>列表头 <code>&lt;th scope=&quot;col&quot;&gt;</code>，行表头 <code>&lt;th scope=&quot;row&quot;&gt;</code>；读屏在单元格之间移动时会读出“列名，行名，值”。</li>
+<li>多级表头用 <code>scope=&quot;colgroup&quot;</code> 和 <code>colspan</code>；关系太复杂时用 <code>headers</code> 属性逐个关联，或者考虑拆成多个简单表格。</li>
+<li>排序列在表头里放一个按钮，并给 <code>th</code> 设置 <code>aria-sort=&quot;ascending&quot;</code> 或 <code>descending</code>。</li>
+<li>窄屏下表格可以放进可横向滚动的容器，容器加 <code>tabindex=&quot;0&quot;</code>、<code>role=&quot;region&quot;</code> 和名称，键盘用户才能滚动。</li>
 </ul>
-<p>订单列表、成绩表和库存明细都有行与列，但“能看见网格”不等于用户能理解每个单元格属于哪个标题。读屏用户通常按表头、行和单元格移动，键盘用户还需要完成排序、筛选和查看详情等操作。</p>
-<p>先判断内容是否真的有二维关系。如果只是把几个字段排成两列的表单或卡片，使用普通的标题、列表和字段结构通常更合适；不要为了视觉对齐把所有内容包成 table。</p>
-<h2>原生表格先把结构说清楚</h2>
-<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">caption</span>&gt;</span>2026 年 10 月订单<span class="hljs-tag">&lt;/<span class="hljs-name">caption</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;col&quot;</span>&gt;</span>订单号<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;col&quot;</span>&gt;</span>客户<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;col&quot;</span>&gt;</span>金额<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;col&quot;</span>&gt;</span>状态<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">tbody</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;row&quot;</span>&gt;</span>A-1024<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>林晓<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>¥128.00<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>已发货<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">tbody</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+<h2>基本结构</h2>
+<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">role</span>=<span class="hljs-string">&quot;region&quot;</span> <span class="hljs-attr">aria-labelledby</span>=<span class="hljs-string">&quot;sales-caption&quot;</span> <span class="hljs-attr">tabindex</span>=<span class="hljs-string">&quot;0&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;table-scroll&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">caption</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;sales-caption&quot;</span>&gt;</span>2026 年季度销售额（万元）<span class="hljs-tag">&lt;/<span class="hljs-name">caption</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;col&quot;</span>&gt;</span>地区<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;col&quot;</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">button</span>&gt;</span>第一季度<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;col&quot;</span> <span class="hljs-attr">aria-sort</span>=<span class="hljs-string">&quot;descending&quot;</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">button</span>&gt;</span>第二季度<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">tbody</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;row&quot;</span>&gt;</span>华东<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>120<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>150<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">tbody</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 </code></pre></div>
-<p><code>caption</code> 给表格一个可发现的标题，列标题使用 <code>th scope=&quot;col&quot;</code>，把订单号作为行标题时使用 <code>th scope=&quot;row&quot;</code>。这样辅助技术在读取“金额”或“状态”时，能把单元格放回相应的行列关系中。</p>
-<p>简单的规则可以直接用 <code>scope</code> 表达。多层表头、跨行跨列或一个单元格同时属于多个标题时，可能需要稳定的 <code>id</code> 与 <code>headers</code> 关系：</p>
+<h2>多级表头</h2>
 <div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;q1&quot;</span> <span class="hljs-attr">colspan</span>=<span class="hljs-string">&quot;2&quot;</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;colgroup&quot;</span>&gt;</span>第一季度<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;colgroup&quot;</span> <span class="hljs-attr">colspan</span>=<span class="hljs-string">&quot;2&quot;</span>&gt;</span>上半年<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;income&quot;</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;col&quot;</span>&gt;</span>收入<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;expense&quot;</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;col&quot;</span>&gt;</span>支出<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;col&quot;</span>&gt;</span>地区<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;col&quot;</span>&gt;</span>Q1<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;col&quot;</span>&gt;</span>Q2<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span>
-<span class="hljs-tag">&lt;<span class="hljs-name">tbody</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">headers</span>=<span class="hljs-string">&quot;q1 income&quot;</span>&gt;</span>1200<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">headers</span>=<span class="hljs-string">&quot;q1 expense&quot;</span>&gt;</span>800<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">tbody</span>&gt;</span>
 </code></pre></div>
-<p>不要为了让源码“更语义化”而同时堆叠互相矛盾的 <code>scope</code>、<code>headers</code> 和大量 ARIA。先用浏览器的可访问性树确认实际关联结果，复杂表头也应在目标读屏器中验证。</p>
-<h2>表格中的操作控件要保留自己的名称</h2>
-<p>每行都有“查看”和“删除”按钮时，按钮名称不能全部只有“操作”或“点击这里”。可以让可见名称包含订单号，或者通过 <code>aria-labelledby</code> 关联该行的标题：</p>
-<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;order-a1024&quot;</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;row&quot;</span>&gt;</span>A-1024<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>林晓<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span> <span class="hljs-attr">aria-labelledby</span>=<span class="hljs-string">&quot;view-a1024 order-a1024&quot;</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;view-a1024&quot;</span>&gt;</span>查看<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span>
-</code></pre></div>
-<p>真实页面不能复制相同的 ID。更简单的做法是使用可见文本“查看订单 A-1024”，并在按钮点击时从稳定的数据 ID 发起操作。数据 ID 是业务参数，不是服务端授权凭据，接口仍要检查当前用户权限。</p>
-<p>表格滚动、固定列和虚拟化也不能破坏表头关系。若使用虚拟列表，当前焦点单元格必须仍存在，<code>aria-activedescendant</code> 不能指向已经卸载的节点；如果内容需要全文查找、打印或复制，分页或普通文档结构可能比虚拟化更合适。</p>
-<h2>排序要同时表达方向和结果</h2>
-<p>可排序列的按钮应有可操作名称，当前排序列可以使用 <code>aria-sort</code> 表达方向：</p>
-<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">&quot;col&quot;</span> <span class="hljs-attr">aria-sort</span>=<span class="hljs-string">&quot;ascending&quot;</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span>&gt;</span>金额<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span>
-</code></pre></div>
-<p><code>aria-sort</code> 描述当前表格的排序状态，不是让浏览器自动排序。点击后应用必须真正更新数据顺序，并同步修改属性；没有排序的列通常不应都写成 ascending 或 descending。</p>
-<p>排序字段要有稳定规则。数字、日期、大小写、空值和本地化文本不能都按字符串比较。排序请求发到服务端时，应使用允许的字段白名单，不能把列名直接拼进 SQL 或任意查询语句。</p>
-<p>更新表格后，用户还需要知道发生了什么。可以在合适的状态区域简短说明“已按金额降序排列”，但不要每次单元格变化都使用高优先级播报。焦点通常应留在触发排序的按钮上，不要因为数据重排就把用户强行送到表格顶部。</p>
-<h2>筛选、分页和加载状态要有清楚的语义</h2>
-<p>筛选后应更新表格标题或状态信息，例如结果数量、当前条件和无结果状态。空结果不是加载失败，也不是把表头和整张表隐藏后留下一片空白。加载下一页时，如果已有数据仍然可读，可以保留表格并在状态区域说明正在更新。</p>
-<p>如果筛选会改变 URL，应让刷新和分享能恢复相同条件；如果只是临时输入，则要区分尚未提交的输入和已经生效的筛选。请求返回顺序不一定等于输入顺序，旧结果不能覆盖最新筛选。</p>
-<p>单元格中的省略号、颜色和图标不能成为唯一信息来源。金额变化、错误状态和库存告警要有文字或可访问名称；对装饰图标使用空替代文本，避免读屏重复读取无意义内容。</p>
-<h2>响应式处理不要简单把表格压成难以理解的卡片</h2>
-<p>窄屏下可以让表格横向滚动，并给滚动区域可发现的说明；也可以针对真正的业务需求重排成每条记录的字段列表。若改成卡片，仍要保留字段名称、记录关系、排序和操作顺序，不能只依靠 CSS <code>display: block</code> 改变视觉排列。</p>
-<p>固定表头、横向滚动和高对比模式要一起测试。焦点不能被裁剪在不可见的滚动区域，键盘用户要能到达每个操作。触摸设备上还要保证横向滚动不会被某个拖拽手势完全拦截。</p>
-<h2>什么时候应该用 grid，而不是 table</h2>
-<p>可编辑排班表、电子表格和复杂键盘导航网格，可能需要 <code>role=&quot;grid&quot;</code> 及一套明确的单元格、行、方向键和焦点模型。<code>role=&quot;grid&quot;</code> 不会自动提供这些行为，反而会让开发者承担 roving tabindex、当前单元格、编辑模式和读屏反馈。</p>
-<p>如果用户只是阅读和点击每行一个链接，原生 table 加普通控件通常更可靠。只有当二维键盘编辑确实是核心任务时，才考虑采用 WAI-ARIA Grid 模式或经过验证的组件库，并按目标浏览器和读屏器测试。</p>
-<p>自动化工具可以发现缺少名称、重复 ID 或部分结构错误，却不能证明表头朗读顺序和业务文案易于理解。验收至少应覆盖：键盘移动、排序、筛选、空结果、加载失败、长文本、窄屏、放大文字和一个常用读屏器。表格的目标是让用户知道“我正在看哪条记录、哪一列、当前状态是什么”，不是让 DOM 看起来拥有更多 ARIA 属性。</p></div><div class="answer-bottom"><a href="https://www.w3.org/WAI/tutorials/tables/" target="_blank" rel="noreferrer">W3C WAI · Tables Tutorial<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%A0%BC%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E6%89%8D%E6%96%B9%E4%BE%BF%E9%94%AE%E7%9B%98%E5%92%8C%E8%AF%BB%E5%B1%8F%E7%94%A8%E6%88%B7%E7%90%86%E8%A7%A3%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%A0%BC%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E6%89%8D%E6%96%B9%E4%BE%BF%E9%94%AE%E7%9B%98%E5%92%8C%E8%AF%BB%E5%B1%8F%E7%94%A8%E6%88%B7%E7%90%86%E8%A7%A3%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aa11y-table%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%97%A0%E9%9A%9C%E7%A2%8D%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fa11y-table%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：数据表格怎样设计才方便键盘和读屏用户理解？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/a11y-keyboard/">怎样验证一个页面可以只用键盘操作？</a></li><li><a href="/questions/a11y-live-region/">aria-live 怎样用于动态状态播报？</a></li><li><a href="/questions/a11y-combobox/">可访问的 Combobox 需要哪些键盘和 ARIA 行为？</a></li><li><a href="/questions/a11y-tree/">可访问的树控件需要怎样处理键盘和层级状态？</a></li></ul></nav></main></div></div>
+<h2>常见错误</h2>
+<ul>
+<li>用 CSS Grid 加 <code>div</code> 显示表格数据：读屏无法按行列导航。确实需要 div 结构时，要完整补上 <code>role=&quot;table&quot;</code>、<code>row</code>、<code>columnheader</code>、<code>cell</code>。</li>
+<li>给布局用的表格加了 <code>th</code>：读屏会把它当成数据表。布局用 CSS，不要用 table。</li>
+<li>表格里每个单元格都可聚焦：Tab 要经过几百次。普通数据表只让单元格里的链接和按钮可聚焦。</li>
+</ul>
+<h2>可交互的网格</h2>
+<p>可编辑的表格（像电子表格那样用方向键移动）是 <code>role=&quot;grid&quot;</code>，需要实现漫游焦点、方向键、Enter 编辑等键盘行为，复杂度高得多，参考 APG 的 Grid 模式。</p>
+<h2>常见追问</h2>
+<ul>
+<li>窄屏下把表格改成卡片可以吗？可以，但每张卡片要把表头文字一起显示，例如“第二季度：150”，读屏用户才不会丢掉列的含义。</li>
+</ul></div><div class="answer-bottom"><a href="https://www.w3.org/WAI/tutorials/tables/" target="_blank" rel="noreferrer">W3C WAI · Tables Tutorial<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%A0%BC%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E6%89%8D%E6%96%B9%E4%BE%BF%E9%94%AE%E7%9B%98%E5%92%8C%E8%AF%BB%E5%B1%8F%E7%94%A8%E6%88%B7%E7%90%86%E8%A7%A3%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%95%B0%E6%8D%AE%E8%A1%A8%E6%A0%BC%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E6%89%8D%E6%96%B9%E4%BE%BF%E9%94%AE%E7%9B%98%E5%92%8C%E8%AF%BB%E5%B1%8F%E7%94%A8%E6%88%B7%E7%90%86%E8%A7%A3%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aa11y-table%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%97%A0%E9%9A%9C%E7%A2%8D%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fa11y-table%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：数据表格怎样设计才方便键盘和读屏用户理解？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/a11y-live-region/">aria-live 怎样用于动态状态播报？</a></li><li><a href="/questions/a11y-assistive-tech-testing/">前端怎样进行读屏器和辅助技术的实际验收？</a></li><li><a href="/questions/a11y-keyboard/">怎样验证一个页面可以只用键盘操作？</a></li><li><a href="/questions/a11y-name/">可访问名称与描述有什么区别？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

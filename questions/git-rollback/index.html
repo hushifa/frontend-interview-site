@@ -23,39 +23,45 @@
     <meta property="og:url" content="https://fe.hushifa.top/questions/git-rollback/" />
     <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/git-rollback/#webpage","url":"https://fe.hushifa.top/questions/git-rollback/","name":"静态网站发布失败时怎样安全回滚？ · 前端知库","description":"Git 与部署面试题：回滚前先判断故障在源码、构建产物、托管配置还是缓存层，再恢复已验证版本并检查入口、资源和关键交互；撤销 Git 提交不等于线上已经恢复。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/git-rollback/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/git-rollback/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Git 与部署面试题","item":"https://fe.hushifa.top/topics/git-deploy/"},{"@type":"ListItem","position":3,"name":"静态网站发布失败时怎样安全回滚？","item":"https://fe.hushifa.top/questions/git-rollback/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
     <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/git-deploy/">Git 与部署面试题</a><span aria-hidden="true">/</span><span aria-current="page">静态网站发布失败时怎样安全回滚？</span></nav><h1 tabindex="-1">静态网站发布失败时怎样安全回滚？</h1><p class="reading-summary">回滚前先判断故障在源码、构建产物、托管配置还是缓存层，再恢复已验证版本并检查入口、资源和关键交互；撤销 Git 提交不等于线上已经恢复。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>回滚的目标是恢复用户可用的版本，先判断故障在代码、产物、DNS 还是缓存哪一层。</li>
-<li>发布记录应关联源码提交、锁文件、构建环境和产物，优先恢复已验证的旧产物。</li>
-<li>没有旧产物时，用对应锁文件和环境重新构建，不要按日期猜提交。</li>
-<li>共享分支用 revert 创建反向提交，保留历史。</li>
+<li>先止损再排查：最快的回滚方式是把线上切回上一个已验证的构建产物，而不是改代码重新构建。</li>
+<li>回滚前判断问题在哪一层：源码、构建产物、托管配置（路由、响应头）还是 CDN 缓存，不同层的回滚方式不同。</li>
+<li>源码层面用 <code>git revert</code> 生成反向提交，保留历史；不要在共享分支上用 <code>reset</code> 加强推。</li>
+<li>回滚后检查入口 HTML、关键资源和核心流程，并确认 CDN 和浏览器缓存不再提供故障版本。</li>
+<li>数据格式或接口已经变化时，单纯回滚前端可能和后端不兼容，要先确认兼容性。</li>
 </ul>
-<h2>回滚的目标是恢复用户可用性</h2>
-<p>“回到上一个提交”只是一个可能的手段。用户真正需要的是一个已知可用的网站版本，因此要先判断故障在哪一层：</p>
-<table><thead><tr><th>现象</th><th>优先检查</th></tr></thead><tbody><tr><td>页面逻辑错误</td><td>源码与对应构建产物</td></tr><tr><td>JS/CSS 404 或白屏</td><td>资源前缀、入口和部署目录</td></tr><tr><td>域名打不开</td><td>DNS、证书和托管绑定</td></tr><tr><td>新旧资源混用</td><td>HTML、资源版本和缓存</td></tr></tbody></table>
-<p>DNS 出错时，撤销组件代码没有帮助；产物有问题时，也不应随意修改稳定的域名解析。先用正式域名检查状态码、入口 HTML、脚本和样式响应，再决定动作。</p>
-<h2>先找到真正可复现的上一版</h2>
-<p>发布记录应关联源码提交、锁文件、构建环境和最终产物。一个旧提交不一定能重新生成原来的文件，依赖、环境变量、外部数据和构建工具都可能变化。若平台保留已经验证的静态产物，直接恢复该产物通常比临时重新构建更可控。</p>
-<p>没有旧产物时，使用对应锁文件和构建环境重新生成，并比较入口、资源清单、路由和必要验证文件。不要凭日期猜一个“看起来像上一版”的提交。</p>
-<h2>共享分支通常用 revert 表达撤销</h2>
-<p>已经共享的分支通常使用：</p>
-<div class="not-prose code-block"><div class="code-language">bash</div><pre><code class="hljs language-bash">git revert &lt;bad-commit&gt;
-git push origin main
+<h2>先定位层级</h2>
+<table><thead><tr><th>现象</th><th>可能的层级</th><th>回滚方式</th></tr></thead><tbody><tr><td>新功能逻辑错误</td><td>源码</td><td>切回旧产物，随后 revert 提交</td></tr><tr><td>白屏、资源 404</td><td>构建产物或部署过程</td><td>切回旧产物，检查 <code>base</code> / <code>publicPath</code></td></tr><tr><td>深链接 404、缺少响应头</td><td>托管配置</td><td>恢复配置，不需要动代码</td></tr><tr><td>部分用户仍看到旧或坏版本</td><td>CDN / 浏览器缓存</td><td>清除 CDN 缓存，检查缓存头</td></tr></tbody></table>
+<h2>切回旧产物</h2>
+<p>能快速回滚的前提是每次发布的产物都被保留：</p>
+<ul>
+<li><strong>托管平台</strong>：Netlify、Vercel、Cloudflare Pages 等保留每次部署，可以在控制台把某次历史部署重新设为生产版本。</li>
+<li><strong>发布仓库</strong>（如 GitHub Pages）：在发布仓库中 revert 最近一次发布提交并推送，平台会重新部署上一版文件。</li>
+<li><strong>对象存储加 CDN</strong>：资源按版本目录存放时，把入口 HTML 指回上一版目录。</li>
+</ul>
+<p>这些操作不需要重新安装依赖和构建，几分钟内就能完成。</p>
+<h2>修复源码</h2>
+<div class="not-prose code-block"><div class="code-language">bash</div><pre><code class="hljs language-bash">git revert &lt;有问题的提交&gt;
+git revert -m 1 &lt;合并提交&gt;   # 撤销一次合并，保留主线一侧
+git push
 </code></pre></div>
-<p><code>revert</code> 创建一个新的反向提交，原提交仍在历史中，协作者可以正常同步，也能看出为什么撤销。它可能产生冲突，尤其是后续提交依赖了问题代码；解决后要检查最终 diff 和程序行为。</p>
-<p><code>git reset</code> 再强推会改变共享分支的历史，可能让别人本地分支出现重复提交或丢失工作。个人尚未共享的分支可以按团队规则使用 reset，但不能把它当作线上回滚的默认命令。撤销合并提交还要确认主线父提交，不能凭感觉填写。</p>
-<h2>源码、产物和线上是三件事</h2>
-<p>源码仓库出现 revert，不代表网站已经更新。若源码仓库和发布仓库分开，必须明确本次恢复的是哪一份产物，以及发布流程是否使用了它。HTML、JS、CSS、字体、数据和深链接入口应来自配套版本，不能只恢复首页。</p>
-<p>恢复后验证正式域名，而不是只看本地开发服务器：检查首页、深链接、脚本样式、资源版本、主要交互和控制台错误。若平台部署有构建缓存，确认新产物确实已经成为当前版本。</p>
-<h2>缓存会让回滚看起来没有生效</h2>
-<p>CDN、浏览器和 Service Worker 可能分别保留旧入口或旧资源，已经打开的页面也可能继续使用当前内存中的代码。应使用带版本指纹的资源、正确的入口缓存策略和平台提供的定向失效能力，避免通过清空所有用户存储来“解决缓存”。那可能会删除草稿和偏好。</p>
-<p>回滚后应观察新旧版本请求、错误率和资源命中情况。必要时引导用户刷新，但要保留未保存输入，不要无限自动刷新。</p>
-<h2>代码回滚不会撤销外部副作用</h2>
-<p>静态前端仍可能调用接口、上传文件或修改服务器数据。恢复旧 JavaScript 不会撤销已经完成的操作，也不保证旧客户端兼容刚升级的后端协议。需要时应先保证后端向前兼容，再通过状态查询、补偿操作或分阶段发布处理数据影响。</p>
-<p>安全回滚的证据是：已知可用版本被发布，正式域名和关键路径验证通过，缓存与资源版本一致，监控显示故障下降，并且记录了没有被回滚覆盖的外部副作用。</p></div><div class="answer-bottom"><a href="https://git-scm.com/docs/git-revert" target="_blank" rel="noreferrer">Git · git-revert<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E9%9D%99%E6%80%81%E7%BD%91%E7%AB%99%E5%8F%91%E5%B8%83%E5%A4%B1%E8%B4%A5%E6%97%B6%E6%80%8E%E6%A0%B7%E5%AE%89%E5%85%A8%E5%9B%9E%E6%BB%9A%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E9%9D%99%E6%80%81%E7%BD%91%E7%AB%99%E5%8F%91%E5%B8%83%E5%A4%B1%E8%B4%A5%E6%97%B6%E6%80%8E%E6%A0%B7%E5%AE%89%E5%85%A8%E5%9B%9E%E6%BB%9A%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Agit-rollback%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AGit+%E4%B8%8E%E9%83%A8%E7%BD%B2%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fgit-rollback%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：静态网站发布失败时怎样安全回滚？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/git-merge-rebase/">git merge 与 rebase 应该怎样选择？</a></li><li><a href="/questions/git-ci/">GitHub Actions 中 workflow、job、step 和 runner 是什么关系？</a></li><li><a href="/questions/git-static-deploy/">静态托管发布时为什么要检查资源路径和缓存？</a></li><li><a href="/questions/git-artifact-integrity/">前端发布怎样校验构建产物？文件哈希能证明发布安全吗？</a></li></ul></nav></main></div></div>
+<p><code>git revert</code> 新增一个反向提交，别人的本地分支不受影响。之后要重新引入这个功能时，需要 revert 这个 revert 提交，或重新提交修复后的代码。</p>
+<h2>回滚后验证</h2>
+<ol>
+<li>用无缓存的方式请求入口 HTML，确认引用的是旧版本资源文件名。</li>
+<li>打开关键页面，检查控制台没有资源加载错误。</li>
+<li>走一遍核心流程，例如登录、搜索、提交。</li>
+<li>如果入口 HTML 在 CDN 上设置了较长缓存，手动清除对应路径的缓存。</li>
+</ol>
+<h2>常见追问</h2>
+<ul>
+<li>为什么不直接 <code>git reset --hard</code> 再强推？它会改写共享历史，别人基于新提交的工作会出错，而且托管平台不一定会因此重新部署。</li>
+<li>如何减少回滚需求？发布前在预览环境验证、灰度放量、保留旧资源一段时间，见《静态托管发布时为什么要检查资源路径和缓存？》。</li>
+</ul></div><div class="answer-bottom"><a href="https://git-scm.com/docs/git-revert" target="_blank" rel="noreferrer">Git · git-revert<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E9%9D%99%E6%80%81%E7%BD%91%E7%AB%99%E5%8F%91%E5%B8%83%E5%A4%B1%E8%B4%A5%E6%97%B6%E6%80%8E%E6%A0%B7%E5%AE%89%E5%85%A8%E5%9B%9E%E6%BB%9A%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E9%9D%99%E6%80%81%E7%BD%91%E7%AB%99%E5%8F%91%E5%B8%83%E5%A4%B1%E8%B4%A5%E6%97%B6%E6%80%8E%E6%A0%B7%E5%AE%89%E5%85%A8%E5%9B%9E%E6%BB%9A%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Agit-rollback%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AGit+%E4%B8%8E%E9%83%A8%E7%BD%B2%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fgit-rollback%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：静态网站发布失败时怎样安全回滚？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/git-merge-rebase/">git merge 与 rebase 应该怎样选择？</a></li><li><a href="/questions/git-ci/">GitHub Actions 中 workflow、job、step 和 runner 是什么关系？</a></li><li><a href="/questions/git-static-deploy/">静态托管发布时为什么要检查资源路径和缓存？</a></li><li><a href="/questions/git-artifact-integrity/">前端发布怎样校验构建产物？文件哈希能证明发布安全吗？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

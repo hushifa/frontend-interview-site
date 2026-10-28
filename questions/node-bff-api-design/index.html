@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Node.js面试题：以题目详情页聚合多个后端服务为例，说明 BFF 的输入输出契约、并发、超时、错误降级、权限和版本兼容，避免把 BFF 做成无边界代理。" />
+    <meta name="description" content="Node.js面试题：以题目详情页聚合多个后端服务为例，说明 BFF 怎样按页面定义输出契约，用整体超时和分支截止时间并行调用下游，区分核心数据与可降级数据，返回前端可恢复的错误，并在缓存、版本和观测上划清边界。" />
     <title>BFF 聚合接口怎样设计才能避免把前端耦合到后端细节？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/node-bff-api-design/" />
     <meta name="robots" content="index,follow" />
@@ -19,88 +19,92 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="BFF 聚合接口怎样设计才能避免把前端耦合到后端细节？ · 前端知库" />
-    <meta property="og:description" content="Node.js面试题：以题目详情页聚合多个后端服务为例，说明 BFF 的输入输出契约、并发、超时、错误降级、权限和版本兼容，避免把 BFF 做成无边界代理。" />
+    <meta property="og:description" content="Node.js面试题：以题目详情页聚合多个后端服务为例，说明 BFF 怎样按页面定义输出契约，用整体超时和分支截止时间并行调用下游，区分核心数据与可降级数据，返回前端可恢复的错误，并在缓存、版本和观测上划清边界。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/node-bff-api-design/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/node-bff-api-design/#webpage","url":"https://fe.hushifa.top/questions/node-bff-api-design/","name":"BFF 聚合接口怎样设计才能避免把前端耦合到后端细节？ · 前端知库","description":"Node.js面试题：以题目详情页聚合多个后端服务为例，说明 BFF 的输入输出契约、并发、超时、错误降级、权限和版本兼容，避免把 BFF 做成无边界代理。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/node-bff-api-design/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/node-bff-api-design/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Node.js面试题","item":"https://fe.hushifa.top/topics/node/"},{"@type":"ListItem","position":3,"name":"BFF 聚合接口怎样设计才能避免把前端耦合到后端细节？","item":"https://fe.hushifa.top/questions/node-bff-api-design/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/node-bff-api-design/#webpage","url":"https://fe.hushifa.top/questions/node-bff-api-design/","name":"BFF 聚合接口怎样设计才能避免把前端耦合到后端细节？ · 前端知库","description":"Node.js面试题：以题目详情页聚合多个后端服务为例，说明 BFF 怎样按页面定义输出契约，用整体超时和分支截止时间并行调用下游，区分核心数据与可降级数据，返回前端可恢复的错误，并在缓存、版本和观测上划清边界。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/node-bff-api-design/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/node-bff-api-design/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Node.js面试题","item":"https://fe.hushifa.top/topics/node/"},{"@type":"ListItem","position":3,"name":"BFF 聚合接口怎样设计才能避免把前端耦合到后端细节？","item":"https://fe.hushifa.top/questions/node-bff-api-design/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/node/">Node.js面试题</a><span aria-hidden="true">/</span><span aria-current="page">BFF 聚合接口怎样设计才能避免把前端耦合到后端细节？</span></nav><h1 tabindex="-1">BFF 聚合接口怎样设计才能避免把前端耦合到后端细节？</h1><p class="reading-summary">以题目详情页聚合多个后端服务为例，说明 BFF 的输入输出契约、并发、超时、错误降级、权限和版本兼容，避免把 BFF 做成无边界代理。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/node/">Node.js面试题</a><span aria-hidden="true">/</span><span aria-current="page">BFF 聚合接口怎样设计才能避免把前端耦合到后端细节？</span></nav><h1 tabindex="-1">BFF 聚合接口怎样设计才能避免把前端耦合到后端细节？</h1><p class="reading-summary">以题目详情页聚合多个后端服务为例，说明 BFF 怎样按页面定义输出契约，用整体超时和分支截止时间并行调用下游，区分核心数据与可降级数据，返回前端可恢复的错误，并在缓存、版本和观测上划清边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>BFF 按页面需要输出数据模型，不要把后端的结构直接透传给前端。</li>
-<li>并行调用下游时要设置整体超时，并区分核心数据和可降级数据。</li>
-<li>错误响应要带上前端可以据此恢复的错误码。</li>
-<li>权限要在 BFF 和下游服务两层都检查。</li>
+<li>BFF 按页面任务定义输出模型，前端不依赖下游的字段名和数据结构，下游改动在 BFF 里适配。</li>
+<li>独立的下游调用并行发起，整次请求有总超时；可降级的分支有更短的截止时间，失败时返回默认值并在 <code>warnings</code> 中标记。</li>
+<li>核心数据失败时返回明确的错误码，可选数据失败时保留页面主体。</li>
+<li>公共数据和个性化数据分开缓存；每个下游的耗时和状态都要记录，便于定位哪一个拖慢了页面。</li>
 </ul>
-<p>前端详情页可能同时需要题目正文、用户收藏状态、推荐列表和评论摘要。如果浏览器直接调用四个后端服务，就要处理多套认证、CORS、错误、版本和瀑布；BFF 可以为这个页面提供一个面向任务的接口，把后端细节留在服务端。</p>
-<p>BFF 不是把任意 URL 转发一遍的代理。它应有明确的客户端契约、输入校验、权限边界、超时预算、数据聚合和可观测性；下游服务仍要保留自己的授权和领域规则。</p>
-<h2>BFF 输出页面需要的模型</h2>
-<p>不要直接把四个后端响应拼成一个巨大对象，也不要把数据库字段全部透传给浏览器。BFF 应按页面任务定义稳定输出：</p>
+<h2>输出页面需要的模型</h2>
+<p>题目详情页需要正文、收藏状态、推荐列表。浏览器直接调用三个服务，就要处理三套认证、三种错误格式和请求瀑布。BFF 给页面提供一个接口：</p>
 <div class="not-prose code-block"><div class="code-language">json</div><pre><code class="hljs language-json">{
-  &quot;question&quot;: { &quot;id&quot;: &quot;js-event-loop&quot;, &quot;title&quot;: &quot;事件循环&quot;, &quot;body&quot;: &quot;...&quot; },
+  &quot;question&quot;: { &quot;id&quot;: &quot;js-event-loop&quot;, &quot;title&quot;: &quot;事件循环&quot; },
   &quot;bookmarked&quot;: true,
-  &quot;recommendations&quot;: [{ &quot;id&quot;: &quot;js-promise&quot;, &quot;title&quot;: &quot;Promise&quot; }],
-  &quot;comments&quot;: { &quot;items&quot;: [], &quot;total&quot;: 0 },
-  &quot;warnings&quot;: []
+  &quot;recommendations&quot;: [],
+  &quot;warnings&quot;: [&quot;recommendations&quot;]
 }
 </code></pre></div>
-<p>字段命名、空值、分页、错误和版本应由 BFF 契约定义。敏感字段、内部 ID、下游令牌和调试堆栈不应因为“前端暂时没用到”就发送出去。前端仍要在边界解析和校验数据，不能把 TypeScript 类型当成服务器保证。</p>
-<h2>并行调用要有整体预算</h2>
-<p>题目正文是关键数据，推荐和评论可能是可降级区域。可以并行发起独立读取，但每个下游和整次 BFF 请求都要有超时：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">loadQuestionPage</span>(<span class="hljs-params">{ questionId, user, signal }</span>) {
-  <span class="hljs-keyword">const</span> group = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AbortController</span>();
-  <span class="hljs-keyword">const</span> requestSignal = <span class="hljs-title class_">AbortSignal</span>.<span class="hljs-title function_">any</span>([
-    ...(signal ? [signal] : []),
-    group.<span class="hljs-property">signal</span>,
-    <span class="hljs-title class_">AbortSignal</span>.<span class="hljs-title function_">timeout</span>(<span class="hljs-number">2500</span>),
-  ]);
+<p>字段名、空值、分页和错误格式由 BFF 契约决定。内部 ID、下游令牌和调试堆栈不应发给浏览器。</p>
+<h2>并行调用与降级</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">withDeadline</span>(<span class="hljs-params">run, ms, parentSignal</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">run</span>(<span class="hljs-title class_">AbortSignal</span>.<span class="hljs-title function_">any</span>([parentSignal, <span class="hljs-title class_">AbortSignal</span>.<span class="hljs-title function_">timeout</span>(ms)]));
+}
 
-  <span class="hljs-comment">// 先为所有分支建立 Promise，再启动调用，统一捕获同步抛错。</span>
-  <span class="hljs-keyword">const</span> questionPromise = <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">loadQuestion</span>(questionId, requestSignal));
-  <span class="hljs-keyword">const</span> bookmarkPromise = <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> user
-    ? <span class="hljs-title function_">loadBookmark</span>(user.<span class="hljs-property">id</span>, questionId, requestSignal)
-    : <span class="hljs-literal">false</span>);
-  <span class="hljs-keyword">const</span> recommendationsPromise = <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">loadRecommendations</span>(questionId, requestSignal));
-
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">optional</span>(<span class="hljs-params">promise, fallback, warnings, name</span>) {
   <span class="hljs-keyword">try</span> {
-    <span class="hljs-keyword">const</span> [question, bookmark, recommendations] = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">all</span>([
-      questionPromise,
-      bookmarkPromise,
-      recommendationsPromise,
-    ]);
-
-    <span class="hljs-keyword">return</span> { question, <span class="hljs-attr">bookmarked</span>: bookmark, recommendations };
-  } <span class="hljs-keyword">catch</span> (error) {
-    group.<span class="hljs-title function_">abort</span>(error);
-    <span class="hljs-keyword">throw</span> error;
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> promise;
+  } <span class="hljs-keyword">catch</span> {
+    warnings.<span class="hljs-title function_">push</span>(name);
+    <span class="hljs-keyword">return</span> fallback;
   }
 }
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">loadQuestionPage</span>(<span class="hljs-params">{ questionId, user, signal }, api</span>) {
+  <span class="hljs-comment">// 客户端断开或整体超时都会取消所有下游调用。</span>
+  <span class="hljs-keyword">const</span> page = <span class="hljs-title class_">AbortSignal</span>.<span class="hljs-title function_">any</span>([signal, <span class="hljs-title class_">AbortSignal</span>.<span class="hljs-title function_">timeout</span>(<span class="hljs-number">2500</span>)]);
+  <span class="hljs-keyword">const</span> warnings = [];
+
+  <span class="hljs-keyword">const</span> [question, bookmarked, recommendations] = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">all</span>([
+    api.<span class="hljs-title function_">loadQuestion</span>(questionId, page),
+    <span class="hljs-title function_">optional</span>(
+      user ? <span class="hljs-title function_">withDeadline</span>(<span class="hljs-function">(<span class="hljs-params">s</span>) =&gt;</span> api.<span class="hljs-title function_">loadBookmark</span>(user.<span class="hljs-property">id</span>, questionId, s), <span class="hljs-number">800</span>, page) : <span class="hljs-literal">false</span>,
+      <span class="hljs-literal">false</span>,
+      warnings,
+      <span class="hljs-string">&#x27;bookmark&#x27;</span>,
+    ),
+    <span class="hljs-title function_">optional</span>(
+      <span class="hljs-title function_">withDeadline</span>(<span class="hljs-function">(<span class="hljs-params">s</span>) =&gt;</span> api.<span class="hljs-title function_">loadRecommendations</span>(questionId, s), <span class="hljs-number">800</span>, page),
+      [],
+      warnings,
+      <span class="hljs-string">&#x27;recommendations&#x27;</span>,
+    ),
+  ]);
+
+  <span class="hljs-keyword">return</span> { question, bookmarked, recommendations, warnings };
+}
 </code></pre></div>
-<p>这是展示请求协作的简化代码，真实 BFF 还要处理各个下游的独立错误和部分成功。<code>Promise.all</code> 中一个可选服务失败会让整个结果拒绝；对于推荐和评论，可以用 <code>Promise.allSettled</code> 或受控包装返回空状态和 warning，但核心题目数据失败时应返回明确错误。</p>
-<p>这里约定三个 load 函数遵守传入的 signal。Promise.resolve().then 包装同步抛错和异步拒绝，先让 Promise.all 注册各分支的处理，再启动下游调用。Promise.all 本身不取消其他请求，所以失败后显式取消同组工作。已经开始的下游仍需要协作处理取消，不能保证零额外请求。AbortSignal.any 在当前 Node.js 22、24 LTS 中均可用；本例的 2500 毫秒仅是教学预算。</p>
-<p>allSettled 会等待所有分支结束，不是“可选服务失败就立即返回”的工具。推荐接口即使可降级，也应设置比整体请求更短的独立截止时间；否则它一直不返回，正文也会被拖住。超时要覆盖响应体读取与解析所处流程，而不是只等到收到 HTTP 响应头就清除计时器。</p>
-<p>客户端取消只表示 BFF 不再需要等待，不能保证下游已经撤销，也不能撤销已经发生的写操作。服务端应把请求的 AbortSignal 传给支持取消的 fetch、数据库查询和流，并在写入前后明确副作用语义。</p>
-<h2>错误响应要能指导前端恢复</h2>
-<p>不要把所有下游失败转成 BFF 的 500。可以区分：</p>
+<p>用模拟下游实测：推荐服务需要 5 秒时，800 毫秒后被取消，接口约 0.8 秒返回正文、收藏状态和空推荐，<code>warnings</code> 为 <code>[&#x27;recommendations&#x27;]</code>。</p>
+<p>设计要点：</p>
 <ul>
-<li>题目不存在：返回稳定的 404 页面状态；</li>
-<li>用户未登录：收藏状态按未登录展示，并提供登录入口；</li>
-<li>推荐暂时失败：保留正文，返回空推荐和可观测 warning；</li>
-<li>下游超时：根据业务返回部分内容或明确重试状态；</li>
-<li>权限拒绝：不能把下游内部 403 原样透传成用户可利用的权限信息。</li>
+<li>可选分支被 <code>optional</code> 包住，失败不会让 <code>Promise.all</code> 拒绝；只有核心的 <code>loadQuestion</code> 失败会让整个请求失败。</li>
+<li>可选分支的截止时间比整体预算短，否则一个慢服务会拖住整个页面。</li>
+<li>取消信号要一直传到 <code>fetch</code>、数据库查询等下游调用，客户端断开后服务端才会停止工作。取消只能停止等待，已经发出的写请求不会被撤销。</li>
 </ul>
-<p>错误响应应有稳定 code、用户可理解的 message 和 request ID；内部日志保留下游服务、耗时、版本和关联 ID，但不要记录 Cookie、令牌和完整用户内容。可预期的业务失败和程序异常要使用不同处理路径。</p>
-<h2>权限检查不能只在 BFF 做一次</h2>
-<p>BFF 可以根据当前会话判断页面能返回哪些字段，但下游服务仍要检查资源权限。用户可以绕过 BFF 直接调用后端，也可能在页面打开后权限变化。BFF 传给下游的身份上下文应由受控服务端生成，不应信任前端提交的 <code>userId</code> 或 <code>role</code>。</p>
-<p>代理目标、请求头和重定向也要限制。SSRF 防护见《前端工程师编写 Node 服务时需要守住哪些安全边界？》；也不要把浏览器 Cookie、Authorization 或 Host 无条件复制给所有下游。固定上游、允许列表和最小请求头更容易审计。</p>
-<h2>API 版本和缓存要按页面契约设计</h2>
-<p>BFF 输出契约可以独立于下游服务版本演进，但下游字段改名时需要兼容窗口、适配层或契约测试。不要让前端直接依赖某个后端数据库字段名，再把 BFF 变成无意义的透传层。</p>
-<p>公开题目页面和用户收藏状态的缓存策略不同。公共正文可以按版本或短 TTL 缓存；个性化收藏不能进入共享缓存。缓存键要包含语言、用户和真正影响结果的维度，失效要考虑下游更新和已经打开的客户端页面。</p>
-<h2>观测和测试要覆盖聚合故障</h2>
-<p>BFF 需要记录每个下游的耗时、状态和超时原因，并用 trace/request ID 关联前端、BFF 和下游日志。总响应变慢时，只有整体耗时无法说明是哪一个服务拖慢了页面。</p>
-<p>测试至少覆盖：核心服务成功、可选服务超时、认证失效、下游返回格式错误、重复请求、客户端提前断开、缓存命中/失效和部分结果。Mock 可以稳定覆盖分支，但仍要有少量真实集成测试验证认证、协议、CORS 和部署网络。</p>
-<p>BFF 的价值是把一次用户任务组织成清晰、稳定、可观测的接口。它不应成为所有业务规则、所有缓存和所有服务的无边界汇聚点；当聚合逻辑、团队边界和部署成本超过收益时，应重新评估领域 API、客户端并行请求或独立后端服务的取舍。</p></div><div class="answer-bottom"><a href="https://nodejs.org/api/globals.html#fetch" target="_blank" rel="noreferrer">Node.js · Fetch API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+BFF+%E8%81%9A%E5%90%88%E6%8E%A5%E5%8F%A3%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E6%89%8D%E8%83%BD%E9%81%BF%E5%85%8D%E6%8A%8A%E5%89%8D%E7%AB%AF%E8%80%A6%E5%90%88%E5%88%B0%E5%90%8E%E7%AB%AF%E7%BB%86%E8%8A%82%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ABFF+%E8%81%9A%E5%90%88%E6%8E%A5%E5%8F%A3%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E6%89%8D%E8%83%BD%E9%81%BF%E5%85%8D%E6%8A%8A%E5%89%8D%E7%AB%AF%E8%80%A6%E5%90%88%E5%88%B0%E5%90%8E%E7%AB%AF%E7%BB%86%E8%8A%82%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anode-bff-api-design%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ANode.js%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnode-bff-api-design%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：BFF 聚合接口怎样设计才能避免把前端耦合到后端细节？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/node-eventloop/">Node.js 事件循环能完全照搬浏览器的执行顺序吗？</a></li><li><a href="/questions/node-bff/">前端工程师编写 Node 服务时需要守住哪些安全边界？</a></li><li><a href="/questions/node-worker-threads/">Node.js Worker Threads 适合解决什么问题？</a></li><li><a href="/questions/node-module-resolution/">Node.js 的 package exports 会怎样影响模块解析？</a></li></ul></nav></main></div></div>
+<h2>错误响应</h2>
+<table><thead><tr><th>情况</th><th>BFF 的响应</th></tr></thead><tbody><tr><td>题目不存在</td><td>404，稳定的 <code>code</code>，例如 <code>QUESTION_NOT_FOUND</code></td></tr><tr><td>未登录</td><td>正文正常返回，<code>bookmarked</code> 为 <code>false</code>，前端显示登录入口</td></tr><tr><td>推荐服务失败</td><td>正文正常返回，推荐为空，<code>warnings</code> 中标记</td></tr><tr><td>核心服务超时</td><td>504 或 503，带 <code>code</code> 和请求 ID，前端可以提示重试</td></tr></tbody></table>
+<p>返回给前端的错误包含 <code>code</code>、可显示的 <code>message</code> 和请求 ID。日志里记录下游名称、耗时和状态，不记录 Cookie、令牌和用户内容。</p>
+<h2>权限与安全</h2>
+<p>BFF 根据会话决定返回哪些字段，下游服务仍要做自己的授权检查，因为调用方可能绕过 BFF。传给下游的用户身份由 BFF 根据会话生成，不能取自前端提交的 <code>userId</code>。输入校验、SSRF 和请求头转发等问题见《前端工程师编写 Node 服务时需要守住哪些安全边界？》。</p>
+<h2>缓存与版本</h2>
+<ul>
+<li>公共正文可以按内容版本或短 TTL 缓存；收藏状态是个性化数据，不能进入共享缓存。缓存键要包含语言等真正影响结果的维度。</li>
+<li>BFF 的输出契约独立演进。下游字段改名时，在 BFF 里做适配，并用契约测试发现不兼容的改动。</li>
+</ul>
+<h2>观测与测试</h2>
+<p>每个下游调用都要记录耗时和结果，并用 trace ID 串起前端、BFF 和下游的日志。测试至少覆盖：全部成功、可选服务超时、核心服务失败、下游返回格式错误、客户端提前断开。</p>
+<h2>常见追问</h2>
+<ul>
+<li><strong>什么时候不该用 BFF？</strong> 只有一个后端、页面直接调用就够用时，BFF 只会多一层部署和延迟。多个客户端（Web、App）需求差异大、需要聚合多个服务时才值得引入。</li>
+<li><strong>为什么不用 <code>Promise.allSettled</code>？</strong> 它会等所有分支结束，一个慢的可选服务仍会拖住响应；给每个可选分支加截止时间才能控制总耗时。</li>
+</ul></div><div class="answer-bottom"><a href="https://samnewman.io/patterns/architectural/bff/" target="_blank" rel="noreferrer">Sam Newman · Backends For Frontends<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+BFF+%E8%81%9A%E5%90%88%E6%8E%A5%E5%8F%A3%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E6%89%8D%E8%83%BD%E9%81%BF%E5%85%8D%E6%8A%8A%E5%89%8D%E7%AB%AF%E8%80%A6%E5%90%88%E5%88%B0%E5%90%8E%E7%AB%AF%E7%BB%86%E8%8A%82%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ABFF+%E8%81%9A%E5%90%88%E6%8E%A5%E5%8F%A3%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E6%89%8D%E8%83%BD%E9%81%BF%E5%85%8D%E6%8A%8A%E5%89%8D%E7%AB%AF%E8%80%A6%E5%90%88%E5%88%B0%E5%90%8E%E7%AB%AF%E7%BB%86%E8%8A%82%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anode-bff-api-design%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ANode.js%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnode-bff-api-design%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：BFF 聚合接口怎样设计才能避免把前端耦合到后端细节？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/node-bff/">前端工程师编写 Node 服务时需要守住哪些安全边界？</a></li><li><a href="/questions/node-eventloop/">Node.js 事件循环和浏览器有什么不同？nextTick 一定先于 Promise 吗？</a></li><li><a href="/questions/node-worker-threads/">Node.js Worker Threads 适合解决什么问题？</a></li><li><a href="/questions/node-module-resolution/">Node.js 的 package exports 会怎样影响模块解析？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

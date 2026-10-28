@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="手写与算法面试题：LRU 在容量满时淘汰最久没有被访问的条目。利用 Map 的插入顺序，读取命中和更新时先删除再插入，把最近访问的键放到末尾，最前面的键作为淘汰对象。" />
+    <meta name="description" content="手写与算法面试题：LRU 在容量满时淘汰最久没被访问的条目。JavaScript 的 Map 按插入顺序迭代，命中或更新时先删除再插入，就把这个键移到了末尾，第一个键就是要淘汰的条目。经典写法是哈希表加双向链表，两种实现的行为相同。" />
     <title>如何利用 Map 实现固定容量的 LRU 缓存？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/alg-map-lru/" />
     <meta name="robots" content="index,follow" />
@@ -19,25 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="如何利用 Map 实现固定容量的 LRU 缓存？ · 前端知库" />
-    <meta property="og:description" content="手写与算法面试题：LRU 在容量满时淘汰最久没有被访问的条目。利用 Map 的插入顺序，读取命中和更新时先删除再插入，把最近访问的键放到末尾，最前面的键作为淘汰对象。" />
+    <meta property="og:description" content="手写与算法面试题：LRU 在容量满时淘汰最久没被访问的条目。JavaScript 的 Map 按插入顺序迭代，命中或更新时先删除再插入，就把这个键移到了末尾，第一个键就是要淘汰的条目。经典写法是哈希表加双向链表，两种实现的行为相同。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/alg-map-lru/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-map-lru/#webpage","url":"https://fe.hushifa.top/questions/alg-map-lru/","name":"如何利用 Map 实现固定容量的 LRU 缓存？ · 前端知库","description":"手写与算法面试题：LRU 在容量满时淘汰最久没有被访问的条目。利用 Map 的插入顺序，读取命中和更新时先删除再插入，把最近访问的键放到末尾，最前面的键作为淘汰对象。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-map-lru/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-map-lru/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"如何利用 Map 实现固定容量的 LRU 缓存？","item":"https://fe.hushifa.top/questions/alg-map-lru/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-map-lru/#webpage","url":"https://fe.hushifa.top/questions/alg-map-lru/","name":"如何利用 Map 实现固定容量的 LRU 缓存？ · 前端知库","description":"手写与算法面试题：LRU 在容量满时淘汰最久没被访问的条目。JavaScript 的 Map 按插入顺序迭代，命中或更新时先删除再插入，就把这个键移到了末尾，第一个键就是要淘汰的条目。经典写法是哈希表加双向链表，两种实现的行为相同。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-map-lru/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-map-lru/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"如何利用 Map 实现固定容量的 LRU 缓存？","item":"https://fe.hushifa.top/questions/alg-map-lru/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">如何利用 Map 实现固定容量的 LRU 缓存？</span></nav><h1 tabindex="-1">如何利用 Map 实现固定容量的 LRU 缓存？</h1><p class="reading-summary">LRU 在容量满时淘汰最久没有被访问的条目。利用 Map 的插入顺序，读取命中和更新时先删除再插入，把最近访问的键放到末尾，最前面的键作为淘汰对象。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">如何利用 Map 实现固定容量的 LRU 缓存？</span></nav><h1 tabindex="-1">如何利用 Map 实现固定容量的 LRU 缓存？</h1><p class="reading-summary">LRU 在容量满时淘汰最久没被访问的条目。JavaScript 的 Map 按插入顺序迭代，命中或更新时先删除再插入，就把这个键移到了末尾，第一个键就是要淘汰的条目。经典写法是哈希表加双向链表，两种实现的行为相同。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>Map 保留插入顺序，最前面的键就是最久未使用的。</li>
-<li>get 命中时先删除再重新插入，把键移到最新的位置。</li>
-<li>set 超出容量时，删除 keys().next() 得到的最旧键。</li>
-<li>get 和 set 都是 O(1)。用 has 判断是否命中，这样值为 0 或 false 也能正确处理。</li>
+<li>Map 按键第一次插入的顺序迭代，重新 <code>set</code> 已有的键不会改变它的位置，所以要先 <code>delete</code> 再 <code>set</code>，把它移到末尾。</li>
+<li><code>get</code> 命中和 <code>set</code> 都算一次访问，都要移到末尾；超出容量时删除 <code>keys().next().value</code>，也就是最久未访问的键。</li>
+<li>判断命中用 <code>has</code>，不能用 <code>get</code> 的返回值是否为 <code>undefined</code>，因为缓存的值本身可能就是 <code>undefined</code>。</li>
+<li>V8 的 Map 基于哈希表，<code>get</code>、<code>set</code>、<code>delete</code> 平均是常数时间；语言规范只要求 Map 操作的平均耗时低于线性，不保证严格 O(1)。</li>
+<li>面试要求手写时，常用&quot;哈希表加双向链表&quot;：哈希表定位节点，链表维护访问顺序，每次操作只调整几个指针。</li>
 </ul>
-<p>LRU 是 Least Recently Used，意思是“最近最少使用”。更直白地说，当缓存满了，要放进一个新值时，把<strong>距离上次访问最久</strong>的那项移走。</p>
-<p>它不统计访问总次数。一个条目昨天被访问了一万次，之后再也没用过，仍可能比刚访问过一次的新条目更早被淘汰。它也不同于先进先出：一次读取就可能改变淘汰顺序。</p>
-<h2>用有序 Map 表示访问顺序</h2>
-<p>JavaScript 的 <code>Map</code> 保留键的插入顺序，但不会自动跟踪读取顺序。直接 <code>get(key)</code> 不会移动键；直接给已经存在的键调用 <code>set(key, value)</code>，也不会把它移到末尾。</p>
-<p>因此约定：Map 最前面的键最久没被使用，最后面的键最近被使用。每次读取命中或更新，都先删除该键，再重新插入。这个小动作就把“插入顺序”变成了我们维护的“使用顺序”。</p>
+<h2>Map 实现</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">LRUCache</span> {
   <span class="hljs-title function_">constructor</span>(<span class="hljs-params">capacity</span>) {
     <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Number</span>.<span class="hljs-title function_">isInteger</span>(capacity) || capacity &lt; <span class="hljs-number">1</span>) {
@@ -56,37 +53,89 @@
   }
 
   <span class="hljs-title function_">set</span>(<span class="hljs-params">key, value</span>) {
-    <span class="hljs-comment">// 更新已有键时也要刷新顺序，且不能误删另一个条目。</span>
+    <span class="hljs-comment">// 已有的键也先删除，插入后位于末尾。</span>
     <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>.<span class="hljs-title function_">delete</span>(key);
     <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>.<span class="hljs-title function_">set</span>(key, value);
     <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>.<span class="hljs-property">size</span> &gt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">capacity</span>) {
-      <span class="hljs-keyword">const</span> oldestKey = <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>.<span class="hljs-title function_">keys</span>().<span class="hljs-title function_">next</span>().<span class="hljs-property">value</span>;
-      <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>.<span class="hljs-title function_">delete</span>(oldestKey);
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>.<span class="hljs-title function_">delete</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>.<span class="hljs-title function_">keys</span>().<span class="hljs-title function_">next</span>().<span class="hljs-property">value</span>);
     }
   }
 }
 </code></pre></div>
-<p>这份教学实现约定 <code>capacity</code> 创建后不再变更，外部也不直接操作 <code>items</code>。每次 <code>set</code> 最多增加一项，所以超出容量时淘汰一项即可。如果允许运行中调小容量，就应额外提供受控方法并连续淘汰，不能只改公开字段。</p>
-<h2>跟着四次操作看淘汰对象</h2>
-<p>容量为 2，按“旧 → 新”的方向记录顺序：</p>
-<table><thead><tr><th>操作</th><th>顺序</th><th>解释</th></tr></thead><tbody><tr><td><code>set(&#x27;a&#x27;, 1)</code></td><td>a</td><td>第一个条目</td></tr><tr><td><code>set(&#x27;b&#x27;, 2)</code></td><td>a、b</td><td>b 最近写入</td></tr><tr><td><code>get(&#x27;a&#x27;)</code></td><td>b、a</td><td>读取 a，使 a 成为最新使用</td></tr><tr><td><code>set(&#x27;c&#x27;, 3)</code></td><td>a、c</td><td>超出容量，淘汰最旧的 b</td></tr></tbody></table>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> cache = <span class="hljs-keyword">new</span> <span class="hljs-title class_">LRUCache</span>(<span class="hljs-number">2</span>);
 cache.<span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-number">1</span>);
 cache.<span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-number">2</span>);
-<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(cache.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;a&#x27;</span>)); <span class="hljs-comment">// 1</span>
-cache.<span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-number">3</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(cache.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;a&#x27;</span>)); <span class="hljs-comment">// 1，a 移到末尾</span>
+cache.<span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-number">3</span>); <span class="hljs-comment">// 淘汰 b</span>
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(cache.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;b&#x27;</span>)); <span class="hljs-comment">// undefined</span>
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>([...cache.<span class="hljs-property">items</span>.<span class="hljs-title function_">keys</span>()]); <span class="hljs-comment">// [&#x27;a&#x27;, &#x27;c&#x27;]</span>
 </code></pre></div>
-<p>如果把 <code>get</code> 中的删除、重插入去掉，第四步淘汰的就会是 a，缓存退化成接近按写入顺序淘汰的行为。如果更新已有键前就先删除“最旧项”，则可能在没有增加条目数时错误地淘汰其他数据，因此上面的实现统一在插入后检查容量。</p>
-<h2>为什么用 <code>has</code> 判断命中</h2>
-<p>缓存中可能存的是 <code>0</code>、<code>false</code>、空字符串甚至 <code>undefined</code>。用 <code>if (!this.items.get(key))</code> 会把合法的假值当成未命中。先用 <code>has</code> 判断，才能决定是否需要刷新访问顺序。</p>
-<p>不过这个接口在对外返回时，仍用 <code>undefined</code> 表示未命中，所以调用方无法仅凭返回值区分“没找到”与“找到了，值就是 undefined”。如果业务需要区分，可以禁止缓存 <code>undefined</code>，或者改为返回 <code>{ found: true, value }</code> 与 <code>{ found: false }</code>；这属于接口设计，需要连同调用方一起确定。</p>
-<p>Map 的对象键按对象身份区分。两次分别创建的 <code>{ id: 1 }</code> 不是同一个键，拿其中一个写入、另一个读取不会命中。缓存请求结果时，通常应选择稳定的字符串键，并把会影响结果的查询参数、用户身份等纳入键的设计。</p>
-<h2>复杂度与实际缓存的边界</h2>
-<p>每次操作只做固定次数的 Map 查询、删除和插入，不扫描全部条目。在常见哈希表式实现及平均常数时间操作的假设下，通常把这类方案的访问成本分析为平均 O(1)。但 ECMAScript 对 Map 的要求是平均访问时间相对于元素数量呈次线性，并没有保证所有引擎、所有操作都严格或最坏 O(1)。不能把常见实现的性能模型写成语言规范的硬承诺。</p>
-<p>缓存本身最多保存 <code>capacity</code> 个条目，但这不是内存字节数上限。两张大图片可能比一千个短字符串更占空间；Map 还会强引用键和值，直到删除或整个缓存不再被引用。</p>
-<p>LRU 只回答容量不足时淘汰谁，不回答数据何时失效。业务缓存通常还要单独考虑 TTL、用户退出时清理、正在进行的相同请求能否共用一个 Promise，以及失败结果是否应该缓存。若题目要求经典的哈希表加双向链表实现，则用哈希表定位节点、链表移动到头尾；这里的 Map 写法是利用 JavaScript 已有的有序集合接口完成相同的淘汰策略。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map" target="_blank" rel="noreferrer">MDN · Map<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8+Map+%E5%AE%9E%E7%8E%B0%E5%9B%BA%E5%AE%9A%E5%AE%B9%E9%87%8F%E7%9A%84+LRU+%E7%BC%93%E5%AD%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8+Map+%E5%AE%9E%E7%8E%B0%E5%9B%BA%E5%AE%9A%E5%AE%B9%E9%87%8F%E7%9A%84+LRU+%E7%BC%93%E5%AD%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-map-lru%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-map-lru%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：如何利用 Map 实现固定容量的 LRU 缓存？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-debounce/">怎样实现只在停止调用后执行的防抖函数？</a></li><li><a href="/questions/alg-throttle/">怎样实现首沿节流？它与尾沿节流、防抖有什么区别？</a></li><li><a href="/questions/alg-promise-all/">怎样实现保持输入顺序的 Promise.all 教学版本？</a></li><li><a href="/questions/alg-concurrency-pool/">怎样实现有明确失败语义的异步并发池？</a></li></ul></nav></main></div></div>
+<h2>双向链表实现</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Node</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">key, value</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">key</span> = key;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">value</span> = value;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">prev</span> = <span class="hljs-literal">null</span>;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">next</span> = <span class="hljs-literal">null</span>;
+  }
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">LinkedLRU</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">capacity</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">capacity</span> = capacity;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">map</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+    <span class="hljs-comment">// 哨兵节点让头尾的插入删除不需要特殊判断。</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>();
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>();
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>.<span class="hljs-property">next</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>.<span class="hljs-property">prev</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>;
+  }
+
+  #<span class="hljs-title function_">remove</span>(<span class="hljs-params">node</span>) {
+    node.<span class="hljs-property">prev</span>.<span class="hljs-property">next</span> = node.<span class="hljs-property">next</span>;
+    node.<span class="hljs-property">next</span>.<span class="hljs-property">prev</span> = node.<span class="hljs-property">prev</span>;
+  }
+
+  #<span class="hljs-title function_">append</span>(<span class="hljs-params">node</span>) {
+    node.<span class="hljs-property">prev</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>.<span class="hljs-property">prev</span>;
+    node.<span class="hljs-property">next</span> = <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>.<span class="hljs-property">prev</span>.<span class="hljs-property">next</span> = node;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">tail</span>.<span class="hljs-property">prev</span> = node;
+  }
+
+  <span class="hljs-title function_">get</span>(<span class="hljs-params">key</span>) {
+    <span class="hljs-keyword">const</span> node = <span class="hljs-variable language_">this</span>.<span class="hljs-property">map</span>.<span class="hljs-title function_">get</span>(key);
+    <span class="hljs-keyword">if</span> (!node) <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>;
+    <span class="hljs-variable language_">this</span>.#<span class="hljs-title function_">remove</span>(node);
+    <span class="hljs-variable language_">this</span>.#<span class="hljs-title function_">append</span>(node);
+    <span class="hljs-keyword">return</span> node.<span class="hljs-property">value</span>;
+  }
+
+  <span class="hljs-title function_">set</span>(<span class="hljs-params">key, value</span>) {
+    <span class="hljs-keyword">let</span> node = <span class="hljs-variable language_">this</span>.<span class="hljs-property">map</span>.<span class="hljs-title function_">get</span>(key);
+    <span class="hljs-keyword">if</span> (node) {
+      node.<span class="hljs-property">value</span> = value;
+      <span class="hljs-variable language_">this</span>.#<span class="hljs-title function_">remove</span>(node);
+    } <span class="hljs-keyword">else</span> {
+      node = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Node</span>(key, value);
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">map</span>.<span class="hljs-title function_">set</span>(key, node);
+    }
+    <span class="hljs-variable language_">this</span>.#<span class="hljs-title function_">append</span>(node);
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">map</span>.<span class="hljs-property">size</span> &gt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">capacity</span>) {
+      <span class="hljs-keyword">const</span> oldest = <span class="hljs-variable language_">this</span>.<span class="hljs-property">head</span>.<span class="hljs-property">next</span>;
+      <span class="hljs-variable language_">this</span>.#<span class="hljs-title function_">remove</span>(oldest);
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">map</span>.<span class="hljs-title function_">delete</span>(oldest.<span class="hljs-property">key</span>);
+    }
+  }
+}
+</code></pre></div>
+<p>实测用 300 组随机操作序列对比两种实现，<code>get</code> 的结果完全一致。链表节点保存 <code>key</code>，淘汰时才能从 Map 中同步删除。</p>
+<h2>常见追问</h2>
+<ul>
+<li><strong>两种实现怎么选？</strong> 业务代码用 Map 版本，简短且性能足够；需要展示数据结构功底时写链表版本。</li>
+<li><strong>要支持过期时间呢？</strong> 每个条目额外保存过期时刻，<code>get</code> 时发现已过期就删除并返回未命中。</li>
+<li><strong>浏览器里哪些地方用到 LRU？</strong> 内存中的接口响应缓存、图片解码缓存、路由组件缓存（如 Vue 的 <code>KeepAlive</code> 设置 <code>max</code> 后按 LRU 淘汰）。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map" target="_blank" rel="noreferrer">MDN · Map<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8+Map+%E5%AE%9E%E7%8E%B0%E5%9B%BA%E5%AE%9A%E5%AE%B9%E9%87%8F%E7%9A%84+LRU+%E7%BC%93%E5%AD%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%A6%82%E4%BD%95%E5%88%A9%E7%94%A8+Map+%E5%AE%9E%E7%8E%B0%E5%9B%BA%E5%AE%9A%E5%AE%B9%E9%87%8F%E7%9A%84+LRU+%E7%BC%93%E5%AD%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-map-lru%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-map-lru%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：如何利用 Map 实现固定容量的 LRU 缓存？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-debounce/">怎样实现只在停止调用后执行的防抖函数？</a></li><li><a href="/questions/alg-throttle/">怎样实现首沿节流？它与尾沿节流、防抖有什么区别？</a></li><li><a href="/questions/alg-promise-all/">怎样实现保持输入顺序的 Promise.all 教学版本？</a></li><li><a href="/questions/alg-concurrency-pool/">怎样实现有明确失败语义的异步并发池？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="浏览器原理面试题：Cookie Store API 用异步方法读取、写入和监听 Cookie，适合封装主题、语言和会话辅助状态，但不能绕过 HttpOnly、SameSite、Secure 或服务端权限校验。" />
+    <meta name="description" content="浏览器原理面试题：Cookie Store API 用 Promise 读写 Cookie 并能监听变化，只在 HTTPS 下可用；它读不到 HttpOnly Cookie，适合管理主题、语言等非敏感 Cookie。" />
     <title>Cookie Store API 应该怎样安全地管理浏览器 Cookie？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/browser-cookie-store/" />
     <meta name="robots" content="index,follow" />
@@ -19,92 +19,62 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Cookie Store API 应该怎样安全地管理浏览器 Cookie？ · 前端知库" />
-    <meta property="og:description" content="浏览器原理面试题：Cookie Store API 用异步方法读取、写入和监听 Cookie，适合封装主题、语言和会话辅助状态，但不能绕过 HttpOnly、SameSite、Secure 或服务端权限校验。" />
+    <meta property="og:description" content="浏览器原理面试题：Cookie Store API 用 Promise 读写 Cookie 并能监听变化，只在 HTTPS 下可用；它读不到 HttpOnly Cookie，适合管理主题、语言等非敏感 Cookie。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/browser-cookie-store/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/browser-cookie-store/#webpage","url":"https://fe.hushifa.top/questions/browser-cookie-store/","name":"Cookie Store API 应该怎样安全地管理浏览器 Cookie？ · 前端知库","description":"浏览器原理面试题：Cookie Store API 用异步方法读取、写入和监听 Cookie，适合封装主题、语言和会话辅助状态，但不能绕过 HttpOnly、SameSite、Secure 或服务端权限校验。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/browser-cookie-store/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/browser-cookie-store/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"浏览器原理面试题","item":"https://fe.hushifa.top/topics/browser/"},{"@type":"ListItem","position":3,"name":"Cookie Store API 应该怎样安全地管理浏览器 Cookie？","item":"https://fe.hushifa.top/questions/browser-cookie-store/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/browser-cookie-store/#webpage","url":"https://fe.hushifa.top/questions/browser-cookie-store/","name":"Cookie Store API 应该怎样安全地管理浏览器 Cookie？ · 前端知库","description":"浏览器原理面试题：Cookie Store API 用 Promise 读写 Cookie 并能监听变化，只在 HTTPS 下可用；它读不到 HttpOnly Cookie，适合管理主题、语言等非敏感 Cookie。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/browser-cookie-store/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/browser-cookie-store/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"浏览器原理面试题","item":"https://fe.hushifa.top/topics/browser/"},{"@type":"ListItem","position":3,"name":"Cookie Store API 应该怎样安全地管理浏览器 Cookie？","item":"https://fe.hushifa.top/questions/browser-cookie-store/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/browser/">浏览器原理面试题</a><span aria-hidden="true">/</span><span aria-current="page">Cookie Store API 应该怎样安全地管理浏览器 Cookie？</span></nav><h1 tabindex="-1">Cookie Store API 应该怎样安全地管理浏览器 Cookie？</h1><p class="reading-summary">Cookie Store API 用异步方法读取、写入和监听 Cookie，适合封装主题、语言和会话辅助状态，但不能绕过 HttpOnly、SameSite、Secure 或服务端权限校验。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/browser/">浏览器原理面试题</a><span aria-hidden="true">/</span><span aria-current="page">Cookie Store API 应该怎样安全地管理浏览器 Cookie？</span></nav><h1 tabindex="-1">Cookie Store API 应该怎样安全地管理浏览器 Cookie？</h1><p class="reading-summary">Cookie Store API 用 Promise 读写 Cookie 并能监听变化，只在 HTTPS 下可用；它读不到 HttpOnly Cookie，适合管理主题、语言等非敏感 Cookie。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>Cookie Store API 用异步方法读写和监听 Cookie，只在安全上下文中可用。</li>
-<li>业务代码应通过封装使用它，写入时显式设置 expires、path、SameSite 等属性。</li>
-<li>它读不到 HttpOnly Cookie，身份认证不能依赖页面可读的 Cookie。</li>
-<li>监听变化时要区分本页写入和其他上下文写入，并发写入仍需自己处理。</li>
+<li><code>cookieStore.get()</code>、<code>set()</code>、<code>delete()</code> 都返回 Promise，替代手动拼接和解析 <code>document.cookie</code> 字符串。</li>
+<li>它只在安全上下文（HTTPS 或 localhost）中可用，写入的 Cookie 一定带 Secure；MDN 标为 Baseline 2025。</li>
+<li>过期时间用 <code>expires</code> 传毫秒时间戳，没有 <code>maxAge</code> 选项；<code>sameSite</code> 默认是 <code>strict</code>。</li>
+<li>读不到 <code>HttpOnly</code> Cookie，登录会话应由服务端设置 HttpOnly Cookie。</li>
+<li>可以监听 <code>change</code> 事件，Service Worker 中也能通过 <code>cookieStore</code> 使用。</li>
 </ul>
-<h2>为什么需要新的 Cookie 访问方式</h2>
-<p><code>document.cookie</code> 看起来只是一个字符串，但每次读取都要把当前作用域可见的 Cookie 拼接出来。Cookie 较多、页面频繁读取，或者代码在滚动和输入事件中反复访问它时，同步调用可能阻塞主线程。它还不方便监听其他代码对 Cookie 的修改，组件往往只能定时读取。</p>
-<p>Cookie Store API 提供 Promise 形式的 <code>get</code>、<code>set</code>、<code>delete</code>，并支持 change 事件。它改善的是访问方式和代码组织，不会改变 Cookie 的安全模型，也不会让前端获得读取 HttpOnly Cookie 的权限。</p>
-<h2>先封装，再让业务使用</h2>
-<p>不要让每个组件自己拼接 Cookie 字符串。应该集中定义名称、路径和生命周期，并为不支持新 API 的浏览器保留降级：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> themeCookie = {
-  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;theme&#x27;</span>,
-  <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;/&#x27;</span>,
-  <span class="hljs-attr">sameSite</span>: <span class="hljs-string">&#x27;lax&#x27;</span>,
-};
-<span class="hljs-comment">// CookieInit 没有 maxAge 字段，新 API 通过 expires 传入毫秒时间戳</span>
-<span class="hljs-keyword">const</span> themeMaxAgeSeconds = <span class="hljs-number">60</span> * <span class="hljs-number">60</span> * <span class="hljs-number">24</span> * <span class="hljs-number">365</span>;
-
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">readLegacyCookie</span>(<span class="hljs-params">name</span>) {
-  <span class="hljs-keyword">const</span> prefix = <span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">encodeURIComponent</span>(name)}</span>=`</span>;
-  <span class="hljs-keyword">const</span> item = <span class="hljs-variable language_">document</span>.<span class="hljs-property">cookie</span>
-    .<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;; &#x27;</span>)
-    .<span class="hljs-title function_">find</span>(<span class="hljs-function">(<span class="hljs-params">part</span>) =&gt;</span> part.<span class="hljs-title function_">startsWith</span>(prefix));
-  <span class="hljs-keyword">return</span> item ? <span class="hljs-built_in">decodeURIComponent</span>(item.<span class="hljs-title function_">slice</span>(prefix.<span class="hljs-property">length</span>)) : <span class="hljs-literal">null</span>;
+<h2>写入和读取</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">setTheme</span>(<span class="hljs-params">theme</span>) {
+  <span class="hljs-keyword">await</span> cookieStore.<span class="hljs-title function_">set</span>({
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;theme&#x27;</span>,
+    <span class="hljs-attr">value</span>: theme,
+    <span class="hljs-attr">expires</span>: <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>() + <span class="hljs-number">365</span> * <span class="hljs-number">24</span> * <span class="hljs-number">60</span> * <span class="hljs-number">60</span> * <span class="hljs-number">1000</span>,
+    <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;/&#x27;</span>,
+    <span class="hljs-attr">sameSite</span>: <span class="hljs-string">&#x27;lax&#x27;</span>,
+  });
 }
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">getTheme</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-keyword">if</span> (globalThis.<span class="hljs-property">cookieStore</span>) {
-    <span class="hljs-keyword">const</span> cookie = <span class="hljs-keyword">await</span> cookieStore.<span class="hljs-title function_">get</span>(themeCookie.<span class="hljs-property">name</span>);
-    <span class="hljs-keyword">return</span> cookie?.<span class="hljs-property">value</span> ?? <span class="hljs-string">&#x27;system&#x27;</span>;
-  }
-  <span class="hljs-keyword">return</span> <span class="hljs-title function_">readLegacyCookie</span>(themeCookie.<span class="hljs-property">name</span>) ?? <span class="hljs-string">&#x27;system&#x27;</span>;
-}
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">setTheme</span>(<span class="hljs-params">theme</span>) {
-  <span class="hljs-keyword">const</span> value = theme === <span class="hljs-string">&#x27;light&#x27;</span> || theme === <span class="hljs-string">&#x27;dark&#x27;</span> ? theme : <span class="hljs-string">&#x27;system&#x27;</span>;
-  <span class="hljs-keyword">if</span> (globalThis.<span class="hljs-property">cookieStore</span>) {
-    <span class="hljs-keyword">await</span> cookieStore.<span class="hljs-title function_">set</span>({
-      ...themeCookie,
-      value,
-      <span class="hljs-attr">expires</span>: <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>() + themeMaxAgeSeconds * <span class="hljs-number">1000</span>,
-    });
-    <span class="hljs-keyword">return</span>;
-  }
-  <span class="hljs-variable language_">document</span>.<span class="hljs-property">cookie</span> = <span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">encodeURIComponent</span>(themeCookie.name)}</span>=<span class="hljs-subst">${<span class="hljs-built_in">encodeURIComponent</span>(value)}</span>; Path=/; Max-Age=<span class="hljs-subst">${themeMaxAgeSeconds}</span>; SameSite=Lax`</span>;
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">getTheme</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> cookie = <span class="hljs-keyword">await</span> cookieStore.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;theme&#x27;</span>);
+  <span class="hljs-keyword">return</span> cookie?.<span class="hljs-property">value</span> ?? <span class="hljs-string">&#x27;system&#x27;</span>;
 }
 </code></pre></div>
-<p><code>cookieStore</code> 只在安全上下文（HTTPS 或 localhost）中暴露，HTTP 页面会走降级分支。封装层负责编码、默认值和降级，组件只关心 <code>getTheme()</code> 和 <code>setTheme()</code>。这样以后更换存储方式、调整过期时间或修复 Cookie 属性时，不需要搜索整个项目里的字符串拼接代码。</p>
-<h2>Cookie 的作用域决定谁能看到它</h2>
-<p>Cookie 是否可读，取决于名称、域名、路径、协议和浏览器的存储策略。设置在 <code>/account</code> 路径下的 Cookie，在 <code>/</code> 页面不一定可见；使用不同 Domain 或子域名也会影响发送范围。删除时必须使用与原 Cookie 匹配的 <code>name</code>、<code>path</code> 和 <code>domain</code>，否则你以为删除成功，旧 Cookie 可能仍然存在。</p>
-<p>同名 Cookie 在不同路径下可以同时存在。服务端收到请求时可能看到多个同名值，前端只删除其中一个会导致登录状态或配置表现不一致。修改 Cookie 规则时，应先盘点线上已有的路径和域名，再设计迁移策略。</p>
-<h2>身份认证不能交给可读 Cookie</h2>
-<p>登录会话通常应该由服务端设置 <code>HttpOnly</code>、<code>Secure</code> 和合适的 <code>SameSite</code> Cookie。<code>HttpOnly</code> 可以阻止 JavaScript 读取会话值，即使使用 Cookie Store API 也一样。这样能降低 XSS 直接窃取会话令牌的风险。</p>
-<p>前端可以读取一个非敏感的 <code>session_hint</code> 来决定是否提前展示加载状态，但最终身份必须由服务端根据会话 Cookie 判断。不能因为前端读不到 HttpOnly Cookie 就把令牌复制到 localStorage 或普通 Cookie 中。CSRF 防护、权限校验、会话失效和刷新策略仍然是服务端责任。</p>
-<h2>监听变化时要区分自己和其他上下文</h2>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">watchTheme</span>(<span class="hljs-params">onChange</span>) {
-  <span class="hljs-keyword">if</span> (!globalThis.<span class="hljs-property">cookieStore</span>) <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {};
-
-  <span class="hljs-keyword">const</span> <span class="hljs-title function_">handler</span> = (<span class="hljs-params">event</span>) =&gt; {
-    <span class="hljs-keyword">const</span> changed = event.<span class="hljs-property">changed</span>.<span class="hljs-title function_">find</span>(<span class="hljs-function">(<span class="hljs-params">cookie</span>) =&gt;</span> cookie.<span class="hljs-property">name</span> === <span class="hljs-string">&#x27;theme&#x27;</span>);
-    <span class="hljs-keyword">const</span> deleted = event.<span class="hljs-property">deleted</span>.<span class="hljs-title function_">some</span>(<span class="hljs-function">(<span class="hljs-params">cookie</span>) =&gt;</span> cookie.<span class="hljs-property">name</span> === <span class="hljs-string">&#x27;theme&#x27;</span>);
-    <span class="hljs-keyword">if</span> (changed) <span class="hljs-title function_">onChange</span>(changed.<span class="hljs-property">value</span>);
-    <span class="hljs-keyword">if</span> (deleted) <span class="hljs-title function_">onChange</span>(<span class="hljs-string">&#x27;system&#x27;</span>);
-  };
-
-  cookieStore.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;change&#x27;</span>, handler);
-  <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> cookieStore.<span class="hljs-title function_">removeEventListener</span>(<span class="hljs-string">&#x27;change&#x27;</span>, handler);
-}
+<p><code>set()</code> 失败时 Promise 会 reject，不需要再读回来确认。</p>
+<h2>监听变化</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">cookieStore.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;change&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> cookie <span class="hljs-keyword">of</span> event.<span class="hljs-property">changed</span>) {
+    <span class="hljs-keyword">if</span> (cookie.<span class="hljs-property">name</span> === <span class="hljs-string">&#x27;theme&#x27;</span>) <span class="hljs-title function_">applyTheme</span>(cookie.<span class="hljs-property">value</span>);
+  }
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> cookie <span class="hljs-keyword">of</span> event.<span class="hljs-property">deleted</span>) {
+    <span class="hljs-keyword">if</span> (cookie.<span class="hljs-property">name</span> === <span class="hljs-string">&#x27;theme&#x27;</span>) <span class="hljs-title function_">applyTheme</span>(<span class="hljs-string">&#x27;system&#x27;</span>);
+  }
+});
 </code></pre></div>
-<p>组件挂载时注册监听，卸载时必须移除，否则页面长时间运行后会累积回调。自己调用 <code>setTheme</code> 后不要等待 change 事件才更新当前组件，应立即更新本地状态；监听主要用于响应其他代码或其他上下文的变化。</p>
-<p>监听事件也不是跨站同步协议。它不能监听别的域名，也不能保证所有嵌入场景下的存储分区都相同。需要跨标签页传递复杂状态时，应使用 BroadcastChannel 或重新读取共享数据，而不是把 Cookie change 当成消息队列。</p>
-<h2>服务端渲染和缓存会改变设计</h2>
-<p>如果服务端根据 Cookie 输出主题、语言或用户信息，客户端监听 Cookie 变化不会自动改变已经生成的 HTML。变化后需要重新请求数据或刷新相关区域。包含用户身份的响应还要正确设置缓存策略，避免 CDN 把一个用户的内容提供给另一个用户。</p>
-<p>主题和语言这类非敏感偏好可以在首屏早期读取，以减少闪烁；登录状态则应让服务端决定，客户端只负责展示加载中、已登录或未登录等状态。不要为了让客户端更方便而暴露认证凭据。</p>
-<h2>异步访问仍然需要处理并发</h2>
-<p>两个请求同时刷新会话时，不能让它们各自写入不同 Cookie，再由最后完成的请求覆盖前一个结果。请求层应合并刷新任务，并在登出后拒绝旧请求写回状态。<code>cookieStore.set()</code> 成功只表示浏览器接受了设置，不代表服务器已经处理了业务，也不代表下一次请求一定已经完成。</p>
-<p>测试时需要覆盖新 API 不存在、HTTPS 与 HTTP、过期和删除、不同 Path、HttpOnly 不可读、多个请求并发刷新以及页面重新打开等情况。Cookie Store 是更好的访问接口，但它不会替你解决认证协议、并发控制和安全问题。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Cookie_Store_API" target="_blank" rel="noreferrer">Cookie Store API - Web APIs | MDN<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Cookie+Store+API+%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%AE%89%E5%85%A8%E5%9C%B0%E7%AE%A1%E7%90%86%E6%B5%8F%E8%A7%88%E5%99%A8+Cookie%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ACookie+Store+API+%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%AE%89%E5%85%A8%E5%9C%B0%E7%AE%A1%E7%90%86%E6%B5%8F%E8%A7%88%E5%99%A8+Cookie%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Abrowser-cookie-store%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%90%86%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fbrowser-cookie-store%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Cookie Store API 应该怎样安全地管理浏览器 Cookie？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/browser-storage/">Cookie、localStorage 和 sessionStorage 如何选择？</a></li><li><a href="/questions/browser-render/">浏览器从 HTML 到页面显示，经历哪些主要步骤？</a></li><li><a href="/questions/browser-delegation/">事件委托是什么？target 和 currentTarget 有何区别？</a></li><li><a href="/questions/browser-reflow/">什么是强制同步布局？如何避免布局抖动？</a></li></ul></nav></main></div></div>
+<p>服务端通过 <code>Set-Cookie</code> 修改非 HttpOnly 的 Cookie 时，这个事件也会触发。</p>
+<h2>降级</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">setThemeFallback</span>(<span class="hljs-params">theme</span>) {
+  <span class="hljs-variable language_">document</span>.<span class="hljs-property">cookie</span> = <span class="hljs-string">`theme=<span class="hljs-subst">${<span class="hljs-built_in">encodeURIComponent</span>(theme)}</span>; Max-Age=31536000; Path=/; SameSite=Lax; Secure`</span>;
+}
+
+<span class="hljs-keyword">const</span> save = <span class="hljs-string">&#x27;cookieStore&#x27;</span> <span class="hljs-keyword">in</span> globalThis ? setTheme : setThemeFallback;
+</code></pre></div>
+<p>两条路径要写入同样的过期时间和属性，否则用户在不同浏览器得到的 Cookie 行为不一致。</p>
+<h2>常见追问</h2>
+<ul>
+<li>和 localStorage 怎么选：服务端渲染时需要读取的偏好用 Cookie，纯前端使用的数据用 localStorage，避免每次请求都携带。</li>
+<li>能不能用它做认证：不能。脚本能读写的 Cookie 一旦遇到 XSS 就会泄露。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Cookie_Store_API" target="_blank" rel="noreferrer">MDN · Cookie Store API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Cookie+Store+API+%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%AE%89%E5%85%A8%E5%9C%B0%E7%AE%A1%E7%90%86%E6%B5%8F%E8%A7%88%E5%99%A8+Cookie%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ACookie+Store+API+%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%AE%89%E5%85%A8%E5%9C%B0%E7%AE%A1%E7%90%86%E6%B5%8F%E8%A7%88%E5%99%A8+Cookie%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Abrowser-cookie-store%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%90%86%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fbrowser-cookie-store%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Cookie Store API 应该怎样安全地管理浏览器 Cookie？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/browser-storage/">Cookie、localStorage 和 sessionStorage 如何选择？</a></li><li><a href="/questions/browser-render/">浏览器从 HTML 到页面显示，经历哪些主要步骤？</a></li><li><a href="/questions/browser-delegation/">事件委托是什么？target 和 currentTarget 有何区别？</a></li><li><a href="/questions/browser-reflow/">什么是强制同步布局？如何避免布局抖动？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

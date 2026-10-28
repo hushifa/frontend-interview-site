@@ -23,48 +23,70 @@
     <meta property="og:url" content="https://fe.hushifa.top/questions/arch-progressive/" />
     <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/arch-progressive/#webpage","url":"https://fe.hushifa.top/questions/arch-progressive/","name":"渐进增强和优雅降级怎样影响前端方案选择？ · 前端知库","description":"架构设计面试题：从最低可用任务出发区分两种设计方向，说明静态内容、原生能力、特性检测与运行时失败的关系，并解释怎样避免增强层反而破坏基础功能。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/arch-progressive/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/arch-progressive/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"架构设计面试题","item":"https://fe.hushifa.top/topics/architecture/"},{"@type":"ListItem","position":3,"name":"渐进增强和优雅降级怎样影响前端方案选择？","item":"https://fe.hushifa.top/questions/arch-progressive/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
     <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/architecture/">架构设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">渐进增强和优雅降级怎样影响前端方案选择？</span></nav><h1 tabindex="-1">渐进增强和优雅降级怎样影响前端方案选择？</h1><p class="reading-summary">从最低可用任务出发区分两种设计方向，说明静态内容、原生能力、特性检测与运行时失败的关系，并解释怎样避免增强层反而破坏基础功能。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>渐进增强从基础内容和核心任务开始逐步增加体验，优雅降级从完整体验出发提供替代。</li>
-<li>两者是出发点不同，实际项目可以同时采用。</li>
-<li>最低标准应对应用户任务，不能是一个永久加载的骨架屏。</li>
-<li>静态内容先让 HTML 本身有意义，再用 JavaScript 增强。</li>
+<li>渐进增强从最基础的可用版本出发（HTML 内容、原生链接和表单），再在支持的环境中叠加样式和脚本功能。</li>
+<li>优雅降级从完整体验出发，为能力不足的环境准备退路。</li>
+<li>两者的区别在于设计起点：渐进增强保证核心任务始终可用，优雅降级容易遗漏退路。</li>
+<li>用特性检测（<code>&#x27;share&#x27; in navigator</code>、<code>@supports</code>）判断能力，不用浏览器名称或版本号判断。</li>
+<li>脚本加载失败、超时或报错也属于&quot;能力不足&quot;，基础功能不应完全依赖 JS 成功执行。</li>
 </ul>
-<p>同一个页面可能运行在新浏览器、旧 WebView、弱网设备或脚本加载失败的环境中。方案选择不能只问“最好情况下有什么效果”，还要问“少了某项能力，用户还能完成什么”。</p>
-<p>渐进增强从基础内容和核心任务开始，再给支持更多能力的环境增加体验。优雅降级通常从完整体验出发，为能力不足或失败的情况提供可接受替代。它们是设计出发点的区别，实际项目可以同时采用，重点是把基础可用性说清楚。</p>
-<h2>最低标准应该对应用户任务</h2>
-<p>内容网站的核心可能是阅读、目录导航和分享链接，动画、智能推荐和即时筛选可以作为增强。在线图形编辑器则可能确实依赖 JavaScript，不能要求没有脚本时仍提供完整编辑能力。</p>
-<p>但“没有脚本就显示空白”也不是一个经过设计的最低标准。可以明确哪些环境支持编辑，已有内容是否能只读展示，用户的数据如何导出或恢复，以及缺少权限时怎样继续。</p>
-<p>基础形态不必拥有全部功能，却应有清楚、可完成的任务，而不只是一个永久加载的骨架屏。</p>
-<h2>对静态内容，先让 HTML 本身有意义</h2>
-<p>一篇题解可以先在 HTML 中包含问题、答案和链接，再用 JavaScript 增强搜索、收藏和局部切换。脚本失败时，内容仍然可以阅读，普通链接也能导航。</p>
-<p>例如一个简单的补充说明，可以使用原生结构：</p>
-<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">details</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">summary</span>&gt;</span>查看补充说明<span class="hljs-tag">&lt;/<span class="hljs-name">summary</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>闭包中的函数会继续通过词法环境访问相关绑定，并不是自动复制所有外部变量。<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">details</span>&gt;</span>
+<h2>一个搜索表单</h2>
+<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">&quot;/search&quot;</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;get&quot;</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;search&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;q&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;search&quot;</span> <span class="hljs-attr">required</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;搜索题目&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span>&gt;</span>搜索<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
 </code></pre></div>
-<p>在支持 details 的环境中，浏览器提供展开与收起等基础行为，不必等待自定义组件初始化后才能读取说明。若改用复杂展示，也应保留内容和语义，而不是让增强脚本成为唯一的数据来源。</p>
-<p>服务端渲染或构建时预渲染可以帮助提供基础 HTML，但它们本身也不保证所有交互可用。还要检查禁用脚本、资源加载失败和客户端接管失败时的真实结果。</p>
-<h2>原生表单的增强有一个前提</h2>
-<p>常见例子是先让 form 通过 action 提交到真实处理端点，再增强成无刷新提交、错误提示和输入建议。这样用户不依赖增强脚本也能完成相应任务。</p>
-<p>但纯静态托管不会因为写了一个 form action，就自动拥有搜索或提交接口。基础路径必须确实存在；如果产品没有后端，可以提供静态分类目录、本地可读内容和明确的功能边界，而不是声明一个根本不存在的回退端点。</p>
-<p>增强层也应保留正确的提交语义，例如 method、字段名称和验证规则。只有在自己确实能够处理当前操作时，才阻止原来的行为。</p>
-<h2>特性检测之后，还要处理运行失败</h2>
-<p>检测 API 或 CSS 能力通常比根据浏览器名称猜测更直接，例如检查某个方法是否存在，或者使用 CSS @supports。浏览器名称相同，不代表版本、嵌入配置和权限策略都相同。</p>
-<p>不过“方法存在”不代表“调用一定成功”。剪贴板可能因权限或用户激活失败，文件选择可能被取消，网络也可能在增强逻辑启动后中断。</p>
-<p>因此能力检测决定是否尝试增强，错误处理决定尝试失败后怎么办。复制按钮失败时可以保留可选择的原文和手动复制路径；动画能力不足时可以直接完成状态变化，不必让导航也一起失效。</p>
-<h2>降级不能制造第二次副作用</h2>
-<p>异步提交失败后，不能总是立即退回原生表单再提交一次。服务器可能已经接受了第一次操作，只是响应丢失，第二次提交就可能重复创建记录。</p>
-<p>对于写操作，应通过幂等、状态查询或明确的用户重试流程判断下一步。对于只读导航或内容获取，回到完整页面导航通常更容易设计，但也需要有正确的目标地址。</p>
-<p>增强逻辑的错误边界最好局部化。推荐模块失败可以隐藏推荐并保留正文；非关键第三方脚本失败不应阻止用户操作核心表单。不要让所有组件都依赖一个不相关的初始化 Promise 才能显示。</p>
-<h2>验证时主动拿掉一些能力</h2>
-<p>可以从实际风险出发测试：禁用或阻断脚本、拒绝权限、阻止非关键资源、模拟接口失败、关闭动效偏好，或者使用目标旧浏览器。检查用户是否仍能阅读、导航、提交或知道为什么暂时不能继续。</p>
-<p>有些增强层会在初始化时先隐藏基础内容，之后出错却没恢复；有些界面只在成功路径取消 loading，失败后永远无法再操作。这些问题不是“浏览器太旧”，而是降级路径没有完成。</p>
-<p>渐进增强并不要求代码永远停留在最旧能力上。它要求先识别哪些能力真正决定核心任务，再把更好的体验建立在可解释的依赖和失败处理之上。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement" target="_blank" rel="noreferrer">MDN · 渐进增强<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%B8%90%E8%BF%9B%E5%A2%9E%E5%BC%BA%E5%92%8C%E4%BC%98%E9%9B%85%E9%99%8D%E7%BA%A7%E6%80%8E%E6%A0%B7%E5%BD%B1%E5%93%8D%E5%89%8D%E7%AB%AF%E6%96%B9%E6%A1%88%E9%80%89%E6%8B%A9%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%B8%90%E8%BF%9B%E5%A2%9E%E5%BC%BA%E5%92%8C%E4%BC%98%E9%9B%85%E9%99%8D%E7%BA%A7%E6%80%8E%E6%A0%B7%E5%BD%B1%E5%93%8D%E5%89%8D%E7%AB%AF%E6%96%B9%E6%A1%88%E9%80%89%E6%8B%A9%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aarch-progressive%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Farch-progressive%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：渐进增强和优雅降级怎样影响前端方案选择？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/architecture-api-evolution/">前端 API 如何演进，才能兼容旧客户端并安全迁移？</a></li><li><a href="/questions/arch-design-system/">设计系统为什么不能只有一套视觉样式？</a></li><li><a href="/questions/arch-state-machine/">怎样避免加载、成功和失败状态互相矛盾？</a></li><li><a href="/questions/architecture-feature-boundaries/">前端大型项目怎样划分功能边界？</a></li></ul></nav></main></div></div>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> form = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;#search&#x27;</span>);
+form.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;submit&#x27;</span>, <span class="hljs-title function_">async</span> (event) =&gt; {
+  event.<span class="hljs-title function_">preventDefault</span>();
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">showResultsInline</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">FormData</span>(form).<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;q&#x27;</span>));
+  } <span class="hljs-keyword">catch</span> {
+    form.<span class="hljs-title function_">submit</span>(); <span class="hljs-comment">// 增强失败时回到原生提交</span>
+  }
+});
+</code></pre></div>
+<ul>
+<li>没有 JS 时，表单正常提交到 <code>/search</code>，服务端或预渲染页面返回结果。</li>
+<li>有 JS 时，在当前页面显示结果，体验更好。</li>
+<li>JS 执行出错时回退到原生行为，而不是让按钮无响应。</li>
+</ul>
+<h2>特性检测</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;share&#x27;</span> <span class="hljs-keyword">in</span> navigator) {
+  shareButton.<span class="hljs-property">hidden</span> = <span class="hljs-literal">false</span>;
+} <span class="hljs-keyword">else</span> {
+  copyLinkButton.<span class="hljs-property">hidden</span> = <span class="hljs-literal">false</span>;
+}
+</code></pre></div>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.layout</span> { <span class="hljs-attribute">display</span>: block; }
+
+<span class="hljs-keyword">@supports</span> (<span class="hljs-attribute">display</span>: <span class="hljs-attribute">grid</span>) {
+  <span class="hljs-selector-class">.layout</span> { <span class="hljs-attribute">display</span>: grid; <span class="hljs-attribute">grid-template-columns</span>: <span class="hljs-number">1</span>fr <span class="hljs-number">3</span>fr; }
+}
+</code></pre></div>
+<p>检测具体能力而不是浏览器，因为同一个浏览器的不同版本、不同设置（如企业策略禁用某些 API）能力不同。</p>
+<h2>增强层破坏基础功能的例子</h2>
+<ul>
+<li>用 <code>&lt;div onclick&gt;</code> 代替链接实现导航，JS 加载前无法点击，也不能在新标签打开。</li>
+<li>客户端渲染全部内容，脚本加载慢或失败时页面空白。</li>
+<li>自定义下拉框替换原生 <code>&lt;select&gt;</code>，却没有实现键盘操作。</li>
+<li>加载脚本前用 CSS 隐藏内容，脚本失败后内容永远不显示。</li>
+</ul>
+<h2>对方案选择的影响</h2>
+<ul>
+<li>内容型网站（文档、博客、电商详情）适合预渲染加渐进增强，首屏和搜索收录都更可靠。</li>
+<li>复杂的交互应用（在线编辑器、设计工具）核心功能本身依赖 JS，更适合明确支持的浏览器范围并对不支持的环境给出提示。</li>
+<li>新 CSS 和 Web API 先用特性检测包裹，在支持的环境中启用。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li>SSR 就是渐进增强吗？SSR 提供了基础 HTML，但如果交互（按钮、表单）只在水合后才能工作，水合前仍然不可用，需要配合原生表单和链接。</li>
+<li>这样会增加多少成本？主要是坚持使用语义化 HTML 和原生控件，这本身也是无障碍的要求。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement" target="_blank" rel="noreferrer">MDN · 渐进增强<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%B8%90%E8%BF%9B%E5%A2%9E%E5%BC%BA%E5%92%8C%E4%BC%98%E9%9B%85%E9%99%8D%E7%BA%A7%E6%80%8E%E6%A0%B7%E5%BD%B1%E5%93%8D%E5%89%8D%E7%AB%AF%E6%96%B9%E6%A1%88%E9%80%89%E6%8B%A9%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%B8%90%E8%BF%9B%E5%A2%9E%E5%BC%BA%E5%92%8C%E4%BC%98%E9%9B%85%E9%99%8D%E7%BA%A7%E6%80%8E%E6%A0%B7%E5%BD%B1%E5%93%8D%E5%89%8D%E7%AB%AF%E6%96%B9%E6%A1%88%E9%80%89%E6%8B%A9%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aarch-progressive%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Farch-progressive%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：渐进增强和优雅降级怎样影响前端方案选择？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/architecture-api-evolution/">前端 API 如何演进，才能兼容旧客户端并安全迁移？</a></li><li><a href="/questions/arch-design-system/">设计系统为什么不能只有一套视觉样式？</a></li><li><a href="/questions/arch-state-machine/">怎样避免加载、成功和失败状态互相矛盾？</a></li><li><a href="/questions/architecture-feature-boundaries/">前端大型项目怎样划分功能边界？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

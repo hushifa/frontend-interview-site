@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="JavaScript面试题：显式资源管理把释放动作绑定到词法作用域退出，using 使用同步释放协议，await using 等待异步释放。它补充确定性的资源生命周期，不替代垃圾回收，也不会自动识别任意 close 方法。" />
+    <meta name="description" content="JavaScript面试题：using 声明在离开块作用域时自动调用资源的 [Symbol.dispose]()，await using 调用并等待 [Symbol.asyncDispose]()，多个资源按声明逆序释放，替代手写 try/finally。释放与主逻辑都出错时，错误被包装成 SuppressedError。该特性在 TC39 列为 2027 版，MDN 标注为非 Baseline，部分浏览器尚不支持。" />
     <title>using 和 await using 解决什么资源清理问题？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/js-explicit-resource-management/" />
     <meta name="robots" content="index,follow" />
@@ -19,24 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="using 和 await using 解决什么资源清理问题？ · 前端知库" />
-    <meta property="og:description" content="JavaScript面试题：显式资源管理把释放动作绑定到词法作用域退出，using 使用同步释放协议，await using 等待异步释放。它补充确定性的资源生命周期，不替代垃圾回收，也不会自动识别任意 close 方法。" />
+    <meta property="og:description" content="JavaScript面试题：using 声明在离开块作用域时自动调用资源的 [Symbol.dispose]()，await using 调用并等待 [Symbol.asyncDispose]()，多个资源按声明逆序释放，替代手写 try/finally。释放与主逻辑都出错时，错误被包装成 SuppressedError。该特性在 TC39 列为 2027 版，MDN 标注为非 Baseline，部分浏览器尚不支持。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/js-explicit-resource-management/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-explicit-resource-management/#webpage","url":"https://fe.hushifa.top/questions/js-explicit-resource-management/","name":"using 和 await using 解决什么资源清理问题？ · 前端知库","description":"JavaScript面试题：显式资源管理把释放动作绑定到词法作用域退出，using 使用同步释放协议，await using 等待异步释放。它补充确定性的资源生命周期，不替代垃圾回收，也不会自动识别任意 close 方法。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-explicit-resource-management/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-explicit-resource-management/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"using 和 await using 解决什么资源清理问题？","item":"https://fe.hushifa.top/questions/js-explicit-resource-management/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-explicit-resource-management/#webpage","url":"https://fe.hushifa.top/questions/js-explicit-resource-management/","name":"using 和 await using 解决什么资源清理问题？ · 前端知库","description":"JavaScript面试题：using 声明在离开块作用域时自动调用资源的 [Symbol.dispose]()，await using 调用并等待 [Symbol.asyncDispose]()，多个资源按声明逆序释放，替代手写 try/finally。释放与主逻辑都出错时，错误被包装成 SuppressedError。该特性在 TC39 列为 2027 版，MDN 标注为非 Baseline，部分浏览器尚不支持。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-explicit-resource-management/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-explicit-resource-management/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"using 和 await using 解决什么资源清理问题？","item":"https://fe.hushifa.top/questions/js-explicit-resource-management/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">using 和 await using 解决什么资源清理问题？</span></nav><h1 tabindex="-1">using 和 await using 解决什么资源清理问题？</h1><p class="reading-summary">显式资源管理把释放动作绑定到词法作用域退出，using 使用同步释放协议，await using 等待异步释放。它补充确定性的资源生命周期，不替代垃圾回收，也不会自动识别任意 close 方法。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">using 和 await using 解决什么资源清理问题？</span></nav><h1 tabindex="-1">using 和 await using 解决什么资源清理问题？</h1><p class="reading-summary">using 声明在离开块作用域时自动调用资源的 [Symbol.dispose]()，await using 调用并等待 [Symbol.asyncDispose]()，多个资源按声明逆序释放，替代手写 try/finally。释放与主逻辑都出错时，错误被包装成 SuppressedError。该特性在 TC39 列为 2027 版，MDN 标注为非 Baseline，部分浏览器尚不支持。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>using 声明在离开块作用域时自动调用资源的 Symbol.dispose，await using 调用并等待 Symbol.asyncDispose。</li>
+<li><code>using x = resource</code> 在所在块结束时调用 <code>x[Symbol.dispose]()</code>，无论正常结束、<code>return</code> 还是抛错。</li>
+<li><code>await using</code> 在离开作用域时调用并等待 <code>x[Symbol.asyncDispose]()</code>，只能用在 async 函数或模块顶层。</li>
 <li>多个资源按声明的相反顺序释放。</li>
-<li>释放与主逻辑都出错时，错误会包装成 SuppressedError。</li>
-<li>DisposableStack 用于动态收集资源；使用前要确认目标运行时或编译器支持。</li>
+<li>主逻辑和释放都抛错时，最终抛出 <code>SuppressedError</code>：<code>error</code> 是释放时的错误，<code>suppressed</code> 是被它压住的错误。</li>
+<li>资源数量不固定时用 <code>DisposableStack</code> / <code>AsyncDisposableStack</code>。</li>
 </ul>
-<p>打开读取器、获取锁或注册临时订阅后，即使业务代码提前 return 或抛错，也应执行释放。传统做法是在 try/finally 中明确清理；资源多时，容易漏掉某条退出路径，或把释放顺序写反。</p>
-<p>using 与 await using 让对象声明自己的释放协议，并把释放安排到所在作用域结束时。它们管理的是“现在该结束这项资源使用”，不是等垃圾回收器以后发现对象不可达。</p>
-<h2>using 在离开作用域时调用 Symbol.dispose</h2>
-<p>下面的对象用日志模拟获取与释放，以便观察顺序，不持有真实文件或连接：</p>
+<h2>释放顺序</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">resource</span>(<span class="hljs-params">name</span>) {
   <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`获取<span class="hljs-subst">${name}</span>`</span>);
   <span class="hljs-keyword">return</span> {
@@ -55,31 +53,15 @@
 <span class="hljs-title function_">work</span>();
 <span class="hljs-comment">// 输出：获取A → 获取B → 执行工作 → 释放B → 释放A</span>
 </code></pre></div>
-<p>资源按相反的登记顺序释放，符合后获取的资源可能依赖先获取资源的情况。执行 return、抛错或正常走到作用域末尾，都会按控制流进入释放过程。</p>
-<p>using 不会自动寻找一个名字叫 close、destroy 或 unsubscribe 的普通方法。对象必须提供符合协议的 Symbol.dispose，或通过适当包装接入；null、undefined 可表示没有需要释放的资源。</p>
-<p>声明绑定不能重新赋值，也不能因为资源在函数结束时释放，就让那个对象的所有引用自动消失。对象是否拒绝释放后的继续使用，仍取决于自身实现。把 using 资源直接返回给外部时，要注意调用方拿到它之前可能已经执行了释放。</p>
-<h2>await using 等待的是释放，不是自动等待获取</h2>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">openResource</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-keyword">return</span> {
-    <span class="hljs-keyword">async</span> [<span class="hljs-title class_">Symbol</span>.<span class="hljs-property">asyncDispose</span>]() {
-      <span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>();
-      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;异步释放完成&#x27;</span>);
-    },
-  };
+<p>等价于嵌套两层 <code>try/finally</code>。<code>using</code> 只认 <code>Symbol.dispose</code>，不会调用名为 <code>close</code> 的普通方法；值为 <code>null</code> 或 <code>undefined</code> 时跳过，其他缺少该方法的值会抛 <code>TypeError</code>。</p>
+<h2>await using</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">work</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">await</span> <span class="hljs-keyword">using</span> connection = <span class="hljs-keyword">await</span> <span class="hljs-title function_">openConnection</span>();
+  <span class="hljs-keyword">return</span> connection.<span class="hljs-title function_">query</span>(<span class="hljs-string">&#x27;select 1&#x27;</span>);
 }
-
-<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">work</span>(<span class="hljs-params"></span>) {
-  <span class="hljs-keyword">await</span> <span class="hljs-keyword">using</span> resource = <span class="hljs-keyword">await</span> <span class="hljs-title function_">openResource</span>();
-  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;执行工作&#x27;</span>);
-}
-
-<span class="hljs-title function_">work</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;函数完成&#x27;</span>));
-<span class="hljs-comment">// 输出：执行工作 → 异步释放完成 → 函数完成</span>
 </code></pre></div>
-<p>右边的 await 等待 openResource 取得资源；左边的 await using 表示离开作用域时等待异步释放。它们作用于两个不同阶段，不能因为写了 await using，就省略实际需要的获取阶段 await，把一个普通 Promise 误当成可释放资源。</p>
-<p>await using 需要处于允许 await 的上下文，例如 async 函数或合适的模块位置。它优先使用异步释放协议，也可以按协议处理同步可释放资源；真正需要等待异步清理时，应正确实现 Symbol.asyncDispose，而不是把任意 Promise 塞进一个本来约定同步的释放方法。</p>
-<p>同步 using 不会为 Symbol.dispose 返回的异步工作提供同样的等待承诺。释放操作的类型和声明方式必须匹配，否则函数可能已经结束，清理却还在后台运行或失败。</p>
-<h2>工作和释放同时失败时会发生什么</h2>
+<p>右侧的 <code>await</code> 等待获取资源，左侧的 <code>await using</code> 表示退出时等待异步释放。</p>
+<h2>错误合并</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">fail</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">using</span> resource = {
     [<span class="hljs-title class_">Symbol</span>.<span class="hljs-property">dispose</span>]() {
@@ -97,20 +79,28 @@
   <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(error.<span class="hljs-property">suppressed</span>.<span class="hljs-property">message</span>); <span class="hljs-comment">// 工作失败</span>
 }
 </code></pre></div>
-<p>SuppressedError 保留两个失败：error 是较晚发生的错误，suppressed 是此前被抑制的错误。它不等同于 AggregateError 的一组并列错误，也不等同于普通 finally 中一个新 throw 把原错误完全覆盖。</p>
-<p>多个资源释放都失败时，还可能继续形成嵌套关系。某个释放动作失败，不应因此简单跳过剩余已登记资源的释放。诊断代码需要保留这条错误链，不能只上传最外层的通用消息而丢掉真实原因。</p>
-<h2>资源个数和获取路径不固定时可以用释放栈</h2>
-<p>DisposableStack 与 AsyncDisposableStack 用来管理动态登记的释放动作。use 接受协议资源，adopt 可以把普通值与自定义释放函数关联，defer 则登记不需要该值参数的清理回调。</p>
-<p>它们适合在多个条件分支中逐步获得资源，并在后续步骤失败时统一按逆序清理。也可以结合 using 管理栈本身，或在不适合词法作用域的生命周期里显式调用释放方法。</p>
-<p>但是作用域要与真实生命周期一致。组件创建函数返回后，组件可能还要继续存活很久；如果在创建函数内部用 using 立刻管理一条应持续到卸载的订阅，它会在函数返回时过早清理。此时应把所有权交给组件卸载逻辑，而不是为了使用新语法强行缩短资源寿命。</p>
-<h2>兼容性需要同时检查语法与运行时 API</h2>
-<p>有 Symbol.dispose 不代表解析器就一定认识 using，也不代表 DisposableStack、SuppressedError 等全部存在。比如某些运行时已有相关 Symbol，但原生解析 using 仍会报语法错误。</p>
-<p>语法错误可能在任何分支执行前就发生，因此不能在同一份旧环境要解析的源码中，简单用一个 if 包住新语法来回退。需要合适的构建目标、语法转换或分发策略，同时确认转换产物依赖的运行时能力。</p>
-<p>对不支持的环境，明确的 try/finally 仍然是可靠方案。转换后的错误合并、逆序释放与异步等待也应验证，不能只看类型检查通过就认为浏览器能够执行。</p>
-<h2>它不提供抢占式中断或进程退出保障</h2>
-<p>如果代码一直没有离开作用域，例如 await 的操作永远不完成，资源不会因为 using 声明存在就立刻释放。外部取消还需要连接 AbortSignal 或具体数据源的终止机制。</p>
-<p>进程被强制结束、页面直接终止等情况，也不属于可以保证任意 JavaScript 清理完成的普通控制流。真正重要的外部状态仍需要适当的服务端期限、事务或恢复机制。</p>
-<p>资源接口最好让释放动作可以安全处理重复调用，并明确释放后的行为。using 简化了谁在何时调用释放，但资源本身怎样正确关闭、怎样报告失败，仍然需要设计。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Resource_management" target="_blank" rel="noreferrer">MDN · JavaScript resource management<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+using+%E5%92%8C+await+using+%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E8%B5%84%E6%BA%90%E6%B8%85%E7%90%86%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Ausing+%E5%92%8C+await+using+%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E8%B5%84%E6%BA%90%E6%B8%85%E7%90%86%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-explicit-resource-management%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-explicit-resource-management%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：using 和 await using 解决什么资源清理问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-this/">普通函数和箭头函数的 this 有什么区别？</a></li><li><a href="/questions/js-promise-combinators/">Promise.all、allSettled、race 和 any 如何选择？</a></li></ul></nav></main></div></div>
+<p>一个资源释放失败后，剩下的资源仍会继续释放。</p>
+<h2>DisposableStack</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">openAll</span>(<span class="hljs-params">paths</span>) {
+  <span class="hljs-keyword">using</span> stack = <span class="hljs-keyword">new</span> <span class="hljs-title class_">DisposableStack</span>();
+  <span class="hljs-keyword">const</span> files = paths.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">path</span>) =&gt;</span> stack.<span class="hljs-title function_">use</span>(<span class="hljs-title function_">openFile</span>(path)));
+  <span class="hljs-keyword">const</span> owned = stack.<span class="hljs-title function_">move</span>(); <span class="hljs-comment">// 全部成功，转移所有权给调用方</span>
+  <span class="hljs-keyword">return</span> { files, [<span class="hljs-title class_">Symbol</span>.<span class="hljs-property">dispose</span>]: <span class="hljs-function">() =&gt;</span> owned.<span class="hljs-title function_">dispose</span>() };
+}
+</code></pre></div>
+<p>中途某个 <code>openFile</code> 抛错时，<code>stack</code> 退出作用域，已打开的文件被逆序关闭。<code>stack.adopt(value, fn)</code> 可以给没有实现协议的对象登记释放函数，<code>stack.defer(fn)</code> 登记任意清理回调。</p>
+<h2>使用边界</h2>
+<ul>
+<li>生命周期必须和词法作用域一致。组件、订阅这类创建后长期存在的对象不适合在创建函数里 <code>using</code>。</li>
+<li><code>await</code> 永远挂起时作用域不会结束，资源也不会释放；需要配合 <code>AbortSignal</code>。</li>
+<li>进程被杀、页面关闭时清理不保证执行。</li>
+<li>兼容性：<code>using</code> 是新语法，不支持的引擎会在解析阶段报错，无法用 <code>if</code> 降级。TypeScript 5.2 起可以把它编译成 <code>try/finally</code>，同时需要 <code>Symbol.dispose</code> 和 <code>DisposableStack</code> 的 polyfill。</li>
+</ul>
+<h2>常见追问</h2>
+<ul>
+<li>和 <code>try/finally</code> 比好在哪里？释放逻辑写在资源一侧，调用方不会忘记；多个资源不必层层嵌套。</li>
+<li>和垃圾回收的关系？没有关系。GC 回收内存的时间不确定，<code>using</code> 在确定的时间点释放文件句柄、锁等外部资源。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Resource_management" target="_blank" rel="noreferrer">MDN · JavaScript resource management<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+using+%E5%92%8C+await+using+%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E8%B5%84%E6%BA%90%E6%B8%85%E7%90%86%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Ausing+%E5%92%8C+await+using+%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E8%B5%84%E6%BA%90%E6%B8%85%E7%90%86%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-explicit-resource-management%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-explicit-resource-management%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：using 和 await using 解决什么资源清理问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-this/">普通函数和箭头函数的 this 有什么区别？</a></li><li><a href="/questions/js-promise-combinators/">Promise.all、allSettled、race 和 any 如何选择？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

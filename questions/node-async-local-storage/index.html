@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Node.js面试题：解释 AsyncLocalStorage 的上下文继承、并发隔离和边界，设计请求 ID 传递方案并分析定时器、回调、Worker 与错误处理中的常见问题。" />
+    <meta name="description" content="Node.js面试题：AsyncLocalStorage 在一次异步调用链里保存上下文，让深层的日志代码读到当前请求的 ID，并发请求之间互不干扰。原生 Promise、定时器和大多数核心 API 会自动传播上下文，EventEmitter 监听器、回调式库和 Worker 需要显式绑定或传递。" />
     <title>AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/node-async-local-storage/" />
     <meta name="robots" content="index,follow" />
@@ -19,102 +19,78 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？ · 前端知库" />
-    <meta property="og:description" content="Node.js面试题：解释 AsyncLocalStorage 的上下文继承、并发隔离和边界，设计请求 ID 传递方案并分析定时器、回调、Worker 与错误处理中的常见问题。" />
+    <meta property="og:description" content="Node.js面试题：AsyncLocalStorage 在一次异步调用链里保存上下文，让深层的日志代码读到当前请求的 ID，并发请求之间互不干扰。原生 Promise、定时器和大多数核心 API 会自动传播上下文，EventEmitter 监听器、回调式库和 Worker 需要显式绑定或传递。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/node-async-local-storage/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/node-async-local-storage/#webpage","url":"https://fe.hushifa.top/questions/node-async-local-storage/","name":"AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？ · 前端知库","description":"Node.js面试题：解释 AsyncLocalStorage 的上下文继承、并发隔离和边界，设计请求 ID 传递方案并分析定时器、回调、Worker 与错误处理中的常见问题。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/node-async-local-storage/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/node-async-local-storage/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Node.js面试题","item":"https://fe.hushifa.top/topics/node/"},{"@type":"ListItem","position":3,"name":"AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？","item":"https://fe.hushifa.top/questions/node-async-local-storage/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/node-async-local-storage/#webpage","url":"https://fe.hushifa.top/questions/node-async-local-storage/","name":"AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？ · 前端知库","description":"Node.js面试题：AsyncLocalStorage 在一次异步调用链里保存上下文，让深层的日志代码读到当前请求的 ID，并发请求之间互不干扰。原生 Promise、定时器和大多数核心 API 会自动传播上下文，EventEmitter 监听器、回调式库和 Worker 需要显式绑定或传递。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/node-async-local-storage/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/node-async-local-storage/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Node.js面试题","item":"https://fe.hushifa.top/topics/node/"},{"@type":"ListItem","position":3,"name":"AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？","item":"https://fe.hushifa.top/questions/node-async-local-storage/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-CpQINO-c.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/node/">Node.js面试题</a><span aria-hidden="true">/</span><span aria-current="page">AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？</span></nav><h1 tabindex="-1">AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？</h1><p class="reading-summary">解释 AsyncLocalStorage 的上下文继承、并发隔离和边界，设计请求 ID 传递方案并分析定时器、回调、Worker 与错误处理中的常见问题。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/node/">Node.js面试题</a><span aria-hidden="true">/</span><span aria-current="page">AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？</span></nav><h1 tabindex="-1">AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？</h1><p class="reading-summary">AsyncLocalStorage 在一次异步调用链里保存上下文，让深层的日志代码读到当前请求的 ID，并发请求之间互不干扰。原生 Promise、定时器和大多数核心 API 会自动传播上下文，EventEmitter 监听器、回调式库和 Worker 需要显式绑定或传递。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>AsyncLocalStorage 在异步调用链中传递上下文，常用于请求 ID、用户信息和日志关联。</li>
-<li>run(store, fn) 中启动的所有异步操作都能用 getStore() 读到同一个 store。</li>
-<li>上下文按异步调用链隔离，不同请求互不影响。</li>
-<li>Node.js 24 起默认用 AsyncContextFrame 实现，开销更低。</li>
+<li><code>storage.run(store, fn)</code> 让 <code>fn</code> 及其中启动的异步操作通过 <code>getStore()</code> 读到同一个 store，常用于请求 ID、trace 信息和日志关联。</li>
+<li>每次 <code>run</code> 有独立的 store，两个请求交错执行 <code>await</code> 也不会串用；在 <code>run</code> 之外调用 <code>getStore()</code> 返回 <code>undefined</code>。</li>
+<li>原生 Promise、定时器和大多数核心 API 会自动传播上下文。EventEmitter 监听器在触发 <code>emit</code> 的上下文中运行，需要 <code>AsyncResource.bind</code> 绑定；回调式第三方库可能丢失上下文。</li>
+<li>Worker 线程不继承主线程的 store，需要在消息里显式传递请求 ID。</li>
+<li>Node.js 24.0.0 起默认由 AsyncContextFrame 实现，可用 <code>--no-async-context-frame</code> 切回基于 async_hooks 的旧实现。</li>
 </ul>
-<p>一个 BFF 同时处理数百个请求，日志需要带上请求 ID、租户和 trace 信息。如果把这些值放在模块级变量里，并发请求会互相覆盖；如果每层函数都手动传参，漏传一层就会丢失关联。<code>AsyncLocalStorage</code> 可以在 Node.js 异步调用链中保存一份上下文，让深层日志读取当前请求的数据。</p>
-<h2>在请求入口建立上下文</h2>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> http <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:http&#x27;</span>;
-<span class="hljs-keyword">import</span> { randomUUID } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:crypto&#x27;</span>;
-<span class="hljs-keyword">import</span> { <span class="hljs-title class_">AsyncLocalStorage</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:async_hooks&#x27;</span>;
+<h2>请求入口建立上下文</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">AsyncLocalStorage</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:async_hooks&#x27;</span>;
 
 <span class="hljs-keyword">const</span> storage = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AsyncLocalStorage</span>();
 
-<span class="hljs-keyword">const</span> server = http.<span class="hljs-title function_">createServer</span>(<span class="hljs-function">(<span class="hljs-params">request, response</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> context = {
-    <span class="hljs-comment">// 示例生成内部标识，不直接信任客户端自报的请求 ID。</span>
-    <span class="hljs-attr">requestId</span>: <span class="hljs-title function_">randomUUID</span>(),
-    <span class="hljs-attr">method</span>: request.<span class="hljs-property">method</span>,
-  };
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">log</span>(<span class="hljs-params">message</span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`<span class="hljs-subst">${storage.getStore()?.requestId ?? <span class="hljs-string">&#x27;-&#x27;</span>}</span> <span class="hljs-subst">${message}</span>`</span>);
+}
 
-  storage.<span class="hljs-title function_">run</span>(context, <span class="hljs-title function_">async</span> () =&gt; {
-    <span class="hljs-keyword">try</span> {
-      <span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;请求开始&#x27;</span>);
-      <span class="hljs-keyword">await</span> <span class="hljs-title function_">handleRequest</span>(request);
-      response.<span class="hljs-title function_">setHeader</span>(<span class="hljs-string">&#x27;Content-Type&#x27;</span>, <span class="hljs-string">&#x27;application/json; charset=utf-8&#x27;</span>);
-      response.<span class="hljs-title function_">end</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>({ <span class="hljs-attr">requestId</span>: storage.<span class="hljs-title function_">getStore</span>().<span class="hljs-property">requestId</span> }));
-    } <span class="hljs-keyword">catch</span> (error) {
-      <span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;请求失败&#x27;</span>, { <span class="hljs-attr">kind</span>: <span class="hljs-string">&#x27;request-error&#x27;</span> });
-      response.<span class="hljs-property">statusCode</span> = <span class="hljs-number">500</span>;
-      response.<span class="hljs-title function_">end</span>(<span class="hljs-string">&#x27;error&#x27;</span>);
-    }
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">handle</span>(<span class="hljs-params">requestId, ms</span>) {
+  <span class="hljs-keyword">return</span> storage.<span class="hljs-title function_">run</span>({ requestId }, <span class="hljs-title function_">async</span> () =&gt; {
+    <span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;开始&#x27;</span>);
+    <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> <span class="hljs-built_in">setTimeout</span>(resolve, ms));
+    <span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;完成&#x27;</span>);
   });
-});
-
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">log</span>(<span class="hljs-params">message, extra = {}</span>) {
-  <span class="hljs-keyword">const</span> context = storage.<span class="hljs-title function_">getStore</span>();
-  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>({ ...extra, message, <span class="hljs-attr">requestId</span>: context?.<span class="hljs-property">requestId</span> }));
 }
 
-<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">handleRequest</span>(<span class="hljs-params">request</span>) {
-  <span class="hljs-keyword">const</span> idBefore = storage.<span class="hljs-title function_">getStore</span>().<span class="hljs-property">requestId</span>;
-  <span class="hljs-comment">// 固定的两条路径让请求完成顺序不同，便于观察并发隔离。</span>
-  <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> <span class="hljs-built_in">setTimeout</span>(resolve, request.<span class="hljs-property">url</span> === <span class="hljs-string">&#x27;/slow&#x27;</span> ? <span class="hljs-number">40</span> : <span class="hljs-number">5</span>));
-  <span class="hljs-keyword">if</span> (storage.<span class="hljs-title function_">getStore</span>().<span class="hljs-property">requestId</span> !== idBefore) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;上下文发生串用&#x27;</span>);
-  <span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;请求完成&#x27;</span>);
-}
+<span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">all</span>([<span class="hljs-title function_">handle</span>(<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-number">30</span>), <span class="hljs-title function_">handle</span>(<span class="hljs-string">&#x27;B&#x27;</span>, <span class="hljs-number">5</span>)]);
+<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;外部&#x27;</span>);
+</code></pre></div>
+<p>Node.js 22 实测输出：</p>
+<div class="not-prose code-block"><div class="code-language">text</div><pre><code class="hljs language-text">A 开始
+B 开始
+B 完成
+A 完成
+- 外部
+</code></pre></div>
+<p>B 先完成，但两个请求的日志各自带着正确的 ID。真实服务里在 HTTP 处理函数的入口调用 <code>run</code>，请求 ID 由服务端生成，或者在校验格式后采用上游传来的值。</p>
+<h2>上下文丢失的场景</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">AsyncResource</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:async_hooks&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">EventEmitter</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:events&#x27;</span>;
 
-server.<span class="hljs-title function_">listen</span>(<span class="hljs-number">3000</span>, <span class="hljs-string">&#x27;127.0.0.1&#x27;</span>);
-</code></pre></div>
-<p><code>run()</code> 只在回调及其异步后续中提供上下文；请求结束后不应把 store 引用保存到全局集合。<code>getStore()</code> 在上下文外会返回 <code>undefined</code>，日志工具必须能处理启动脚本、定时任务和测试环境没有请求上下文的情况。</p>
-<p>保存为 server.mjs 后用 Node.js 运行，并同时请求 /slow 与 /fast。每次响应返回独立 requestId；日志中同一次请求的“开始”和“完成”应保持相同 ID，完成顺序则可以交错。示例没有鉴权业务，仅演示异步上下文。</p>
-<p>HTTP 响应结束不会自动取消在 run 中启动的定时器。异步任务仍存活时，它也可能继续持有 store，因此不要创建永不结束的请求内轮询。run 在同步调用返回后恢复外层上下文，而其创建的异步后续仍能继承 store；这与“整个进程当前只有一份上下文”不同。</p>
-<h2>并发请求为什么不会互相覆盖</h2>
-<p>每次 <code>run()</code> 都有自己的 store，Node.js 会沿异步资源关联当前执行上下文。两个请求同时执行 <code>await</code> 时，恢复后仍会回到各自的 store，因此不需要使用模块级可变变量。上下文对象本身仍是可变对象，建议在创建后尽量只读，避免某个下游函数改写租户或用户字段后影响同一请求的后续日志。</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> context = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">freeze</span>({ requestId, tenantId });
-storage.<span class="hljs-title function_">run</span>(context, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-comment">// 这里启动的 Promise、定时器和大多数 Node 异步 API 会继承 context</span>
+<span class="hljs-keyword">const</span> emitter = <span class="hljs-keyword">new</span> <span class="hljs-title class_">EventEmitter</span>();
+storage.<span class="hljs-title function_">run</span>({ <span class="hljs-attr">requestId</span>: <span class="hljs-string">&#x27;C&#x27;</span> }, <span class="hljs-function">() =&gt;</span> {
+  emitter.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;普通监听&#x27;</span>));
+  emitter.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-title class_">AsyncResource</span>.<span class="hljs-title function_">bind</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;绑定后的监听&#x27;</span>)));
 });
+storage.<span class="hljs-title function_">run</span>({ <span class="hljs-attr">requestId</span>: <span class="hljs-string">&#x27;D&#x27;</span> }, <span class="hljs-function">() =&gt;</span> emitter.<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;x&#x27;</span>));
+<span class="hljs-comment">// D 普通监听</span>
+<span class="hljs-comment">// C 绑定后的监听</span>
 </code></pre></div>
-<p>这不是权限隔离。攻击者如果能控制请求头，服务端必须校验或重新生成 request ID；租户和用户信息必须来自经过认证的会话。上下文只用于关联和诊断，不能决定“是否允许访问资源”。</p>
-<h2>回调和第三方库可能破坏关联</h2>
-<p>原生 Promise、定时器和常见 Node API 通常能保持上下文，但手动保存回调、跨线程消息、旧式原生扩展或第三方异步调度器可能不在预期的异步资源链上。遇到上下文丢失时，先定位哪个边界没有传播，再使用 <code>AsyncResource</code> 或库提供的上下文 API 修复，不要在所有函数中重新读取全局变量。</p>
-<p>Worker Threads 拥有独立的事件循环和内存，不会自动共享主线程的 store。发送任务时应显式传递经过筛选的 trace/request ID，在 Worker 中建立自己的上下文；不要把完整用户对象或认证凭证通过消息传过去。</p>
-<h2><code>enterWith</code> 要谨慎使用</h2>
-<p><code>enterWith()</code> 会改变当前同步执行上下文，并可能影响后续事件监听器。它适合少数明确的适配场景，容易让事件回调意外继承上一次上下文。请求入口通常优先使用 <code>run()</code>，让作用域随着回调结束而清晰退出。</p>
-<h2>错误、流和响应结束</h2>
-<p>异常被捕获或 Promise 拒绝不会自动清理外部资源。请求上下文可以帮助日志关联错误，但数据库连接、文件流、计时器和订阅仍要在 <code>finally</code> 中释放。流事件和回调如果由请求范围外启动，要确认它们仍与正确上下文关联，或者在创建时显式绑定。</p>
-<p>上下文数据也可能被日志系统复制到错误、指标标签和 trace 属性中。只放低敏感度的标识，限制字符串长度，避免把 Cookie、Authorization、提示词和用户输入写入每条日志。高基数的 request ID 不适合直接作为聚合指标标签。</p>
-<h2>测试和性能</h2>
-<p>测试应同时发起多个请求，断言每条日志的 request ID 不串用；覆盖超时、异常、流式响应、定时任务和 Worker 边界。测试结束后清除监听器和临时上下文，避免异步任务继续写入下一用例。</p>
-<p><code>AsyncLocalStorage</code> 的上下文访问有运行时成本，store 对象越大、日志复制越多，开销越明显。只存必要标识，并在真实负载下测量；不要为了传递一个常量把所有业务状态都塞进上下文。需要跨服务传播时使用标准 Trace Context 或明确的请求头协议，而不是假设进程内上下文能自动跨网络。</p>
-<h2>常见误区</h2>
+<p>普通监听器读到的是触发 <code>emit</code> 时的上下文 D，绑定后的监听器保留了注册时的上下文 C。其他常见情况：</p>
+<table><thead><tr><th>场景</th><th>处理方式</th></tr></thead><tbody><tr><td>回调式 API</td><td>用 <code>util.promisify</code> 转成 Promise，或用 <code>AsyncResource</code> 包装回调</td></tr><tr><td>自定义连接池、任务队列</td><td>入队时用 <code>AsyncResource.bind</code> 绑定回调</td></tr><tr><td>Worker Threads</td><td>在消息里传递请求 ID，Worker 内部重新 <code>run</code></td></tr><tr><td>跨服务</td><td>用 W3C Trace Context（<code>traceparent</code> 请求头）传递，进程内上下文不会跨网络</td></tr></tbody></table>
+<p>调试时，如果某条日志的 ID 变成 <code>undefined</code>，通常是它之前最近执行的那个回调丢失了上下文。</p>
+<h2>使用建议</h2>
 <ul>
-<li>用模块级变量保存当前请求：并发时必然互相覆盖。</li>
-<li>把上下文当权限来源：客户端可控字段必须重新验证。</li>
-<li>认为 Worker 自动继承上下文：线程之间需要显式传递。</li>
-<li>处处使用 <code>enterWith()</code>：事件监听器可能意外继承错误上下文。</li>
-<li>把完整用户对象放进 store：扩大内存、日志和隐私风险。</li>
+<li>优先用 <code>run()</code>。<code>enterWith()</code> 仍是实验性 API，它会改变当前整段同步执行的上下文，容易让后续代码意外继承。</li>
+<li>store 只放请求 ID、租户 ID 这类小而稳定的标识，可以用 <code>Object.freeze</code> 防止被下游改写。</li>
+<li>上下文用于日志关联，不用于授权判断；用户身份要从认证后的会话中取得。</li>
+<li>store 中的数据会被复制到每条日志，不要放 Cookie、令牌和用户输入。</li>
 </ul>
-<h2>参考资料</h2>
+<h2>常见追问</h2>
 <ul>
-<li><a href="https://nodejs.org/api/async_context.html#class-asynclocalstorage">Node.js · AsyncLocalStorage</a></li>
-<li><a href="https://nodejs.org/api/async_hooks.html#class-asyncresource">Node.js · AsyncResource</a></li>
-<li><a href="https://www.w3.org/TR/trace-context/">W3C · Trace Context</a></li>
-</ul>
-<h2>Node.js 24 起默认使用 AsyncContextFrame</h2>
-<p>从 Node.js 24.0.0 起，AsyncLocalStorage 默认由 AsyncContextFrame 实现：上下文随 V8 的 Promise 续体传播，不再依赖 async_hooks，开销更低。需要旧实现时可以用 <code>--no-async-context-frame</code> 关闭；官方说明两种实现的上下文流可能有差异，升级时应回归测试依赖上下文的日志和追踪。</p></div><div class="answer-bottom"><a href="https://nodejs.org/api/async_context.html#class-asynclocalstorage" target="_blank" rel="noreferrer">Node.js · AsyncLocalStorage<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+AsyncLocalStorage+%E5%A6%82%E4%BD%95%E5%9C%A8+Node.js+%E8%AF%B7%E6%B1%82%E9%93%BE%E8%B7%AF%E4%B8%AD%E4%BC%A0%E9%80%92%E4%B8%8A%E4%B8%8B%E6%96%87%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAsyncLocalStorage+%E5%A6%82%E4%BD%95%E5%9C%A8+Node.js+%E8%AF%B7%E6%B1%82%E9%93%BE%E8%B7%AF%E4%B8%AD%E4%BC%A0%E9%80%92%E4%B8%8A%E4%B8%8B%E6%96%87%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anode-async-local-storage%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ANode.js%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnode-async-local-storage%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/node-diagnostics-channel/">Node.js 的 diagnostics_channel 适合解决什么问题？</a></li><li><a href="/questions/node-eventloop/">Node.js 事件循环能完全照搬浏览器的执行顺序吗？</a></li><li><a href="/questions/node-bff/">前端工程师编写 Node 服务时需要守住哪些安全边界？</a></li><li><a href="/questions/node-worker-threads/">Node.js Worker Threads 适合解决什么问题？</a></li></ul></nav></main></div></div>
+<li><strong>为什么不用模块级变量保存当前请求？</strong> 并发请求会互相覆盖，第一个 <code>await</code> 之后读到的可能已经是另一个请求的值。</li>
+<li><strong>AsyncContextFrame 改变了什么？</strong> 上下文改为随 V8 的 Promise 续体传播，不再依赖 async_hooks，开销更低，API 不变。官方说明两种实现的上下文流向在少数情况下可能不同，升级时要回归测试日志关联。</li>
+<li><strong>和 diagnostics_channel 怎么配合？</strong> 订阅者在收到诊断事件时调用 <code>getStore()</code> 给事件打上请求 ID，见《Node.js 的 diagnostics_channel 适合解决什么问题？》。</li>
+</ul></div><div class="answer-bottom"><a href="https://nodejs.org/api/async_context.html#class-asynclocalstorage" target="_blank" rel="noreferrer">Node.js · AsyncLocalStorage<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+AsyncLocalStorage+%E5%A6%82%E4%BD%95%E5%9C%A8+Node.js+%E8%AF%B7%E6%B1%82%E9%93%BE%E8%B7%AF%E4%B8%AD%E4%BC%A0%E9%80%92%E4%B8%8A%E4%B8%8B%E6%96%87%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAsyncLocalStorage+%E5%A6%82%E4%BD%95%E5%9C%A8+Node.js+%E8%AF%B7%E6%B1%82%E9%93%BE%E8%B7%AF%E4%B8%AD%E4%BC%A0%E9%80%92%E4%B8%8A%E4%B8%8B%E6%96%87%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anode-async-local-storage%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ANode.js%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnode-async-local-storage%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/node-diagnostics-channel/">Node.js 的 diagnostics_channel 适合解决什么问题？</a></li><li><a href="/questions/node-eventloop/">Node.js 事件循环和浏览器有什么不同？nextTick 一定先于 Promise 吗？</a></li><li><a href="/questions/node-bff/">前端工程师编写 Node 服务时需要守住哪些安全边界？</a></li><li><a href="/questions/node-worker-threads/">Node.js Worker Threads 适合解决什么问题？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

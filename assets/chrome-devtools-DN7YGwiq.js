@@ -1,4 +1,0 @@
-var e={notesHtml:`<p>Chrome DevTools 是 Chrome 内置的免费开发者工具，官方文档解释了 Elements、Console、Sources、Network、Performance、Memory、Application 和 Lighthouse 等面板的使用方式。它适合复现页面问题、查看请求和缓存、分析长任务与布局、定位内存泄漏、检查存储和调试无障碍树。</p>
-<p>使用 Performance 面板时，应先录制一个明确的用户动作，再结合主线程调用栈、Long Task、布局和绘制记录判断瓶颈。Network 面板可以帮助核对请求顺序、缓存响应头、压缩、优先级和失败状态；Memory 面板的堆快照和分配时间线适合比较疑似泄漏前后的对象存活情况。工具中的模拟 CPU、网络和设备尺寸是诊断辅助，不等于真实设备结果。</p>
-<p>文档和 DevTools 前端项目公开维护，可以免费阅读和使用。Chrome DevTools 的结果只代表 Chromium 实现，不能直接证明 Firefox、Safari、Android WebView 或 iOS 浏览器行为一致。涉及兼容性、媒体、触摸、键盘、屏幕阅读器和功耗的问题，还应使用目标浏览器、操作系统和真实设备验证。</p>
-<p>调试生产问题时要注意隐私和安全：不要把用户真实数据、认证 Cookie、访问令牌或完整查询参数复制到公开工单；性能录制、堆快照和网络 HAR 可能包含敏感信息，分享前应脱敏。Lighthouse 分数是某次实验条件下的指标，不能替代真实用户监测和业务成功率。</p>`};export{e as default};

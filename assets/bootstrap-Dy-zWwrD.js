@@ -1,2 +1,0 @@
-var e={notesHtml:`<p>适合传统网页、快速原型和已有 Bootstrap 项目。官方文档的组件示例、CSS 工具类和 JavaScript 交互分开组织，便于按需使用。</p>
-<p>这里指向 Bootstrap 5.3 文档；与 React、Vue 封装库组合时，要分别确认初始化和生命周期，避免让 DOM 插件与框架状态互相覆盖。</p>`};export{e as default};
