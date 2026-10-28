@@ -31,7 +31,7 @@
 <li>通过 <code>&lt;link rel=&quot;manifest&quot; href=&quot;/manifest.webmanifest&quot;&gt;</code> 引用，内容是 JSON。</li>
 <li>常用字段：<code>name</code>、<code>short_name</code>、<code>icons</code>、<code>start_url</code>、<code>scope</code>、<code>display</code>、<code>theme_color</code>、<code>background_color</code>、<code>id</code>。</li>
 <li><code>display: standalone</code> 让安装后的应用在独立窗口中运行，没有浏览器地址栏。</li>
-<li>图标至少提供 192×192 和 512×512 两种尺寸，<code>purpose: &quot;maskable&quot;</code> 的图标会被系统裁成各种形状。</li>
+<li>图标通常提供 192×192 和 512×512 两种尺寸，这是 Chromium 安装条件的要求；<code>purpose: &quot;maskable&quot;</code> 的图标允许系统裁成各种形状。</li>
 <li>manifest 只描述安装和启动方式，离线访问、推送等能力需要 Service Worker。</li>
 </ul>
 <h2>示例</h2>
@@ -58,6 +58,7 @@
 <li><strong><code>start_url</code></strong>：可以带参数用于统计从桌面图标启动的次数。</li>
 <li><strong><code>display</code></strong>：<code>fullscreen</code>、<code>standalone</code>、<code>minimal-ui</code>、<code>browser</code>；<code>display_override</code> 可以按优先级列出更多模式。</li>
 <li><strong><code>shortcuts</code></strong>：长按图标出现的快捷入口。</li>
+<li><strong><code>icons</code></strong>：Chromium 的安装条件要求至少有 192×192 和 512×512 的图标，规范本身不规定尺寸。<code>purpose: &quot;maskable&quot;</code> 表示图标四周留有安全区，系统可以裁成圆形、圆角方形等形状；普通图标被这样裁切会缺边。</li>
 </ul>
 <h2>各平台差异</h2>
 <ul>

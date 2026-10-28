@@ -49,6 +49,7 @@
 <li>屏幕外的图片和 iframe 不会因此停止加载，仍需 <code>loading=&quot;lazy&quot;</code>。</li>
 <li>计时器、订阅等 JavaScript 工作照常运行，需要单独暂停。</li>
 <li>用 Performance 面板对比开启前后的渲染耗时，收益取决于被跳过内容的复杂度。</li>
+<li><code>content-visibility: hidden</code> 始终跳过内容渲染，但保留元素已有的渲染状态，切回可见时比 <code>display: none</code> 更快恢复；它的内容对页内查找和焦点不可用，适合暂时隐藏的标签页面板。</li>
 </ul>
 <h2>常见追问</h2>
 <ul>

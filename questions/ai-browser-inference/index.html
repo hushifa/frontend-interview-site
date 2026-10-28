@@ -54,9 +54,10 @@
 <h2>界面与资源管理</h2>
 <ul>
 <li>分别显示&quot;下载模型 xx%&quot;&quot;初始化&quot;&quot;推理中&quot;，不要一直显示&quot;思考中&quot;。</li>
-<li>推理放进 Worker，避免阻塞输入和滚动，细节见&quot;浏览器端 AI 为什么用了 WebGPU 或 Worker 仍可能卡顿？&quot;。</li>
+<li>推理放进 Worker，避免阻塞输入和滚动，细节见<a href="/questions/ai-inference-performance/">《浏览器端 AI 为什么用了 WebGPU 或 Worker 仍可能卡顿？》</a>。</li>
 <li>不再使用时释放会话和张量；限制同时加载的模型数量。</li>
 <li>用 Cache Storage 或 OPFS 缓存权重，但浏览器在存储压力下可能清理它们，下次启动要能重新下载。</li>
+<li>本地推理只说明输入在设备上计算。模型文件从 CDN 下载、运行时或页面的统计上报仍会发出网络请求，宣称&quot;离线&quot;或&quot;数据不出设备&quot;前要检查实际请求。</li>
 </ul>
 <h2>常见追问</h2>
 <ul>

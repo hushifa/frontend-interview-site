@@ -32,7 +32,7 @@
 <li><code>PlainDate</code>：只有年月日，不对应任何时刻，适合生日、账期；同类还有 <code>PlainTime</code>、<code>PlainDateTime</code>、<code>PlainMonthDay</code>。</li>
 <li><code>ZonedDateTime</code>：瞬间 + IANA 时区，适合会议和当地日程；跨夏令时加 1 天和加 24 小时的结果不同。</li>
 <li>Temporal 对象不可变，<code>add</code> 返回新对象；月份从 1 开始，而 <code>Date</code> 从 0 开始。</li>
-<li>Temporal 已进入 TC39 Stage 4，Firefox 139、Chrome 144、Node.js 26 已内置；MDN 仍标注为非 Baseline，其他环境用 <code>@js-temporal/polyfill</code> 或 <code>temporal-polyfill</code>。</li>
+<li>Temporal 已进入 TC39 Stage 4，部分浏览器已内置；MDN 仍标注为非 Baseline（Limited availability），其他环境用 <code>@js-temporal/polyfill</code> 或 <code>temporal-polyfill</code>。</li>
 </ul>
 <h2>Date 的问题</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(<span class="hljs-string">&#x27;2024-01-01&#x27;</span>);       <span class="hljs-comment">// 按 UTC 午夜解析</span>

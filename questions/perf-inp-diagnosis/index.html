@@ -65,12 +65,12 @@
 <h2>按阶段优化</h2>
 <p><strong>输入延迟高</strong>：交互发生时主线程被别的任务占用。</p>
 <ul>
-<li>找出交互前后的长任务和长动画帧，见《如何用 Long Animation Frames API 定位卡顿来源？》。</li>
+<li>找出交互前后的长任务和长动画帧，见<a href="/questions/perf-long-animation-frames/">《如何用 Long Animation Frames API 定位卡顿来源？》</a>。</li>
 <li>拆分初始化和第三方脚本，非关键工作推迟到空闲时段。</li>
 </ul>
 <p><strong>处理时间高</strong>：事件回调本身慢。</p>
 <ul>
-<li>回调里先更新能立即给出反馈的状态，其余工作用 <code>scheduler.yield()</code> 或 <code>setTimeout</code> 延后，见《什么是长任务，为什么会影响交互响应？怎样观测和拆分？》。</li>
+<li>回调里先更新能立即给出反馈的状态，其余工作用 <code>scheduler.yield()</code> 或 <code>setTimeout</code> 延后，见<a href="/questions/perf-longtasks/">《什么是长任务，为什么会影响交互响应？怎样观测和拆分？》</a>。</li>
 <li>减少一次交互触发的组件重渲染范围，排序、过滤等纯计算移到 Worker。</li>
 </ul>
 <p><strong>呈现延迟高</strong>：回调结束后渲染慢。</p>

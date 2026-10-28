@@ -50,7 +50,7 @@
   <span class="hljs-keyword">return</span> cookie?.<span class="hljs-property">value</span> ?? <span class="hljs-string">&#x27;system&#x27;</span>;
 }
 </code></pre></div>
-<p><code>set()</code> 失败时 Promise 会 reject，不需要再读回来确认。</p>
+<p><code>set()</code> 参数不合法时 Promise 会 reject；被浏览器策略拒绝时是否 reject 没有统一保证，关键 Cookie 写入后可以用 <code>get()</code> 确认。</p>
 <h2>监听变化</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">cookieStore.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;change&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> cookie <span class="hljs-keyword">of</span> event.<span class="hljs-property">changed</span>) {

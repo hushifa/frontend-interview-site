@@ -32,7 +32,7 @@
 <li>用 <code>touch-action</code> 提前划分：横滑卡片设 <code>pan-y pinch-zoom</code>，纵向滚动和双指缩放留给浏览器，横向移动交给页面。</li>
 <li>移动距离超过阈值（如 10px）后再判断方向并锁定，避免轻微抖动被误判为手势。</li>
 <li>浏览器接管滚动时会发送 <code>pointercancel</code>，卡片要回到原位。</li>
-<li>每个手势都要有可点击的替代操作（如&quot;删除&quot;按钮），满足 WCAG 2.5.1 对路径手势的要求。</li>
+<li>每个手势都要有可点击的替代操作（如&quot;删除&quot;按钮），满足 WCAG 2.5.1（多点和路径手势需有单指替代）和 2.5.7（拖动需有单指点击替代）。</li>
 </ul>
 <h2>横滑删除卡片</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">bindSwipe</span>(<span class="hljs-params">card, { threshold = <span class="hljs-number">10</span>, onSwipe }</span>) {
@@ -96,8 +96,8 @@
 <li><strong>滚动穿透</strong>：弹层内滚动到底时继续滑动会带动背景滚动，可以给弹层容器设置 <code>overscroll-behavior: contain</code>。</li>
 </ul>
 <h2>替代操作</h2>
-<p>手势是隐藏的交互，用户不一定知道可以滑动，读屏用户和使用开关设备的用户也难以完成。卡片上应提供可见或可通过菜单访问的&quot;删除&quot;按钮，手势只作为快捷方式。WCAG 2.2 的 2.5.7 也要求拖动操作提供单指点击的替代方式。</p>
-<p>Pointer Events 的基础模型和指针捕获见《Pointer Events 为什么适合统一鼠标、触摸和触控笔交互？》。</p>
+<p>手势是隐藏的交互，用户不一定知道可以滑动，读屏用户和使用开关设备的用户也难以完成。卡片上应提供可见或可通过菜单访问的&quot;删除&quot;按钮，手势只作为快捷方式。WCAG 2.5.1 要求依赖路径或多点的手势有单指、无路径的替代方式；WCAG 2.2 的 2.5.7 要求拖动操作提供单指点击的替代方式。</p>
+<p>Pointer Events 的基础模型和指针捕获见<a href="/questions/mobile-pointer-events/">《Pointer Events 为什么适合统一鼠标、触摸和触控笔交互？》</a>。</p>
 <h2>常见追问</h2>
 <ul>
 <li>为什么不在 <code>pointermove</code> 里 <code>preventDefault()</code> 阻止滚动？滚动是否发生由 <code>touch-action</code> 在手势开始时决定，之后调用无效。</li>

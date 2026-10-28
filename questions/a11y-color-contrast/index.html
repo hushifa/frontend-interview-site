@@ -31,7 +31,7 @@
 <li>WCAG 1.4.3（AA）：普通文字对比度至少 4.5:1，大号文字（18pt 或 14pt 加粗，约 24px 或 18.66px 加粗）至少 3:1。</li>
 <li>WCAG 1.4.11（AA）：理解界面所需的图形和控件边界（输入框边框、图标、焦点环、图表线条）至少 3:1。</li>
 <li>WCAG 1.4.1（A）：颜色不能是传达信息的唯一方式，例如错误字段除了变红还要有文字或图标。</li>
-<li>禁用状态的控件不要求满足对比度，但要能看出它是禁用的。</li>
+<li>WCAG 不要求禁用控件满足对比度；产品上通常仍让用户能看出它不可用。</li>
 <li>深色模式、悬停、聚焦等每种状态都要单独检查，Windows 高对比度模式（<code>forced-colors</code>）也要检查。</li>
 </ul>
 <h2>对比度计算</h2>
@@ -53,6 +53,7 @@
 <span class="hljs-title function_">contrast</span>(<span class="hljs-string">&#x27;#000000&#x27;</span>, <span class="hljs-string">&#x27;#ffffff&#x27;</span>); <span class="hljs-comment">// 21</span>
 </code></pre></div>
 <p>实际工作中用开发者工具的取色器或设计工具插件即可，它们会直接显示是否达到 AA 和 AAA。</p>
+<p>对比度按每种实际出现的颜色组合计算，悬停、聚焦、选中和深色模式会换颜色，要分别检查。WCAG 1.4.3 对禁用控件不作要求，但禁用状态完全看不出来同样会让用户困惑。</p>
 <h2>状态不只靠颜色</h2>
 <div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">for</span>=<span class="hljs-string">&quot;email&quot;</span>&gt;</span>邮箱<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;email&quot;</span> <span class="hljs-attr">aria-invalid</span>=<span class="hljs-string">&quot;true&quot;</span> <span class="hljs-attr">aria-describedby</span>=<span class="hljs-string">&quot;email-error&quot;</span>&gt;</span>

@@ -53,7 +53,7 @@
 }
 </code></pre></div>
 <p><code>useUnknownInCatchVariables</code>（<code>strict</code> 的一部分）让 <code>catch (e)</code> 中的 <code>e</code> 为 <code>unknown</code>，访问 <code>e.message</code> 前要判断 <code>e instanceof Error</code>。<code>JSON.parse</code> 的返回类型是 <code>any</code>，建议立刻赋给 <code>unknown</code> 变量再校验。</p>
-<p><code>value as User</code> 跳过了证明过程，不是 <code>unknown</code> 的使用方式，见《为什么 TypeScript 不能替代接口数据校验？》。</p>
+<p><code>value as User</code> 跳过了证明过程，不是 <code>unknown</code> 的使用方式，见<a href="/questions/ts-runtime-schema/">《为什么 TypeScript 不能替代接口数据校验？》</a>。</p>
 <h2>never</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">fail</span>(<span class="hljs-params"><span class="hljs-attr">message</span>: <span class="hljs-built_in">string</span></span>): <span class="hljs-built_in">never</span> {
   <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(message);
@@ -71,7 +71,7 @@
   }
 }
 </code></pre></div>
-<p><code>string &amp; number</code> 也是 <code>never</code>。条件类型中，<code>never</code> 作为裸类型参数时会得到 <code>never</code>，见《条件类型、infer 和分布式条件类型如何理解？》。</p>
+<p><code>string &amp; number</code> 也是 <code>never</code>。条件类型中，<code>never</code> 作为裸类型参数时会得到 <code>never</code>，见<a href="/questions/ts-conditional-infer/">《条件类型、infer 和分布式条件类型如何理解？》</a>。</p>
 <h2>void 与 never</h2>
 <table><thead><tr><th></th><th><code>void</code></th><th><code>never</code></th></tr></thead><tbody><tr><td>函数能否正常返回</td><td>能</td><td>不能</td></tr><tr><td>典型例子</td><td>事件回调、<code>console.log</code></td><td>抛错函数、<code>process.exit</code></td></tr><tr><td>async 版本</td><td><code>Promise&lt;void&gt;</code></td><td><code>Promise&lt;never&gt;</code></td></tr></tbody></table>
 <p>返回类型为 <code>() =&gt; void</code> 的回调类型，允许传入有返回值的函数，返回值被忽略，所以 <code>arr.forEach(x =&gt; list.push(x))</code> 不会报错。</p>

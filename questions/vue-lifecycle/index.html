@@ -80,7 +80,7 @@ onUnmounted(() =&gt; {
 </code></pre></div>
 <p>生命周期钩子要在 <code>setup</code> 中同步调用。组合式函数里的钩子也遵循同一规则。</p>
 <h2>KeepAlive 中的组件</h2>
-<p>被缓存的组件切走时不会卸载，<code>onUnmounted</code> 不执行，改为触发 <code>onDeactivated</code>；切回时触发 <code>onActivated</code>。需要在离开时暂停的资源应写在这对钩子中，见《KeepAlive 与 Teleport 有哪些使用边界？》。</p>
+<p>被缓存的组件切走时不会卸载，<code>onUnmounted</code> 不执行，改为触发 <code>onDeactivated</code>；切回时触发 <code>onActivated</code>。需要在离开时暂停的资源应写在这对钩子中，见<a href="/questions/vue-keepalive-teleport/">《KeepAlive 与 Teleport 有哪些使用边界？》</a>。</p>
 <h2>和 Vue 2 选项式 API 的对应</h2>
 <table><thead><tr><th>Vue 2</th><th>Vue 3 组合式 API</th></tr></thead><tbody><tr><td><code>beforeCreate</code> / <code>created</code></td><td><code>setup</code> 本身</td></tr><tr><td><code>mounted</code></td><td><code>onMounted</code></td></tr><tr><td><code>beforeDestroy</code> / <code>destroyed</code></td><td><code>onBeforeUnmount</code> / <code>onUnmounted</code></td></tr></tbody></table>
 <h2>常见追问</h2>

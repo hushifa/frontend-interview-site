@@ -94,7 +94,7 @@
 <li>旧请求失败不会把新页面变成错误状态。</li>
 <li><code>finally</code> 只清理属于自己的 <code>active</code>，不会误清新请求。</li>
 <li><code>cancel</code> 用于用户主动取消并通知状态层；<code>dispose</code> 用于组件卸载，之后不再发送任何事件。</li>
-<li>状态层可以配合《怎样避免加载、成功和失败状态互相矛盾？》中的 <code>reduceRequest</code>，它同样按 <code>requestId</code> 拒绝过期事件。</li>
+<li>状态层可以配合<a href="/questions/arch-state-machine/">《怎样避免加载、成功和失败状态互相矛盾？》</a>中的 <code>reduceRequest</code>，它同样按 <code>requestId</code> 拒绝过期事件。</li>
 </ul>
 <h2>请求身份不是业务版本</h2>
 <p><code>requestId</code> 只在这个控制器内部有意义，用来判断哪次搜索代表当前意图。跨标签页、跨设备同步订单或草稿时，需要实体 ID、服务端版本号等，时间戳不能独自保证顺序。</p>

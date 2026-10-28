@@ -32,7 +32,7 @@
 <li>泛型：<code>&lt;T&gt;(value: T) =&gt; { value: T }</code>，返回类型跟随输入类型。</li>
 <li>重载：几条公开签名加一个实现签名，调用方只能看到公开签名，传入 <code>string | number</code> 这样的联合不会匹配任何一条。</li>
 <li>函数类型赋值：参数位置要求&quot;能接受更宽的输入&quot;（逆变），返回值要求&quot;产出更窄的结果&quot;（协变）。</li>
-<li><code>strictFunctionTypes</code> 只对函数类型属性 <code>handle: (v: T) =&gt; void</code> 生效，方法简写 <code>handle(v: T): void</code> 仍是双变的，以兼容数组等内置类型。</li>
+<li><code>strictFunctionTypes</code> 对所有函数类型（包括函数类型属性 <code>handle: (v: T) =&gt; void</code>）生效，方法简写 <code>handle(v: T): void</code> 仍是双变的，以兼容数组等内置类型。</li>
 </ul>
 <h2>联合参数</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">lengthOf</span>(<span class="hljs-params"><span class="hljs-attr">value</span>: <span class="hljs-built_in">string</span> | <span class="hljs-keyword">readonly</span> <span class="hljs-built_in">unknown</span>[]</span>): <span class="hljs-built_in">number</span> {

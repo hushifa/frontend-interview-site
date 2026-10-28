@@ -30,7 +30,7 @@
 <ul>
 <li><code>prefetch</code>：只取目标文档的响应正文，不取子资源，成本低，可以较广泛使用。</li>
 <li><code>prerender</code>：取文档、加载所有子资源、执行 JavaScript，资源消耗接近渲染一个 iframe，只用于高概率访问的页面。</li>
-<li><code>eagerness</code>：<code>immediate</code> 立即执行，<code>moderate</code> 在桌面端悬停约 200ms 或按下指针时，<code>conservative</code> 在按下指针或触摸时。列表规则默认 <code>immediate</code>，文档规则默认 <code>conservative</code>。</li>
+<li><code>eagerness</code>：<code>immediate</code> 立即执行，<code>eager</code> 在 Chromium 中目前与 <code>immediate</code> 行为相同，<code>moderate</code> 在桌面端悬停约 200ms 或按下指针时，<code>conservative</code> 在按下指针或触摸时。列表规则默认 <code>immediate</code>，文档规则默认 <code>conservative</code>。</li>
 <li>预渲染默认只限同源；同站跨源需要目标页面返回 <code>Supports-Loading-Mode: credentialed-prerender</code>，跨站不支持。</li>
 <li>预渲染的页面会执行代码，统计、广告曝光等副作用要等页面真正被用户看到再执行。</li>
 </ul>

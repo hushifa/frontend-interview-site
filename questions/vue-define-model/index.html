@@ -70,7 +70,7 @@ const last = defineModel(&#x27;last&#x27;);
 </code></pre></div>
 <p>父组件写 <code>&lt;NameEditor v-model:first=&quot;f&quot; v-model:last=&quot;l&quot; /&gt;</code>。两个模型各自 emit，父组件分两次收到更新；需要两个字段必须同时生效时，改用单个对象模型并整体赋值。</p>
 <h2>编译结果</h2>
-<p><code>defineModel</code> 只能在 <code>&lt;script setup&gt;</code> 中使用，不需要导入，由编译器处理。它展开后就是 prop、emit 和一个本地 ref：父组件传入的值变化时同步到 ref，ref 被赋值时 emit。原理见《组件 v-model 的本质是什么？》。</p>
+<p><code>defineModel</code> 只能在 <code>&lt;script setup&gt;</code> 中使用，不需要导入，由编译器处理。它展开后就是 prop、emit 和一个本地 ref：父组件传入的值变化时同步到 ref，ref 被赋值时 emit。原理见<a href="/questions/vue-vmodel/">《组件 v-model 的本质是什么？》</a>。</p>
 <h2>常见追问</h2>
 <ul>
 <li>父组件没有用 v-model 时，子组件赋值会怎样？本地 ref 会更新并显示新值，但父组件不知道，像一个非受控组件。</li>

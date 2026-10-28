@@ -32,7 +32,7 @@
 <li>textarea 会随输入变高，单行 input 会随输入变宽，select 按选中项宽度调整。</li>
 <li>一定要配 <code>min-*</code> 和 <code>max-*</code>：空内容时控件可能缩得很小，长内容会无限撑开。</li>
 <li>自 2026 年 6 月起进入 Baseline，旧浏览器保持固定尺寸，功能不受影响。</li>
-<li>设置了 <code>rows</code>、<code>cols</code>、<code>size</code> 属性或显式宽高时，对应方向不再按内容伸缩。</li>
+<li>在 <code>field-sizing: content</code> 下 <code>rows</code>、<code>cols</code>、<code>size</code> 不再起作用；要固定某个方向，就设置显式的宽或高。</li>
 </ul>
 <h2>自动增高的 textarea</h2>
 <div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-tag">textarea</span> {

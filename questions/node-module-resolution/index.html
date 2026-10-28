@@ -66,7 +66,7 @@
 </code></pre></div>
 <p>这让很多库可以只发布 ESM。仍需支持更早版本时，才需要同时提供 CommonJS 产物。同时发布两种格式时，要注意&quot;双包风险&quot;：同一进程里 <code>import</code> 和 <code>require</code> 可能各加载一份实现，模块级状态、单例和 <code>instanceof</code> 判断会出现两套。</p>
 <h2>包内部别名</h2>
-<p>包内代码之间的别名用 <code>imports</code> 字段定义，键以 <code>#</code> 开头，例如 <code>#logger</code>，Node.js 运行时会读取它。TypeScript 的 <code>paths</code> 只影响类型检查，运行时不起作用。<code>exports</code> 与 <code>imports</code> 的设计细节见《package.json 的 exports 和 imports 分别解决什么问题？》。</p>
+<p>包内代码之间的别名用 <code>imports</code> 字段定义，键以 <code>#</code> 开头，例如 <code>#logger</code>，Node.js 运行时会读取它。TypeScript 的 <code>paths</code> 只影响类型检查，运行时不起作用。<code>exports</code> 与 <code>imports</code> 的设计细节见<a href="/questions/eng-package-exports/">《package.json 的 exports 和 imports 分别解决什么问题？》</a>。</p>
 <h2>常见追问</h2>
 <ul>
 <li><strong>为什么 ESM 必须写扩展名？</strong> Node.js 的 ESM 解析按 URL 规则查找文件，不会像 CommonJS 那样依次尝试 <code>.js</code>、<code>.json</code> 和目录下的 <code>index.js</code>。</li>

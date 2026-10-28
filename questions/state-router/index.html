@@ -45,7 +45,9 @@
 
 <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> a = e.<span class="hljs-property">target</span>.<span class="hljs-title function_">closest</span>(<span class="hljs-string">&#x27;a[href^=&quot;/&quot;]&#x27;</span>);
-  <span class="hljs-keyword">if</span> (!a || e.<span class="hljs-property">metaKey</span> || e.<span class="hljs-property">ctrlKey</span> || e.<span class="hljs-property">button</span> !== <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span>; <span class="hljs-comment">// 保留新标签页打开</span>
+  <span class="hljs-keyword">if</span> (!a || e.<span class="hljs-property">metaKey</span> || e.<span class="hljs-property">ctrlKey</span> || e.<span class="hljs-property">shiftKey</span> || e.<span class="hljs-property">altKey</span> || e.<span class="hljs-property">button</span> !== <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span>; <span class="hljs-comment">// 保留新标签页、新窗口和下载</span>
+  <span class="hljs-keyword">if</span> (a.<span class="hljs-property">target</span> &amp;&amp; a.<span class="hljs-property">target</span> !== <span class="hljs-string">&#x27;_self&#x27;</span>) <span class="hljs-keyword">return</span>;
+  <span class="hljs-keyword">if</span> (a.<span class="hljs-title function_">hasAttribute</span>(<span class="hljs-string">&#x27;download&#x27;</span>)) <span class="hljs-keyword">return</span>;
   e.<span class="hljs-title function_">preventDefault</span>();
   <span class="hljs-title function_">navigate</span>(a.<span class="hljs-title function_">getAttribute</span>(<span class="hljs-string">&#x27;href&#x27;</span>));
 });
@@ -65,8 +67,8 @@
 <p>参数非法时使用默认值，必要时用 <code>history.replaceState</code> 把地址改成规范形式，避免同一内容有多种 URL。</p>
 <h2>导航时的其他工作</h2>
 <ul>
-<li><strong>数据加载</strong>：进入路由时开始请求，快速切换时取消旧请求，见《路由并发导航和权限变化应该怎样处理？》。</li>
-<li><strong>错误与 404</strong>：参数指向的数据不存在时显示 404 页面；SSR 或静态托管时还要返回真实的 404 状态码，见《前端渲染方式怎样影响 SEO 和部署？》。</li>
+<li><strong>数据加载</strong>：进入路由时开始请求，快速切换时取消旧请求，见<a href="/questions/state-route-concurrency/">《路由并发导航和权限变化应该怎样处理？》</a>。</li>
+<li><strong>错误与 404</strong>：参数指向的数据不存在时显示 404 页面；SSR 或静态托管时还要返回真实的 404 状态码，见<a href="/questions/render-seo-deploy/">《前端渲染方式怎样影响 SEO 和部署？》</a>。</li>
 <li><strong>标题与焦点</strong>：更新 <code>document.title</code>，把焦点移到新页面的 <code>&lt;h1&gt;</code>（加 <code>tabindex=&quot;-1&quot;</code>），或用 <code>aria-live</code> 区域播报。</li>
 <li><strong>滚动</strong>：新页面滚动到顶部，后退时恢复原来的位置。Vue Router 用 <code>scrollBehavior</code>，React Router 用 <code>&lt;ScrollRestoration&gt;</code>。</li>
 </ul>

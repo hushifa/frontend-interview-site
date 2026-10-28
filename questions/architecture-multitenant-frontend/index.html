@@ -35,7 +35,7 @@
 <li>用两个租户的测试账号做自动化测试，验证互相看不到对方的数据。</li>
 </ul>
 <h2>租户从哪里来</h2>
-<table><thead><tr><th>方式</th><th>示例</th><th>特点</th></tr></thead><tbody><tr><td>子域名</td><td><code>acme.app.com</code></td><td>隔离 Cookie 和存储最彻底，需要通配证书</td></tr><tr><td>路径前缀</td><td><code>app.com/t/acme/</code></td><td>部署简单，同源共享存储，需要在键中区分</td></tr><tr><td>登录后选择</td><td>同一 URL，账号属于多个租户</td><td>URL 中看不出租户，分享链接容易出错</td></tr></tbody></table>
+<table><thead><tr><th>方式</th><th>示例</th><th>特点</th></tr></thead><tbody><tr><td>子域名</td><td><code>acme.app.com</code></td><td>每个子域名是独立的源，存储天然隔离；Cookie 只要不设置父域 <code>Domain</code> 也互不共享。需要通配证书</td></tr><tr><td>路径前缀</td><td><code>app.com/t/acme/</code></td><td>部署简单，同源共享存储，需要在键中区分</td></tr><tr><td>登录后选择</td><td>同一 URL，账号属于多个租户</td><td>URL 中看不出租户，分享链接容易出错</td></tr></tbody></table>
 <p>无论哪种方式，服务端每次请求都要校验&quot;当前用户是否属于这个租户、是否有权访问这条记录&quot;。前端隐藏菜单只影响展示。</p>
 <h2>缓存键包含租户</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// TanStack Query 示例</span>

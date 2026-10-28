@@ -30,7 +30,7 @@
 <ul>
 <li>文档响应头要有 <code>Cross-Origin-Opener-Policy: same-origin</code>。</li>
 <li>同时要有 <code>Cross-Origin-Embedder-Policy: require-corp</code> 或 <code>credentialless</code>。</li>
-<li>页面在安全上下文中，并且 Permissions-Policy 没有禁用 <code>cross-origin-isolated</code>。</li>
+<li>Permissions-Policy 没有禁用 <code>cross-origin-isolated</code>。COOP 和 COEP 头只在安全上下文（HTTPS 或 localhost）下生效。</li>
 <li>满足后可以使用 <code>SharedArrayBuffer</code>、<code>performance.measureUserAgentSpecificMemory()</code>，<code>performance.now()</code> 的精度也更高。</li>
 </ul>
 <h2>两个头各管什么</h2>

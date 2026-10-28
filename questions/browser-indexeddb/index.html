@@ -51,7 +51,12 @@
         store.<span class="hljs-title function_">createIndex</span>(<span class="hljs-string">&#x27;byUpdatedAt&#x27;</span>, <span class="hljs-string">&#x27;updatedAt&#x27;</span>);
       }
     };
-    request.<span class="hljs-property">onsuccess</span> = <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">resolve</span>(request.<span class="hljs-property">result</span>);
+    request.<span class="hljs-property">onsuccess</span> = <span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-keyword">const</span> db = request.<span class="hljs-property">result</span>;
+      <span class="hljs-comment">// 其他标签页要升级版本时关闭旧连接，避免阻塞对方</span>
+      db.<span class="hljs-property">onversionchange</span> = <span class="hljs-function">() =&gt;</span> db.<span class="hljs-title function_">close</span>();
+      <span class="hljs-title function_">resolve</span>(db);
+    };
     request.<span class="hljs-property">onerror</span> = <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">reject</span>(request.<span class="hljs-property">error</span>);
     request.<span class="hljs-property">onblocked</span> = <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">reject</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;其他标签页仍在使用旧版本数据库&#x27;</span>));
   });
@@ -64,6 +69,7 @@
     tx.<span class="hljs-title function_">objectStore</span>(<span class="hljs-string">&#x27;notes&#x27;</span>).<span class="hljs-title function_">put</span>(note);
     tx.<span class="hljs-property">oncomplete</span> = <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">resolve</span>();
     tx.<span class="hljs-property">onerror</span> = <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">reject</span>(tx.<span class="hljs-property">error</span>);
+    tx.<span class="hljs-property">onabort</span> = <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">reject</span>(tx.<span class="hljs-property">error</span> ?? <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;事务已中止&#x27;</span>));
   });
 }
 </code></pre></div>

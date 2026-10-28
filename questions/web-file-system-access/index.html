@@ -31,7 +31,7 @@
 <li><code>showOpenFilePicker()</code>、<code>showSaveFilePicker()</code>、<code>showDirectoryPicker()</code> 弹出系统文件选择器，返回 <code>FileSystemFileHandle</code> 或 <code>FileSystemDirectoryHandle</code>。</li>
 <li>这些选择器方法只有 Chromium 桌面浏览器支持，Firefox、Safari 和移动端都不支持。</li>
 <li>句柄可以存进 IndexedDB，下次打开页面后要调用 <code>queryPermission()</code>，必要时在用户手势中用 <code>requestPermission()</code> 重新授权。</li>
-<li>写入用 <code>createWritable()</code>，数据先写进临时文件，<code>close()</code> 时才替换原文件。</li>
+<li>写入用 <code>createWritable()</code>，写入的内容在 <code>close()</code> 之后才落到原文件，中途失败不会留下半个文件。</li>
 <li><code>navigator.storage.getDirectory()</code> 返回的 OPFS 所有主流浏览器都支持，适合应用自己的数据文件，用户在系统里看不到这些文件。</li>
 </ul>
 <h2>打开并保存文件</h2>
@@ -57,6 +57,7 @@
   <span class="hljs-keyword">await</span> writable.<span class="hljs-title function_">close</span>();
 }
 </code></pre></div>
+<p><code>createWritable()</code> 返回的流先写到临时位置，<code>close()</code> 时才替换原文件；<code>close()</code> 之前出错或调用 <code>abort()</code>，原文件保持不变。</p>
 <p>用户取消选择器时，Promise 以 <code>AbortError</code> reject，应当静默处理。</p>
 <h2>降级</h2>
 <p>不支持时：</p>

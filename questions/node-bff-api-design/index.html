@@ -92,7 +92,7 @@
 <table><thead><tr><th>情况</th><th>BFF 的响应</th></tr></thead><tbody><tr><td>题目不存在</td><td>404，稳定的 <code>code</code>，例如 <code>QUESTION_NOT_FOUND</code></td></tr><tr><td>未登录</td><td>正文正常返回，<code>bookmarked</code> 为 <code>false</code>，前端显示登录入口</td></tr><tr><td>推荐服务失败</td><td>正文正常返回，推荐为空，<code>warnings</code> 中标记</td></tr><tr><td>核心服务超时</td><td>504 或 503，带 <code>code</code> 和请求 ID，前端可以提示重试</td></tr></tbody></table>
 <p>返回给前端的错误包含 <code>code</code>、可显示的 <code>message</code> 和请求 ID。日志里记录下游名称、耗时和状态，不记录 Cookie、令牌和用户内容。</p>
 <h2>权限与安全</h2>
-<p>BFF 根据会话决定返回哪些字段，下游服务仍要做自己的授权检查，因为调用方可能绕过 BFF。传给下游的用户身份由 BFF 根据会话生成，不能取自前端提交的 <code>userId</code>。输入校验、SSRF 和请求头转发等问题见《前端工程师编写 Node 服务时需要守住哪些安全边界？》。</p>
+<p>BFF 根据会话决定返回哪些字段，下游服务仍要做自己的授权检查，因为调用方可能绕过 BFF。传给下游的用户身份由 BFF 根据会话生成，不能取自前端提交的 <code>userId</code>。输入校验、SSRF 和请求头转发等问题见<a href="/questions/node-bff/">《前端工程师编写 Node 服务时需要守住哪些安全边界？》</a>。</p>
 <h2>缓存与版本</h2>
 <ul>
 <li>公共正文可以按内容版本或短 TTL 缓存；收藏状态是个性化数据，不能进入共享缓存。缓存键要包含语言等真正影响结果的维度。</li>

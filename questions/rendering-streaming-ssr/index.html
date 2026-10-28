@@ -95,7 +95,7 @@ app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x2
 <span class="hljs-comment">// 请求时</span>
 <span class="hljs-keyword">const</span> stream = <span class="hljs-keyword">await</span> <span class="hljs-title function_">resume</span>(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span></span>, postponed);
 </code></pre></div>
-<p>构建时得到的 <code>prelude</code> 是可以缓存到 CDN 的静态 HTML，<code>postponed</code> 记录了哪些部分需要在请求时完成。Next.js 的 Cache Components 就基于这种模式，见《Next.js App Router 中的几层缓存怎样区分？》。</p>
+<p>构建时得到的 <code>prelude</code> 是可以缓存到 CDN 的静态 HTML，<code>postponed</code> 记录了哪些部分需要在请求时完成。Next.js 的 Cache Components 就基于这种模式，见<a href="/questions/render-next-cache/">《Next.js App Router 中的几层缓存怎样区分？》</a>。</p>
 <p>React 19.2 也让 Web Streams 版本的 API 可以在 Node 中使用，但官方仍推荐在 Node 中使用 Node Streams 版本，速度更快且支持压缩。</p>
 <h2>常见追问</h2>
 <ul>

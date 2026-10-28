@@ -76,7 +76,7 @@
 <h2>会话结束与可见性</h2>
 <ul>
 <li>监听 <code>end</code>：恢复页面状态，清理监听器，释放只属于 XR 的资源。</li>
-<li><code>visibilitychange</code> 中 <code>visibilityState</code> 变为 <code>hidden</code> 时（例如系统菜单弹出），减少渲染工作，但会话没有结束。</li>
+<li>监听会话的 <code>visibilitychange</code>：<code>visible-blurred</code> 时场景可能仍可见，但不处理输入，帧回调可能被降频，应暂停交互；<code>hidden</code> 时帧回调完全停止。两种状态都不代表会话结束。</li>
 </ul>
 <h2>常见追问</h2>
 <ul>

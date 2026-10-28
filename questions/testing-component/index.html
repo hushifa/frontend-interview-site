@@ -107,8 +107,14 @@
   <span class="hljs-title function_">expect</span>(<span class="hljs-keyword">await</span> screen.<span class="hljs-title function_">findByText</span>(<span class="hljs-string">&#x27;闭包&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>();
 });
 </code></pre></div>
-<p><code>listitem</code> 的名称不能从内容计算，所以先按名称找到列表，再用 <code>within</code> 找文字。查询选择的原则见《Testing Library 查询方式为什么优先按用户可见语义？》。</p>
+<p><code>listitem</code> 的名称不能从内容计算，所以先按名称找到列表，再用 <code>within</code> 找文字。查询选择的原则见<a href="/questions/testing-library-queries/">《Testing Library 查询方式为什么优先按用户可见语义？》</a>。</p>
 <p><code>userEvent</code> 会依次触发聚焦、键盘、输入等事件，比 <code>fireEvent.change</code> 更接近真实操作，也能发现焦点和提交行为的问题。</p>
+<ul>
+<li>示例的 <code>search</code> 通过 props 注入，测试直接传 <code>vi.fn()</code>；依赖藏在模块里时用 <code>vi.mock</code>，放在 Context 里时用测试专用的 Provider 包裹。</li>
+<li>输入框写成 <code>type=&quot;search&quot;</code> 时角色是 <code>searchbox</code>，查询要改成 <code>getByRole(&#x27;searchbox&#x27;)</code>，不要为了让测试通过而改组件的语义。</li>
+<li><code>toBeVisible</code>、<code>toHaveValue</code>、<code>toHaveTextContent</code> 来自 jest-dom，要在 Vitest 的 setup 文件中引入 <code>@testing-library/jest-dom/vitest</code>。</li>
+<li><code>findBy*</code> 之外的异步断言可以用 <code>waitFor</code>，回调里只放断言，不要在里面点击或提交。</li>
+</ul>
 <h2>哪些断言容易变脆</h2>
 <ul>
 <li><code>expect(wrapper.state.kind).toBe(&#x27;error&#x27;)</code>：内部状态。</li>
@@ -117,7 +123,7 @@
 <li>整个组件的 DOM 快照：任何结构调整都会失败，审查者往往直接更新快照。</li>
 </ul>
 <h2>组件测试的边界</h2>
-<p>组件测试证明组件自身的交互逻辑，不能证明真实路由、后端接口、浏览器布局和多个页面组合正确。关键流程还需要端到端测试，见《如何减少 Playwright 端到端测试的不稳定？》；外观变化用截图测试，见《视觉回归测试如何减少无意义的截图差异？》。</p>
+<p>组件测试证明组件自身的交互逻辑，不能证明真实路由、后端接口、浏览器布局和多个页面组合正确。关键流程还需要端到端测试，见<a href="/questions/test-e2e/">《如何减少 Playwright 端到端测试的不稳定？》</a>；外观变化用截图测试，见<a href="/questions/test-visual-regression/">《视觉回归测试如何减少无意义的截图差异？》</a>。</p>
 <h2>常见追问</h2>
 <ul>
 <li>自定义 Hook 怎样测？优先通过使用它的组件测试；Hook 本身是公共库接口时，用 <code>renderHook</code> 测试返回值和更新。</li>

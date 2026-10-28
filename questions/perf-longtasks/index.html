@@ -37,11 +37,14 @@
 <h2>观测</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">new</span> <span class="hljs-title class_">PerformanceObserver</span>(<span class="hljs-function">(<span class="hljs-params">list</span>) =&gt;</span> {
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> entry <span class="hljs-keyword">of</span> list.<span class="hljs-title function_">getEntries</span>()) {
-    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;长任务&#x27;</span>, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">round</span>(entry.<span class="hljs-property">duration</span>), <span class="hljs-string">&#x27;ms&#x27;</span>, entry.<span class="hljs-property">attribution</span>[<span class="hljs-number">0</span>]?.<span class="hljs-property">containerSrc</span>);
+    <span class="hljs-comment">// containerSrc 可能带查询参数等敏感信息，上报前只保留来源</span>
+    <span class="hljs-keyword">const</span> src = entry.<span class="hljs-property">attribution</span>[<span class="hljs-number">0</span>]?.<span class="hljs-property">containerSrc</span>;
+    <span class="hljs-keyword">const</span> origin = src ? <span class="hljs-keyword">new</span> <span class="hljs-title function_">URL</span>(src, location.<span class="hljs-property">href</span>).<span class="hljs-property">origin</span> : <span class="hljs-string">&#x27;self&#x27;</span>;
+    <span class="hljs-title function_">report</span>({ <span class="hljs-attr">duration</span>: <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">round</span>(entry.<span class="hljs-property">duration</span>), <span class="hljs-attr">startTime</span>: entry.<span class="hljs-property">startTime</span>, origin });
   }
 }).<span class="hljs-title function_">observe</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;longtask&#x27;</span>, <span class="hljs-attr">buffered</span>: <span class="hljs-literal">true</span> });
 </code></pre></div>
-<p>Long Tasks API 只告诉你&quot;有一段长时间占用&quot;，归因只到容器（哪个 iframe 或窗口），不提供函数调用栈。需要知道是哪个脚本、是否发生强制布局时，用 LoAF，见《如何用 Long Animation Frames API 定位卡顿来源？》。LoAF 目前不是 Baseline，使用前做特性检测。</p>
+<p>Long Tasks API 只告诉你&quot;有一段长时间占用&quot;。<code>attribution</code> 只到容器（哪个 iframe 或窗口），不是调用栈。<code>buffered: true</code> 只能拿到时间线缓冲区里仍保留的条目，不是完整历史。要判断长任务是否影响了用户，把条目的 <code>startTime</code> 和用户操作处的 <code>performance.mark()</code> 对齐比较。需要知道是哪个脚本、是否发生强制布局时，用 LoAF，见<a href="/questions/perf-long-animation-frames/">《如何用 Long Animation Frames API 定位卡顿来源？》</a>。LoAF 目前不是 Baseline。两种条目都先用 <code>PerformanceObserver.supportedEntryTypes.includes(&#x27;longtask&#x27;)</code> 或 <code>&#x27;long-animation-frame&#x27;</code> 检测再观察。</p>
 <h2>分片让出主线程</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">yieldToBrowser</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">if</span> (globalThis.<span class="hljs-property">scheduler</span>?.<span class="hljs-property">yield</span>) <span class="hljs-keyword">return</span> globalThis.<span class="hljs-property">scheduler</span>.<span class="hljs-title function_">yield</span>();
@@ -72,6 +75,12 @@
 <li>Worker：排序、解析、压缩这类纯计算放到 Worker，注意数据传输的克隆成本，大数据用 Transferable 转移。</li>
 <li>渲染成本：大量 DOM 用虚拟列表，避免读写布局交替导致强制同步布局。</li>
 <li>页面加载阶段：拆分打包产物，推迟非关键脚本。</li>
+</ul>
+<h2>和 TBT、INP 的区别</h2>
+<ul>
+<li>Long Task：单个超过 50ms 的任务，是原始观测数据。</li>
+<li>TBT（Total Blocking Time）：实验室指标，加载期间每个长任务超过 50ms 的部分累加。</li>
+<li>INP：现场指标，统计真实交互从输入到下一帧绘制的耗时。长任务是 INP 变差的常见原因，但没有交互时长任务不影响 INP。</li>
 </ul>
 <h2>常见追问</h2>
 <ul>

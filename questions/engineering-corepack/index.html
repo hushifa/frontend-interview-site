@@ -31,7 +31,7 @@
 <li><code>package.json</code> 的 <code>packageManager</code> 字段声明项目用哪个包管理器的哪个精确版本，例如 <code>pnpm@12.15.0</code>。</li>
 <li>Corepack 是一层代理：通过它调用 <code>pnpm</code> 或 <code>yarn</code> 时，它按声明下载并运行对应版本。</li>
 <li>只写字段不会生效，必须执行 <code>corepack enable</code> 安装代理命令；npm 的代理默认不安装。</li>
-<li>Corepack 随 Node.js 14.19.0 到 24.x 分发，Node.js 25 起不再内置，需要 <code>npm install -g corepack</code>。</li>
+<li>Corepack 随 Node.js 14.19.0 到 25.0.0 之前的版本分发，Node.js 25 起不再内置，需要 <code>npm install -g corepack</code>。</li>
 <li>它只固定工具版本，依赖树仍由锁文件固定，CI 还需冻结安装。</li>
 </ul>
 <h2>三层关系</h2>

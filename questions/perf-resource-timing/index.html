@@ -42,7 +42,8 @@
 <h2>区分缓存命中和权限不足</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> entry <span class="hljs-keyword">of</span> performance.<span class="hljs-title function_">getEntriesByType</span>(<span class="hljs-string">&#x27;resource&#x27;</span>)) {
   <span class="hljs-keyword">const</span> crossOrigin = <span class="hljs-keyword">new</span> <span class="hljs-title function_">URL</span>(entry.<span class="hljs-property">name</span>).<span class="hljs-property">origin</span> !== location.<span class="hljs-property">origin</span>;
-  <span class="hljs-keyword">const</span> timingAllowed = !crossOrigin || entry.<span class="hljs-property">nextHopProtocol</span> !== <span class="hljs-string">&#x27;&#x27;</span>;
+  <span class="hljs-comment">// 有 TAO 时连接相关字段非 0；只看 nextHopProtocol 会把缓存命中（也可能为空）误判成无 TAO</span>
+  <span class="hljs-keyword">const</span> timingAllowed = !crossOrigin || entry.<span class="hljs-property">requestStart</span> &gt; <span class="hljs-number">0</span> || entry.<span class="hljs-property">nextHopProtocol</span> !== <span class="hljs-string">&#x27;&#x27;</span>;
 
   <span class="hljs-keyword">let</span> source;
   <span class="hljs-keyword">if</span> (!timingAllowed) source = <span class="hljs-string">&#x27;无 TAO，无法判断&#x27;</span>;

@@ -92,7 +92,7 @@ state.<span class="hljs-property">name</span> = <span class="hljs-string">&#x27;
 state.<span class="hljs-property">count</span>++;
 state.<span class="hljs-property">count</span>++;
 </code></pre></div>
-<p>组件只重新渲染一次。Vue 把组件更新任务放进队列，在微任务中统一执行，所以修改后立即读取 DOM 拿到的还是旧内容，需要 <code>await nextTick()</code>，见《修改状态后，为什么有时需要 await nextTick()？》。</p>
+<p>组件只重新渲染一次。Vue 把组件更新任务放进队列，在微任务中统一执行，所以修改后立即读取 DOM 拿到的还是旧内容，需要 <code>await nextTick()</code>，见<a href="/questions/vue-nexttick/">《修改状态后，为什么有时需要 await nextTick()？》</a>。</p>
 <h2>和 Vue 2 的差别</h2>
 <p>Vue 2 在初始化时用 <code>Object.defineProperty</code> 遍历对象的每个属性，所以新增属性、删除属性和数组下标赋值检测不到，需要 <code>Vue.set</code>。Vue 3 的 Proxy 在访问时才拦截，嵌套对象也是访问到时才转换，这些限制都消失了。</p>
 <h2>常见追问</h2>

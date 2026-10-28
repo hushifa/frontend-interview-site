@@ -32,7 +32,7 @@
 <li><code>@layer reset, base, components, utilities;</code> 先声明顺序，后面的层覆盖前面的层，与选择器优先级无关。</li>
 <li>自定义属性（<code>--color-primary</code>）会继承，可以在任意祖先上重新赋值，适合主题、密度和组件可配置项。</li>
 <li>三者可以组合：组件样式用 Modules 写并放进 <code>components</code> 层，颜色和间距从自定义属性读取。</li>
-<li>它们都不是完全隔离：继承属性、全局元素选择器仍会影响组件，需要真正封装时用 Shadow DOM。</li>
+<li>它们都不是完全隔离：继承属性、全局元素选择器仍会影响组件，需要更强的封装时用 Shadow DOM：外部选择器无法匹配影子树内的元素，但继承属性和自定义属性仍会传入。</li>
 </ul>
 <h2>层叠层管理覆盖</h2>
 <div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-keyword">@layer</span> reset, vendor, components, utilities;

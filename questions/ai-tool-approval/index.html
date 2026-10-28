@@ -51,9 +51,10 @@
   <span class="hljs-attr">args</span>?: <span class="hljs-built_in">unknown</span>;
   <span class="hljs-attr">result</span>?: { <span class="hljs-attr">summary</span>: <span class="hljs-built_in">string</span>; <span class="hljs-attr">evidence</span>?: <span class="hljs-built_in">string</span> }; <span class="hljs-comment">// 记录 ID、文件版本等</span>
   <span class="hljs-attr">error</span>?: { <span class="hljs-attr">code</span>: <span class="hljs-built_in">string</span>; <span class="hljs-attr">retryable</span>: <span class="hljs-built_in">boolean</span> };
+  <span class="hljs-attr">version</span>: <span class="hljs-built_in">number</span>; <span class="hljs-comment">// 每次状态变化加 1，用于丢弃迟到事件</span>
 };
 </code></pre></div>
-<p>一条进度条无法表达&quot;检索已完成、写文件在等批准&quot;这种并行状态，所以按步骤展示。</p>
+<p>一条进度条无法表达&quot;检索已完成、写文件在等批准&quot;这种并行状态，所以按步骤展示。一步在等批准时，只读检索可以继续，依赖这次批准的写入、发送或删除不能提前执行。</p>
 <p>状态只由执行端事件推进，例如 <code>step.started</code>、<code>step.waiting-approval</code>、<code>step.succeeded</code>。模型流式输出的说明文字可以展示，但不改变步骤状态。参数接收完整并通过 Schema 校验之前，不显示批准按钮。</p>
 <h2>确认卡片展示什么</h2>
 <ul>
@@ -67,7 +68,7 @@
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">retryStep</span>(<span class="hljs-params">callId, approval</span>) {
   <span class="hljs-keyword">const</span> { status, error } = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getExecutionStatus</span>(callId);
   <span class="hljs-keyword">if</span> (status === <span class="hljs-string">&#x27;succeeded&#x27;</span> || status === <span class="hljs-string">&#x27;executing&#x27;</span>) <span class="hljs-keyword">return</span> { status };
-  <span class="hljs-keyword">if</span> (status === <span class="hljs-string">&#x27;failed&#x27;</span> &amp;&amp; !error.<span class="hljs-property">retryable</span>) <span class="hljs-keyword">return</span> { <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;failed&#x27;</span> };
+  <span class="hljs-keyword">if</span> (status === <span class="hljs-string">&#x27;failed&#x27;</span> &amp;&amp; !error?.<span class="hljs-property">retryable</span>) <span class="hljs-keyword">return</span> { <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;failed&#x27;</span> };
   <span class="hljs-keyword">if</span> (status !== <span class="hljs-string">&#x27;failed&#x27;</span>) <span class="hljs-keyword">return</span> { <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;unknown&#x27;</span> }; <span class="hljs-comment">// 查不到确定结果，交给用户决定</span>
 
   <span class="hljs-comment">// 审批过期或参数变化，回到待确认</span>
@@ -78,13 +79,14 @@
   <span class="hljs-keyword">return</span> <span class="hljs-title function_">executeAgain</span>({ callId, <span class="hljs-attr">approvalId</span>: approval.<span class="hljs-property">id</span> });
 }
 </code></pre></div>
-<p>重试沿用原 <code>callId</code>，服务端据此去重，避免重复发信或重复下单。取消只能阻止还没开始的步骤，已经完成的外部写入要走业务的撤销或补偿流程。</p>
+<p>重试沿用原 <code>callId</code>，服务端据此去重，避免重复发信或重复下单。每次尝试另记一条 attempt 记录，界面能显示&quot;第一次失败、第二次成功&quot;，排查时也能还原过程。取消只能阻止还没开始的步骤，已经完成的外部写入要走业务的撤销或补偿流程。</p>
 <h2>刷新与失败展示</h2>
 <ul>
 <li>刷新页面后先拉取运行的服务端快照，再从快照版本继续订阅事件。事件带运行 ID、步骤 ID 和版本号，重复或迟到的事件不能把已完成的步骤改回执行中。</li>
 <li>展示历史步骤不会重新执行工具。</li>
 <li>失败按原因区分：参数错误、权限不足、用户拒绝、外部服务失败、结果未知，并附上诊断 ID。</li>
-<li>成功时展示真实证据，例如外部记录 ID、文件版本、链接。</li>
+<li>成功时展示真实证据，例如外部记录 ID、文件版本、链接，以及修改摘要、验证命令和未完成事项。</li>
+<li>原始工具日志默认折叠，并按权限脱敏，不向普通用户展示环境变量、完整请求头或内部路径。</li>
 </ul>
 <h2>常见追问</h2>
 <ul>

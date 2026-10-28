@@ -58,7 +58,7 @@
   <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 </code></pre></div>
-<p>滚动事件里只更新 <code>start</code>、<code>end</code>，每帧最多计算一次（可以在 <code>requestAnimationFrame</code> 里处理）。行高必须真的等于 <code>rowHeight</code>，包括边框和外边距，否则越往下误差越大。行高不固定的情况见《动态高度的虚拟列表怎样处理测量、滚动锚点和焦点？》。</p>
+<p>滚动事件里只更新 <code>start</code>、<code>end</code>，每帧最多计算一次（可以在 <code>requestAnimationFrame</code> 里处理）。行高必须真的等于 <code>rowHeight</code>，包括边框和外边距，否则越往下误差越大。行高不固定的情况见<a href="/questions/performance-virtual-list/">《动态高度的虚拟列表怎样处理测量、滚动锚点和焦点？》</a>。</p>
 <h2>它不解决什么</h2>
 <table><thead><tr><th>问题</th><th>对应方案</th></tr></thead><tbody><tr><td>数据量太大，下载慢、占内存</td><td>分页或按需加载</td></tr><tr><td>每次输入都全量过滤排序很慢</td><td>优化算法、索引、Worker 或服务端查询</td></tr><tr><td>屏幕外内容的渲染成本</td><td><code>content-visibility: auto</code> 也能跳过渲染，但节点仍在 DOM 中</td></tr></tbody></table>
 <h2>常见追问</h2>

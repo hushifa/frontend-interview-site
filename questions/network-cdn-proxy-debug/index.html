@@ -48,7 +48,7 @@ curl -sI --resolve www.example.com:443:203.0.113.10 https://www.example.com/app.
 </code></pre></div>
 <h2>常见原因</h2>
 <table><thead><tr><th>现象</th><th>可能原因</th></tr></thead><tbody><tr><td>发版后仍是旧 JS</td><td>HTML 被长期缓存，引用旧哈希；或无哈希文件被长期缓存</td></tr><tr><td>用户看到别人的数据</td><td>个性化响应缺少 <code>private</code>，CDN 按 URL 缓存了</td></tr><tr><td>偶发 502 被缓存</td><td>CDN 缓存了错误响应，负缓存时间过长</td></tr><tr><td>语言或设备版本串了</td><td>缺少 <code>Vary</code>，或缓存键未包含区分维度</td></tr><tr><td>命中率很低</td><td>缓存键包含追踪参数、时间戳，或 <code>Vary: User-Agent</code> 导致碎片化</td></tr></tbody></table>
-<p>用户数据串号属于安全事故，原理和防护见《什么是 Web 缓存投毒？如何避免把用户数据缓存给别人？》。</p>
+<p>用户数据串号属于安全事故，原理和防护见<a href="/questions/sec-cache-poisoning/">《什么是 Web 缓存投毒？如何避免把用户数据缓存给别人？》</a>。</p>
 <h2>预防</h2>
 <ul>
 <li>HTML 用 <code>no-cache</code>，静态资源用哈希文件名加长期缓存。</li>

@@ -30,8 +30,8 @@
 <ul>
 <li><code>navigator.sendBeacon(url, data)</code> 发出 POST 请求，页面卸载后请求仍会继续发送。</li>
 <li>返回 <code>true</code> 只表示数据已进入浏览器的发送队列，返回 <code>false</code> 通常是数据过大（排队总量约 64KB 的限制）；服务端是否收到、返回什么状态，页面都无从得知。</li>
-<li>发送时机选 <code>visibilitychange</code> 变为 <code>hidden</code>，<code>unload</code> 和 <code>beforeunload</code> 在移动端经常不触发，还会影响 bfcache。</li>
-<li>需要自定义请求头或 JSON 类型时，用 <code>fetch(url, { method: &#x27;POST&#x27;, keepalive: true })</code>，同样有 64KB 的限制。</li>
+<li>发送时机选 <code>visibilitychange</code> 变为 <code>hidden</code>，<code>unload</code> 和 <code>beforeunload</code> 在移动端经常不触发；注册 <code>unload</code> 监听还会让页面无法进入 bfcache。</li>
+<li>需要自定义请求头或 JSON 类型时，用 <code>fetch(url, { method: &#x27;POST&#x27;, keepalive: true })</code>，两者共用同一份约 64KB 的 keepalive 配额。</li>
 <li>统计数据要设计成可丢失、可去重，例如每条带唯一 ID。</li>
 </ul>
 <h2>示例</h2>
@@ -45,8 +45,9 @@
   <span class="hljs-keyword">if</span> (queue.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span>;
   <span class="hljs-keyword">const</span> body = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(queue.<span class="hljs-title function_">splice</span>(<span class="hljs-number">0</span>, queue.<span class="hljs-property">length</span>));
   <span class="hljs-keyword">const</span> blob = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Blob</span>([body], { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;application/json&#x27;</span> });
+  <span class="hljs-comment">// 失败多半是超出共享配额，keepalive 回退同样会失败，所以平时就要分批 flush，控制单次大小</span>
   <span class="hljs-keyword">if</span> (!navigator.<span class="hljs-title function_">sendBeacon</span>(<span class="hljs-string">&#x27;/api/collect&#x27;</span>, blob)) {
-    <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;/api/collect&#x27;</span>, { <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>, body, <span class="hljs-attr">keepalive</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">headers</span>: { <span class="hljs-string">&#x27;Content-Type&#x27;</span>: <span class="hljs-string">&#x27;application/json&#x27;</span> } }).<span class="hljs-title function_">catch</span>(<span class="hljs-function">() =&gt;</span> {});
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">warn</span>(<span class="hljs-string">&#x27;上报数据过大，未能排队&#x27;</span>);
   }
 }
 
@@ -55,7 +56,7 @@
 });
 </code></pre></div>
 <ul>
-<li>用 <code>Blob</code> 指定 <code>application/json</code> 时，跨源请求会触发 CORS 预检；服务端要允许，或者改用 <code>text/plain</code> 避免预检。</li>
+<li><code>Blob</code> 类型不是 <code>text/plain</code> 等 CORS 安全类型时，跨源发送的行为在不同浏览器之间不一致；跨源上报用 <code>text/plain</code> 发送 JSON 字符串最稳妥，服务端按文本解析。</li>
 <li>sendBeacon 不能设置自定义请求头，鉴权依赖 Cookie 或 URL 里的参数。</li>
 <li>平时可以定时或攒够一定数量后发送，页面离开时只发剩余部分，单次数据更小。</li>
 </ul>

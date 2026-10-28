@@ -46,7 +46,7 @@
 <li>第二个参数是导入对象，Wasm 通过它调用 JavaScript 提供的函数。</li>
 </ul>
 <h2>数据传递</h2>
-<p>Wasm 函数参数只能是数字。传图片这类数据时：</p>
+<p>Wasm 函数的参数和返回值以数值类型为主：<code>i32</code>、<code>f32</code>、<code>f64</code> 对应 JavaScript 的 Number，<code>i64</code> 对应 BigInt；<code>externref</code> 可以原样传递 JavaScript 引用，但 Wasm 不能读取其内部结构。传图片这类数据时：</p>
 <ol>
 <li>Wasm 暴露一块线性内存（<code>WebAssembly.Memory</code>），JavaScript 用 <code>Uint8Array</code> 视图写入。</li>
 <li>把数据所在的偏移量（指针）和长度作为数字传给 Wasm 函数。</li>

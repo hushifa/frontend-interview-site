@@ -56,7 +56,7 @@
 <li>服务端也可以用响应头 <code>Content-Security-Policy: sandbox</code> 对文档本身施加沙箱，适合用户上传文件的下载域。</li>
 </ul>
 <h2>与其他机制的分工</h2>
-<table><thead><tr><th>机制</th><th>控制什么</th></tr></thead><tbody><tr><td><code>sandbox</code></td><td>嵌入方限制 iframe 内的能力</td></tr><tr><td><code>allow</code> 属性 / Permissions Policy</td><td>iframe 能否使用摄像头、地理位置等能力，见《Permissions Policy 怎样限制页面和 iframe 的设备能力？》</td></tr><tr><td><code>frame-ancestors</code></td><td>被嵌入方限制谁能嵌入自己</td></tr><tr><td><code>postMessage</code> 校验</td><td>父子窗口之间的消息信任</td></tr></tbody></table>
+<table><thead><tr><th>机制</th><th>控制什么</th></tr></thead><tbody><tr><td><code>sandbox</code></td><td>嵌入方限制 iframe 内的能力</td></tr><tr><td><code>allow</code> 属性 / Permissions Policy</td><td>iframe 能否使用摄像头、地理位置等能力，见<a href="/questions/security-permissions-policy/">《Permissions Policy 怎样限制页面和 iframe 的设备能力？》</a></td></tr><tr><td><code>frame-ancestors</code></td><td>被嵌入方限制谁能嵌入自己</td></tr><tr><td><code>postMessage</code> 校验</td><td>父子窗口之间的消息信任</td></tr></tbody></table>
 <h2>常见追问</h2>
 <ul>
 <li>沙箱里的脚本能用 <code>localStorage</code> 吗？没有 <code>allow-same-origin</code> 时处于不透明源，访问存储会抛出异常。</li>

@@ -42,7 +42,15 @@
 }
 
 <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">readLines</span>(<span class="hljs-params">port, onLine</span>) {
-  <span class="hljs-keyword">const</span> reader = port.<span class="hljs-property">readable</span>.<span class="hljs-title function_">pipeThrough</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">TextDecoderStream</span>()).<span class="hljs-title function_">getReader</span>();
+  <span class="hljs-keyword">const</span> decoder = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TextDecoderStream</span>();
+  <span class="hljs-comment">// pipeTo 会锁住 port.readable，关闭时要等这个 Promise 结束</span>
+  <span class="hljs-keyword">const</span> piped = port.<span class="hljs-property">readable</span>.<span class="hljs-title function_">pipeTo</span>(decoder.<span class="hljs-property">writable</span>).<span class="hljs-title function_">catch</span>(<span class="hljs-function">() =&gt;</span> {});
+  <span class="hljs-keyword">const</span> reader = decoder.<span class="hljs-property">readable</span>.<span class="hljs-title function_">getReader</span>();
+  port.<span class="hljs-property">stop</span> = <span class="hljs-title function_">async</span> () =&gt; {
+    <span class="hljs-keyword">await</span> reader.<span class="hljs-title function_">cancel</span>();
+    <span class="hljs-keyword">await</span> piped;
+    <span class="hljs-keyword">await</span> port.<span class="hljs-title function_">close</span>();
+  };
   <span class="hljs-keyword">let</span> buffer = <span class="hljs-string">&#x27;&#x27;</span>;
   <span class="hljs-keyword">try</span> {
     <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
@@ -66,7 +74,7 @@
 </code></pre></div>
 <ul>
 <li>串口数据会被拆成任意大小的块，必须自己按换行或协议的帧格式拼接。</li>
-<li>关闭端口前要先 <code>reader.cancel()</code> 让读取循环结束，再调用 <code>port.close()</code>，否则流被锁定时关闭会失败。</li>
+<li>用了管道后 <code>port.readable</code> 处于锁定状态。关闭顺序是：<code>reader.cancel()</code> 结束读取，等待 <code>pipeTo</code> 的 Promise 结束（锁随之释放），再调用 <code>port.close()</code>；顺序不对时 <code>close()</code> 会因流被锁定而失败。</li>
 </ul>
 <h2>断开处理</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">navigator.<span class="hljs-property">serial</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;disconnect&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {

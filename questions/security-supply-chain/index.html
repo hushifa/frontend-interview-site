@@ -35,7 +35,7 @@
 <li><code>npm audit</code> 只覆盖已公开的漏洞，零告警不代表没有风险。</li>
 </ul>
 <h2>攻击类型</h2>
-<table><thead><tr><th>类型</th><th>例子</th><th>主要防护</th></tr></thead><tbody><tr><td>仿冒包</td><td><code>reacct</code>、<code>lodahs</code></td><td>核对包名，安装前检查</td></tr><tr><td>账号被盗或维护者作恶</td><td>热门包的新版本里加了窃取代码</td><td>锁文件、延迟升级、审查变更</td></tr><tr><td>依赖混淆</td><td>公共仓库出现与内部包同名的包</td><td>作用域映射，见《前端项目如何防范依赖混淆攻击？》</td></tr><tr><td>构建插件</td><td>恶意 Vite、Babel 插件改写产物</td><td>只用可信插件，审查构建配置</td></tr><tr><td>CDN 被篡改</td><td>第三方托管的脚本被替换</td><td>自托管或使用 SRI</td></tr></tbody></table>
+<table><thead><tr><th>类型</th><th>例子</th><th>主要防护</th></tr></thead><tbody><tr><td>仿冒包</td><td><code>reacct</code>、<code>lodahs</code></td><td>核对包名，安装前检查</td></tr><tr><td>账号被盗或维护者作恶</td><td>热门包的新版本里加了窃取代码</td><td>锁文件、延迟升级、审查变更</td></tr><tr><td>依赖混淆</td><td>公共仓库出现与内部包同名的包</td><td>作用域映射，见<a href="/questions/sec-dependency-confusion/">《前端项目如何防范依赖混淆攻击？》</a></td></tr><tr><td>构建插件</td><td>恶意 Vite、Babel 插件改写产物</td><td>只用可信插件，审查构建配置</td></tr><tr><td>CDN 被篡改</td><td>第三方托管的脚本被替换</td><td>自托管或使用 SRI</td></tr></tbody></table>
 <h2>实践</h2>
 <div class="not-prose code-block"><div class="code-language">bash</div><pre><code class="hljs language-bash"># CI 中按锁文件安装，不执行安装脚本
 npm ci --ignore-scripts

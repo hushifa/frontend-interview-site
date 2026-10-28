@@ -56,6 +56,8 @@
       <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;没有找到摄像头&#x27;</span>;
     <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;NotReadableError&#x27;</span>:
       <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;摄像头正在被其他程序使用&#x27;</span>;
+    <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;OverconstrainedError&#x27;</span>:
+      <span class="hljs-keyword">return</span> <span class="hljs-string">`摄像头不支持要求的参数：<span class="hljs-subst">${error.constraint}</span>`</span>;
     <span class="hljs-attr">default</span>:
       <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;无法打开摄像头&#x27;</span>;
   }

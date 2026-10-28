@@ -47,6 +47,7 @@ locale.<span class="hljs-property">baseName</span>; <span class="hljs-comment">/
 <span class="hljs-keyword">new</span> <span class="hljs-title class_">Intl</span>.<span class="hljs-title class_">Locale</span>(<span class="hljs-string">&#x27;not a tag&#x27;</span>); <span class="hljs-comment">// RangeError</span>
 </code></pre></div>
 <p>规范化会修正大小写，也会把弃用的代码替换掉（<code>iw</code> → <code>he</code>）。存储用户偏好时保存规范化后的结果。</p>
+<p>语言标签的地区子标签只描述语言变体，不代表用户所在地、货币或时区。在日本的英语用户可能要英文界面、日元和东京时区，这三项要分别保存，不要从一个字段推断另外两个。</p>
 <h2>Unicode 扩展</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> thai = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Intl</span>.<span class="hljs-title class_">Locale</span>(<span class="hljs-string">&#x27;th-TH&#x27;</span>, { <span class="hljs-attr">calendar</span>: <span class="hljs-string">&#x27;buddhist&#x27;</span>, <span class="hljs-attr">numberingSystem</span>: <span class="hljs-string">&#x27;thai&#x27;</span> });
 thai.<span class="hljs-title function_">toString</span>(); <span class="hljs-comment">// &#x27;th-TH-u-ca-buddhist-nu-thai&#x27;</span>

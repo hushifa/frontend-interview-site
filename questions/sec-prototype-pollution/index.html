@@ -67,7 +67,10 @@ record[<span class="hljs-string">&#x27;__proto__&#x27;</span>][<span class="hljs
     <span class="hljs-keyword">if</span> (<span class="hljs-variable constant_">BLOCKED</span>.<span class="hljs-title function_">has</span>(key)) <span class="hljs-keyword">continue</span>;
     <span class="hljs-keyword">const</span> value = source[key];
     <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> value === <span class="hljs-string">&#x27;object&#x27;</span> &amp;&amp; value !== <span class="hljs-literal">null</span> &amp;&amp; !<span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(value)) {
-      <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">hasOwn</span>(target, key)) target[key] = {};
+      <span class="hljs-comment">// 目标缺少该键或是原始值时，换成新对象再递归</span>
+      <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">hasOwn</span>(target, key) || <span class="hljs-keyword">typeof</span> target[key] !== <span class="hljs-string">&#x27;object&#x27;</span> || target[key] === <span class="hljs-literal">null</span>) {
+        target[key] = {};
+      }
       <span class="hljs-title function_">safeMerge</span>(target[key], value);
     } <span class="hljs-keyword">else</span> {
       target[key] = value;

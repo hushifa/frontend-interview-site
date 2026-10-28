@@ -59,11 +59,12 @@
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-comment">// vitest.config.ts</span>
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">defineConfig</span>({
   <span class="hljs-attr">test</span>: {
+    <span class="hljs-attr">clearMocks</span>: <span class="hljs-literal">true</span>,
     <span class="hljs-attr">restoreMocks</span>: <span class="hljs-literal">true</span>,
   },
 });
 </code></pre></div>
-<p>开启 <code>restoreMocks</code> 后，每个测试前自动调用 <code>mockRestore</code>，避免一个测试设置的返回值或替换的全局方法影响下一个测试。修改了 <code>globalThis</code>、<code>Date</code> 或环境变量时，用 <code>vi.stubGlobal</code>、<code>vi.stubEnv</code> 并配合 <code>unstubGlobals</code>、<code>unstubEnvs</code>。</p>
+<p><code>restoreMocks</code> 只把 <code>vi.spyOn</code> 创建的 spy 恢复成原方法，不会重置 <code>vi.fn()</code>；<code>clearMocks</code> 负责在每个测试前清掉调用记录。需要连 <code>vi.fn()</code> 的自定义实现一起清除时，改用 <code>mockReset: true</code>。修改了 <code>globalThis</code>、<code>Date</code> 或环境变量时，用 <code>vi.stubGlobal</code>、<code>vi.stubEnv</code> 并配合 <code>unstubGlobals</code>、<code>unstubEnvs</code>。</p>
 <h2>用 MSW 模拟网络层</h2>
 <p>组件内部直接调用 <code>fetch</code> 时，可以用 MSW 在网络层拦截，组件代码不用改，同一套处理器还能用于开发环境和浏览器测试：</p>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">import</span> { http, <span class="hljs-title class_">HttpResponse</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;msw&#x27;</span>;

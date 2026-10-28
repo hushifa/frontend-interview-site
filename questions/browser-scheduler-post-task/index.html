@@ -37,7 +37,11 @@
 <h2>示例</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> controller = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TaskController</span>({ <span class="hljs-attr">priority</span>: <span class="hljs-string">&#x27;background&#x27;</span> });
 
-scheduler.<span class="hljs-title function_">postTask</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">prefetchNextPage</span>(), { <span class="hljs-attr">signal</span>: controller.<span class="hljs-property">signal</span> });
+scheduler
+  .<span class="hljs-title function_">postTask</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">prefetchNextPage</span>(), { <span class="hljs-attr">signal</span>: controller.<span class="hljs-property">signal</span> })
+  .<span class="hljs-title function_">catch</span>(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (error.<span class="hljs-property">name</span> !== <span class="hljs-string">&#x27;AbortError&#x27;</span>) <span class="hljs-keyword">throw</span> error; <span class="hljs-comment">// abort 后 Promise 以 AbortError 拒绝</span>
+  });
 
 searchInput.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;focus&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
   controller.<span class="hljs-title function_">setPriority</span>(<span class="hljs-string">&#x27;user-visible&#x27;</span>);

@@ -94,14 +94,14 @@
   .<span class="hljs-title function_">toArray</span>();
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(result); <span class="hljs-comment">// [4, 16, 36]</span>
 </code></pre></div>
-<p>每个方法返回新的迭代器，只有 <code>toArray</code>、<code>reduce</code>、<code>forEach</code>、<code>some</code>、<code>every</code>、<code>find</code> 会真正消费。对无限序列也只计算需要的项。数组要先调用 <code>values()</code> 才能使用这些方法；<code>Iterator.from(obj)</code> 把只有 <code>next()</code> 的对象包装成支持 helpers 的迭代器。</p>
+<p>除 <code>map</code>、<code>filter</code>、<code>take</code> 外，惰性方法还有 <code>drop</code>（跳过前 n 项）和 <code>flatMap</code>（展开每项返回的迭代器）。每个方法返回新的迭代器，只有 <code>toArray</code>、<code>reduce</code>、<code>forEach</code>、<code>some</code>、<code>every</code>、<code>find</code> 会真正消费。对无限序列也只计算需要的项。数组要先调用 <code>values()</code> 才能使用这些方法；<code>Iterator.from(obj)</code> 把只有 <code>next()</code> 的对象包装成支持 helpers 的迭代器。</p>
 <h2>用途</h2>
 <ul>
 <li>惰性序列：分页、树遍历、无限 ID 生成。</li>
 <li>让自定义数据结构支持 <code>for...of</code> 和展开。</li>
 <li>状态机：用暂停点代替手写的状态变量。</li>
 </ul>
-<p><code>[...iterator]</code> 会一次性取出全部值，对无限序列会永不结束。提前退出时的清理见《JavaScript 迭代器关闭和 return 方法有什么作用？》，异步数据源见《异步迭代器和 for await...of 适合处理什么数据？》。</p>
+<p><code>[...iterator]</code> 会一次性取出全部值，对无限序列会永不结束。提前退出时的清理见<a href="/questions/js-iterator-closing/">《JavaScript 迭代器关闭和 return 方法有什么作用？》</a>，异步数据源见<a href="/questions/js-async-iterators/">《异步迭代器和 for await...of 适合处理什么数据？》</a>。</p>
 <h2>常见追问</h2>
 <ul>
 <li>怎样让普通对象可以 <code>for...of</code>？给它加 <code>*[Symbol.iterator]() { yield* Object.entries(this); }</code>。</li>

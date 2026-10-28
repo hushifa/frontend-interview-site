@@ -44,7 +44,7 @@
   <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setCount(count + 1)}&gt;{count}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>;
 }
 </code></pre></div>
-<p>点击后：<code>setCount</code> 安排更新 → React 调用 <code>Counter</code> 打印 <code>render 1</code> → 比较发现只有按钮文字变了 → 提交时只更新这个文本节点 → 浏览器绘制，Effect 打印 <code>effect 1</code>。</p>
+<p>点击后：<code>setCount</code> 安排更新 → React 调用 <code>Counter</code> 打印 <code>render 1</code> → 比较发现只有按钮文字变了 → 提交时只更新这个文本节点 → 浏览器绘制，Effect 通常在此后打印 <code>effect 1</code>。</p>
 <h2>不纯渲染的问题</h2>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">let</span> renderCount = <span class="hljs-number">0</span>;
 
@@ -55,7 +55,7 @@
 </code></pre></div>
 <p>严格模式下每次渲染会执行两次，被中断重来的渲染也会计数，显示的数字和实际提交次数对不上。需要记录次数时用 ref 并在 Effect 里修改，需要显示就放进 state。</p>
 <h2>父组件渲染会带动子组件</h2>
-<p>父组件重新渲染时，默认会重新调用所有子组件函数，即使子组件的 props 没变。这通常很快，因为最终 DOM 改动很少。确实有性能问题时，用 <code>memo</code> 跳过子组件，或者启用 React Compiler，详见《memo、useMemo、useCallback 各自优化什么？》。</p>
+<p>父组件重新渲染时，默认会重新调用所有子组件函数，即使子组件的 props 没变。这通常很快，因为最终 DOM 改动很少。确实有性能问题时，用 <code>memo</code> 跳过子组件，或者启用 React Compiler，详见<a href="/questions/react-memo/">《memo、useMemo、useCallback 各自优化什么？》</a>。</p>
 <h2>提交阶段的顺序</h2>
 <ol>
 <li>应用 DOM 变更。</li>

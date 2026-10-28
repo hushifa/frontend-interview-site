@@ -45,7 +45,7 @@
 <li><code>.env</code>、<code>.env.local</code>、<code>.env.[mode]</code>、<code>.env.[mode].local</code> 依次加载，越具体的优先级越高；<code>.local</code> 文件应加入 <code>.gitignore</code>。</li>
 <li><code>--mode</code> 决定加载哪个 <code>.env.[mode]</code>，默认开发是 <code>development</code>、构建是 <code>production</code>。</li>
 <li>启动 Vite 时已经存在的进程环境变量优先于 <code>.env</code> 文件。</li>
-<li>只有 <code>VITE_</code> 前缀（可用 <code>envPrefix</code> 修改）的变量出现在 <code>import.meta.env</code> 中。不要把 <code>envPrefix</code> 设成空字符串，否则所有变量都可能被打包。</li>
+<li>只有 <code>VITE_</code> 前缀（可用 <code>envPrefix</code> 修改）的变量出现在 <code>import.meta.env</code> 中。<code>envPrefix</code> 不能设成空字符串，那会暴露全部环境变量，Vite 检测到 <code>&#x27;&#x27;</code> 会直接报错；只需暴露个别变量时用 <code>define</code>。</li>
 <li>内置的 <code>import.meta.env.MODE</code>、<code>DEV</code>、<code>PROD</code>、<code>BASE_URL</code> 可直接使用。</li>
 </ul>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> timeout = <span class="hljs-title class_">Number</span>(<span class="hljs-keyword">import</span>.<span class="hljs-property">meta</span>.<span class="hljs-property">env</span>.<span class="hljs-property">VITE_TIMEOUT</span> ?? <span class="hljs-number">5000</span>);

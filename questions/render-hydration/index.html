@@ -30,7 +30,7 @@
 <ul>
 <li>Hydration 是客户端把组件逻辑和事件&quot;接到&quot;服务端已经生成的 DOM 上，前提是客户端首次渲染与服务端 HTML 一致。</li>
 <li>常见原因：渲染时调用 <code>Date.now()</code>、<code>Math.random()</code>；读取 <code>window</code>、<code>localStorage</code>；服务端与浏览器时区、语言不同；服务端和客户端拿到的数据不同；不合法的 HTML 嵌套；浏览器扩展插入了节点。</li>
-<li>React 遇到文本不一致时会报警告；遇到较严重的不一致，会丢弃这部分服务端 HTML，在客户端重新渲染到最近的 Suspense 边界。</li>
+<li>React 18 起，任何不一致（包括文本）都不只是警告：React 会丢弃这部分服务端 HTML，从最近的 Suspense 边界（没有则从根）改为客户端渲染，并通过 <code>onRecoverableError</code> 上报。</li>
 <li>修复原则：首次渲染只使用两端都相同的输入；浏览器专属的内容在 <code>useEffect</code>（Vue 中是 <code>onMounted</code>）之后再更新。</li>
 <li><code>suppressHydrationWarning</code> 只能用于无法避免的单个文本差异（如时间戳），不能用来掩盖结构问题。</li>
 </ul>

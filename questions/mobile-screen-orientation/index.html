@@ -49,8 +49,8 @@ screen.<span class="hljs-property">orientation</span>.<span class="hljs-title fu
 </code></pre></div>
 <h2>锁定方向</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">enterLandscapePlayer</span>(<span class="hljs-params">element</span>) {
-  <span class="hljs-keyword">await</span> element.<span class="hljs-title function_">requestFullscreen</span>();
   <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">await</span> element.<span class="hljs-title function_">requestFullscreen</span>();
     <span class="hljs-keyword">await</span> screen.<span class="hljs-property">orientation</span>.<span class="hljs-title function_">lock</span>(<span class="hljs-string">&#x27;landscape&#x27;</span>);
   } <span class="hljs-keyword">catch</span> (error) {
     <span class="hljs-comment">// 不支持锁定时显示&quot;请横置设备&quot;的提示</span>

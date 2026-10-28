@@ -81,8 +81,17 @@ test.<span class="hljs-title function_">beforeEach</span>(<span class="hljs-titl
 });
 </code></pre></div>
 <p>这依赖真实后端可用，适合在测试环境里验证某个字段对界面的影响。</p>
+<h2>处理链和清理</h2>
+<ul>
+<li>每个处理器都必须以 <code>fulfill</code>、<code>abort</code>、<code>continue</code> 或 <code>fallback</code> 之一结束；忘记调用时请求会一直挂起。为了模拟慢响应保存的延迟 Promise，也要在测试结束时释放。</li>
+<li>某个处理器发现请求不归自己负责时用 <code>fallback</code>，交给前面注册的默认模拟；用 <code>continue</code> 会直接访问真实网络，绕过其他模拟。</li>
+<li>同一请求同时匹配页面级和上下文级路由时，页面级路由优先。</li>
+<li><code>continue</code> 和 <code>fallback</code> 可以改写方法、请求体和部分请求头，受限请求头不能随意改写；Cookie 用上下文的 Cookie API 设置。</li>
+<li>开启路由会禁用浏览器 HTTP 缓存，所以这类测试不能用来判断真实的缓存行为。</li>
+<li>用 <code>page.unroute()</code> 移除指定规则，<code>page.unrouteAll()</code> 移除全部；它的 <code>behavior</code> 选项决定是否等待正在执行的处理器：<code>&#x27;wait&#x27;</code> 等待完成，<code>&#x27;ignoreErrors&#x27;</code> 不等待并吞掉之后的错误，默认值不等待。</li>
+</ul>
 <h2>模拟的风险</h2>
-<p>模拟数据是手写的，接口变了测试仍会通过。可以从 OpenAPI 生成模拟数据，或用契约测试保证前后端一致，见《前端契约测试应该验证什么？》。<code>routeFromHAR</code> 能把录制的真实流量作为模拟数据回放。</p>
+<p>模拟数据是手写的，接口变了测试仍会通过。可以从 OpenAPI 生成模拟数据，或用契约测试保证前后端一致，见<a href="/questions/testing-contract/">《前端契约测试应该验证什么？》</a>。<code>routeFromHAR</code> 能把录制的真实流量作为模拟数据回放。</p>
 <h2>常见追问</h2>
 <ul>
 <li>和 MSW 有什么区别？MSW 在应用内部通过 Service Worker 或 Node 拦截，同一套模拟可用于开发、单元测试和 E2E；Playwright 的 route 只在 Playwright 测试中可用，但可以拦截任何请求，包括第三方资源。</li>

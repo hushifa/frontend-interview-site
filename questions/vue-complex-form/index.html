@@ -110,6 +110,7 @@ function reset() {
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { watch, onWatcherCleanup } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
 
 <span class="hljs-title function_">watch</span>(<span class="hljs-function">() =&gt;</span> draft.<span class="hljs-property">name</span>, <span class="hljs-title function_">async</span> (name) =&gt; {
+  <span class="hljs-keyword">if</span> (!name.<span class="hljs-title function_">trim</span>()) <span class="hljs-keyword">return</span>; <span class="hljs-comment">// 空值交给必填校验，不发请求</span>
   <span class="hljs-keyword">const</span> controller = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AbortController</span>();
   <span class="hljs-title function_">onWatcherCleanup</span>(<span class="hljs-function">() =&gt;</span> controller.<span class="hljs-title function_">abort</span>()); <span class="hljs-comment">// Vue 3.5 起可用</span>
   <span class="hljs-keyword">try</span> {

@@ -54,7 +54,7 @@
   <span class="hljs-keyword">throw</span> <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">assign</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">`HTTP <span class="hljs-subst">${response.status}</span>`</span>), { <span class="hljs-attr">status</span>: response.<span class="hljs-property">status</span> });
 }
 </code></pre></div>
-<p><code>Retry-After</code> 也可能是 HTTP 日期格式，生产代码要两种都解析。<code>fetch</code> 本身的错误处理见《为什么 fetch 收到 404 不一定进入 catch？》。</p>
+<p><code>Retry-After</code> 也可能是 HTTP 日期格式，生产代码要两种都解析。<code>fetch</code> 本身的错误处理见<a href="/questions/http-fetch-errors/">《为什么 fetch 收到 404 不一定进入 catch？》</a>。</p>
 <h2>常见追问</h2>
 <ul>
 <li>业务错误该用 200 加错误码，还是用 4xx？用 HTTP 状态码表达协议层结果，监控、缓存和网关能正确识别；业务细节放在响应体里。</li>

@@ -69,7 +69,7 @@
 <li>不要用 <code>eval</code>、<code>new Function</code> 或 <code>vm</code> 处理用户数据，<code>vm</code> 不是安全沙箱。</li>
 </ul>
 <h2>资源上限</h2>
-<table><thead><tr><th>风险</th><th>处理</th></tr></thead><tbody><tr><td>超大请求体</td><td>在框架解析前限制大小，例如 1MB，超出直接返回 413</td></tr><tr><td>下游不返回</td><td>每个调用都有超时，整次请求有总预算</td></tr><tr><td>正则回溯</td><td>避免嵌套量词，限制输入长度</td></tr><tr><td>暴力请求</td><td>按 IP 或用户限流</td></tr><tr><td>同步重计算</td><td>移到 Worker，见《Node.js Worker Threads 适合解决什么问题？》</td></tr></tbody></table>
+<table><thead><tr><th>风险</th><th>处理</th></tr></thead><tbody><tr><td>超大请求体</td><td>在框架解析前限制大小，例如 1MB，超出直接返回 413</td></tr><tr><td>下游不返回</td><td>每个调用都有超时，整次请求有总预算</td></tr><tr><td>正则回溯</td><td>避免嵌套量词，限制输入长度</td></tr><tr><td>暴力请求</td><td>按 IP 或用户限流</td></tr><tr><td>同步重计算</td><td>移到 Worker，见<a href="/questions/node-worker-threads/">《Node.js Worker Threads 适合解决什么问题？》</a></td></tr></tbody></table>
 <p>Node.js HTTP 服务器的 <code>requestTimeout</code> 默认 300 秒，<code>headersTimeout</code> 默认 60 秒，限制的是接收完整个请求的时间，用来防慢速请求攻击，处理请求本身的耗时要靠业务代码里的超时来控制。</p>
 <h2>依赖与密钥</h2>
 <ul>

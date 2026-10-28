@@ -63,7 +63,7 @@
 <p>只加 <code>aria-modal=&quot;true&quot;</code> 不会阻止背景交互，它只是告诉辅助技术背景不可用，键盘仍能 Tab 到背景，必须配合 <code>inert</code>。</p>
 <h2>其他细节</h2>
 <ul>
-<li>点击遮罩关闭可以用 <code>closedby=&quot;any&quot;</code>，表单有未保存内容时应先确认。</li>
+<li>点击遮罩关闭可以用 <code>closedby=&quot;any&quot;</code>，表单有未保存内容时应先确认。<code>closedby</code> 目前不是 Baseline，要先检测 <code>&#x27;closedBy&#x27; in HTMLDialogElement.prototype</code>，不支持时监听 <code>click</code>，在 <code>event.target === dialog</code> 时调用 <code>close()</code>。</li>
 <li>打开对话框时阻止背景滚动，可以用 <code>html:has(dialog[open]) { overflow: hidden; }</code>。</li>
 <li>对话框里有错误提示或异步结果时，用 live region 播报。</li>
 <li>不需要阻断背景的提示用 popover 或非模态对话框，不要滥用模态。</li>

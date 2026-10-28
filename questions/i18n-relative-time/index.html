@@ -74,9 +74,11 @@ en.<span class="hljs-title function_">format</span>(-<span class="hljs-number">1
 <li>在相对时间旁边提供绝对时间，例如 <code>&lt;time datetime=&quot;2026-10-28T09:00:00Z&quot; title=&quot;2026年10月28日 17:00&quot;&gt;</code>。</li>
 <li>按时间差决定刷新频率：一分钟内每 10 秒刷新，一小时内每分钟刷新，更早的不必自动刷新。</li>
 <li>读屏器不需要每次刷新都播报，不要把相对时间放进 live region。</li>
+<li>列表排序、是否需要刷新都用原始时间戳判断，不要解析显示出来的字符串。</li>
+<li>SSR 时服务端渲染的&quot;现在&quot;和客户端水合时不同，&quot;3分钟前&quot;可能变成&quot;4分钟前&quot;，造成水合不一致。常见做法是服务端只输出绝对时间，客户端水合后再替换成相对时间。</li>
 </ul>
 <h2>与 Temporal 的关系</h2>
-<p>Temporal 已于 2026 年 3 月进入 TC39 第 4 阶段，预计收入 ES2027。它提供带时区和日历的日期计算（例如按日历日相减），计算结果仍然交给 <code>Intl.RelativeTimeFormat</code> 显示。Node 22 还没有 Temporal，使用前要做能力检测或引入 polyfill。</p>
+<p>Temporal 已进入 TC39 第 4 阶段，预计收入 ES2027。它提供带时区和日历的日期计算（例如按日历日相减），计算结果仍然交给 <code>Intl.RelativeTimeFormat</code> 显示。Node 22 还没有 Temporal，使用前要做能力检测或引入 polyfill。</p>
 <h2>常见追问</h2>
 <ul>
 <li><strong>要按词高亮数字部分怎么办？</strong> 用 <code>formatToParts()</code>，返回结果里数字部分的 <code>type</code> 是 <code>&#x27;integer&#x27;</code>。</li>

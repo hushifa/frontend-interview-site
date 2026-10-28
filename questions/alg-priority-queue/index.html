@@ -114,17 +114,21 @@ queue.<span class="hljs-title function_">push</span>(<span class="hljs-string">&
       <span class="hljs-keyword">while</span> (active &lt; limit &amp;&amp; queue.<span class="hljs-property">size</span> &gt; <span class="hljs-number">0</span>) {
         <span class="hljs-keyword">const</span> task = queue.<span class="hljs-title function_">pop</span>();
         active++;
-        <span class="hljs-title function_">task</span>().<span class="hljs-title function_">finally</span>(<span class="hljs-function">() =&gt;</span> {
-          active--;
-          <span class="hljs-title function_">next</span>();
-        });
+        <span class="hljs-comment">// 同步抛错也转成拒绝；失败只记录，不中断队列，也不产生未处理拒绝。</span>
+        <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>()
+          .<span class="hljs-title function_">then</span>(task)
+          .<span class="hljs-title function_">catch</span>(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;任务失败&#x27;</span>, error))
+          .<span class="hljs-title function_">finally</span>(<span class="hljs-function">() =&gt;</span> {
+            active--;
+            <span class="hljs-title function_">next</span>();
+          });
       }
     };
     <span class="hljs-title function_">next</span>();
   });
 }
 </code></pre></div>
-<p>优先队列决定顺序，<code>limit</code> 控制同时运行的数量。用户滚动后某张图片不再需要时，要在任务里检查取消标记或用 <code>AbortController</code> 中止请求，堆本身不支持删除任意元素。</p>
+<p>优先队列决定顺序，<code>limit</code> 控制同时运行的数量。单个任务失败只记录错误，队列继续执行，全部结束后 <code>runQueue</code> 兑现；需要汇总失败时，可以在 <code>catch</code> 里收集错误再一并返回。用户滚动后某张图片不再需要时，要在任务里检查取消标记或用 <code>AbortController</code> 中止请求，堆本身不支持删除任意元素。</p>
 <h2>常见追问</h2>
 <ul>
 <li><strong>怎样支持修改优先级？</strong> 维护&quot;值 → 堆下标&quot;的映射，修改后按新优先级上浮或下沉；更简单的做法是插入一个新条目，旧条目出队时发现已失效就跳过。</li>

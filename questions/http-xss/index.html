@@ -47,7 +47,7 @@ container.<span class="hljs-property">innerHTML</span> = <span class="hljs-title
 <ul>
 <li>框架默认转义插值，危险在逃生口：React 的 <code>dangerouslySetInnerHTML</code>、Vue 的 <code>v-html</code>。</li>
 <li><code>href</code> 也是入口：<code>javascript:</code> URL 会执行脚本，链接地址要校验协议只允许 <code>http:</code>、<code>https:</code>。</li>
-<li>CSP 限制脚本来源，即使注入成功也不能执行，见《CSP 的 nonce、hash 与 Report-Only 如何使用？》。</li>
+<li>CSP 限制脚本来源，即使注入成功也不能执行，见<a href="/questions/sec-csp/">《CSP 的 nonce、hash 与 Report-Only 如何使用？》</a>。</li>
 <li>会话 Cookie 设 <code>HttpOnly</code>，减少脚本直接读取令牌，但不能阻止脚本在页面里以用户身份发请求。</li>
 </ul>
 <h2>防 CSRF</h2>
@@ -56,7 +56,7 @@ container.<span class="hljs-property">innerHTML</span> = <span class="hljs-title
 <ul>
 <li><code>SameSite=Lax</code> 时跨站的 <code>POST</code>、<code>fetch</code> 请求不带 Cookie，只有顶层导航的 <code>GET</code> 会带上。</li>
 <li>服务端对修改操作检查 <code>Origin</code> 是否是自己的站点，或检查 <code>Sec-Fetch-Site</code> 是否为 <code>same-origin</code>。</li>
-<li>需要更强保证或兼容旧浏览器时使用 CSRF 令牌，见《Double Submit Cookie 能怎样防御 CSRF？》。</li>
+<li>需要更强保证或兼容旧浏览器时使用 CSRF 令牌，见<a href="/questions/security-csrf-double-submit/">《Double Submit Cookie 能怎样防御 CSRF？》</a>。</li>
 <li>同站不等于同源：<code>evil.example.com</code> 和 <code>app.example.com</code> 是同站，SameSite 拦不住来自子域名的请求。</li>
 </ul>
 <h2>常见追问</h2>

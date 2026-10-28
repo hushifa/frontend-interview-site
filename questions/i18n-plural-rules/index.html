@@ -60,7 +60,7 @@
 <span class="hljs-title function_">unreadMessage</span>(<span class="hljs-number">1</span>); <span class="hljs-comment">// &#x27;You have 1 unread message.&#x27;</span>
 <span class="hljs-title function_">unreadMessage</span>(<span class="hljs-number">1200</span>); <span class="hljs-comment">// &#x27;You have 1,200 unread messages.&#x27;</span>
 </code></pre></div>
-<p>每个类别对应一整句，不要只替换词尾。实际项目里通常把这些分支写进 ICU 消息，见&quot;ICU MessageFormat 为什么适合复杂国际化文案？&quot;。</p>
+<p>每个类别对应一整句，不要只替换词尾。实际项目里通常把这些分支写进 ICU 消息，见<a href="/questions/i18n-icu-message/">《ICU MessageFormat 为什么适合复杂国际化文案？》</a>。</p>
 <h2>序数</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> ordinal = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Intl</span>.<span class="hljs-title class_">PluralRules</span>(<span class="hljs-string">&#x27;en&#x27;</span>, { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;ordinal&#x27;</span> });
 <span class="hljs-keyword">const</span> suffix = { <span class="hljs-attr">one</span>: <span class="hljs-string">&#x27;st&#x27;</span>, <span class="hljs-attr">two</span>: <span class="hljs-string">&#x27;nd&#x27;</span>, <span class="hljs-attr">few</span>: <span class="hljs-string">&#x27;rd&#x27;</span>, <span class="hljs-attr">other</span>: <span class="hljs-string">&#x27;th&#x27;</span> };

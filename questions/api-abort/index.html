@@ -56,15 +56,16 @@
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">wait</span>(<span class="hljs-params">ms, { signal } = {}</span>) {
   <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
     signal?.<span class="hljs-title function_">throwIfAborted</span>();
-    <span class="hljs-keyword">const</span> timer = <span class="hljs-built_in">setTimeout</span>(resolve, ms);
-    signal?.<span class="hljs-title function_">addEventListener</span>(
-      <span class="hljs-string">&#x27;abort&#x27;</span>,
-      <span class="hljs-function">() =&gt;</span> {
-        <span class="hljs-built_in">clearTimeout</span>(timer);
-        <span class="hljs-title function_">reject</span>(signal.<span class="hljs-property">reason</span>);
-      },
-      { <span class="hljs-attr">once</span>: <span class="hljs-literal">true</span> },
-    );
+    <span class="hljs-keyword">const</span> <span class="hljs-title function_">onAbort</span> = (<span class="hljs-params"></span>) =&gt; {
+      <span class="hljs-built_in">clearTimeout</span>(timer);
+      <span class="hljs-title function_">reject</span>(signal.<span class="hljs-property">reason</span>);
+    };
+    <span class="hljs-comment">// 正常结束时移除监听，复用同一个 signal 时不会累积</span>
+    <span class="hljs-keyword">const</span> timer = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+      signal?.<span class="hljs-title function_">removeEventListener</span>(<span class="hljs-string">&#x27;abort&#x27;</span>, onAbort);
+      <span class="hljs-title function_">resolve</span>();
+    }, ms);
+    signal?.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;abort&#x27;</span>, onAbort, { <span class="hljs-attr">once</span>: <span class="hljs-literal">true</span> });
   });
 }
 </code></pre></div>

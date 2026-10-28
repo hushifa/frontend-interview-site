@@ -28,26 +28,27 @@
   <body>
     <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">动态高度的虚拟列表怎样处理测量、滚动锚点和焦点？</span></nav><h1 tabindex="-1">动态高度的虚拟列表怎样处理测量、滚动锚点和焦点？</h1><p class="reading-summary">行高不固定时，先用估计高度计算位置，行挂载后用 ResizeObserver 测量真实高度并按数据 ID 缓存，再修正后续行的偏移。前方内容高度变化时，要按锚点行补偿滚动位置；被卸载的行会丢失焦点和输入状态，需要单独保留。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
 <ul>
-<li>固定行高可以直接算出位置（原理见《虚拟列表通过什么方式减少渲染成本？》）；动态高度要维护&quot;每行高度&quot;的缓存和前缀和。</li>
+<li>固定行高可以直接算出位置（原理见<a href="/questions/perf-virtual-list/">《虚拟列表通过什么方式减少渲染成本？》</a>）；动态高度要维护&quot;每行高度&quot;的缓存和前缀和。</li>
 <li>未测量的行用估计高度，挂载后测量真实高度，更新缓存和总高度。</li>
 <li>高度缓存按数据 ID 存，排序、筛选、插入后索引会变，按索引存会错位。</li>
 <li>前方的行变高或在顶部插入数据时，记录锚点行的 ID 和它离视口顶部的距离，测量完成后补偿 <code>scrollTop</code>，否则内容会跳动。</li>
 <li>正在编辑或获得焦点的行离开窗口会被卸载，要把状态提升到列表外，或暂时保留这一行。</li>
 </ul>
 <h2>测量与定位</h2>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> heights = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>(); <span class="hljs-comment">// id -&gt; 实测高度</span>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> heights = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>(); <span class="hljs-comment">// String(id) -&gt; 实测高度；dataset 读出的总是字符串，两边统一成字符串</span>
 <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">ESTIMATE</span> = <span class="hljs-number">60</span>;
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">layout</span>(<span class="hljs-params">items</span>) {
   <span class="hljs-keyword">const</span> offsets = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(items.<span class="hljs-property">length</span> + <span class="hljs-number">1</span>);
   offsets[<span class="hljs-number">0</span>] = <span class="hljs-number">0</span>;
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; items.<span class="hljs-property">length</span>; i += <span class="hljs-number">1</span>) {
-    offsets[i + <span class="hljs-number">1</span>] = offsets[i] + (heights.<span class="hljs-title function_">get</span>(items[i].<span class="hljs-property">id</span>) ?? <span class="hljs-variable constant_">ESTIMATE</span>);
+    offsets[i + <span class="hljs-number">1</span>] = offsets[i] + (heights.<span class="hljs-title function_">get</span>(<span class="hljs-title class_">String</span>(items[i].<span class="hljs-property">id</span>)) ?? <span class="hljs-variable constant_">ESTIMATE</span>);
   }
   <span class="hljs-keyword">return</span> offsets; <span class="hljs-comment">// offsets[i] 是第 i 行的顶部，offsets[length] 是总高度</span>
 }
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">findStart</span>(<span class="hljs-params">offsets, scrollTop</span>) {
+  <span class="hljs-keyword">if</span> (offsets.<span class="hljs-property">length</span> &lt; <span class="hljs-number">2</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; <span class="hljs-comment">// 空列表</span>
   <span class="hljs-keyword">let</span> low = <span class="hljs-number">0</span>;
   <span class="hljs-keyword">let</span> high = offsets.<span class="hljs-property">length</span> - <span class="hljs-number">2</span>;
   <span class="hljs-keyword">while</span> (low &lt; high) {

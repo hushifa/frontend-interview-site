@@ -48,7 +48,8 @@
     <span class="hljs-keyword">const</span> prev = ids.<span class="hljs-property">value</span>;
     ids.<span class="hljs-property">value</span> = <span class="hljs-title function_">has</span>(id) ? prev.<span class="hljs-title function_">filter</span>(<span class="hljs-function">(<span class="hljs-params">x</span>) =&gt;</span> x !== id) : [...prev, id];
     <span class="hljs-keyword">try</span> {
-      <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">`/api/bookmarks/<span class="hljs-subst">${id}</span>`</span>, { <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;PUT&#x27;</span> });
+      <span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">`/api/bookmarks/<span class="hljs-subst">${id}</span>`</span>, { <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;PUT&#x27;</span> });
+      <span class="hljs-keyword">if</span> (!res.<span class="hljs-property">ok</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">`HTTP <span class="hljs-subst">${res.status}</span>`</span>);
     } <span class="hljs-keyword">catch</span> {
       ids.<span class="hljs-property">value</span> = prev; <span class="hljs-comment">// 失败时恢复</span>
     }

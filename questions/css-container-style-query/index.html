@@ -48,7 +48,14 @@
 </code></pre></div>
 <p>侧栏里的 <code>.item</code> 自动变紧凑，主内容区的 <code>.item</code> 保持默认，HTML 不用改。</p>
 <p>也可以只判断属性是否存在，或组合多个条件：</p>
-<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-keyword">@container</span> style(<span class="hljs-attribute">--theme</span>: dark) <span class="hljs-keyword">or</span> style(<span class="hljs-attribute">--theme</span>: dim) {
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-comment">/* 只要设置了 --theme 就生效 */</span>
+<span class="hljs-keyword">@container</span> style(--theme) {
+  <span class="hljs-selector-class">.card</span> {
+    <span class="hljs-attribute">border-width</span>: <span class="hljs-number">2px</span>;
+  }
+}
+
+<span class="hljs-keyword">@container</span> style(<span class="hljs-attribute">--theme</span>: dark) <span class="hljs-keyword">or</span> style(<span class="hljs-attribute">--theme</span>: dim) {
   <span class="hljs-selector-class">.card</span> {
     <span class="hljs-attribute">background</span>: <span class="hljs-number">#222</span>;
   }

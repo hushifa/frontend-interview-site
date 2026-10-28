@@ -78,7 +78,7 @@ queryChannel.<span class="hljs-title function_">subscribe</span>({
 <p><code>tracePromise</code> 会把同一个 context 对象传给五个事件，订阅者可以在 <code>start</code> 中记录时间，在 <code>asyncEnd</code> 中计算耗时。失败时 context 上会带有 <code>error</code>。同步调用和回调式调用分别使用 <code>traceSync</code>、<code>traceCallback</code>。</p>
 <h2>与日志、指标、追踪的分工</h2>
 <table><thead><tr><th>机制</th><th>用途</th></tr></thead><tbody><tr><td>diagnostics_channel</td><td>进程内事件入口，连接库和观测工具</td></tr><tr><td>日志</td><td>需要人阅读的事实和错误详情</td></tr><tr><td>指标</td><td>计数、延迟、错误率的聚合和告警</td></tr><tr><td>追踪</td><td>跨服务关联一次请求</td></tr><tr><td>审计记录</td><td>支付、权限变更等必须留存的业务事实</td></tr></tbody></table>
-<p>诊断通道可以没有订阅者，所以审计记录不能依赖它。需要关联请求时，订阅者在回调中通过 AsyncLocalStorage 读取当前请求 ID，见《AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？》。</p>
+<p>诊断通道可以没有订阅者，所以审计记录不能依赖它。需要关联请求时，订阅者在回调中通过 AsyncLocalStorage 读取当前请求 ID，见<a href="/questions/node-async-local-storage/">《AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？》</a>。</p>
 <h2>常见追问</h2>
 <ul>
 <li><strong>订阅者怎样避免影响业务请求？</strong> 回调里只提取字段放进有界队列，由后台批量发送；回调内部自己捕获异常。</li>

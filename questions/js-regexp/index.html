@@ -62,7 +62,7 @@
 </code></pre></div>
 <p><code>replace</code> 中用 <code>$&lt;year&gt;</code> 引用。ES2025 起不同分支可以使用同名捕获组。</p>
 <h2>ReDoS</h2>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">/^(a+)+$/.<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;a&#x27;</span>.<span class="hljs-title function_">repeat</span>(<span class="hljs-number">30</span>) + <span class="hljs-string">&#x27;b&#x27;</span>); <span class="hljs-comment">// 可能耗时数秒</span>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">/^(a+)+$/.<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;a&#x27;</span>.<span class="hljs-title function_">repeat</span>(<span class="hljs-number">30</span>) + <span class="hljs-string">&#x27;b&#x27;</span>); <span class="hljs-comment">// 可能耗时数分钟</span>
 </code></pre></div>
 <p>不匹配时引擎会尝试所有拆分方式。防护措施：</p>
 <ul>

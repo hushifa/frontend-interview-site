@@ -95,9 +95,13 @@ void main() {
 
   gl.<span class="hljs-title function_">viewport</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, canvas.<span class="hljs-property">width</span>, canvas.<span class="hljs-property">height</span>);
   gl.<span class="hljs-title function_">drawArrays</span>(gl.<span class="hljs-property">TRIANGLES</span>, <span class="hljs-number">0</span>, <span class="hljs-number">3</span>);
+
+  <span class="hljs-keyword">const</span> pixel = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>(<span class="hljs-number">4</span>);
+  gl.<span class="hljs-title function_">readPixels</span>(canvas.<span class="hljs-property">width</span> / <span class="hljs-number">2</span>, canvas.<span class="hljs-property">height</span> / <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, gl.<span class="hljs-property">RGBA</span>, gl.<span class="hljs-property">UNSIGNED_BYTE</span>, pixel);
+  <span class="hljs-keyword">return</span> pixel;
 }
 </code></pre></div>
-<p>画布中心落在三角形内，读出的像素是红色 <code>[255, 0, 0, 255]</code>。</p>
+<p>画布中心落在三角形内，<code>readPixels</code> 读出的像素是红色 <code>[255, 0, 0, 255]</code>。</p>
 <h2>坐标空间</h2>
 <div class="not-prose code-block"><div class="code-language">text</div><pre><code class="hljs language-text">裁剪坐标 = 投影矩阵 × 视图矩阵 × 模型矩阵 × 模型坐标
 </code></pre></div>
@@ -111,7 +115,7 @@ void main() {
 </ul>
 <h2>安全</h2>
 <p>不要把用户输入拼接进 GLSL 源码。用户数据通过属性、uniform 或纹理传入，模型和纹理要限制尺寸，防止耗尽显存。</p>
-<p>上下文丢失的处理见&quot;什么场景值得用 WebGL？GPU 加速有哪些成本？&quot;。</p>
+<p>上下文丢失的处理见<a href="/questions/graphics-webgl/">《什么场景值得用 WebGL？GPU 加速有哪些成本？》</a>。</p>
 <h2>常见追问</h2>
 <ul>
 <li><strong>为什么要把位置属性绑定到 0 号？</strong> 在部分 WebGL 1 实现上，0 号属性没有启用数组会走慢路径，把最常用的属性固定在 0 号可以避免。</li>

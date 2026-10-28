@@ -48,7 +48,7 @@
 <p>工具、资源和提示是三种不同能力。工具执行操作；资源提供上下文数据；提示是可复用的输入模板。资源和工具结果里的文字都是数据，可能含有提示词注入，Host 按不可信内容处理。</p>
 <h2>2026-07-28 版的主要变化</h2>
 <table><thead><tr><th>方面</th><th>2025 年各版本</th><th>2026-07-28 版</th></tr></thead><tbody><tr><td>连接建立</td><td><code>initialize</code> 握手协商版本与能力</td><td>无握手；每个请求的 <code>_meta</code> 携带 <code>io.modelcontextprotocol/protocolVersion</code> 和 <code>clientCapabilities</code></td></tr><tr><td>能力发现</td><td>握手返回</td><td>Server 必须实现 <code>server/discover</code>，Client 可先调用它选版本</td></tr><tr><td>会话</td><td><code>Mcp-Session-Id</code> 头</td><td>移除；跨调用状态由 Server 生成的句柄作为普通参数传递</td></tr><tr><td>服务端通知</td><td>GET 长连接、<code>resources/subscribe</code></td><td>统一用 <code>subscriptions/listen</code></td></tr><tr><td>断线续传</td><td><code>Last-Event-ID</code> 重放</td><td>移除；流断开即丢失该请求，客户端用新请求 ID 重试</td></tr><tr><td>Server 向客户端索取输入</td><td>Server 发起 <code>sampling/createMessage</code>、<code>elicitation/create</code> 等请求</td><td>多轮请求模式：结果返回 <code>resultType: &quot;input_required&quot;</code>，客户端补充 <code>inputResponses</code> 后重试原请求</td></tr></tbody></table>
-<p>Sampling、Roots 和 Logging 在这一版被标为弃用，旧的 HTTP+SSE 传输也处于弃用状态。新实现应直接接入 Streamable HTTP。</p>
+<p>这一版还移除了 <code>ping</code>、<code>logging/setLevel</code>，日志级别改为每个请求在 <code>_meta</code> 里用 <code>io.modelcontextprotocol/logLevel</code> 指定；所有结果新增必填字段 <code>resultType</code>（<code>&quot;complete&quot;</code> 或 <code>&quot;input_required&quot;</code>）。Sampling、Roots 和 Logging 功能被标为弃用，旧的 HTTP+SSE 传输也处于弃用状态。新实现应直接接入 Streamable HTTP。</p>
 <h2>授权与浏览器边界</h2>
 <p>远程 Server 的授权基于 OAuth。2026-07-28 版要求客户端校验授权响应里的 <code>iss</code>，按签发方保存凭据、换授权服务器时重新注册；客户端注册推荐 Client ID Metadata Documents，DCR 只为兼容保留。</p>
 <p>浏览器页面不能启动本地进程，长期令牌也不适合放在前端。常见做法是由后端或桌面宿主充当 Host，网页只负责展示调用状态和收集用户确认。</p>

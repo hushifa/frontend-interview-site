@@ -31,7 +31,7 @@
 <li>未注册的自定义属性在过渡时会直接跳到新值，因为浏览器不知道怎样在两串文本之间插值。</li>
 <li><code>@property --x { syntax: &#x27;&lt;color&gt;&#x27;; inherits: false; initial-value: red; }</code> 注册后，浏览器把它当成颜色计算和插值。</li>
 <li><code>syntax</code> 可以是 <code>&lt;length&gt;</code>、<code>&lt;percentage&gt;</code>、<code>&lt;number&gt;</code>、<code>&lt;angle&gt;</code>、<code>&lt;color&gt;</code> 等，也可以写 <code>&#x27;*&#x27;</code> 表示任意值。</li>
-<li>赋了不符合类型的值，属性会使用 <code>initial-value</code>，而不是让整条声明失效。</li>
+<li>赋了不符合类型的值，声明在计算值阶段无效：<code>inherits: false</code> 时使用 <code>initial-value</code>，<code>inherits: true</code> 时继承父元素的值。</li>
 <li><code>inherits: false</code> 可以避免组件内部变量被外层同名变量影响，也减少继承带来的样式重算。</li>
 </ul>
 <h2>渐变动画</h2>
@@ -62,6 +62,7 @@
 <p>效果与 <code>@property</code> 相同，同一个名字只能注册一次，重复注册会抛错。</p>
 <h2>注意</h2>
 <ul>
+<li>注册后赋了不符合 <code>syntax</code> 的值，例如给 <code>&lt;angle&gt;</code> 写 <code>red</code>，这条声明在计算值阶段无效：<code>inherits: false</code> 时退回 <code>initial-value</code>，<code>inherits: true</code> 时取父元素的值。</li>
 <li>除 <code>syntax: &#x27;*&#x27;</code> 外，<code>initial-value</code> 必须是计算上独立的值，例如 <code>10px</code> 可以，<code>1em</code> 不可以。</li>
 <li>注册对整个文档生效，组件库要使用带前缀的名字，避免和页面冲突。</li>
 <li><code>@property</code> 已被主流浏览器支持；不支持时属性按普通自定义属性工作，只是失去动画和类型检查。</li>

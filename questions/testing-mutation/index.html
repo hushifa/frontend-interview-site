@@ -64,7 +64,7 @@ npx stryker run
 <h2>怎样处理存活的变异体</h2>
 <ol>
 <li>是真实的测试遗漏：补边界值或补断言。</li>
-<li>是等价变异：例如改动只影响日志文字，用注释 <code>// Stryker disable next-line</code> 标记并写明原因。</li>
+<li>是等价变异：改动后程序的可观察行为完全不变，例如把 <code>i &lt; arr.length</code> 改成 <code>i !== arr.length</code>，而 <code>i</code> 每次只加 1。用 <code>// Stryker disable next-line EqualityOperator: 原因</code> 标记，写明被禁用的变异器和理由。</li>
 <li>是不重要的代码：从 <code>mutate</code> 范围中排除。</li>
 </ol>
 <h2>常见追问</h2>

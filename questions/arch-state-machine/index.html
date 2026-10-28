@@ -67,7 +67,7 @@
 }
 </code></pre></div>
 <p>依次发生 <code>start(1)</code>、<code>start(2)</code>、<code>succeed(1)</code>、<code>succeed(2)</code> 时：第三个事件的 <code>requestId</code> 不是当前请求，状态保持不变；第四个事件才进入 success。已经成功后再收到重复的完成事件，也会被忽略。</p>
-<p>函数不发请求、不读时钟、不修改传入的对象，可以直接写单元测试。发起请求和取消请求的一侧见《事件驱动 UI 怎样避免状态互相覆盖？》。</p>
+<p>函数不发请求、不读时钟、不修改传入的对象，可以直接写单元测试。发起请求和取消请求的一侧见<a href="/questions/architecture-event-driven-ui/">《事件驱动 UI 怎样避免状态互相覆盖？》</a>。</p>
 <h2>转换表</h2>
 <table><thead><tr><th>当前状态</th><th>事件</th><th>结果</th></tr></thead><tbody><tr><td>任意</td><td><code>start</code></td><td>新请求的 loading</td></tr><tr><td>loading</td><td>当前请求 <code>succeed</code></td><td>success</td></tr><tr><td>loading</td><td>当前请求 <code>fail</code></td><td>error</td></tr><tr><td>loading</td><td>当前请求 <code>cancel</code></td><td>idle</td></tr><tr><td>loading</td><td>旧请求的任何事件</td><td>不变</td></tr><tr><td>非 loading</td><td><code>succeed</code> / <code>fail</code> / <code>cancel</code></td><td>不变</td></tr></tbody></table>
 <p>这些规则是本例的选择。取消后回到 idle、保留旧结果还是显示&quot;已取消&quot;，要按产品需求决定，重要的是集中写在一处。</p>

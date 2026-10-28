@@ -30,13 +30,15 @@
 <ul>
 <li>默认值 <code>numeric-only</code> 下，<code>height: 0</code> 到 <code>height: auto</code> 不会过渡；在 <code>:root</code> 设置 <code>interpolate-size: allow-keywords</code> 后可以过渡。</li>
 <li>两端必须有一端是长度或百分比，两个固有尺寸之间（如 <code>auto</code> 到 <code>max-content</code>）仍然不能插值。</li>
-<li>该属性可继承，所以通常在 <code>:root</code> 或组件容器上设置一次。</li>
+<li>通常在 <code>:root</code> 或组件容器上设置一次，子元素会继承这个值。</li>
 <li><code>calc-size()</code> 也能实现，适合需要在固有尺寸上再做计算的场景；只做动画时 MDN 推荐用 <code>interpolate-size</code>。</li>
 <li>截至目前它是实验特性，属于有限可用，不支持时展开和收起应照常工作，只是没有动画。</li>
 </ul>
 <h2>折叠面板</h2>
-<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-pseudo">:root</span> {
-  interpolate-size: allow-keywords;
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-keyword">@supports</span> (<span class="hljs-attribute">interpolate-size</span>: allow-keywords) {
+  <span class="hljs-selector-pseudo">:root</span> {
+    interpolate-size: allow-keywords;
+  }
 }
 
 <span class="hljs-selector-class">.panel</span> {
@@ -70,7 +72,7 @@
   <span class="hljs-attribute">height</span>: auto;
 }
 </code></pre></div>
-<p>收起时浏览器会把内容切到 <code>content-visibility: hidden</code>，加上 <code>allow-discrete</code> 才能等高度动画结束后再隐藏。<code>::details-content</code> 的支持范围比 <code>interpolate-size</code> 更窄，要单独检查。</p>
+<p>收起时浏览器会把内容切到 <code>content-visibility: hidden</code>，加上 <code>allow-discrete</code> 才能等高度动画结束后再隐藏。<code>::details-content</code> 已是 Baseline 2025，比 <code>interpolate-size</code> 支持更广；没有高度动画时，面板仍能正常展开收起。</p>
 <h2>calc-size()</h2>
 <div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.panel</span><span class="hljs-selector-class">.open</span> {
   <span class="hljs-attribute">height</span>: <span class="hljs-built_in">calc-size</span>(auto, size + <span class="hljs-number">16px</span>);

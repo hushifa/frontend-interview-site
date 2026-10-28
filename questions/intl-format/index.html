@@ -42,6 +42,7 @@
 </code></pre></div>
 <ul>
 <li>欧元前面的空格是不换行空格，测试里不要用普通空格比较。</li>
+<li><code>NumberFormat</code> 不做汇率换算：<code>currency</code> 只决定符号和小数位，金额要先按业务汇率换算好再格式化。</li>
 <li><code>NumberFormat</code> 只做显示舍入。金额计算用最小货币单位的整数或十进制库，避免浮点误差。</li>
 </ul>
 <h2>日期</h2>
@@ -54,7 +55,7 @@
 
 <span class="hljs-keyword">new</span> <span class="hljs-title class_">Intl</span>.<span class="hljs-title class_">DateTimeFormat</span>(<span class="hljs-string">&#x27;zh-CN&#x27;</span>, { <span class="hljs-attr">dateStyle</span>: <span class="hljs-string">&#x27;long&#x27;</span>, <span class="hljs-attr">timeZone</span>: <span class="hljs-string">&#x27;UTC&#x27;</span> }).<span class="hljs-title function_">format</span>(instant); <span class="hljs-comment">// &#x27;2026年1月1日&#x27;</span>
 </code></pre></div>
-<p>SSR 时显式传入 <code>timeZone</code>。服务端默认 UTC、浏览器用本地时区，会导致水合时文本不一致。时区建模见&quot;时间戳、时区和只有日期的业务值应该怎样区分？&quot;。</p>
+<p>SSR 时显式传入 <code>timeZone</code>。服务端默认 UTC、浏览器用本地时区，会导致水合时文本不一致。时区建模见<a href="/questions/intl-timezones/">《时间戳、时区和只有日期的业务值应该怎样区分？》</a>。</p>
 <h2>排序</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">[<span class="hljs-string">&#x27;item10&#x27;</span>, <span class="hljs-string">&#x27;item2&#x27;</span>, <span class="hljs-string">&#x27;item1&#x27;</span>].<span class="hljs-title function_">sort</span>(); <span class="hljs-comment">// [&#x27;item1&#x27;, &#x27;item10&#x27;, &#x27;item2&#x27;]</span>
 [<span class="hljs-string">&#x27;item10&#x27;</span>, <span class="hljs-string">&#x27;item2&#x27;</span>, <span class="hljs-string">&#x27;item1&#x27;</span>].<span class="hljs-title function_">sort</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Intl</span>.<span class="hljs-title class_">Collator</span>(<span class="hljs-string">&#x27;en&#x27;</span>, { <span class="hljs-attr">numeric</span>: <span class="hljs-literal">true</span> }).<span class="hljs-property">compare</span>);

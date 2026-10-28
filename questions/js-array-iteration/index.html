@@ -47,6 +47,7 @@
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(values.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 1,10,2</span>
 </code></pre></div>
 <p><code>sort()</code> 不传比较函数时把元素转成字符串比较，所以 <code>10</code> 排在 <code>2</code> 前面。<code>sort</code> 原地排序并返回原数组；<code>toSorted</code> 返回排好序的副本。规范要求排序稳定。</p>
+<p><code>fill</code> 和 <code>copyWithin</code> 也原地修改并返回原数组；<code>concat</code> 拼接出新数组，<code>flat</code> 把嵌套数组展开成新数组。</p>
 <p><code>splice</code> 返回被删除的元素数组，不是修改后的数组；<code>slice</code> 不修改原数组。</p>
 <h2>新数组不等于深拷贝</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> source = [{ <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">score</span>: <span class="hljs-number">10</span> }];

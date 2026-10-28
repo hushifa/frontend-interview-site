@@ -64,14 +64,18 @@ button.<span class="hljs-title function_">addEventListener</span>(<span class="h
 <li><code>context.currentTime</code> 是音频时钟，按它调度比用 <code>setTimeout</code> 精确。</li>
 </ul>
 <h2>音频可视化</h2>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> analyser = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AnalyserNode</span>(context, { <span class="hljs-attr">fftSize</span>: <span class="hljs-number">256</span> });
-source.<span class="hljs-title function_">connect</span>(analyser);
-<span class="hljs-keyword">const</span> bins = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>(analyser.<span class="hljs-property">frequencyBinCount</span>);
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// source 是任意音频节点，例如上面 play() 里创建的 AudioBufferSourceNode</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">visualize</span>(<span class="hljs-params">source</span>) {
+  <span class="hljs-keyword">const</span> analyser = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AnalyserNode</span>(context, { <span class="hljs-attr">fftSize</span>: <span class="hljs-number">256</span> });
+  source.<span class="hljs-title function_">connect</span>(analyser);
+  <span class="hljs-keyword">const</span> bins = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>(analyser.<span class="hljs-property">frequencyBinCount</span>);
 
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">draw</span>(<span class="hljs-params"></span>) {
-  analyser.<span class="hljs-title function_">getByteFrequencyData</span>(bins);
-  <span class="hljs-title function_">renderBars</span>(bins);
-  <span class="hljs-title function_">requestAnimationFrame</span>(draw);
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">draw</span>(<span class="hljs-params"></span>) {
+    analyser.<span class="hljs-title function_">getByteFrequencyData</span>(bins);
+    <span class="hljs-title function_">renderBars</span>(bins);
+    <span class="hljs-title function_">requestAnimationFrame</span>(draw);
+  }
+  <span class="hljs-title function_">draw</span>();
 }
 </code></pre></div>
 <h2>注意事项</h2>

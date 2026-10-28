@@ -66,7 +66,7 @@
 </code></pre></div>
 <h2>组合方法不负责的事</h2>
 <ul>
-<li><strong>启动</strong>：传进去时请求已经发出。<code>Promise.all(urls.map(fetch))</code> 会同时发出全部请求，需要限流时用并发池，见《怎样实现有明确失败语义的异步并发池？》。</li>
+<li><strong>启动</strong>：传进去时请求已经发出。<code>Promise.all(urls.map(fetch))</code> 会同时发出全部请求，需要限流时用并发池，见<a href="/questions/alg-concurrency-pool/">《怎样实现有明确失败语义的异步并发池？》</a>。</li>
 <li><strong>取消</strong>：<code>all</code> 拒绝或 <code>race</code> 超时后，其余任务仍在运行。需要停止时给每个任务传同一个 <code>AbortSignal</code>，在失败时调用 <code>controller.abort()</code>。</li>
 <li><strong>未处理拒绝</strong>：<code>all</code> 拒绝后，其余 Promise 再拒绝不会触发 <code>unhandledrejection</code>，因为组合方法已经给它们挂了处理器。</li>
 </ul>

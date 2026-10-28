@@ -31,7 +31,7 @@
 <li>WebSocket 通过一次 HTTP <code>Upgrade</code> 握手建立全双工连接，之后双方都能随时发文本或二进制消息。</li>
 <li>断线重连要自己实现，用指数退避加随机抖动，避免服务器重启后所有客户端同时涌入。</li>
 <li>连接恢复不等于数据恢复：客户端记录最后收到的消息序号，重连后请服务器补发；发出的消息要等服务器确认，超时重发，并用消息 ID 去重。</li>
-<li>只能推送、不需要双向时，SSE 更简单，见《SSE 与 WebSocket 有什么区别？》。</li>
+<li>只能推送、不需要双向时，SSE 更简单，见<a href="/questions/http-sse/">《SSE 与 WebSocket 有什么区别？》</a>。</li>
 </ul>
 <h2>握手</h2>
 <div class="not-prose code-block"><div class="code-language">http</div><pre><code class="hljs language-http">GET /chat HTTP/1.1

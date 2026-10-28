@@ -61,7 +61,7 @@
 </code></pre></div>
 <p>测试通过 API 准备数据比通过界面点击更快，也不会受其他界面的问题影响。并行运行时，不同测试不要共用同一条数据。</p>
 <h2>登录状态复用</h2>
-<p>在 setup 项目里登录一次，用 <code>storageState</code> 保存 Cookie 和本地存储，其他测试直接加载。会修改账号设置的测试应使用单独的账号，见《Playwright fixtures 解决了什么测试维护问题？》。</p>
+<p>在 setup 项目里登录一次，用 <code>storageState</code> 保存 Cookie 和本地存储，其他测试直接加载。会修改账号设置的测试应使用单独的账号，见<a href="/questions/testing-playwright-fixtures/">《Playwright fixtures 解决了什么测试维护问题？》</a>。</p>
 <h2>常见不稳定原因</h2>
 <table><thead><tr><th>现象</th><th>原因</th><th>处理</th></tr></thead><tbody><tr><td>偶尔点不到按钮</td><td>动画或遮罩还在</td><td>等遮罩消失的断言，或在测试环境关闭动画</td></tr><tr><td>列表数量不对</td><td>数据来自其他并行测试</td><td>每个测试用自己的数据</td></tr><tr><td>本地通过，CI 失败</td><td>时区、语言、视口不同</td><td>在配置中固定 <code>timezoneId</code>、<code>locale</code>、<code>viewport</code></td></tr><tr><td>依赖第三方服务</td><td>外部不稳定</td><td>用 <code>page.route</code> 模拟第三方</td></tr></tbody></table>
 <h2>常见追问</h2>

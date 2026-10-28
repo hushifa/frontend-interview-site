@@ -30,7 +30,7 @@
 <ul>
 <li>HTTP 缓存：浏览器和 CDN 按 <code>Cache-Control</code>、<code>ETag</code>、<code>Vary</code> 复用整个响应，<code>public</code> 可以被 CDN 共享，<code>private</code> 只能存在用户浏览器中。</li>
 <li>请求内去重：如 React <code>cache</code>、Next.js 对 <code>fetch</code> 的记忆，只在一次渲染中有效。</li>
-<li>框架数据缓存：如 Next.js 的 <code>&#x27;use cache&#x27;</code>、Nuxt 的 payload，跨请求保存，需要按时间或标签失效。</li>
+<li>框架数据缓存：如 Next.js 的 <code>&#x27;use cache&#x27;</code>、Nuxt 的 <code>cachedEventHandler</code>，跨请求保存，需要按时间或标签失效。</li>
 <li>客户端状态缓存：如 TanStack Query、Pinia 中保存的数据，存在浏览器内存里，登出时要清空。</li>
 <li>个性化内容（含用户名、权限、订单）不能以 <code>public</code> 缓存；缓存键要包含用户、语言、权限等所有影响结果的因素。</li>
 </ul>

@@ -46,9 +46,9 @@
 <h2>更细的组合</h2>
 <ul>
 <li>ISR（增量静态再生）：页面先按 SSG 提供，过期后在后台重新生成，下一位访问者拿到新版本。</li>
-<li>流式 SSR：先发送页面外壳，慢的部分就绪后再流式补上，见《React 流式 SSR 解决什么问题？》。</li>
+<li>流式 SSR：先发送页面外壳，慢的部分就绪后再流式补上，见<a href="/questions/rendering-streaming-ssr/">《React 流式 SSR 解决什么问题？》</a>。</li>
 <li>部分预渲染：静态外壳在构建时生成，动态部分在请求时填充，Next.js 的 Cache Components 采用这种方式。</li>
-<li>Islands：大部分页面是静态 HTML，只有交互区域加载 JavaScript，见《Astro Islands 架构怎样减少客户端 JavaScript？》。</li>
+<li>Islands：大部分页面是静态 HTML，只有交互区域加载 JavaScript，见<a href="/questions/frameworks-astro-islands/">《Astro Islands 架构怎样减少客户端 JavaScript？》</a>。</li>
 </ul>
 <h2>不要忽略的成本</h2>
 <ul>
@@ -56,7 +56,7 @@
 <li>SSR 的服务器要承担渲染开销，流量大时需要缓存和扩容。</li>
 <li>SSG 页面数量很多时构建时间会变长，可以只预生成热门页面，其余按需生成。</li>
 </ul>
-<p>缓存层的区分见《SSR 和 SSG 中的缓存层应该怎样区分？》，SEO 相关要求见《前端渲染方式怎样影响 SEO 和部署？》。</p>
+<p>缓存层的区分见<a href="/questions/rendering-cache-semantics/">《SSR 和 SSG 中的缓存层应该怎样区分？》</a>，SEO 相关要求见<a href="/questions/render-seo-deploy/">《前端渲染方式怎样影响 SEO 和部署？》</a>。</p>
 <h2>常见追问</h2>
 <ul>
 <li>SSR 一定比 CSR 快吗？首屏内容通常更早出现，但服务器响应慢时首字节会更晚，能交互的时间也不一定更早。</li>

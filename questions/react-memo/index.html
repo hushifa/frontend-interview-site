@@ -73,7 +73,7 @@
 </ul>
 <p>更好的第一步通常是调整结构：把状态下放到真正用它的组件，或者把不变的部分作为 <code>children</code> 传进来，让它不随父组件重新渲染。</p>
 <h2>和 React Compiler 的关系</h2>
-<p>React Compiler 1.0 已稳定发布。它在构建时分析符合 React 规则的组件，自动插入等价的缓存。启用后，新代码一般不需要再手写 <code>memo</code>、<code>useMemo</code>、<code>useCallback</code>。已有代码里的手写缓存可以先保留，确认编译器覆盖了对应组件后再删除，详见《React Compiler 解决了哪些优化问题？》。</p>
+<p>React Compiler 1.0 已稳定发布。它在构建时分析符合 React 规则的组件，自动插入等价的缓存。启用后，新代码一般不需要再手写 <code>memo</code>、<code>useMemo</code>、<code>useCallback</code>。已有代码里的手写缓存可以先保留，确认编译器覆盖了对应组件后再删除，详见<a href="/questions/react-compiler/">《React Compiler 解决了哪些优化问题？》</a>。</p>
 <h2>常见追问</h2>
 <ul>
 <li><code>memo</code> 能自定义比较吗？第二个参数传 <code>arePropsEqual(prev, next)</code>，但必须比较所有 props，包括函数，否则会读到旧回调。</li>

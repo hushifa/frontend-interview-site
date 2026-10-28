@@ -42,7 +42,7 @@
 </ol>
 <h2>常用配置</h2>
 <table><thead><tr><th>资源</th><th>响应头</th></tr></thead><tbody><tr><td>带内容哈希的 JS、CSS</td><td><code>Cache-Control: max-age=31536000, immutable</code></td></tr><tr><td>HTML 入口</td><td><code>Cache-Control: no-cache</code> 加 <code>ETag</code></td></tr><tr><td>含个人数据的接口</td><td><code>Cache-Control: private, no-store</code> 或按需 <code>private, no-cache</code></td></tr></tbody></table>
-<p>HTML 每次验证，资源文件长期缓存，发布新版本时 HTML 引用新的哈希文件名，既能及时更新又不浪费带宽。各指令的取舍见《Cache-Control 的 immutable、stale-while-revalidate 和 no-store 怎样选择？》。</p>
+<p>HTML 每次验证，资源文件长期缓存，发布新版本时 HTML 引用新的哈希文件名，既能及时更新又不浪费带宽。各指令的取舍见<a href="/questions/network-cache-control/">《Cache-Control 的 immutable、stale-while-revalidate 和 no-store 怎样选择？》</a>。</p>
 <h2>ETag 的细节</h2>
 <ul>
 <li>强 ETag <code>&quot;abc&quot;</code> 要求字节一致；弱 ETag <code>W/&quot;abc&quot;</code> 表示语义等价，可用于条件 GET，不能用于 Range 请求。</li>

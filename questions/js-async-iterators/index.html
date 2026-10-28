@@ -78,7 +78,7 @@
 <h2>背压</h2>
 <p>消费者按需调用 <code>next()</code>，生成器在 <code>yield</code> 处暂停，天然不会提前生产。但如果生产者内部预取或使用无限缓冲的队列，内存仍会增长。消费者把每项都 <code>push</code> 进数组，也会重新累积全部数据。</p>
 <h2>取消</h2>
-<p><code>break</code> 只有在循环体执行时才能发生。如果 <code>next()</code> 一直挂起在网络请求上，要通过 <code>AbortSignal</code> 取消底层请求。各种关闭路径的区别见《JavaScript 迭代器关闭和 return 方法有什么作用？》。</p>
+<p><code>break</code> 只有在循环体执行时才能发生。如果 <code>next()</code> 一直挂起在网络请求上，要通过 <code>AbortSignal</code> 取消底层请求。各种关闭路径的区别见<a href="/questions/js-iterator-closing/">《JavaScript 迭代器关闭和 return 方法有什么作用？》</a>。</p>
 <h2>常见追问</h2>
 <ul>
 <li><code>Array.fromAsync(iterable)</code> 做什么？把异步可迭代对象收集成数组（ES2026），同样逐项等待。</li>

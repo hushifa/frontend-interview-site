@@ -42,7 +42,7 @@
 <p>所以&quot;降低 target 后旧浏览器还是报错&quot;很常见：报错往往来自缺失的 API，而不是语法。</p>
 <h2>各项配置分别管什么</h2>
 <table><thead><tr><th>配置</th><th>影响</th><th>不影响</th></tr></thead><tbody><tr><td>构建 target（Vite <code>build.target</code>、esbuild/Oxc 目标）</td><td>语法降级和压缩方式</td><td>内置 API 是否存在</td></tr><tr><td>TypeScript <code>lib</code></td><td>哪些 API 能通过类型检查</td><td>产物和运行环境</td></tr><tr><td>polyfill（如 core-js）</td><td>在运行时补齐缺失 API</td><td>无法补齐的能力（如新的 CSS 布局、硬件 API）</td></tr><tr><td>Browserslist</td><td>让支持它的工具共享同一份浏览器列表</td><td>工具自身不读它时无效</td></tr></tbody></table>
-<p>Vite 的默认构建目标面向支持原生 ES 模块和动态导入的浏览器。需要更旧的浏览器时，官方提供 <code>@vitejs/plugin-legacy</code>，它会额外生成旧浏览器产物并按需注入 polyfill。</p>
+<p>Vite 的默认 <code>build.target</code> 是 <code>&#x27;baseline-widely-available&#x27;</code>：按每个大版本固定的日期，取当时 Baseline 广泛可用的浏览器版本，Vite 8 对应 Chrome 111、Firefox 114、Safari 16.4。需要更旧的浏览器时，官方提供 <code>@vitejs/plugin-legacy</code>，它会额外生成旧浏览器产物并按需注入 polyfill。</p>
 <h2>polyfill 的取舍</h2>
 <p>全量引入 polyfill 会让所有用户为少数旧浏览器承担体积。常见做法：</p>
 <ul>

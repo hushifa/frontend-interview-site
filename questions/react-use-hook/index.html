@@ -39,8 +39,9 @@
 <span class="hljs-keyword">import</span> { <span class="hljs-title class_">Suspense</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 <span class="hljs-keyword">import</span> { <span class="hljs-title class_">Comments</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./comments&#x27;</span>;
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Page</span>(<span class="hljs-params">{ params }</span>) {
-  <span class="hljs-keyword">const</span> commentsPromise = <span class="hljs-title function_">getComments</span>(params.<span class="hljs-property">id</span>); <span class="hljs-comment">// 不 await，立即开始请求</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Page</span>(<span class="hljs-params">{ params }</span>) {
+  <span class="hljs-keyword">const</span> { id } = <span class="hljs-keyword">await</span> params; <span class="hljs-comment">// Next.js 15 起 params 是 Promise</span>
+  <span class="hljs-keyword">const</span> commentsPromise = <span class="hljs-title function_">getComments</span>(id); <span class="hljs-comment">// 不 await，立即开始请求</span>
   <span class="hljs-keyword">return</span> (
     <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Suspense</span> <span class="hljs-attr">fallback</span>=<span class="hljs-string">{</span>&lt;<span class="hljs-attr">p</span>&gt;</span>评论加载中…<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>}&gt;
       <span class="hljs-tag">&lt;<span class="hljs-name">Comments</span> <span class="hljs-attr">commentsPromise</span>=<span class="hljs-string">{commentsPromise}</span> /&gt;</span>

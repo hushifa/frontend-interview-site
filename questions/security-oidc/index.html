@@ -64,7 +64,7 @@
 }
 </code></pre></div>
 <h2>几个容易混淆的点</h2>
-<table><thead><tr><th>概念</th><th>用途</th></tr></thead><tbody><tr><td><code>state</code></td><td>防止回调被伪造（CSRF），客户端自己比较</td></tr><tr><td><code>nonce</code></td><td>绑定 ID Token 和本次登录请求，防重放</td></tr><tr><td>PKCE</td><td>防止授权码被截获后兑换，见《OAuth 2.0 的 PKCE 解决了什么问题？》</td></tr><tr><td>UserInfo 端点</td><td>用 access token 获取更多用户信息</td></tr><tr><td>发现文档</td><td><code>/.well-known/openid-configuration</code>，列出端点和 JWKS 地址</td></tr></tbody></table>
+<table><thead><tr><th>概念</th><th>用途</th></tr></thead><tbody><tr><td><code>state</code></td><td>防止回调被伪造（CSRF），客户端自己比较</td></tr><tr><td><code>nonce</code></td><td>绑定 ID Token 和本次登录请求，防重放</td></tr><tr><td>PKCE</td><td>防止授权码被截获后兑换，见<a href="/questions/security-oauth-pkce/">《OAuth 2.0 的 PKCE 解决了什么问题？》</a></td></tr><tr><td>UserInfo 端点</td><td>用 access token 获取更多用户信息</td></tr><tr><td>发现文档</td><td><code>/.well-known/openid-configuration</code>，列出端点和 JWKS 地址</td></tr></tbody></table>
 <h2>登录之后</h2>
 <p>拿到 ID Token 只说明身份提供方认证了用户。应用还需要创建自己的会话（通常是 <code>HttpOnly</code> Cookie），并处理过期、登出和账号关联。单页应用推荐通过 BFF 在服务端完成兑换和校验，浏览器不直接持有令牌。</p>
 <h2>常见追问</h2>
