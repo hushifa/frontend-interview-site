@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="手写与算法面试题：从视频章节和有序时间戳出发，用左闭右开区间实现 lower bound，解释循环不变量、重复值、未命中、复杂度和 JavaScript 位运算陷阱。" />
+    <title>二分查找怎样定位时间轴边界？为什么重复值和空数组容易写错？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/alg-lower-bound/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="二分查找怎样定位时间轴边界？为什么重复值和空数组容易写错？ · 前端知库" />
+    <meta property="og:description" content="手写与算法面试题：从视频章节和有序时间戳出发，用左闭右开区间实现 lower bound，解释循环不变量、重复值、未命中、复杂度和 JavaScript 位运算陷阱。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/alg-lower-bound/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-lower-bound/#webpage","url":"https://fe.hushifa.top/questions/alg-lower-bound/","name":"二分查找怎样定位时间轴边界？为什么重复值和空数组容易写错？ · 前端知库","description":"手写与算法面试题：从视频章节和有序时间戳出发，用左闭右开区间实现 lower bound，解释循环不变量、重复值、未命中、复杂度和 JavaScript 位运算陷阱。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-lower-bound/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-lower-bound/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"二分查找怎样定位时间轴边界？为什么重复值和空数组容易写错？","item":"https://fe.hushifa.top/questions/alg-lower-bound/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">二分查找怎样定位时间轴边界？为什么重复值和空数组容易写错？</span></nav><h1 tabindex="-1">二分查找怎样定位时间轴边界？为什么重复值和空数组容易写错？</h1><p class="reading-summary">从视频章节和有序时间戳出发，用左闭右开区间实现 lower bound，解释循环不变量、重复值、未命中、复杂度和 JavaScript 位运算陷阱。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>视频播放器保存了已排序的章节起点。用户跳到第 25 秒时，需要找到下一个章节，或者找到当前所属章节。此时搜索“是否存在 25”通常不够：即使没有恰好相等的时间，也需要返回一个边界位置。</p>
+<p>lower bound 返回第一个大于或等于目标值的索引。如果所有值都小于目标，返回数组长度。这个约定同时覆盖插入位置、重复值的左边界和不存在相等元素的情况。</p>
+<h2>用一条不变量解释整个循环</h2>
+<p>下面约定输入为升序排列的有限数值数组，允许重复值。区间采用 <code>[left, right)</code>，right 初始值等于 length，不是最后一个下标。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">lowerBound</span>(<span class="hljs-params">values, target</span>) {
+  <span class="hljs-keyword">let</span> left = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> right = values.<span class="hljs-property">length</span>;
+  <span class="hljs-keyword">while</span> (left &lt; right) {
+    <span class="hljs-keyword">const</span> middle = left + <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>((right - left) / <span class="hljs-number">2</span>);
+    <span class="hljs-keyword">if</span> (values[middle] &lt; target) {
+      left = middle + <span class="hljs-number">1</span>;
+    } <span class="hljs-keyword">else</span> {
+      right = middle;
+    }
+  }
+  <span class="hljs-keyword">return</span> left;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">lowerBound</span>([<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">20</span>, <span class="hljs-number">40</span>], <span class="hljs-number">20</span>)); <span class="hljs-comment">// 1</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">lowerBound</span>([<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">20</span>, <span class="hljs-number">40</span>], <span class="hljs-number">25</span>)); <span class="hljs-comment">// 3</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">lowerBound</span>([<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">20</span>, <span class="hljs-number">40</span>], <span class="hljs-number">50</span>)); <span class="hljs-comment">// 4</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">lowerBound</span>([], <span class="hljs-number">20</span>)); <span class="hljs-comment">// 0</span>
+</code></pre></div>
+<p>每轮循环保持：left 左边的值都小于 target，right 及其右边的值都大于或等于 target，尚未排除的候选位于两者之间。</p>
+<p>当中点小于目标，中点也不可能是答案，所以 left 跳到 middle + 1；否则中点仍可能是第一个满足条件的位置，保留它作为新的右边界。每轮都缩小区间，直到 left 等于 right，此时边界唯一。</p>
+<p>在 <code>[10,20,20,40]</code> 中查 20，第一次中点为 2，值等于目标，于是 right 变为 2。继续向左缩小，最终落在索引 1。若一遇到相等就返回，就只能找到某一个 20，无法保证是第一个。</p>
+<h2>查找下一个章节和当前章节不是同一个问题</h2>
+<p>lowerBound 可以找“不早于当前时间”的章节，但当前正在播放的章节通常需要“最后一个不大于当前时间”的起点。可以先求 upper bound，即第一个严格大于目标的位置，再减一。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">upperBound</span>(<span class="hljs-params">values, target</span>) {
+  <span class="hljs-keyword">let</span> left = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> right = values.<span class="hljs-property">length</span>;
+  <span class="hljs-keyword">while</span> (left &lt; right) {
+    <span class="hljs-keyword">const</span> middle = left + <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>((right - left) / <span class="hljs-number">2</span>);
+    <span class="hljs-keyword">if</span> (values[middle] &lt;= target) left = middle + <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">else</span> right = middle;
+  }
+  <span class="hljs-keyword">return</span> left;
+}
+
+<span class="hljs-keyword">const</span> starts = [<span class="hljs-number">0</span>, <span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">40</span>];
+<span class="hljs-keyword">const</span> current = <span class="hljs-title function_">upperBound</span>(starts, <span class="hljs-number">25</span>) - <span class="hljs-number">1</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(current); <span class="hljs-comment">// 2，对应第 20 秒开始的章节</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">upperBound</span>([<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">20</span>, <span class="hljs-number">40</span>], <span class="hljs-number">20</span>) - <span class="hljs-title function_">lowerBound</span>([<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">20</span>, <span class="hljs-number">40</span>], <span class="hljs-number">20</span>)); <span class="hljs-comment">// 2</span>
+</code></pre></div>
+<p>如果播放时间早于第一个起点，current 为 -1，调用方应显示“尚未开始”，不能直接访问数组。若下一章节索引等于 length，表示后面没有章节。两个边界相减还能得到重复值数量，不需要逐项扫描这段重复区间。</p>
+<h2>O(log n) 有前提</h2>
+<p>输入必须已经有序，并且比较规则在查询期间保持一致。算法不会自动修复乱序，遇到 NaN 时比较也不再符合预期。外部数据应在进入索引时检查类型、有限性和排序；每次查询前都扫描校验或重新排序，总成本就不再只是 O(log n)。</p>
+<p>JavaScript 的默认 sort 按字符串比较，数值排序需要明确比较函数，例如 <code>[...values].sort((a, b) =&gt; a - b)</code>。不要在每次指针移动时重建排序数组；可以在数据版本变化时重建索引，然后多次查询。若搜索时数据被异步替换，结果必须与对应数据快照一起使用。</p>
+<p>不要直接用 <code>(left + right) &gt;&gt; 1</code> 求中点。JavaScript 位运算会转为 32 位整数，大索引下可能截断或变负。Math.floor 不依赖这类 32 位转换。示例假定正常数组索引和有限数值，不是适用于任意超大 BigInt 索引的通用实现。</p>
+<h2>性能收益与业务边界</h2>
+<p>二分定位是 O(log n) 时间、O(1) 额外空间，但向普通数组中间插入仍可能移动大量元素。它只加速寻找位置，不会让更新整个结构也变成对数复杂度。小数组上直接遍历可能更简单，应结合查询频率和数据量选择。</p>
+<p>用户输入的大数组应在入口限制容量；算法快不代表接收、复制和排序任意数据都便宜。时间戳还应统一单位，不能把毫秒数组与秒级 target 比较。音视频浮点时间是否允许误差，需要业务明确规则，不能随意在比较中加一个 epsilon 改变边界语义。</p>
+<h2>如何验证</h2>
+<p>除了几个固定输出，可以用线性扫描作为独立参照：随机生成有序数组，比较 lowerBound 与第一个满足 <code>value &gt;= target</code> 的位置；未命中时使用 length。覆盖空数组、全部相等、目标小于最小值、大于最大值、负数和重复区间。再验证返回位置左侧严格小于目标、右侧大于或等于目标，这比只测一个命中例子更能发现边界错误。</p>
+<p>本题是教学实现，参考资料用于理解二分算法和 JavaScript 数值语义，并非某个库的官方代码。</p>
+<h2>补充参考</h2>
+<ul>
+<li><a href="https://cp-algorithms.com/num_methods/binary_search.html">CP-Algorithms · Binary Search</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort">MDN · Array.sort</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isSafeInteger">MDN · Number.isSafeInteger</a></li>
+</ul></div><div class="answer-bottom"><a href="https://cp-algorithms.com/num_methods/binary_search.html" target="_blank" rel="noreferrer">CP-Algorithms · Binary Search<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E6%80%8E%E6%A0%B7%E5%AE%9A%E4%BD%8D%E6%97%B6%E9%97%B4%E8%BD%B4%E8%BE%B9%E7%95%8C%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E9%87%8D%E5%A4%8D%E5%80%BC%E5%92%8C%E7%A9%BA%E6%95%B0%E7%BB%84%E5%AE%B9%E6%98%93%E5%86%99%E9%94%99%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E6%80%8E%E6%A0%B7%E5%AE%9A%E4%BD%8D%E6%97%B6%E9%97%B4%E8%BD%B4%E8%BE%B9%E7%95%8C%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E9%87%8D%E5%A4%8D%E5%80%BC%E5%92%8C%E7%A9%BA%E6%95%B0%E7%BB%84%E5%AE%B9%E6%98%93%E5%86%99%E9%94%99%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-lower-bound%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-lower-bound%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：二分查找怎样定位时间轴边界？为什么重复值和空数组容易写错？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-merge-intervals/">如何合并时间区间？相邻区间算不算重叠？</a></li><li><a href="/questions/alg-topological-sort/">如何用拓扑排序解析前端任务和模块依赖？</a></li><li><a href="/questions/alg-debounce/">怎样实现只在停止调用后执行的防抖函数？</a></li><li><a href="/questions/alg-throttle/">怎样实现首沿节流，和尾沿节流有什么区别？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

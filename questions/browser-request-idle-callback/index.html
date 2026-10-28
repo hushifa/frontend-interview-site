@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="浏览器原理面试题：从延迟统计和非关键初始化出发，解释空闲回调的 deadline、timeout、页面后台限制和降级策略，区分主线程调度与 Worker。" />
+    <title>requestIdleCallback 适合做什么？为什么不能用它保证任务一定执行？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/browser-request-idle-callback/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="requestIdleCallback 适合做什么？为什么不能用它保证任务一定执行？ · 前端知库" />
+    <meta property="og:description" content="浏览器原理面试题：从延迟统计和非关键初始化出发，解释空闲回调的 deadline、timeout、页面后台限制和降级策略，区分主线程调度与 Worker。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/browser-request-idle-callback/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/browser-request-idle-callback/#webpage","url":"https://fe.hushifa.top/questions/browser-request-idle-callback/","name":"requestIdleCallback 适合做什么？为什么不能用它保证任务一定执行？ · 前端知库","description":"浏览器原理面试题：从延迟统计和非关键初始化出发，解释空闲回调的 deadline、timeout、页面后台限制和降级策略，区分主线程调度与 Worker。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/browser-request-idle-callback/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/browser-request-idle-callback/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"浏览器原理面试题","item":"https://fe.hushifa.top/topics/browser/"},{"@type":"ListItem","position":3,"name":"requestIdleCallback 适合做什么？为什么不能用它保证任务一定执行？","item":"https://fe.hushifa.top/questions/browser-request-idle-callback/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/browser/">浏览器原理面试题</a><span aria-hidden="true">/</span><span aria-current="page">requestIdleCallback 适合做什么？为什么不能用它保证任务一定执行？</span></nav><h1 tabindex="-1">requestIdleCallback 适合做什么？为什么不能用它保证任务一定执行？</h1><p class="reading-summary">从延迟统计和非关键初始化出发，解释空闲回调的 deadline、timeout、页面后台限制和降级策略，区分主线程调度与 Worker。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>页面首屏已经可用，但还想在不影响用户输入的情况下准备低频搜索索引、预热非关键组件或发送一次诊断摘要。把工作直接放进 setTimeout 只能推迟时间点，不能表达“浏览器现在有空”。requestIdleCallback 允许浏览器在预计空闲时调用任务，但它是机会调度，不是执行保证。</p>
+<h2>deadline 表示这次机会还有多少时间</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">scheduleIdle</span>(<span class="hljs-params">work, timeout = <span class="hljs-number">2000</span></span>) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-variable language_">window</span>.<span class="hljs-property">requestIdleCallback</span> !== <span class="hljs-string">&#x27;function&#x27;</span>) {
+    <span class="hljs-keyword">const</span> timer = <span class="hljs-variable language_">window</span>.<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">work</span>({ <span class="hljs-attr">timeRemaining</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-number">0</span>, <span class="hljs-attr">didTimeout</span>: <span class="hljs-literal">true</span> }), <span class="hljs-number">0</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">window</span>.<span class="hljs-built_in">clearTimeout</span>(timer);
+  }
+
+  <span class="hljs-keyword">const</span> id = <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">requestIdleCallback</span>(work, { timeout });
+  <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">cancelIdleCallback</span>(id);
+}
+
+<span class="hljs-keyword">const</span> cancel = <span class="hljs-title function_">scheduleIdle</span>(<span class="hljs-function">(<span class="hljs-params">deadline</span>) =&gt;</span> {
+  <span class="hljs-keyword">while</span> (deadline.<span class="hljs-title function_">timeRemaining</span>() &gt; <span class="hljs-number">2</span> &amp;&amp; <span class="hljs-title function_">hasMoreIndexWork</span>()) {
+    <span class="hljs-title function_">buildNextIndexChunk</span>();
+  }
+  <span class="hljs-keyword">if</span> (<span class="hljs-title function_">hasMoreIndexWork</span>()) <span class="hljs-title function_">scheduleIdle</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">buildNextIndexChunk</span>());
+});
+</code></pre></div>
+<p>这里的 hasMoreIndexWork 和分块函数是业务实现；示例只表达调度边界。<code>timeRemaining()</code> 是本次回调剩余时间的估算，不能当作精确计时器。didTimeout 为 true 表示 timeout 到期触发，应该处理少量必要工作或再次分块，不能因此在一个回调里突然执行完整大任务。</p>
+<p>代码中的降级 setTimeout 也没有空闲保证，只是让不支持 API 的浏览器保留功能。取消函数只取消尚未开始的回调；已经进入执行的函数不能被 cancelIdleCallback 中断，工作函数自己要按块返回。</p>
+<h2>timeout 是最长等待提示，不是硬实时保证</h2>
+<p>不设置 timeout 时，持续动画、滚动或不断到达的用户任务可能让低优先级回调延迟很久。设置 timeout 允许浏览器在等待过久后安排它，但 callback 仍会占用主线程，且 timeout 到期不代表可以忽略输入响应。高优先级用户操作、支付提交和数据保存不适合依赖空闲回调。</p>
+<p>requestIdleCallback 运行在主线程。它不能替代 Worker，也不会让 CPU 密集计算脱离页面脚本；大任务应切块、交给 Worker 或采用服务端处理。一个 idle 回调中排队大量微任务也可能阻塞后续渲染，不能只看外层函数名字。</p>
+<h2>页面隐藏、后台和资源竞争</h2>
+<p>浏览器可能对后台页面限频或延迟定时器，空闲回调也不应作为页面关闭前最后一次保存的唯一机会。关键草稿要在编辑时持续持久化，统计可考虑 visibilitychange 与 Beacon，但两者都不等于服务器已确认。图片解码、第三方脚本、GC 和扩展也会改变空闲窗口。</p>
+<p>如果任务与当前页面交互无关，可以在页面重新可见、用户主动触发或下一次启动时继续。任务要有版本、幂等标识和进度，避免回调被多次安排后重复建立索引或发送事件。</p>
+<h2>实际选型与测试</h2>
+<p>空闲调度适合非关键、可暂停、可重复的主线程小任务；setTimeout 适合明确的延迟；scheduler.postTask（若目标浏览器支持）可以表达优先级，但仍需核对版本；Worker 适合独立 CPU 计算。不要因为某个调度 API 看起来“更现代”就跳过性能录制。</p>
+<p>测试应使用 fake timers 之外的真实浏览器录制，因为空闲机会依赖渲染、输入、设备和后台策略。至少验证持续动画、连续输入、timeout 触发、取消、页面隐藏和 API 不支持的降级。任务结果还要验证没有覆盖用户最新状态。</p>
+<h2>补充参考</h2>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback">MDN · requestIdleCallback</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/PerformanceLongAnimationFrameTiming">MDN · PerformanceLongAnimationFrameTiming</a></li>
+<li><a href="https://wicg.github.io/scheduling-apis/">WICG · Scheduling APIs</a></li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback" target="_blank" rel="noreferrer">MDN · Window.requestIdleCallback<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+requestIdleCallback+%E9%80%82%E5%90%88%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E7%94%A8%E5%AE%83%E4%BF%9D%E8%AF%81%E4%BB%BB%E5%8A%A1%E4%B8%80%E5%AE%9A%E6%89%A7%E8%A1%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ArequestIdleCallback+%E9%80%82%E5%90%88%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E7%94%A8%E5%AE%83%E4%BF%9D%E8%AF%81%E4%BB%BB%E5%8A%A1%E4%B8%80%E5%AE%9A%E6%89%A7%E8%A1%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Abrowser-request-idle-callback%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%90%86%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fbrowser-request-idle-callback%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：requestIdleCallback 适合做什么？为什么不能用它保证任务一定执行？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/browser-reflow/">什么是强制同步布局？如何避免布局抖动？</a></li><li><a href="/questions/browser-microtask-starvation/">为什么不断追加微任务会阻塞页面响应？</a></li><li><a href="/questions/browser-render/">浏览器从 HTML 到页面显示，经历哪些主要步骤？</a></li><li><a href="/questions/browser-delegation/">事件委托是什么？target 和 currentTarget 有何区别？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

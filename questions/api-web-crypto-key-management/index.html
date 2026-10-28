@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="Web API面试题：区分哈希、加密、签名和密钥派生，使用 SubtleCrypto 设计密钥生成、导入、存储和轮换流程，并说明浏览器端密码学的安全边界。" />
+    <title>Web Crypto API 如何正确管理浏览器端密钥？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/api-web-crypto-key-management/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="Web Crypto API 如何正确管理浏览器端密钥？ · 前端知库" />
+    <meta property="og:description" content="Web API面试题：区分哈希、加密、签名和密钥派生，使用 SubtleCrypto 设计密钥生成、导入、存储和轮换流程，并说明浏览器端密码学的安全边界。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/api-web-crypto-key-management/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/api-web-crypto-key-management/#webpage","url":"https://fe.hushifa.top/questions/api-web-crypto-key-management/","name":"Web Crypto API 如何正确管理浏览器端密钥？ · 前端知库","description":"Web API面试题：区分哈希、加密、签名和密钥派生，使用 SubtleCrypto 设计密钥生成、导入、存储和轮换流程，并说明浏览器端密码学的安全边界。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/api-web-crypto-key-management/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/api-web-crypto-key-management/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Web API面试题","item":"https://fe.hushifa.top/topics/web-apis/"},{"@type":"ListItem","position":3,"name":"Web Crypto API 如何正确管理浏览器端密钥？","item":"https://fe.hushifa.top/questions/api-web-crypto-key-management/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/web-apis/">Web API面试题</a><span aria-hidden="true">/</span><span aria-current="page">Web Crypto API 如何正确管理浏览器端密钥？</span></nav><h1 tabindex="-1">Web Crypto API 如何正确管理浏览器端密钥？</h1><p class="reading-summary">区分哈希、加密、签名和密钥派生，使用 SubtleCrypto 设计密钥生成、导入、存储和轮换流程，并说明浏览器端密码学的安全边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>应用想在浏览器中加密草稿、验证下载文件或实现 Passkey 辅助流程，开发者常把“字符串做 SHA-256”称为加密，或者把密钥放进 <code>localStorage</code> 后认为数据安全。Web Crypto API 提供的是底层密码学原语，真正安全取决于用途、密钥生命周期、认证方式、随机数和服务端协议。</p>
+<h2>哈希、加密、签名和派生解决不同问题</h2>
+<ul>
+<li><strong>哈希</strong>：把输入映射为摘要，用于完整性或指纹；不能从摘要还原原文，也不等于密码存储方案。</li>
+<li><strong>对称加密</strong>：同一把秘密密钥加密和解密，适合保护数据机密性；必须使用认证加密模式并安全保存密钥。</li>
+<li><strong>签名</strong>：私钥签名、公钥验证，证明持有者和内容完整性；不是把内容隐藏起来。</li>
+<li><strong>密钥派生</strong>：从密码或主密钥派生工作密钥，需要盐值、成本参数和明确协议。</li>
+</ul>
+<p>把密码直接哈希一次、把 AES-CTR 当作完整加密、把公钥当成秘密，都会造成错误的安全假设。</p>
+<h2>生成随机密钥和随机数</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> key = <span class="hljs-keyword">await</span> crypto.<span class="hljs-property">subtle</span>.<span class="hljs-title function_">generateKey</span>(
+  {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;AES-GCM&#x27;</span>,
+    <span class="hljs-attr">length</span>: <span class="hljs-number">256</span>,
+  },
+  <span class="hljs-literal">false</span>,
+  [<span class="hljs-string">&#x27;encrypt&#x27;</span>, <span class="hljs-string">&#x27;decrypt&#x27;</span>],
+);
+
+<span class="hljs-keyword">const</span> iv = crypto.<span class="hljs-title function_">getRandomValues</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>(<span class="hljs-number">12</span>));
+<span class="hljs-keyword">const</span> plaintext = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TextEncoder</span>().<span class="hljs-title function_">encode</span>(<span class="hljs-string">&#x27;需要保护的草稿&#x27;</span>);
+<span class="hljs-comment">// 绑定记录身份；解密端必须从可信业务上下文取得同样的值。</span>
+<span class="hljs-keyword">const</span> additionalData = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TextEncoder</span>().<span class="hljs-title function_">encode</span>(<span class="hljs-string">&#x27;draft:42:format:1&#x27;</span>);
+<span class="hljs-keyword">const</span> ciphertext = <span class="hljs-keyword">await</span> crypto.<span class="hljs-property">subtle</span>.<span class="hljs-title function_">encrypt</span>(
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;AES-GCM&#x27;</span>, iv, additionalData, <span class="hljs-attr">tagLength</span>: <span class="hljs-number">128</span> },
+  key,
+  plaintext,
+);
+
+<span class="hljs-keyword">const</span> restored = <span class="hljs-keyword">await</span> crypto.<span class="hljs-property">subtle</span>.<span class="hljs-title function_">decrypt</span>(
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;AES-GCM&#x27;</span>, iv, additionalData, <span class="hljs-attr">tagLength</span>: <span class="hljs-number">128</span> },
+  key,
+  ciphertext,
+);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">TextDecoder</span>().<span class="hljs-title function_">decode</span>(restored)); <span class="hljs-comment">// 需要保护的草稿</span>
+
+<span class="hljs-keyword">const</span> damaged = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Uint8Array</span>(ciphertext.<span class="hljs-title function_">slice</span>(<span class="hljs-number">0</span>));
+damaged[<span class="hljs-number">0</span>] ^= <span class="hljs-number">1</span>;
+<span class="hljs-keyword">try</span> {
+  <span class="hljs-keyword">await</span> crypto.<span class="hljs-property">subtle</span>.<span class="hljs-title function_">decrypt</span>(
+    { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;AES-GCM&#x27;</span>, iv, additionalData, <span class="hljs-attr">tagLength</span>: <span class="hljs-number">128</span> },
+    key,
+    damaged,
+  );
+  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;预期认证失败，但解密成功&#x27;</span>);
+} <span class="hljs-keyword">catch</span> (error) {
+  <span class="hljs-keyword">if</span> (error.<span class="hljs-property">name</span> !== <span class="hljs-string">&#x27;OperationError&#x27;</span>) <span class="hljs-keyword">throw</span> error;
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;密文被修改，拒绝使用&#x27;</span>);
+}
+</code></pre></div>
+<p>AES-GCM 的 IV 不要求保密，但同一把密钥下不能重复使用；它通常使用 12 字节随机 IV，具体限制要按实现和协议固定。密文应和 IV、版本、算法参数一起保存，解密时还要验证认证标签。不要使用 <code>Math.random()</code> 生成 IV、盐或密钥，也不要截断密文或忽略 <code>decrypt</code> 的失败。</p>
+<p><code>extractable: false</code> 可以限制密钥导出，但不是对恶意同源脚本的绝对防护；同源 XSS 仍可能调用密钥进行允许的操作。浏览器端密钥保护必须和 CSP、Trusted Types、依赖治理及会话安全一起设计。</p>
+<p>这段代码可以在支持 Web Crypto 的安全上下文中作为模块运行。Web Crypto 的 AES-GCM 输出已包含认证标签，decrypt 会校验它；无需自己比较标签，更不能验证失败后仍展示解出的部分数据。AAD 不加密，只参与认证，不能把秘密放进去并期待它被隐藏。错误的密钥、IV 或 AAD 也可能导致认证失败，生产界面不应仅凭 OperationError 就断言用户遭遇攻击。</p>
+<p>随机 IV 是概率性避免重复，不是无限使用的保证。高频、多设备共享密钥的协议必须规划调用量、唯一性和轮换，不能把同一个示例 iv 重用于多次 encrypt。重复解密同一条密文则不属于重复加密使用 IV。</p>
+<h2>密钥存储和导入</h2>
+<p><code>CryptoKey</code> 可以放入 IndexedDB（具体可序列化性和浏览器支持需实测），但存储它不等于密钥已经脱离当前源的信任边界。任何能够执行同源脚本的代码都可能尝试使用可访问的密钥。<code>localStorage</code> 适合保存非敏感版本或状态，不适合保存原始密钥、会话令牌和密码。</p>
+<p>导入外部 JWK、原始字节或 PEM 时要校验算法、用途、长度和版本，不能让输入决定任意算法：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> publicKey = <span class="hljs-keyword">await</span> crypto.<span class="hljs-property">subtle</span>.<span class="hljs-title function_">importKey</span>(
+  <span class="hljs-string">&#x27;jwk&#x27;</span>,
+  jwk,
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;ECDSA&#x27;</span>, <span class="hljs-attr">namedCurve</span>: <span class="hljs-string">&#x27;P-256&#x27;</span> },
+  <span class="hljs-literal">false</span>,
+  [<span class="hljs-string">&#x27;verify&#x27;</span>],
+);
+</code></pre></div>
+<p>示例只允许公钥验证用途。生产协议应确认曲线、签名编码和哈希算法与服务端实现一致；不要因为导入成功就信任密钥来源，密钥绑定和撤销仍属于应用协议。</p>
+<h2>密码派生不能用普通哈希替代</h2>
+<p>用户密码熵通常较低，不能直接作为 AES 密钥，也不能只做一次 SHA-256。浏览器可以使用 PBKDF2 等 API 进行派生，但成本参数、盐值、升级和服务端验证要由完整协议定义。更高风险的账号密码存储应交给服务端使用适合密码哈希的方案；浏览器端派生不应让密码在网络或日志中暴露。</p>
+<p>加密草稿的密钥恢复也需要产品设计：用户清除浏览器数据、换设备、忘记密码或撤销会话时，数据是否仍可恢复？如果没有密钥备份或服务端密钥包装，纯客户端加密数据可能永久无法解密。不要把“无法恢复”当作默认安全优势而不告知用户。</p>
+<h2>版本、轮换和关联数据</h2>
+<p>加密格式应包含版本、算法、密钥 ID、IV 和密文长度边界。密钥轮换时，新数据使用新密钥，旧数据按版本解密后重新加密；不能把新密钥直接覆盖旧密钥导致历史数据不可读。关联数据（AAD）可以认证租户、记录 ID 或版本，但这些字段必须在解密前由业务上下文确定，不能信任密文中自称的租户。</p>
+<h2>安全上下文、兼容性和性能</h2>
+<p>Web Crypto 的许多能力要求安全上下文（HTTPS），在 Web Worker 中也可能可用。算法、曲线、密钥格式和浏览器实现存在差异，不能只在一个浏览器成功就宣布兼容。大文件加密应评估流式处理、分块协议和内存峰值；<code>subtle.encrypt</code> 接收完整 ArrayBuffer 时可能一次性占用大量内存。</p>
+<h2>常见误区</h2>
+<ul>
+<li>把哈希称为加密：哈希没有保密性。</li>
+<li>用 AES-ECB 或复用 GCM IV：会泄露模式或破坏认证安全。</li>
+<li>把密钥放进 localStorage：XSS 或同源脚本可直接读取。</li>
+<li>只加密前端：服务端、备份和日志仍可能保存明文。</li>
+<li>只验证签名不验证密钥绑定：攻击者可能替换成自己的公钥。</li>
+</ul>
+<p>高风险密码学方案优先采用经过审查的协议和库，不要自行设计算法组合。Web Crypto 适合明确、可验证的原语调用；密钥生成、分发、恢复、撤销和服务端权限才是完整安全方案的主体。</p>
+<h2>参考资料</h2>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API">MDN · Web Crypto API</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto">MDN · SubtleCrypto</a></li>
+<li><a href="https://www.w3.org/TR/WebCryptoAPI/">W3C · Web Cryptography API</a></li>
+<li><a href="https://www.rfc-editor.org/rfc/rfc5869.html">RFC 5869 · HKDF</a></li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API" target="_blank" rel="noreferrer">MDN · Web Crypto API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Web+Crypto+API+%E5%A6%82%E4%BD%95%E6%AD%A3%E7%A1%AE%E7%AE%A1%E7%90%86%E6%B5%8F%E8%A7%88%E5%99%A8%E7%AB%AF%E5%AF%86%E9%92%A5%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AWeb+Crypto+API+%E5%A6%82%E4%BD%95%E6%AD%A3%E7%A1%AE%E7%AE%A1%E7%90%86%E6%B5%8F%E8%A7%88%E5%99%A8%E7%AB%AF%E5%AF%86%E9%92%A5%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aapi-web-crypto-key-management%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AWeb+API%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fapi-web-crypto-key-management%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Web Crypto API 如何正确管理浏览器端密钥？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/api-abort/">AbortController 能取消什么，不能取消什么？</a></li><li><a href="/questions/api-web-components/">Custom Elements、Shadow DOM 和 template 分别负责什么？</a></li><li><a href="/questions/api-files/">File、Blob 和 object URL 怎样用于文件预览？</a></li><li><a href="/questions/api-readable-streams/">怎样正确消费 Fetch 返回的 ReadableStream？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="架构设计面试题：用表单和页面配置说明 Schema、组件注册、数据绑定和版本迁移的边界，避免把任意 JavaScript 放进配置或把配置校验当成权限控制。" />
+    <title>低代码和 Schema 驱动 UI 怎样保持可维护与安全？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/architecture-low-code-schema/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="低代码和 Schema 驱动 UI 怎样保持可维护与安全？ · 前端知库" />
+    <meta property="og:description" content="架构设计面试题：用表单和页面配置说明 Schema、组件注册、数据绑定和版本迁移的边界，避免把任意 JavaScript 放进配置或把配置校验当成权限控制。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/architecture-low-code-schema/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/architecture-low-code-schema/#webpage","url":"https://fe.hushifa.top/questions/architecture-low-code-schema/","name":"低代码和 Schema 驱动 UI 怎样保持可维护与安全？ · 前端知库","description":"架构设计面试题：用表单和页面配置说明 Schema、组件注册、数据绑定和版本迁移的边界，避免把任意 JavaScript 放进配置或把配置校验当成权限控制。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/architecture-low-code-schema/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/architecture-low-code-schema/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"架构设计面试题","item":"https://fe.hushifa.top/topics/architecture/"},{"@type":"ListItem","position":3,"name":"低代码和 Schema 驱动 UI 怎样保持可维护与安全？","item":"https://fe.hushifa.top/questions/architecture-low-code-schema/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/architecture/">架构设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">低代码和 Schema 驱动 UI 怎样保持可维护与安全？</span></nav><h1 tabindex="-1">低代码和 Schema 驱动 UI 怎样保持可维护与安全？</h1><p class="reading-summary">用表单和页面配置说明 Schema、组件注册、数据绑定和版本迁移的边界，避免把任意 JavaScript 放进配置或把配置校验当成权限控制。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>低代码平台通常把页面结构、字段、校验和数据源保存成 JSON，再由运行时渲染。这样可以让运营快速调整表单和列表，但也会带来新的问题：配置怎样校验、组件怎样升级、表达式能做什么、用户权限在哪里执行，以及旧配置怎样迁移。</p>
+<p>Schema 驱动 UI 的价值在于把可变业务描述成受约束的数据；如果配置里可以执行任意 JavaScript，它就不再是单纯的 Schema，而接近一个需要隔离和治理的程序运行时。</p>
+<h2>先区分结构 Schema 和业务数据</h2>
+<p>页面配置可以描述组件类型、属性、子节点和事件：</p>
+<div class="not-prose code-block"><div class="code-language">json</div><pre><code class="hljs language-json">{
+  &quot;version&quot;: 2,
+  &quot;type&quot;: &quot;form&quot;,
+  &quot;fields&quot;: [
+    {
+      &quot;id&quot;: &quot;email&quot;,
+      &quot;component&quot;: &quot;text&quot;,
+      &quot;label&quot;: &quot;邮箱&quot;,
+      &quot;required&quot;: true,
+      &quot;inputType&quot;: &quot;email&quot;
+    }
+  ]
+}
+</code></pre></div>
+<p>这个对象是 UI 结构的描述，不等于用户填写的表单值，也不等于服务端权限。结构校验可以检查 <code>component</code> 是否在白名单、字段 ID 是否唯一、嵌套深度和字符串长度是否有限；业务数据还要按字段类型、跨字段约束和服务端规则单独校验。</p>
+<p>Schema 通过不等于配置安全。来自网络、数据库导入或用户编辑的配置都应当视为不可信输入，不能直接把任意字段 spread 到 DOM 或组件 props 上。</p>
+<h2>组件注册表比动态执行组件名更可控</h2>
+<p>渲染器应从受控注册表取得组件：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">const</span> components = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>([
+  [<span class="hljs-string">&#x27;text&#x27;</span>, <span class="hljs-title class_">TextField</span>],
+  [<span class="hljs-string">&#x27;select&#x27;</span>, <span class="hljs-title class_">SelectField</span>],
+]);
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">renderField</span>(<span class="hljs-params">schema, value, onChange</span>) {
+  <span class="hljs-keyword">const</span> <span class="hljs-title class_">Component</span> = components.<span class="hljs-title function_">get</span>(schema.<span class="hljs-property">component</span>);
+  <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Component</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">`未知组件：<span class="hljs-subst">${schema.component}</span>`</span>);
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Component</span> <span class="hljs-attr">schema</span>=<span class="hljs-string">{schema}</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{value}</span> <span class="hljs-attr">onChange</span>=<span class="hljs-string">{onChange}</span> /&gt;</span></span>;
+}
+</code></pre></div>
+<p>不要根据配置拼接模块路径并执行任意导入，也不要把组件名交给 <code>eval</code>。需要插件扩展时，应采用明确的插件清单、版本和权限，而不是让配置直接加载任意 URL。</p>
+<p>组件 API 要有稳定契约：哪些属性是展示配置，哪些是用户输入，哪些事件是允许的，错误和 loading 如何表达。组件升级时，旧 Schema 要么由迁移脚本转换，要么由渲染器明确拒绝；默默把旧字段解释成新含义会产生难以追踪的页面差异。</p>
+<h2>数据绑定和表达式是最高风险区域</h2>
+<p>低代码平台常让配置引用 <code>form.email</code>、<code>data.items</code> 或条件表达式。安全做法是定义有限表达式语言或路径访问器，只允许读取白名单字段和有限运算；不要把配置字符串直接交给 <code>eval</code>、<code>new Function</code> 或模板编译器。</p>
+<p>即使表达式不能执行 JavaScript，也要限制递归深度、循环次数、字符串长度和可访问对象。一个恶意配置可以通过巨大数组、深层路径或高成本正则耗尽主线程。表达式错误应显示可定位的配置路径，不能让整个应用只剩一个空白 loading。</p>
+<p>数据源请求也要由受控连接器负责。配置不能任意指定内网 URL、请求头和长期凭据，否则平台可能变成 SSRF、数据越权或密钥泄漏入口。服务端必须根据当前用户和资源权限重新检查数据源，前端 Schema 不是授权凭据。</p>
+<h2>事件动作需要能力白名单</h2>
+<p>按钮动作可以是“提交表单”“刷新数据”或“打开面板”，但不能因为配置中出现一个字符串就执行任意代码。动作注册表应限制参数、目标和可组合范围；写操作还需要幂等、确认和错误恢复。</p>
+<p>如果允许自定义脚本，应把它视为独立的代码执行功能。普通同源 Worker 只是线程与 DOM 访问边界，不是安全沙箱：它仍可能请求网络、访问同源数据或耗尽资源。不能仅把 eval 搬到 Worker 就宣称安全。独立 origin、受控消息协议和服务端隔离环境也需要分别设计权限、网络出口、资源限额与终止机制。iframe 不会自动成为安全沙箱，allow-scripts、allow-same-origin 和消息通信必须一起审查。</p>
+<h2>Schema 版本和迁移要可追踪</h2>
+<p>配置一旦保存，就会经历组件重命名、字段属性改变和数据结构升级。每份配置应包含版本，发布新渲染器时提供确定性的迁移函数：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">migrate</span>(<span class="hljs-params">schema</span>) {
+  <span class="hljs-keyword">if</span> (!schema || <span class="hljs-keyword">typeof</span> schema !== <span class="hljs-string">&#x27;object&#x27;</span> || !<span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(schema.<span class="hljs-property">fields</span>)) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;配置结构无效&#x27;</span>);
+  }
+  <span class="hljs-keyword">if</span> (schema.<span class="hljs-property">version</span> !== <span class="hljs-number">1</span> &amp;&amp; schema.<span class="hljs-property">version</span> !== <span class="hljs-number">2</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;不支持该配置版本&#x27;</span>);
+  }
+  <span class="hljs-keyword">if</span> (schema.<span class="hljs-property">version</span> === <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">return</span> {
+      ...schema,
+      <span class="hljs-attr">version</span>: <span class="hljs-number">2</span>,
+      <span class="hljs-attr">fields</span>: schema.<span class="hljs-property">fields</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">field</span>) =&gt;</span> ({
+        ...field,
+        <span class="hljs-attr">inputType</span>: field.<span class="hljs-property">kind</span> === <span class="hljs-string">&#x27;email&#x27;</span> ? <span class="hljs-string">&#x27;email&#x27;</span> : field.<span class="hljs-property">inputType</span>,
+      })),
+    };
+  }
+  <span class="hljs-keyword">return</span> schema;
+}
+</code></pre></div>
+<p>迁移函数应保持纯、可重复并有回归样例，不能在页面首次打开时偷偷修改数据库而没有备份。迁移失败时要保留原配置、显示错误并提供导出或回滚路径。版本号不是权限版本，发布配置仍需要审批和审计。</p>
+<p>示例只展示版本分派，不是完整的 Schema 校验器。进入迁移前先按 v1 或 v2 的对应结构检查每个 field；迁移后再按 v2 验证组件名、属性与业务限制。未知的未来版本必须拒绝，不能原样返回给旧渲染器碰运气。当前返回的 v2 对象仍与输入共用引用，调用方应将配置当作只读数据。</p>
+<h2>配置驱动不等于不需要测试</h2>
+<p>除了 Schema 单元校验，还要测试组件注册、渲染状态、表达式边界、字段错误、权限拒绝、旧版本迁移、空数据和配置损坏。配置数量很大时，可以用属性测试生成合法和非法结构，检查渲染器不会崩溃或越权。</p>
+<p>关键业务页面还需要端到端、视觉、键盘和读屏验收。一个 JSON 文件能成功解析，不代表用户能完成表单；一个配置能在开发环境渲染，也不代表发布时所有组件和数据连接器都存在。</p>
+<p>低代码的正确目标是把重复的结构化工作变成受约束的产品能力，同时保留必要的代码扩展和人工审查。Schema、组件注册、表达式、数据连接和权限都清楚之后，平台才容易演进；否则只是把难维护的代码搬进一份更难调试的 JSON。</p></div><div class="answer-bottom"><a href="https://json-schema.org/specification" target="_blank" rel="noreferrer">JSON Schema · Specification<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%BD%8E%E4%BB%A3%E7%A0%81%E5%92%8C+Schema+%E9%A9%B1%E5%8A%A8+UI+%E6%80%8E%E6%A0%B7%E4%BF%9D%E6%8C%81%E5%8F%AF%E7%BB%B4%E6%8A%A4%E4%B8%8E%E5%AE%89%E5%85%A8%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%BD%8E%E4%BB%A3%E7%A0%81%E5%92%8C+Schema+%E9%A9%B1%E5%8A%A8+UI+%E6%80%8E%E6%A0%B7%E4%BF%9D%E6%8C%81%E5%8F%AF%E7%BB%B4%E6%8A%A4%E4%B8%8E%E5%AE%89%E5%85%A8%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aarchitecture-low-code-schema%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Farchitecture-low-code-schema%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：低代码和 Schema 驱动 UI 怎样保持可维护与安全？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/arch-design-system/">设计系统为什么不能只有一套视觉样式？</a></li><li><a href="/questions/arch-state-machine/">怎样避免加载、成功和失败状态互相矛盾？</a></li><li><a href="/questions/arch-progressive/">渐进增强和优雅降级怎样影响前端方案选择？</a></li><li><a href="/questions/architecture-feature-boundaries/">前端大型项目怎样划分功能边界？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

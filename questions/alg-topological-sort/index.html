@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="手写与算法面试题：从构建任务和插件依赖出发，解释拓扑排序、入度、环检测和稳定顺序，给出可验证的 TypeScript 实现与工程边界。" />
+    <title>如何用拓扑排序解析前端任务和模块依赖？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/alg-topological-sort/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="如何用拓扑排序解析前端任务和模块依赖？ · 前端知库" />
+    <meta property="og:description" content="手写与算法面试题：从构建任务和插件依赖出发，解释拓扑排序、入度、环检测和稳定顺序，给出可验证的 TypeScript 实现与工程边界。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/alg-topological-sort/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-topological-sort/#webpage","url":"https://fe.hushifa.top/questions/alg-topological-sort/","name":"如何用拓扑排序解析前端任务和模块依赖？ · 前端知库","description":"手写与算法面试题：从构建任务和插件依赖出发，解释拓扑排序、入度、环检测和稳定顺序，给出可验证的 TypeScript 实现与工程边界。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-topological-sort/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-topological-sort/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"如何用拓扑排序解析前端任务和模块依赖？","item":"https://fe.hushifa.top/questions/alg-topological-sort/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">如何用拓扑排序解析前端任务和模块依赖？</span></nav><h1 tabindex="-1">如何用拓扑排序解析前端任务和模块依赖？</h1><p class="reading-summary">从构建任务和插件依赖出发，解释拓扑排序、入度、环检测和稳定顺序，给出可验证的 TypeScript 实现与工程边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>构建工具需要先编译共享类型，再打包业务模块；插件系统需要先加载依赖插件，任务编排需要先完成数据库迁移再启动服务。依赖关系可以表示成有向图：<code>A -&gt; B</code> 表示 A 必须在 B 之前完成。只要图没有环，就可以用拓扑排序得到一个满足约束的执行顺序；如果排序结果不包含全部节点，就说明存在循环依赖或输入引用了不存在的节点。</p>
+<h2>用入度逐步移除“没有前置依赖”的节点</h2>
+<p>下面约定 <code>dependencies.get(name)</code> 返回当前节点必须先完成的节点：</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">topologicalOrder</span>(<span class="hljs-params">
+  <span class="hljs-attr">dependencies</span>: <span class="hljs-title class_">ReadonlyMap</span>&lt;<span class="hljs-built_in">string</span>, <span class="hljs-keyword">readonly</span> <span class="hljs-built_in">string</span>[]&gt;,
+</span>): <span class="hljs-built_in">string</span>[] {
+  <span class="hljs-keyword">const</span> indegree = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">number</span>&gt;();
+  <span class="hljs-keyword">const</span> dependents = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">string</span>[]&gt;();
+
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> [name, required] <span class="hljs-keyword">of</span> dependencies) {
+    <span class="hljs-keyword">if</span> (!indegree.<span class="hljs-title function_">has</span>(name)) indegree.<span class="hljs-title function_">set</span>(name, <span class="hljs-number">0</span>);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> dependency <span class="hljs-keyword">of</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>(required)) {
+      <span class="hljs-keyword">if</span> (!dependencies.<span class="hljs-title function_">has</span>(dependency)) {
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">`缺少依赖：<span class="hljs-subst">${name}</span> -&gt; <span class="hljs-subst">${dependency}</span>`</span>);
+      }
+      indegree.<span class="hljs-title function_">set</span>(name, (indegree.<span class="hljs-title function_">get</span>(name) ?? <span class="hljs-number">0</span>) + <span class="hljs-number">1</span>);
+      <span class="hljs-keyword">const</span> list = dependents.<span class="hljs-title function_">get</span>(dependency) ?? [];
+      list.<span class="hljs-title function_">push</span>(name);
+      dependents.<span class="hljs-title function_">set</span>(dependency, list);
+    }
+  }
+
+  <span class="hljs-keyword">const</span> ready = [...indegree]
+    .<span class="hljs-title function_">filter</span>(<span class="hljs-function">(<span class="hljs-params">[, count]</span>) =&gt;</span> count === <span class="hljs-number">0</span>)
+    .<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">[name]</span>) =&gt;</span> name)
+    .<span class="hljs-title function_">sort</span>();
+  <span class="hljs-keyword">const</span> <span class="hljs-attr">result</span>: <span class="hljs-built_in">string</span>[] = [];
+
+  <span class="hljs-keyword">while</span> (ready.<span class="hljs-property">length</span> &gt; <span class="hljs-number">0</span>) {
+    <span class="hljs-keyword">const</span> current = ready.<span class="hljs-title function_">shift</span>();
+    <span class="hljs-keyword">if</span> (current === <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">break</span>;
+    result.<span class="hljs-title function_">push</span>(current);
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> next <span class="hljs-keyword">of</span> dependents.<span class="hljs-title function_">get</span>(current) ?? []) {
+      <span class="hljs-keyword">const</span> count = (indegree.<span class="hljs-title function_">get</span>(next) ?? <span class="hljs-number">0</span>) - <span class="hljs-number">1</span>;
+      indegree.<span class="hljs-title function_">set</span>(next, count);
+      <span class="hljs-keyword">if</span> (count === <span class="hljs-number">0</span>) {
+        ready.<span class="hljs-title function_">push</span>(next);
+        ready.<span class="hljs-title function_">sort</span>();
+      }
+    }
+  }
+
+  <span class="hljs-keyword">if</span> (result.<span class="hljs-property">length</span> !== indegree.<span class="hljs-property">size</span>) {
+    <span class="hljs-keyword">const</span> blockedNodes = [...indegree]
+      .<span class="hljs-title function_">filter</span>(<span class="hljs-function">(<span class="hljs-params">[, count]</span>) =&gt;</span> count &gt; <span class="hljs-number">0</span>)
+      .<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">[name]</span>) =&gt;</span> name);
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">`存在循环依赖，未能排入顺序的节点：<span class="hljs-subst">${blockedNodes.join(<span class="hljs-string">&#x27;, &#x27;</span>)}</span>`</span>);
+  }
+  <span class="hljs-keyword">return</span> result;
+}
+</code></pre></div>
+<p>例如 <code>types</code> 被 <code>app</code> 依赖、<code>vendor</code> 被 <code>app</code> 依赖时，结果可以是 <code>types, vendor, app</code> 或 <code>vendor, types, app</code>。代码对可执行节点按名称排序，使相同输入得到稳定结果，便于缓存、日志和测试；稳定顺序不代表业务上唯一正确的顺序。</p>
+<h2>复杂度和输入边界</h2>
+<p>使用邻接表和带读取下标的 FIFO 队列时，Kahn 算法可以达到 <code>O(V + E)</code> 时间和 <code>O(V + E)</code> 空间。这里的实现并不是线性时间：每加入一个就绪节点就重新排序，还使用了会移动数组元素的 <code>shift()</code>。按常见比较排序模型估算，反复排序可产生 <code>O(V² log V)</code> 成本，另有遍历边的 <code>O(E)</code> 成本；JavaScript 规范本身不承诺 sort 的具体复杂度。</p>
+<p>如果需要每一步都选取名称最小的可用节点，可用最小堆，将队列操作控制在 <code>O(V log V)</code>，连同邻接表遍历合计 <code>O(E + V log V)</code>。如果只要求相同输入得到相同输出，而不要求字典序最小，Map 的插入顺序配合 FIFO 下标队列也可以保持确定性，无须牺牲稳定性来换取线性遍历。E 计入输入的依赖条目数量，本例先用 Set 合并每个节点的重复依赖。</p>
+<p>输入校验不能省略：依赖名称应唯一且经过规范化，重复依赖不能让入度被多算，节点数量和边数量应设上限。用户可配置的插件图还要限制深度和内存，避免恶意输入构造巨大图或大量重复边。空图应返回空数组，只有自依赖时应明确报告环。</p>
+<h2>环检测不能只说“排序失败”</h2>
+<p>Kahn 算法发现结果长度不足时，可以确定剩余节点属于某个环或依赖于环，但不能直接给出完整环路径。构建工具和依赖安装器通常需要更友好的错误，例如 <code>a -&gt; b -&gt; c -&gt; a</code>。可以在剩余子图上运行 DFS，记录三种颜色（未访问、访问中、已完成）并在遇到访问中的节点时回溯路径。</p>
+<p>错误信息还应区分“缺少依赖”和“循环依赖”。前者是输入引用问题，后者是约束无法同时满足；把两种错误都显示成“排序失败”会增加排查成本。</p>
+<h2>拓扑顺序不等于可以无脑并行执行</h2>
+<p>拓扑排序只给出依赖满足的顺序。如果两个节点没有依赖关系，它们可以并行，但还要考虑 CPU、网络、文件锁和任务副作用。可以在每轮把所有入度为零的节点组成批次，再用并发池执行；任一任务失败后，要定义是否取消同批任务、是否继续无关任务以及如何回滚已完成副作用。</p>
+<p>增量构建也不能只比较拓扑序列。某个节点的输入、环境变量或工具版本变化，可能使所有传递依赖失效；需要结合内容哈希和缓存键判断哪些任务真正需要重新运行。缓存命中结果必须绑定依赖版本，不能只按任务名称复用。</p>
+<h2>真实工程中的稳定性和安全</h2>
+<p>模块解析应规范化路径和包名，防止 <code>../</code>、大小写差异或符号链接让同一资源被当成多个节点。插件名称和配置来自不可信来源时，拓扑排序只解决顺序，不解决插件代码执行权限；安装和运行仍需审查来源、沙箱和最小权限。</p>
+<h2>常见误区</h2>
+<ul>
+<li>把边方向写反：先明确 <code>A -&gt; B</code> 是 A 依赖 B 还是 A 必须先于 B。</li>
+<li>只按数组顺序执行：输入顺序不一定满足依赖，也无法发现环。</li>
+<li>发现排序结果不足就静默跳过剩余节点：会生成不完整产物。</li>
+<li>认为有拓扑序就能并行：任务仍可能争抢资源或有不可逆副作用。</li>
+<li>只按名称做缓存：依赖内容和环境变化后可能复用错误结果。</li>
+</ul>
+<h2>参考资料</h2>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map">MDN · Map</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Topological_sorting">Wikipedia · Topological sorting</a></li>
+<li><a href="https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html">TypeScript · TypeScript for JavaScript Programmers</a></li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map" target="_blank" rel="noreferrer">MDN · Map<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%A6%82%E4%BD%95%E7%94%A8%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F%E8%A7%A3%E6%9E%90%E5%89%8D%E7%AB%AF%E4%BB%BB%E5%8A%A1%E5%92%8C%E6%A8%A1%E5%9D%97%E4%BE%9D%E8%B5%96%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%A6%82%E4%BD%95%E7%94%A8%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F%E8%A7%A3%E6%9E%90%E5%89%8D%E7%AB%AF%E4%BB%BB%E5%8A%A1%E5%92%8C%E6%A8%A1%E5%9D%97%E4%BE%9D%E8%B5%96%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-topological-sort%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-topological-sort%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：如何用拓扑排序解析前端任务和模块依赖？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-graph-traversal/">前端场景中的图遍历应该怎样建模？</a></li><li><a href="/questions/alg-lower-bound/">二分查找怎样定位时间轴边界？为什么重复值和空数组容易写错？</a></li><li><a href="/questions/alg-merge-intervals/">如何合并时间区间？相邻区间算不算重叠？</a></li><li><a href="/questions/alg-debounce/">怎样实现只在停止调用后执行的防抖函数？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="性能优化面试题：解释长动画帧与 Long Task 的区别，使用 PerformanceObserver 读取脚本、布局和渲染耗时，分析如何在真实用户环境中定位交互卡顿并设计降级方案。" />
+    <title>如何用 Long Animation Frames API 定位卡顿来源？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/perf-long-animation-frames/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="如何用 Long Animation Frames API 定位卡顿来源？ · 前端知库" />
+    <meta property="og:description" content="性能优化面试题：解释长动画帧与 Long Task 的区别，使用 PerformanceObserver 读取脚本、布局和渲染耗时，分析如何在真实用户环境中定位交互卡顿并设计降级方案。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/perf-long-animation-frames/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-long-animation-frames/#webpage","url":"https://fe.hushifa.top/questions/perf-long-animation-frames/","name":"如何用 Long Animation Frames API 定位卡顿来源？ · 前端知库","description":"性能优化面试题：解释长动画帧与 Long Task 的区别，使用 PerformanceObserver 读取脚本、布局和渲染耗时，分析如何在真实用户环境中定位交互卡顿并设计降级方案。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-long-animation-frames/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-long-animation-frames/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"如何用 Long Animation Frames API 定位卡顿来源？","item":"https://fe.hushifa.top/questions/perf-long-animation-frames/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">如何用 Long Animation Frames API 定位卡顿来源？</span></nav><h1 tabindex="-1">如何用 Long Animation Frames API 定位卡顿来源？</h1><p class="reading-summary">解释长动画帧与 Long Task 的区别，使用 PerformanceObserver 读取脚本、布局和渲染耗时，分析如何在真实用户环境中定位交互卡顿并设计降级方案。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>页面明明没有一个持续几百毫秒的函数，用户却感觉点击后画面停顿。原因可能是多个中等耗时的脚本、样式计算、布局和绘制共同超过了一帧预算。只观察 Long Task 只能看到主线程上的长任务，无法完整回答“这一帧为什么没有及时呈现”。Long Animation Frames（LoAF）记录的是一帧从开始到完成的整体耗时，并提供参与这帧的脚本和渲染阶段信息。</p>
+<h2>长动画帧和长任务观察的对象不同</h2>
+<ul>
+<li><strong>Long Task</strong>：单个主线程任务持续至少 50 毫秒，适合发现某段 JavaScript 或其他任务长时间占用主线程。</li>
+<li><strong>Long Animation Frame</strong>：观察超过 50 毫秒的长帧处理，包含跨任务的脚本工作和渲染更新信息。50 毫秒是长帧报告阈值，不是流畅动画的帧预算；60 Hz 屏幕的一次刷新间隔约为 16.7 毫秒。</li>
+</ul>
+<p>两者可以同时出现，也可能只有其中一个被观察到。例如若多个 30 毫秒的脚本任务被安排在同一帧，它们单独都不到 50 毫秒，却可能共同造成长帧。反过来，一个长任务也可能发生在没有形成完整帧的时段。诊断时不要把两套指标当成重复数据相加。</p>
+<h2>先用 <code>PerformanceObserver</code> 收集长帧</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">observeLongAnimationFrames</span>(<span class="hljs-params">onEntry</span>) {
+  <span class="hljs-keyword">if</span> (!(<span class="hljs-string">&#x27;PerformanceObserver&#x27;</span> <span class="hljs-keyword">in</span> <span class="hljs-variable language_">window</span>)) <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {};
+
+  <span class="hljs-keyword">const</span> supported = <span class="hljs-title class_">PerformanceObserver</span>.<span class="hljs-property">supportedEntryTypes</span> ?? [];
+  <span class="hljs-keyword">if</span> (!supported.<span class="hljs-title function_">includes</span>(<span class="hljs-string">&#x27;long-animation-frame&#x27;</span>)) <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {};
+
+  <span class="hljs-keyword">const</span> observer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">PerformanceObserver</span>(<span class="hljs-function">(<span class="hljs-params">list</span>) =&gt;</span> {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> entry <span class="hljs-keyword">of</span> list.<span class="hljs-title function_">getEntries</span>()) {
+      <span class="hljs-title function_">onEntry</span>({
+        <span class="hljs-attr">startTime</span>: entry.<span class="hljs-property">startTime</span>,
+        <span class="hljs-attr">duration</span>: entry.<span class="hljs-property">duration</span>,
+        <span class="hljs-attr">blockingDuration</span>: entry.<span class="hljs-property">blockingDuration</span>,
+        <span class="hljs-attr">renderStart</span>: entry.<span class="hljs-property">renderStart</span>,
+        <span class="hljs-attr">styleAndLayoutStart</span>: entry.<span class="hljs-property">styleAndLayoutStart</span>,
+        <span class="hljs-attr">scripts</span>: entry.<span class="hljs-property">scripts</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">script</span>) =&gt;</span> ({
+          <span class="hljs-attr">invoker</span>: script.<span class="hljs-property">invoker</span>,
+          <span class="hljs-attr">sourceURL</span>: script.<span class="hljs-property">sourceURL</span>,
+          <span class="hljs-attr">sourceFunctionName</span>: script.<span class="hljs-property">sourceFunctionName</span>,
+          <span class="hljs-attr">duration</span>: script.<span class="hljs-property">duration</span>,
+          <span class="hljs-attr">pauseDuration</span>: script.<span class="hljs-property">pauseDuration</span>,
+          <span class="hljs-attr">forcedStyleAndLayoutDuration</span>: script.<span class="hljs-property">forcedStyleAndLayoutDuration</span>,
+        })),
+      });
+    }
+  });
+
+  observer.<span class="hljs-title function_">observe</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;long-animation-frame&#x27;</span>, <span class="hljs-attr">buffered</span>: <span class="hljs-literal">true</span> });
+  <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> observer.<span class="hljs-title function_">disconnect</span>();
+}
+
+<span class="hljs-keyword">const</span> stop = <span class="hljs-title function_">observeLongAnimationFrames</span>(<span class="hljs-function">(<span class="hljs-params">frame</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (frame.<span class="hljs-property">duration</span> &gt;= <span class="hljs-number">200</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;发现严重长帧&#x27;</span>, frame);
+  }
+});
+</code></pre></div>
+<p><code>buffered: true</code> 允许观察器读取观察开始前已经记录的条目，但只能读取浏览器保留的缓冲区，不等于能拿到页面生命周期内的全部历史。上报时应采样、限制字段长度并去掉用户输入等敏感信息；不能把每一帧的完整脚本路径无过滤地发送到远端。</p>
+<p><code>blockingDuration</code> 描述主线程无法响应用户输入等高优先级任务的估算阻塞时间，不是 GPU 绘制时长，也不是 duration 减去一个刷新间隔。MDN 的计算说明围绕帧内超过 50 毫秒的任务，结合最长任务的渲染耗时计算；因此不能把它与 INP 或帧总时长直接互换。</p>
+<p><code>renderStart</code> 包含 requestAnimationFrame 回调、样式布局和观察器回调等渲染周期工作，<code>styleAndLayoutStart</code> 标记样式布局阶段开始；不能把两者之差命名为“GPU 耗时”。这些时间戳可能为 0，应先检查再计算。较新的接口文档还描述了 paintTime、presentationTime，但目标浏览器未必支持；本例没有读取它们，不能声称已测得实际屏幕呈现等待。需要时另行做字段检测并与 DevTools 时间线核对。</p>
+<h2><code>scripts</code> 能帮助定位“谁触发了这一帧”</h2>
+<p>每个脚本记录通常会包含调用者、脚本 URL、函数名、脚本自身耗时，以及是否触发了强制样式或布局。可以用它区分几类常见问题：</p>
+<ul>
+<li>点击处理函数同步计算大量数据；</li>
+<li>第三方脚本在交互时执行同步工作；</li>
+<li>先写 DOM 再立即读布局属性，触发强制同步布局；</li>
+<li>MutationObserver、ResizeObserver 或框架提交在同一帧集中修改节点；</li>
+<li>样式选择器或 DOM 规模导致样式计算和布局耗时上升。</li>
+</ul>
+<p>记录中的 <code>sourceURL</code> 可能为空、被打包成产物地址，或因为跨域与隐私策略无法提供完整源码位置。生产环境应配合 Source Map 和版本标识在服务端还原，但不要把 Source Map 内容直接暴露给所有用户。</p>
+<h2>不要只根据一个长帧就改代码</h2>
+<p>真实用户数据可能受到后台标签页、设备降频、扩展程序和操作系统调度影响。应按页面、设备等级、交互类型和版本聚合，关注 P75/P95 等分位数，并结合用户动作和业务结果。一次 500 毫秒长帧说明需要调查，但不能单独证明某个函数是唯一原因。</p>
+<p>开发环境可以用 Performance panel、CPU throttling 和录制的调用栈复现；生产环境则只上报经过采样的摘要，例如页面路由、交互名称、帧耗时区间、脚本来源类别和是否发生强制布局。用户输入、完整 URL 查询参数和内部路径应在采集前脱敏。</p>
+<h2>和 Long Task、Event Timing 一起看</h2>
+<p>LoAF 适合解释帧级阻塞，Long Task 适合发现单个长任务，Event Timing 适合观察输入事件从发生到处理和呈现的延迟。三者应使用共同的页面版本和时间线关联，而不是把每个指标的数值直接相加。比如一个输入延迟很高的事件可能由多个短任务组成，此时 LoAF 能补充“同一帧内还有哪些阶段耗时”。</p>
+<h2>兼容性和降级</h2>
+<p>Long Animation Frames API 仍不是所有浏览器和嵌入式 WebView 都支持。特性检测失败时，页面功能不能因此中断，可以降级为：</p>
+<ol>
+<li>使用 <code>PerformanceObserver</code> 观察 <code>longtask</code>；</li>
+<li>通过 Event Timing 或自定义交互标记记录关键路径；</li>
+<li>在开发环境用 DevTools Performance panel 做详细分析；</li>
+<li>对不支持的环境只保留基础页面和请求耗时指标。</li>
+</ol>
+<p>不要为了采集性能数据在每个 <code>requestAnimationFrame</code> 中执行复杂逻辑，这会改变被测页面本身的性能。观察器回调也应快速结束，必要时把摘要放入队列，使用 <code>navigator.sendBeacon()</code> 或合适的后台发送方式批量上报。</p>
+<h2>优化方向取决于证据</h2>
+<p>如果脚本耗时占主导，可以拆分任务、延迟非关键工作、使用 Worker 或减少渲染次数；如果强制布局明显，应把 DOM 写入和读取分组，并减少布局依赖；如果样式和布局占主导，应缩小 DOM、简化选择器或使用合适的 <code>content-visibility</code> 等策略。优化后要在同一设备和交互场景重新测量，确认长帧分位数和用户实际输入延迟都改善，而不是只看到某一条调用栈变短。</p>
+<h2>参考资料</h2>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/PerformanceLongAnimationFrameTiming">MDN · PerformanceLongAnimationFrameTiming</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/PerformanceObserver">MDN · PerformanceObserver</a></li>
+<li><a href="https://w3c.github.io/long-animation-frames/">W3C · Long Animation Frames</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Long_Tasks_API">MDN · Long Tasks API</a></li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/PerformanceLongAnimationFrameTiming" target="_blank" rel="noreferrer">MDN · PerformanceLongAnimationFrameTiming<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%A6%82%E4%BD%95%E7%94%A8+Long+Animation+Frames+API+%E5%AE%9A%E4%BD%8D%E5%8D%A1%E9%A1%BF%E6%9D%A5%E6%BA%90%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%A6%82%E4%BD%95%E7%94%A8+Long+Animation+Frames+API+%E5%AE%9A%E4%BD%8D%E5%8D%A1%E9%A1%BF%E6%9D%A5%E6%BA%90%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aperf-long-animation-frames%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fperf-long-animation-frames%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：如何用 Long Animation Frames API 定位卡顿来源？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/perf-longtasks/">什么是长任务，为什么会影响交互响应？</a></li><li><a href="/questions/performance-longtask-observer/">Long Tasks API 怎样帮助定位主线程卡顿？</a></li><li><a href="/questions/perf-third-party-scripts/">第三方脚本怎样接入，才能控制性能和安全风险？</a></li><li><a href="/questions/perf-speculation-rules/">Speculation Rules API 的预取和预渲染有什么区别？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

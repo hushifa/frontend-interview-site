@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="浏览器原理面试题：以后台嵌入第三方报表为例，解释 Chromium 站点隔离、跨进程 iframe、同源策略与 COOP/COEP 的职责，以及进程数量、通信和性能的实际边界。" />
+    <title>跨站 iframe 为什么可能独占渲染进程？站点隔离与同源策略有什么区别？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/browser-site-isolation/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="跨站 iframe 为什么可能独占渲染进程？站点隔离与同源策略有什么区别？ · 前端知库" />
+    <meta property="og:description" content="浏览器原理面试题：以后台嵌入第三方报表为例，解释 Chromium 站点隔离、跨进程 iframe、同源策略与 COOP/COEP 的职责，以及进程数量、通信和性能的实际边界。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/browser-site-isolation/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/browser-site-isolation/#webpage","url":"https://fe.hushifa.top/questions/browser-site-isolation/","name":"跨站 iframe 为什么可能独占渲染进程？站点隔离与同源策略有什么区别？ · 前端知库","description":"浏览器原理面试题：以后台嵌入第三方报表为例，解释 Chromium 站点隔离、跨进程 iframe、同源策略与 COOP/COEP 的职责，以及进程数量、通信和性能的实际边界。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/browser-site-isolation/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/browser-site-isolation/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"浏览器原理面试题","item":"https://fe.hushifa.top/topics/browser/"},{"@type":"ListItem","position":3,"name":"跨站 iframe 为什么可能独占渲染进程？站点隔离与同源策略有什么区别？","item":"https://fe.hushifa.top/questions/browser-site-isolation/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/browser/">浏览器原理面试题</a><span aria-hidden="true">/</span><span aria-current="page">跨站 iframe 为什么可能独占渲染进程？站点隔离与同源策略有什么区别？</span></nav><h1 tabindex="-1">跨站 iframe 为什么可能独占渲染进程？站点隔离与同源策略有什么区别？</h1><p class="reading-summary">以后台嵌入第三方报表为例，解释 Chromium 站点隔离、跨进程 iframe、同源策略与 COOP/COEP 的职责，以及进程数量、通信和性能的实际边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>后台页面嵌入一个第三方报表，打开浏览器任务管理器后，发现一个标签页对应多个渲染进程。这并不一定是内存泄漏，也不意味着页面创建了多个 Web Worker。浏览器可以把跨站 iframe 放进不同的渲染进程，再把各个进程产生的画面合成到同一标签页。</p>
+<p>以下以 Chromium 的 Site Isolation 设计为例。它是浏览器实现层的安全机制，不是网页能统一配置的跨浏览器进程规范；具体进程分配受到版本、平台、企业策略和资源条件影响。</p>
+<h2>为什么有同源策略，还要隔离进程</h2>
+<p>同源策略限制脚本读取其他来源的 DOM、响应和存储。例如主页面不能直接读取第三方 iframe 的 document。正常执行的 JavaScript 必须遵守这一限制，即使两个文档恰好运行在同一个进程中。</p>
+<p>但如果渲染器本身出现漏洞，攻击者可能不再遵守渲染器内的软件检查；Spectre 一类侧信道还可能暴露同一进程内的内存。Site Isolation 进一步让不同站点的敏感数据尽量不进入同一个渲染进程，并让浏览器进程执行额外的权限与资源检查。这样，即使一个渲染器被攻破，也不应因此获得其他站点的数据。</p>
+<p>它不是同源策略的替代品。它也不修复本站 XSS：如果攻击者已经能在当前站点执行脚本，依然可能使用该站点允许的能力。CSRF、接口越权和点击劫持仍需要应用自己的防护。</p>
+<h2>site、origin 和标签页不是同一个边界</h2>
+<p>origin 通常由协议、主机和端口构成；site 的判断围绕协议和可注册域，并涉及公共后缀规则，不能简单取域名最后两段。两个子域可以不同源但同站，因此“跨源 iframe”不能无条件等同于“跨站 iframe”。</p>
+<p>一个标签页可以包含多个站点，一次导航也可以改变站点。反过来，同站文档可能复用进程，也可能因为其他隔离约束分开。不要画成“一标签页一进程”或“一域名永久对应一个进程”。应用不能用进程数量推断 Cookie、存储权限或文档访问权限。</p>
+<h2>OOPIF 如何还能显示在原来的位置</h2>
+<p>OOPIF 是 out-of-process iframe，即在宿主之外的渲染进程运行的子框架。宿主仍负责它在页面布局中的位置，子框架负责自身内容，浏览器协调输入与跨进程交互，并合成最终画面。它不会变成另一个用户可见的窗口。</p>
+<p>允许的跨窗口操作仍可通过浏览器协调，例如 postMessage。消息传递并没有解除同源限制，也不是直接共享两个页面的 JavaScript 对象。</p>
+<p>下面演示宿主如何接收报表加载完成通知。两个页面分别部署到示例中对应的 HTTPS 来源；实际使用时换成自己控制的地址，并确认子页面允许被宿主嵌入。</p>
+<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-comment">&lt;!-- https://app.example.test/ 页面 --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;status&quot;</span>&gt;</span>报表加载中<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">iframe</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;report&quot;</span> <span class="hljs-attr">title</span>=<span class="hljs-string">&quot;业务报表&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">iframe</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-keyword">const</span> frame = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;#report&#x27;</span>);
+  <span class="hljs-keyword">const</span> reportOrigin = <span class="hljs-string">&#x27;https://reports.example.org&#x27;</span>;
+  <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;message&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (event.<span class="hljs-property">origin</span> !== reportOrigin || event.<span class="hljs-property">source</span> !== frame.<span class="hljs-property">contentWindow</span>) <span class="hljs-keyword">return</span>;
+    <span class="hljs-keyword">if</span> (!event.<span class="hljs-property">data</span> || event.<span class="hljs-property">data</span>.<span class="hljs-property">type</span> !== <span class="hljs-string">&#x27;report-ready&#x27;</span> || event.<span class="hljs-property">data</span>.<span class="hljs-property">version</span> !== <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span>;
+    <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;#status&#x27;</span>).<span class="hljs-property">textContent</span> = <span class="hljs-string">&#x27;报表已就绪&#x27;</span>;
+  });
+  <span class="hljs-comment">// 先注册监听，再发起加载，避免错过早期消息。</span>
+  frame.<span class="hljs-property">src</span> = reportOrigin + <span class="hljs-string">&#x27;/report.html&#x27;</span>;
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre></div>
+<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-comment">&lt;!-- https://reports.example.org/report.html 页面 --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>业务报表<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  parent.<span class="hljs-title function_">postMessage</span>(
+    { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;report-ready&#x27;</span>, <span class="hljs-attr">version</span>: <span class="hljs-number">1</span> },
+    <span class="hljs-string">&#x27;https://app.example.test&#x27;</span>,
+  );
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre></div>
+<p>检查 origin 限定来源，检查 source 限定具体窗口，检查消息结构限定业务协议。三个检查不能互相替代。示例不涉及登录和业务数据授权；允许显示 iframe 不等于允许它读主页面数据。这个通信例子即使没有跨进程也能工作，不能根据收到消息证明 OOPIF 已启用。</p>
+<h2>COOP、COEP 与 sandbox 不是进程开关</h2>
+<p>COOP 影响顶层页面的跨源 opener 关系和浏览上下文分组；COEP 对嵌入跨源资源提出要求。满足相应条件后，页面可能获得 crossOriginIsolated 状态，并使用需要隔离的能力。但不能从设置了响应头推导出具体 PID，也不能从 iframe 独立进程推导出 crossOriginIsolated 为 true。</p>
+<p>iframe sandbox 限制脚本、导航等文档能力；CSP frame-ancestors 决定谁能嵌入页面。Site Isolation 不会自动替页面补上这些策略。应用应先按信任边界设计允许的能力，再验证具体浏览器行为。</p>
+<h2>性能诊断要看成本在哪里</h2>
+<p>独立进程可能让子框架的工作与宿主并行，但增加进程、堆和通信成本。第三方报表依然会使用 CPU、内存和网络；子框架触发宿主改尺寸时，宿主也可能重新布局。因此“分进程就不会拖慢主页面”不成立。</p>
+<p>在目标浏览器版本上，可以结合浏览器任务管理器中的进程 ID、开发者工具的框架树与性能录制观察。比较嵌入前后、报表更新时和关闭后各个进程的 CPU 与内存，而不是把操作系统看到的所有进程都归因于当前页面。自动化测试验证消息协议和错误降级，进程部署与故障隔离则需要真实浏览器证据。</p>
+<h2>实际选型</h2>
+<p>不可信的第三方报表适合放在独立来源的 iframe 中，配合最小能力、嵌入策略和经过校验的消息协议；不要为了性能期待而把同源页面拆成很多 iframe。需要后台纯计算时评估 Worker，需要可复用 UI 时评估组件边界。三者解决的问题不同，浏览器进程分配应作为实现事实观察，而不是业务协议依赖。</p>
+<h2>补充参考</h2>
+<ul>
+<li><a href="https://www.chromium.org/developers/design-documents/site-isolation/">Chromium · Site Isolation Design Document</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy">MDN · Same-origin policy</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage">MDN · Window.postMessage</a></li>
+</ul></div><div class="answer-bottom"><a href="https://www.chromium.org/developers/design-documents/site-isolation/" target="_blank" rel="noreferrer">Chromium · Site Isolation Design Document<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E8%B7%A8%E7%AB%99+iframe+%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%AF%E8%83%BD%E7%8B%AC%E5%8D%A0%E6%B8%B2%E6%9F%93%E8%BF%9B%E7%A8%8B%EF%BC%9F%E7%AB%99%E7%82%B9%E9%9A%94%E7%A6%BB%E4%B8%8E%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E8%B7%A8%E7%AB%99+iframe+%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%AF%E8%83%BD%E7%8B%AC%E5%8D%A0%E6%B8%B2%E6%9F%93%E8%BF%9B%E7%A8%8B%EF%BC%9F%E7%AB%99%E7%82%B9%E9%9A%94%E7%A6%BB%E4%B8%8E%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Abrowser-site-isolation%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%90%86%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fbrowser-site-isolation%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：跨站 iframe 为什么可能独占渲染进程？站点隔离与同源策略有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/browser-storage-origin/">同源、同站点与跨域分别是什么意思？</a></li><li><a href="/questions/browser-render/">浏览器从 HTML 到页面显示，经历哪些主要步骤？</a></li><li><a href="/questions/browser-delegation/">事件委托是什么？target 和 currentTarget 有何区别？</a></li><li><a href="/questions/browser-storage/">Cookie、localStorage 和 sessionStorage 如何选择？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

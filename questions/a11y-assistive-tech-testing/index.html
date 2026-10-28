@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="无障碍面试题：建立从键盘、可访问性树到读屏器的分层验收流程，说明自动化规则、浏览器和辅助技术组合分别能证明什么，避免把 ARIA 属性存在当成可用性完成。" />
+    <title>前端怎样进行读屏器和辅助技术的实际验收？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/a11y-assistive-tech-testing/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="前端怎样进行读屏器和辅助技术的实际验收？ · 前端知库" />
+    <meta property="og:description" content="无障碍面试题：建立从键盘、可访问性树到读屏器的分层验收流程，说明自动化规则、浏览器和辅助技术组合分别能证明什么，避免把 ARIA 属性存在当成可用性完成。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/a11y-assistive-tech-testing/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/a11y-assistive-tech-testing/#webpage","url":"https://fe.hushifa.top/questions/a11y-assistive-tech-testing/","name":"前端怎样进行读屏器和辅助技术的实际验收？ · 前端知库","description":"无障碍面试题：建立从键盘、可访问性树到读屏器的分层验收流程，说明自动化规则、浏览器和辅助技术组合分别能证明什么，避免把 ARIA 属性存在当成可用性完成。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/a11y-assistive-tech-testing/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/a11y-assistive-tech-testing/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"无障碍面试题","item":"https://fe.hushifa.top/topics/accessibility/"},{"@type":"ListItem","position":3,"name":"前端怎样进行读屏器和辅助技术的实际验收？","item":"https://fe.hushifa.top/questions/a11y-assistive-tech-testing/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/accessibility/">无障碍面试题</a><span aria-hidden="true">/</span><span aria-current="page">前端怎样进行读屏器和辅助技术的实际验收？</span></nav><h1 tabindex="-1">前端怎样进行读屏器和辅助技术的实际验收？</h1><p class="reading-summary">建立从键盘、可访问性树到读屏器的分层验收流程，说明自动化规则、浏览器和辅助技术组合分别能证明什么，避免把 ARIA 属性存在当成可用性完成。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>一个表单可能通过 axe 检查，却让读屏用户听不到字段错误；一个弹窗可能有正确的 <code>role=&quot;dialog&quot;</code>，但关闭后焦点丢到页面顶部。自动化工具能发现结构问题，不能替用户完成一次真实任务。</p>
+<p>无障碍验收应从“用户能否完成关键任务”出发，再用不同层级的工具寻找原因。不要把“没有自动化违规”写成“所有辅助技术都可用”。</p>
+<h2>先定义真实任务和支持范围</h2>
+<p>登录、搜索、表单提交、打开弹窗、筛选表格和提交支付各有不同的焦点、状态和错误路径。先列出任务的起点、成功条件、失败恢复和需要听到的信息，再决定测试哪些页面和状态。</p>
+<p>辅助技术组合要与产品支持范围对应。桌面网站可能需要键盘加一个主流桌面读屏器，移动页面还要覆盖触摸与系统读屏器；不同浏览器、操作系统和读屏器组合的行为并不完全相同。无法覆盖的组合应记录为限制，而不是假定它们都等价。</p>
+<h2>第一层是不用鼠标完成完整流程</h2>
+<p>关闭鼠标，用键盘完成打开页面、跳过导航、进入搜索、填写字段、提交、处理错误、打开弹窗、选择列表项和退出。检查 Tab 顺序是否符合视觉和任务顺序，焦点是否始终可见，是否被 <code>display:none</code> 或弹层遮挡。</p>
+<p>重点记录：</p>
+<ul>
+<li>进入组件后是否知道当前位置和下一步；</li>
+<li>Tab 是否进入了不该进入的装饰节点或隐藏内容；</li>
+<li>Escape、Enter、空格、方向键在当前控件中是否有明确含义；</li>
+<li>错误出现后焦点是否仍在可修复的位置；</li>
+<li>弹窗关闭、页面切换和删除节点后焦点回到哪里。</li>
+</ul>
+<p><code>document.activeElement</code> 只能告诉脚本 DOM 焦点所在元素，不等于读屏器已经正确播报名称和状态。键盘流程通过后仍要进入下一层验证。</p>
+<h2>第二层查看可访问性树和计算名称</h2>
+<p>浏览器开发者工具的 Accessibility 面板可以查看元素的 role、computed name、description、状态和部分关系。检查名称来自哪里，<code>aria-labelledby</code> 是否指向存在且唯一的节点，错误和帮助文字是否通过 <code>aria-describedby</code> 关联。</p>
+<p>对组合框、树、表格和对话框要检查动态状态：展开、收起、选中、禁用、忙碌、错误、当前项和层级。节点被虚拟化或重建后，<code>aria-activedescendant</code> 不能指向已经卸载的元素。</p>
+<p>可访问性树是浏览器提供给辅助技术的中间表示，不是读屏器最终一定会朗读的录音。它能帮助定位结构问题，但不能替代真实任务。</p>
+<h2>第三层用读屏器按用户路径操作</h2>
+<p>不要只把读屏器打开后按 Tab 一遍。先用标题、地标、链接、表单控件和表格导航快捷键理解页面，再回到业务流程。这样可以发现页面视觉顺序与辅助技术导航顺序不一致的问题。</p>
+<p>以表单为例，读屏用户应能听到字段名称、类型、必填状态、帮助信息和错误原因；以弹窗为例，应能知道对话框名称、初始焦点、可用操作和关闭后的返回位置；以异步搜索为例，结果数量和失败状态应在合适时机通知，但不能每次输入都打断当前朗读。</p>
+<p>测试动态内容时，要分别验证初次加载、加载中、空结果、错误和更新完成。一个 <code>role=&quot;status&quot;</code> 出现在 DOM 中，不代表它的文本更新时机和优先级适合真实使用。</p>
+<h2>自动化工具适合发现重复结构问题</h2>
+<p>axe、Lighthouse 或 Playwright 的无障碍规则适合在 CI 中检查缺少名称、重复 ID、部分对比度和 ARIA 结构错误。扫描前要把页面带到真实状态：打开弹窗、触发表单错误、展开树或加载结果，再进行局部和整页检查。</p>
+<p>自动检查无法判断文案是否易懂、表格标题是否真的帮助理解、焦点是否抢得太早、读屏器是否按正确顺序播报，也无法覆盖所有浏览器和辅助技术组合。不要为了让报告变绿而关闭规则、排除整个区域或添加无意义的 ARIA。</p>
+<h2>记录问题时要保留可复现条件</h2>
+<p>无障碍缺陷报告至少应包含浏览器、操作系统、辅助技术版本、键盘或触摸操作步骤、期望结果、实际听到或看到的结果、页面状态和严重程度。把“读屏不好用”改写成“在某组合中打开编辑弹窗后，焦点仍停留在触发按钮，用户无法到达标题和错误提示”才便于修复和回归。</p>
+<p>组件库应为共享交互模式建立固定验收场景，并在组件升级时重跑。单独测试一个页面通过，不代表其他页面使用的同一组合框、表格或弹窗都没有问题；反过来，一个组件的已知例外也不应默默扩散到所有业务。</p>
+<h2>处理平台差异而不是追求虚假的一致</h2>
+<p>浏览器和读屏器对 ARIA、焦点、表格和实时区域的支持细节可能不同。优先使用原生 HTML，减少不必要的自定义控件；遇到差异时，在产品支持矩阵中记录实际行为，并选择对目标用户最可靠的实现。</p>
+<p>强制颜色模式、文字放大、缩放、窄视口、减少动画和输入法也要纳入验收。读屏器能朗读并不代表视觉焦点、布局和触摸目标同时可用。</p>
+<p>一份可信的无障碍结论应说明：自动化规则覆盖了什么、键盘走过哪些任务、哪些浏览器和辅助技术组合已验证、哪些风险仍待确认。这样测试结果才能指导修复，而不是用一个绿色分数代替用户体验。</p></div><div class="answer-bottom"><a href="https://www.w3.org/WAI/test-evaluate/" target="_blank" rel="noreferrer">W3C WAI · Evaluating Web Accessibility<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E6%80%8E%E6%A0%B7%E8%BF%9B%E8%A1%8C%E8%AF%BB%E5%B1%8F%E5%99%A8%E5%92%8C%E8%BE%85%E5%8A%A9%E6%8A%80%E6%9C%AF%E7%9A%84%E5%AE%9E%E9%99%85%E9%AA%8C%E6%94%B6%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E6%80%8E%E6%A0%B7%E8%BF%9B%E8%A1%8C%E8%AF%BB%E5%B1%8F%E5%99%A8%E5%92%8C%E8%BE%85%E5%8A%A9%E6%8A%80%E6%9C%AF%E7%9A%84%E5%AE%9E%E9%99%85%E9%AA%8C%E6%94%B6%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aa11y-assistive-tech-testing%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%97%A0%E9%9A%9C%E7%A2%8D%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fa11y-assistive-tech-testing%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端怎样进行读屏器和辅助技术的实际验收？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/a11y-table/">数据表格怎样设计才方便键盘和读屏用户理解？</a></li><li><a href="/questions/a11y-keyboard/">怎样验证一个页面可以只用键盘操作？</a></li><li><a href="/questions/a11y-name/">可访问名称与描述有什么区别？</a></li><li><a href="/questions/a11y-dialog/">一个可访问的模态对话框需要具备哪些行为？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

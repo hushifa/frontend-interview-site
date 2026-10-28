@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="网络与安全面试题：把域名解析、传输连接、TLS 握手和 HTTP 请求分成不同阶段，解释缓存与连接复用，并说明 preconnect、HTTP/3 和排查工具不能替代真实测量。" />
+    <title>DNS、TCP 和 TLS 握手分别会给页面增加哪些等待？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/network-dns-tcp-tls/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="DNS、TCP 和 TLS 握手分别会给页面增加哪些等待？ · 前端知库" />
+    <meta property="og:description" content="网络与安全面试题：把域名解析、传输连接、TLS 握手和 HTTP 请求分成不同阶段，解释缓存与连接复用，并说明 preconnect、HTTP/3 和排查工具不能替代真实测量。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/network-dns-tcp-tls/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/network-dns-tcp-tls/#webpage","url":"https://fe.hushifa.top/questions/network-dns-tcp-tls/","name":"DNS、TCP 和 TLS 握手分别会给页面增加哪些等待？ · 前端知库","description":"网络与安全面试题：把域名解析、传输连接、TLS 握手和 HTTP 请求分成不同阶段，解释缓存与连接复用，并说明 preconnect、HTTP/3 和排查工具不能替代真实测量。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/network-dns-tcp-tls/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/network-dns-tcp-tls/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"网络与安全面试题","item":"https://fe.hushifa.top/topics/network/"},{"@type":"ListItem","position":3,"name":"DNS、TCP 和 TLS 握手分别会给页面增加哪些等待？","item":"https://fe.hushifa.top/questions/network-dns-tcp-tls/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/network/">网络与安全面试题</a><span aria-hidden="true">/</span><span aria-current="page">DNS、TCP 和 TLS 握手分别会给页面增加哪些等待？</span></nav><h1 tabindex="-1">DNS、TCP 和 TLS 握手分别会给页面增加哪些等待？</h1><p class="reading-summary">把域名解析、传输连接、TLS 握手和 HTTP 请求分成不同阶段，解释缓存与连接复用，并说明 preconnect、HTTP/3 和排查工具不能替代真实测量。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>打开一个页面时，用户等待的不只有“服务器生成 HTML”这一段。浏览器可能先解析域名，再寻找可用连接，建立 TLS 保护，最后才发送 HTTP 请求。某些阶段可以被缓存或复用，某些阶段会因网络、代理和协议版本重新发生。</p>
+<p>把所有时间都归为“后端慢”会导致错误优化。反过来，也不能把浏览器开发者工具中的每一段时间机械地解释成一个服务器函数。</p>
+<h2>DNS 解决的是名称到地址的发现</h2>
+<p>浏览器需要把 <code>app.example.com</code> 解析成可连接的地址。结果可能来自浏览器缓存、操作系统缓存、本地网络或递归 DNS 服务；缓存命中时不一定发生完整的递归查询。</p>
+<p>一个域名可能对应多个地址，解析结果还可能受 TTL、网络位置、IPv4/IPv6 能力和服务端策略影响。DNS 解析成功只说明得到候选地址，不代表目标端口可连接，也不代表后续 TLS 证书匹配。</p>
+<p><code>dns-prefetch</code> 可以尝试提前解析来源；它不建立 TCP 或 QUIC 连接，也不下载资源。若请求本来就会很快发出、DNS 已经缓存或来源最终没有使用，提示收益可能接近于零，甚至增加额外网络活动。</p>
+<h2>TCP 或 QUIC 负责建立传输路径</h2>
+<p>传统 HTTP/1.1 和 HTTP/2 通常基于 TCP。TCP 建立连接后，双方还要处理拥塞控制、丢包恢复和流量控制。TCP 是可靠的有序字节流，但它不理解 HTTP 请求边界。</p>
+<p>HTTP/3 使用 QUIC，通常承载在 UDP 之上；QUIC 自己提供可靠流、拥塞控制和 TLS 1.3 集成。不能把“UDP”直接理解成正文不可靠，也不能把 HTTP/3 当成所有请求都没有等待的开关。</p>
+<p>连接可以复用。浏览器对同一个来源已有可用 HTTP/2 或 HTTP/3 连接时，新请求可能不需要重新建立传输和 TLS；不同主机名、端口、代理路径和连接状态会改变复用条件。一个页面引用很多第三方来源，仍可能需要多组连接。</p>
+<h2>TLS 负责保护和验证连接</h2>
+<p>HTTPS 建立 TLS 会话时，客户端要验证证书和主机名，并协商后续保护应用数据的密钥。证书验证成功不代表业务接口授权成功，也不代表返回内容本身可信。</p>
+<p>常见 HTTPS 等待包括连接准备、TLS 握手和最终 HTTP 请求。会话恢复、连接复用和协议版本可以减少部分往返，但首次访问、代理、证书链和网络策略仍会影响结果。0-RTT 等能力还涉及重放风险，不能把所有写操作都当成适合早期数据。</p>
+<p>TLS 可能在 CDN、负载均衡器或反向代理处终止。浏览器到 CDN 的连接安全，不自动证明 CDN 到源站的下一段连接也使用了同样的保护；部署时要分段检查。</p>
+<h2>Timing API 的字段不是万能诊断答案</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> entry = performance.<span class="hljs-title function_">getEntriesByType</span>(<span class="hljs-string">&#x27;navigation&#x27;</span>)[<span class="hljs-number">0</span>];
+<span class="hljs-keyword">if</span> (entry) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">table</span>({
+    <span class="hljs-attr">dns</span>: entry.<span class="hljs-property">domainLookupEnd</span> - entry.<span class="hljs-property">domainLookupStart</span>,
+    <span class="hljs-attr">tcp</span>: entry.<span class="hljs-property">connectEnd</span> - entry.<span class="hljs-property">connectStart</span>,
+    <span class="hljs-attr">tls</span>: entry.<span class="hljs-property">secureConnectionStart</span> &gt; <span class="hljs-number">0</span>
+      ? entry.<span class="hljs-property">connectEnd</span> - entry.<span class="hljs-property">secureConnectionStart</span>
+      : <span class="hljs-literal">null</span>,
+    <span class="hljs-attr">requestToFirstByte</span>: entry.<span class="hljs-property">responseStart</span> - entry.<span class="hljs-property">requestStart</span>,
+  });
+}
+</code></pre></div>
+<p>这些差值只能描述当前导航条目记录到的阶段时间。DNS 或 TCP 为 0 可能表示连接复用、缓存或信息不可用，不应解释成“这一阶段永远没有成本”。<code>secureConnectionStart</code> 为 0 也可能与非 HTTPS 或复用有关。</p>
+<p>资源条目可以进一步查看不同来源，但浏览器安全策略、跨源 Timing-Allow-Origin 和隐私限制可能减少可见细节。开发者工具的瀑布、服务器日志、CDN 日志和真实用户数据要结合分析，不能只看一个字段归因。</p>
+<h2>preconnect 应该只给确定会使用的来源</h2>
+<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;preconnect&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://fonts.example.com&quot;</span> <span class="hljs-attr">crossorigin</span>&gt;</span>
+</code></pre></div>
+<p>preconnect 让浏览器有机会提前完成适用的 DNS、传输和安全连接准备；它不下载字体，也不能保证后续请求一定复用。<code>crossorigin</code> 应匹配后续请求的凭据模式，否则已经准备的连接可能无法按预期使用。</p>
+<p>对很多低概率第三方来源预连接会占用连接、CPU 和网络资源，还可能提前暴露访问意图。首屏只需要一个来源时，不应把所有分析、广告和未来页面来源都放进模板。</p>
+<h2>常见排查方式和错误归因</h2>
+<p>如果 DNS 时间高，先检查缓存、域名配置、递归服务和网络位置；不要先给页面加更多 JavaScript。若连接时间高，检查连接复用、协议版本、代理和网络丢包。若 TLS 阶段失败，检查证书链、主机名、系统时间和终止代理；忽略证书校验只是隐藏问题。</p>
+<p>如果请求已经复用连接，新增 preconnect 不会创造明显收益；如果真正瓶颈在服务器处理或响应体下载，优化 DNS 也不会缩短那段等待。跨源字体、图片和接口还要分别检查 CORS、CSP、Cookie 与缓存策略。</p>
+<p>不同协议的连接并非都能由前端 fetch 代码直接选择。浏览器会根据服务端能力、ALPN、网络和实现策略协商 HTTP 版本；应用应从服务端和实际 Network 协议列验证，而不是把“启用 HTTP/3”写成客户端 API 参数。</p>
+<p>优化网络连接时应看冷缓存和热缓存、移动网络、IPv4/IPv6、重定向、代理和真实设备。最终目标是减少关键资源到达和可交互前的等待，而不是让每个握手阶段的数字都看起来为零。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Transport_Layer_Security" target="_blank" rel="noreferrer">MDN · Transport Layer Security<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+DNS%E3%80%81TCP+%E5%92%8C+TLS+%E6%8F%A1%E6%89%8B%E5%88%86%E5%88%AB%E4%BC%9A%E7%BB%99%E9%A1%B5%E9%9D%A2%E5%A2%9E%E5%8A%A0%E5%93%AA%E4%BA%9B%E7%AD%89%E5%BE%85%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ADNS%E3%80%81TCP+%E5%92%8C+TLS+%E6%8F%A1%E6%89%8B%E5%88%86%E5%88%AB%E4%BC%9A%E7%BB%99%E9%A1%B5%E9%9D%A2%E5%A2%9E%E5%8A%A0%E5%93%AA%E4%BA%9B%E7%AD%89%E5%BE%85%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anetwork-dns-tcp-tls%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%BD%91%E7%BB%9C%E4%B8%8E%E5%AE%89%E5%85%A8%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnetwork-dns-tcp-tls%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：DNS、TCP 和 TLS 握手分别会给页面增加哪些等待？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/http-https/">HTTPS 相比 HTTP 提供了哪些保障？</a></li><li><a href="/questions/network-dns-prefetch-preconnect/">dns-prefetch、preconnect 和 preload 应该怎样选择？</a></li><li><a href="/questions/http-cache/">强缓存与协商缓存如何配合？</a></li><li><a href="/questions/http-cors/">什么是跨域？CORS 为什么需要服务端配合？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>
