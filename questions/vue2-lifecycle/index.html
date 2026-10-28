@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="Vue面试题：Vue 2 的 beforeDestroy/destroyed 在 Vue 3 中改名为 beforeUnmount/unmounted…" />
+    <title>Vue 2 与 Vue 3 的生命周期如何对照？父子组件钩子按什么顺序执行？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/vue2-lifecycle/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="Vue 2 与 Vue 3 的生命周期如何对照？父子组件钩子按什么顺序执行？" />
+    <meta property="og:description" content="Vue面试题：Vue 2 的 beforeDestroy/destroyed 在 Vue 3 中改名为 beforeUnmount/unmounted…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/vue2-lifecycle/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue2-lifecycle/#webpage","url":"https://fe.hushifa.top/questions/vue2-lifecycle/","name":"Vue 2 与 Vue 3 的生命周期如何对照？父子组件钩子按什么顺序执行？","description":"Vue面试题：Vue 2 的 beforeDestroy/destroyed 在 Vue 3 中改名为 beforeUnmount/unmounted…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue2-lifecycle/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue2-lifecycle/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"Vue 2 与 Vue 3 的生命周期如何对照？父子组件钩子按什么顺序执行？","item":"https://fe.hushifa.top/questions/vue2-lifecycle/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue 2 与 Vue 3 的生命周期如何对照？父子组件钩子按什么顺序执行？</span></nav><h1 tabindex="-1">Vue 2 与 Vue 3 的生命周期如何对照？父子组件钩子按什么顺序执行？</h1><p class="reading-summary">Vue 2 的 beforeDestroy/destroyed 在 Vue 3 中改名为 beforeUnmount/unmounted，组合式 API 用 onXxx 注册。父子组件创建时父先开始、子先挂载完成；更新和销毁同样是父先开始、子先结束。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><blockquote>
+<p>Vue 2 已于 2023-12-31 停止维护，本题 Vue 2 部分以 2.7 为准。何时请求数据、何时清理资源见<a href="/questions/vue-lifecycle/">《Vue 生命周期中何时访问 DOM、发请求和清理资源？》</a>，本题只讲版本对照与执行顺序。</p>
+</blockquote>
+<h2>简答</h2>
+<ul>
+<li>选项式钩子在 Vue 3 中基本保留，只有两个改名：<code>beforeDestroy</code> → <code>beforeUnmount</code>，<code>destroyed</code> → <code>unmounted</code>。</li>
+<li>组合式 API 没有 <code>beforeCreate</code>/<code>created</code> 对应函数，<code>setup()</code> 本身承担这部分工作，并且在所有选项式钩子之前执行，包括 <code>beforeCreate</code>。</li>
+<li>创建阶段：父组件执行到 <code>beforeMount</code> 后开始渲染子组件，子组件全部 <code>mounted</code> 后父组件才 <code>mounted</code>。</li>
+<li>更新阶段：父 <code>beforeUpdate</code> → 子 <code>beforeUpdate</code> → 子 <code>updated</code> → 父 <code>updated</code>。</li>
+<li>销毁阶段（Vue 2）：父 <code>beforeDestroy</code> → 子 <code>beforeDestroy</code> → 子 <code>destroyed</code> → 父 <code>destroyed</code>；Vue 3 的卸载顺序相同，只是名字换成 unmount。</li>
+</ul>
+<h2>钩子对照表</h2>
+<table><thead><tr><th>Vue 2 选项</th><th>Vue 3 选项</th><th>Vue 3 组合式 API（2.7 也可用）</th></tr></thead><tbody><tr><td><code>beforeCreate</code></td><td><code>beforeCreate</code></td><td>无，写在 <code>setup()</code> 中</td></tr><tr><td><code>created</code></td><td><code>created</code></td><td>无，写在 <code>setup()</code> 中</td></tr><tr><td><code>beforeMount</code></td><td><code>beforeMount</code></td><td><code>onBeforeMount</code></td></tr><tr><td><code>mounted</code></td><td><code>mounted</code></td><td><code>onMounted</code></td></tr><tr><td><code>beforeUpdate</code></td><td><code>beforeUpdate</code></td><td><code>onBeforeUpdate</code></td></tr><tr><td><code>updated</code></td><td><code>updated</code></td><td><code>onUpdated</code></td></tr><tr><td><code>beforeDestroy</code></td><td><code>beforeUnmount</code></td><td><code>onBeforeUnmount</code></td></tr><tr><td><code>destroyed</code></td><td><code>unmounted</code></td><td><code>onUnmounted</code></td></tr><tr><td><code>activated</code> / <code>deactivated</code></td><td>同名</td><td><code>onActivated</code> / <code>onDeactivated</code></td></tr><tr><td><code>errorCaptured</code></td><td>同名</td><td><code>onErrorCaptured</code></td></tr></tbody></table>
+<p>改名记录在迁移指南的“Other Minor Changes”中。Vue 2.7 把组合式 API 移植回 Vue 2，所以 <code>onMounted</code>、<code>onBeforeUnmount</code> 等也能在 2.7 中使用，便于升级前先改写。</p>
+<h2>父子顺序为什么是“父先开始、子先结束”</h2>
+<p>父组件渲染时才会创建子组件。父组件进入 <code>beforeMount</code> 后执行渲染和 patch，遇到子组件就完整走一遍子组件的创建与挂载；子组件的 DOM 插入父组件的 DOM 树后，父组件才算挂载完成。</p>
+<p>更新时，调度器按 watcher 创建顺序（父先于子）运行渲染 watcher，所以父组件先触发 <code>beforeUpdate</code>；<code>updated</code> 在整个队列执行完后统一调用，Vue 2 源码 <code>callUpdatedHooks</code> 倒序遍历队列，因此子组件的 <code>updated</code> 先于父组件。</p>
+<p>销毁时，父组件先触发 <code>beforeDestroy</code>，再递归销毁子组件，最后自己触发 <code>destroyed</code>。</p>
+<h2>示例：实际运行结果</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// vue@2.7.16，在浏览器中运行</span>
+<span class="hljs-keyword">const</span> log = [];
+<span class="hljs-keyword">const</span> names = [<span class="hljs-string">&#x27;beforeCreate&#x27;</span>, <span class="hljs-string">&#x27;created&#x27;</span>, <span class="hljs-string">&#x27;beforeMount&#x27;</span>, <span class="hljs-string">&#x27;mounted&#x27;</span>,
+  <span class="hljs-string">&#x27;beforeUpdate&#x27;</span>, <span class="hljs-string">&#x27;updated&#x27;</span>, <span class="hljs-string">&#x27;beforeDestroy&#x27;</span>, <span class="hljs-string">&#x27;destroyed&#x27;</span>];
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">hooks</span> = (<span class="hljs-params">who</span>) =&gt; <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">fromEntries</span>(
+  names.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">h</span>) =&gt;</span> [h, <span class="hljs-function">() =&gt;</span> log.<span class="hljs-title function_">push</span>(<span class="hljs-string">`<span class="hljs-subst">${who}</span> <span class="hljs-subst">${h}</span>`</span>)]),
+);
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Child</span> = { <span class="hljs-attr">props</span>: [<span class="hljs-string">&#x27;msg&#x27;</span>], <span class="hljs-attr">template</span>: <span class="hljs-string">&#x27;&lt;i&gt;{{ msg }}&lt;/i&gt;&#x27;</span>, ...<span class="hljs-title function_">hooks</span>(<span class="hljs-string">&#x27;子&#x27;</span>) };
+<span class="hljs-keyword">const</span> vm = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Vue</span>({
+  <span class="hljs-attr">data</span>: { <span class="hljs-attr">msg</span>: <span class="hljs-string">&#x27;a&#x27;</span> },
+  <span class="hljs-attr">components</span>: { <span class="hljs-title class_">Child</span> },
+  <span class="hljs-attr">template</span>: <span class="hljs-string">&#x27;&lt;div&gt;&lt;Child :msg=&quot;msg&quot; /&gt;&lt;/div&gt;&#x27;</span>,
+  ...<span class="hljs-title function_">hooks</span>(<span class="hljs-string">&#x27;父&#x27;</span>),
+}).$mount();
+
+vm.<span class="hljs-property">msg</span> = <span class="hljs-string">&#x27;b&#x27;</span>;            <span class="hljs-comment">// 触发更新</span>
+<span class="hljs-title class_">Vue</span>.<span class="hljs-title function_">nextTick</span>(<span class="hljs-function">() =&gt;</span> vm.$destroy());
+</code></pre></div>
+<p>输出按阶段整理如下：</p>
+<div class="not-prose code-block"><div class="code-language">text</div><pre><code class="hljs language-text">创建：父 beforeCreate, 父 created, 父 beforeMount,
+      子 beforeCreate, 子 created, 子 beforeMount, 子 mounted, 父 mounted
+更新：父 beforeUpdate, 子 beforeUpdate, 子 updated, 父 updated
+销毁：父 beforeDestroy, 子 beforeDestroy, 子 destroyed, 父 destroyed
+</code></pre></div>
+<p>把同一段代码换成 Vue 3.5（<code>beforeUnmount</code>/<code>unmounted</code>，<code>app.unmount()</code>）运行，三个阶段的顺序完全一致。</p>
+<h2>常见追问</h2>
+<ul>
+<li>子组件的 <code>props</code> 变化一定会触发父组件的 <code>beforeUpdate</code> 吗？不一定。上例中父组件模板读取了 <code>msg</code>，所以父组件也会更新；如果只有子组件依赖的数据变了，只有子组件更新。</li>
+<li>在父组件 <code>mounted</code> 中能访问子组件的 DOM 吗？能，子组件此时已挂载。但异步组件或 <code>v-if</code> 后来才渲染的子组件不在此列。</li>
+<li>Vue 3 选项式 API 还能写 <code>beforeDestroy</code> 吗？不能直接使用，需要改名；迁移构建 <code>@vue/compat</code> 会对旧名给出兼容与警告。</li>
+</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://v3-migration.vuejs.org/breaking-changes/" target="_blank" rel="noreferrer">Vue 3 迁移指南 · 破坏性变更<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://vuejs.org/api/composition-api-lifecycle.html" target="_blank" rel="noreferrer">Vue · 组合式 API 生命周期钩子<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://vuejs.org/api/options-lifecycle.html" target="_blank" rel="noreferrer">Vue · 选项式 API 生命周期<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://v2.vuejs.org/v2/api/" target="_blank" rel="noreferrer">Vue 2 · API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://v2.vuejs.org/eol/" target="_blank" rel="noreferrer">Vue 2 停止维护说明<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vue+2+%E4%B8%8E+Vue+3+%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%A6%82%E4%BD%95%E5%AF%B9%E7%85%A7%EF%BC%9F%E7%88%B6%E5%AD%90%E7%BB%84%E4%BB%B6%E9%92%A9%E5%AD%90%E6%8C%89%E4%BB%80%E4%B9%88%E9%A1%BA%E5%BA%8F%E6%89%A7%E8%A1%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVue+2+%E4%B8%8E+Vue+3+%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%A6%82%E4%BD%95%E5%AF%B9%E7%85%A7%EF%BC%9F%E7%88%B6%E5%AD%90%E7%BB%84%E4%BB%B6%E9%92%A9%E5%AD%90%E6%8C%89%E4%BB%80%E4%B9%88%E9%A1%BA%E5%BA%8F%E6%89%A7%E8%A1%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue2-lifecycle%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue2-lifecycle%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vue 2 与 Vue 3 的生命周期如何对照？父子组件钩子按什么顺序执行？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue2-communication/">Vue 2 有哪些组件通信方式？哪些写法在 Vue 3 中被移除或改变？</a></li><li><a href="/questions/vue2-migration/">Vue 2 项目如何迁移到 Vue 3？</a></li><li><a href="/questions/vue-lifecycle/">Vue 生命周期中何时访问 DOM、发请求和清理资源？</a></li><li><a href="/questions/vue2-reactivity/">Vue 2 的响应式原理是什么？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

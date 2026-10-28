@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="Vue面试题：先升级到 Vue 2.7，用组合式 API 和 &lt;script setup&gt; 改写并清理 filters、$listeners…" />
+    <title>Vue 2 项目如何迁移到 Vue 3？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/vue2-migration/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="Vue 2 项目如何迁移到 Vue 3？ · 前端知库" />
+    <meta property="og:description" content="Vue面试题：先升级到 Vue 2.7，用组合式 API 和 &lt;script setup&gt; 改写并清理 filters、$listeners…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/vue2-migration/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue2-migration/#webpage","url":"https://fe.hushifa.top/questions/vue2-migration/","name":"Vue 2 项目如何迁移到 Vue 3？ · 前端知库","description":"Vue面试题：先升级到 Vue 2.7，用组合式 API 和 \u003cscript setup> 改写并清理 filters、$listeners…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue2-migration/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue2-migration/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"Vue 2 项目如何迁移到 Vue 3？","item":"https://fe.hushifa.top/questions/vue2-migration/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue 2 项目如何迁移到 Vue 3？</span></nav><h1 tabindex="-1">Vue 2 项目如何迁移到 Vue 3？</h1><p class="reading-summary">先升级到 Vue 2.7，用组合式 API 和 &lt;script setup&gt; 改写并清理 filters、$listeners、.sync 等写法；检查组件库、路由和 IE11 等依赖边界；再用 @vue/compat 迁移构建逐项消除警告，同时升级 vue-router 4、Vuex 4 或改用 Pinia。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><blockquote>
+<p>Vue 2 已于 2023-12-31 停止维护，本题 Vue 2 部分以 2.7 为准。通信写法的具体改动见<a href="/questions/vue2-communication/">《Vue 2 有哪些组件通信方式？哪些写法在 Vue 3 中被移除或改变？》</a>。</p>
+</blockquote>
+<h2>简答</h2>
+<ul>
+<li>先评估能否迁移：依赖 Vue 2 内部 API 的库、尚无 Vue 3 版本的组件库、必须支持 IE11 的项目，都可能需要暂留 Vue 2。</li>
+<li>可以先升级到 Vue 2.7：它内置组合式 API、<code>&lt;script setup&gt;</code> 和 SFC CSS <code>v-bind</code>，能在 Vue 2 上提前改写代码，缩小之后的差异。</li>
+<li>正式迁移可用 <code>@vue/compat</code>：它是可配置 Vue 2 兼容行为的 Vue 3 构建，默认以 Vue 2 模式运行，对废弃用法发出警告，可以逐项修复。</li>
+<li>主要破坏性变更包括 <code>createApp</code> 取代 <code>new Vue()</code>、组件 <code>v-model</code> 重做并移除 <code>.sync</code>、<code>$listeners</code>/<code>$on</code>/filters 移除、<code>beforeDestroy</code>/<code>destroyed</code> 改名、过渡类名变化等。</li>
+<li>生态同步升级：vue-router 4、Vuex 4（或改用官方推荐的 Pinia）、<code>vue-template-compiler</code> 换成 <code>@vue/compiler-sfc</code>。</li>
+</ul>
+<h2>第一步：评估依赖与环境</h2>
+<p>迁移构建文档列出了几类限制：</p>
+<ul>
+<li>依赖 Vue 2 内部 API 或未公开行为的库，最常见的是访问 VNode 私有属性。</li>
+<li>依赖 Vuetify、Quasar、ElementUI 等组件库时，最好等它们的 Vue 3 兼容版本。</li>
+<li>Vue 3 不支持 IE11，需要支持 IE11 的项目只能留在 Vue 2。</li>
+<li>自定义 SSR 迁移成本更高，<code>vue-server-renderer</code> 要换成 <code>@vue/server-renderer</code>。</li>
+</ul>
+<h2>第二步：在 Vue 2.7 上提前改写</h2>
+<p>2.7 发布说明列出的移植功能有组合式 API、SFC <code>&lt;script setup&gt;</code>、SFC CSS <code>v-bind</code>，以及 <code>defineComponent()</code> 的类型推断改进。原先使用 <code>@vue/composition-api</code> 插件的项目，把导入改成从 <code>vue</code> 导入即可。</p>
+<p>同时要知道 2.7 的边界：组合式 API 基于 Vue 2 的 getter/setter 响应式实现；<code>createApp()</code>、<code>&lt;script setup&gt;</code> 中的顶层 <code>await</code>、模板表达式中的 TypeScript 语法和 Reactivity Transform 没有移植。</p>
+<p>这一阶段还可以先清理迁移后不再支持的写法：废弃的具名/作用域插槽语法（2.6 已支持新语法）、filters、<code>$listeners</code>、<code>.sync</code>、EventBus 等。</p>
+<h2>第三步：用 @vue/compat 切换到 Vue 3</h2>
+<p>迁移构建文档给出的流程：</p>
+<ol>
+<li>升级工具链：自定义 webpack 升级 <code>vue-loader</code> 到 16；Vue CLI 用 <code>vue upgrade</code>，或改用 Vite。</li>
+<li>在 <code>package.json</code> 中把 <code>vue</code> 升到 3，安装同版本的 <code>@vue/compat</code>，用 <code>@vue/compiler-sfc</code> 替换 <code>vue-template-compiler</code>。</li>
+<li>构建配置中把 <code>vue</code> 别名指向 <code>@vue/compat</code>，并在编译选项中设置 <code>compatConfig: { MODE: 2 }</code>。</li>
+</ol>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// vite.config.js</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-attr">resolve</span>: { <span class="hljs-attr">alias</span>: { <span class="hljs-attr">vue</span>: <span class="hljs-string">&#x27;@vue/compat&#x27;</span> } },
+  <span class="hljs-attr">plugins</span>: [
+    <span class="hljs-title function_">vue</span>({ <span class="hljs-attr">template</span>: { <span class="hljs-attr">compilerOptions</span>: { <span class="hljs-attr">compatConfig</span>: { <span class="hljs-attr">MODE</span>: <span class="hljs-number">2</span> } } } }),
+  ],
+};
+</code></pre></div>
+<ol start="4">
+<li>先修复编译期错误（如 filters），再逐个处理浏览器控制台中的运行时警告。每个警告有 ID，例如 <code>GLOBAL_MOUNT</code>（<code>new Vue()</code> → <code>createApp</code>）、<code>OPTIONS_BEFORE_DESTROY</code>。</li>
+<li>过渡类名变化是唯一没有运行时警告的特性，需要全局搜索 <code>.*-enter</code>、<code>.*-leave</code> 类名。</li>
+<li>改用 <code>createApp</code> 挂载，升级 Vuex 4 和 vue-router 4。</li>
+<li>冲突较大的组件可以通过 <code>compatConfig</code> 选项按组件切换到 Vue 3 行为；警告全部清除后移除迁移构建。</li>
+</ol>
+<h2>状态管理：Vuex → Pinia</h2>
+<p>Vue 官方文档说明 Pinia 已承担 Vuex 的角色，Vuex 进入维护模式，新项目推荐 Pinia。迁移时可以先升级 Vuex 4 保证运行，再按模块逐步改写为 Pinia store。</p>
+<h2>常见追问</h2>
+<ul>
+<li>为什么不直接重写？大型项目一次性重写风险高；2.7 + 迁移构建允许应用在每一步都保持可运行。</li>
+<li>迁移构建能长期使用吗？不能。它的目的是过渡，部分特性在 Vue 2 和 Vue 3 中行为冲突，最终需要移除并切换到正式的 Vue 3。</li>
+<li>必须先用组合式 API 吗？不必。Vue 3 仍完整支持选项式 API，组合式 API 是可选的改写方向。</li>
+</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://v3-migration.vuejs.org/migration-build.html" target="_blank" rel="noreferrer">Vue 3 迁移指南 · 迁移构建<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://v3-migration.vuejs.org/breaking-changes/" target="_blank" rel="noreferrer">Vue 3 迁移指南 · 破坏性变更<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://blog.vuejs.org/posts/vue-2-7-naruto" target="_blank" rel="noreferrer">Vue 2.7 发布说明<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://vuejs.org/guide/scaling-up/state-management.html" target="_blank" rel="noreferrer">Vue · 状态管理<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://v2.vuejs.org/eol/" target="_blank" rel="noreferrer">Vue 2 停止维护说明<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vue+2+%E9%A1%B9%E7%9B%AE%E5%A6%82%E4%BD%95%E8%BF%81%E7%A7%BB%E5%88%B0+Vue+3%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVue+2+%E9%A1%B9%E7%9B%AE%E5%A6%82%E4%BD%95%E8%BF%81%E7%A7%BB%E5%88%B0+Vue+3%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue2-migration%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue2-migration%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vue 2 项目如何迁移到 Vue 3？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue2-lifecycle/">Vue 2 与 Vue 3 的生命周期如何对照？父子组件钩子按什么顺序执行？</a></li><li><a href="/questions/vue2-communication/">Vue 2 有哪些组件通信方式？哪些写法在 Vue 3 中被移除或改变？</a></li><li><a href="/questions/vue2-reactivity/">Vue 2 的响应式原理是什么？</a></li><li><a href="/questions/vue2-reactivity-caveats/">Vue 2 响应式有哪些限制？如何绕过？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>
