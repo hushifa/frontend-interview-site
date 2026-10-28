@@ -26,9 +26,11 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">React 中的过期闭包为什么会读到旧状态？</span></nav><h1 tabindex="-1">React 中的过期闭包为什么会读到旧状态？</h1><p class="reading-summary">回调会保留创建它的那次渲染环境，后续渲染不会自动替换已注册的旧函数。修复应先明确需要旧快照、最新状态还是重新同步，再选择函数式更新、正确依赖、Effect Event 或受控的可变引用。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>组件重新渲染，会得到新的状态值并创建新的函数。但一个已经交给定时器、订阅或外部库的旧函数，不会因此自动换成新函数。它仍然沿着创建时的作用域读取变量。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">React 中的过期闭包为什么会读到旧状态？</span></nav><h1 tabindex="-1">React 中的过期闭包为什么会读到旧状态？</h1><p class="reading-summary">回调会保留创建它的那次渲染环境，后续渲染不会自动替换已注册的旧函数。修复应先明确需要旧快照、最新状态还是重新同步，再选择函数式更新、正确依赖、Effect Event 或受控的可变引用。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<p>事件处理函数和 Effect 会捕获创建它们那次渲染的 props 和 state，之后状态更新不会改变已创建函数里的值，这就是过期闭包。常见修复方法：用函数式更新 setCount(c =&gt; c + 1)；把读取的值正确写进依赖数组；需要读取最新值但不想重新同步时，用 useEffectEvent；或用 ref 保存最新值。先弄清需要的是旧快照还是最新值，再选择方法。</p>
+<p>组件重新渲染，会得到新的状态值并创建新的函数。但一个已经交给定时器、订阅或外部库的旧函数，不会因此自动换成新函数。它仍然沿着创建时的作用域读取变量。</p>
 <p>“过期闭包”通常表示这份旧快照已经不符合业务此刻需要的语义，并不是 JavaScript 忘了更新某个变量，也不是 React 的所有状态都没有变化。</p>
-<h3>为什么这个计数器停在 1</h3>
+<h2>为什么这个计数器停在 1</h2>
 <p>下面是故意保留问题的版本：Effect 读取 count，却用空依赖数组长期保存了第一轮回调。</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { useEffect, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 
@@ -47,7 +49,7 @@
 </code></pre></div>
 <p>初始渲染的 count 是 0。计时器保存的回调每次都计算 0+1，所以反复请求替换为 1，而不是根据当前计数继续增加。页面后来显示 1，不会让旧回调里的 count 绑定自动指向另一轮渲染的值。</p>
 <p>Hooks 依赖检查通常会指出缺失的 count。这个警告是在提示闭包读取了什么，不应直接禁用规则后把现象归为 React 调度不稳定。</p>
-<h3>如果只需要基于前值更新，可以让 React 提供它</h3>
+<h2>如果只需要基于前值更新，可以让 React 提供它</h2>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Counter</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
 
@@ -61,10 +63,10 @@
   <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">output</span> <span class="hljs-attr">aria-label</span>=<span class="hljs-string">&quot;正确计数&quot;</span>&gt;</span>{count}<span class="hljs-tag">&lt;/<span class="hljs-name">output</span>&gt;</span></span>;
 }
 </code></pre></div>
-<p>这里回调不再直接读取渲染中的 count，而是把一个纯更新函数交给 React。React 处理更新时传入相应的前值，因此可以连续得到 1、2、3。</p>
+<p>这里回调不再直接读取渲染中的 count，而是把一个纯更新函数交给 React。React 处理更新时传入前值，因此可以连续得到 1、2、3。</p>
 <p>这不仅是把函数写法换短了，而是改变了需要读取的数据来源。Effect 仍然必须清理计时器，函数式更新并不会帮它处理资源生命周期。</p>
 <p>也可以把 count 放进依赖数组，让每次变化都清理并重建计时器，但这同时改变了计时器重置时机。修复闭包要考虑期望的外部同步行为，不能只看数字能否继续增加。</p>
-<h3>updater 只能解决它实际接收到的状态</h3>
+<h2>updater 只能解决它实际接收到的状态</h2>
 <p>如果每次增量还由 step prop 决定，单纯把 count 换成函数式更新，并不会自动让闭包中的 step 也变成最新值：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">SteppedCounter</span>(<span class="hljs-params">{ step }</span>) {
   <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
@@ -80,15 +82,15 @@
 }
 </code></pre></div>
 <p>step 改变后，这个版本重新建立计时器，符合“计时过程跟着步长配置重新同步”的设计。若业务希望维持同一份计时器，但每次触发时使用最新步长，需要进一步把计时生命周期与非响应式事件逻辑分开，而不是偷偷删掉 step。</p>
-<h3>依赖与回调稳定性需要一起理解</h3>
+<h2>依赖与回调稳定性需要一起理解</h2>
 <p>useCallback(fn, []) 并不会让函数体自动读取最新变量，它只是可能保留第一次计算出的函数身份。函数里读了会变化的值，却没有正确依赖，同样会保存旧环境。</p>
 <p>memo 的自定义比较函数如果忽略函数 prop 的变化，也可能让子组件继续使用旧回调。旧函数即使源码看起来相同，也可能捕获了不同状态，所以“只比较按钮文字”不足以证明行为相同。</p>
 <p>外部订阅或事件监听也有同样问题。同步条件改变时，应移除旧监听并注册新监听；需要在保留订阅的同时读取最新事件数据时，可以按约束使用 Effect Event 等能力。</p>
-<h3>ref 不是所有旧值问题的万能修复</h3>
+<h2>ref 不是所有旧值问题的万能修复</h2>
 <p>ref 可以保存跨渲染的可变值，但修改 current 不会触发界面更新。把所有 state 再复制到 ref，会产生额外的数据同步规则，也让读者难以看清哪一份值才是显示来源。</p>
 <p>如果确实使用 ref 连接外部回调，应明确何时更新它、回调应观察哪一份已提交状态，以及怎样清理。渲染过程中随意读写 ref 来绕过快照，不是所有情况下都安全的通用模式。</p>
 <p>对于 Effect 所建立的事件逻辑，支持环境中的 useEffectEvent 可以让调用读取最新值，同时避免把纯事件读取错误地变成重建订阅的原因；它有明确调用范围，不能当成任意按钮回调的替代。</p>
-<h3>有些旧快照其实是正确需求</h3>
+<h2>有些旧快照其实是正确需求</h2>
 <p>用户点“发送”时，要提交的是那一刻编辑框里的消息，还是三秒后最新的草稿？定时提示需要描述点击时的计数，还是触发时的计数？这些需求不同，闭包保留旧值不一定是错误。</p>
 <p>先写清回调应该使用哪个时刻的数据，再选择机制。否则一味追求“永远最新”，反而可能把用户确认过的内容换成后来编辑的新内容。</p>
 <p>请求竞态则是相关但不同的问题：旧请求晚到并覆盖新结果，既可能与旧闭包有关，也涉及任务身份和完成顺序。即使回调能读取最新状态，也不代表它自然知道自己的请求是否仍有权写入，仍需要取消或过期结果检查。</p></div><div class="answer-bottom"><a href="https://react.dev/learn/removing-effect-dependencies" target="_blank" rel="noreferrer">React · Removing Effect Dependencies<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+%E4%B8%AD%E7%9A%84%E8%BF%87%E6%9C%9F%E9%97%AD%E5%8C%85%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E8%AF%BB%E5%88%B0%E6%97%A7%E7%8A%B6%E6%80%81%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+%E4%B8%AD%E7%9A%84%E8%BF%87%E6%9C%9F%E9%97%AD%E5%8C%85%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E8%AF%BB%E5%88%B0%E6%97%A7%E7%8A%B6%E6%80%81%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-stale-closure%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-stale-closure%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React 中的过期闭包为什么会读到旧状态？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-state/">为什么调用 setState 后，当前变量还是旧值？</a></li><li><a href="/questions/react-effect/">useEffect 的依赖数组和清理函数应该怎么写？</a></li><li><a href="/questions/react-key/">列表中的 key 为什么不能随意使用数组下标？</a></li><li><a href="/questions/react-memo/">memo、useMemo、useCallback 各自优化什么？</a></li></ul></nav></main></div></div>

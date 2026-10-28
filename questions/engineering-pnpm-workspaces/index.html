@@ -26,7 +26,14 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/engineering/">工程化与性能面试题</a><span aria-hidden="true">/</span><span aria-current="page">pnpm workspace 怎样管理多包前端仓库？</span></nav><h1 tabindex="-1">pnpm workspace 怎样管理多包前端仓库？</h1><p class="reading-summary">解释工作区清单、workspace 协议和本地依赖链接，区分依赖与下游选择器，并说明打包时版本转换、隔离和 CI 冻结安装的作用。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>pnpm workspace 把多个本地包纳入同一个工作区，统一安装并建立依赖关系。应用可以通过包名使用本仓库组件库，相关包也可以一起运行构建或测试。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/engineering/">工程化与性能面试题</a><span aria-hidden="true">/</span><span aria-current="page">pnpm workspace 怎样管理多包前端仓库？</span></nav><h1 tabindex="-1">pnpm workspace 怎样管理多包前端仓库？</h1><p class="reading-summary">解释工作区清单、workspace 协议和本地依赖链接，区分依赖与下游选择器，并说明打包时版本转换、隔离和 CI 冻结安装的作用。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>pnpm workspace 用 <code>pnpm-workspace.yaml</code> 选择包目录，统一安装并链接本地包。</li>
+<li>每个包仍有自己的 <code>package.json</code>，根目录负责统一工具声明和工作区锁文件。</li>
+<li><code>workspace:</code> 协议要求依赖必须由本地工作区满足，找不到就安装失败。</li>
+<li>它解决包管理和任务选择，不会自动决定业务边界、发布策略或测试范围。</li>
+</ul>
+<p>pnpm workspace 把多个本地包纳入同一个工作区，统一安装并建立依赖关系。应用可以通过包名使用本仓库组件库，相关包也可以一起运行构建或测试。</p>
 <p>它解决包管理与任务选择的一部分问题，不会自动决定业务边界、发布策略或哪些测试足以证明兼容。</p>
 <h2>工作区清单和包清单各有作用</h2>
 <p>在根目录通过 pnpm-workspace.yaml 选择包目录：</p>
@@ -62,8 +69,7 @@ pnpm --filter &quot;...@demo/ui&quot; test
 <p>改组件库后只运行它的依赖项，并不能证明使用它的应用没坏；依赖与依赖者是相反的方向。还应注意筛选是否匹配到预期包，不能把空选择导致的“什么都没跑”当成测试成功。</p>
 <p>按 Git 变更选择包也有对应语法，但 CI 仍要有正确的比较基准与依赖图。工具不会仅凭文件改动自动理解所有业务上的影响范围。</p>
 <h2>选择范围与执行顺序仍是两件事</h2>
-<p>递归任务通常可以结合依赖关系排序，相关选项也可能改变并行方式。循环依赖、缺少构建脚本、源码与产物混用，仍可能让应用在依赖未准备好时开始构建。</p>
-<p>对于类型声明、生成代码等构建产物，应把需要等待的任务表达出来。更复杂的缓存和受影响分析可以交给相应任务工具，但缓存键也要包含真正影响结果的输入。</p>
+<p><code>pnpm -r</code> 默认按工作区依赖拓扑排序执行，这一点比 npm workspaces 强；但循环依赖、缺少构建脚本和源码与产物混用仍会让应用先于依赖构建。链接不等于已构建、多包命令与任务图的区别，见“Monorepo 与 npm workspaces 能解决什么问题？”。</p>
 <h2>pnpm 的依赖布局能减少什么问题</h2>
 <p>pnpm 使用相应存储与链接机制组织依赖，常见配置有助于减少重复存储，并减少无意访问未声明依赖的情况。但实际可见性仍受 node-linker、hoist 与根依赖等配置影响，不能宣称任何配置下都绝不可能出现幽灵依赖。</p>
 <p>不要让业务代码依赖 node_modules 的具体内部路径。应通过包公开入口导入，独立包仍需声明自己使用的依赖，并从实际消费者环境验证。</p>

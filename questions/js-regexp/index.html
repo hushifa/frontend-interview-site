@@ -26,7 +26,14 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">正则表达式在前端使用时需要注意什么？</span></nav><h1 tabindex="-1">正则表达式在前端使用时需要注意什么？</h1><p class="reading-summary">正则需要同时考虑匹配范围、转义、状态、Unicode 和回溯成本。校验与搜索应采用不同的匹配意图，动态字面量应正确转义，耗时同步匹配也不能靠普通定时器强行中断。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>正则适合表达边界清楚的文本模式，例如某种编号、需要提取的标签片段或一类字符。它不只是“写出一个能匹配的表达式”就完成了：同一个模式是用于整段校验还是局部搜索，是否会重复使用，输入有多长，都会影响正确性与性能。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">正则表达式在前端使用时需要注意什么？</span></nav><h1 tabindex="-1">正则表达式在前端使用时需要注意什么？</h1><p class="reading-summary">正则需要同时考虑匹配范围、转义、状态、Unicode 和回溯成本。校验与搜索应采用不同的匹配意图，动态字面量应正确转义，耗时同步匹配也不能靠普通定时器强行中断。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>u 或 v 标志让正则按 Unicode 码点处理，g、y 标志会让 lastIndex 产生状态。</li>
+<li>具名捕获组 (?...) 比按序号取组更易维护。</li>
+<li>把用户输入嵌入正则前要转义，ES2025 提供 RegExp.escape。</li>
+<li>回溯过多的模式可能导致 ReDoS，校验不可信输入时要限制长度并避免嵌套量词。</li>
+</ul>
+<p>正则适合表达边界清楚的文本模式，例如某种编号、需要提取的标签片段或一类字符。它不只是“写出一个能匹配的表达式”就完成了：同一个模式是用于整段校验还是局部搜索，是否会重复使用，输入有多长，都会影响正确性与性能。</p>
 <p>一个很常见的意外是，同样的字符串连续 test，两次结果竟然不同：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> pattern = <span class="hljs-regexp">/a/g</span>;
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(pattern.<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;a&#x27;</span>)); <span class="hljs-comment">// true</span>
@@ -34,7 +41,7 @@
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(pattern.<span class="hljs-property">lastIndex</span>); <span class="hljs-comment">// 0</span>
 </code></pre></div>
 <p>这不是随机结果。带 g 的模式成功后推进 lastIndex，第二次从上次结束位置继续寻找，失败后又把 lastIndex 重置为 0。用于单次布尔校验时，通常不需要 g；复用有状态正则时，就必须有意识地管理位置。</p>
-<h3>字面量和构造函数分别转义哪一层</h3>
+<h2>字面量和构造函数分别转义哪一层</h2>
 <p>固定模式可以使用正则字面量；模式需要动态生成时，可以用 RegExp 构造函数。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> literal = <span class="hljs-regexp">/\d+/u</span>;
 <span class="hljs-keyword">const</span> constructed = <span class="hljs-keyword">new</span> <span class="hljs-title class_">RegExp</span>(<span class="hljs-string">&#x27;\\d+&#x27;</span>, <span class="hljs-string">&#x27;u&#x27;</span>);
@@ -43,7 +50,7 @@
 </code></pre></div>
 <p>字面量中的 <code>\d</code> 直接交给正则解析器；构造函数先接收一个 JavaScript 字符串，所以要用 <code>\\</code> 在字符串里保留一个反斜杠，再让正则解析器看到 <code>\d</code>。少转义一层，模式就可能悄悄变成匹配字母 d。</p>
 <p>这与把用户文字作为字面内容拼进正则是另一个问题：用户可能输入加号、括号、点号等正则元字符，即便字符串语法合法，也会改变模式含义。</p>
-<h3>搜索存在与整个值合法，是不同需求</h3>
+<h2>搜索存在与整个值合法，是不同需求</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> codePattern = <span class="hljs-regexp">/^[A-Z]{2}[0-9]{4}$/u</span>;
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(codePattern.<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;AB1234&#x27;</span>)); <span class="hljs-comment">// true</span>
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(codePattern.<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;prefixAB1234&#x27;</span>)); <span class="hljs-comment">// false</span>
@@ -52,8 +59,8 @@
 <p>如果去掉边界约束，模式可能只证明字符串里包含一个合法片段，而不是整个输入都符合规则。表单校验应明确是否接受前后空白、大小写差异和多行内容，而不是发现不匹配后无条件加几个 .*。</p>
 <p>m 改变 ^、$ 对行边界的理解，不是让点号匹配换行；s 才会改变点号对行终止符的匹配范围。需要逐行处理的文本与只允许单行的字段，应使用不同的规则。</p>
 <p>HTML 的 pattern 属性也有自己的整值匹配及编译规则，不能直接把包含斜杠的 JavaScript 正则字面量放进去，再假定两边语义完全相同。</p>
-<h3>动态搜索应先决定是否真的需要正则</h3>
-<p>如果用户只是查找一段原样文字，String.includes、indexOf 等接口更简单，不需要把输入变成模式。确实要把字面文字嵌入正则时，可以使用支持环境中的 RegExp.escape：</p>
+<h2>动态搜索应先决定是否真的需要正则</h2>
+<p>如果用户只是查找一段原样文字，String.includes、indexOf 等接口更简单，不需要把输入变成模式。确实要把字面文字嵌入正则时，可以使用 ES2025 标准化的 RegExp.escape：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> keyword = <span class="hljs-string">&#x27;a+b&#x27;</span>;
 <span class="hljs-keyword">const</span> search = <span class="hljs-keyword">new</span> <span class="hljs-title class_">RegExp</span>(<span class="hljs-title class_">RegExp</span>.<span class="hljs-built_in">escape</span>(keyword), <span class="hljs-string">&#x27;u&#x27;</span>);
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(search.<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;a+b&#x27;</span>)); <span class="hljs-comment">// true</span>
@@ -62,11 +69,11 @@
 <p>没有转义时，a+b 会被解释成“一个或多个 a 后接 b”，而不是原样的加号。RegExp.escape 还处理了更复杂的嵌入上下文，不只是给几个常见符号前面加反斜杠。</p>
 <p>这段例子要求运行环境支持 RegExp.escape。旧环境应使用与该标准语义兼容的实现或改用普通字符串搜索，不要把一条只覆盖常见字符的 replace 正则宣称为所有上下文都安全的完整实现。</p>
 <p>如果产品本来就是允许用户输入正则的高级搜索，则不能转义掉全部语法，而应把它当成另一种功能：捕获构造时的 SyntaxError、明确支持的标志，并限制输入与执行成本。</p>
-<h3>g、y 与空匹配都有状态问题</h3>
+<h2>g、y 与空匹配都有状态问题</h2>
 <p>g 允许从 lastIndex 开始继续向后寻找下一个匹配位置；y 则要求从指定位置粘连匹配，不会像一般全局搜索那样继续跳过不匹配片段。二者都会影响多次 exec、test 的状态。</p>
 <p>如果手写 while 循环反复 exec，而模式可以匹配空字符串，需要额外保证位置推进，否则可能一直停在同一处。适用时可以使用 matchAll 等已有迭代接口，但它也有自身的标志和返回值规则，并不是给任意有状态匹配都自动消除问题。</p>
 <p>单纯判断某个固定格式是否合法时，使用不带 g/y 的模式通常最容易推理。</p>
-<h3>Unicode 模式不等于“一个用户字符”</h3>
+<h2>Unicode 模式不等于“一个用户字符”</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/^.$/u</span>.<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;💡&#x27;</span>)); <span class="hljs-comment">// true</span>
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-regexp">/^.$/u</span>.<span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;e\u0301&#x27;</span>)); <span class="hljs-comment">// false</span>
 <span class="hljs-keyword">const</span> segmenter = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Intl</span>.<span class="hljs-title class_">Segmenter</span>(<span class="hljs-string">&#x27;zh&#x27;</span>, { <span class="hljs-attr">granularity</span>: <span class="hljs-string">&#x27;grapheme&#x27;</span> });
@@ -74,12 +81,12 @@
 </code></pre></div>
 <p>u 使相关匹配按 Unicode 码点语义处理，所以一个由代理对表示的灯泡 emoji 可以被一个点号匹配。但 e 加组合重音是两个码点，用户通常把它看成一个字素簇，单个点号并不会把它们自动合成一个。</p>
 <p>复杂 emoji 序列也可能包含多个码点。需要按用户感知字符计数、截断时，Intl.Segmenter 往往更贴切，而不是不断扩大一个字符类。</p>
-<p><code>\d</code> 主要匹配 ASCII 数字，<code>\w</code> 也不是“所有语言的文字”。需要 Unicode 属性时可以考虑相应模式下的属性转义，例如 <code>\p{Letter}</code>。v 模式还引入更丰富的 Unicode 集合能力，与 u 不能同时启用，使用前应核对目标环境。</p>
-<h3>回溯过多可能直接卡住主线程</h3>
+<p><code>\d</code> 主要匹配 ASCII 数字，<code>\w</code> 也不是“所有语言的文字”。需要 Unicode 属性时可以考虑模式下的属性转义，例如 <code>\p{Letter}</code>。v 模式还引入更丰富的 Unicode 集合能力，与 u 不能同时启用，使用前应核对目标环境。</p>
+<h2>回溯过多可能直接卡住主线程</h2>
 <p>某些含重叠分支、嵌套重复的模式，在接近匹配但最终失败的长输入上，需要尝试大量路径。例如类似 <code>(a+)+</code> 的结构值得警惕；实际风险取决于完整模式、输入与引擎，不能只看正常短字符串很快就通过。</p>
 <p>优先简化有歧义的模式，给不可信输入设置合理长度上限，并测试接近失败的边界。不要在页面主线程上拿超长输入反复尝试潜在高回溯模式。</p>
 <p>普通的 setTimeout 或 Promise.race 无法中断已经占住同一线程的同步正则执行：线程不归还，超时回调也没机会运行。需要隔离重负载时，可以使用 Worker 并由外部控制终止，或选择符合需求的受限匹配引擎，但这也需要评估支持语法与结果语义。</p>
-<p>最后，复杂 HTML、URL 或程序语言应优先使用相应解析器。邮箱等现实格式的前端校验也应以清楚提示为主，最终合法性、可达性或所有权并不能由一条正则证明。</p>
+<p>最后，复杂 HTML、URL 或程序语言应优先使用解析器。邮箱等现实格式的前端校验也应以清楚提示为主，最终合法性、可达性或所有权并不能由一条正则证明。</p>
 <p>补充参考：<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/escape">MDN · RegExp.escape()</a>。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp" target="_blank" rel="noreferrer">MDN · RegExp<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%9C%A8%E5%89%8D%E7%AB%AF%E4%BD%BF%E7%94%A8%E6%97%B6%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%9C%A8%E5%89%8D%E7%AB%AF%E4%BD%BF%E7%94%A8%E6%97%B6%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-regexp%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-regexp%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：正则表达式在前端使用时需要注意什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-this/">普通函数和箭头函数的 this 有什么区别？</a></li><li><a href="/questions/js-promise-combinators/">Promise.all、allSettled、race 和 any 如何选择？</a></li></ul></nav></main></div></div>
     
   </body>

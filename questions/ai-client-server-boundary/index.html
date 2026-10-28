@@ -26,7 +26,14 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/ai-frontend/">AI 应用前端面试题</a><span aria-hidden="true">/</span><span aria-current="page">AI 对话前端为什么不能直接内置服务商 API 密钥？</span></nav><h1 tabindex="-1">AI 对话前端为什么不能直接内置服务商 API 密钥？</h1><p class="reading-summary">浏览器收到的代码、构建变量和网络请求都能被用户检查。长期 API 密钥、模型权限、额度和工具授权必须放在受控服务端，纯静态前端只能负责交互。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>浏览器不是秘密保存环境</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/ai-frontend/">AI 应用前端面试题</a><span aria-hidden="true">/</span><span aria-current="page">AI 对话前端为什么不能直接内置服务商 API 密钥？</span></nav><h1 tabindex="-1">AI 对话前端为什么不能直接内置服务商 API 密钥？</h1><p class="reading-summary">浏览器收到的代码、构建变量和网络请求都能被用户检查。长期 API 密钥、模型权限、额度和工具授权必须放在受控服务端，纯静态前端只能负责交互。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>浏览器收到的代码、构建变量和请求都能被用户查看和重放。</li>
+<li>长期 API 密钥、模型权限、额度和工具授权必须放在受控服务端。</li>
+<li>纯静态站点可以调用另行部署的受控 API，不等于只能把密钥写进前端。</li>
+<li>服务端要重新校验工具调用，错误和日志不能泄露堆栈、认证头或系统提示。</li>
+</ul>
+<h2>浏览器不是秘密保存环境</h2>
 <p>页面必须把 JavaScript 发送给用户，用户可以查看构建产物、修改运行时变量、复制网络请求和重放接口。因此把长期服务商密钥放进 <code>VITE_*</code>、混淆字符串、关闭 Source Map 或私有源码仓库，都不会改变它最终出现在用户机器上的事实。</p>
 <p>一旦浏览器用这个密钥访问模型服务，Authorization 头和请求参数也能被检查。CORS 只限制浏览器读取跨源响应，不能阻止用户把已经拿到的密钥放进自己的服务器或命令行中使用。</p>
 <h2>常见的职责分层</h2>
@@ -40,7 +47,7 @@
 <p>纯静态站点不能在访问时运行自己的服务器代码，但仍可以调用另行部署的受控 API，也可以使用适合设备的本地模型。静态部署限制的是站点自身的服务端能力，不等于 AI 功能只能把长期密钥写在前端。</p>
 <p>如果产品允许用户输入自己的服务商凭据，要明确说明它可能被 XSS、浏览器扩展、网络日志或误操作暴露，并尽量不持久化。某些服务提供短期、受限的客户端凭据，可以由受控端按用户权限签发，限制有效期、用途和资源；这和把普通长期密钥改个变量名完全不同。</p>
 <h2>工具、检索和输出仍然需要服务端边界</h2>
-<p>模型返回的工具名和参数只是拟议动作，不能直接转换成数据库、文件系统或网络调用。服务端要重新检查用户身份、资源权限、参数白名单、资源版本和审批记录，审批还要绑定具体调用、参数摘要和有效期。</p>
+<p>模型返回的工具名和参数只是拟议动作，不能直接转换成数据库、文件系统或网络调用。服务端要重新检查用户身份、资源权限、参数白名单、资源版本和审批记录，审批怎样绑定调用见“模型提出工具调用后，前端应该怎样展示和确认？”。</p>
 <p>检索文本和模型输出也不能直接作为 HTML、SQL、脚本或文件路径使用。服务端保存了密钥，不代表已经解决提示词注入、输出注入和越权读取；这些仍需要独立的输入、工具和渲染防护。</p>
 <h2>流式错误、日志和缓存不能泄露数据</h2>
 <p>前端可以展示用户能理解的“请求被拒绝”“额度不足”或“结果待核对”，同时携带内部错误 ID。不要原样返回服务端堆栈、认证头、完整系统提示和敏感附件。</p>

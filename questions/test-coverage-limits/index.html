@@ -26,7 +26,14 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/testing/">测试面试题</a><span aria-hidden="true">/</span><span aria-current="page">为什么 100% 代码覆盖率也可能漏掉严重问题？</span></nav><h1 tabindex="-1">为什么 100% 代码覆盖率也可能漏掉严重问题？</h1><p class="reading-summary">覆盖率只说明哪些代码被执行过，不能证明结果正确、边界完整或异步时序安全。测试质量取决于独立断言、风险场景和统计范围。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>覆盖率回答的问题很有限</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/testing/">测试面试题</a><span aria-hidden="true">/</span><span aria-current="page">为什么 100% 代码覆盖率也可能漏掉严重问题？</span></nav><h1 tabindex="-1">为什么 100% 代码覆盖率也可能漏掉严重问题？</h1><p class="reading-summary">覆盖率只说明哪些代码被执行过，不能证明结果正确、边界完整或异步时序安全。测试质量取决于独立断言、风险场景和统计范围。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>覆盖率只回答测试运行时经过了哪些代码，不回答结果是否符合需求。</li>
+<li>语句、函数、分支覆盖各有盲区，都覆盖不了所有输入组合和状态顺序。</li>
+<li>断言预期值应来自需求或独立规则，不能照抄实现。</li>
+<li>覆盖率是未触达区域的提示，看报告前先确认统计的分母。</li>
+</ul>
+<h2>覆盖率回答的问题很有限</h2>
 <p>覆盖率报告回答的是“测试运行时经过了哪些代码”。它不能回答“这个结果是否符合需求”“错误输入是否被拒绝”“两个异步请求乱序时是否安全”。</p>
 <p>例如实现本应计算总价，却写成了加法：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">lineTotal</span>(<span class="hljs-params">unitPrice, quantity</span>) {
@@ -57,7 +64,28 @@
 <h2>断言应从风险反推</h2>
 <p>付款、权限和数据修改应优先验证正确结果、拒绝路径、重复提交、幂等和恢复；筛选界面要验证空结果、重置、过期响应和键盘操作；底层函数要覆盖边界和必须成立的性质。</p>
 <p>测试可以写成外部行为：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;旧搜索结果不能覆盖较新的查询&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 测试辅助：可从外部控制完成时机的 Promise</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">deferred</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">let</span> resolve;
+  <span class="hljs-keyword">const</span> promise = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">r</span>) =&gt;</span> { resolve = r; });
+  <span class="hljs-keyword">return</span> { promise, resolve };
+}
+
+<span class="hljs-comment">// 被测实现：只接受最新一次查询的结果</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">createSearch</span>(<span class="hljs-params">{ request }</span>) {
+  <span class="hljs-keyword">let</span> latest = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> results = [];
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-keyword">async</span> <span class="hljs-title function_">run</span>(<span class="hljs-params">query</span>) {
+      <span class="hljs-keyword">const</span> id = ++latest;
+      <span class="hljs-keyword">const</span> items = <span class="hljs-keyword">await</span> <span class="hljs-title function_">request</span>(query);
+      <span class="hljs-keyword">if</span> (id === latest) results = items;
+    },
+    <span class="hljs-attr">currentResults</span>: <span class="hljs-function">() =&gt;</span> results,
+  };
+}
+
+<span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;旧搜索结果不能覆盖较新的查询&#x27;</span>, <span class="hljs-title function_">async</span> () =&gt; {
   <span class="hljs-keyword">const</span> first = <span class="hljs-title function_">deferred</span>();
   <span class="hljs-keyword">const</span> second = <span class="hljs-title function_">deferred</span>();
   <span class="hljs-keyword">const</span> search = <span class="hljs-title function_">createSearch</span>({ <span class="hljs-attr">request</span>: <span class="hljs-function">(<span class="hljs-params">q</span>) =&gt;</span> q === <span class="hljs-string">&#x27;a&#x27;</span> ? first.<span class="hljs-property">promise</span> : second.<span class="hljs-property">promise</span> });
@@ -68,6 +96,7 @@
   <span class="hljs-keyword">await</span> second.<span class="hljs-property">promise</span>;
   first.<span class="hljs-title function_">resolve</span>([<span class="hljs-string">&#x27;apple&#x27;</span>]);
   <span class="hljs-keyword">await</span> first.<span class="hljs-property">promise</span>;
+  <span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>(); <span class="hljs-comment">// 让 run 中 await 之后的赋值先执行</span>
 
   <span class="hljs-title function_">expect</span>(search.<span class="hljs-title function_">currentResults</span>()).<span class="hljs-title function_">toEqual</span>([<span class="hljs-string">&#x27;about&#x27;</span>]);
 });

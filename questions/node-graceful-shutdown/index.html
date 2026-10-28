@@ -26,7 +26,14 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/node/">Node.js面试题</a><span aria-hidden="true">/</span><span aria-current="page">Node.js 服务如何实现优雅退出？</span></nav><h1 tabindex="-1">Node.js 服务如何实现优雅退出？</h1><p class="reading-summary">从容器滚动发布和进程信号出发，解释 Node.js 优雅退出、连接排空、请求超时、重复信号和强制终止的实现边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>在容器平台滚动发布 Node.js 服务时，旧进程收到 <code>SIGTERM</code> 后如果立刻退出，正在上传文件、写入订单或等待数据库响应的请求会被中断。新的请求又可能在负载均衡器还没完成摘除前继续进入旧实例。优雅退出的目标是：停止接收新流量，给已有请求一个有限的完成时间，完成必要清理后再退出；超时或清理失败时仍要有强制终止边界。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/node/">Node.js面试题</a><span aria-hidden="true">/</span><span aria-current="page">Node.js 服务如何实现优雅退出？</span></nav><h1 tabindex="-1">Node.js 服务如何实现优雅退出？</h1><p class="reading-summary">从容器滚动发布和进程信号出发，解释 Node.js 优雅退出、连接排空、请求超时、重复信号和强制终止的实现边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>收到 SIGTERM 后先停止接收新请求，再等待已有请求完成。</li>
+<li>server.close() 停止接受新连接（Node.js 19 起也会关闭空闲连接），但不会中断正在处理的请求，所以每个请求都要有超时。</li>
+<li>设置一个最终截止时间，超时后强制退出。</li>
+<li>关闭开始时把 readiness 检查改为失败，让负载均衡器尽快摘除实例。</li>
+</ul>
+<p>在容器平台滚动发布 Node.js 服务时，旧进程收到 <code>SIGTERM</code> 后如果立刻退出，正在上传文件、写入订单或等待数据库响应的请求会被中断。新的请求又可能在负载均衡器还没完成摘除前继续进入旧实例。优雅退出的目标是：停止接收新流量，给已有请求一个有限的完成时间，完成必要清理后再退出；超时或清理失败时仍要有强制终止边界。</p>
 <h2><code>process.exit()</code> 为什么会截断请求</h2>
 <p><code>process.exit()</code> 会立即结束进程，事件循环里尚未完成的异步操作、响应写入和日志刷新都可能来不及执行。设置 <code>process.exitCode</code> 则不同：它只指定进程在事件循环自然清空后的退出码。因此收到终止信号后，不能先调用 <code>process.exit()</code> 再期待 <code>finally</code> 或 HTTP 响应完成。</p>
 <p>退出流程一般分为四步：</p>
@@ -39,6 +46,9 @@
 <h2>HTTP 服务器需要“停止接新请求”和“排空旧请求”</h2>
 <p><code>server.close()</code> 会停止接受新的连接，并在连接全部关闭后回调。它不会替你取消一个卡住的请求，也不会自动关闭其他资源。Node.js 版本和 HTTP 模块不同，空闲 keep-alive 连接还可能需要显式处理，因此不能只调用一个方法就认为服务已经排空。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> http <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:http&#x27;</span>;
+
+<span class="hljs-keyword">let</span> shuttingDown = <span class="hljs-literal">false</span>;
+<span class="hljs-keyword">let</span> shutdownPromise;
 
 <span class="hljs-keyword">const</span> server = http.<span class="hljs-title function_">createServer</span>(<span class="hljs-title function_">async</span> (request, response) =&gt; {
   <span class="hljs-keyword">try</span> {
@@ -53,9 +63,6 @@
 });
 
 server.<span class="hljs-title function_">listen</span>(<span class="hljs-number">3000</span>);
-
-<span class="hljs-keyword">let</span> shuttingDown = <span class="hljs-literal">false</span>;
-<span class="hljs-keyword">let</span> shutdownPromise;
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">shutdown</span>(<span class="hljs-params">signal</span>) {
   <span class="hljs-keyword">if</span> (shutdownPromise) <span class="hljs-keyword">return</span> shutdownPromise;
@@ -83,12 +90,6 @@ server.<span class="hljs-title function_">listen</span>(<span class="hljs-number
   <span class="hljs-keyword">return</span> shutdownPromise;
 }
 
-server.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;request&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">_request, response</span>) =&gt;</span> {
-  <span class="hljs-keyword">if</span> (shuttingDown &amp;&amp; !response.<span class="hljs-property">headersSent</span>) {
-    response.<span class="hljs-title function_">setHeader</span>(<span class="hljs-string">&#x27;Connection&#x27;</span>, <span class="hljs-string">&#x27;close&#x27;</span>);
-  }
-});
-
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> signal <span class="hljs-keyword">of</span> [<span class="hljs-string">&#x27;SIGTERM&#x27;</span>, <span class="hljs-string">&#x27;SIGINT&#x27;</span>]) {
   process.<span class="hljs-title function_">on</span>(signal, <span class="hljs-function">() =&gt;</span> {
     <span class="hljs-keyword">void</span> <span class="hljs-title function_">shutdown</span>(signal).<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
@@ -104,17 +105,19 @@ server.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#
 <p>健康检查失败到负载均衡器真正摘除之间存在传播延迟。优雅退出截止时间应大于这段延迟，并预留已有请求的完成时间。若平台支持 <code>preStop</code> 或 termination grace period，也要把它和 Node.js 内部的强制截止时间一起设计，避免平台先杀进程导致应用层没有机会清理。</p>
 <h2>请求超时是优雅退出的必要条件</h2>
 <p>如果一个请求没有超时，客户端断开或上游服务失联后，Node 进程可能永远等不到它结束。应根据业务设置请求头、请求体和空闲连接的超时，并在超时时取消数据库查询或下游 <code>fetch</code>：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> controller = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AbortController</span>();
-<span class="hljs-keyword">const</span> timer = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> controller.<span class="hljs-title function_">abort</span>(), <span class="hljs-number">5_000</span>);
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">loadData</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> controller = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AbortController</span>();
+  <span class="hljs-keyword">const</span> timer = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> controller.<span class="hljs-title function_">abort</span>(), <span class="hljs-number">5_000</span>);
 
-<span class="hljs-keyword">try</span> {
-  <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://api.example.test/data&#x27;</span>, {
-    <span class="hljs-attr">signal</span>: controller.<span class="hljs-property">signal</span>,
-  });
-  <span class="hljs-keyword">if</span> (!response.<span class="hljs-property">ok</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">`下游返回 HTTP <span class="hljs-subst">${response.status}</span>`</span>);
-  <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>();
-} <span class="hljs-keyword">finally</span> {
-  <span class="hljs-built_in">clearTimeout</span>(timer);
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://api.example.test/data&#x27;</span>, {
+      <span class="hljs-attr">signal</span>: controller.<span class="hljs-property">signal</span>,
+    });
+    <span class="hljs-keyword">if</span> (!response.<span class="hljs-property">ok</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">`下游返回 HTTP <span class="hljs-subst">${response.status}</span>`</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>();
+  } <span class="hljs-keyword">finally</span> {
+    <span class="hljs-built_in">clearTimeout</span>(timer);
+  }
 }
 </code></pre></div>
 <p>超时不能只在 Node 进程层设置。下游请求、数据库连接池、消息确认和文件流都要有自己的取消或截止策略，否则最外层的优雅退出仍会被内部任务拖住。取消操作也应区分“客户端主动取消”和“服务端关闭”，避免把正常排空误报成业务错误。</p>

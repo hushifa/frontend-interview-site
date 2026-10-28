@@ -26,18 +26,17 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">React 的 cache API 解决什么问题？</span></nav><h1 tabindex="-1">React 的 cache API 解决什么问题？</h1><p class="reading-summary">React cache 为 Server Components 请求上下文中的函数调用提供结果复用，稳定的被缓存函数与匹配参数可以共享值、Promise 或失败。它不是普通客户端记忆化函数，也不提供跨请求持久缓存、TTL 或自动失效策略。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>同一份服务器组件树里，标题区域和统计区域可能都要读取同一用户或计算同一结果。如果每个组件分别执行相同工作，就会重复查询或计算。React cache 可以让这些调用在同一 Server Components 请求上下文中复用结果。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">React 的 cache API 解决什么问题？</span></nav><h1 tabindex="-1">React 的 cache API 解决什么问题？</h1><p class="reading-summary">React cache 为 Server Components 请求上下文中的函数调用提供结果复用，稳定的被缓存函数与匹配参数可以共享值、Promise 或失败。它不是普通客户端记忆化函数，也不提供跨请求持久缓存、TTL 或自动失效策略。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<p>cache(fn) 只在 Server Components 中可用，为一次服务端请求内的重复调用去重：参数相同就复用结果，包括 Promise 和抛出的错误。缓存在请求结束后失效，不跨请求，也没有 TTL 和手动失效。每次调用 cache 都会生成一个独立的缓存函数，所以要在模块级只创建一次并导出共享。</p>
+<p>同一份服务器组件树里，标题区域和统计区域可能都要读取同一用户或计算同一结果。如果每个组件分别执行相同工作，就会重复查询或计算。React cache 可以让这些调用在同一 Server Components 请求上下文中复用结果。</p>
 <p>这里必须强调 Server Components 上下文。它不是给任意 Node 函数加一个长期 Map，也不能把普通客户端组件或任意 renderToString 调用都默认当成具有相同缓存语义的环境。</p>
-<h3>缓存函数在模块中建立，组件共享它</h3>
+<h2>缓存函数在模块中建立，组件共享它</h2>
 <p>下面需要在支持 Server Components 的环境中渲染。日志用于观察计算是否重复，不代表真实业务需要在每次读取时输出日志。</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { cache } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 
+<span class="hljs-comment">// 模块级只调用一次 cache，所有组件导入同一个函数</span>
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> getScore = <span class="hljs-title function_">cache</span>(<span class="hljs-function">(<span class="hljs-params">correct, total</span>) =&gt;</span> {
-  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;计算得分&#x27;</span>);
-  <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Number</span>.<span class="hljs-title function_">isInteger</span>(correct) || !<span class="hljs-title class_">Number</span>.<span class="hljs-title function_">isInteger</span>(total) ||
-      total &lt;= <span class="hljs-number">0</span> || correct &lt; <span class="hljs-number">0</span> || correct &gt; total) {
-    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RangeError</span>(<span class="hljs-string">&#x27;题目数量不合法&#x27;</span>);
-  }
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;计算得分&#x27;</span>); <span class="hljs-comment">// 同一请求内只输出一次</span>
   <span class="hljs-keyword">return</span> { <span class="hljs-attr">percentage</span>: <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">round</span>(correct / total * <span class="hljs-number">100</span>) };
 });
 
@@ -57,31 +56,31 @@
 </code></pre></div>
 <p>同一请求中，两处都使用同一个 getScore，参数也相同，可以复用第一次得到的结果。新的服务器请求拥有新的缓存范围，不应该期待前一个请求的结果永久留下来。</p>
 <p>cache(fn) 创建包装函数时不会立即执行 fn。真正调用包装函数时才查找对应记录，未命中再执行原函数。</p>
-<h3>被缓存函数的身份需要稳定</h3>
+<h2>被缓存函数的身份需要稳定</h2>
 <p>如果每次渲染都创建一个新函数，再传给 cache，例如 cache(() =&gt; calculate())，就不是稳定的同一个被缓存函数。源码看起来相同，不表示函数对象身份相同。通常应在合适的模块边界建立并导出一份明确的缓存入口，让多个读取点复用它。</p>
-<p>对同一个原函数重复调用 cache，会得到不同包装引用，但不能据此把它们当成可靠隔离的缓存区。例如 React 19.3.1 的实现按原函数身份组织相应请求内记录，重复包装同一个原函数仍可共享结果。不要依赖这种包装细节设计用户隔离或失效策略，应使用明确的请求范围与业务参数。</p>
+<p>官方文档明确：每次调用 cache 都会创建新函数，对同一个原函数多次调用 cache 得到的记忆化函数互不共享缓存。因此应在专门模块里只调用一次并导出，各读取点导入同一个函数；也不要靠多次包装来做用户隔离，隔离应依赖请求范围与业务参数。</p>
 <p>这与把实际用户数据放在模块级变量里不是一回事。包装函数可以长期存在，数据缓存仍由 React 的请求上下文管理；如果另外在闭包里保存一个永久全局 Map，那是应用自行引入的另一层生命周期。</p>
-<h3>参数不会自动进行业务内容的深度比较</h3>
+<h2>参数不会自动进行业务内容的深度比较</h2>
 <p>两次传入分别创建的 <code>{ id: &#x27;user_1&#x27; }</code>，即使内容相同，也不是同一个对象参数，不能假定命中同一条记录。对象与函数参数的引用身份尤其需要稳定。</p>
 <p>如果查询天然由 ID、语言、版本等原始值确定，直接传递这些明确参数，往往比每次构造新 options 对象更清楚。确实需要对象参数时，应理解共享的是哪一个对象，以及它是否会被修改。</p>
 <p>原地修改对象后继续用同一引用，也可能复用不符合预期的旧结果。缓存函数的输入应准确表达决定结果的条件，不应该偷偷依赖一个会变化、又没有被正确隔离的全局用户或配置变量。</p>
-<h3>异步结果可以共享同一个进行中的工作</h3>
+<h2>异步结果可以共享同一个进行中的工作</h2>
 <p>缓存函数可以返回 Promise。第一次调用启动异步工作后，同一上下文、同一缓存键的后续调用可以取得同一结果路径，不必等第一次完全完成后才有复用价值。</p>
 <p>这适合多个 Server Component 共享一项读取，或者在合适位置预先启动，稍后再 await。预加载不意味着请求永远成功，也不意味着所有读取都应该无条件提前开始，仍需考虑权限、成本和实际使用概率。</p>
 <p>从服务器创建并传给客户端读取的 Promise，还受到 React 序列化与框架集成约束。不能把 cache 与任意浏览器 Promise 缓存混为一谈。</p>
-<h3>失败也可能在当前范围内被复用</h3>
+<h2>失败也可能在当前范围内被复用</h2>
 <p>如果原函数针对某组参数抛错，缓存函数会记住对应失败；同一范围里的再次调用可能重新抛出同一个错误，而不是自动重试一遍。</p>
 <p>因此一个组件外面加 try/catch，再立即用相同参数调用同一缓存函数，不一定发起新的工作。需要重试时，应根据框架生命周期或数据层设计真正的新尝试，而不是把 cache 当成“失败不算缓存”的通用约定。</p>
 <p>可预期的失败如果被转换为普通结果，那也可能作为结果被复用。返回空对象还是抛错，是数据契约选择，不应为了看起来缓存命中率高而隐藏真实问题。</p>
-<h3>请求内复用不等于持久数据缓存</h3>
+<h2>请求内复用不等于持久数据缓存</h2>
 <p>React 会按服务器请求管理这类缓存范围。它不提供跨用户的永久命中，也没有在这里声明任意 TTL、按标签失效或后台重新验证策略。</p>
 <p>HTTP 缓存由响应头和浏览器/CDN等机制决定；框架的数据缓存可能跨请求保存；数据库缓存又有自己的规则。给一个函数加 React cache，不会自动改写这些系统的缓存寿命。</p>
 <p>框架中名称相近的缓存指令或封装，也不一定与 React 的 cache() 具有同一生命周期。讨论命中与失效时，应明确究竟是哪一层在复用数据。</p>
-<h3>它不能替代事务、授权或取消设计</h3>
+<h2>它不能替代事务、授权或取消设计</h2>
 <p>同一请求中重复得到同一结果，有助于减少重复读取，但不等于数据库提供了事务一致性。如果读取依赖多个资源，仍然要由数据访问层保证需要的关系。</p>
 <p>写入动作通常不应直接套上读取型缓存，避免相同参数时本应执行的变更被跳过。认证授权也必须按服务端当前请求和资源规则检查，而不是因为某次缓存里曾有成功结果就长期放行。</p>
 <p>支持环境中可以进一步结合 cacheSignal 等生命周期能力取消不再需要的工作，但这不等于用户操作被回滚，也不能让任意底层 API 自动支持取消。</p>
-<h3>验证必须放在正确的运行上下文里</h3>
+<h2>验证必须放在正确的运行上下文里</h2>
 <p>在普通脚本顶层连续调用两次包装函数，或在客户端环境中测试，可能看不到预期复用，因为没有对应的 Server Components 缓存上下文。不能据此宣布 cache 失效，也不能把自己手写的 Map 测试结果当成 React 行为证明。</p>
 <p>有意义的验证应包括：同一请求重复参数只执行一次、新请求重新执行、不同对象参数不误合并、错误是否按预期共享，以及缓存函数没有被每个组件重新创建。把范围和身份说清楚后，cache 才是一个可解释的读取优化工具。</p></div><div class="answer-bottom"><a href="https://react.dev/reference/react/cache" target="_blank" rel="noreferrer">React · cache<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+%E7%9A%84+cache+API+%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+%E7%9A%84+cache+API+%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-server-cache%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-server-cache%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React 的 cache API 解决什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-use-effect-event/">React useEffectEvent 适合解决什么依赖问题？</a></li><li><a href="/questions/react-use-hook/">React use API 可以读取哪些值？</a></li><li><a href="/questions/react-server-actions/">React Server Functions/Actions 的边界是什么？</a></li><li><a href="/questions/react-compiler/">React Compiler 解决了哪些优化问题？</a></li></ul></nav></main></div></div>
     

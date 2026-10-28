@@ -26,7 +26,15 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">INP 很高时，如何定位到底是哪一段交互变慢？</span></nav><h1 tabindex="-1">INP 很高时，如何定位到底是哪一段交互变慢？</h1><p class="reading-summary">从输入延迟、事件处理和呈现延迟三个阶段拆解 INP，结合 Event Timing、PerformanceObserver 和 DevTools 设计可复现、可验证的交互性能诊断流程。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>用户点击筛选按钮后，页面过了半秒才显示结果。把所有 JavaScript 都压到 50 毫秒以内并不能保证体验良好，因为浏览器可能先忙于处理其他任务，事件处理结束后又花很久做样式、布局和绘制。INP（Interaction to Next Paint）关注交互开始到下一次呈现之间的完整时间，诊断时必须把这段时间拆开。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">INP 很高时，如何定位到底是哪一段交互变慢？</span></nav><h1 tabindex="-1">INP 很高时，如何定位到底是哪一段交互变慢？</h1><p class="reading-summary">从输入延迟、事件处理和呈现延迟三个阶段拆解 INP，结合 Event Timing、PerformanceObserver 和 DevTools 设计可复现、可验证的交互性能诊断流程。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>INP 衡量交互到下一次绘制的延迟，≤200ms 为良好，&gt;500ms 为较差，按 75 分位统计，2024 年 3 月取代 FID。</li>
+<li>一次交互分为输入延迟、处理时间和呈现延迟三段，要先判断慢在哪段。</li>
+<li>输入延迟高时减少主线程争用，处理时间高时缩小单次更新，呈现延迟高时检查样式、布局和绘制。</li>
+<li>Event Timing 需要特性检测；RUM 按交互类型和分位数上报，不只看平均值。</li>
+</ul>
+<p>用户点击筛选按钮后，页面过了半秒才显示结果。把所有 JavaScript 都压到 50 毫秒以内并不能保证体验良好，因为浏览器可能先忙于处理其他任务，事件处理结束后又花很久做样式、布局和绘制。INP（Interaction to Next Paint）关注交互开始到下一次呈现之间的完整时间，诊断时必须把这段时间拆开。</p>
+<p>INP 在 2024 年 3 月取代 FID 成为 Core Web Vitals 指标。评估标准按页面访问的第 75 百分位统计：≤ 200 毫秒为良好，200 到 500 毫秒需要改进，超过 500 毫秒为较差。单次访问内，交互少于 50 次时取最慢的一次，交互更多时剔除少量极端值。</p>
 <h2>一次交互包含三个阶段</h2>
 <ol>
 <li><strong>输入延迟</strong>：浏览器收到用户操作后，等待主线程可以运行事件处理的时间。</li>
@@ -50,7 +58,8 @@
         <span class="hljs-attr">interactionId</span>: entry.<span class="hljs-property">interactionId</span>,
         <span class="hljs-attr">processingStart</span>: entry.<span class="hljs-property">processingStart</span>,
         <span class="hljs-attr">processingEnd</span>: entry.<span class="hljs-property">processingEnd</span>,
-        <span class="hljs-attr">presentationTime</span>: entry.<span class="hljs-property">presentationTime</span>,
+        <span class="hljs-comment">// presentationTime 并非所有实现都提供</span>
+        <span class="hljs-attr">presentationTime</span>: entry.<span class="hljs-property">presentationTime</span> ?? <span class="hljs-literal">null</span>,
       });
     }
   });

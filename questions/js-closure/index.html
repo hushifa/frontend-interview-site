@@ -26,9 +26,16 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">什么是闭包？它有哪些实际应用？</span></nav><h1 tabindex="-1">什么是闭包？它有哪些实际应用？</h1><p class="reading-summary">闭包让函数按创建位置的词法作用域继续访问外层绑定。它可以保存独立状态、提供受控接口和连接回调上下文，但不会默认复制变量快照，也不必然造成内存泄漏。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>一个函数执行结束后，里面创建的另一个函数仍然可以访问它的局部变量，这就是理解闭包最常见的入口。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">什么是闭包？它有哪些实际应用？</span></nav><h1 tabindex="-1">什么是闭包？它有哪些实际应用？</h1><p class="reading-summary">闭包让函数按创建位置的词法作用域继续访问外层绑定。它可以保存独立状态、提供受控接口和连接回调上下文，但不会默认复制变量快照，也不必然造成内存泄漏。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>闭包是函数加上它创建时所在的词法环境，外层函数返回后，内层函数仍能访问这些绑定。</li>
+<li>闭包保存的是对绑定的访问，不是变量值的快照。</li>
+<li>常见用途有私有状态、工厂函数、回调和柯里化。</li>
+<li>陈旧闭包与内存问题的根源，都是旧环境仍被某个函数引用。</li>
+</ul>
+<p>一个函数执行结束后，里面创建的另一个函数仍然可以访问它的局部变量，这就是理解闭包最常见的入口。</p>
 <p>更完整地说，闭包是函数与其创建时的词法环境的组合。函数以后在哪里被调用，不会把它原本的变量查找位置改成调用者的局部作用域。它仍然沿定义位置对应的作用域关系寻找名字。</p>
-<h3>函数已经返回，count 为什么还能用</h3>
+<h2>函数已经返回，count 为什么还能用</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">createCounter</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">let</span> count = <span class="hljs-number">0</span>;
 
@@ -54,7 +61,7 @@
 <p>createCounter 第一次执行时创建一个 count 绑定，以及两个能访问它的方法。外层函数返回的是这些函数所组成的对象。只要这些函数仍然可达，它们需要访问的外层状态就必须继续可用，不会仅因 createCounter 的调用栈帧结束而丢失。</p>
 <p>first.increment 和 first.read 访问的是同一个 count，所以一个修改后，另一个能读到新值。第二次调用 createCounter 则创建另一份局部环境，second 不会与 first 共用计数。</p>
 <p>这里的 count 没有暴露为 <code>first.count</code> 属性，外部只能通过返回的接口操作它。这是一种封装状态的方法；也可以使用类的私有字段等其他机制，选择取决于代码组织需要。</p>
-<h3>闭包通常保存访问关系，不是拍一张变量快照</h3>
+<h2>闭包通常保存访问关系，不是拍一张变量快照</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">let</span> message = <span class="hljs-string">&#x27;早上的内容&#x27;</span>;
 <span class="hljs-keyword">const</span> <span class="hljs-title function_">readLive</span> = (<span class="hljs-params"></span>) =&gt; message;
 
@@ -67,8 +74,8 @@ message = <span class="hljs-string">&#x27;晚上的内容&#x27;</span>;
 </code></pre></div>
 <p>readLive 读取的是 message 这个绑定的当前值，后来赋值会影响结果。readSaved 读取的是另一个绑定 savedMessage，这个绑定保存了当时的字符串值，所以结果不同。</p>
 <p>这不是一种闭包“实时”、另一种闭包“不实时”，而是它们引用了不同的绑定。若 savedMessage 保存的是对象引用，那么它也不代表自动获得对象的深拷贝，对象内部属性仍可能被其他代码修改。</p>
-<p>函数调用时产生的参数也属于相应调用的局部环境。把一个值作为参数交给函数，再让返回的回调使用该参数，可以有意识地保存那次调用的上下文，但需要清楚值本身是否还引用可变对象。</p>
-<h3>“陈旧闭包”往往是旧环境仍被使用</h3>
+<p>函数调用时产生的参数也属于调用的局部环境。把一个值作为参数交给函数，再让返回的回调使用该参数，可以有意识地保存那次调用的上下文，但需要清楚值本身是否还引用可变对象。</p>
+<h2>“陈旧闭包”往往是旧环境仍被使用</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">createReader</span>(<span class="hljs-params">count</span>) {
   <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> count;
 }
@@ -81,7 +88,7 @@ message = <span class="hljs-string">&#x27;晚上的内容&#x27;</span>;
 </code></pre></div>
 <p>两次调用有各自的 count。创建 newReader 并没有修改 oldReader 所在的旧环境，所以旧函数仍返回 1。它没有忘记更新，也不是 JavaScript 随机缓存了一个错误结果。</p>
 <p>这有助于理解 React 等代码中的陈旧回调：不同渲染可能创建不同的局部环境，长期保留的回调可能仍引用某次旧渲染中的值。修复方式要根据所需语义选择重新建立订阅、正确维护依赖、使用合适的更新形式或读取受控的最新引用，不能笼统认为“所有闭包都应改成全局变量”。</p>
-<h3>为什么回调、工厂函数都经常用到闭包</h3>
+<h2>为什么回调、工厂函数都经常用到闭包</h2>
 <p>事件处理器需要记住某个组件的局部状态，防抖函数需要记住上次定时器，函数工厂需要记住配置，这些都可以通过闭包完成。下面把点击次数绑定到两个实际 DOM 元素，并返回清理函数：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">bindCounter</span>(<span class="hljs-params">button, output</span>) {
   <span class="hljs-keyword">let</span> count = <span class="hljs-number">0</span>;
@@ -100,10 +107,9 @@ message = <span class="hljs-string">&#x27;晚上的内容&#x27;</span>;
 </code></pre></div>
 <p>每次调用 bindCounter 都有自己的一份 count。onClick 记住 output 与 count，dispose 记住 button 与同一个 onClick 引用。正因为保留了正确的函数引用，清理时才能移除原监听器，而不是临时创建一个长得一样但身份不同的函数。</p>
 <p>闭包不要求函数一定被返回，也不要求存在异步任务。只要函数按词法作用域使用外层绑定，就涉及这种机制；“返回一个内部函数”只是最容易观察外层调用结束后状态仍被保存的例子。</p>
-<h3>循环里读到相同结果，问题在共享绑定</h3>
-<p>用 var 声明的循环变量，多个回调可能共同引用同一个绑定，循环结束后再读取时都看到最后的值。for 循环头的 let 则可以为各次迭代提供独立绑定，所以回调能分别记住各自的迭代值。</p>
-<p>这不意味着闭包在循环中失效。恰恰是它忠实地沿着所捕获的绑定去读取，才表现出了共享与独立的区别。即使把回调放进数组，循环后同步调用，也能复现，不一定要用 setTimeout。</p>
-<h3>闭包与内存泄漏有什么关系</h3>
+<h2>循环里读到相同结果，问题在共享绑定</h2>
+<p>var 循环变量让所有回调共享一个绑定，for 头里的 let 为每次迭代提供独立绑定。闭包没有失效，只是忠实读取了它捕获的绑定。可运行示例见《var、let、const 和暂时性死区有什么关系？》。</p>
+<h2>闭包与内存泄漏有什么关系</h2>
 <p>如果一个长期存活的监听器、定时器或订阅引用了某个回调，而回调又访问大型对象或 DOM 节点，这些对象就可能继续可达。组件已经不再需要它们，但引用关系没有清除，才会造成不必要的长期保留。</p>
 <p>因此应在生命周期结束时移除监听、取消计时器、解除订阅，并检查缓存和清理函数是否仍被其他地方保存。闭包并不是“函数返回后内存永远无法释放”的机制；相关函数和状态都不再可达时，垃圾回收器仍然可以回收它们。</p>
 <p>也不必假定每个闭包都会完整保存外层的所有变量或整份调用栈。具体保留与优化由引擎实现决定，应用能把握的是对象是否仍然可达，以及哪些长期对象持有了这些引用。发现内存持续增长时，应结合堆快照和引用路径找原因，而不是把所有内部函数都删掉。</p></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures" target="_blank" rel="noreferrer">MDN · Closures<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%BB%80%E4%B9%88%E6%98%AF%E9%97%AD%E5%8C%85%EF%BC%9F%E5%AE%83%E6%9C%89%E5%93%AA%E4%BA%9B%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E9%97%AD%E5%8C%85%EF%BC%9F%E5%AE%83%E6%9C%89%E5%93%AA%E4%BA%9B%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-closure%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-closure%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：什么是闭包？它有哪些实际应用？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-scope-hoisting/">var、let、const 和暂时性死区有什么关系？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-this/">普通函数和箭头函数的 this 有什么区别？</a></li><li><a href="/questions/js-promise-combinators/">Promise.all、allSettled、race 和 any 如何选择？</a></li></ul></nav></main></div></div>

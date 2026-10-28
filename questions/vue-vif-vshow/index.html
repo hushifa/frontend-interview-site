@@ -26,9 +26,11 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">v-if、v-show 与列表 key 应该怎样选择？</span></nav><h1 tabindex="-1">v-if、v-show 与列表 key 应该怎样选择？</h1><p class="reading-summary">v-if 改变条件子树是否存在，v-show 通常保留子树并切换显示；key 决定更新时如何识别同级记录。选择要同时考虑初始成本、切换成本、状态保留、焦点和副作用生命周期。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>两个区域都能在条件为 false 时看不见，但“看不见”不代表它们经历了相同的事情。v-if 通常让对应条件子树不再存在，v-show 则让已经存在的内容通过 display 隐藏。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">v-if、v-show 与列表 key 应该怎样选择？</span></nav><h1 tabindex="-1">v-if、v-show 与列表 key 应该怎样选择？</h1><p class="reading-summary">v-if 改变条件子树是否存在，v-show 通常保留子树并切换显示；key 决定更新时如何识别同级记录。选择要同时考虑初始成本、切换成本、状态保留、焦点和副作用生命周期。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<p>v-if 真正创建和销毁条件子树，条件为假时组件被卸载、状态丢失，初次渲染成本低；v-show 始终渲染，只切换 display，组件状态保留，切换成本低。频繁切换用 v-show，很少改变或初始不需要渲染用 v-if。v-show 隐藏的组件里，计时器和请求仍在运行。v-if 不能和 v-show 一起用在 template 上。</p>
+<p>两个区域都能在条件为 false 时看不见，但“看不见”不代表它们经历了相同的事情。v-if 通常让对应条件子树不再存在，v-show 则让已经存在的内容通过 display 隐藏。</p>
 <p>组件本地状态、DOM 身份、监听器与初次加载工作都会受到这个区别影响，所以不能只用一句“频繁切换选 v-show”结束判断。</p>
-<h3>用两个有草稿的计数面板观察区别</h3>
+<h2>用两个有草稿的计数面板观察区别</h2>
 <div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;!-- StatefulPanel.vue --&gt;
 &lt;script setup&gt;
 import { onMounted, onUnmounted, ref } from &#x27;vue&#x27;;
@@ -66,25 +68,22 @@ const visible = ref(false);
 </code></pre></div>
 <p>初始为 false 时，v-if 面板没有被创建，v-show 面板则已经挂载，只是显示被关闭。首次显示后，分别增加计数、填写草稿，再隐藏并显示：v-if 的普通子组件重新挂载，本地计数与草稿重新初始化；v-show 那份实例仍保留原来的值。</p>
 <p>这里强调的是子组件内部状态。如果草稿保存在父级，子组件重新挂载时又从父级取得它，数据也可以保留。因此是否丢失草稿，不只由指令决定，还取决于状态所有权。</p>
-<h3>初始成本与切换成本不同</h3>
-<p>v-if 是惰性的，初始条件不成立时可以省掉该分支的创建工作。以后每次进入或退出，可能需要创建、卸载组件和 DOM，并处理相应生命周期。</p>
+<h2>初始成本与切换成本不同</h2>
+<p>v-if 是惰性的，初始条件不成立时可以省掉该分支的创建工作。以后每次进入或退出，可能需要创建、卸载组件和 DOM，并处理生命周期。</p>
 <p>v-show 一开始就需要承担渲染与组件建立成本，后续主要调整显示。大型内容即使初始隐藏，也可能已经建立侦听、计时器或其他工作，不能把它当成没有资源开销的占位。</p>
 <p>因此罕见打开的复杂面板常适合 v-if，频繁切换且需要保留实例的区域可以考虑 v-show。最终还要测量真实内容，不是每个场景都有一条永远正确的速度排名。</p>
-<h3>隐藏不会自动暂停组件内部的工作</h3>
+<h2>隐藏不会自动暂停组件内部的工作</h2>
 <p>v-show 不触发普通卸载，也不会自动停止请求、轮询、订阅或动画脚本。若这些工作只应在可见时运行，应让它们依据可见状态主动暂停或清理。</p>
 <p>display:none 的内容不参与正常布局，相关尺寸读取可能变为 0。隐藏期间初始化需要真实尺寸的图表或编辑器，可能得到错误布局；应在合适的显示阶段测量或通知外部实例调整。</p>
 <p>v-if 触发卸载也不意味着任意外部资源都由 Vue 自动认识并释放，组件仍需实现清理。KeepAlive 还会改变某些组件的停用与保留规则，应按真实树结构判断，不能把所有条件退出都视为普通销毁。</p>
-<h3>template、else 与列表条件有不同语法规则</h3>
-<p>v-if 可以用于 template，把多个元素作为一个条件块；v-else、v-else-if 需要相应的相邻分支关系。v-show 需要实际元素的显示样式，不支持用 template 当作同样的隐藏容器，也不能与 v-else 组成相同的分支链。</p>
+<h2>template、else 与列表条件有不同语法规则</h2>
+<p>v-if 可以用于 template，把多个元素作为一个条件块；v-else、v-else-if 需要相邻分支关系。v-show 需要实际元素的显示样式，不支持用 template 当作同样的隐藏容器，也不能与 v-else 组成相同的分支链。</p>
 <p>Vue 3 中，同一元素同时写 v-if 与 v-for 时，v-if 的优先级更高，这时不能按直觉认为循环变量已经可供条件使用。应先用 computed 过滤出要显示的列表，或用外层结构表达条件与循环，而不是依赖容易误读的同元素组合。</p>
-<p>如果条件决定整张列表是否存在，可以把条件放在外层；如果决定每条记录是否出现，派生出相应列表通常更清楚。</p>
-<h3>key 表达记录身份，不只是消除警告</h3>
-<p>列表更新可能复用已有组件。稳定且同级唯一的业务 ID，能让本地编辑、焦点和组件状态跟随正确记录。</p>
-<p>数组下标表示位置，插入、删除或重排之后，同一个位置可能已经是另一条记录。若每行有本地草稿，用下标 key 就可能把旧状态复用给新记录。渲染时生成随机 key 则走向另一个极端，会不断制造新身份并重建组件。</p>
-<p>key 通常应采用稳定的原始标识，如记录 ID，而不是每次新建的对象。它的范围是同一组兄弟节点，不是全站必须只有一份的数据库命名空间。</p>
-<p>对真正固定、没有重排增删与身份相关状态的列表，下标风险较低；一旦新增搜索、排序或编辑功能，这个前提就可能不再成立。</p>
-<h3>保留状态与保持可用性需要一起设计</h3>
-<p>隐藏当前焦点所在区域时，应把焦点移动到合理的仍可操作位置，而不是让键盘用户突然失去上下文。弹层、折叠区与复杂表单还需要相应的状态提示和无障碍关系。</p>
+<p>如果条件决定整张列表是否存在，可以把条件放在外层；如果决定每条记录是否出现，派生出列表通常更清楚。</p>
+<h2>列表中的 key</h2>
+<p>用条件渲染增删列表项时，组件是否复用取决于 key。key 的选择原则见 React 的 key 题，Vue 同样适用：用稳定、同级唯一的业务 ID，不要用数组下标或渲染时生成的随机值。</p>
+<h2>保留状态与保持可用性需要一起设计</h2>
+<p>隐藏当前焦点所在区域时，应把焦点移动到合理的仍可操作位置，而不是让键盘用户突然失去上下文。弹层、折叠区与复杂表单还需要状态提示和无障碍关系。</p>
 <p>想跨卸载保留业务草稿，可以提升状态或持久化；想保留组件实例，可以按需求评估 KeepAlive。不要为了保留一点数据，就无界地把所有大型区域永久 v-show 隐藏。</p>
 <p>验证时除了看内容是否出现，还应观察首次挂载、再次显示、草稿、焦点、定时任务与列表重排。视觉相同的两种写法，生命周期成本可能完全不同。</p></div><div class="answer-bottom"><a href="https://vuejs.org/guide/essentials/conditional.html" target="_blank" rel="noreferrer">Vue · Conditional Rendering<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+v-if%E3%80%81v-show+%E4%B8%8E%E5%88%97%E8%A1%A8+key+%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E9%80%89%E6%8B%A9%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Av-if%E3%80%81v-show+%E4%B8%8E%E5%88%97%E8%A1%A8+key+%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E9%80%89%E6%8B%A9%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-vif-vshow%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-vif-vshow%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：v-if、v-show 与列表 key 应该怎样选择？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-ref-reactive/">Vue 3 中 ref 和 reactive 有什么区别？</a></li><li><a href="/questions/vue-computed-watch/">computed、watch 和 watchEffect 应该如何选择？</a></li><li><a href="/questions/vue-nexttick/">修改状态后，为什么有时需要 await nextTick()？</a></li><li><a href="/questions/vue-props/">为什么 Vue 提倡 props 单向数据流？</a></li></ul></nav></main></div></div>
     

@@ -26,7 +26,14 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/web-apis/">Web API面试题</a><span aria-hidden="true">/</span><span aria-current="page">Declarative Shadow DOM 适合解决什么问题？</span></nav><h1 tabindex="-1">Declarative Shadow DOM 适合解决什么问题？</h1><p class="reading-summary">解释 template shadowrootmode 如何让服务端直接输出 Shadow DOM，覆盖 SSR 首屏、样式封装、客户端 hydration、slot、渐进增强、兼容性和安全边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>传统 Shadow DOM 通常在浏览器执行 JavaScript 后才创建：自定义元素构造器调用 <code>attachShadow()</code>，再把模板插入根节点。这样组件在脚本下载和执行前没有内部结构，服务端渲染的 HTML 也无法直接包含封装后的 Shadow DOM。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/web-apis/">Web API面试题</a><span aria-hidden="true">/</span><span aria-current="page">Declarative Shadow DOM 适合解决什么问题？</span></nav><h1 tabindex="-1">Declarative Shadow DOM 适合解决什么问题？</h1><p class="reading-summary">解释 template shadowrootmode 如何让服务端直接输出 Shadow DOM，覆盖 SSR 首屏、样式封装、客户端 hydration、slot、渐进增强、兼容性和安全边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>template 加 shadowrootmode 属性可以让服务端直接输出 Shadow DOM，首屏无需 JavaScript 也能显示封装后的结构。</li>
+<li>它和普通 template 不同，解析时会直接附加为 Shadow Root。</li>
+<li>自定义元素升级时应先复用已有的 this.shadowRoot，没有时才调用 attachShadow。</li>
+<li>slot 与 light DOM 的边界仍然存在，交互状态仍需客户端接管。</li>
+</ul>
+<p>传统 Shadow DOM 通常在浏览器执行 JavaScript 后才创建：自定义元素构造器调用 <code>attachShadow()</code>，再把模板插入根节点。这样组件在脚本下载和执行前没有内部结构，服务端渲染的 HTML 也无法直接包含封装后的 Shadow DOM。</p>
 <p>Declarative Shadow DOM（声明式 Shadow DOM）允许 HTML 解析器直接把一个带 <code>shadowrootmode</code> 的 <code>&lt;template&gt;</code> 变成 Shadow Root：</p>
 <div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">shadowrootmode</span>=<span class="hljs-string">&quot;open&quot;</span>&gt;</span>
@@ -48,11 +55,15 @@
 <p>只有识别 <code>shadowrootmode=&quot;open&quot;</code> 或 <code>shadowrootmode=&quot;closed&quot;</code> 的浏览器，才把对应模板当作声明式 Shadow DOM。旧浏览器可能把它当普通 template，用户看不到模板里的主要内容；因此不能把模板本身当成完整的跨浏览器渐进增强方案，需要提供兼容路径或服务端输出可用的 light DOM。</p>
 <p><code>open</code> 允许脚本通过 <code>element.shadowRoot</code> 获取根，<code>closed</code> 则不暴露这个属性。两者都不是安全沙箱，也不能阻止同一页面中的脚本读取、修改或观察组件逻辑。选择 open/closed 是封装和调试 API 设计，不是权限控制。</p>
 <h2>自定义元素升级时怎样接管已存在的 Shadow Root</h2>
-<p>声明式 Shadow DOM 的价值之一是：HTML 可以先显示结构，随后自定义元素类再接管交互。构造器不能无条件在已有根上再次创建第二个 Shadow Root；在支持的实现中，使用相同模式调用 <code>attachShadow()</code> 可以取得并清空已存在的声明式根，从而让组件完成 hydration：</p>
+<p>声明式 Shadow DOM 的价值之一是：HTML 可以先显示结构，随后自定义元素类再接管交互。升级时元素上已经有声明式根，可以直接通过 <code>this.shadowRoot</code> 复用；对已有声明式根调用 <code>attachShadow()</code> 会返回该根但清空其内容，所以只有在没有根时才创建：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">UserCard</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">HTMLElement</span> {
   <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
     <span class="hljs-variable language_">super</span>();
-    <span class="hljs-keyword">const</span> root = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">attachShadow</span>({ <span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span> });
+    <span class="hljs-comment">// 复用服务端输出的根，避免 attachShadow() 清空已有内容</span>
+    <span class="hljs-keyword">const</span> root = <span class="hljs-variable language_">this</span>.<span class="hljs-property">shadowRoot</span> ?? <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">attachShadow</span>({ <span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span> });
+    <span class="hljs-keyword">if</span> (!root.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;.name&#x27;</span>)) {
+      root.<span class="hljs-property">innerHTML</span> = <span class="hljs-string">&#x27;&lt;span class=&quot;name&quot;&gt;&lt;/span&gt;&#x27;</span>;
+    }
     <span class="hljs-variable language_">this</span>.<span class="hljs-property">nameElement</span> = root.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;.name&#x27;</span>);
   }
 
@@ -74,7 +85,7 @@
 
 customElements.<span class="hljs-title function_">define</span>(<span class="hljs-string">&#x27;user-card&#x27;</span>, <span class="hljs-title class_">UserCard</span>);
 </code></pre></div>
-<p>构造器中拿到的根必须与声明式模板的 mode 匹配；不要把 <code>closed</code> 的根改成 <code>open</code> 来“修复”升级。真实框架集成还要处理服务端输出和客户端状态是否一致、重复绑定事件、属性初始值以及异步数据到达顺序。Shadow DOM 已经存在并不代表交互逻辑自动完成，hydration 仍需有明确的组件状态模型。</p>
+<p><code>closed</code> 模式下外部读不到 <code>this.shadowRoot</code>，组件类可以通过 <code>ElementInternals.shadowRoot</code> 取得声明式根。不要把 <code>closed</code> 的根改成 <code>open</code> 来“修复”升级。真实框架集成还要处理服务端输出和客户端状态是否一致、重复绑定事件、属性初始值以及异步数据到达顺序。Shadow DOM 已经存在并不代表交互逻辑自动完成，hydration 仍需有明确的组件状态模型。</p>
 <p>如果浏览器不支持声明式根，<code>attachShadow()</code> 的行为和模板仍会走兼容路径。应用可以在自定义元素升级时检测 <code>this.shadowRoot</code>、创建普通 Shadow Root，并从模板或服务器数据恢复结构；但不要假设旧浏览器已经解析并保存了 <code>shadowrootmode</code> 的内容。兼容策略应由构建目标和实际浏览器测试决定。</p>
 <h2>SSR 输出要区分可见结构和交互状态</h2>
 <p>声明式 Shadow DOM 让服务端能输出样式和文本，但服务端仍不能替浏览器保存任意运行时对象、事件监听器和用户权限。下列内容可以作为首屏结构：</p>

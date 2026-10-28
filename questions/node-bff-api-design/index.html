@@ -26,7 +26,14 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/node/">Node.js面试题</a><span aria-hidden="true">/</span><span aria-current="page">BFF 聚合接口怎样设计才能避免把前端耦合到后端细节？</span></nav><h1 tabindex="-1">BFF 聚合接口怎样设计才能避免把前端耦合到后端细节？</h1><p class="reading-summary">以题目详情页聚合多个后端服务为例，说明 BFF 的输入输出契约、并发、超时、错误降级、权限和版本兼容，避免把 BFF 做成无边界代理。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>前端详情页可能同时需要题目正文、用户收藏状态、推荐列表和评论摘要。如果浏览器直接调用四个后端服务，就要处理多套认证、CORS、错误、版本和瀑布；BFF 可以为这个页面提供一个面向任务的接口，把后端细节留在服务端。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/node/">Node.js面试题</a><span aria-hidden="true">/</span><span aria-current="page">BFF 聚合接口怎样设计才能避免把前端耦合到后端细节？</span></nav><h1 tabindex="-1">BFF 聚合接口怎样设计才能避免把前端耦合到后端细节？</h1><p class="reading-summary">以题目详情页聚合多个后端服务为例，说明 BFF 的输入输出契约、并发、超时、错误降级、权限和版本兼容，避免把 BFF 做成无边界代理。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>BFF 按页面需要输出数据模型，不要把后端的结构直接透传给前端。</li>
+<li>并行调用下游时要设置整体超时，并区分核心数据和可降级数据。</li>
+<li>错误响应要带上前端可以据此恢复的错误码。</li>
+<li>权限要在 BFF 和下游服务两层都检查。</li>
+</ul>
+<p>前端详情页可能同时需要题目正文、用户收藏状态、推荐列表和评论摘要。如果浏览器直接调用四个后端服务，就要处理多套认证、CORS、错误、版本和瀑布；BFF 可以为这个页面提供一个面向任务的接口，把后端细节留在服务端。</p>
 <p>BFF 不是把任意 URL 转发一遍的代理。它应有明确的客户端契约、输入校验、权限边界、超时预算、数据聚合和可观测性；下游服务仍要保留自己的授权和领域规则。</p>
 <h2>BFF 输出页面需要的模型</h2>
 <p>不要直接把四个后端响应拼成一个巨大对象，也不要把数据库字段全部透传给浏览器。BFF 应按页面任务定义稳定输出：</p>
@@ -58,10 +65,10 @@
 
   <span class="hljs-keyword">try</span> {
     <span class="hljs-keyword">const</span> [question, bookmark, recommendations] = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">all</span>([
-    questionPromise,
-    bookmarkPromise,
-    recommendationsPromise,
-  ]);
+      questionPromise,
+      bookmarkPromise,
+      recommendationsPromise,
+    ]);
 
     <span class="hljs-keyword">return</span> { question, <span class="hljs-attr">bookmarked</span>: bookmark, recommendations };
   } <span class="hljs-keyword">catch</span> (error) {
@@ -71,7 +78,7 @@
 }
 </code></pre></div>
 <p>这是展示请求协作的简化代码，真实 BFF 还要处理各个下游的独立错误和部分成功。<code>Promise.all</code> 中一个可选服务失败会让整个结果拒绝；对于推荐和评论，可以用 <code>Promise.allSettled</code> 或受控包装返回空状态和 warning，但核心题目数据失败时应返回明确错误。</p>
-<p>这里约定三个 load 函数遵守传入的 signal。Promise.resolve().then 包装同步抛错和异步拒绝，先让 Promise.all 注册各分支的处理，再启动下游调用。Promise.all 本身不取消其他请求，所以失败后显式取消同组工作。已经开始的下游仍需要协作处理取消，不能保证零额外请求。AbortSignal.any 需要相应 Node.js 版本支持，例如 Node.js 20.3+；本例的 2500 毫秒仅是教学预算。</p>
+<p>这里约定三个 load 函数遵守传入的 signal。Promise.resolve().then 包装同步抛错和异步拒绝，先让 Promise.all 注册各分支的处理，再启动下游调用。Promise.all 本身不取消其他请求，所以失败后显式取消同组工作。已经开始的下游仍需要协作处理取消，不能保证零额外请求。AbortSignal.any 在当前 Node.js 22、24 LTS 中均可用；本例的 2500 毫秒仅是教学预算。</p>
 <p>allSettled 会等待所有分支结束，不是“可选服务失败就立即返回”的工具。推荐接口即使可降级，也应设置比整体请求更短的独立截止时间；否则它一直不返回，正文也会被拖住。超时要覆盖响应体读取与解析所处流程，而不是只等到收到 HTTP 响应头就清除计时器。</p>
 <p>客户端取消只表示 BFF 不再需要等待，不能保证下游已经撤销，也不能撤销已经发生的写操作。服务端应把请求的 AbortSignal 传给支持取消的 fetch、数据库查询和流，并在写入前后明确副作用语义。</p>
 <h2>错误响应要能指导前端恢复</h2>
@@ -86,7 +93,7 @@
 <p>错误响应应有稳定 code、用户可理解的 message 和 request ID；内部日志保留下游服务、耗时、版本和关联 ID，但不要记录 Cookie、令牌和完整用户内容。可预期的业务失败和程序异常要使用不同处理路径。</p>
 <h2>权限检查不能只在 BFF 做一次</h2>
 <p>BFF 可以根据当前会话判断页面能返回哪些字段，但下游服务仍要检查资源权限。用户可以绕过 BFF 直接调用后端，也可能在页面打开后权限变化。BFF 传给下游的身份上下文应由受控服务端生成，不应信任前端提交的 <code>userId</code> 或 <code>role</code>。</p>
-<p>代理目标、请求头和重定向也要限制。不要让客户端传任意 URL 并让 BFF fetch，否则可能造成 SSRF；不要把浏览器 Cookie、Authorization 或 Host 无条件复制给所有下游。固定上游、允许列表和最小请求头更容易审计。</p>
+<p>代理目标、请求头和重定向也要限制。SSRF 防护见《前端工程师编写 Node 服务时需要守住哪些安全边界？》；也不要把浏览器 Cookie、Authorization 或 Host 无条件复制给所有下游。固定上游、允许列表和最小请求头更容易审计。</p>
 <h2>API 版本和缓存要按页面契约设计</h2>
 <p>BFF 输出契约可以独立于下游服务版本演进，但下游字段改名时需要兼容窗口、适配层或契约测试。不要让前端直接依赖某个后端数据库字段名，再把 BFF 变成无意义的透传层。</p>
 <p>公开题目页面和用户收藏状态的缓存策略不同。公共正文可以按版本或短 TTL 缓存；个性化收藏不能进入共享缓存。缓存键要包含语言、用户和真正影响结果的维度，失效要考虑下游更新和已经打开的客户端页面。</p>

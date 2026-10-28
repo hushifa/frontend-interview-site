@@ -26,7 +26,14 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/web-apis/">Web API面试题</a><span aria-hidden="true">/</span><span aria-current="page">URLPattern 适合做路由匹配吗？</span></nav><h1 tabindex="-1">URLPattern 适合做路由匹配吗？</h1><p class="reading-summary">介绍 URLPattern 的 pathname、hostname 和 search 匹配语法，说明参数提取、路由优先级、基准 URL、兼容性和安全边界，并区分它与完整路由器的职责。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>页面导航、Service Worker 请求拦截和权限边界经常需要回答“这个 URL 属于哪一类资源”。如果用字符串 <code>startsWith(&#x27;/users/&#x27;)</code> 或手写正则，容易把 <code>/users/123/edit</code>、查询参数、端口和编码差异处理错。<code>URLPattern</code> 提供了按 URL 各组成部分匹配的声明式方式，但它只是匹配器，不会替你加载组件、管理历史记录或决定权限。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/web-apis/">Web API面试题</a><span aria-hidden="true">/</span><span aria-current="page">URLPattern 适合做路由匹配吗？</span></nav><h1 tabindex="-1">URLPattern 适合做路由匹配吗？</h1><p class="reading-summary">介绍 URLPattern 的 pathname、hostname 和 search 匹配语法，说明参数提取、路由优先级、基准 URL、兼容性和安全边界，并区分它与完整路由器的职责。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>URLPattern 可以分别约束 pathname、hostname、search 等 URL 部分并提取参数。</li>
+<li>通配符和查询参数要有明确的匹配语义；需要精确拆分时使用显式正则分组。</li>
+<li>它只负责匹配，路由优先级、加载和导航仍由路由器处理。</li>
+<li>在 Service Worker 中用 baseURL 限定源；使用前做特性检测并准备降级。</li>
+</ul>
+<p>页面导航、Service Worker 请求拦截和权限边界经常需要回答“这个 URL 属于哪一类资源”。如果用字符串 <code>startsWith(&#x27;/users/&#x27;)</code> 或手写正则，容易把 <code>/users/123/edit</code>、查询参数、端口和编码差异处理错。<code>URLPattern</code> 提供了按 URL 各组成部分匹配的声明式方式，但它只是匹配器，不会替你加载组件、管理历史记录或决定权限。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> userPattern = <span class="hljs-keyword">new</span> <span class="hljs-title class_">URLPattern</span>(
   { <span class="hljs-attr">pathname</span>: <span class="hljs-string">&#x27;/users/:id&#x27;</span> },
   <span class="hljs-string">&#x27;https://example.com&#x27;</span>,
@@ -44,7 +51,8 @@
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> assetPattern = <span class="hljs-keyword">new</span> <span class="hljs-title class_">URLPattern</span>({
   <span class="hljs-attr">protocol</span>: <span class="hljs-string">&#x27;https&#x27;</span>,
   <span class="hljs-attr">hostname</span>: <span class="hljs-string">&#x27;cdn.example.com&#x27;</span>,
-  <span class="hljs-attr">pathname</span>: <span class="hljs-string">&#x27;/assets/:name.:ext&#x27;</span>,
+  <span class="hljs-comment">// 具名分组默认按非贪婪方式匹配，多段扩展名要用显式正则约束</span>
+  <span class="hljs-attr">pathname</span>: <span class="hljs-string">&#x27;/assets/:name([^/]+)\\.:ext([a-z0-9]+)&#x27;</span>,
 });
 
 <span class="hljs-keyword">const</span> match = assetPattern.<span class="hljs-title function_">exec</span>(
@@ -52,8 +60,9 @@
 );
 
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(match?.<span class="hljs-property">pathname</span>.<span class="hljs-property">groups</span>);
-<span class="hljs-comment">// { name: &#x27;app&#x27;, ext: &#x27;js&#x27; }</span>
+<span class="hljs-comment">// { name: &#x27;app.8f3a&#x27;, ext: &#x27;js&#x27; }</span>
 </code></pre></div>
+<p>如果写成 <code>&#x27;/assets/:name.:ext&#x27;</code>，<code>name</code> 会尽早停在第一个点，<code>ext</code> 得到 <code>&#x27;8f3a.js&#x27;</code>。文件名含多个点时，显式正则比默认分组更可预测。</p>
 <p>没有写出的部分通常使用宽松匹配，不能误以为“只写 pathname 就自动限制同源”。服务 Worker、图片代理和跳转处理器要显式校验 origin、协议和允许的主机；匹配成功只是形状符合，不代表请求可信。</p>
 <p>路径参数可以表达一段动态值，但不要把它当成解码和业务校验的替代品。拿到 <code>groups.id</code> 后仍要验证字符集、长度、数值范围和资源权限：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">readUserId</span>(<span class="hljs-params">url, pattern</span>) {
@@ -118,9 +127,10 @@
 <p><code>groups</code> 中的值不是任意可信文本，也不应直接拼进 HTML、SQL、shell 命令或跳转地址。用于生成链接时应让 <code>URL</code> 和 <code>URLSearchParams</code> 负责编码，并限制协议和目标 origin，避免把匹配后的参数变成开放重定向或注入入口。</p>
 <h2>Service Worker 中的使用边界</h2>
 <p>Service Worker 可以用 URLPattern 判断哪些请求交给缓存策略，但缓存命中仍需考虑 HTTP 方法、请求头、用户身份和响应的共享性：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> staticAsset = <span class="hljs-keyword">new</span> <span class="hljs-title class_">URLPattern</span>({
-  <span class="hljs-attr">origin</span>: <span class="hljs-variable language_">self</span>.<span class="hljs-property">location</span>.<span class="hljs-property">origin</span>,
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// URLPatternInit 没有 origin 字段；用 baseURL 把协议、主机和端口固定为当前源</span>
+<span class="hljs-keyword">const</span> staticAsset = <span class="hljs-keyword">new</span> <span class="hljs-title class_">URLPattern</span>({
   <span class="hljs-attr">pathname</span>: <span class="hljs-string">&#x27;/assets/*&#x27;</span>,
+  <span class="hljs-attr">baseURL</span>: <span class="hljs-variable language_">self</span>.<span class="hljs-property">location</span>.<span class="hljs-property">origin</span>,
 });
 
 <span class="hljs-variable language_">self</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;fetch&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {

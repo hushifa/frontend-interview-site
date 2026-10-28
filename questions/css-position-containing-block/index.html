@@ -26,8 +26,15 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">absolute、fixed 和 sticky 的定位参照是什么？</span></nav><h1 tabindex="-1">absolute、fixed 和 sticky 的定位参照是什么？</h1><p class="reading-summary">absolute 相对其绝对定位包含块定位，fixed 通常相对视口但可能受 transform 等祖先影响，sticky 则同时受最近滚动容器和自身包含块边界约束。三者不能统一理解成相对父元素。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p><code>top: 0</code> 只说明“距离某个参照区域的顶部为 0”，没有说明这个区域是谁。定位错位时，首先要找的是<strong>包含块</strong>：浏览器用来计算元素尺寸和位置的参照矩形。它不一定是 DOM 的直接父元素，也不一定是整个屏幕。</p>
-<h3>absolute：找建立绝对定位包含块的祖先</h3>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">absolute、fixed 和 sticky 的定位参照是什么？</span></nav><h1 tabindex="-1">absolute、fixed 和 sticky 的定位参照是什么？</h1><p class="reading-summary">absolute 相对其绝对定位包含块定位，fixed 通常相对视口但可能受 transform 等祖先影响，sticky 则同时受最近滚动容器和自身包含块边界约束。三者不能统一理解成相对父元素。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>定位错位先找包含块：absolute 通常相对最近建立定位包含块的祖先的 padding box。</li>
+<li>非 <code>none</code> 的 <code>transform</code>、某些 <code>contain</code> 和 <code>will-change</code> 也会建立包含块，甚至让 fixed 元素不再相对视口。</li>
+<li>sticky 在流中占位，需要设置所在轴的偏移（如 <code>top: 0</code>），并受最近滚动容器和自身包含块范围限制。</li>
+<li>sticky 不生效时检查偏移、祖先的 overflow 和可活动空间。</li>
+</ul>
+<p><code>top: 0</code> 只说明“距离某个参照区域的顶部为 0”，没有说明这个区域是谁。定位错位时，首先要找的是<strong>包含块</strong>：浏览器用来计算元素尺寸和位置的参照矩形。它不一定是 DOM 的直接父元素，也不一定是整个屏幕。</p>
+<h2>absolute：找建立绝对定位包含块的祖先</h2>
 <p>常见做法是在卡片上设置 <code>position: relative</code>，让右上角的徽章相对卡片定位：</p>
 <div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">article</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;card&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;badge&quot;</span>&gt;</span>新内容<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
@@ -50,7 +57,7 @@
 <p><code>.card</code> 仍然占据正常流中的位置，单独设置 <code>position: relative</code> 而不偏移，不会把它移走；<code>.badge</code> 脱离正常流，不会为自己预留一行。卡片顶部的内边距是特意给徽章腾出的空间。</p>
 <p>对于这种普通块级定位祖先，绝对定位包含块通常由祖先的 padding box 边缘形成。<code>top: 0</code> 不是“放到祖先内容区文字起点”，不能忽略祖先的内边距和边框。</p>
 <p>如果没有相应祖先，绝对定位会回到初始包含块。只记“最近非 static 祖先”仍然不够：<code>transform</code> 非 <code>none</code>、某些 <code>contain</code>、相关 <code>will-change</code> 等条件，也可能建立绝对定位包含块，即便祖先本身没有改 <code>position</code>。</p>
-<h3>fixed：通常固定在视口，但有例外</h3>
+<h2>fixed：通常固定在视口，但有例外</h2>
 <div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.help</span> {
   <span class="hljs-attribute">position</span>: fixed;
   <span class="hljs-attribute">right</span>: <span class="hljs-number">1rem</span>;
@@ -66,7 +73,7 @@
 <p>这个非 <code>none</code> 的 <code>transform</code> 会为固定定位后代建立包含块。即使 <code>translateZ(0)</code> 看起来没有移动任何东西，按钮也可能变成相对 <code>.panel</code> 定位，随这个面板一起滚动。</p>
 <p>这也是“给祖先加了一个性能优化样式，悬浮按钮突然不悬浮”的常见原因。<code>contain: layout</code>、<code>contain: paint</code> 等条件也需要检查；<code>filter</code>、<code>perspective</code> 相关行为还要结合目标浏览器确认。仅在父级加 <code>position: relative</code>，则不会像 <code>transform</code> 一样自动把普通 fixed 后代的参照改到父级。</p>
 <p>组件库把浮层通过 Portal 挂到更靠外的容器，常常是为了避开这样的祖先条件。但 Portal 只改变挂载位置，不会自动解决所有遮挡、裁剪和交互问题。</p>
-<h3>sticky：在流中占位，再受滚动阈值约束</h3>
+<h2>sticky：在流中占位，再受滚动阈值约束</h2>
 <p><code>sticky</code> 最适合章节标题、表头、目录等“开始跟着内容走，到了某个位置再暂时停住”的元素。</p>
 <div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;reader&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">section</span>&gt;</span>
@@ -91,7 +98,7 @@
 </code></pre></div>
 <p>当 <code>.reader</code> 的实际内容超过限高时，它成为可滚动区域。标题先按正常流排版，占位不消失；滚动到顶部阈值后，浏览器调整标题的视觉位置，使其在允许范围内贴住这个滚动区域顶部。</p>
 <p>它不是一触发就永久变成 fixed。标题还要留在自身包含块的边界范围内，章节滚动到结尾时，不能无限停留在上方。示例如果只有一小段文字、不足以滚动，就看不到吸顶过程。</p>
-<h3>sticky 没生效，应该检查什么</h3>
+<h2>sticky 没生效，应该检查什么</h2>
 <p>先检查希望吸附的轴上有没有非 <code>auto</code> 的偏移，比如垂直方向的 <code>top: 0</code>。只写 <code>position: sticky</code>，该轴两端偏移仍为 <code>auto</code>，不会得到期待的粘性效果。</p>
 <p>然后沿祖先检查 <code>overflow</code>。最近带滚动机制的祖先可能是 <code>overflow: auto</code>、<code>scroll</code> 或 <code>hidden</code> 的盒子，即使它当前并没有实际滚动。一个为了裁切内容而加入的 <code>overflow: hidden</code> 容器，就可能让 sticky 不再跟随页面滚动。单独设置某一轴的 overflow 还可能影响另一轴的计算值，要看 DevTools 的计算结果，而不只看源码。</p>
 <p><code>overflow: clip</code> 单独使用时不建立滚动容器，与 <code>hidden</code> 不同，但它仍会裁切内容，也不支持相同的程序化滚动用途，不能不分析需求就直接替换。</p>

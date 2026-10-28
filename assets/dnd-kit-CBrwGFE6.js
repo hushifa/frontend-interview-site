@@ -1,0 +1,2 @@
+var e={notesHtml:`<p>适合列表排序、拖放区域和自定义拖拽交互。多框架适配属于新架构的 <code>@dnd-kit/dom</code> 系列包，旧版 <code>@dnd-kit/core</code> 只支持 React，两套 API 不同，安装包要与文档版本匹配。</p>
+<p>拖拽之外还要提供键盘替代、触摸支持、取消和数据持久化，并避免与页面滚动冲突。</p>`};export{e as default};

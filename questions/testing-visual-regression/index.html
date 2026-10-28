@@ -11,49 +11,77 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="测试面试题：通过稳定环境、截图范围和差异阈值捕获视觉回归，同时避免把字体和动画波动当成真实缺陷。" />
-    <title>Playwright 视觉回归的差异阈值和基线怎样维护？ · 前端知库</title>
+    <meta name="description" content="测试面试题：把组件状态整理成可单独渲染的用例，用开源工具逐个截图比较；基线的归属、更新评审和清理决定了视觉测试能否长期维护。" />
+    <title>组件级视觉测试怎样组织用例和管理基线？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/testing-visual-regression/" />
     <meta name="robots" content="index,follow" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
-    <meta property="og:title" content="Playwright 视觉回归的差异阈值和基线怎样维护？ · 前端知库" />
-    <meta property="og:description" content="测试面试题：通过稳定环境、截图范围和差异阈值捕获视觉回归，同时避免把字体和动画波动当成真实缺陷。" />
+    <meta property="og:title" content="组件级视觉测试怎样组织用例和管理基线？ · 前端知库" />
+    <meta property="og:description" content="测试面试题：把组件状态整理成可单独渲染的用例，用开源工具逐个截图比较；基线的归属、更新评审和清理决定了视觉测试能否长期维护。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/testing-visual-regression/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/testing-visual-regression/#webpage","url":"https://fe.hushifa.top/questions/testing-visual-regression/","name":"Playwright 视觉回归的差异阈值和基线怎样维护？ · 前端知库","description":"测试面试题：通过稳定环境、截图范围和差异阈值捕获视觉回归，同时避免把字体和动画波动当成真实缺陷。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/testing-visual-regression/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/testing-visual-regression/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"测试面试题","item":"https://fe.hushifa.top/topics/testing/"},{"@type":"ListItem","position":3,"name":"Playwright 视觉回归的差异阈值和基线怎样维护？","item":"https://fe.hushifa.top/questions/testing-visual-regression/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/testing-visual-regression/#webpage","url":"https://fe.hushifa.top/questions/testing-visual-regression/","name":"组件级视觉测试怎样组织用例和管理基线？ · 前端知库","description":"测试面试题：把组件状态整理成可单独渲染的用例，用开源工具逐个截图比较；基线的归属、更新评审和清理决定了视觉测试能否长期维护。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/testing-visual-regression/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/testing-visual-regression/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"测试面试题","item":"https://fe.hushifa.top/topics/testing/"},{"@type":"ListItem","position":3,"name":"组件级视觉测试怎样组织用例和管理基线？","item":"https://fe.hushifa.top/questions/testing-visual-regression/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/testing/">测试面试题</a><span aria-hidden="true">/</span><span aria-current="page">Playwright 视觉回归的差异阈值和基线怎样维护？</span></nav><h1 tabindex="-1">Playwright 视觉回归的差异阈值和基线怎样维护？</h1><p class="reading-summary">通过稳定环境、截图范围和差异阈值捕获视觉回归，同时避免把字体和动画波动当成真实缺陷。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>视觉测试失败后，最重要的问题是“差异为什么出现”，而不是“怎样让 CI 变绿”。基线代表团队确认过的外观预期；把每次新截图自动覆盖进去，会让视觉回归失去判断标准。</p>
-<p>在环境和数据已经稳定的前提下，再讨论阈值、差异分析与基线更新，才能避免把真实问题当作噪声消掉。</p>
-<h3>三种阈值不是同一个参数</h3>
-<p>Playwright 的截图断言可以使用如下选项，具体数字应根据被测范围与真实噪声选择：</p>
-<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByTestId</span>(<span class="hljs-string">&#x27;summary-card&#x27;</span>)).<span class="hljs-title function_">toHaveScreenshot</span>(<span class="hljs-string">&#x27;summary-card.png&#x27;</span>, {
-  <span class="hljs-attr">threshold</span>: <span class="hljs-number">0.15</span>,
-  <span class="hljs-attr">maxDiffPixels</span>: <span class="hljs-number">20</span>,
-});
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/testing/">测试面试题</a><span aria-hidden="true">/</span><span aria-current="page">组件级视觉测试怎样组织用例和管理基线？</span></nav><h1 tabindex="-1">组件级视觉测试怎样组织用例和管理基线？</h1><p class="reading-summary">把组件状态整理成可单独渲染的用例，用开源工具逐个截图比较；基线的归属、更新评审和清理决定了视觉测试能否长期维护。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>组件级视觉测试按状态单独渲染和截图，失败时能直接定位到组件和状态。</li>
+<li>用例来自组件状态清单，一个 story 固定一组 props 和数据。</li>
+<li>固定日期等输入，避免基线随时间变化。</li>
+<li>状态按风险选取，不穷举所有组合。</li>
+</ul>
+<p>页面级截图一次覆盖很多组件，任何一处变化都会让整张图失败，定位成本高。组件级视觉测试把每个关键状态单独渲染、单独截图，失败时能直接看出是哪个组件的哪个状态变了。页面级截图稳定化和阈值选择见“视觉回归测试如何减少无意义的截图差异？”，这里只讲组件用例和基线管理。</p>
+<h2>用例来自组件状态清单</h2>
+<p>先为组件列出需要守住的外观状态，再让每个状态可以独立渲染。Storybook 的 story 就是这种形式：一个 story 固定一组 props 和数据，等于一个视觉用例。</p>
+<div class="not-prose code-block"><div class="code-language">TSX</div><pre><code class="hljs language-tsx"><span class="hljs-comment">// DatePicker.stories.tsx</span>
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> { <span class="hljs-title class_">Meta</span>, <span class="hljs-title class_">StoryObj</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@storybook/react-vite&#x27;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">DatePicker</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./DatePicker&#x27;</span>;
+
+<span class="hljs-keyword">const</span> meta = { <span class="hljs-attr">component</span>: <span class="hljs-title class_">DatePicker</span> } <span class="hljs-keyword">satisfies</span> <span class="hljs-title class_">Meta</span>&lt;<span class="hljs-keyword">typeof</span> <span class="hljs-title class_">DatePicker</span>&gt;;
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> meta;
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Story</span> = <span class="hljs-title class_">StoryObj</span>&lt;<span class="hljs-keyword">typeof</span> meta&gt;;
+
+<span class="hljs-comment">// 固定日期，避免“今天”让基线每天变化</span>
+<span class="hljs-keyword">const</span> today = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(<span class="hljs-string">&#x27;2026-01-15T00:00:00Z&#x27;</span>);
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title class_">Closed</span>: <span class="hljs-title class_">Story</span> = { <span class="hljs-attr">args</span>: { today } };
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title class_">Open</span>: <span class="hljs-title class_">Story</span> = { <span class="hljs-attr">args</span>: { today, <span class="hljs-attr">defaultOpen</span>: <span class="hljs-literal">true</span> } };
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title class_">Invalid</span>: <span class="hljs-title class_">Story</span> = { <span class="hljs-attr">args</span>: { today, <span class="hljs-attr">error</span>: <span class="hljs-string">&#x27;日期不能早于今天&#x27;</span> } };
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> <span class="hljs-title class_">LongLabel</span>: <span class="hljs-title class_">Story</span> = {
+  <span class="hljs-attr">args</span>: { today, <span class="hljs-attr">label</span>: <span class="hljs-string">&#x27;预计送达日期（以快递实际签收时间为准）&#x27;</span> },
+};
 </code></pre></div>
-<p>threshold 控制对应像素间允许的感知颜色差异，在比较阶段决定哪些像素算不同；maxDiffPixels 控制允许不同的像素数量；maxDiffPixelRatio 则以整张图片的比例表达数量容忍。</p>
-<p>threshold 为 0.15 不表示允许 15% 像素错误。一个很大的全页截图即使只允许很小比例，也可能容忍局部按钮消失涉及的大量像素。因此应结合截图面积和关键区域，而不是复制一个统一的大阈值到所有场景。</p>
-<p>如果字体整体变化产生大片差异，先检查字体和运行环境。靠放宽阈值掩盖它，可能同时放过文字截断与位置错误。</p>
-<h3>失败时一起看三张图</h3>
-<p>基线图描述预期，实际图描述当前渲染，差异图突出变化位置。三者结合才能看出是整个页面偏移、某个元素变化还是局部抗锯齿噪声。</p>
-<p>例如差异图显示后半页全部偏移，根因可能是顶部某段文字多换了一行；不能把每个受影响组件都当成独立失败。若只有数字不同，则检查时间和数据是否固定。若出现整片空白，先排查资源加载与错误状态，而不是批准新图。</p>
-<p>还应查看对应的 trace、控制台和业务断言。截图测试的失败可能源于页面根本没准备好，这时更新像素基线解决不了问题。</p>
-<h3>基线更新是一项需要说明的代码变化</h3>
-<p>确认 UI 改版符合预期后，可以按测试工具提供的更新方式生成新图，再把基线差异作为评审内容。评审应说明修改了哪些状态、视口和主题，而不是只提交一批难以追溯的 PNG。</p>
-<p>应尽量只更新本次明确变更的用例，不要把其他失败一起批量接受。第一次生成基线同样需要检查，因为工具只能记录当前外观，不知道设计是否正确。</p>
-<p>不同浏览器项目和平台要有明确的基线归属。浏览器或字体升级导致大量合理变化时，可以单独安排一次受控更新，避免与业务改版混在一起难以审查。</p>
-<h3>覆盖状态比堆截图数量更重要</h3>
-<p>一个日期选择器可以按关闭、打开、选择完成和错误状态建立少量关键基线，再覆盖最容易出问题的窄屏或长文案。并不需要机械穷举所有日期与所有像素尺寸。</p>
-<p>暗色主题、RTL、文本放大等是否进入矩阵，应由产品支持范围和风险决定。截图太多但没有明确目标，会增加维护噪声；只截图默认空页面，又可能完全漏掉真实交互状态。</p>
-<p>截图名应反映场景，fixture 数据应可复现。删除功能时清理相应旧基线，避免仓库保留没人再运行的“历史正确答案”。</p>
-<h3>对噪声的修复也要验证没有掩盖回归</h3>
-<p>使用 mask、注入测试样式或阈值调整后，检查关键区域是否仍然受测。可以有意识地制造一个小的布局错误，确认断言能失败，再撤销验证改动。</p>
-<p>不要把测试环境专用 CSS 改得与生产布局完全不同，否则得到的稳定截图可能已经不是用户看到的页面。必要的稳定化应尽量局部，并记录它排除了什么。</p>
-<p>可靠的视觉测试既能发现应发现的变化，也不会要求人每天批准大量无关差异。稳定输入、明确场景、合理阈值与认真审核缺一不可。</p></div><div class="answer-bottom"><a href="https://playwright.dev/docs/test-snapshots" target="_blank" rel="noreferrer">Playwright · Visual comparisons<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Playwright+%E8%A7%86%E8%A7%89%E5%9B%9E%E5%BD%92%E7%9A%84%E5%B7%AE%E5%BC%82%E9%98%88%E5%80%BC%E5%92%8C%E5%9F%BA%E7%BA%BF%E6%80%8E%E6%A0%B7%E7%BB%B4%E6%8A%A4%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9APlaywright+%E8%A7%86%E8%A7%89%E5%9B%9E%E5%BD%92%E7%9A%84%E5%B7%AE%E5%BC%82%E9%98%88%E5%80%BC%E5%92%8C%E5%9F%BA%E7%BA%BF%E6%80%8E%E6%A0%B7%E7%BB%B4%E6%8A%A4%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Atesting-visual-regression%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%B5%8B%E8%AF%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Ftesting-visual-regression%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Playwright 视觉回归的差异阈值和基线怎样维护？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/test-visual-regression/">视觉回归测试如何减少无意义的截图差异？</a></li><li><a href="/questions/testing-playwright-fixtures/">Playwright fixtures 解决了什么测试维护问题？</a></li><li><a href="/questions/testing-playwright-route/">Playwright route 的处理链与拦截范围怎样设计？</a></li><li><a href="/questions/test-e2e/">如何减少 Playwright 端到端测试的不稳定？</a></li></ul></nav></main></div></div>
+<p>状态选取看风险：关闭、展开、错误、禁用、长文案和窄容器通常比穷举所有日期更有价值。暗色主题、RTL 是否进入矩阵，由产品支持范围决定。</p>
+<h2>截图可以用开源工具完成</h2>
+<p>Storybook 官方的像素比较能力依赖 Chromatic 云服务。不使用云服务时，可以让 Playwright 逐个打开 story 的独立 iframe 页面截图：</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">import</span> { expect, test } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@playwright/test&#x27;</span>;
+
+<span class="hljs-keyword">const</span> stories = [<span class="hljs-string">&#x27;datepicker--closed&#x27;</span>, <span class="hljs-string">&#x27;datepicker--open&#x27;</span>, <span class="hljs-string">&#x27;datepicker--invalid&#x27;</span>];
+
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> id <span class="hljs-keyword">of</span> stories) {
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">`视觉：<span class="hljs-subst">${id}</span>`</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+    <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">goto</span>(<span class="hljs-string">`/iframe.html?id=<span class="hljs-subst">${id}</span>&amp;viewMode=story`</span>);
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">locator</span>(<span class="hljs-string">&#x27;#storybook-root&#x27;</span>)).<span class="hljs-title function_">toHaveScreenshot</span>(<span class="hljs-string">`<span class="hljs-subst">${id}</span>.png`</span>);
+  });
+}
+</code></pre></div>
+<p>截图范围限定在组件根节点，页面其他区域的变化不会干扰结果。story ID 列表也可以从 Storybook 构建出的 <code>index.json</code> 读取，避免新增状态后忘记登记。</p>
+<h2>基线归属要和运行环境绑定</h2>
+<p>同一个组件在不同浏览器、操作系统和字体下渲染结果不同。基线应按项目或平台分开存放，并固定生成基线的环境，通常是 CI 使用的同一个容器镜像。开发者本机生成的基线和 CI 不一致，会造成持续的假失败。</p>
+<p>浏览器或字体升级会带来大量合理差异，应单独安排一次受控的基线更新，不要和业务改动混在同一个提交里。</p>
+<h2>更新基线需要评审</h2>
+<p>更新基线等于修改“预期外观”，应和代码一起评审：</p>
+<ul>
+<li>只更新本次明确改动的组件状态，不顺手接受其他失败；</li>
+<li>提交说明写清改了哪些状态、主题和视口；</li>
+<li>第一次生成的基线也要人工确认，工具只记录当前外观，不知道设计是否正确；</li>
+<li>删除组件或状态时同步删除旧基线，避免仓库保留没人运行的图片。</li>
+</ul>
+<h2>组件级和页面级怎样分工</h2>
+<p>组件级视觉测试适合守住设计系统和通用组件的外观，用例小、定位快。它看不到组件组合后的间距、页面布局和真实数据下的换行，这些仍需要少量关键页面截图来覆盖。两层都只证明“外观与基线一致”，可访问性、交互和业务正确性还要靠对应的测试。</p></div><div class="answer-bottom"><a href="https://storybook.js.org/docs/writing-tests/visual-testing" target="_blank" rel="noreferrer">Storybook · Visual tests<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E7%BB%84%E4%BB%B6%E7%BA%A7%E8%A7%86%E8%A7%89%E6%B5%8B%E8%AF%95%E6%80%8E%E6%A0%B7%E7%BB%84%E7%BB%87%E7%94%A8%E4%BE%8B%E5%92%8C%E7%AE%A1%E7%90%86%E5%9F%BA%E7%BA%BF%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E7%BB%84%E4%BB%B6%E7%BA%A7%E8%A7%86%E8%A7%89%E6%B5%8B%E8%AF%95%E6%80%8E%E6%A0%B7%E7%BB%84%E7%BB%87%E7%94%A8%E4%BE%8B%E5%92%8C%E7%AE%A1%E7%90%86%E5%9F%BA%E7%BA%BF%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Atesting-visual-regression%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%B5%8B%E8%AF%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Ftesting-visual-regression%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：组件级视觉测试怎样组织用例和管理基线？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/test-visual-regression/">视觉回归测试如何减少无意义的截图差异？</a></li><li><a href="/questions/test-user-behavior/">组件测试为什么应优先测试用户可见行为？</a></li><li><a href="/questions/testing-library-queries/">Testing Library 查询方式为什么优先按用户可见语义？</a></li><li><a href="/questions/testing-component/">前端组件测试应该围绕哪些用户行为？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -26,9 +26,16 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/web-apis/">Web API面试题</a><span aria-hidden="true">/</span><span aria-current="page">AbortController 能取消什么，不能取消什么？</span></nav><h1 tabindex="-1">AbortController 能取消什么，不能取消什么？</h1><p class="reading-summary">AbortController 通过 signal 向支持它的 API 传递取消信号，例如 fetch、部分流操作与事件监听清理。它不是能强制终止任意 JavaScript 函数的机制，普通 Promise 也不会因为外部创建了 controller 就自动取消。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>AbortController 提供一个可以触发的取消信号。真正停止工作的是接收 signal 并实现了取消逻辑的 API，而不是 controller 强行杀死任意 JavaScript。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/web-apis/">Web API面试题</a><span aria-hidden="true">/</span><span aria-current="page">AbortController 能取消什么，不能取消什么？</span></nav><h1 tabindex="-1">AbortController 能取消什么，不能取消什么？</h1><p class="reading-summary">AbortController 通过 signal 向支持它的 API 传递取消信号，例如 fetch、部分流操作与事件监听清理。它不是能强制终止任意 JavaScript 函数的机制，普通 Promise 也不会因为外部创建了 controller 就自动取消。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>AbortController 通过 signal 向支持它的 API 传递取消信号，例如 fetch 和事件监听。</li>
+<li>它不能强制终止任意 JavaScript 函数，自定义任务要主动订阅 signal 并清理。</li>
+<li>fetch 被取消不代表服务端已回滚。</li>
+<li>取消旧请求后仍要防止旧结果写回界面。</li>
+</ul>
+<p>AbortController 提供一个可以触发的取消信号。真正停止工作的是接收 signal 并实现了取消逻辑的 API，而不是 controller 强行杀死任意 JavaScript。</p>
 <p>fetch、部分流操作和事件监听器支持 signal；普通 Promise、同步循环和你自己写的异步函数，不会因为旁边创建了一个 controller 就自动取消。</p>
-<h3>Controller 发出信号，任务决定怎样响应</h3>
+<h2>Controller 发出信号，任务决定怎样响应</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> controller = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AbortController</span>();
 <span class="hljs-keyword">const</span> signal = controller.<span class="hljs-property">signal</span>;
 
@@ -39,11 +46,11 @@ controller.<span class="hljs-title function_">abort</span>();
 </code></pre></div>
 <p>取消是单向状态变化，已经 aborted 的 signal 不能重置。新的一轮请求通常使用新的 controller；多个相关任务也可以共用同一个 signal，让一次取消结束整组工作。</p>
 <p>abort 可以传入自定义 reason，部分组合信号还会产生 TimeoutError 等原因。因此处理错误不能永远只检查一个固定错误名，也不能把任何 catch 都解释成用户取消。</p>
-<h3>fetch 取消不等于服务端回滚</h3>
+<h2>fetch 取消不等于服务端回滚</h2>
 <p>把 signal 传给 fetch 后，取消可以让请求或响应体消费失败。即使 fetch 已返回 Response，后续读取 body 时仍可能因取消而拒绝。</p>
 <p>但服务器可能已经接收并执行了操作。用户点取消上传、创建订单请求超时，都不能直接推断远端没有发生修改。写操作需要幂等标识、状态查询或明确的撤销接口，客户端取消只是其中一部分。</p>
 <p>同样，Promise.race 与一个超时 Promise 竞争，只会让外层先得到超时结果，不会自动停止输掉的请求。要结束实际工作，还需要对应 signal 或其他取消协议。</p>
-<h3>自定义任务要主动订阅并清理</h3>
+<h2>自定义任务要主动订阅并清理</h2>
 <p>下面让一个等待函数真正响应取消：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">delay</span>(<span class="hljs-params">ms, signal</span>) {
   <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
@@ -67,7 +74,7 @@ controller.<span class="hljs-title function_">abort</span>();
 </code></pre></div>
 <p>先检查已经取消的状态，因为给已取消 signal 新增监听不会补发过去的 abort 事件。正常完成时移除监听，取消时清理计时器，避免任务结束后继续保留无用工作。</p>
 <p>长循环可以在合理位置调用 throwIfAborted，但同步 JavaScript 不会被取消事件抢占。如果一直不让出主线程，用户点击取消也无法及时得到处理，需要分片或其他执行模型。</p>
-<h3>取消旧请求后仍应防止旧结果提交</h3>
+<h2>取消旧请求后仍应防止旧结果提交</h2>
 <p>搜索输入快速变化时，取消上一轮请求可以减少无用下载。不过旧任务可能已经完成网络阶段，正在做不支持取消的后处理；也可能某个依赖根本忽略 signal。</p>
 <p>因此更新界面前还应检查任务版本或请求身份，确保当前结果仍对应最新输入。取消负责减少工作，身份检查负责防止过期提交，二者解决不同问题。</p>
 <p>现代环境可用 AbortSignal.timeout 设置超时，或 AbortSignal.any 合并用户取消和超时信号；使用前仍应核对目标支持。超时也不是对所有后台、暂停状态下的精确墙钟保证，应按 API 行为设计体验。</p>

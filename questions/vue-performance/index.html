@@ -26,9 +26,11 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue 大型页面应从哪些方面优化更新开销？</span></nav><h1 tabindex="-1">Vue 大型页面应从哪些方面优化更新开销？</h1><p class="reading-summary">更新优化应先定位计算、组件更新、DOM 数量或布局绘制的真实成本，再选择稳定 props、派生数据、浅层状态或虚拟化。缓存与编译优化不能替代清楚的数据边界，也不能用错误的跳过更新换取表面流畅。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>页面卡顿可能来自不同阶段：输入后执行了昂贵筛选，很多子组件收到变化的 prop，大量 DOM 需要布局，或者只是网络结果尚未到达。先用浏览器 Performance、Vue DevTools 等观察真实交互，再决定改哪一层。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue 大型页面应从哪些方面优化更新开销？</span></nav><h1 tabindex="-1">Vue 大型页面应从哪些方面优化更新开销？</h1><p class="reading-summary">更新优化应先定位计算、组件更新、DOM 数量或布局绘制的真实成本，再选择稳定 props、派生数据、浅层状态或虚拟化。缓存与编译优化不能替代清楚的数据边界，也不能用错误的跳过更新换取表面流畅。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<p>先用 Vue DevTools 和浏览器 Performance 面板定位瓶颈，判断是 JS 计算、组件更新范围、DOM 数量还是布局绘制。常用手段：保持 props 稳定，避免子组件无谓更新；大型只读数据用 shallowRef 或 markRaw；长列表用虚拟滚动；静态内容用 v-once，按条件跳过更新用 v-memo；路由和大组件用异步组件拆包。</p>
+<p>页面卡顿可能来自不同阶段：输入后执行了昂贵筛选，很多子组件收到变化的 prop，大量 DOM 需要布局，或者只是网络结果尚未到达。先用浏览器 Performance、Vue DevTools 等观察真实交互，再决定改哪一层。</p>
 <p>“少渲染几个组件”和“首屏少下载一些 JavaScript”也不是同一个优化。代码分割、静态生成和 SSR 可以改善交付路径，但不能自动解决每次输入时的长任务。</p>
-<h3>让子组件只接收真正变化的值</h3>
+<h2>让子组件只接收真正变化的值</h2>
 <p>列表行如果每行都接收 activeId，那么选中项改变时，所有行都看到这个 prop 改变。可以由父级先算出每行自己的 active，再传给子组件：</p>
 <div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;!-- TopicRow.vue --&gt;
 &lt;script setup&gt;
@@ -67,11 +69,11 @@ const topics = [
 </code></pre></div>
 <p>从 HTML 切换到 CSS 时，主要变化的是旧行的 active 从 true 变 false、新行从 false 变 true，其余行的相关 props 保持不变。日志可用于观察这个小例子，不应作为整个页面的性能基准。</p>
 <p>这不意味着父级无需遍历列表，也不意味着子组件永远不会因自己的响应式依赖而更新。它只是让父级传递的变化范围更符合业务事实。</p>
-<h3>减少重复计算与无意义的身份变化</h3>
+<h2>减少重复计算与无意义的身份变化</h2>
 <p>筛选、排序和统计通常可以通过 computed 表达，而不是用多个 watch 维护重复结果。依赖不变时可复用计算，相关值变化时再更新。</p>
 <p>但每次计算都创建一个新对象或新数组，可能让下游看到新的身份，即使业务内容没变。Vue 的计算稳定性优化也需要结合实际返回值理解，不能假定所有内容相同的新对象都会自动被深度比较并跳过。</p>
 <p>频繁传递新配置对象、把整份大数据传给每个小组件，或让一个输入影响整页无关内容，都值得先检查。缩小依赖与组件更新范围，通常比到处添加缓存指令更容易保持正确。</p>
-<h3>浅层响应式必须配合清楚的更新约定</h3>
+<h2>浅层响应式必须配合清楚的更新约定</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { nextTick, shallowRef, watchEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
 
 <span class="hljs-keyword">const</span> rows = <span class="hljs-title function_">shallowRef</span>([{ <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;原内容&#x27;</span> }]);
@@ -89,19 +91,19 @@ rows.<span class="hljs-property">value</span> = [{ ...rows.<span class="hljs-pro
 </code></pre></div>
 <p>shallowRef 不会按深层响应式方式追踪内部对象修改，通常通过替换根值表达新版本。某些场景也可以显式通知，但必须由接口清楚规定，不能一边依赖深层修改一边期待浅层 API 自动发现。</p>
 <p>如果其他无关更新顺便重新读取了内部数据，界面可能偶尔显现出那次修改，这不表示它建立了正确的通知关系。浅层 API 适合按不可变方式管理的大结构或外部对象，不是一个加上就必然更快的开关。</p>
-<h3>大列表首先面对 DOM 规模</h3>
+<h2>大列表首先面对 DOM 规模</h2>
 <p>几万行即使每行只有很少计算，创建、布局、绘制和保留节点也会有成本。分页或虚拟列表可以减少同时存在的 DOM，但需要处理滚动位置、行高、焦点、键盘导航和动态内容。</p>
 <p>虚拟化还可能卸载不可见行，因此本地草稿不能只放在随时会消失的行组件里。需要按稳定 ID 保存在合适位置，并设计返回可见区时怎样恢复。</p>
 <p>稳定 key 能保持正确身份，但不能把一万个实际节点变成十个。更新身份和节点数量是不同问题。</p>
-<h3>v-once、v-memo 需要完整的正确性条件</h3>
+<h2>v-once、v-memo 需要完整的正确性条件</h2>
 <p>v-once 适合真正只需要初始呈现的内容，后续相关状态变化不会按普通方式更新这段子树。v-memo 可以按依赖条件跳过一部分更新，但依赖必须包含决定这段内容需要变化的因素。</p>
 <p>如果为了少更新而漏掉标题、权限或其他真实依赖，就可能留下旧界面。它们适合测量后确认的局部优化，不应成为修复错误状态设计的默认办法。</p>
 <p>大型 v-for 场景还应按文档把指令与列表结构放在正确位置。只看某一次操作快了，不足以证明所有后续变化都仍然正确。</p>
-<h3>组件库要把插槽成本和性能契约说清楚</h3>
+<h2>组件库要把插槽成本和性能契约说清楚</h2>
 <p>表格单元格插槽可能由业务方渲染输入框、图表或编辑器，组件库不能假设它永远是廉价纯文本，也不能为了优化跳过必需的插槽更新。提供分页、虚拟化和按需渲染入口时，应同时说明动态行高、固定列、展开行以及表单草稿的限制。</p>
 <p>对于虚拟化的可交互内容，需要明确焦点移出可见范围后的策略，以及总行数和当前位置怎样向辅助技术表达。不能只减少 DOM 数量，却让正在编辑的行被卸载后丢失输入。原生表格与交互式 grid 的键盘契约不同，不应为了虚拟化随意添加 role 后忽略交互实现。</p>
 <p>组件库文档可以记录测量所用的数据规模、浏览器与设备条件、插槽类型和推荐使用方式；这不是承诺任意业务插槽都能达到同样速度。回归场景应覆盖筛选、滚动、编辑、错误状态和卸载后的资源回收，不能只比较默认截图。</p>
-<h3>响应式之外还有很多成本</h3>
+<h2>响应式之外还有很多成本</h2>
 <p>每帧交替读布局、改样式、再读布局，会造成同步布局压力；复杂阴影、大图片和动画也可能让绘制昂贵。网络瀑布、重复请求和过多依赖则需要数据层与构建层处理。</p>
 <p>组件隐藏后仍运行轮询、观察器和计时器，也会消耗资源。优化应包含卸载、停用与后台场景，而不是只测第一次看到页面的速度。</p>
 <p>最后建立可重复的交互场景，例如连续输入、切换选中项、滚动大列表或打开复杂面板，比较改动前后的耗时、内存与正确性。优化的结果应是用户更快得到正确反馈，而不是单纯让某个更新计数变小。</p></div><div class="answer-bottom"><a href="https://vuejs.org/guide/best-practices/performance.html" target="_blank" rel="noreferrer">Vue · Performance<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vue+%E5%A4%A7%E5%9E%8B%E9%A1%B5%E9%9D%A2%E5%BA%94%E4%BB%8E%E5%93%AA%E4%BA%9B%E6%96%B9%E9%9D%A2%E4%BC%98%E5%8C%96%E6%9B%B4%E6%96%B0%E5%BC%80%E9%94%80%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVue+%E5%A4%A7%E5%9E%8B%E9%A1%B5%E9%9D%A2%E5%BA%94%E4%BB%8E%E5%93%AA%E4%BA%9B%E6%96%B9%E9%9D%A2%E4%BC%98%E5%8C%96%E6%9B%B4%E6%96%B0%E5%BC%80%E9%94%80%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-performance%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-performance%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vue 大型页面应从哪些方面优化更新开销？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-ref-reactive/">Vue 3 中 ref 和 reactive 有什么区别？</a></li><li><a href="/questions/vue-computed-watch/">computed、watch 和 watchEffect 应该如何选择？</a></li><li><a href="/questions/vue-nexttick/">修改状态后，为什么有时需要 await nextTick()？</a></li><li><a href="/questions/vue-props/">为什么 Vue 提倡 props 单向数据流？</a></li></ul></nav></main></div></div>

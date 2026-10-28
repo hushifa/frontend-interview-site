@@ -1,0 +1,60 @@
+var e={answerHtml:`<h2>简答</h2>
+<ul>
+<li>选单位先问尺寸应该跟谁一起变化：根字号、父级字号、视口还是容器。</li>
+<li>CSS <code>px</code> 是参考像素，不等于设备像素；页面缩放仍会放大 px 内容，但写死 px 的文字可能不跟随用户字号设置。</li>
+<li><code>rem</code> 相对根元素字号，<code>em</code> 在 font-size 上相对继承字号，在其他属性上相对元素自身字号，嵌套时会逐层放大。</li>
+<li>移动端视口变化要区分 <code>vh</code> 与 <code>svh</code>、<code>lvh</code>、<code>dvh</code> 等视口单位。</li>
+</ul>
+<p>选择单位并不是给它们排一个“先进程度”。真正要问的是：这个尺寸应该跟谁一起变化？细边框可能需要稳定的 CSS 像素，按钮内边距适合随按钮文字变化，文章宽度与页面区域相关，全屏面板则与视口相关。</p>
+<h2>px 不是物理屏幕上的一个发光点</h2>
+<p>CSS 的 <code>px</code> 是参考像素单位。高像素密度设备上，一个 CSS 像素可能对应多个设备像素；浏览器缩放也会影响这种关系。因此不能看到 <code>width: 100px</code> 就推断它一定占用 100 个物理像素。</p>
+<p><code>px</code> 也不等于“用户不能缩放”。正常的页面缩放会放大以 px 设置的内容。但如果大量文字写死 px，它们通常不会像依赖根字体的 rem 一样，直接跟随用户修改的默认字体大小。是否尊重字体偏好、是否允许页面缩放，是相关但不同的问题。</p>
+<h2>rem 和 em 的差别，主要在参照对象</h2>
+<p><code>rem</code> 通常相对根元素的计算字体大小。假设根字体为 <code>16px</code>，<code>1.5rem</code> 就是 <code>24px</code>；改成 <code>20px</code>，同一个值变成 <code>30px</code>。</p>
+<p><code>em</code> 在 <code>font-size</code> 上相对继承来的字体大小，通常就是父级字体；用在多数其他长度属性上，则相对元素自己的计算字体大小。</p>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.frame</span> {
+  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">20px</span>;
+}
+
+<span class="hljs-selector-class">.card</span> {
+  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">1.5em</span>;
+  <span class="hljs-attribute">padding</span>: <span class="hljs-number">1em</span>;
+  <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">0.5rem</span>;
+}
+</code></pre></div>
+<p>如果 <code>.card</code> 在 <code>.frame</code> 内，而且根字体是 <code>16px</code>，卡片字体为 <code>30px</code>，内边距也是 <code>30px</code>，圆角则为 <code>8px</code>。这里两个 <code>em</code> 没有使用同一个直接参照：字体先根据父级计算，内边距再根据卡片自己的字体计算。</p>
+<p>嵌套时重复写 <code>font-size: 1.2em</code> 会逐层放大。例如两层都是 1.2 倍，最终是 1.44 倍。想让全站字号和间距相对统一，可更多使用 rem；希望组件内的按钮 padding 跟着该按钮字号缩放，则 em 很合适。</p>
+<p>根元素自己的 <code>font-size</code> 使用 rem 时，要根据初始字体大小解析，不能让根字体依赖自己形成循环。也不要为了方便换算就假定所有用户根字体永远为 16px，或通过禁止缩放来维持设计稿比例。</p>
+<h2>百分比没有统一的“父级同方向尺寸”规则</h2>
+<p>百分比的参照由属性定义决定，常见例子如下：</p>
+<table><thead><tr><th>写法</th><th>需要确认的参照</th></tr></thead><tbody><tr><td><code>width: 50%</code></td><td>通常根据包含块宽度计算，不一定是直接父元素的内容宽度</td></tr><tr><td><code>height: 100%</code></td><td>受包含块高度是否明确及具体布局规则影响</td></tr><tr><td><code>font-size: 120%</code></td><td>相对继承来的字体大小</td></tr><tr><td>横排布局的 <code>padding-top: 10%</code></td><td>根据包含块宽度计算，不是高度</td></tr><tr><td><code>transform: translateX(50%)</code></td><td>相对变换参考盒的宽度，通常是元素自身的 border box</td></tr></tbody></table>
+<p>这解释了为什么父级高度由内容撑开时，给子级写 <code>height: 100%</code> 不一定能得到“占满屏幕”。先确认布局是否提供了可解析的高度，而不是继续给所有祖先堆 <code>100%</code>。</p>
+<p>它也解释了经典居中方法中两种百分比的不同：<code>left: 50%</code> 根据定位包含块偏移，<code>translateX(-50%)</code> 再根据元素自己的宽度往回移动一半。</p>
+<h2>移动端为什么 100vh 有时太高</h2>
+<p>浏览器地址栏、工具栏展开或收起后，用户实际能看到的页面区域会变化。较大的视口高度能覆盖工具栏收起后的空间，但在工具栏仍显示时，元素底部可能被挡住。</p>
+<p>现代视口单位把这些情况分开：</p>
+<ul>
+<li><code>svh</code>：小视口高度的百分之一，按浏览器动态界面展开时的较小空间计算。布局较稳定，界面收起后可能留出额外空间。</li>
+<li><code>lvh</code>：大视口高度的百分之一，按动态界面收起时的较大空间计算。展开界面时，部分内容可能超出可见区域。</li>
+<li><code>dvh</code>：动态视口高度的百分之一，随相关浏览器界面变化调整，能更贴近当前空间，但也可能在滚动时引发布局尺寸变化。</li>
+</ul>
+<p>当前常见实现中的 <code>vh</code> 对应大视口单位，不能依赖它自动解决工具栏遮挡。需要稳定的开屏区可以考虑 <code>min-height: 100svh</code>；需要跟随当前视口的面板可以考虑 <code>dvh</code>，但要评估调整尺寸时的体验。</p>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.page-shell</span> {
+  <span class="hljs-attribute">min-height</span>: <span class="hljs-number">100vh</span>;
+  <span class="hljs-attribute">min-height</span>: <span class="hljs-number">100</span>dvh;
+}
+</code></pre></div>
+<p>不支持 dvh 的环境会忽略第二条，保留第一条。这里用 <code>min-height</code> 而非固定 <code>height</code>，让长内容仍然有机会撑高页面，不会仅因超出一屏就被限制在固定高度里。</p>
+<p>虚拟键盘不一定按同样方式改变这些单位，取决于浏览器的布局视口、视觉视口和交互策略。不能把 <code>100dvh</code> 当成所有设备上的避让键盘方案；底部输入框还要实测键盘弹起、缩放和安全区域。安全区域内边距 <code>env(safe-area-inset-bottom)</code> 解决的也是另一类边缘遮挡问题。</p>
+<h2>响应式通常需要组合单位和约束</h2>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.article</span> {
+  <span class="hljs-attribute">width</span>: <span class="hljs-built_in">min</span>(<span class="hljs-number">100%</span> - <span class="hljs-number">2rem</span>, <span class="hljs-number">48rem</span>);
+  <span class="hljs-attribute">margin-inline</span>: auto;
+}
+
+<span class="hljs-selector-class">.article</span> <span class="hljs-selector-tag">h1</span> {
+  <span class="hljs-attribute">font-size</span>: <span class="hljs-built_in">clamp</span>(<span class="hljs-number">1.75rem</span>, <span class="hljs-number">1.25rem</span> + <span class="hljs-number">2vw</span>, <span class="hljs-number">3rem</span>);
+}
+</code></pre></div>
+<p>文章宽度在小容器中保留左右空间，在大容器中限制最大阅读宽度。标题大小在给定上下限之间随视口调整，而不是无限放大。</p>
+<p><code>clamp()</code> 的上下限也可能限制文字放大效果，因此仍需检查用户放大字号与缩放页面后的可读性。把所有 px 换成 rem，或者给所有宽度写百分比，都不能自动完成响应式；长文本、换行、溢出和布局切换仍需要独立设计。</p>`};export{e as default};

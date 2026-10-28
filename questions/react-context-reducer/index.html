@@ -26,9 +26,11 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">Context 与 useReducer 适合管理什么状态？</span></nav><h1 tabindex="-1">Context 与 useReducer 适合管理什么状态？</h1><p class="reading-summary">Context 负责把某个范围内的值提供给后代，useReducer 负责集中计算状态如何随动作变化。它们可以组合，但 Context 不自动存储数据，reducer 不执行副作用，也不天然等于全局缓存或高性能状态库。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>Context 与 useReducer 解决的是两个不同问题。Context 让深层组件读取祖先提供的值，减少中间层只为转交而接收 props；useReducer 则把“收到什么动作，下一状态是什么”集中到一个纯函数中。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">Context 与 useReducer 适合管理什么状态？</span></nav><h1 tabindex="-1">Context 与 useReducer 适合管理什么状态？</h1><p class="reading-summary">Context 负责把某个范围内的值提供给后代，useReducer 负责集中计算状态如何随动作变化。它们可以组合，但 Context 不自动存储数据，reducer 不执行副作用，也不天然等于全局缓存或高性能状态库。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<p>Context 解决“把值传给深层后代”，useReducer 解决“状态如何随动作变化”。常见组合是用 reducer 管状态，再用两个 Context 分别提供 state 和 dispatch。Context 值变化会让所有消费者重新渲染，高频更新的大状态更适合拆分 Context 或使用外部 store。reducer 必须是纯函数，副作用放在事件处理或 Effect 里。</p>
+<p>Context 与 useReducer 解决的是两个不同问题。Context 让深层组件读取祖先提供的值，减少中间层只为转交而接收 props；useReducer 则把“收到什么动作，下一状态是什么”集中到一个纯函数中。</p>
 <p>简单的主题、语言可以只用 Context 配合 state。更新动作多、多个字段需要保持关系时，reducer 更容易把规则组织清楚。它们组合后仍然是组件范围内的状态，不会自动成为跨页面永久存活的全局服务。</p>
-<h3>用任务列表把数据与动作一起组织</h3>
+<h2>用任务列表把数据与动作一起组织</h2>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { createContext, useContext, useReducer, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 
 <span class="hljs-keyword">const</span> <span class="hljs-title class_">TasksContext</span> = <span class="hljs-title function_">createContext</span>(<span class="hljs-literal">null</span>);
@@ -50,14 +52,15 @@
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">TasksProvider</span>(<span class="hljs-params">{ children }</span>) {
   <span class="hljs-keyword">const</span> [tasks, dispatch] = <span class="hljs-title function_">useReducer</span>(tasksReducer, []);
   <span class="hljs-keyword">return</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">TasksContext.Provider</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{tasks}</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">TasksDispatchContext.Provider</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{dispatch}</span>&gt;</span>
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">TasksContext</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{tasks}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">TasksDispatchContext</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{dispatch}</span>&gt;</span>
         {children}
-      <span class="hljs-tag">&lt;/<span class="hljs-name">TasksDispatchContext.Provider</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">TasksContext.Provider</span>&gt;</span></span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">TasksDispatchContext</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">TasksContext</span>&gt;</span></span>
   );
 }
 
+<span class="hljs-comment">// React 19 起可直接把 Context 当作提供者；&lt;Ctx.Provider&gt; 仍可用，官方计划将来弃用</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">useTasks</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">const</span> tasks = <span class="hljs-title function_">useContext</span>(<span class="hljs-title class_">TasksContext</span>);
   <span class="hljs-keyword">if</span> (tasks === <span class="hljs-literal">null</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;任务组件需要 TasksProvider&#x27;</span>);
@@ -125,19 +128,19 @@
 </code></pre></div>
 <p>任务名称的编辑草稿只属于 AddTask，因此仍放在局部 state。正式任务列表属于多个组件共同使用的状态，放在共同 Provider 中。完成数量能从 tasks 推导出来，就不再存一份需要手动保持一致的 count。</p>
 <p>动作把新增、切换与删除的意图集中表达。ID 在用户提交的事件处理器里生成，reducer 只根据输入返回结果，不读取随机数、不发请求，也不修改原数组。</p>
-<h3>reducer 是下一状态的计算器</h3>
+<h2>reducer 是下一状态的计算器</h2>
 <p>dispatch 把动作交给 React，reducer 计算下一状态。它不会同步改掉当前处理器中已经捕获的 tasks，也不返回一个等待渲染完成的 Promise。</p>
 <p>返回下一状态时要保持完整契约。对象状态不能只返回一个零散字段就期待自动浅合并；数组中未修改的项可以共享引用，修改的项则建立新对象。直接 push 原数组再返回原引用，会破坏状态快照和更新判断。</p>
 <p>开发检查可能再次调用 reducer 或初始化逻辑，因此它必须保持纯粹。需要服务端保存时，应在合适的事件、数据层或 Effect 中执行，再把结果转换成明确动作，而不是在 reducer 内直接产生副作用。</p>
-<h3>Context 传递的是值，不是自动存储系统</h3>
+<h2>Context 传递的是值，不是自动存储系统</h2>
 <p>useContext 读取组件上方最近的对应 Provider。没有 Provider 时才使用 createContext 的默认值；Provider 明确传入 undefined，不会自动改用默认值。</p>
 <p>例子用 null 作为缺少 Provider 的信号，让错误更早出现。也可以为主题等场景提供真正合理的默认值，但不应该用一个假的空 dispatch 掩盖 Provider 配置遗漏。</p>
 <p>Provider 位于哪里，就决定这份状态能活多久、谁能共享。两个独立 TasksProvider 会有两份任务列表；Provider 卸载后，本地 reducer 状态也不会只因为使用了 Context 就永久保存。</p>
-<h3>Context 更新与普通父级更新要分别理解</h3>
+<h2>Context 更新与普通父级更新要分别理解</h2>
 <p>Provider 的 value 通过 Object.is 比较。值发生变化时，读取这个 Context 的消费者需要接收新值，memo 不能阻止它们获得更新的 Context。</p>
 <p>把所有状态塞进一个巨大 value 对象，会让只需要一小部分数据的消费者也受到这个 Context 的变化影响。每次渲染都创建新的对象 value，也可能造成不必要的身份变化。可以按职责与变化频率拆分，或者在确有需要时稳定值的引用。</p>
 <p>示例把 tasks 与 dispatch 分成两个 Context。dispatch 身份稳定，只派发动作的组件不必订阅 tasks Context 的变化；但这不保证它永远不会因父组件、自己的 state 或其他依赖而渲染。拆分减少的是一类通知来源，不是万能的渲染屏障。</p>
-<h3>什么情况下不必使用这套组合</h3>
+<h2>什么情况下不必使用这套组合</h2>
 <p>只有一两个直接子组件需要的状态，普通 props 通常更清楚。仅为了减少一层传参就引入多个 Context，会增加隐含依赖与测试准备成本。</p>
 <p>服务端请求缓存涉及失效、去重、重试和后台刷新；跨标签页同步需要通信和冲突处理；高频外部数据可能需要更细粒度订阅。这些并不由 Context 或 useReducer 自动实现，专门的数据层或外部 store 可能更合适。</p>
 <p>选择前先确定数据属于谁、谁需要读取、谁可以发起变化、何时清理或持久化。Context 负责把这份关系提供出去，reducer 负责让更新规则可解释；二者都应服务这个边界，而不是把所有状态一概提升成全局状态。</p>

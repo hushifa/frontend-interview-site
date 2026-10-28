@@ -26,9 +26,16 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">TypeScript 声明合并和模块扩展有哪些边界？</span></nav><h1 tabindex="-1">TypeScript 声明合并和模块扩展有哪些边界？</h1><p class="reading-summary">声明合并让符合规则的同名声明共同描述一个实体，模块增补则补充已有模块的类型视图。接口与环境声明不会自动提供运行时方法，普通 namespace 却可能产生代码，必须区分这些层次。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>声明合并不是“后面的声明覆盖前面的声明”，而是 TypeScript 按规则把多份声明组合成同一个类型或实体的描述。它常用于接口扩展、库的模块增补，以及一些函数、类与命名空间组合模式。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">TypeScript 声明合并和模块扩展有哪些边界？</span></nav><h1 tabindex="-1">TypeScript 声明合并和模块扩展有哪些边界？</h1><p class="reading-summary">声明合并让符合规则的同名声明共同描述一个实体，模块增补则补充已有模块的类型视图。接口与环境声明不会自动提供运行时方法，普通 namespace 却可能产生代码，必须区分这些层次。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>同名 interface 会合并成员，同名 type 别名不能重复声明。</li>
+<li>namespace 可以与函数、类、枚举合并，为它们添加静态成员。</li>
+<li>declare module 可以给已有模块补充类型，但只是类型层面的扩展，不提供运行时实现。</li>
+<li>含运行时代码的 namespace 不是可擦除语法，在 erasableSyntaxOnly 或 Node 类型剥离下会报错。</li>
+</ul>
+<p>声明合并不是“后面的声明覆盖前面的声明”，而是 TypeScript 按规则把多份声明组合成同一个类型或实体的描述。它常用于接口扩展、库的模块增补，以及一些函数、类与命名空间组合模式。</p>
 <p>需要先区分：某些声明只存在于类型层，另一些语法还会产生 JavaScript。不能把所有叫作“合并”的东西都归为完全没有运行时效果，也不能认为补了一份接口就已经给对象安装了方法。</p>
-<h3>接口合并要求成员兼容</h3>
+<h2>接口合并要求成员兼容</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">PanelOptions</span> {
   <span class="hljs-attr">title</span>: <span class="hljs-built_in">string</span>;
 }
@@ -50,8 +57,8 @@
   <span class="hljs-attr">value</span>: <span class="hljs-built_in">number</span>;
 }
 </code></pre></div>
-<p>方法成员可以按相应规则形成重载，但重载顺序与特化签名有自己的规则，也不是无限制地把所有声明随意拼起来。type 别名不能用重复声明的方式重新打开，类与类也不能直接按普通接口的方式合并。</p>
-<h3>普通 namespace 可能有真实运行时代码</h3>
+<p>方法成员可以按规则形成重载，但重载顺序与特化签名有自己的规则，也不是无限制地把所有声明随意拼起来。type 别名不能用重复声明的方式重新打开，类与类也不能直接按普通接口的方式合并。</p>
+<h2>普通 namespace 可能有真实运行时代码</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">formatLabel</span>(<span class="hljs-params"><span class="hljs-attr">value</span>: <span class="hljs-built_in">string</span></span>): <span class="hljs-built_in">string</span> {
   <span class="hljs-keyword">return</span> value.<span class="hljs-title function_">trim</span>();
 }
@@ -63,10 +70,11 @@
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">formatLabel</span>(<span class="hljs-string">&#x27; Lin &#x27;</span>)); <span class="hljs-comment">// Lin</span>
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(formatLabel.<span class="hljs-property">version</span>); <span class="hljs-comment">// 1.0</span>
 </code></pre></div>
-<p>命名空间放在相应函数声明之后，使这个函数还能具有导出的 version 成员。这里普通 namespace 中的值声明会产生运行时代码，真正给函数对象补上属性。</p>
+<p>命名空间放在函数声明之后，使这个函数还能具有导出的 version 成员。这里普通 namespace 中的值声明会产生运行时代码，真正给函数对象补上属性。</p>
 <p>这与 <code>.d.ts</code> 中的 declare namespace 或接口合并不同：环境声明只描述某个值应当存在，不负责创建它。编写类型兼容说明时，应明确是在讨论哪一种语法。</p>
+<p>含运行时代码的 namespace 不是可擦除语法。开启 TypeScript 5.8 引入的 <code>erasableSyntaxOnly</code>，或用 Node.js 类型剥离直接运行 <code>.ts</code> 时，上例会报错；此时改为显式赋值 <code>formatLabel.version = &#x27;1.0.0&#x27;</code>，并用接口或 <code>declare namespace</code> 描述类型。</p>
 <p>命名空间中没有 export 的成员也不会因为同名合并，就自动对其他声明块可见。不要把合并理解成把源码块之间的全部局部变量无条件打通。</p>
-<h3>模块增补需要类型声明和实现一起到位</h3>
+<h2>模块增补需要类型声明和实现一起到位</h2>
 <p>下面三个文件放在同一目录，使用 ESM。原模块提供 Counter，增补模块增加 reset 的类型与运行时实现，入口负责加载这个增补模块。</p>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-comment">// counter.ts</span>
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Counter</span> {
@@ -99,13 +107,13 @@ counter.<span class="hljs-title function_">reset</span>();
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(counter.<span class="hljs-property">value</span>); <span class="hljs-comment">// 0</span>
 </code></pre></div>
 <p>declare module 中的接口合并让编译器知道 Counter 实例上存在 reset；原型赋值才实际安装方法；入口的副作用导入确保这段安装代码运行。</p>
-<p>如果增补文件被 TypeScript 项目包含，但入口没有加载相应实现，类型检查仍可能知道 reset，运行时调用却会失败。反过来，只安装方法但没有合适声明，则运行时可能能用，编译器却无法按契约检查。</p>
+<p>如果增补文件被 TypeScript 项目包含，但入口没有加载实现，类型检查仍可能知道 reset，运行时调用却会失败。反过来，只安装方法但没有合适声明，则运行时可能能用，编译器却无法按契约检查。</p>
 <p>示例使用 .js 导入路径，让编译后的 ESM 仍指向真实 JavaScript 文件；TypeScript 会按配置解析对应的源文件。实际项目还需要让模块解析方式与目标宿主、构建工具一致。</p>
-<h3>增补的是解析到的模块，不是任意同名字符串</h3>
+<h2>增补的是解析到的模块，不是任意同名字符串</h2>
 <p>模块增补中的标识符按模块解析规则指向目标。它必须解析到你真正希望扩展的那个模块，而不是因为包名或文件名看起来相似，就能作用到所有引用。</p>
 <p>增补文件也必须进入编译器项目。需要运行时补丁时，还要保证打包器与入口不会把必要的副作用导入遗漏或误删。类型可见与代码被执行是两份不同的检查。</p>
 <p>一个 <code>.d.ts</code> 文件如果没有导入或导出标记，其中的 declare module 可能是在声明一个新的环境模块，而不是在已有模块上下文中增补。编写增补文件时应明确它是模块，可按需求使用顶层 import 或 export {}，避免无意遮住原库导出。</p>
-<h3>默认导出、新顶层声明与全局扩展的限制</h3>
+<h2>默认导出、新顶层声明与全局扩展的限制</h2>
 <p>模块增补用于修补已有声明，不是给目标模块随意增加从未存在的新顶层导出。默认导出也不能像普通具名导出那样直接按 default 名字进行增补。遇到这种需求，更适合考虑包装 API、扩展库已公开的接口，或修正原始声明。</p>
 <p>全局增补可以在模块文件中使用 declare global，例如描述由宿主实际提供的页面字段：</p>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-comment">// globals.d.ts</span>
@@ -118,7 +126,7 @@ counter.<span class="hljs-title function_">reset</span>();
 }
 </code></pre></div>
 <p>这只说明 window.appVersion 可能存在，不会真的给浏览器写入版本号。若业务需要它，仍需某处真实赋值；如果不保证宿主已经安装，就不应随意声明为必需字段，让所有调用方误以为它永远可用。</p>
-<h3>什么时候应该避免增补</h3>
+<h2>什么时候应该避免增补</h2>
 <p>类型增补适合稳定的扩展点或修正缺失声明，不适合拿来掩盖版本不兼容。库已经删除某个方法时，仅在类型中加回来，不会让实现复活。</p>
 <p>全局合并与原型补丁还会影响其他消费者，可能发生重名或升级冲突。能通过局部包装函数表达的能力，未必需要修改全局类型或第三方原型。</p>
 <p>验证时应同时检查：编译器能找到增补、原来的导出没有被意外遮蔽、入口确实加载实现，以及升级后目标对象仍满足这些假设。只看到编辑器自动补全多了一个方法，还不足以证明扩展已经正确接入。</p></div><div class="answer-bottom"><a href="https://www.typescriptlang.org/docs/handbook/declaration-merging.html" target="_blank" rel="noreferrer">TypeScript · Declaration Merging<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+TypeScript+%E5%A3%B0%E6%98%8E%E5%90%88%E5%B9%B6%E5%92%8C%E6%A8%A1%E5%9D%97%E6%89%A9%E5%B1%95%E6%9C%89%E5%93%AA%E4%BA%9B%E8%BE%B9%E7%95%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ATypeScript+%E5%A3%B0%E6%98%8E%E5%90%88%E5%B9%B6%E5%92%8C%E6%A8%A1%E5%9D%97%E6%89%A9%E5%B1%95%E6%9C%89%E5%93%AA%E4%BA%9B%E8%BE%B9%E7%95%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-declaration-merging%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-declaration-merging%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：TypeScript 声明合并和模块扩展有哪些边界？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-library-publishing/">TypeScript 库发布时怎样组织类型声明和入口？</a></li><li><a href="/questions/ts-type-testing/">TypeScript 复杂类型应该怎样测试？</a></li><li><a href="/questions/ts-unknown/">any、unknown 和 never 分别适合什么场景？</a></li><li><a href="/questions/ts-interface-type/">type 和 interface 有哪些区别？</a></li></ul></nav></main></div></div>

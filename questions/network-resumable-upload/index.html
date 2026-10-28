@@ -26,7 +26,14 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/network/">网络与安全面试题</a><span aria-hidden="true">/</span><span aria-current="page">浏览器分片上传如何实现可靠的暂停与续传？</span></nav><h1 tabindex="-1">浏览器分片上传如何实现可靠的暂停与续传？</h1><p class="reading-summary">从大文件分片、上传会话、幂等重试和完整性校验出发，设计一个能暂停恢复的浏览器上传流程，并说明并发、安全、兼容性和服务端边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>上传一个几个 GB 的视频时，用户切换网络或关闭页面，重新从零开始会浪费时间和流量。把文件切成多个小片并逐片发送，可以让客户端只重试失败的片段；但“切片”本身还不等于可靠续传。客户端和服务器还必须约定上传会话、片段编号、重复请求的结果以及最终合并规则。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/network/">网络与安全面试题</a><span aria-hidden="true">/</span><span aria-current="page">浏览器分片上传如何实现可靠的暂停与续传？</span></nav><h1 tabindex="-1">浏览器分片上传如何实现可靠的暂停与续传？</h1><p class="reading-summary">从大文件分片、上传会话、幂等重试和完整性校验出发，设计一个能暂停恢复的浏览器上传流程，并说明并发、安全、兼容性和服务端边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>先设计初始化、上传分片、完成三阶段协议，再写并发循环。</li>
+<li>File.slice() 只创建视图，不复制整个文件。</li>
+<li>续传依赖查询服务端已保存的分片，uploadId 等信息持久化到 IndexedDB。</li>
+<li>分片重试必须幂等，超时不等于失败；并发要有上限，完成时由服务端最终校验。</li>
+</ul>
+<p>上传一个几个 GB 的视频时，用户切换网络或关闭页面，重新从零开始会浪费时间和流量。把文件切成多个小片并逐片发送，可以让客户端只重试失败的片段；但“切片”本身还不等于可靠续传。客户端和服务器还必须约定上传会话、片段编号、重复请求的结果以及最终合并规则。</p>
 <h2>先确定协议，而不是先写并发循环</h2>
 <p>一个可维护的上传协议通常分为三个阶段：</p>
 <ol>
@@ -133,7 +140,7 @@ X-Part-SHA-256: &lt;该片段的摘要&gt;
   });
 }
 </code></pre></div>
-<p>这里约定服务端持久化成功或确认相同摘要的重复上传时返回 204，409 表示内容冲突并立即停止。401、403、413 等响应也不应靠重试解决；原示例把这些错误抛进统一 catch 后会重复请求，必须将 HTTP 分类放在网络异常捕获之外。202 只表示接受处理，不作为保存成功的证明。</p>
+<p>这里约定服务端持久化成功或确认相同摘要的重复上传时返回 204，409 表示内容冲突并立即停止。401、403、413 等响应也不应靠重试解决，示例在网络异常的 catch 之外直接按状态码抛出它们，只有网络失败和可重试的服务端错误才进入重试。202 只表示接受处理，不作为保存成功的证明。</p>
 <p>示例最多请求四次，仅对网络异常和 502、503、504 做有限重试。网络异常也可能来自永久性 CORS 配置问题，并不保证下一次成功。生产实现还应解析 Retry-After、设置总截止时间，并按接口契约处理 429；本例不自动重试 429。退避等待同样响应取消，暂停时不必等待定时器到期。服务端应设置会话过期时间和遗留片段清理任务。</p>
 <h2>并发不是越高越快</h2>
 <p>可以维护一个有限大小的任务池，例如同时上传 3 到 6 个片段。并发数太高会争抢上行带宽、增加移动设备耗电，也可能让服务端连接数和临时磁盘压力上升。并发数应根据网络类型、片段大小和失败率动态调整，至少要支持暂停：暂停时停止派发新任务，并通过 <code>AbortController</code> 取消正在进行的请求；已成功保存的片段不要删除，恢复时重新查询即可。</p>

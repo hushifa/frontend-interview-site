@@ -26,9 +26,16 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">泛型解决了什么问题？如何约束泛型？</span></nav><h1 tabindex="-1">泛型解决了什么问题？如何约束泛型？</h1><p class="reading-summary">泛型用类型参数保留输入、输出与不同参数之间的关系，约束说明实现可以依赖哪些能力。满足约束不代表能随意构造任意 T，类型参数也不会在运行时校验接口数据。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>假设一个函数把传入的值原样返回。写成 <code>(value: any) =&gt; any</code>，虽然能接收任何输入，却丢掉了“返回值与输入是同一种类型”的关系；写成 unknown 则要求调用方重新检查返回值。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">泛型解决了什么问题？如何约束泛型？</span></nav><h1 tabindex="-1">泛型解决了什么问题？如何约束泛型？</h1><p class="reading-summary">泛型用类型参数保留输入、输出与不同参数之间的关系，约束说明实现可以依赖哪些能力。满足约束不代表能随意构造任意 T，类型参数也不会在运行时校验接口数据。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>泛型让类型在调用时确定，并保留输入与输出之间的关系。</li>
+<li>extends 约束类型参数必须满足的结构，keyof 约束常用于安全地读取属性。</li>
+<li>类型参数能推断时就不必手写，只出现一次的类型参数通常没有必要。</li>
+<li>泛型默认值可以简化常见调用。</li>
+</ul>
+<p>假设一个函数把传入的值原样返回。写成 <code>(value: any) =&gt; any</code>，虽然能接收任何输入，却丢掉了“返回值与输入是同一种类型”的关系；写成 unknown 则要求调用方重新检查返回值。</p>
 <p>泛型可以把这个关系保留下来：调用时确定 T，参数与返回值共同使用这一份 T。它主要是在描述类型之间的关联，不是让函数在运行时获得一个可以随意检查的“类型对象”。</p>
-<h3>最简单的关系是输入什么，返回什么</h3>
+<h2>最简单的关系是输入什么，返回什么</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">function</span> identity&lt;T&gt;(<span class="hljs-attr">value</span>: T): T {
   <span class="hljs-keyword">return</span> value;
 }
@@ -40,7 +47,7 @@
 </code></pre></div>
 <p>这里 T 从输入推导为字符串数组，返回值保留对应数组能力。identity 没有复制数组，也没有把它变成另一种表示；泛型只描述这个调用的类型关系。</p>
 <p>大多数使用场景应让编译器从参数推导类型，不必每次都手写类型实参。显式指定类型可以用于推导不足或需要明确契约的情况，但不能借此声称运行时数据已经符合该类型。</p>
-<h3>约束说明实现最低可以依赖什么</h3>
+<h2>约束说明实现最低可以依赖什么</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">function</span> longer&lt;T <span class="hljs-keyword">extends</span> { <span class="hljs-attr">length</span>: <span class="hljs-built_in">number</span> }&gt;(<span class="hljs-attr">first</span>: T, <span class="hljs-attr">second</span>: T): T {
   <span class="hljs-keyword">return</span> first.<span class="hljs-property">length</span> &gt;= second.<span class="hljs-property">length</span> ? first : second;
 }
@@ -49,9 +56,9 @@
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(selected); <span class="hljs-comment">// TypeScript</span>
 </code></pre></div>
 <p>T extends { length:number } 表示传入类型必须具备所需的 length 能力，函数实现因此可以访问 length。它不表示 T 必须在运行时继承某个类，也不表示只允许字符串。</p>
-<p>约束仍保留调用时的具体类型。返回的是传入的其中一个值，调用方可以继续获得相应的具体类型信息，而不是只得到一个孤立的 <code>{ length:number }</code>。</p>
+<p>约束仍保留调用时的具体类型。返回的是传入的其中一个值，调用方可以继续获得具体类型信息，而不是只得到一个孤立的 <code>{ length:number }</code>。</p>
 <p>不同参数能否共同推导出一个 T，还取决于实际输入和推导规则，不能假定编译器总会自动拼出任意联合。若业务本就允许不同输入类型并返回联合，应把这个关系明确建模。</p>
-<h3>满足约束，不代表一个新对象一定就是 T</h3>
+<h2>满足约束，不代表一个新对象一定就是 T</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">function</span> ensureLength&lt;T <span class="hljs-keyword">extends</span> { <span class="hljs-attr">length</span>: <span class="hljs-built_in">number</span> }&gt;(<span class="hljs-attr">value</span>: T, <span class="hljs-attr">minimum</span>: <span class="hljs-built_in">number</span>): T {
   <span class="hljs-keyword">if</span> (value.<span class="hljs-property">length</span> &gt;= minimum) <span class="hljs-keyword">return</span> value;
 
@@ -61,7 +68,7 @@
 </code></pre></div>
 <p>调用方可能把 T 选为带额外字段的对象、字符串或数组。新建 <code>{ length: minimum }</code> 只满足约束，不满足所有可能的具体 T。因此编译器拒绝这条 return 是合理的，不应该用 <code>as T</code> 随意压掉。</p>
 <p>修复应回到真实契约：如果只需要保证 length，就把返回类型也定义为那个较宽结构；如果必须返回完整 T，可以要求调用方提供构造 T 的工厂，或者只允许返回已有 T。不能让泛型函数凭空知道怎样构造未知的具体类型。</p>
-<h3>让键和返回属性类型建立关联</h3>
+<h2>让键和返回属性类型建立关联</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">function</span> getProperty&lt;T, K <span class="hljs-keyword">extends</span> keyof T&gt;(<span class="hljs-attr">object</span>: T, <span class="hljs-attr">key</span>: K): T[K] {
   <span class="hljs-keyword">return</span> <span class="hljs-built_in">object</span>[key];
 }
@@ -75,7 +82,7 @@
 </code></pre></div>
 <p>K 必须来自 T 的键集合，T[K] 则表示选中那个键对应的属性类型。传 age 时，返回类型是 number；传 name 时，返回类型是 string。</p>
 <p>若把 key 写成任意 string，函数就无法保证键一定存在，也很难准确表达返回值与这个键的关联。索引签名、可选属性和联合类型会进一步影响结果，应按实际模型处理，而不是把每次索引都断言成一定成功。</p>
-<h3>泛型返回值也需要考虑空输入</h3>
+<h2>泛型返回值也需要考虑空输入</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">function</span> first&lt;T&gt;(<span class="hljs-attr">items</span>: <span class="hljs-keyword">readonly</span> T[]): T | <span class="hljs-literal">undefined</span> {
   <span class="hljs-keyword">return</span> items[<span class="hljs-number">0</span>];
 }
@@ -84,8 +91,8 @@
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">first</span>([])); <span class="hljs-comment">// undefined</span>
 </code></pre></div>
 <p>传入 T[] 并不说明数组一定有第一项。明确返回 T | undefined，比依赖某个编译选项恰好没有报错更符合运行时事实。</p>
-<p>如果函数只接受非空输入，可以把参数设计成非空元组等结构，再相应地承诺返回 T。readonly 参数则允许函数接收只读数组，也表达它不需要通过参数修改数组内容，但不会自动深度冻结元素对象。</p>
-<h3>泛型不能把未知 JSON 自动变成领域对象</h3>
+<p>如果函数只接受非空输入，可以把参数设计成非空元组等结构，再承诺返回 T。readonly 参数则允许函数接收只读数组，也表达它不需要通过参数修改数组内容，但不会自动深度冻结元素对象。</p>
+<h2>泛型不能把未知 JSON 自动变成领域对象</h2>
 <p>调用一个返回 Promise 的请求封装，并指定 T 为 User，只是在建立编译期的使用预期。网络响应不会因为 <code>&lt;User&gt;</code> 就接受 User 校验。</p>
 <p>可以把真正的解析函数作为参数，让泛型连接解析器输出与函数返回：</p>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">function</span> parseJson&lt;T&gt;(<span class="hljs-attr">text</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">parse</span>: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">input</span>: <span class="hljs-built_in">unknown</span></span>) =&gt;</span> T): T {
@@ -94,9 +101,9 @@
 }
 </code></pre></div>
 <p>这里 parse 必须用真实检查建立 T，或由符合契约的 schema 解析器完成。泛型的作用是保留 parse 已经表达的返回类型，而不是替 parse 实现验证。</p>
-<h3>类型参数越多不代表设计越好</h3>
+<h2>类型参数越多不代表设计越好</h2>
 <p>一个类型参数只出现一次、没有建立输入输出或参数之间的实际关系时，可能只是让调用方多填一个名字。可以检查它是否能改成具体类型、unknown、普通联合或更简单的回调签名。</p>
-<p>也不要把所有分支关系都塞进复杂条件类型。简单重载、明确的联合返回值或拆分函数，有时能提供更清楚的错误信息。好的泛型应该让调用方保留需要的信息，并让实现真的能兑现承诺，而不是依靠大量断言维持表面上的精确类型。</p></div><div class="answer-bottom"><a href="https://www.typescriptlang.org/docs/handbook/2/generics.html" target="_blank" rel="noreferrer">TypeScript · Generics<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%B3%9B%E5%9E%8B%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%E5%A6%82%E4%BD%95%E7%BA%A6%E6%9D%9F%E6%B3%9B%E5%9E%8B%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%B3%9B%E5%9E%8B%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%E5%A6%82%E4%BD%95%E7%BA%A6%E6%9D%9F%E6%B3%9B%E5%9E%8B%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-generics%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-generics%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：泛型解决了什么问题？如何约束泛型？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-function-variance/">函数重载、联合参数与泛型怎样选择？</a></li><li><a href="/questions/ts-type-testing/">TypeScript 复杂类型应该怎样测试？</a></li><li><a href="/questions/ts-unknown/">any、unknown 和 never 分别适合什么场景？</a></li><li><a href="/questions/ts-interface-type/">type 和 interface 有哪些区别？</a></li></ul></nav></main></div></div>
+<p>也不要把所有分支关系都塞进复杂条件类型。简单重载、明确的联合返回值或拆分函数，有时能提供更清楚的错误信息。好的泛型应该让调用方保留需要的信息，并让实现真的能兑现承诺，而不是依靠大量断言维持表面上的精确类型。</p></div><div class="answer-bottom"><a href="https://www.typescriptlang.org/docs/handbook/2/generics.html" target="_blank" rel="noreferrer">TypeScript · Generics<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%B3%9B%E5%9E%8B%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%E5%A6%82%E4%BD%95%E7%BA%A6%E6%9D%9F%E6%B3%9B%E5%9E%8B%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%B3%9B%E5%9E%8B%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%E5%A6%82%E4%BD%95%E7%BA%A6%E6%9D%9F%E6%B3%9B%E5%9E%8B%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-generics%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-generics%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：泛型解决了什么问题？如何约束泛型？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-function-variance/">函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？</a></li><li><a href="/questions/ts-type-testing/">TypeScript 复杂类型应该怎样测试？</a></li><li><a href="/questions/ts-unknown/">any、unknown 和 never 分别适合什么场景？</a></li><li><a href="/questions/ts-interface-type/">type 和 interface 有哪些区别？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -26,9 +26,16 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">Proxy 与 Reflect 能实现什么，存在哪些限制？</span></nav><h1 tabindex="-1">Proxy 与 Reflect 能实现什么，存在哪些限制？</h1><p class="reading-summary">Proxy 拦截对象的内部操作，Reflect 提供对应的转发接口。正确处理 receiver 能保留访问器语义，但代理仍受不变量、对象身份、内部槽与私有品牌限制，也不会自动构成完整响应式系统。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>Proxy 可以在对象被读取、写入、删除、枚举等操作发生时插入逻辑。它不是提前复制对象，也不是为每个属性安装一对 getter/setter，而是为目标对象建立一个代理入口，通过 handler 中的 trap 拦截对应内部操作。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">Proxy 与 Reflect 能实现什么，存在哪些限制？</span></nav><h1 tabindex="-1">Proxy 与 Reflect 能实现什么，存在哪些限制？</h1><p class="reading-summary">Proxy 拦截对象的内部操作，Reflect 提供对应的转发接口。正确处理 receiver 能保留访问器语义，但代理仍受不变量、对象身份、内部槽与私有品牌限制，也不会自动构成完整响应式系统。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>Proxy 通过 get、set、has、deleteProperty 等陷阱拦截对象的基本操作。</li>
+<li>Reflect 提供与这些陷阱一一对应的默认行为，陷阱里通常用 Reflect 转发并传入 receiver。</li>
+<li>陷阱必须遵守不变式，例如不可配置的只读属性不能报告成其他值。</li>
+<li>Proxy 无法拦截私有字段，Map、Date 等内部槽对象的方法直接经代理调用会失败。</li>
+</ul>
+<p>Proxy 可以在对象被读取、写入、删除、枚举等操作发生时插入逻辑。它不是提前复制对象，也不是为每个属性安装一对 getter/setter，而是为目标对象建立一个代理入口，通过 handler 中的 trap 拦截对应内部操作。</p>
 <p>常见用途包括开发期校验、访问记录、惰性包装以及响应式追踪。不过“能拦截 get/set”与“已经做出了完整响应式系统”之间还有很大距离。</p>
-<h3>一个记录读取并校验价格的代理</h3>
+<h2>一个记录读取并校验价格的代理</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> reads = [];
 <span class="hljs-keyword">const</span> target = {
   <span class="hljs-attr">price</span>: <span class="hljs-number">10</span>,
@@ -58,16 +65,16 @@ product.<span class="hljs-property">price</span> = <span class="hljs-number">12<
 </code></pre></div>
 <p>读取 product.total 先进入 get trap。随后 Reflect.get 找到 total 的 getter，并把 receiver，也就是这次读取的接收者，作为 getter 的 this。getter 中的 this.price 又经过代理，因此记录了 total 和 price 两次读取。</p>
 <p>这个例子只记录访问和校验某项赋值，没有实现订阅、更新通知或批处理。数组 reads 本身也会不断增长，只适合演示，不应不加限制地作为长期运行的日志容器。</p>
-<h3>为什么不直接返回 target[key]</h3>
+<h2>为什么不直接返回 target[key]</h2>
 <p>如果在 get trap 中写 <code>return object[key]</code>，total 的 getter 会以原 target 为 this。它内部读取 this.price 就直接读原对象，不再经过代理，因此可能漏掉依赖追踪。</p>
 <p>receiver 也不一定永远是代理本身。例如一个对象以该代理为原型，读取继承 getter 时，receiver 可以是那个派生对象。使用 Reflect.get(target, key, receiver) 能保留普通属性访问应有的接收者关系。</p>
-<p>Reflect.set 的 receiver 同样会影响 setter 的 this，以及相应属性最终应定义到哪里。只写 <code>target[key] = value; return true</code>，容易绕过这些语义，还可能把一个失败赋值谎报为成功。</p>
+<p>Reflect.set 的 receiver 同样会影响 setter 的 this，以及属性最终应定义到哪里。只写 <code>target[key] = value; return true</code>，容易绕过这些语义，还可能把一个失败赋值谎报为成功。</p>
 <p>Reflect 方法不是“绕过所有代理的魔法出口”。如果把代理本身又传回 Reflect.get，仍然可能再次进入 trap，造成递归。常见转发写法把传入的原 target 交给 Reflect，同时保留 receiver。</p>
-<h3>不同语法会触发不同操作</h3>
+<h2>不同语法会触发不同操作</h2>
 <table><thead><tr><th>行为</th><th>常见相关 trap</th></tr></thead><tbody><tr><td><code>proxy.name</code></td><td>get</td></tr><tr><td><code>proxy.name = value</code></td><td>set，具体过程还可能涉及定义属性</td></tr><tr><td><code>delete proxy.name</code></td><td>deleteProperty</td></tr><tr><td><code>&#x27;name&#x27; in proxy</code></td><td>has</td></tr><tr><td>Reflect.ownKeys(proxy)</td><td>ownKeys</td></tr><tr><td>Object.getOwnPropertyDescriptor(proxy, key)</td><td>getOwnPropertyDescriptor</td></tr><tr><td>Object.defineProperty(proxy, key, descriptor)</td><td>defineProperty</td></tr><tr><td>调用或构造一个可调用/可构造目标的代理</td><td>apply、construct</td></tr></tbody></table>
 <p>Object.keys 不只需要键列表，还要判断自身描述符与可枚举性，因此可能同时涉及 ownKeys 和 getOwnPropertyDescriptor。对象展开还要继续读取属性值。一次高层语法对应多个内部步骤，是设计代理逻辑时容易漏掉的地方。</p>
 <p>目标本身不可调用时，单纯添加 apply trap 不会把普通对象变成函数；不可构造的目标也不会仅因提供 construct 就获得构造能力。代理仍必须服从目标所能支持的基本操作种类。</p>
-<h3>trap 不能随意违背对象不变量</h3>
+<h2>trap 不能随意违背对象不变量</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> locked = {};
 <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(locked, <span class="hljs-string">&#x27;id&#x27;</span>, {
   <span class="hljs-attr">value</span>: <span class="hljs-number">7</span>,
@@ -90,7 +97,7 @@ product.<span class="hljs-property">price</span> = <span class="hljs-number">12<
 <p>id 是不可配置、不可写的自身数据属性，代理不能把读取结果任意改成另一个值。浏览器会检查这些不变量，违背时抛错。</p>
 <p>类似地，ownKeys 不能随意漏掉不可配置属性；不可扩展目标还会限制报告的键集合。set 等 trap 也有返回值与不变量约束，严格模式下报告失败的赋值会表现为异常。</p>
 <p>因此实现“虚拟属性”“只读对象”等方案时，要同时考虑目标的描述符和扩展状态，不能只实现几个最常见的读取分支。</p>
-<h3>为什么空代理包住 Map 也可能不能正常用</h3>
+<h2>为什么空代理包住 Map 也可能不能正常用</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> values = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Proxy</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>(), {});
 <span class="hljs-keyword">try</span> {
   values.<span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-number">1</span>);
@@ -98,9 +105,9 @@ product.<span class="hljs-property">price</span> = <span class="hljs-number">12<
   <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(error.<span class="hljs-property">name</span>); <span class="hljs-comment">// TypeError</span>
 }
 </code></pre></div>
-<p>Map 方法要求 this 具备相应内部槽，而代理本身不是拥有那些 Map 内部槽的原对象。普通方法调用把代理作为 this，因此即使 handler 为空，也不能把它当成对所有内置对象完全透明的包装。</p>
+<p>Map 方法要求 this 具备内部槽，而代理本身不是拥有那些 Map 内部槽的原对象。普通方法调用把代理作为 this，因此即使 handler 为空，也不能把它当成对所有内置对象完全透明的包装。</p>
 <p>依赖类私有元素的方法也可能因接收者不具备正确私有品牌而失败。把特定方法绑定到原目标可以解决部分接收者问题，但会改变函数身份和 this 行为，内部访问还可能绕过预期追踪。不能不分析对象类型就把所有函数自动 bind，然后宣称得到了通用代理。</p>
-<h3>完整系统还要处理身份、深层结构与生命周期</h3>
+<h2>完整系统还要处理身份、深层结构与生命周期</h2>
 <p>代理和原对象不是同一个身份，放进 Map、Set 或用于严格比较时应明确使用哪一方。直接修改原 target 不会凭空经过代理的 set trap，所以把原对象随处泄漏，会破坏入口校验或追踪约定。</p>
 <p>普通代理也不会自动递归包装所有嵌套对象。需要深层追踪时，通常要维护原对象到代理的缓存，避免同一个对象每次读取都生成新代理；还要区分属性新增、更新、删除、数组 length 和集合内部变更等操作。</p>
 <p>Proxy.revocable 可以提供撤销后的不可用代理，但撤销并不会取消已经发出的请求，也不会删除外部代码早已持有的原对象引用。代理适合管理受控入口，不能独自作为运行不可信代码的完整沙箱。</p>

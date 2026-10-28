@@ -26,9 +26,16 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">结构类型、可选属性和额外属性检查有哪些区别？</span></nav><h1 tabindex="-1">结构类型、可选属性和额外属性检查有哪些区别？</h1><p class="reading-summary">TypeScript 主要按成员结构判断兼容性，对象字面量还会接受额外属性检查。可选属性与显式 undefined、字段隐藏与运行时删除、结构相同与业务身份相同，都是需要分别处理的问题。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>TypeScript 主要采用结构类型：一个值只要具备目标要求的成员和相应类型，就可能与目标兼容，不必先声明“我实现了这个名字”。因此两个名称不同、字段相同的类型，通常仍能互相使用。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">结构类型、可选属性和额外属性检查有哪些区别？</span></nav><h1 tabindex="-1">结构类型、可选属性和额外属性检查有哪些区别？</h1><p class="reading-summary">TypeScript 主要按成员结构判断兼容性，对象字面量还会接受额外属性检查。可选属性与显式 undefined、字段隐藏与运行时删除、结构相同与业务身份相同，都是需要分别处理的问题。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>TypeScript 按结构判断兼容性：属性满足要求即可赋值，不看类型名称。</li>
+<li>对象字面量直接赋给有类型的目标时会做额外属性检查，经过变量中转则不会。</li>
+<li>可选属性 ?: 允许缺省；开启 exactOptionalPropertyTypes 后，不能显式赋值 undefined。</li>
+<li>需要名义区分时，可以用品牌类型（branded type）。</li>
+</ul>
+<p>TypeScript 主要采用结构类型：一个值只要具备目标要求的成员和类型，就可能与目标兼容，不必先声明“我实现了这个名字”。因此两个名称不同、字段相同的类型，通常仍能互相使用。</p>
 <p>但这不是说所有多余字段都无条件接受。直接提供对象字面量时，编译器还会执行额外属性检查，帮助发现字段拼写错误。这与一般结构兼容是相关但不同的检查层次。</p>
-<h3>为什么变量能传入，直接字面量却报错</h3>
+<h2>为什么变量能传入，直接字面量却报错</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Named</span> = { <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span> };
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">greet</span>(<span class="hljs-params"><span class="hljs-attr">person</span>: <span class="hljs-title class_">Named</span></span>): <span class="hljs-built_in">string</span> {
@@ -47,11 +54,11 @@
 <p>detailed 已经是一个具有明确结构的值，它包含 Named 所需要的 name，因此可以使用。直接传入的字面量则会受到额外属性检查，在这个上下文中指出 role 不属于目标契约。</p>
 <p>这不是把数据放进变量就改变了运行时内容，也不是编译器随意前后矛盾。新鲜对象字面量常常是在表达“这就是我要提供的完整参数”，多写的字段很可能是拼错，因此有更直接的检查。</p>
 <p>如果调用者本来就需要传 role，应修改接口或选择正确的参数模型；不应该把中转变量当作绕过真实错误的技巧。</p>
-<h3>类型标注不会删除对象里没有声明的字段</h3>
+<h2>类型标注不会删除对象里没有声明的字段</h2>
 <p>上例 narrowed 的静态类型只暴露 name，但运行时仍然引用 detailed，Object.keys 依然看得到 role。把接口对象赋给一个更窄类型，不是字段过滤或数据脱敏。</p>
 <p>这也是 Object.keys 通常返回 string[]，而不是无条件返回 Array 的重要原因之一：运行时对象可能带有静态类型没列出的键。想按固定字段生成数据，应显式映射或验证，而不是给所有枚举结果加断言后就假定完全准确。</p>
 <p>对于真正允许任意额外键的字典，可以设计索引签名或 Record，但这会扩大可接受范围，也可能让拼写错误更难发现。开放字典与固定配置对象应该使用不同的契约。</p>
-<h3>可选属性不只是给类型加一个 undefined</h3>
+<h2>可选属性不只是给类型加一个 undefined</h2>
 <p>以下例子以 strictNullChecks 与 exactOptionalPropertyTypes 都开启为前提：</p>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Options</span> = { <span class="hljs-attr">label</span>?: <span class="hljs-built_in">string</span> };
 <span class="hljs-keyword">const</span> <span class="hljs-attr">absent</span>: <span class="hljs-title class_">Options</span> = {};
@@ -69,10 +76,10 @@
 <p>label?:string 表示属性可以不存在，存在时按声明提供 string。label:string|undefined 则要求这个键存在，只是它保存的值允许是 undefined。</p>
 <p>关闭 exactOptionalPropertyTypes 时，可选属性对显式 undefined 的赋值限制会更宽松。这个选项并不因为开启 strict 就自动一并启用，所以解释报错时要说明配置，不能把某一份 tsconfig 的行为当成全部项目的默认情况。</p>
 <p>无论是否开启精确可选属性，直接读取一个可能不存在的 label 通常仍要处理 undefined。存在性与读到的值类型是两个相关问题，in、Object.hasOwn、对象展开和 JSON 序列化也可能区分“没有这个键”与“键存在但值是 undefined”。</p>
-<h3>函数参数和数组索引也有自己的约束</h3>
+<h2>函数参数和数组索引也有自己的约束</h2>
 <p>一个可选参数与对象可选属性并不是完全相同的规则，不能把 exactOptionalPropertyTypes 的结论直接推广到每个带问号的位置。数组索引是否显式包含 undefined，也受 noUncheckedIndexedAccess 和具体类型约束影响。</p>
 <p>例如普通 T[] 不保证非空，读取第一项在运行时可以得到 undefined；非空元组可以表达更强的长度关系。类型设计应围绕真实数据，而不是只根据当前编译器是否恰好报警。</p>
-<h3>结构相同，业务上也可能不能混用</h3>
+<h2>结构相同，业务上也可能不能混用</h2>
 <p>用户 ID 和订单 ID 如果都只是 string 别名，就依然能互相传递。需要降低这类混用风险时，可以加入品牌标记，并通过受控工厂建立值：</p>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">userIdBrand</span>: unique <span class="hljs-built_in">symbol</span>;
 <span class="hljs-keyword">type</span> <span class="hljs-title class_">UserId</span> = <span class="hljs-built_in">string</span> &amp; { <span class="hljs-keyword">readonly</span> [userIdBrand]: <span class="hljs-string">&#x27;UserId&#x27;</span> };
@@ -93,9 +100,9 @@
 <span class="hljs-comment">// @ts-expect-error 普通字符串不能直接当成已建立品牌的 UserId</span>
 <span class="hljs-keyword">const</span> <span class="hljs-attr">wrongId</span>: <span class="hljs-title class_">UserId</span> = <span class="hljs-string">&#x27;order_1&#x27;</span>;
 </code></pre></div>
-<p>品牌在这里主要存在于类型层，字符串不会因此在运行时多出一个真实 Symbol 属性。工厂中的断言集中在已经执行了相应格式检查的边界上，调用方正常使用接口时就不必到处断言。</p>
+<p>品牌在这里主要存在于类型层，字符串不会因此在运行时多出一个真实 Symbol 属性。工厂中的断言集中在已经执行了格式检查的边界上，调用方正常使用接口时就不必到处断言。</p>
 <p>这仍不证明该用户真的存在或调用方有访问权限。断言、any 或直接发送请求都可能绕过前端类型层，服务端必须继续处理真正的业务约束。</p>
-<h3>结构类型也不是所有类型都只比较公开字段</h3>
+<h2>结构类型也不是所有类型都只比较公开字段</h2>
 <p>类中的 private、protected 成员以及 JavaScript 私有元素会影响兼容性，相关成员的来源或品牌不能简单用另一个同名公开字段伪造。把 TypeScript 叫作结构类型系统，不意味着它完全没有名义化边界。</p>
 <p>readonly 也不能简单当成运行时不可变保证；对象方法、可变别名和类型兼容规则还可能产生不同效果。需要运行时冻结或严格受控更新时，应明确加入对应机制。</p>
 <p>理解这些差别后，就能把“这个赋值为什么通过”和“这个运行时值是否真的符合业务要求”分开判断。前者依赖结构、上下文与编译选项，后者仍需要明确的构造、验证和权限流程。</p></div><div class="answer-bottom"><a href="https://www.typescriptlang.org/docs/handbook/type-compatibility.html" target="_blank" rel="noreferrer">TypeScript · Type Compatibility<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E7%BB%93%E6%9E%84%E7%B1%BB%E5%9E%8B%E3%80%81%E5%8F%AF%E9%80%89%E5%B1%9E%E6%80%A7%E5%92%8C%E9%A2%9D%E5%A4%96%E5%B1%9E%E6%80%A7%E6%A3%80%E6%9F%A5%E6%9C%89%E5%93%AA%E4%BA%9B%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E7%BB%93%E6%9E%84%E7%B1%BB%E5%9E%8B%E3%80%81%E5%8F%AF%E9%80%89%E5%B1%9E%E6%80%A7%E5%92%8C%E9%A2%9D%E5%A4%96%E5%B1%9E%E6%80%A7%E6%A3%80%E6%9F%A5%E6%9C%89%E5%93%AA%E4%BA%9B%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-structural-typing%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-structural-typing%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：结构类型、可选属性和额外属性检查有哪些区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-unknown/">any、unknown 和 never 分别适合什么场景？</a></li><li><a href="/questions/ts-interface-type/">type 和 interface 有哪些区别？</a></li><li><a href="/questions/ts-generics/">泛型解决了什么问题？如何约束泛型？</a></li><li><a href="/questions/ts-discriminated-union/">如何用可辨识联合避免不合理的状态组合？</a></li></ul></nav></main></div></div>

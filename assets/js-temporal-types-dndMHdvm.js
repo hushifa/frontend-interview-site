@@ -1,0 +1,71 @@
+var e={answerHtml:`<h2>简答</h2>
+<ul>
+<li>Temporal 用不同类型区分时间语义：Instant 是时间线上的一点，PlainDate 是不带时区的日历日期，ZonedDateTime 是带时区的日期时间。</li>
+<li>把这些语义分开，可以避免 Date 混用 UTC 与本地时间导致的错误。</li>
+<li>跨夏令时计算应使用 ZonedDateTime，它会按时区规则调整。</li>
+<li>Temporal 的运行时支持仍在推进，使用前要做能力检测或引入 polyfill。</li>
+</ul>
+<p>“2024 年 1 月 1 日”可以是一张账单的日期，也可以是某地午夜发生的真实瞬间，两者不是同一种数据。若把生日统一转成一个 UTC 午夜时间戳，再按用户本地时间显示，某些地区就可能显示成前一天。</p>
+<p>Temporal 把这些用途分成不同类型，让代码先说明自己处理的是日历日期、确定瞬间，还是某个时区下的本地日程，再选择格式化与运算方式。</p>
+<h2>三种核心类型分别表达什么</h2>
+<table><thead><tr><th>类型</th><th>主要语义</th><th>常见用途</th></tr></thead><tbody><tr><td>Instant</td><td>时间线上的一个确定瞬间</td><td>日志、事件发生时间、跨系统时间戳</td></tr><tr><td>PlainDate</td><td>年月日与日历，不附带具体时刻或时区</td><td>生日日期、账期、按天安排的日历事项</td></tr><tr><td>ZonedDateTime</td><td>确定瞬间，加上时区与日历上下文</td><td>地区日程、当地时间展示、涉及夏令时的计算</td></tr></tbody></table>
+<p>Instant 本身不包含“上海现在几点”这种地区解释。同一个瞬间可以投影到多个时区，得到不同的本地日期和时刻。PlainDate 则根本不表示一个全球唯一的瞬间，不能随意把它当作 Unix 时间戳。</p>
+<h2>日历日期不需要先变成午夜</h2>
+<p>以下示例要求环境提供 Temporal，或者通过兼容方案取得同样的接口：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> date = <span class="hljs-title class_">Temporal</span>.<span class="hljs-property">PlainDate</span>.<span class="hljs-title function_">from</span>(<span class="hljs-string">&#x27;2024-02-28&#x27;</span>);
+<span class="hljs-keyword">const</span> next = date.<span class="hljs-title function_">add</span>({ <span class="hljs-attr">days</span>: <span class="hljs-number">1</span> });
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(date.<span class="hljs-title function_">toString</span>()); <span class="hljs-comment">// 2024-02-28</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(next.<span class="hljs-title function_">toString</span>()); <span class="hljs-comment">// 2024-02-29</span>
+</code></pre></div>
+<p>日期加一天会按日历规则处理闰年，不必先乘上 24 小时的毫秒数。add 返回新值，原 date 没被修改，这也减少了一个模块不小心改变另一个模块所持日期对象的问题。</p>
+<p>不包含年份的周期性生日，还可以考虑 PlainMonthDay；每天几点提醒，可以考虑 PlainTime。PlainDateTime 表达完整的本地年月日时分秒，但没有时区，仍不一定能对应唯一瞬间。</p>
+<h2>同一个 Instant，在不同地方可以属于不同日期</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> instant = <span class="hljs-title class_">Temporal</span>.<span class="hljs-property">Instant</span>.<span class="hljs-title function_">from</span>(<span class="hljs-string">&#x27;2024-01-01T00:00:00Z&#x27;</span>);
+<span class="hljs-keyword">const</span> shanghai = instant.<span class="hljs-title function_">toZonedDateTimeISO</span>(<span class="hljs-string">&#x27;Asia/Shanghai&#x27;</span>);
+<span class="hljs-keyword">const</span> losAngeles = instant.<span class="hljs-title function_">toZonedDateTimeISO</span>(<span class="hljs-string">&#x27;America/Los_Angeles&#x27;</span>);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(shanghai.<span class="hljs-property">hour</span>); <span class="hljs-comment">// 8</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(losAngeles.<span class="hljs-title function_">toPlainDate</span>().<span class="hljs-title function_">toString</span>()); <span class="hljs-comment">// 2023-12-31</span>
+</code></pre></div>
+<p>两处展示描述的是同一个真实时间点，并不是其中一个算错了日期。因此“用户填写的日期”和“某个事件发生瞬间的本地日期”不能使用同一套不加说明的存储约定。</p>
+<p>纯偏移量如 +08:00 可以帮助确定某个本地时间对应的瞬间，但它不包含一个地区未来的夏令时或法律规则。需要按地区安排未来日程时，应保留 IANA 时区标识，例如 Asia/Shanghai、America/New_York，而不只是保存当前偏移。</p>
+<h2>加一个日历日，不一定等于经过 24 小时</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> start = <span class="hljs-title class_">Temporal</span>.<span class="hljs-property">ZonedDateTime</span>.<span class="hljs-title function_">from</span>(
+  <span class="hljs-string">&#x27;2024-03-09T12:00:00-05:00[America/New_York]&#x27;</span>,
+);
+<span class="hljs-keyword">const</span> nextDay = start.<span class="hljs-title function_">add</span>({ <span class="hljs-attr">days</span>: <span class="hljs-number">1</span> });
+<span class="hljs-keyword">const</span> after24Hours = start.<span class="hljs-title function_">add</span>({ <span class="hljs-attr">hours</span>: <span class="hljs-number">24</span> });
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(nextDay.<span class="hljs-property">hour</span>); <span class="hljs-comment">// 12</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(after24Hours.<span class="hljs-property">hour</span>); <span class="hljs-comment">// 13</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(start.<span class="hljs-title function_">until</span>(nextDay, { <span class="hljs-attr">largestUnit</span>: <span class="hljs-string">&#x27;hours&#x27;</span> }).<span class="hljs-property">hours</span>); <span class="hljs-comment">// 23</span>
+</code></pre></div>
+<p>这个区间跨过纽约的春季夏令时变化。加一个日历日保持“第二天中午”这一日程含义，但两次中午之间实际只经过 23 小时；加 24 小时则描述实际经过时长，因此到达当地下午 1 点。</p>
+<p>这不是 ZonedDateTime 随意改变加法，而是 days 与 hours 表达的业务语义不同。按天重复的会议、准确持续 24 小时的令牌有效期，应该选择符合各自规则的运算。</p>
+<p>Instant 没有地区日历上下文，不能期待它独自解释一个地区“明天同一时刻”的意思。需要日历单位的计算时，应先明确日期或时区语义。</p>
+<h2>夏令时会产生不存在或重复的本地时间</h2>
+<p>秋季回拨时，一些本地时刻会出现两次。下面同一个纽约本地时间，按 earlier 与 later 选择得到不同的瞬间：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> local = {
+  <span class="hljs-attr">timeZone</span>: <span class="hljs-string">&#x27;America/New_York&#x27;</span>,
+  <span class="hljs-attr">year</span>: <span class="hljs-number">2024</span>,
+  <span class="hljs-attr">month</span>: <span class="hljs-number">11</span>,
+  <span class="hljs-attr">day</span>: <span class="hljs-number">3</span>,
+  <span class="hljs-attr">hour</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">minute</span>: <span class="hljs-number">30</span>,
+};
+
+<span class="hljs-keyword">const</span> earlier = <span class="hljs-title class_">Temporal</span>.<span class="hljs-property">ZonedDateTime</span>.<span class="hljs-title function_">from</span>(local, { <span class="hljs-attr">disambiguation</span>: <span class="hljs-string">&#x27;earlier&#x27;</span> });
+<span class="hljs-keyword">const</span> later = <span class="hljs-title class_">Temporal</span>.<span class="hljs-property">ZonedDateTime</span>.<span class="hljs-title function_">from</span>(local, { <span class="hljs-attr">disambiguation</span>: <span class="hljs-string">&#x27;later&#x27;</span> });
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(earlier.<span class="hljs-title function_">toInstant</span>().<span class="hljs-title function_">toString</span>()); <span class="hljs-comment">// 2024-11-03T05:30:00Z</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(later.<span class="hljs-title function_">toInstant</span>().<span class="hljs-title function_">toString</span>()); <span class="hljs-comment">// 2024-11-03T06:30:00Z</span>
+</code></pre></div>
+<p>春季向前调整则可能跳过一段本地时间。Temporal 提供 disambiguation 选项决定遇到重复或缺失时怎样处理，默认 compatible 也有明确的调整规则。如果业务要求用户显式确认，而不是自动挑一个解释，可以使用 reject 并处理错误。</p>
+<p>输入里同时提供时区和偏移，还要考虑它们是否相互匹配；相关 offset 选项与 disambiguation 是不同维度。不能把一个看起来格式完整的字符串，直接认定为没有任何时间语义歧义。</p>
+<h2>不可变不等于不需要业务规则</h2>
+<p>月底加一个月、跨日历计算、无效日期组件怎样处理，都需要明确约定。某些操作默认采用 constrain，将不适合目标月份的日号约束到有效范围；要求严格拒绝时，应使用对应的 overflow 选项，而不是误以为每个无效输入都一定按同样方式处理。</p>
+<p>Temporal 对象应使用 equals、compare 等接口比较，不应把对象引用相等当成日期或瞬间相等，也不应依赖隐式数字转换进行运算。格式化给人看与序列化给系统交换数据，也应分别设计。</p>
+<p>接口中应标明字段到底是日期字符串、瞬间字符串，还是还包含地区时区的日程结构。对于未来地区日程，时区规则也可能变化，需要系统明确以本地约定还是已经确定的瞬间为最终依据。</p>
+<h2>接入前先检查目标环境</h2>
+<p>Temporal 的原生可用性仍应按目标浏览器和运行时确认。可以检查 typeof globalThis.Temporal，缺失时选择合适的兼容实现，并根据库文档显式导入；不能因为 TypeScript 有类型声明，就认定生产环境也有全局对象。</p>
+<p>兼容实现还涉及包体积、日历与时区数据、服务端和客户端的一致性。应重点测试跨时区、夏令时边界、月末、闰年和序列化往返，而不是只在本机当前时区测试一个普通工作日。</p>
+<p>补充参考：<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal/ZonedDateTime/from">MDN · ZonedDateTime.from()</a>、<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal/ZonedDateTime/add">MDN · ZonedDateTime.add()</a>。</p>`};export{e as default};

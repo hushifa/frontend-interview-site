@@ -26,12 +26,19 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">:has() 怎样根据后代或相邻元素设置样式？</span></nav><h1 tabindex="-1">:has() 怎样根据后代或相邻元素设置样式？</h1><p class="reading-summary">:has() 以当前元素为锚点检查相对选择器是否匹配，匹配后选中的仍是当前元素。它既能表达包含某个后代，也能表达后面紧接某个兄弟元素等关系。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>普通的 <code>.card img</code> 选择卡片里的图片；<code>.card:has(img)</code> 选择<strong>里面存在图片的卡片</strong>。变化的关键不只是“往上找父元素”，而是可以用一个元素与周围元素的关系，决定要不要选中它自己。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">:has() 怎样根据后代或相邻元素设置样式？</span></nav><h1 tabindex="-1">:has() 怎样根据后代或相邻元素设置样式？</h1><p class="reading-summary">:has() 以当前元素为锚点检查相对选择器是否匹配，匹配后选中的仍是当前元素。它既能表达包含某个后代，也能表达后面紧接某个兄弟元素等关系。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li><code>:has()</code> 根据元素与周围元素的关系选中括号外的元素，例如 <code>.card:has(img)</code> 选中含图片的卡片。</li>
+<li>括号里是相对选择器，还能表达相邻和后续兄弟，比如 <code>h2:has(+ p)</code>，所以不只是“父选择器”。</li>
+<li>逗号表示“或”，连写多个 <code>:has()</code> 表示“且”；<code>:not(:has(img))</code> 与 <code>:has(:not(img))</code> 含义不同。</li>
+<li>可以让卡片样式跟随原生控件状态，但要保留原生控件，不支持时功能仍可用。</li>
+</ul>
+<p>普通的 <code>.card img</code> 选择卡片里的图片；<code>.card:has(img)</code> 选择<strong>里面存在图片的卡片</strong>。变化的关键不只是“往上找父元素”，而是可以用一个元素与周围元素的关系，决定要不要选中它自己。</p>
 <p><code>:has()</code> 括号里写的是相对选择器，以括号外面的元素为锚点。例如 <code>.card:has(&gt; img)</code> 中，<code>&gt; img</code> 从当前卡片出发寻找直接子图片；满足条件后，被设置样式的仍然是 <code>.card</code>。</p>
-<h3>不同组合符表达不同关系</h3>
+<h2>不同组合符表达不同关系</h2>
 <table><thead><tr><th>选择器</th><th>选中了谁</th></tr></thead><tbody><tr><td><code>.card:has(img)</code></td><td>任意深度后代中有图片的卡片</td></tr><tr><td><code>.card:has(&gt; img)</code></td><td>直接子元素中有图片的卡片</td></tr><tr><td><code>h2:has(+ p)</code></td><td>后面紧接着一个同级段落的二级标题</td></tr><tr><td><code>li:has(~ li.active)</code></td><td>后续兄弟中存在活动列表项的列表项</td></tr></tbody></table>
 <p><code>h2:has(+ p)</code> 能用来调整标题与紧随正文之间的距离，它没有选择 <code>p</code>，也没有要求 <code>p</code> 是 <code>h2</code> 的子元素。因此把 <code>:has()</code> 只叫作“父选择器”会漏掉相邻、后续兄弟等用法。</p>
-<h3>让原生选项的状态带动整张卡片</h3>
+<h2>让原生选项的状态带动整张卡片</h2>
 <p>以前要给选中的套餐卡片加边框，常见做法是监听单选框变化，再用 JavaScript 同步一个 <code>.selected</code> 类。现在可以直接查询单选框状态：</p>
 <div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">fieldset</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;plans&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">legend</span>&gt;</span>选择学习节奏<span class="hljs-tag">&lt;/<span class="hljs-name">legend</span>&gt;</span>
@@ -67,7 +74,7 @@
 </code></pre></div>
 <p>原生单选框仍然提供互斥选择、表单值和键盘交互，<code>:has()</code> 只让卡片外观跟随这些真实状态。用户用鼠标点标签，或者通过键盘切换选项，都无需额外维护一份“选中卡片”的样式状态。</p>
 <p>这里保留了单选框本身。即便目标浏览器不支持 <code>:has()</code> 而忽略增强规则，仍能通过单选框判断选中状态；不能先把原生控件完全隐藏，再让必要反馈只依赖某个选择器。</p>
-<h3>“有任意一个”和“两个都要有”怎样写</h3>
+<h2>“有任意一个”和“两个都要有”怎样写</h2>
 <p><code>.card:has(img, video)</code> 中的逗号表示或：有图片或者有视频就匹配。<code>.card:has(img):has(video)</code> 则要求两个条件同时成立，图片和视频可以在不同后代分支中。</p>
 <p>否定的位置也会改变含义：</p>
 <ul>
@@ -76,7 +83,7 @@
 </ul>
 <p>一张同时包含图片和段落的卡片不满足第一条，却满足第二条，因为段落不是图片。空卡片满足第一条，但不满足第二条，因为它根本没有后代。</p>
 <p>不能把 <code>:has()</code> 再嵌套进另一个 <code>:has()</code>。例如要找“包含带图片文章的区块”，应根据真实关系写成 <code>section:has(article img)</code> 等合法选择器，而不是 <code>section:has(article:has(img))</code>。伪元素如 <code>::before</code> 也不能按普通后代元素放进 <code>:has()</code> 查询。</p>
-<h3>权重和性能不能忽略</h3>
+<h2>权重和性能不能忽略</h2>
 <p><code>:has()</code> 的特异性贡献取参数列表中最高的那一个。<code>.card:has(.cover, #hero)</code> 中，<code>.card</code> 贡献一个类，参数里的 <code>#hero</code> 贡献一个 ID，合计为 <code>1-1-0</code>。即便当前卡片只是因为含有 <code>.cover</code> 而匹配，参数中的 ID 仍然影响这条选择器的权重。</p>
 <p>如果希望整条默认样式容易覆盖，可以按设计使用 <code>:where(.card:has(...))</code> 把这一部分特异性归零，而不是不断给业务覆盖规则叠加 class。</p>
 <p>浏览器需要在相关 DOM 或状态改变后更新匹配结果。<code>:has()</code> 并非天然不能用于动态页面，但 <code>body:has(...)</code>、<code>*:has(...)</code> 等过宽锚点可能扩大需要检查的范围。明确到具体组件，关系明确时使用 <code>&gt;</code>、<code>+</code> 等限制，再用真实交互测量样式计算成本，比一律禁用或一律替代 JavaScript 更合理。</p>

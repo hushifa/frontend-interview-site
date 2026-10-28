@@ -26,9 +26,16 @@
     <link rel="stylesheet" crossorigin href="/assets/index-DfLvmW1A.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">TypeScript 新装饰器与 experimentalDecorators 有何区别？</span></nav><h1 tabindex="-1">TypeScript 新装饰器与 experimentalDecorators 有何区别？</h1><p class="reading-summary">TypeScript 支持现代装饰器语义，也保留 experimentalDecorators 对应的旧方案。它们的参数、返回与初始化机制不同，元数据和参数装饰器能力也不能互换，迁移必须验证库与构建链。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><p>装饰器是会在运行时参与类或成员定义的代码，不是像 interface 那样编译后就只剩空气的类型标注。它可以包装方法、参与字段初始化或注册额外行为，因此语义不同的装饰器方案不能只靠同一个 @ 外观混用。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">TypeScript 新装饰器与 experimentalDecorators 有何区别？</span></nav><h1 tabindex="-1">TypeScript 新装饰器与 experimentalDecorators 有何区别？</h1><p class="reading-summary">TypeScript 支持现代装饰器语义，也保留 experimentalDecorators 对应的旧方案。它们的参数、返回与初始化机制不同，元数据和参数装饰器能力也不能互换，迁移必须验证库与构建链。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>TypeScript 5.0 起支持 ECMAScript 标准装饰器，不需要 experimentalDecorators。</li>
+<li>标准装饰器接收 value 和 context 两个参数，通过 context.addInitializer 注册初始化逻辑。</li>
+<li>旧版 experimentalDecorators 的签名不同，并支持参数装饰器和 emitDecoratorMetadata。</li>
+<li>依赖旧装饰器的框架（如部分 DI 库）不能直接切换到标准装饰器。</li>
+</ul>
+<p>装饰器是会在运行时参与类或成员定义的代码，不是像 interface 那样编译后就只剩空气的类型标注。它可以包装方法、参与字段初始化或注册额外行为，因此语义不同的装饰器方案不能只靠同一个 @ 外观混用。</p>
 <p>TypeScript 5.0 开始支持的现代方案，主要使用“被装饰的值 + 上下文对象”；experimentalDecorators 对应的旧实验方案，则有 target、属性名、描述符等另一套约定。</p>
-<h3>现代方法装饰器收到原方法与 context</h3>
+<h2>现代方法装饰器收到原方法与 context</h2>
 <p>下面的文件使用现代装饰器配置，不开启 experimentalDecorators：</p>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-comment">// modern.ts</span>
 <span class="hljs-keyword">function</span> logged&lt;<span class="hljs-title class_">This</span>, <span class="hljs-title class_">Args</span> <span class="hljs-keyword">extends</span> <span class="hljs-built_in">unknown</span>[], <span class="hljs-title class_">Result</span>&gt;(
@@ -57,8 +64,8 @@
 </code></pre></div>
 <p>装饰器返回替代方法，包装函数保留原来的 this、参数和返回类型。不能用一个不关心 this 的箭头函数随意替换实例方法，否则调用接收者可能变化。</p>
 <p>context 提供成员种类、名称、静态或私有等信息。不同种类的装饰目标有不同上下文与允许的返回形式，不能把方法装饰器的处理方式直接套到字段或类上。</p>
-<p>这里的日志只表示开始调用。若方法返回 Promise，包装函数立即返回同一个相应结果，并没有等待异步工作结束；想记录异步完成需要另外设计，同时保持原接口的返回与错误语义。</p>
-<h3>旧方案使用另一套调用协议</h3>
+<p>这里的日志只表示开始调用。若方法返回 Promise，包装函数立即返回同一个结果，并没有等待异步工作结束；想记录异步完成需要另外设计，同时保持原接口的返回与错误语义。</p>
+<h2>旧方案使用另一套调用协议</h2>
 <p>下面是单独的 legacy.ts，需要开启 experimentalDecorators。它不是给上面现代装饰器再补一个开关：</p>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-comment">// legacy.ts</span>
 <span class="hljs-keyword">function</span> legacyLogged&lt;<span class="hljs-title class_">This</span>, <span class="hljs-title class_">Args</span> <span class="hljs-keyword">extends</span> <span class="hljs-built_in">unknown</span>[], <span class="hljs-title class_">Result</span>&gt;(
@@ -90,18 +97,18 @@
 </code></pre></div>
 <p>旧方法装饰器通过描述符修改方法，参数签名与现代方案不同。把现代实现放进旧配置，或把依赖三个参数的旧方法装饰器当成现代实现使用，都可能产生类型诊断或运行时不匹配。</p>
 <p>因此升级框架时要确认它要求哪套语义，而不是看到项目里有 @ 就默认开启或关闭 experimentalDecorators。</p>
-<h3>定义、初始化和调用是不同时间点</h3>
-<p>装饰器表达式通常在相应类定义求值过程中参与处理，不是每次 new 实例都会重新装饰一遍方法。现代 context.addInitializer 可以登记初始化逻辑，再按目标种类在实例或静态初始化的相应时机执行。</p>
+<h2>定义、初始化和调用是不同时间点</h2>
+<p>装饰器表达式通常在类定义求值过程中参与处理，不是每次 new 实例都会重新装饰一遍方法。现代 context.addInitializer 可以登记初始化逻辑，再按目标种类在实例或静态初始化的时机执行。</p>
 <p>例如需要把某个方法绑定到每个实例时，初始化钩子可以帮助建立实例上的绑定。但它运行的具体阶段与目标是方法、字段、静态成员还是类有关，应按接口规则安排，不能假定所有初始化都发生在构造函数最后一行之后。</p>
 <p>多个装饰器叠加时，还要区分装饰器表达式的求值顺序、装饰器应用顺序以及最终包装方法的调用顺序。只看一条日志，很容易把这几个阶段误认为同一个过程。</p>
-<h3>参数装饰器和反射元数据不能直接搬过去</h3>
+<h2>参数装饰器和反射元数据不能直接搬过去</h2>
 <p>旧方案支持一些现有库依赖的参数装饰器与 emitDecoratorMetadata 输出机制。现代方案不是同一套协议，不能按旧规则装饰参数，也不兼容旧 emitDecoratorMetadata 的直接使用方式。</p>
 <p>依赖旧反射元数据的依赖注入框架，可能通过运行时库读取编译器生成的信息。关掉旧选项后，即使类看上去还能定义，也可能无法按原方式获得依赖信息。迁移应核对框架版本、装饰器实现和元数据消费方。</p>
 <p>后续的装饰器元数据能力，例如相关 context.metadata 与 Symbol.metadata 机制，也不自动等同于旧的设计类型元数据输出。API、编译器与运行环境支持需要分别确认，不能仅凭名字里都有 metadata 就认定兼容。</p>
-<h3>装饰器改变行为，不自动改变外部类型契约</h3>
+<h2>装饰器改变行为，不自动改变外部类型契约</h2>
 <p>一个装饰器运行时给实例增加了字段，不代表调用方的类类型就自动出现这个字段；替换构造器、绑定方法或修改初始化，也需要维持原本对外承诺的结构与行为。</p>
 <p>装饰器还可能引入模块顶层副作用和额外运行时依赖。只以 import type 导入相关值并不能执行注册逻辑，打包器的副作用处理、类字段输出方式与不同转换器配置也可能影响最终结果。</p>
-<h3>怎样验证迁移是否真的成功</h3>
+<h2>怎样验证迁移是否真的成功</h2>
 <p>至少分别编译现代和旧方案的最小文件，确认使用的配置、参数签名与产物；再实际调用方法，检查 this、参数、返回值、异常和异步行为没有变化。</p>
 <p>如果使用初始化钩子或元数据，还要验证多个实例、静态成员、继承与缺失元数据的情况。仅仅“编译不报错”不能证明框架在运行时读到了原来需要的信息。</p>
 <p>最后，TypeScript 能把装饰器转换成目标 JavaScript，不代表所有浏览器已经原生接受同样的 @ 语法。发布产物仍需与目标环境匹配，并确保整条构建链使用的是同一套装饰器语义。</p></div><div class="answer-bottom"><a href="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html" target="_blank" rel="noreferrer">TypeScript · TypeScript 5.0 decorators<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+TypeScript+%E6%96%B0%E8%A3%85%E9%A5%B0%E5%99%A8%E4%B8%8E+experimentalDecorators+%E6%9C%89%E4%BD%95%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ATypeScript+%E6%96%B0%E8%A3%85%E9%A5%B0%E5%99%A8%E4%B8%8E+experimentalDecorators+%E6%9C%89%E4%BD%95%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-decorators-modern%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-decorators-modern%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：TypeScript 新装饰器与 experimentalDecorators 有何区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-unknown/">any、unknown 和 never 分别适合什么场景？</a></li><li><a href="/questions/ts-interface-type/">type 和 interface 有哪些区别？</a></li><li><a href="/questions/ts-generics/">泛型解决了什么问题？如何约束泛型？</a></li><li><a href="/questions/ts-discriminated-union/">如何用可辨识联合避免不合理的状态组合？</a></li></ul></nav></main></div></div>
