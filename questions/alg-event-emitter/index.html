@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="手写与算法面试题：用 Map 按事件名保存监听器数组。emit 遍历前先复制一份快照，这样执行期间新增的监听器从下一次 emit 起生效，被移除的监听器本轮仍会执行，与 Node.js EventEmitter 一致。once 的监听器要在调用前移除，回调里再次 emit 同一事件时才不会重复触发。" />
+    <title>怎样手写一个支持 on、off、once 和 emit 的事件中心？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/alg-event-emitter/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="怎样手写一个支持 on、off、once 和 emit 的事件中心？ · 前端知库" />
+    <meta property="og:description" content="手写与算法面试题：用 Map 按事件名保存监听器数组。emit 遍历前先复制一份快照，这样执行期间新增的监听器从下一次 emit 起生效，被移除的监听器本轮仍会执行，与 Node.js EventEmitter 一致。once 的监听器要在调用前移除，回调里再次 emit 同一事件时才不会重复触发。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/alg-event-emitter/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-event-emitter/#webpage","url":"https://fe.hushifa.top/questions/alg-event-emitter/","name":"怎样手写一个支持 on、off、once 和 emit 的事件中心？ · 前端知库","description":"手写与算法面试题：用 Map 按事件名保存监听器数组。emit 遍历前先复制一份快照，这样执行期间新增的监听器从下一次 emit 起生效，被移除的监听器本轮仍会执行，与 Node.js EventEmitter 一致。once 的监听器要在调用前移除，回调里再次 emit 同一事件时才不会重复触发。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-event-emitter/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-event-emitter/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"怎样手写一个支持 on、off、once 和 emit 的事件中心？","item":"https://fe.hushifa.top/questions/alg-event-emitter/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DhmYjr2V.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样手写一个支持 on、off、once 和 emit 的事件中心？</span></nav><h1 tabindex="-1">怎样手写一个支持 on、off、once 和 emit 的事件中心？</h1><p class="reading-summary">用 Map 按事件名保存监听器数组。emit 遍历前先复制一份快照，这样执行期间新增的监听器从下一次 emit 起生效，被移除的监听器本轮仍会执行，与 Node.js EventEmitter 一致。once 的监听器要在调用前移除，回调里再次 emit 同一事件时才不会重复触发。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>数据结构用 <code>Map&lt;事件名, 监听器数组&gt;</code>，数组保持注册顺序，<code>emit</code> 按顺序同步调用。</li>
+<li><code>emit</code> 先复制数组再遍历。直接遍历原数组时，回调里调用 <code>off</code> 会让后面的监听器下标前移而被跳过，调用 <code>on</code> 会让新监听器在本轮就执行。</li>
+<li>采用快照后，本轮执行期间新增的监听器下一次才会触发，被移除的监听器本轮仍会执行。Node.js 的 <code>EventEmitter</code> 也是这个行为。</li>
+<li><code>once</code> 给监听器打标记，<code>emit</code> 调用它之前先按包装对象移除。先调用再移除时，回调内部再次 <code>emit</code> 同一事件会再次触发它。</li>
+<li><code>off</code> 按函数引用查找，同一函数注册多次时只移除一次。返回 <code>this</code> 支持链式调用。</li>
+</ul>
+<h2>实现</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">EventEmitter</span> {
+  #events = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+
+  <span class="hljs-title function_">on</span>(<span class="hljs-params">type, listener</span>) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> listener !== <span class="hljs-string">&#x27;function&#x27;</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;listener must be a function&#x27;</span>);
+    <span class="hljs-keyword">if</span> (!<span class="hljs-variable language_">this</span>.#events.<span class="hljs-title function_">has</span>(type)) <span class="hljs-variable language_">this</span>.#events.<span class="hljs-title function_">set</span>(type, []);
+    <span class="hljs-variable language_">this</span>.#events.<span class="hljs-title function_">get</span>(type).<span class="hljs-title function_">push</span>({ listener, <span class="hljs-attr">once</span>: <span class="hljs-literal">false</span> });
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>;
+  }
+
+  <span class="hljs-title function_">once</span>(<span class="hljs-params">type, listener</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">on</span>(type, listener);
+    <span class="hljs-keyword">const</span> list = <span class="hljs-variable language_">this</span>.#events.<span class="hljs-title function_">get</span>(type);
+    list[list.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>].<span class="hljs-property">once</span> = <span class="hljs-literal">true</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>;
+  }
+
+  <span class="hljs-title function_">off</span>(<span class="hljs-params">type, listener</span>) {
+    <span class="hljs-keyword">const</span> list = <span class="hljs-variable language_">this</span>.#events.<span class="hljs-title function_">get</span>(type);
+    <span class="hljs-keyword">if</span> (!list) <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>;
+    <span class="hljs-comment">// 从后往前找，同一函数注册多次时只移除最近一次，与 Node.js 一致</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = list.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i--) {
+      <span class="hljs-keyword">if</span> (list[i].<span class="hljs-property">listener</span> === listener) {
+        list.<span class="hljs-title function_">splice</span>(i, <span class="hljs-number">1</span>);
+        <span class="hljs-keyword">break</span>;
+      }
+    }
+    <span class="hljs-keyword">if</span> (list.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>) <span class="hljs-variable language_">this</span>.#events.<span class="hljs-title function_">delete</span>(type);
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>;
+  }
+
+  <span class="hljs-comment">// once 触发时按包装对象删除，避免误删同一函数用 on 注册的另一条</span>
+  #<span class="hljs-title function_">remove</span>(<span class="hljs-params">type, entry</span>) {
+    <span class="hljs-keyword">const</span> list = <span class="hljs-variable language_">this</span>.#events.<span class="hljs-title function_">get</span>(type);
+    <span class="hljs-keyword">const</span> index = list ? list.<span class="hljs-title function_">indexOf</span>(entry) : -<span class="hljs-number">1</span>;
+    <span class="hljs-keyword">if</span> (index === -<span class="hljs-number">1</span>) <span class="hljs-keyword">return</span>;
+    list.<span class="hljs-title function_">splice</span>(index, <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">if</span> (list.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>) <span class="hljs-variable language_">this</span>.#events.<span class="hljs-title function_">delete</span>(type);
+  }
+
+  <span class="hljs-title function_">emit</span>(<span class="hljs-params">type, ...args</span>) {
+    <span class="hljs-keyword">const</span> list = <span class="hljs-variable language_">this</span>.#events.<span class="hljs-title function_">get</span>(type);
+    <span class="hljs-keyword">if</span> (!list) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    <span class="hljs-comment">// 快照：本轮执行期间的增删从下一次 emit 起生效</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> entry <span class="hljs-keyword">of</span> [...list]) {
+      <span class="hljs-keyword">if</span> (entry.<span class="hljs-property">once</span>) <span class="hljs-variable language_">this</span>.#<span class="hljs-title function_">remove</span>(type, entry); <span class="hljs-comment">// 先移除，防止回调内重入时重复触发</span>
+      entry.<span class="hljs-property">listener</span>.<span class="hljs-title function_">apply</span>(<span class="hljs-variable language_">this</span>, args);
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+  }
+}
+</code></pre></div>
+<p>监听器用 <code>{ listener, once }</code> 包装，<code>off</code> 仍按原函数比较，所以 <code>once</code> 注册的监听器也能用原函数取消。</p>
+<p><code>emit</code> 删除 once 监听器时按包装对象删除，不调用 <code>off</code>。同一个函数既用 <code>on</code>、又用 <code>once</code> 注册时，如果本轮前面的监听器已经把 once 那条移除，按函数删除会误删 <code>on</code> 那条。按包装对象删除时，两次 <code>emit</code> 后该函数共执行 3 次，与 Node.js 的结果相同；按函数删除只有 2 次。</p>
+<h2>emit 期间增删监听器</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> log = [];
+<span class="hljs-keyword">const</span> emitter = <span class="hljs-keyword">new</span> <span class="hljs-title class_">EventEmitter</span>();
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">b</span> = (<span class="hljs-params"></span>) =&gt; log.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;b&#x27;</span>);
+
+emitter.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  log.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;a&#x27;</span>);
+  emitter.<span class="hljs-title function_">off</span>(<span class="hljs-string">&#x27;x&#x27;</span>, b);
+  emitter.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-function">() =&gt;</span> log.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;new&#x27;</span>));
+});
+emitter.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;x&#x27;</span>, b);
+emitter.<span class="hljs-title function_">once</span>(<span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">v</span>) =&gt;</span> log.<span class="hljs-title function_">push</span>(<span class="hljs-string">`once<span class="hljs-subst">${v}</span>`</span>));
+
+emitter.<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-number">1</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(log.<span class="hljs-title function_">join</span>()); <span class="hljs-comment">// a,b,once1</span>
+log.<span class="hljs-property">length</span> = <span class="hljs-number">0</span>;
+
+emitter.<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-number">2</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(log.<span class="hljs-title function_">join</span>()); <span class="hljs-comment">// a,new</span>
+</code></pre></div>
+<p>第一次 <code>emit</code> 时，b 在本轮被移除但仍执行，新增的监听器没有执行。第二次 <code>emit</code> 时 b 已不在，once 已移除，新增的监听器开始执行。把同样的代码换成 Node.js 的 <code>require(&#x27;events&#x27;).EventEmitter</code>，第一次输出同样是 <code>a,b,once1</code>。</p>
+<h2>常见追问</h2>
+<ul>
+<li>某个监听器抛错会怎样？上面的实现中错误直接抛出，后面的监听器不再执行。需要隔离时在循环里 <code>try...catch</code>，把错误交给统一的错误处理。</li>
+<li>为什么要提供 <code>off</code>？组件卸载时不移除监听器，回调会继续引用组件里的数据，造成内存泄漏和对已卸载组件的更新。</li>
+<li>浏览器里有现成的吗？<code>EventTarget</code> 配合 <code>addEventListener</code>、<code>dispatchEvent</code> 可以实现相同用途，监听器选项 <code>{ once: true }</code> 对应 <code>once</code>。</li>
+</ul></div><div class="answer-bottom"><a href="https://nodejs.org/api/events.html" target="_blank" rel="noreferrer">Node.js 文档 · Events<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E6%89%8B%E5%86%99%E4%B8%80%E4%B8%AA%E6%94%AF%E6%8C%81+on%E3%80%81off%E3%80%81once+%E5%92%8C+emit+%E7%9A%84%E4%BA%8B%E4%BB%B6%E4%B8%AD%E5%BF%83%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E6%89%8B%E5%86%99%E4%B8%80%E4%B8%AA%E6%94%AF%E6%8C%81+on%E3%80%81off%E3%80%81once+%E5%92%8C+emit+%E7%9A%84%E4%BA%8B%E4%BB%B6%E4%B8%AD%E5%BF%83%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-event-emitter%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-event-emitter%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样手写一个支持 on、off、once 和 emit 的事件中心？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-debounce/">怎样实现只在停止调用后执行的防抖函数？</a></li><li><a href="/questions/alg-throttle/">怎样实现首沿节流？它与尾沿节流、防抖有什么区别？</a></li><li><a href="/questions/alg-promise-aplus/">怎样手写一个符合 Promises/A+ 规范的 Promise？</a></li><li><a href="/questions/alg-deep-clone/">怎样手写深拷贝？和 structuredClone 有什么区别？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

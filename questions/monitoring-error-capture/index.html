@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="前端监控面试题：window.onerror 与 error 事件捕获运行时异常，unhandledrejection 捕获未处理的 Promise 拒绝，资源加载失败要在捕获阶段监听；跨域脚本的报错只剩 Script error.，需 crossorigin 加 CORS 响应头才能拿到详情。" />
+    <title>前端怎样全局捕获 JS 错误、Promise 拒绝和资源加载失败？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/monitoring-error-capture/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="前端怎样全局捕获 JS 错误、Promise 拒绝和资源加载失败？ · 前端知库" />
+    <meta property="og:description" content="前端监控面试题：window.onerror 与 error 事件捕获运行时异常，unhandledrejection 捕获未处理的 Promise 拒绝，资源加载失败要在捕获阶段监听；跨域脚本的报错只剩 Script error.，需 crossorigin 加 CORS 响应头才能拿到详情。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/monitoring-error-capture/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/monitoring-error-capture/#webpage","url":"https://fe.hushifa.top/questions/monitoring-error-capture/","name":"前端怎样全局捕获 JS 错误、Promise 拒绝和资源加载失败？ · 前端知库","description":"前端监控面试题：window.onerror 与 error 事件捕获运行时异常，unhandledrejection 捕获未处理的 Promise 拒绝，资源加载失败要在捕获阶段监听；跨域脚本的报错只剩 Script error.，需 crossorigin 加 CORS 响应头才能拿到详情。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/monitoring-error-capture/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/monitoring-error-capture/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"前端监控面试题","item":"https://fe.hushifa.top/topics/monitoring/"},{"@type":"ListItem","position":3,"name":"前端怎样全局捕获 JS 错误、Promise 拒绝和资源加载失败？","item":"https://fe.hushifa.top/questions/monitoring-error-capture/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DhmYjr2V.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/monitoring/">前端监控面试题</a><span aria-hidden="true">/</span><span aria-current="page">前端怎样全局捕获 JS 错误、Promise 拒绝和资源加载失败？</span></nav><h1 tabindex="-1">前端怎样全局捕获 JS 错误、Promise 拒绝和资源加载失败？</h1><p class="reading-summary">window.onerror 与 error 事件捕获运行时异常，unhandledrejection 捕获未处理的 Promise 拒绝，资源加载失败要在捕获阶段监听；跨域脚本的报错只剩 Script error.，需 crossorigin 加 CORS 响应头才能拿到详情。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>运行时脚本错误会以 <code>ErrorEvent</code> 派发到 <code>window</code>，可用 <code>window.onerror</code> 或 <code>addEventListener(&#x27;error&#x27;)</code> 捕获。</li>
+<li>未处理的 Promise 拒绝不触发 <code>error</code>，而是触发 <code>unhandledrejection</code>，原因在 <code>event.reason</code> 中。</li>
+<li><code>&lt;img&gt;</code>、<code>&lt;script&gt;</code>、<code>&lt;link&gt;</code> 加载失败的 <code>error</code> 事件派发在元素上且不冒泡，全局捕获必须在 <code>window</code> 上使用捕获阶段监听。</li>
+<li>跨域脚本抛错时浏览器只给出 <code>Script error.</code>，行列号为 0、<code>error</code> 为 <code>null</code>；要拿到详情，脚本标签需加 <code>crossorigin</code>，服务端需返回 <code>Access-Control-Allow-Origin</code>。</li>
+</ul>
+<h2>运行时错误</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-variable language_">window</span>.<span class="hljs-property">onerror</span> = <span class="hljs-function">(<span class="hljs-params">message, source, lineno, colno, error</span>) =&gt;</span> {
+  <span class="hljs-title function_">report</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;js&#x27;</span>, message, source, lineno, colno, <span class="hljs-attr">stack</span>: error?.<span class="hljs-property">stack</span> });
+};
+</code></pre></div>
+<p><code>onerror</code> 是唯一接收多个参数的事件处理属性；<code>addEventListener(&#x27;error&#x27;, handler)</code> 则只收到一个 <code>ErrorEvent</code>，字段为 <code>message</code>、<code>filename</code>、<code>lineno</code>、<code>colno</code>、<code>error</code>。<code>onerror</code> 返回 <code>true</code> 会取消默认的控制台报错，但抛错的脚本依然中止。</p>
+<p><code>try/catch</code> 包住的错误、框架自身的错误边界吞掉的错误不会到达全局事件，需要在框架层（如 React 错误边界、Vue 的 <code>app.config.errorHandler</code>）另行上报。</p>
+<h2>Promise 拒绝</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;unhandledrejection&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+  <span class="hljs-title function_">report</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;promise&#x27;</span>, <span class="hljs-attr">reason</span>: <span class="hljs-title class_">String</span>(event.<span class="hljs-property">reason</span>), <span class="hljs-attr">stack</span>: event.<span class="hljs-property">reason</span>?.<span class="hljs-property">stack</span> });
+});
+</code></pre></div>
+<p>事件类型是 <code>PromiseRejectionEvent</code>，含 <code>promise</code> 和 <code>reason</code>。拒绝之后才挂上处理函数时会触发 <code>rejectionhandled</code>，可用于修正&quot;未处理&quot;的统计。调用 <code>preventDefault()</code> 只是取消控制台的默认输出。来自跨域脚本的拒绝不会触发该事件。</p>
+<p><code>reason</code> 不一定是 <code>Error</code>，可能是字符串或普通对象，上报前要做类型判断。</p>
+<h2>资源加载失败</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(
+  <span class="hljs-string">&#x27;error&#x27;</span>,
+  <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (event <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">ErrorEvent</span>) <span class="hljs-keyword">return</span>; <span class="hljs-comment">// 运行时错误交给上面的逻辑</span>
+    <span class="hljs-keyword">const</span> el = event.<span class="hljs-property">target</span>;
+    <span class="hljs-title function_">report</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;resource&#x27;</span>, <span class="hljs-attr">tag</span>: el.<span class="hljs-property">tagName</span>, <span class="hljs-attr">url</span>: el.<span class="hljs-property">src</span> || el.<span class="hljs-property">href</span> });
+  },
+  <span class="hljs-literal">true</span>, <span class="hljs-comment">// 资源错误不冒泡，只能在捕获阶段拿到</span>
+);
+</code></pre></div>
+<p>资源错误是普通 <code>Event</code>，拿不到 HTTP 状态码。需要状态码或耗时时，可结合 Resource Timing 数据分析。<code>fetch</code> 失败不属于资源错误，它表现为 Promise 拒绝，应在请求封装层统一处理。</p>
+<h2>跨域 Script error.</h2>
+<p>脚本放在 CDN 等其他源时，浏览器为避免跨源信息泄露会屏蔽错误详情。解决需要双方配合：</p>
+<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cdn.example.com/app.js&quot;</span> <span class="hljs-attr">crossorigin</span>=<span class="hljs-string">&quot;anonymous&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre></div>
+<p>CDN 响应头返回 <code>Access-Control-Allow-Origin: https://www.example.com</code>（或 <code>*</code>，但不能与 <code>use-credentials</code> 同用）。只加属性而服务端不返回该响应头时，脚本会整体加载失败，比拿不到详情更糟。CORS 的原理见<a href="/questions/http-cors/">《什么是跨域？CORS 为什么需要服务端配合？》</a>。</p>
+<h2>常见追问</h2>
+<ul>
+<li>为什么同一个错误被报了两次？<code>onerror</code> 和 <code>addEventListener(&#x27;error&#x27;)</code> 同时注册，或框架错误处理与全局监听都上报了；按错误指纹去重。</li>
+<li>压缩后的堆栈怎么看？上报原始堆栈，在服务端用 Source Map 还原，见<a href="/questions/monitoring-source-map/">《线上报错怎样用 Source Map 还原，又不把 map 文件公开？》</a>。</li>
+<li>浏览器扩展注入的脚本报错怎么办？按 <code>filename</code> 过滤非本站来源，避免噪声告警。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/error_event" target="_blank" rel="noreferrer">MDN · Window error event<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E6%80%8E%E6%A0%B7%E5%85%A8%E5%B1%80%E6%8D%95%E8%8E%B7+JS+%E9%94%99%E8%AF%AF%E3%80%81Promise+%E6%8B%92%E7%BB%9D%E5%92%8C%E8%B5%84%E6%BA%90%E5%8A%A0%E8%BD%BD%E5%A4%B1%E8%B4%A5%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E6%80%8E%E6%A0%B7%E5%85%A8%E5%B1%80%E6%8D%95%E8%8E%B7+JS+%E9%94%99%E8%AF%AF%E3%80%81Promise+%E6%8B%92%E7%BB%9D%E5%92%8C%E8%B5%84%E6%BA%90%E5%8A%A0%E8%BD%BD%E5%A4%B1%E8%B4%A5%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Amonitoring-error-capture%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%89%8D%E7%AB%AF%E7%9B%91%E6%8E%A7%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fmonitoring-error-capture%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端怎样全局捕获 JS 错误、Promise 拒绝和资源加载失败？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/monitoring-source-map/">线上报错怎样用 Source Map 还原，又不把 map 文件公开？</a></li><li><a href="/questions/monitoring-beacon/">页面关闭或切走时怎样可靠上报？sendBeacon、keepalive 和 fetchLater 怎么选？</a></li><li><a href="/questions/monitoring-white-screen/">怎样检测页面白屏？常见方案有哪些误报？</a></li><li><a href="/questions/monitoring-sampling-alert/">前端监控数据怎样做采样、去重、聚合和告警？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

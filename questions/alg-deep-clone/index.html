@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="手写与算法面试题：深拷贝要递归复制对象，用 WeakMap 记录已复制的对象来处理循环引用；Date、RegExp、Map、Set 要按类型单独构造；用 Reflect.ownKeys 才能拷到 Symbol 键。structuredClone 原生支持循环引用和多数内置类型，但会丢弃 Symbol 键和原型，遇到函数会抛出 DataCloneError。" />
+    <title>怎样手写深拷贝？和 structuredClone 有什么区别？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/alg-deep-clone/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="怎样手写深拷贝？和 structuredClone 有什么区别？ · 前端知库" />
+    <meta property="og:description" content="手写与算法面试题：深拷贝要递归复制对象，用 WeakMap 记录已复制的对象来处理循环引用；Date、RegExp、Map、Set 要按类型单独构造；用 Reflect.ownKeys 才能拷到 Symbol 键。structuredClone 原生支持循环引用和多数内置类型，但会丢弃 Symbol 键和原型，遇到函数会抛出 DataCloneError。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/alg-deep-clone/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-deep-clone/#webpage","url":"https://fe.hushifa.top/questions/alg-deep-clone/","name":"怎样手写深拷贝？和 structuredClone 有什么区别？ · 前端知库","description":"手写与算法面试题：深拷贝要递归复制对象，用 WeakMap 记录已复制的对象来处理循环引用；Date、RegExp、Map、Set 要按类型单独构造；用 Reflect.ownKeys 才能拷到 Symbol 键。structuredClone 原生支持循环引用和多数内置类型，但会丢弃 Symbol 键和原型，遇到函数会抛出 DataCloneError。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-deep-clone/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-deep-clone/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"怎样手写深拷贝？和 structuredClone 有什么区别？","item":"https://fe.hushifa.top/questions/alg-deep-clone/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DhmYjr2V.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样手写深拷贝？和 structuredClone 有什么区别？</span></nav><h1 tabindex="-1">怎样手写深拷贝？和 structuredClone 有什么区别？</h1><p class="reading-summary">深拷贝要递归复制对象，用 WeakMap 记录已复制的对象来处理循环引用；Date、RegExp、Map、Set 要按类型单独构造；用 Reflect.ownKeys 才能拷到 Symbol 键。structuredClone 原生支持循环引用和多数内置类型，但会丢弃 Symbol 键和原型，遇到函数会抛出 DataCloneError。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>原始值和函数直接返回；对象先查 <code>WeakMap</code>，复制过就返回已有副本，这样循环引用和共享引用都能保持原来的结构。</li>
+<li>副本要在递归子属性之前写入 <code>WeakMap</code>，否则子属性指回自身时会无限递归。</li>
+<li><code>Date</code>、<code>RegExp</code>、<code>Map</code>、<code>Set</code> 的数据不在普通属性上，需要按类型新建；<code>Map</code> 的键和值都要递归复制。</li>
+<li><code>Object.keys</code> 和 <code>for...in</code> 拿不到 Symbol 键，要用 <code>Reflect.ownKeys</code> 再筛选可枚举属性。用 <code>Object.create(原型)</code> 创建副本可以保留类实例的方法。</li>
+<li><code>structuredClone</code> 能处理循环引用、Date、Map、Set 等，但不复制 Symbol 键，类实例会变成普通对象，函数和 DOM 节点会抛出 <code>DataCloneError</code>。</li>
+</ul>
+<h2>实现</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">deepClone</span>(<span class="hljs-params">value, seen = <span class="hljs-keyword">new</span> <span class="hljs-built_in">WeakMap</span>()</span>) {
+  <span class="hljs-keyword">if</span> (value === <span class="hljs-literal">null</span> || <span class="hljs-keyword">typeof</span> value !== <span class="hljs-string">&#x27;object&#x27;</span>) <span class="hljs-keyword">return</span> value;
+  <span class="hljs-keyword">if</span> (seen.<span class="hljs-title function_">has</span>(value)) <span class="hljs-keyword">return</span> seen.<span class="hljs-title function_">get</span>(value);
+
+  <span class="hljs-keyword">if</span> (value <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Date</span>) <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(value.<span class="hljs-title function_">getTime</span>());
+  <span class="hljs-keyword">if</span> (value <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">RegExp</span>) {
+    <span class="hljs-keyword">const</span> copy = <span class="hljs-keyword">new</span> <span class="hljs-title class_">RegExp</span>(value.<span class="hljs-property">source</span>, value.<span class="hljs-property">flags</span>);
+    copy.<span class="hljs-property">lastIndex</span> = value.<span class="hljs-property">lastIndex</span>;
+    <span class="hljs-keyword">return</span> copy;
+  }
+  <span class="hljs-keyword">if</span> (value <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Map</span>) {
+    <span class="hljs-keyword">const</span> copy = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+    seen.<span class="hljs-title function_">set</span>(value, copy);
+    value.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">v, k</span>) =&gt;</span> copy.<span class="hljs-title function_">set</span>(<span class="hljs-title function_">deepClone</span>(k, seen), <span class="hljs-title function_">deepClone</span>(v, seen)));
+    <span class="hljs-keyword">return</span> copy;
+  }
+  <span class="hljs-keyword">if</span> (value <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Set</span>) {
+    <span class="hljs-keyword">const</span> copy = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>();
+    seen.<span class="hljs-title function_">set</span>(value, copy);
+    value.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">v</span>) =&gt;</span> copy.<span class="hljs-title function_">add</span>(<span class="hljs-title function_">deepClone</span>(v, seen)));
+    <span class="hljs-keyword">return</span> copy;
+  }
+
+  <span class="hljs-keyword">const</span> copy = <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(value) ? [] : <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">create</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">getPrototypeOf</span>(value));
+  <span class="hljs-comment">// 先登记再递归，子属性引用自身时能拿到这个副本</span>
+  seen.<span class="hljs-title function_">set</span>(value, copy);
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> key <span class="hljs-keyword">of</span> <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">ownKeys</span>(value)) {
+    <span class="hljs-keyword">const</span> descriptor = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">getOwnPropertyDescriptor</span>(value, key);
+    <span class="hljs-keyword">if</span> (descriptor.<span class="hljs-property">enumerable</span>) copy[key] = <span class="hljs-title function_">deepClone</span>(value[key], seen);
+  }
+  <span class="hljs-keyword">return</span> copy;
+}
+</code></pre></div>
+<p>用 <code>WeakMap</code> 而不是 <code>Map</code>，是因为它只在本次拷贝期间使用，键是对象，不会阻止原对象被回收。</p>
+<h2>验证</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> id = <span class="hljs-title class_">Symbol</span>(<span class="hljs-string">&#x27;id&#x27;</span>);
+<span class="hljs-keyword">const</span> source = {
+  <span class="hljs-attr">date</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(<span class="hljs-number">0</span>),
+  <span class="hljs-attr">map</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>([[<span class="hljs-string">&#x27;k&#x27;</span>, { <span class="hljs-attr">n</span>: <span class="hljs-number">1</span> }]]),
+  <span class="hljs-attr">set</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>([<span class="hljs-number">1</span>]),
+  [id]: <span class="hljs-string">&#x27;sym&#x27;</span>,
+  <span class="hljs-attr">list</span>: [<span class="hljs-number">1</span>, { <span class="hljs-attr">x</span>: <span class="hljs-number">2</span> }],
+};
+source.<span class="hljs-property">self</span> = source;
+
+<span class="hljs-keyword">const</span> copy = <span class="hljs-title function_">deepClone</span>(source);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(copy.<span class="hljs-property">self</span> === copy); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(copy.<span class="hljs-property">date</span> !== source.<span class="hljs-property">date</span> &amp;&amp; copy.<span class="hljs-property">date</span> <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Date</span>); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(copy.<span class="hljs-property">map</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;k&#x27;</span>) !== source.<span class="hljs-property">map</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;k&#x27;</span>)); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(copy[id]); <span class="hljs-comment">// &#x27;sym&#x27;</span>
+
+<span class="hljs-keyword">const</span> native = <span class="hljs-title function_">structuredClone</span>(source);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(native.<span class="hljs-property">self</span> === native); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(native[id]); <span class="hljs-comment">// undefined</span>
+</code></pre></div>
+<h2>structuredClone 的边界</h2>
+<table><thead><tr><th>情况</th><th>deepClone（上面实现）</th><th>structuredClone</th></tr></thead><tbody><tr><td>循环引用</td><td>支持</td><td>支持</td></tr><tr><td>Date、RegExp、Map、Set</td><td>支持</td><td>支持</td></tr><tr><td>Symbol 键</td><td>复制</td><td>丢弃</td></tr><tr><td>类实例的原型</td><td>保留</td><td>变成普通对象</td></tr><tr><td>函数</td><td>共享原函数</td><td>抛出 <code>DataCloneError</code></td></tr><tr><td>ArrayBuffer、TypedArray、Blob 等</td><td>未处理</td><td>支持</td></tr></tbody></table>
+<p>实际项目里复制纯数据优先用 <code>structuredClone</code>；它和 JSON 方案、浅拷贝的取舍见<a href="/questions/js-copy-structured-clone/">《浅拷贝、深拷贝和 structuredClone 如何选择？》</a>。</p>
+<h2>常见追问</h2>
+<ul>
+<li>为什么函数不复制？函数可能引用闭包里的变量，无法可靠地复制这些变量，通常直接共享。</li>
+<li>getter 和不可枚举属性怎么办？上面的实现读取 getter 的当前值并跳过不可枚举属性。需要保留完整属性描述符时，改用 <code>Object.defineProperty</code> 写入复制后的描述符。</li>
+<li>数据很深时会不会栈溢出？递归实现有调用栈深度限制，极深的结构可以改用显式栈迭代。</li>
+</ul></div><div class="answer-bottom"><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/structuredClone" target="_blank" rel="noreferrer">MDN · structuredClone()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E6%89%8B%E5%86%99%E6%B7%B1%E6%8B%B7%E8%B4%9D%EF%BC%9F%E5%92%8C+structuredClone+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E6%89%8B%E5%86%99%E6%B7%B1%E6%8B%B7%E8%B4%9D%EF%BC%9F%E5%92%8C+structuredClone+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-deep-clone%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-deep-clone%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样手写深拷贝？和 structuredClone 有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-debounce/">怎样实现只在停止调用后执行的防抖函数？</a></li><li><a href="/questions/alg-throttle/">怎样实现首沿节流？它与尾沿节流、防抖有什么区别？</a></li><li><a href="/questions/alg-promise-aplus/">怎样手写一个符合 Promises/A+ 规范的 Promise？</a></li><li><a href="/questions/alg-call-apply-bind/">怎样手写 call、apply 和 bind？用 new 调用 bind 返回的函数会怎样？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

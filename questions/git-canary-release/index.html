@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="Git 与部署面试题：金丝雀发布先让一小部分用户访问新版本，对比新旧版本的错误率和关键指标，没有退化再逐步放大比例。前端要让同一用户稳定命中同一版本，新旧两版的静态资源同时可用，接口对两版都兼容。回滚就是把流量切回旧版本，新版资源要保留到旧页面不再请求它们。" />
+    <title>前端怎样做灰度发布和金丝雀发布？出问题怎样回滚？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/git-canary-release/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="前端怎样做灰度发布和金丝雀发布？出问题怎样回滚？ · 前端知库" />
+    <meta property="og:description" content="Git 与部署面试题：金丝雀发布先让一小部分用户访问新版本，对比新旧版本的错误率和关键指标，没有退化再逐步放大比例。前端要让同一用户稳定命中同一版本，新旧两版的静态资源同时可用，接口对两版都兼容。回滚就是把流量切回旧版本，新版资源要保留到旧页面不再请求它们。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/git-canary-release/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/git-canary-release/#webpage","url":"https://fe.hushifa.top/questions/git-canary-release/","name":"前端怎样做灰度发布和金丝雀发布？出问题怎样回滚？ · 前端知库","description":"Git 与部署面试题：金丝雀发布先让一小部分用户访问新版本，对比新旧版本的错误率和关键指标，没有退化再逐步放大比例。前端要让同一用户稳定命中同一版本，新旧两版的静态资源同时可用，接口对两版都兼容。回滚就是把流量切回旧版本，新版资源要保留到旧页面不再请求它们。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/git-canary-release/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/git-canary-release/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Git 与部署面试题","item":"https://fe.hushifa.top/topics/git-deploy/"},{"@type":"ListItem","position":3,"name":"前端怎样做灰度发布和金丝雀发布？出问题怎样回滚？","item":"https://fe.hushifa.top/questions/git-canary-release/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DhmYjr2V.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/git-deploy/">Git 与部署面试题</a><span aria-hidden="true">/</span><span aria-current="page">前端怎样做灰度发布和金丝雀发布？出问题怎样回滚？</span></nav><h1 tabindex="-1">前端怎样做灰度发布和金丝雀发布？出问题怎样回滚？</h1><p class="reading-summary">金丝雀发布先让一小部分用户访问新版本，对比新旧版本的错误率和关键指标，没有退化再逐步放大比例。前端要让同一用户稳定命中同一版本，新旧两版的静态资源同时可用，接口对两版都兼容。回滚就是把流量切回旧版本，新版资源要保留到旧页面不再请求它们。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>金丝雀发布（也叫分阶段发布、增量发布）先把新版本开放给少量用户，观察指标没有退化后再逐步扩大，直到全部用户使用新版本。</li>
+<li>分流可以按随机比例、内部员工、地区或用户特征。前端分流要保持粘性，同一用户在一次会话内不能在新旧版本之间来回切换。</li>
+<li>新旧版本会同时在线，所以两版的 HTML 引用的静态资源都要能访问，后端接口和数据格式要同时兼容两版。</li>
+<li>判断标准要提前定好：对比金丝雀组和对照组的错误率、接口失败率、性能指标和关键业务转化，出现明显退化就停止放量。</li>
+<li>回滚就是把流量切回旧版本。已经打开新页面的用户还会继续请求新版资源，所以新版资源不能在切流时立刻删除。</li>
+</ul>
+<h2>分流放在哪一层</h2>
+<table><thead><tr><th>方式</th><th>做法</th><th>注意点</th></tr></thead><tbody><tr><td>入口分流</td><td>CDN、网关或边缘函数按 Cookie 或比例返回不同版本的 <code>index.html</code></td><td>入口 HTML 不能被长时间缓存，否则切流不生效</td></tr><tr><td>功能开关</td><td>同一份构建，运行时按开关决定是否启用新功能</td><td>新旧代码同时打包，开关清理不及时会积累分支</td></tr></tbody></table>
+<p>入口分流适合整站升级，例如更换框架或构建配置；功能开关适合单个功能的灰度，切换不需要重新发布。开关的稳定分桶和清理见<a href="/questions/eng-feature-flags/">《前端功能开关和灰度发布应该怎样设计？》</a>。</p>
+<h2>新旧版本共存</h2>
+<p>带内容哈希的资源文件名（例如 <code>app.3f2a1c.js</code>）让两版资源互不覆盖。发布时把新资源追加到托管目录，而不是先清空再上传。</p>
+<p>旧版本的页面在用户浏览器里可能停留很久，它按需加载的分片仍指向旧文件名。删除旧资源前要等足够长的时间，或者在加载分片失败时提示用户刷新。资源路径和缓存的检查方式见<a href="/questions/git-static-deploy/">《静态托管发布时为什么要检查资源路径和缓存？》</a>。</p>
+<p>接口方面，先上线同时兼容新旧格式的后端，再灰度前端，全部切换后再移除旧格式支持。顺序反过来，旧版前端会在灰度期间出错。</p>
+<h2>观察指标与放量</h2>
+<ul>
+<li>每个阶段（例如 1%、10%、50%、100%）停留一段时间，让指标有足够样本。</li>
+<li>监控和错误上报要带上版本号，才能把金丝雀组和对照组分开比较。</li>
+<li>金丝雀用于发现退化，按分钟到小时判断；A/B 测试用于验证产品假设，需要更长时间，两者不要混在一起。</li>
+</ul>
+<h2>回滚</h2>
+<p>入口分流时，把新版本的比例调回 0 即可，不需要重新构建。功能开关灰度时关闭开关。回滚之后仍要确认入口、资源和关键交互正常，完整流程见<a href="/questions/git-rollback/">《静态网站发布失败时怎样安全回滚？》</a>。</p>
+<h2>常见追问</h2>
+<ul>
+<li>纯静态托管没有网关能灰度吗？托管平台不支持按请求分流时，只能在运行时用功能开关，或者发布到不同地址让部分用户访问。</li>
+<li>为什么用户刷新后版本变了？分流没有粘性，或者入口 HTML 被缓存。要用 Cookie 等标识固定分组，并让入口文件短缓存。</li>
+<li>数据库迁移怎么办？迁移要做到新旧代码都能运行，灰度阶段不能做只有新版能读的改动。</li>
+</ul></div><div class="answer-bottom"><a href="https://martinfowler.com/bliki/CanaryRelease.html" target="_blank" rel="noreferrer">Martin Fowler · CanaryRelease<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E6%80%8E%E6%A0%B7%E5%81%9A%E7%81%B0%E5%BA%A6%E5%8F%91%E5%B8%83%E5%92%8C%E9%87%91%E4%B8%9D%E9%9B%80%E5%8F%91%E5%B8%83%EF%BC%9F%E5%87%BA%E9%97%AE%E9%A2%98%E6%80%8E%E6%A0%B7%E5%9B%9E%E6%BB%9A%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E6%80%8E%E6%A0%B7%E5%81%9A%E7%81%B0%E5%BA%A6%E5%8F%91%E5%B8%83%E5%92%8C%E9%87%91%E4%B8%9D%E9%9B%80%E5%8F%91%E5%B8%83%EF%BC%9F%E5%87%BA%E9%97%AE%E9%A2%98%E6%80%8E%E6%A0%B7%E5%9B%9E%E6%BB%9A%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Agit-canary-release%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AGit+%E4%B8%8E%E9%83%A8%E7%BD%B2%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fgit-canary-release%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端怎样做灰度发布和金丝雀发布？出问题怎样回滚？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/git-rollback/">静态网站发布失败时怎样安全回滚？</a></li><li><a href="/questions/git-artifact-integrity/">前端发布怎样校验构建产物？文件哈希能证明发布安全吗？</a></li><li><a href="/questions/git-merge-rebase/">git merge 与 rebase 应该怎样选择？</a></li><li><a href="/questions/git-ci/">GitHub Actions 中 workflow、job、step 和 runner 是什么关系？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

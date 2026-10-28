@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="桌面端面试题：按启动、主进程阻塞、渲染卡顿和内存四类问题，说明 Electron 官方性能建议、常用测量工具和优化方法。" />
+    <title>Electron 应用启动慢、内存高、界面卡顿时怎么排查？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/desktop-performance/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="Electron 应用启动慢、内存高、界面卡顿时怎么排查？ · 前端知库" />
+    <meta property="og:description" content="桌面端面试题：按启动、主进程阻塞、渲染卡顿和内存四类问题，说明 Electron 官方性能建议、常用测量工具和优化方法。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/desktop-performance/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/desktop-performance/#webpage","url":"https://fe.hushifa.top/questions/desktop-performance/","name":"Electron 应用启动慢、内存高、界面卡顿时怎么排查？ · 前端知库","description":"桌面端面试题：按启动、主进程阻塞、渲染卡顿和内存四类问题，说明 Electron 官方性能建议、常用测量工具和优化方法。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/desktop-performance/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/desktop-performance/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"桌面端面试题","item":"https://fe.hushifa.top/topics/desktop/"},{"@type":"ListItem","position":3,"name":"Electron 应用启动慢、内存高、界面卡顿时怎么排查？","item":"https://fe.hushifa.top/questions/desktop-performance/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DhmYjr2V.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/desktop/">桌面端面试题</a><span aria-hidden="true">/</span><span aria-current="page">Electron 应用启动慢、内存高、界面卡顿时怎么排查？</span></nav><h1 tabindex="-1">Electron 应用启动慢、内存高、界面卡顿时怎么排查？</h1><p class="reading-summary">按启动、主进程阻塞、渲染卡顿和内存四类问题，说明 Electron 官方性能建议、常用测量工具和优化方法。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<ul>
+<li>先测量再优化：渲染进程用 Chrome DevTools 的 Performance 和 Memory 面板，跨进程问题用 Chrome Tracing 或 <code>contentTracing</code>，按进程查看资源用 <code>app.getAppMetrics()</code>。</li>
+<li>启动慢常见原因是启动时同步加载大量模块和做初始化。把 <code>require</code> 推迟到真正用到的地方，用打包工具合并代码，自定义菜单时在 <code>ready</code> 前调用 <code>Menu.setApplicationMenu(null)</code>。</li>
+<li>主进程负责窗口和 IPC，一旦阻塞所有窗口都会卡住。不在主进程做同步 I/O 和长计算，避免 <code>sendSync</code> 和 <code>@electron/remote</code>，重任务交给 utility 进程。</li>
+<li>渲染卡顿按网页性能的方法处理：长任务放 Web Worker，低优先级任务用 <code>requestIdleCallback</code>，减少不必要的 polyfill 和网络请求。</li>
+<li>内存问题先按进程定位，再用堆快照找出未释放的窗口、监听器和缓存；隐藏的窗口和多余的渲染进程同样占用内存。</li>
+</ul>
+<h2>测量工具</h2>
+<ul>
+<li><strong>DevTools</strong>：每个渲染进程都可以打开 DevTools，Performance 面板看长任务和渲染，Memory 面板拍堆快照。</li>
+<li><strong>主进程调试</strong>：用 <code>--inspect</code> 启动后，在 Chrome 的 <code>chrome://inspect</code> 中连接主进程，进行 CPU 分析。</li>
+<li><strong>跨进程追踪</strong>：<code>contentTracing.startRecording</code> 和 <code>stopRecording</code> 可以记录所有进程的追踪数据，适合分析启动阶段多个进程之间的等待关系。追踪文件的格式和查看工具随 Electron 版本变化，以当前版本文档为准。</li>
+<li><strong>按进程统计</strong>：<code>app.getAppMetrics()</code> 返回各进程的 CPU 和内存使用，utility 进程设置 <code>serviceName</code> 后可以在结果中区分。</li>
+<li><strong>模块加载成本</strong>：官方建议用 <code>node --cpu-prof --heap-prof -e &quot;require(&#x27;模块名&#x27;)&quot;</code> 测量一个模块被加载时的耗时和内存，再在 DevTools 中打开生成的文件。</li>
+</ul>
+<h2>启动慢</h2>
+<ol>
+<li><strong>谨慎引入模块</strong>：官方举过的例子是，一个检测网络连接的模块因依赖链在加载时解析了一个超过十万行的 JSON 文件。引入依赖前先评估它的体积和加载开销。</li>
+<li><strong>推迟加载</strong>：把只在某个功能中用到的大模块的 <code>require</code> 移到函数内部，让资源&quot;用到时再分配&quot;。</li>
+<li><strong>打包代码</strong>：用 Webpack、Vite、Rollup 等把代码合并成少量文件，减少大量小文件的 <code>require</code> 和磁盘读取开销。</li>
+<li><strong>减少默认工作</strong>：自己构建菜单或使用无边框窗口时，在 <code>app</code> 的 <code>ready</code> 之前调用 <code>Menu.setApplicationMenu(null)</code>，省去默认菜单的创建。</li>
+<li><strong>避免白屏闪烁</strong>：窗口用 <code>show: false</code> 创建，在 <code>ready-to-show</code> 事件中再调用 <code>win.show()</code>；页面复杂时也可以立即显示窗口，同时设置接近页面底色的 <code>backgroundColor</code>。</li>
+<li><strong>本地化资源</strong>：字体等很少变化的资源打包进应用，不在启动时从网络加载。</li>
+</ol>
+<h2>主进程阻塞</h2>
+<p>表现为所有窗口同时无响应、拖动和菜单卡住。</p>
+<ul>
+<li>文件和子进程操作使用异步 API，例如 <code>fs.promises</code>。</li>
+<li>不使用同步 IPC（<code>ipcRenderer.sendSync</code>）和 <code>@electron/remote</code>，它们会让渲染进程等待主进程。</li>
+<li>CPU 密集任务交给 Worker Threads 或 utility 进程，进程分工见<a href="/questions/desktop-electron-process/">《Electron 的主进程、渲染进程、preload 和 utility 进程分别负责什么？》</a>。</li>
+</ul>
+<h2>渲染卡顿</h2>
+<p>表现为单个窗口滚动掉帧、输入延迟。</p>
+<ul>
+<li>长计算放进 Web Worker，小的低优先级任务用 <code>requestIdleCallback</code>。</li>
+<li>Electron 内置的 Chromium 版本是确定的，官方建议不要为旧浏览器加 polyfill，转译目标设为当前 Electron 支持的 ECMAScript 版本。</li>
+<li>长列表虚拟化，避免频繁触发布局。</li>
+<li>高频 IPC 调用会在两端产生序列化开销，合并消息或批量传输。</li>
+</ul>
+<p><code>backgroundThrottling</code> 默认开启，窗口进入后台时会限制动画和定时器。关闭它可以让后台窗口继续运行，但会增加功耗，而且会影响同一窗口中的所有 webContents。</p>
+<h2>内存高</h2>
+<ol>
+<li>用 <code>app.getAppMetrics()</code> 确认是哪个进程占用高：主进程、某个窗口，还是 GPU 进程。</li>
+<li>对渲染进程拍两次堆快照，对比操作前后，查找未释放的 DOM 节点、闭包和缓存。</li>
+<li>常见泄漏来源：
+<ul>
+<li>主进程中保存了已关闭窗口的引用；</li>
+<li><code>ipcRenderer.on</code> 在组件每次挂载时注册却从不移除；</li>
+<li>全局缓存没有上限。</li>
+</ul>
+</li>
+<li>隐藏而不销毁的窗口仍保留完整的渲染进程。不常用的窗口关闭后重新创建，常用窗口再考虑复用。</li>
+</ol>
+<h2>常见追问</h2>
+<ul>
+<li>为什么 Electron 应用比原生应用占内存多？每个窗口都有独立的 Chromium 渲染进程，另外还有主进程和 GPU 等辅助进程。如果内存是首要约束，可以评估其他方案，见<a href="/questions/desktop-electron-tauri/">《Electron 和 Tauri 有什么区别？桌面应用怎么选型？》</a>。</li>
+<li>升级 Electron 能提升性能吗？新版 Chromium 和 V8 通常带来性能改进和安全修复，但需要回归测试原生模块和废弃的 API。</li>
+</ul></div><div class="answer-bottom"><a href="https://www.electronjs.org/docs/latest/tutorial/performance" target="_blank" rel="noreferrer">Electron · Performance<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Electron+%E5%BA%94%E7%94%A8%E5%90%AF%E5%8A%A8%E6%85%A2%E3%80%81%E5%86%85%E5%AD%98%E9%AB%98%E3%80%81%E7%95%8C%E9%9D%A2%E5%8D%A1%E9%A1%BF%E6%97%B6%E6%80%8E%E4%B9%88%E6%8E%92%E6%9F%A5%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AElectron+%E5%BA%94%E7%94%A8%E5%90%AF%E5%8A%A8%E6%85%A2%E3%80%81%E5%86%85%E5%AD%98%E9%AB%98%E3%80%81%E7%95%8C%E9%9D%A2%E5%8D%A1%E9%A1%BF%E6%97%B6%E6%80%8E%E4%B9%88%E6%8E%92%E6%9F%A5%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Adesktop-performance%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%8C%E9%9D%A2%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fdesktop-performance%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Electron 应用启动慢、内存高、界面卡顿时怎么排查？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/desktop-electron-tauri/">Electron 和 Tauri 有什么区别？桌面应用怎么选型？</a></li><li><a href="/questions/mobile-electron-security/">Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？</a></li><li><a href="/questions/desktop-electron-process/">Electron 的主进程、渲染进程、preload 和 utility 进程分别负责什么？</a></li><li><a href="/questions/desktop-electron-ipc/">Electron 的 IPC 怎么设计？invoke/handle、send/on 和 contextBridge 如何配合？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>
