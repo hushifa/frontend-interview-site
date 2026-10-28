@@ -11,17 +11,17 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="TypeScript面试题：多种输入走同一逻辑、返回同一类型时用联合参数；返回类型由输入类型决定时用泛型；几种离散调用形式各自返回不同类型时用重载，实现签名对调用方不可见。函数赋值时参数按逆变检查（strictFunctionTypes），返回值按协变检查；方法简写语法的参数仍按双变检查。" />
-    <title>函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？ · 前端知库</title>
+    <meta name="description" content="TypeScript面试题：多种输入走同一逻辑、返回同一类型时用联合参数；返回类型由输入类型决定时用泛型；几种离散调用形式各自返回不同类型时用重载…" />
+    <title>函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/ts-function-variance/" />
     <meta name="robots" content="index,follow" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="article" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
-    <meta property="og:title" content="函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？ · 前端知库" />
-    <meta property="og:description" content="TypeScript面试题：多种输入走同一逻辑、返回同一类型时用联合参数；返回类型由输入类型决定时用泛型；几种离散调用形式各自返回不同类型时用重载，实现签名对调用方不可见。函数赋值时参数按逆变检查（strictFunctionTypes），返回值按协变检查；方法简写语法的参数仍按双变检查。" />
+    <meta property="og:title" content="函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？" />
+    <meta property="og:description" content="TypeScript面试题：多种输入走同一逻辑、返回同一类型时用联合参数；返回类型由输入类型决定时用泛型；几种离散调用形式各自返回不同类型时用重载…" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/ts-function-variance/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-function-variance/#webpage","url":"https://fe.hushifa.top/questions/ts-function-variance/","name":"函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？ · 前端知库","description":"TypeScript面试题：多种输入走同一逻辑、返回同一类型时用联合参数；返回类型由输入类型决定时用泛型；几种离散调用形式各自返回不同类型时用重载，实现签名对调用方不可见。函数赋值时参数按逆变检查（strictFunctionTypes），返回值按协变检查；方法简写语法的参数仍按双变检查。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-function-variance/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-function-variance/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？","item":"https://fe.hushifa.top/questions/ts-function-variance/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-function-variance/#webpage","url":"https://fe.hushifa.top/questions/ts-function-variance/","name":"函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？","description":"TypeScript面试题：多种输入走同一逻辑、返回同一类型时用联合参数；返回类型由输入类型决定时用泛型；几种离散调用形式各自返回不同类型时用重载…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-function-variance/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-function-variance/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？","item":"https://fe.hushifa.top/questions/ts-function-variance/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-DhmYjr2V.css">
   </head>

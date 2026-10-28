@@ -11,17 +11,17 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="性能优化面试题：页面里直接加载的第三方脚本以页面的身份运行，能读写 DOM、发请求、访问非 HttpOnly 的 Cookie，同时占用带宽和主线程。接入时先决定是否需要、何时加载，用 defer 或延迟加载减少阻塞，用 CSP 限制来源，不可信内容放进跨源 iframe，并为故障准备开关和降级。" />
+    <meta name="description" content="性能优化面试题：页面里直接加载的第三方脚本以页面的身份运行，能读写 DOM、发请求、访问非 HttpOnly 的 Cookie，同时占用带宽和主线程。" />
     <title>第三方脚本怎样接入，才能控制性能和安全风险？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/perf-third-party-scripts/" />
     <meta name="robots" content="index,follow" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="article" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="第三方脚本怎样接入，才能控制性能和安全风险？ · 前端知库" />
-    <meta property="og:description" content="性能优化面试题：页面里直接加载的第三方脚本以页面的身份运行，能读写 DOM、发请求、访问非 HttpOnly 的 Cookie，同时占用带宽和主线程。接入时先决定是否需要、何时加载，用 defer 或延迟加载减少阻塞，用 CSP 限制来源，不可信内容放进跨源 iframe，并为故障准备开关和降级。" />
+    <meta property="og:description" content="性能优化面试题：页面里直接加载的第三方脚本以页面的身份运行，能读写 DOM、发请求、访问非 HttpOnly 的 Cookie，同时占用带宽和主线程。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/perf-third-party-scripts/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-third-party-scripts/#webpage","url":"https://fe.hushifa.top/questions/perf-third-party-scripts/","name":"第三方脚本怎样接入，才能控制性能和安全风险？ · 前端知库","description":"性能优化面试题：页面里直接加载的第三方脚本以页面的身份运行，能读写 DOM、发请求、访问非 HttpOnly 的 Cookie，同时占用带宽和主线程。接入时先决定是否需要、何时加载，用 defer 或延迟加载减少阻塞，用 CSP 限制来源，不可信内容放进跨源 iframe，并为故障准备开关和降级。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-third-party-scripts/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-third-party-scripts/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"第三方脚本怎样接入，才能控制性能和安全风险？","item":"https://fe.hushifa.top/questions/perf-third-party-scripts/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-third-party-scripts/#webpage","url":"https://fe.hushifa.top/questions/perf-third-party-scripts/","name":"第三方脚本怎样接入，才能控制性能和安全风险？ · 前端知库","description":"性能优化面试题：页面里直接加载的第三方脚本以页面的身份运行，能读写 DOM、发请求、访问非 HttpOnly 的 Cookie，同时占用带宽和主线程。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-third-party-scripts/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-third-party-scripts/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"第三方脚本怎样接入，才能控制性能和安全风险？","item":"https://fe.hushifa.top/questions/perf-third-party-scripts/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-DhmYjr2V.css">
   </head>

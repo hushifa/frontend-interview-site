@@ -11,17 +11,17 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="手写与算法面试题：深拷贝要递归复制对象，用 WeakMap 记录已复制的对象来处理循环引用；Date、RegExp、Map、Set 要按类型单独构造；用 Reflect.ownKeys 才能拷到 Symbol 键。structuredClone 原生支持循环引用和多数内置类型，但会丢弃 Symbol 键和原型，遇到函数会抛出 DataCloneError。" />
-    <title>怎样手写深拷贝？和 structuredClone 有什么区别？ · 前端知库</title>
+    <meta name="description" content="手写与算法面试题：深拷贝要递归复制对象，用 WeakMap 记录已复制的对象来处理循环引用；Date、RegExp、Map、Set 要按类型单独构造…" />
+    <title>怎样手写深拷贝？和 structuredClone 有什么区别？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/alg-deep-clone/" />
     <meta name="robots" content="index,follow" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="article" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
-    <meta property="og:title" content="怎样手写深拷贝？和 structuredClone 有什么区别？ · 前端知库" />
-    <meta property="og:description" content="手写与算法面试题：深拷贝要递归复制对象，用 WeakMap 记录已复制的对象来处理循环引用；Date、RegExp、Map、Set 要按类型单独构造；用 Reflect.ownKeys 才能拷到 Symbol 键。structuredClone 原生支持循环引用和多数内置类型，但会丢弃 Symbol 键和原型，遇到函数会抛出 DataCloneError。" />
+    <meta property="og:title" content="怎样手写深拷贝？和 structuredClone 有什么区别？" />
+    <meta property="og:description" content="手写与算法面试题：深拷贝要递归复制对象，用 WeakMap 记录已复制的对象来处理循环引用；Date、RegExp、Map、Set 要按类型单独构造…" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/alg-deep-clone/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-deep-clone/#webpage","url":"https://fe.hushifa.top/questions/alg-deep-clone/","name":"怎样手写深拷贝？和 structuredClone 有什么区别？ · 前端知库","description":"手写与算法面试题：深拷贝要递归复制对象，用 WeakMap 记录已复制的对象来处理循环引用；Date、RegExp、Map、Set 要按类型单独构造；用 Reflect.ownKeys 才能拷到 Symbol 键。structuredClone 原生支持循环引用和多数内置类型，但会丢弃 Symbol 键和原型，遇到函数会抛出 DataCloneError。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-deep-clone/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-deep-clone/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"怎样手写深拷贝？和 structuredClone 有什么区别？","item":"https://fe.hushifa.top/questions/alg-deep-clone/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-deep-clone/#webpage","url":"https://fe.hushifa.top/questions/alg-deep-clone/","name":"怎样手写深拷贝？和 structuredClone 有什么区别？","description":"手写与算法面试题：深拷贝要递归复制对象，用 WeakMap 记录已复制的对象来处理循环引用；Date、RegExp、Map、Set 要按类型单独构造…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-deep-clone/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-deep-clone/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"怎样手写深拷贝？和 structuredClone 有什么区别？","item":"https://fe.hushifa.top/questions/alg-deep-clone/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-DhmYjr2V.css">
   </head>

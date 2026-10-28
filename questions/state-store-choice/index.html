@@ -11,17 +11,17 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="状态与路由面试题：Zustand 用一个 hook 暴露整个 store，组件通过选择器订阅需要的部分，不需要 Provider；Jotai 把状态拆成原子，组件按原子订阅，派生原子自动追踪依赖；Redux Toolkit 要求通过 action 和纯 reducer 修改状态，约束最多，自带 DevTools、thunk 和开发期检查。服务端数据应交给查询库，三者只管客户端状态。" />
-    <title>Zustand、Jotai 和 Redux Toolkit 应该怎样选择？ · 前端知库</title>
+    <meta name="description" content="状态与路由面试题：Zustand 用一个 hook 暴露整个 store，组件通过选择器订阅需要的部分，不需要 Provider；Jotai 把状态拆成原子…" />
+    <title>Zustand、Jotai 和 Redux Toolkit 应该怎样选择？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/state-store-choice/" />
     <meta name="robots" content="index,follow" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="article" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
-    <meta property="og:title" content="Zustand、Jotai 和 Redux Toolkit 应该怎样选择？ · 前端知库" />
-    <meta property="og:description" content="状态与路由面试题：Zustand 用一个 hook 暴露整个 store，组件通过选择器订阅需要的部分，不需要 Provider；Jotai 把状态拆成原子，组件按原子订阅，派生原子自动追踪依赖；Redux Toolkit 要求通过 action 和纯 reducer 修改状态，约束最多，自带 DevTools、thunk 和开发期检查。服务端数据应交给查询库，三者只管客户端状态。" />
+    <meta property="og:title" content="Zustand、Jotai 和 Redux Toolkit 应该怎样选择？" />
+    <meta property="og:description" content="状态与路由面试题：Zustand 用一个 hook 暴露整个 store，组件通过选择器订阅需要的部分，不需要 Provider；Jotai 把状态拆成原子…" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/state-store-choice/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/state-store-choice/#webpage","url":"https://fe.hushifa.top/questions/state-store-choice/","name":"Zustand、Jotai 和 Redux Toolkit 应该怎样选择？ · 前端知库","description":"状态与路由面试题：Zustand 用一个 hook 暴露整个 store，组件通过选择器订阅需要的部分，不需要 Provider；Jotai 把状态拆成原子，组件按原子订阅，派生原子自动追踪依赖；Redux Toolkit 要求通过 action 和纯 reducer 修改状态，约束最多，自带 DevTools、thunk 和开发期检查。服务端数据应交给查询库，三者只管客户端状态。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/state-store-choice/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/state-store-choice/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"状态与路由面试题","item":"https://fe.hushifa.top/topics/state-routing/"},{"@type":"ListItem","position":3,"name":"Zustand、Jotai 和 Redux Toolkit 应该怎样选择？","item":"https://fe.hushifa.top/questions/state-store-choice/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/state-store-choice/#webpage","url":"https://fe.hushifa.top/questions/state-store-choice/","name":"Zustand、Jotai 和 Redux Toolkit 应该怎样选择？","description":"状态与路由面试题：Zustand 用一个 hook 暴露整个 store，组件通过选择器订阅需要的部分，不需要 Provider；Jotai 把状态拆成原子…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/state-store-choice/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/state-store-choice/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"状态与路由面试题","item":"https://fe.hushifa.top/topics/state-routing/"},{"@type":"ListItem","position":3,"name":"Zustand、Jotai 和 Redux Toolkit 应该怎样选择？","item":"https://fe.hushifa.top/questions/state-store-choice/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-DhmYjr2V.css">
   </head>

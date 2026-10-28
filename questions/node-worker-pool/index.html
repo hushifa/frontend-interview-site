@@ -11,17 +11,17 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Node.js面试题：每个 Worker 都要启动新的 V8 实例，频繁创建会消耗时间和内存，并发高时还可能耗尽资源。任务池预先创建固定数量的 Worker，用队列分发任务，并处理 Worker 崩溃、排队上限和关闭流程。" />
-    <title>Node.js 为什么要用 Worker Threads 任务池，而不是每次请求都创建 Worker？ · 前端知库</title>
+    <meta name="description" content="Node.js面试题：每个 Worker 都要启动新的 V8 实例，频繁创建会消耗时间和内存，并发高时还可能耗尽资源。" />
+    <title>Node.js 为什么要用 Worker Threads 任务池，而不是每次请求都创建 Worker？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/node-worker-pool/" />
     <meta name="robots" content="index,follow" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="article" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
-    <meta property="og:title" content="Node.js 为什么要用 Worker Threads 任务池，而不是每次请求都创建 Worker？ · 前端知库" />
-    <meta property="og:description" content="Node.js面试题：每个 Worker 都要启动新的 V8 实例，频繁创建会消耗时间和内存，并发高时还可能耗尽资源。任务池预先创建固定数量的 Worker，用队列分发任务，并处理 Worker 崩溃、排队上限和关闭流程。" />
+    <meta property="og:title" content="Node.js 为什么要用 Worker Threads 任务池，而不是每次请求都创建 Worker？" />
+    <meta property="og:description" content="Node.js面试题：每个 Worker 都要启动新的 V8 实例，频繁创建会消耗时间和内存，并发高时还可能耗尽资源。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/node-worker-pool/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/node-worker-pool/#webpage","url":"https://fe.hushifa.top/questions/node-worker-pool/","name":"Node.js 为什么要用 Worker Threads 任务池，而不是每次请求都创建 Worker？ · 前端知库","description":"Node.js面试题：每个 Worker 都要启动新的 V8 实例，频繁创建会消耗时间和内存，并发高时还可能耗尽资源。任务池预先创建固定数量的 Worker，用队列分发任务，并处理 Worker 崩溃、排队上限和关闭流程。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/node-worker-pool/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/node-worker-pool/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Node.js面试题","item":"https://fe.hushifa.top/topics/node/"},{"@type":"ListItem","position":3,"name":"Node.js 为什么要用 Worker Threads 任务池，而不是每次请求都创建 Worker？","item":"https://fe.hushifa.top/questions/node-worker-pool/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/node-worker-pool/#webpage","url":"https://fe.hushifa.top/questions/node-worker-pool/","name":"Node.js 为什么要用 Worker Threads 任务池，而不是每次请求都创建 Worker？","description":"Node.js面试题：每个 Worker 都要启动新的 V8 实例，频繁创建会消耗时间和内存，并发高时还可能耗尽资源。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/node-worker-pool/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/node-worker-pool/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Node.js面试题","item":"https://fe.hushifa.top/topics/node/"},{"@type":"ListItem","position":3,"name":"Node.js 为什么要用 Worker Threads 任务池，而不是每次请求都创建 Worker？","item":"https://fe.hushifa.top/questions/node-worker-pool/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-DhmYjr2V.css">
   </head>

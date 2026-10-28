@@ -11,17 +11,17 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Node.js面试题：AsyncLocalStorage 在一次异步调用链里保存上下文，让深层的日志代码读到当前请求的 ID，并发请求之间互不干扰。原生 Promise、定时器和大多数核心 API 会自动传播上下文，EventEmitter 监听器、回调式库和 Worker 需要显式绑定或传递。" />
-    <title>AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？ · 前端知库</title>
+    <meta name="description" content="Node.js面试题：AsyncLocalStorage 在一次异步调用链里保存上下文，让深层的日志代码读到当前请求的 ID，并发请求之间互不干扰。" />
+    <title>AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/node-async-local-storage/" />
     <meta name="robots" content="index,follow" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="article" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
-    <meta property="og:title" content="AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？ · 前端知库" />
-    <meta property="og:description" content="Node.js面试题：AsyncLocalStorage 在一次异步调用链里保存上下文，让深层的日志代码读到当前请求的 ID，并发请求之间互不干扰。原生 Promise、定时器和大多数核心 API 会自动传播上下文，EventEmitter 监听器、回调式库和 Worker 需要显式绑定或传递。" />
+    <meta property="og:title" content="AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？" />
+    <meta property="og:description" content="Node.js面试题：AsyncLocalStorage 在一次异步调用链里保存上下文，让深层的日志代码读到当前请求的 ID，并发请求之间互不干扰。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/node-async-local-storage/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/node-async-local-storage/#webpage","url":"https://fe.hushifa.top/questions/node-async-local-storage/","name":"AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？ · 前端知库","description":"Node.js面试题：AsyncLocalStorage 在一次异步调用链里保存上下文，让深层的日志代码读到当前请求的 ID，并发请求之间互不干扰。原生 Promise、定时器和大多数核心 API 会自动传播上下文，EventEmitter 监听器、回调式库和 Worker 需要显式绑定或传递。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/node-async-local-storage/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/node-async-local-storage/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Node.js面试题","item":"https://fe.hushifa.top/topics/node/"},{"@type":"ListItem","position":3,"name":"AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？","item":"https://fe.hushifa.top/questions/node-async-local-storage/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/node-async-local-storage/#webpage","url":"https://fe.hushifa.top/questions/node-async-local-storage/","name":"AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？","description":"Node.js面试题：AsyncLocalStorage 在一次异步调用链里保存上下文，让深层的日志代码读到当前请求的 ID，并发请求之间互不干扰。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/node-async-local-storage/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/node-async-local-storage/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Node.js面试题","item":"https://fe.hushifa.top/topics/node/"},{"@type":"ListItem","position":3,"name":"AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？","item":"https://fe.hushifa.top/questions/node-async-local-storage/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-DhmYjr2V.css">
   </head>

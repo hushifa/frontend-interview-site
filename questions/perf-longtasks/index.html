@@ -11,17 +11,17 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="性能优化面试题：主线程上连续执行 50ms 以上的任务是长任务。执行期间用户输入只能排队，渲染也被推迟，表现为点击没反应、INP 变差。可以用 PerformanceObserver 观察 longtask 或更详细的 long-animation-frame 定位，再通过减少工作、分片让出主线程或移到 Worker 来优化。" />
-    <title>什么是长任务，为什么会影响交互响应？怎样观测和拆分？ · 前端知库</title>
+    <meta name="description" content="性能优化面试题：主线程上连续执行 50ms 以上的任务是长任务。执行期间用户输入只能排队，渲染也被推迟，表现为点击没反应、INP 变差。" />
+    <title>什么是长任务，为什么会影响交互响应？怎样观测和拆分？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/perf-longtasks/" />
     <meta name="robots" content="index,follow" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="article" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
-    <meta property="og:title" content="什么是长任务，为什么会影响交互响应？怎样观测和拆分？ · 前端知库" />
-    <meta property="og:description" content="性能优化面试题：主线程上连续执行 50ms 以上的任务是长任务。执行期间用户输入只能排队，渲染也被推迟，表现为点击没反应、INP 变差。可以用 PerformanceObserver 观察 longtask 或更详细的 long-animation-frame 定位，再通过减少工作、分片让出主线程或移到 Worker 来优化。" />
+    <meta property="og:title" content="什么是长任务，为什么会影响交互响应？怎样观测和拆分？" />
+    <meta property="og:description" content="性能优化面试题：主线程上连续执行 50ms 以上的任务是长任务。执行期间用户输入只能排队，渲染也被推迟，表现为点击没反应、INP 变差。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/perf-longtasks/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-longtasks/#webpage","url":"https://fe.hushifa.top/questions/perf-longtasks/","name":"什么是长任务，为什么会影响交互响应？怎样观测和拆分？ · 前端知库","description":"性能优化面试题：主线程上连续执行 50ms 以上的任务是长任务。执行期间用户输入只能排队，渲染也被推迟，表现为点击没反应、INP 变差。可以用 PerformanceObserver 观察 longtask 或更详细的 long-animation-frame 定位，再通过减少工作、分片让出主线程或移到 Worker 来优化。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-longtasks/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-longtasks/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"什么是长任务，为什么会影响交互响应？怎样观测和拆分？","item":"https://fe.hushifa.top/questions/perf-longtasks/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-longtasks/#webpage","url":"https://fe.hushifa.top/questions/perf-longtasks/","name":"什么是长任务，为什么会影响交互响应？怎样观测和拆分？","description":"性能优化面试题：主线程上连续执行 50ms 以上的任务是长任务。执行期间用户输入只能排队，渲染也被推迟，表现为点击没反应、INP 变差。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-longtasks/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-longtasks/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"什么是长任务，为什么会影响交互响应？怎样观测和拆分？","item":"https://fe.hushifa.top/questions/perf-longtasks/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-DhmYjr2V.css">
   </head>

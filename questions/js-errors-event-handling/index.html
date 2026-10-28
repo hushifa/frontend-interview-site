@@ -11,17 +11,17 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="JavaScript面试题：catch 只能捕获当前调用栈上抛出的错误，或在 try 内 await 的 Promise 拒绝。定时器和事件回调里的错误发生在之后的任务中，注册时的 try 捕获不到，需要在回调内部处理或转成拒绝。异步失败未被处理时由 window 的 error 和 unhandledrejection 兜底上报，但它们不负责业务恢复。" />
-    <title>同步错误、Promise 拒绝和全局异常应该怎样处理？ · 前端知库</title>
+    <meta name="description" content="JavaScript面试题：catch 只能捕获当前调用栈上抛出的错误，或在 try 内 await 的 Promise 拒绝。" />
+    <title>同步错误、Promise 拒绝和全局异常应该怎样处理？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/js-errors-event-handling/" />
     <meta name="robots" content="index,follow" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="article" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
-    <meta property="og:title" content="同步错误、Promise 拒绝和全局异常应该怎样处理？ · 前端知库" />
-    <meta property="og:description" content="JavaScript面试题：catch 只能捕获当前调用栈上抛出的错误，或在 try 内 await 的 Promise 拒绝。定时器和事件回调里的错误发生在之后的任务中，注册时的 try 捕获不到，需要在回调内部处理或转成拒绝。异步失败未被处理时由 window 的 error 和 unhandledrejection 兜底上报，但它们不负责业务恢复。" />
+    <meta property="og:title" content="同步错误、Promise 拒绝和全局异常应该怎样处理？" />
+    <meta property="og:description" content="JavaScript面试题：catch 只能捕获当前调用栈上抛出的错误，或在 try 内 await 的 Promise 拒绝。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/js-errors-event-handling/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-errors-event-handling/#webpage","url":"https://fe.hushifa.top/questions/js-errors-event-handling/","name":"同步错误、Promise 拒绝和全局异常应该怎样处理？ · 前端知库","description":"JavaScript面试题：catch 只能捕获当前调用栈上抛出的错误，或在 try 内 await 的 Promise 拒绝。定时器和事件回调里的错误发生在之后的任务中，注册时的 try 捕获不到，需要在回调内部处理或转成拒绝。异步失败未被处理时由 window 的 error 和 unhandledrejection 兜底上报，但它们不负责业务恢复。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-errors-event-handling/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-errors-event-handling/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"同步错误、Promise 拒绝和全局异常应该怎样处理？","item":"https://fe.hushifa.top/questions/js-errors-event-handling/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-errors-event-handling/#webpage","url":"https://fe.hushifa.top/questions/js-errors-event-handling/","name":"同步错误、Promise 拒绝和全局异常应该怎样处理？","description":"JavaScript面试题：catch 只能捕获当前调用栈上抛出的错误，或在 try 内 await 的 Promise 拒绝。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-errors-event-handling/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-errors-event-handling/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"同步错误、Promise 拒绝和全局异常应该怎样处理？","item":"https://fe.hushifa.top/questions/js-errors-event-handling/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-DhmYjr2V.css">
   </head>

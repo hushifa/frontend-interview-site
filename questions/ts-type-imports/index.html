@@ -11,17 +11,17 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="TypeScript面试题：import type 整条导入在编译后删除，模块不会被加载。开启 verbatimModuleSyntax 后，TypeScript 按源码写法保留导入：没有 type 修饰的名字一律保留，只用作类型却没标 type 会报错；import { type A } 只删除 A，留下 import {} 仍会执行模块副作用。Node.js 类型剥离、esbuild 等单文件转换器依赖这种显式标注。" />
-    <title>import type 和 verbatimModuleSyntax 如何影响模块输出？ · 前端知库</title>
+    <meta name="description" content="TypeScript面试题：import type 整条导入在编译后删除，模块不会被加载。" />
+    <title>import type 和 verbatimModuleSyntax 如何影响模块输出？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/ts-type-imports/" />
     <meta name="robots" content="index,follow" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="article" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
-    <meta property="og:title" content="import type 和 verbatimModuleSyntax 如何影响模块输出？ · 前端知库" />
-    <meta property="og:description" content="TypeScript面试题：import type 整条导入在编译后删除，模块不会被加载。开启 verbatimModuleSyntax 后，TypeScript 按源码写法保留导入：没有 type 修饰的名字一律保留，只用作类型却没标 type 会报错；import { type A } 只删除 A，留下 import {} 仍会执行模块副作用。Node.js 类型剥离、esbuild 等单文件转换器依赖这种显式标注。" />
+    <meta property="og:title" content="import type 和 verbatimModuleSyntax 如何影响模块输出？" />
+    <meta property="og:description" content="TypeScript面试题：import type 整条导入在编译后删除，模块不会被加载。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/ts-type-imports/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-type-imports/#webpage","url":"https://fe.hushifa.top/questions/ts-type-imports/","name":"import type 和 verbatimModuleSyntax 如何影响模块输出？ · 前端知库","description":"TypeScript面试题：import type 整条导入在编译后删除，模块不会被加载。开启 verbatimModuleSyntax 后，TypeScript 按源码写法保留导入：没有 type 修饰的名字一律保留，只用作类型却没标 type 会报错；import { type A } 只删除 A，留下 import {} 仍会执行模块副作用。Node.js 类型剥离、esbuild 等单文件转换器依赖这种显式标注。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-type-imports/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-type-imports/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"import type 和 verbatimModuleSyntax 如何影响模块输出？","item":"https://fe.hushifa.top/questions/ts-type-imports/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-type-imports/#webpage","url":"https://fe.hushifa.top/questions/ts-type-imports/","name":"import type 和 verbatimModuleSyntax 如何影响模块输出？","description":"TypeScript面试题：import type 整条导入在编译后删除，模块不会被加载。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-type-imports/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-type-imports/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"import type 和 verbatimModuleSyntax 如何影响模块输出？","item":"https://fe.hushifa.top/questions/ts-type-imports/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-DhmYjr2V.css">
   </head>

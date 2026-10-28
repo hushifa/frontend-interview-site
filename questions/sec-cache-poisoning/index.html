@@ -11,17 +11,17 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="前端安全面试题：缓存投毒是让 CDN 等共享缓存存下一份被攻击者影响的响应，再分发给其他用户；缓存欺骗则是诱导共享缓存存下某个用户的私有响应。根源都是影响响应的输入没有进入缓存键，或私有响应缺少 private、no-store。" />
-    <title>什么是 Web 缓存投毒？如何避免把用户数据缓存给别人？ · 前端知库</title>
+    <meta name="description" content="前端安全面试题：缓存投毒是让 CDN 等共享缓存存下一份被攻击者影响的响应，再分发给其他用户；缓存欺骗则是诱导共享缓存存下某个用户的私有响应。" />
+    <title>什么是 Web 缓存投毒？如何避免把用户数据缓存给别人？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/sec-cache-poisoning/" />
     <meta name="robots" content="index,follow" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="article" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
-    <meta property="og:title" content="什么是 Web 缓存投毒？如何避免把用户数据缓存给别人？ · 前端知库" />
-    <meta property="og:description" content="前端安全面试题：缓存投毒是让 CDN 等共享缓存存下一份被攻击者影响的响应，再分发给其他用户；缓存欺骗则是诱导共享缓存存下某个用户的私有响应。根源都是影响响应的输入没有进入缓存键，或私有响应缺少 private、no-store。" />
+    <meta property="og:title" content="什么是 Web 缓存投毒？如何避免把用户数据缓存给别人？" />
+    <meta property="og:description" content="前端安全面试题：缓存投毒是让 CDN 等共享缓存存下一份被攻击者影响的响应，再分发给其他用户；缓存欺骗则是诱导共享缓存存下某个用户的私有响应。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/sec-cache-poisoning/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/sec-cache-poisoning/#webpage","url":"https://fe.hushifa.top/questions/sec-cache-poisoning/","name":"什么是 Web 缓存投毒？如何避免把用户数据缓存给别人？ · 前端知库","description":"前端安全面试题：缓存投毒是让 CDN 等共享缓存存下一份被攻击者影响的响应，再分发给其他用户；缓存欺骗则是诱导共享缓存存下某个用户的私有响应。根源都是影响响应的输入没有进入缓存键，或私有响应缺少 private、no-store。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/sec-cache-poisoning/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/sec-cache-poisoning/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"前端安全面试题","item":"https://fe.hushifa.top/topics/security/"},{"@type":"ListItem","position":3,"name":"什么是 Web 缓存投毒？如何避免把用户数据缓存给别人？","item":"https://fe.hushifa.top/questions/sec-cache-poisoning/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/sec-cache-poisoning/#webpage","url":"https://fe.hushifa.top/questions/sec-cache-poisoning/","name":"什么是 Web 缓存投毒？如何避免把用户数据缓存给别人？","description":"前端安全面试题：缓存投毒是让 CDN 等共享缓存存下一份被攻击者影响的响应，再分发给其他用户；缓存欺骗则是诱导共享缓存存下某个用户的私有响应。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/sec-cache-poisoning/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/sec-cache-poisoning/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"前端安全面试题","item":"https://fe.hushifa.top/topics/security/"},{"@type":"ListItem","position":3,"name":"什么是 Web 缓存投毒？如何避免把用户数据缓存给别人？","item":"https://fe.hushifa.top/questions/sec-cache-poisoning/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-DhmYjr2V.css">
   </head>

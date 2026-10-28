@@ -11,17 +11,17 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="浏览器原理面试题：requestIdleCallback 在浏览器空闲时执行低优先级工作，回调通过 timeRemaining() 得到剩余时间；页面一直繁忙或在后台时回调可能长时间不执行，Safari 也不支持，所以只适合可推迟、可丢弃的任务。" />
-    <title>requestIdleCallback 适合做什么？为什么不能用它保证任务一定执行？ · 前端知库</title>
+    <meta name="description" content="浏览器原理面试题：requestIdleCallback 在浏览器空闲时执行低优先级工作，回调通过 timeRemaining() 得到剩余时间…" />
+    <title>requestIdleCallback 适合做什么？为什么不能用它保证任务一定执行？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/browser-request-idle-callback/" />
     <meta name="robots" content="index,follow" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="article" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
-    <meta property="og:title" content="requestIdleCallback 适合做什么？为什么不能用它保证任务一定执行？ · 前端知库" />
-    <meta property="og:description" content="浏览器原理面试题：requestIdleCallback 在浏览器空闲时执行低优先级工作，回调通过 timeRemaining() 得到剩余时间；页面一直繁忙或在后台时回调可能长时间不执行，Safari 也不支持，所以只适合可推迟、可丢弃的任务。" />
+    <meta property="og:title" content="requestIdleCallback 适合做什么？为什么不能用它保证任务一定执行？" />
+    <meta property="og:description" content="浏览器原理面试题：requestIdleCallback 在浏览器空闲时执行低优先级工作，回调通过 timeRemaining() 得到剩余时间…" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/browser-request-idle-callback/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/browser-request-idle-callback/#webpage","url":"https://fe.hushifa.top/questions/browser-request-idle-callback/","name":"requestIdleCallback 适合做什么？为什么不能用它保证任务一定执行？ · 前端知库","description":"浏览器原理面试题：requestIdleCallback 在浏览器空闲时执行低优先级工作，回调通过 timeRemaining() 得到剩余时间；页面一直繁忙或在后台时回调可能长时间不执行，Safari 也不支持，所以只适合可推迟、可丢弃的任务。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/browser-request-idle-callback/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/browser-request-idle-callback/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"浏览器原理面试题","item":"https://fe.hushifa.top/topics/browser/"},{"@type":"ListItem","position":3,"name":"requestIdleCallback 适合做什么？为什么不能用它保证任务一定执行？","item":"https://fe.hushifa.top/questions/browser-request-idle-callback/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/browser-request-idle-callback/#webpage","url":"https://fe.hushifa.top/questions/browser-request-idle-callback/","name":"requestIdleCallback 适合做什么？为什么不能用它保证任务一定执行？","description":"浏览器原理面试题：requestIdleCallback 在浏览器空闲时执行低优先级工作，回调通过 timeRemaining() 得到剩余时间…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/browser-request-idle-callback/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/browser-request-idle-callback/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"浏览器原理面试题","item":"https://fe.hushifa.top/topics/browser/"},{"@type":"ListItem","position":3,"name":"requestIdleCallback 适合做什么？为什么不能用它保证任务一定执行？","item":"https://fe.hushifa.top/questions/browser-request-idle-callback/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-DhmYjr2V.css">
   </head>

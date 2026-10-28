@@ -11,17 +11,17 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="网络面试题：服务端创建上传会话并记录已收到的分片；浏览器用 File.slice 切片、限制并发上传、失败重试。暂停就是取消进行中的请求，续传时先向服务端查询已完成的分片，只补传缺失部分，全部完成后由服务端合并并校验。" />
+    <meta name="description" content="网络面试题：服务端创建上传会话并记录已收到的分片；浏览器用 File.slice 切片、限制并发上传、失败重试。" />
     <title>浏览器分片上传如何实现可靠的暂停与续传？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/network-resumable-upload/" />
     <meta name="robots" content="index,follow" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="article" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="浏览器分片上传如何实现可靠的暂停与续传？ · 前端知库" />
-    <meta property="og:description" content="网络面试题：服务端创建上传会话并记录已收到的分片；浏览器用 File.slice 切片、限制并发上传、失败重试。暂停就是取消进行中的请求，续传时先向服务端查询已完成的分片，只补传缺失部分，全部完成后由服务端合并并校验。" />
+    <meta property="og:description" content="网络面试题：服务端创建上传会话并记录已收到的分片；浏览器用 File.slice 切片、限制并发上传、失败重试。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/network-resumable-upload/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/network-resumable-upload/#webpage","url":"https://fe.hushifa.top/questions/network-resumable-upload/","name":"浏览器分片上传如何实现可靠的暂停与续传？ · 前端知库","description":"网络面试题：服务端创建上传会话并记录已收到的分片；浏览器用 File.slice 切片、限制并发上传、失败重试。暂停就是取消进行中的请求，续传时先向服务端查询已完成的分片，只补传缺失部分，全部完成后由服务端合并并校验。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/network-resumable-upload/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/network-resumable-upload/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"网络面试题","item":"https://fe.hushifa.top/topics/network/"},{"@type":"ListItem","position":3,"name":"浏览器分片上传如何实现可靠的暂停与续传？","item":"https://fe.hushifa.top/questions/network-resumable-upload/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/network-resumable-upload/#webpage","url":"https://fe.hushifa.top/questions/network-resumable-upload/","name":"浏览器分片上传如何实现可靠的暂停与续传？ · 前端知库","description":"网络面试题：服务端创建上传会话并记录已收到的分片；浏览器用 File.slice 切片、限制并发上传、失败重试。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/network-resumable-upload/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/network-resumable-upload/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"网络面试题","item":"https://fe.hushifa.top/topics/network/"},{"@type":"ListItem","position":3,"name":"浏览器分片上传如何实现可靠的暂停与续传？","item":"https://fe.hushifa.top/questions/network-resumable-upload/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-DhmYjr2V.css">
   </head>

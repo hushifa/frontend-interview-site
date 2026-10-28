@@ -11,17 +11,17 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="性能优化面试题：先用 RUM 按页面、版本、设备拆分，确认哪些用户、哪个指标、从哪个版本开始变慢；再在实验室固定条件复现，用瀑布图分析 LCP、用 Performance 面板分析 INP；修复要对应找到的瓶颈，最后通过对照测试和分批发布验证真实用户数据是否改善。" />
+    <meta name="description" content="性能优化面试题：先用 RUM 按页面、版本、设备拆分，确认哪些用户、哪个指标、从哪个版本开始变慢；再在实验室固定条件复现，用瀑布图分析 LCP…" />
     <title>一个线上页面变慢后应该怎样完成性能诊断闭环？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/perf-diagnostics-case/" />
     <meta name="robots" content="index,follow" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="article" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="一个线上页面变慢后应该怎样完成性能诊断闭环？ · 前端知库" />
-    <meta property="og:description" content="性能优化面试题：先用 RUM 按页面、版本、设备拆分，确认哪些用户、哪个指标、从哪个版本开始变慢；再在实验室固定条件复现，用瀑布图分析 LCP、用 Performance 面板分析 INP；修复要对应找到的瓶颈，最后通过对照测试和分批发布验证真实用户数据是否改善。" />
+    <meta property="og:description" content="性能优化面试题：先用 RUM 按页面、版本、设备拆分，确认哪些用户、哪个指标、从哪个版本开始变慢；再在实验室固定条件复现，用瀑布图分析 LCP…" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/perf-diagnostics-case/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-diagnostics-case/#webpage","url":"https://fe.hushifa.top/questions/perf-diagnostics-case/","name":"一个线上页面变慢后应该怎样完成性能诊断闭环？ · 前端知库","description":"性能优化面试题：先用 RUM 按页面、版本、设备拆分，确认哪些用户、哪个指标、从哪个版本开始变慢；再在实验室固定条件复现，用瀑布图分析 LCP、用 Performance 面板分析 INP；修复要对应找到的瓶颈，最后通过对照测试和分批发布验证真实用户数据是否改善。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-diagnostics-case/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-diagnostics-case/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"一个线上页面变慢后应该怎样完成性能诊断闭环？","item":"https://fe.hushifa.top/questions/perf-diagnostics-case/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-diagnostics-case/#webpage","url":"https://fe.hushifa.top/questions/perf-diagnostics-case/","name":"一个线上页面变慢后应该怎样完成性能诊断闭环？ · 前端知库","description":"性能优化面试题：先用 RUM 按页面、版本、设备拆分，确认哪些用户、哪个指标、从哪个版本开始变慢；再在实验室固定条件复现，用瀑布图分析 LCP…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-diagnostics-case/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-diagnostics-case/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"一个线上页面变慢后应该怎样完成性能诊断闭环？","item":"https://fe.hushifa.top/questions/perf-diagnostics-case/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-DhmYjr2V.css">
   </head>

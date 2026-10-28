@@ -11,17 +11,17 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="性能优化面试题：INP 衡量点击、轻触和按键到下一帧绘制的延迟，≤200ms 为良好、&gt;500ms 为较差，按 75 分位评估，2024 年取代 FID 成为 Core Web Vitals。每次交互分为输入延迟、处理时间、呈现延迟三段，先用 Event Timing 或 web-vitals 库找到最慢的交互和慢在哪段，再针对性优化。" />
+    <meta name="description" content="性能优化面试题：INP 衡量点击、轻触和按键到下一帧绘制的延迟，≤200ms 为良好、&gt;500ms 为较差，按 75 分位评估…" />
     <title>INP 很高时，如何定位到底是哪一段交互变慢？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/perf-inp-diagnosis/" />
     <meta name="robots" content="index,follow" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="article" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="INP 很高时，如何定位到底是哪一段交互变慢？ · 前端知库" />
-    <meta property="og:description" content="性能优化面试题：INP 衡量点击、轻触和按键到下一帧绘制的延迟，≤200ms 为良好、&gt;500ms 为较差，按 75 分位评估，2024 年取代 FID 成为 Core Web Vitals。每次交互分为输入延迟、处理时间、呈现延迟三段，先用 Event Timing 或 web-vitals 库找到最慢的交互和慢在哪段，再针对性优化。" />
+    <meta property="og:description" content="性能优化面试题：INP 衡量点击、轻触和按键到下一帧绘制的延迟，≤200ms 为良好、&gt;500ms 为较差，按 75 分位评估…" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/perf-inp-diagnosis/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-inp-diagnosis/#webpage","url":"https://fe.hushifa.top/questions/perf-inp-diagnosis/","name":"INP 很高时，如何定位到底是哪一段交互变慢？ · 前端知库","description":"性能优化面试题：INP 衡量点击、轻触和按键到下一帧绘制的延迟，≤200ms 为良好、>500ms 为较差，按 75 分位评估，2024 年取代 FID 成为 Core Web Vitals。每次交互分为输入延迟、处理时间、呈现延迟三段，先用 Event Timing 或 web-vitals 库找到最慢的交互和慢在哪段，再针对性优化。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-inp-diagnosis/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-inp-diagnosis/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"INP 很高时，如何定位到底是哪一段交互变慢？","item":"https://fe.hushifa.top/questions/perf-inp-diagnosis/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-inp-diagnosis/#webpage","url":"https://fe.hushifa.top/questions/perf-inp-diagnosis/","name":"INP 很高时，如何定位到底是哪一段交互变慢？ · 前端知库","description":"性能优化面试题：INP 衡量点击、轻触和按键到下一帧绘制的延迟，≤200ms 为良好、>500ms 为较差，按 75 分位评估…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-inp-diagnosis/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-inp-diagnosis/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"INP 很高时，如何定位到底是哪一段交互变慢？","item":"https://fe.hushifa.top/questions/perf-inp-diagnosis/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-DhmYjr2V.css">
   </head>
