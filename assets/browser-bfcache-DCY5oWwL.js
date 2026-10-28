@@ -3,7 +3,7 @@ var e={answerHtml:`<h2>简答</h2>
 <li>HTTP 缓存保存单个资源的响应，恢复页面时仍要重新解析、执行脚本和渲染。</li>
 <li>bfcache（往返缓存）把离开时的整个页面连同 JavaScript 堆冻结在内存里，后退或前进时直接恢复，几乎瞬间显示。</li>
 <li>从 bfcache 恢复时不触发 <code>load</code>，而是触发 <code>pageshow</code>，<code>event.persisted</code> 为 <code>true</code>。</li>
-<li>常见的阻止原因有：注册了 <code>unload</code> 监听器、离开时还有未关闭的 WebSocket 或 IndexedDB 事务、主文档带 <code>Cache-Control: no-store</code>（Chrome 正在逐步放宽这一条）。</li>
+<li>常见的阻止原因有：注册了 <code>unload</code> 监听器（桌面版 Chrome 和 Firefox 会因此放弃缓存）、离开时还有打开的 IndexedDB 连接、进行中的 fetch 或 XHR、未关闭的 WebSocket 或 WebRTC 连接（部分浏览器会因此放弃缓存）、主文档带 <code>Cache-Control: no-store</code>（Chrome 正在逐步放宽这一条）。</li>
 </ul>
 <h2>对比</h2>
 <table><thead><tr><th></th><th>HTTP 缓存</th><th>bfcache</th></tr></thead><tbody><tr><td>保存内容</td><td>单个响应</td><td>整个页面和 JS 状态</td></tr><tr><td>存放位置</td><td>磁盘或内存</td><td>内存</td></tr><tr><td>适用导航</td><td>所有请求</td><td>只有后退、前进</td></tr><tr><td>恢复时脚本</td><td>重新执行</td><td>不重新执行，从冻结点继续</td></tr></tbody></table>

@@ -16,7 +16,7 @@ var e={answerHtml:`<h2>简答</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">function</span> longer&lt;T <span class="hljs-keyword">extends</span> { <span class="hljs-attr">length</span>: <span class="hljs-built_in">number</span> }&gt;(<span class="hljs-attr">first</span>: T, <span class="hljs-attr">second</span>: T): T {
   <span class="hljs-keyword">return</span> first.<span class="hljs-property">length</span> &gt;= second.<span class="hljs-property">length</span> ? first : second;
 }
-<span class="hljs-title function_">longer</span>(<span class="hljs-string">&#x27;HTML&#x27;</span>, <span class="hljs-string">&#x27;TypeScript&#x27;</span>); <span class="hljs-comment">// string</span>
+<span class="hljs-title function_">longer</span>(<span class="hljs-string">&#x27;HTML&#x27;</span>, <span class="hljs-string">&#x27;TypeScript&#x27;</span>); <span class="hljs-comment">// &#x27;HTML&#x27; | &#x27;TypeScript&#x27;</span>
 <span class="hljs-title function_">longer</span>([<span class="hljs-number">1</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]);          <span class="hljs-comment">// number[]</span>
 </code></pre></div>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">function</span> ensureLength&lt;T <span class="hljs-keyword">extends</span> { <span class="hljs-attr">length</span>: <span class="hljs-built_in">number</span> }&gt;(<span class="hljs-attr">value</span>: T, <span class="hljs-attr">minimum</span>: <span class="hljs-built_in">number</span>): T {

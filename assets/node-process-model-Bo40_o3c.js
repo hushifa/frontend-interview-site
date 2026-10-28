@@ -25,6 +25,6 @@ var e={answerHtml:`<h2>简答</h2>
 <p>多个进程之间不共享内存。会话、限流计数、缓存这些状态要放到 Redis 等外部存储，否则同一用户的请求落到不同进程会看到不同的数据。</p>
 <h2>常见追问</h2>
 <ul>
-<li><strong>Worker 的通信与任务池细节？</strong> 见<a href="/questions/node-worker-threads/">《Node.js Worker Threads 适合解决什么问题？》</a>和<a href="/questions/node-worker-pool/">《Node.js 为什么要用 Worker Threads 任务池，而不是每次请求都创建 Worker？》</a>。</li>
+<li><strong>Worker 的通信与任务池细节？</strong> 见<a href="/questions/node-worker-threads/">《Node.js Worker Threads 适合解决什么问题？》</a>和<a href="/questions/node-worker-pool/">《Node.js 为什么要用 Worker Threads 任务池？》</a>。</li>
 <li><strong>怎样限制子进程的权限？</strong> 用操作系统层面的隔离：低权限用户、容器、seccomp 等。Node.js 的权限模型（<code>--permission</code>，v22.13.0 和 v23.5.0 起稳定）开启后，默认禁止访问文件系统、创建子进程和 Worker，需要用 <code>--allow-fs-read</code>、<code>--allow-child-process</code>、<code>--allow-worker</code> 等参数逐项放开。它防的是代码误用权限，不能代替操作系统隔离。</li>
 </ul>`};export{e as default};

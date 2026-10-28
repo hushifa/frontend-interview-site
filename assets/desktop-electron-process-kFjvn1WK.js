@@ -58,6 +58,6 @@ process.<span class="hljs-property">parentPort</span>.<span class="hljs-title fu
 <table><thead><tr><th>任务</th><th>推荐位置</th></tr></thead><tbody><tr><td>界面渲染、交互逻辑</td><td>渲染进程</td></tr><tr><td>页面内的长计算（解析、压缩）</td><td>渲染进程中的 Web Worker</td></tr><tr><td>文件系统、原生对话框、窗口管理</td><td>主进程，经 IPC 调用</td></tr><tr><td>需要 Node.js 的重计算、第三方原生模块、可能崩溃的服务</td><td>utility 进程</td></tr></tbody></table>
 <h2>常见追问</h2>
 <ul>
-<li>多个窗口怎么共享状态？由主进程或 utility 进程持有状态，再通过 IPC 广播，或者用 <code>MessagePort</code> 让窗口之间直接通信，通信方式见<a href="/questions/desktop-electron-ipc/">《Electron 的 IPC 怎么设计？invoke/handle、send/on 和 contextBridge 如何配合？》</a>。</li>
+<li>多个窗口怎么共享状态？由主进程或 utility 进程持有状态，再通过 IPC 广播，或者用 <code>MessagePort</code> 让窗口之间直接通信，通信方式见<a href="/questions/desktop-electron-ipc/">《Electron 的 IPC 和 contextBridge 怎样设计？》</a>。</li>
 <li>为什么不在 preload 里直接做文件操作？沙箱开启后 preload 拿不到 <code>fs</code>；即使关闭沙箱，把文件能力放进渲染进程也会扩大 XSS 的影响，安全细节见<a href="/questions/mobile-electron-security/">《Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？》</a>。</li>
 </ul>`};export{e as default};

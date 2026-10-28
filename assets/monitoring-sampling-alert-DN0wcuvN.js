@@ -32,7 +32,7 @@ var e={answerHtml:`<h2>简答</h2>
   <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
 }
 </code></pre></div>
-<p>数据先放入队列批量发送，页面隐藏时再刷出，发送方式见<a href="/questions/monitoring-beacon/">《页面关闭或切走时怎样可靠上报？sendBeacon、keepalive 和 fetchLater 怎么选？》</a>。</p>
+<p>数据先放入队列批量发送，页面隐藏时再刷出，发送方式见<a href="/questions/monitoring-beacon/">《页面关闭时怎样可靠上报？sendBeacon 和 keepalive 怎么选？》</a>。</p>
 <h2>指纹与聚合</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">fingerprint</span> = (<span class="hljs-params">e</span>) =&gt; <span class="hljs-string">\`<span class="hljs-subst">\${e.name}</span>|<span class="hljs-subst">\${e.message.replace(/\\d+/g, <span class="hljs-string">&#x27;{n}&#x27;</span>)}</span>|<span class="hljs-subst">\${e.frame}</span>\`</span>;
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">fingerprint</span>({ <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;TypeError&#x27;</span>, <span class="hljs-attr">message</span>: <span class="hljs-string">&#x27;id 123 not found&#x27;</span>, <span class="hljs-attr">frame</span>: <span class="hljs-string">&#x27;app.js:10:5&#x27;</span> }));

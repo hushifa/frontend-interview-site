@@ -28,7 +28,7 @@ var e={answerHtml:`<h2>简答</h2>
 
 parentPort.<span class="hljs-title function_">postMessage</span>(<span class="hljs-title function_">createHash</span>(<span class="hljs-string">&#x27;sha256&#x27;</span>).<span class="hljs-title function_">update</span>(workerData).<span class="hljs-title function_">digest</span>(<span class="hljs-string">&#x27;hex&#x27;</span>));
 </code></pre></div>
-<p>这个示例每次调用都创建一个新 Worker，只适合低频任务。高频调用的做法见<a href="/questions/node-worker-pool/">《Node.js 为什么要用 Worker Threads 任务池，而不是每次请求都创建 Worker？》</a>。</p>
+<p>这个示例每次调用都创建一个新 Worker，只适合低频任务。高频调用的做法见<a href="/questions/node-worker-pool/">《Node.js 为什么要用 Worker Threads 任务池？》</a>。</p>
 <h2>数据怎样在线程间传递</h2>
 <table><thead><tr><th>方式</th><th>特点</th></tr></thead><tbody><tr><td>结构化克隆（默认）</td><td>复制一份数据，支持对象、Map、Date、TypedArray 等；函数和类实例的原型不会保留</td></tr><tr><td>转移（transferList）</td><td>ArrayBuffer、MessagePort 等可转移对象移交给另一方，原线程中的变为不可用</td></tr><tr><td>SharedArrayBuffer</td><td>两个线程读写同一块内存，需要用 Atomics 协调读写顺序</td></tr></tbody></table>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> buffer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayBuffer</span>(<span class="hljs-number">8</span>);

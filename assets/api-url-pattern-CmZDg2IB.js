@@ -18,12 +18,12 @@ relative.<span class="hljs-title function_">test</span>(<span class="hljs-string
 </code></pre></div>
 <p><code>baseURL</code> 提供了协议和主机，所以只匹配 <code>example.com</code>。</p>
 <h2>带约束的参数</h2>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> asset = <span class="hljs-keyword">new</span> <span class="hljs-title class_">URLPattern</span>({ <span class="hljs-attr">pathname</span>: <span class="hljs-string">&#x27;/assets/:name([^/]+)\\\\.:ext([a-z0-9]+)&#x27;</span> });
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> asset = <span class="hljs-keyword">new</span> <span class="hljs-title class_">URLPattern</span>({ <span class="hljs-attr">pathname</span>: <span class="hljs-string">&#x27;/assets/:name([^\\\\/]+)\\\\.:ext([a-z0-9]+)&#x27;</span> });
 asset.<span class="hljs-title function_">exec</span>(<span class="hljs-string">&#x27;https://cdn.example.com/assets/app.8f3a.js&#x27;</span>).<span class="hljs-property">pathname</span>.<span class="hljs-property">groups</span>;
 <span class="hljs-comment">// { name: &#x27;app.8f3a&#x27;, ext: &#x27;js&#x27; }</span>
 </code></pre></div>
 <ul>
-<li>括号里是正则约束，<code>[^/]+</code> 贪婪匹配，回溯后让 <code>ext</code> 只拿到最后一段扩展名。</li>
+<li>括号里是正则约束，<code>[^\\/]+</code> 贪婪匹配，回溯后让 <code>ext</code> 只拿到最后一段扩展名。字符类里的 <code>/</code> 要写成 <code>\\/</code>；写成 <code>[^/]+</code> 时 Chrome 156 在构造阶段就抛 <code>TypeError</code>（invalid regular expression group）。</li>
 <li>不加约束时，<code>:name</code> 默认匹配到下一个分隔符前的最短内容，多段扩展名的结果不符合预期。</li>
 <li><code>:id?</code> 可选，<code>:path+</code> 一段或多段，<code>:path*</code> 零段或多段。</li>
 </ul>

@@ -52,7 +52,7 @@ var e={answerHtml:`<h2>简答</h2>
   [K <span class="hljs-keyword">in</span> keyof T <span class="hljs-keyword">as</span> K <span class="hljs-keyword">extends</span> <span class="hljs-built_in">string</span> ? <span class="hljs-string">\`get<span class="hljs-subst">\${Capitalize&lt;K&gt;}</span>\`</span> : <span class="hljs-built_in">never</span>]: <span class="hljs-function">() =&gt;</span> T[K];
 };
 <span class="hljs-keyword">type</span> <span class="hljs-title class_">UserGetters</span> = <span class="hljs-title class_">Getters</span>&lt;<span class="hljs-title class_">Pick</span>&lt;<span class="hljs-title class_">User</span>, <span class="hljs-string">&#x27;id&#x27;</span> | <span class="hljs-string">&#x27;name&#x27;</span>&gt;&gt;;
-<span class="hljs-comment">// { getId: () =&gt; string; getName: () =&gt; string }</span>
+<span class="hljs-comment">// { readonly getId: () =&gt; string; getName: () =&gt; string }，同态映射保留 id 的 readonly</span>
 
 <span class="hljs-keyword">type</span> <span class="hljs-title class_">OnlyStrings</span>&lt;T&gt; = { [K <span class="hljs-keyword">in</span> keyof T <span class="hljs-keyword">as</span> T[K] <span class="hljs-keyword">extends</span> <span class="hljs-built_in">string</span> ? K : <span class="hljs-built_in">never</span>]: T[K] };
 </code></pre></div>
