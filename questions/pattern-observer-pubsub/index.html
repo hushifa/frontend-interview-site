@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="设计模式面试题：观察者模式里，被观察的对象自己保存观察者列表，状态变了直接逐个通知。发布订阅在中间多了一个事件中心，发布者和订阅者互不认识，只按事件名通信。" />
+    <title>观察者模式和发布订阅模式有什么区别？前端哪里用到了它们？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/pattern-observer-pubsub/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="观察者模式和发布订阅模式有什么区别？前端哪里用到了它们？" />
+    <meta property="og:description" content="设计模式面试题：观察者模式里，被观察的对象自己保存观察者列表，状态变了直接逐个通知。发布订阅在中间多了一个事件中心，发布者和订阅者互不认识，只按事件名通信。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/pattern-observer-pubsub/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/pattern-observer-pubsub/#webpage","url":"https://fe.hushifa.top/questions/pattern-observer-pubsub/","name":"观察者模式和发布订阅模式有什么区别？前端哪里用到了它们？","description":"设计模式面试题：观察者模式里，被观察的对象自己保存观察者列表，状态变了直接逐个通知。发布订阅在中间多了一个事件中心，发布者和订阅者互不认识，只按事件名通信。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/pattern-observer-pubsub/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/pattern-observer-pubsub/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"设计模式面试题","item":"https://fe.hushifa.top/topics/design-patterns/"},{"@type":"ListItem","position":3,"name":"观察者模式和发布订阅模式有什么区别？前端哪里用到了它们？","item":"https://fe.hushifa.top/questions/pattern-observer-pubsub/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/design-patterns/">设计模式面试题</a><span aria-hidden="true">/</span><span aria-current="page">观察者模式和发布订阅模式有什么区别？前端哪里用到了它们？</span></nav><h1 tabindex="-1">观察者模式和发布订阅模式有什么区别？前端哪里用到了它们？</h1><p class="reading-summary">观察者模式里，被观察的对象自己保存观察者列表，状态变了直接逐个通知。发布订阅在中间多了一个事件中心，发布者和订阅者互不认识，只按事件名通信。Vue 的响应式依赖收集接近观察者模式，EventEmitter、DOM 事件和全局事件总线是发布订阅。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>商品降价时要通知所有关注它的用户，这就是“一个东西变了，很多地方要知道”的场景，两种模式都是为它设计的。</p>
+<p>观察者模式里，商品自己保存一份关注者列表，提供“添加关注”“取消关注”的方法，价格一变，就遍历列表挨个调用关注者的方法。商品和关注者是直接联系的，商品知道自己通知的是谁。</p>
+<p>发布订阅模式在中间加了一个事件中心。订阅者向事件中心说“我关心 <code>price-change</code> 这个事件”，发布者只管向事件中心发出 <code>price-change</code>，由事件中心找到所有订阅者去通知。发布者和订阅者彼此不知道对方存在，只靠事件名联系，所以耦合更松，可以跨模块使用。</p>
+<p>前端里两者都很常见。Vue 的响应式数据记住了哪些副作用依赖它，变化时直接触发它们，更接近观察者模式。Node.js 的 EventEmitter、浏览器的 <code>addEventListener</code>、Vue 2 常用的全局事件总线，都是按事件名订阅和触发，属于发布订阅。要注意，订阅了就要在不用时取消，组件卸载时不移除监听，回调和它引用的数据会一直留在内存里。</p>
+</blockquote>
+<h2>两种写法对比</h2>
+<p>下面用同一个降价通知分别实现：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 观察者模式：被观察者直接持有观察者</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Product</span> {
+  #observers = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>();
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">price</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">price</span> = price;
+  }
+  <span class="hljs-title function_">subscribe</span>(<span class="hljs-params">observer</span>) {
+    <span class="hljs-variable language_">this</span>.#observers.<span class="hljs-title function_">add</span>(observer);
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">this</span>.#observers.<span class="hljs-title function_">delete</span>(observer);
+  }
+  <span class="hljs-title function_">setPrice</span>(<span class="hljs-params">price</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">price</span> = price;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> observer <span class="hljs-keyword">of</span> <span class="hljs-variable language_">this</span>.#observers) observer.<span class="hljs-title function_">update</span>(<span class="hljs-variable language_">this</span>);
+  }
+}
+
+<span class="hljs-comment">// 发布订阅：通过事件中心解耦</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">EventBus</span> {
+  #handlers = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+  <span class="hljs-title function_">on</span>(<span class="hljs-params">event, handler</span>) {
+    <span class="hljs-keyword">if</span> (!<span class="hljs-variable language_">this</span>.#handlers.<span class="hljs-title function_">has</span>(event)) <span class="hljs-variable language_">this</span>.#handlers.<span class="hljs-title function_">set</span>(event, <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>());
+    <span class="hljs-variable language_">this</span>.#handlers.<span class="hljs-title function_">get</span>(event).<span class="hljs-title function_">add</span>(handler);
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">this</span>.#handlers.<span class="hljs-title function_">get</span>(event).<span class="hljs-title function_">delete</span>(handler);
+  }
+  <span class="hljs-title function_">emit</span>(<span class="hljs-params">event, payload</span>) {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> handler <span class="hljs-keyword">of</span> <span class="hljs-variable language_">this</span>.#handlers.<span class="hljs-title function_">get</span>(event) ?? []) <span class="hljs-title function_">handler</span>(payload);
+  }
+}
+
+<span class="hljs-keyword">const</span> logs = [];
+<span class="hljs-keyword">const</span> phone = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Product</span>(<span class="hljs-number">3000</span>);
+<span class="hljs-keyword">const</span> unsubscribe = phone.<span class="hljs-title function_">subscribe</span>({ <span class="hljs-attr">update</span>: <span class="hljs-function">(<span class="hljs-params">p</span>) =&gt;</span> logs.<span class="hljs-title function_">push</span>(<span class="hljs-string">`观察者：<span class="hljs-subst">${p.price}</span>`</span>) });
+phone.<span class="hljs-title function_">setPrice</span>(<span class="hljs-number">2800</span>);
+<span class="hljs-title function_">unsubscribe</span>();
+phone.<span class="hljs-title function_">setPrice</span>(<span class="hljs-number">2500</span>);
+
+<span class="hljs-keyword">const</span> bus = <span class="hljs-keyword">new</span> <span class="hljs-title class_">EventBus</span>();
+bus.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;price-change&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">price</span>) =&gt;</span> logs.<span class="hljs-title function_">push</span>(<span class="hljs-string">`订阅者：<span class="hljs-subst">${price}</span>`</span>));
+bus.<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;price-change&#x27;</span>, <span class="hljs-number">2800</span>);
+bus.<span class="hljs-title function_">emit</span>(<span class="hljs-string">&#x27;stock-change&#x27;</span>, <span class="hljs-number">0</span>);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(logs.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;|&#x27;</span>)); <span class="hljs-comment">// 观察者：2800|订阅者：2800</span>
+</code></pre></div>
+<p><code>phone.setPrice(2500)</code> 为什么没有记录？因为在那之前调用了 <code>subscribe</code> 返回的取消函数，观察者已经从列表里删掉了。把取消函数作为返回值，调用方不用自己保存回调的引用，组件卸载时调用一下就能清理。</p>
+<p>发布订阅这边，<code>bus.emit(&#x27;stock-change&#x27;, 0)</code> 也没有输出。因为没有人订阅这个事件名，事件中心找不到处理函数，什么也不做，发布者并不知道有没有人在听。</p>
+<h2>怎么选</h2>
+<p>需要通知的对象明确、关系固定，比如一个数据源对应几个视图，用观察者模式就够了，调用关系清楚，调试时容易顺着找到是谁触发的。</p>
+<p>需要跨模块、跨层级通信，发布方不应该依赖接收方，比如埋点、全局消息提示，用发布订阅更合适。可是事件名多了以后，很难知道一个事件被谁发出、被谁接收，所以大型项目里不建议用全局事件总线代替状态管理。手写完整的事件中心，包括 <code>once</code> 和错误处理，见<a href="/questions/alg-event-emitter/">《怎样手写一个支持 on、off、once 和 emit 的事件中心？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>DOM 事件属于哪一种？</strong></p>
+<blockquote>
+<p><code>addEventListener</code> 按事件类型订阅，<code>dispatchEvent</code> 按类型触发，按事件名解耦，更接近发布订阅。不过事件中心就是元素自己，还多了捕获和冒泡这类传播规则。</p>
+</blockquote>
+<p><strong>Vue 3 为什么去掉了 $on、$off？</strong></p>
+<blockquote>
+<p>Vue 3 移除了实例上的事件接口，官方认为全局事件总线难以追踪数据流，推荐用 props、emit、provide/inject 或状态管理库。确实需要事件总线时，可以用 mitt 这类小库。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget" target="_blank" rel="noreferrer">MDN · EventTarget<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://nodejs.org/api/events.html" target="_blank" rel="noreferrer">Node.js · Events<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%E5%89%8D%E7%AB%AF%E5%93%AA%E9%87%8C%E7%94%A8%E5%88%B0%E4%BA%86%E5%AE%83%E4%BB%AC%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%E5%92%8C%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%E5%89%8D%E7%AB%AF%E5%93%AA%E9%87%8C%E7%94%A8%E5%88%B0%E4%BA%86%E5%AE%83%E4%BB%AC%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Apattern-observer-pubsub%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fpattern-observer-pubsub%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：观察者模式和发布订阅模式有什么区别？前端哪里用到了它们？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/pattern-singleton/">单例模式在前端怎样实现？ES 模块天然是单例吗？</a></li><li><a href="/questions/pattern-strategy-proxy/">策略模式和代理模式分别解决什么问题？前端怎样使用？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

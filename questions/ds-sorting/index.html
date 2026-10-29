@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="数据结构与算法面试题：快速排序选一个基准，把数组分成比它小和比它大的两部分再递归，平均 O(n log n)，最坏 O(n²)，不稳定。" />
+    <title>快速排序和归并排序怎样实现？时间复杂度和稳定性有什么区别？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/ds-sorting/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="快速排序和归并排序怎样实现？时间复杂度和稳定性有什么区别？" />
+    <meta property="og:description" content="数据结构与算法面试题：快速排序选一个基准，把数组分成比它小和比它大的两部分再递归，平均 O(n log n)，最坏 O(n²)，不稳定。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/ds-sorting/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ds-sorting/#webpage","url":"https://fe.hushifa.top/questions/ds-sorting/","name":"快速排序和归并排序怎样实现？时间复杂度和稳定性有什么区别？","description":"数据结构与算法面试题：快速排序选一个基准，把数组分成比它小和比它大的两部分再递归，平均 O(n log n)，最坏 O(n²)，不稳定。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ds-sorting/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ds-sorting/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"数据结构与算法面试题","item":"https://fe.hushifa.top/topics/data-structures/"},{"@type":"ListItem","position":3,"name":"快速排序和归并排序怎样实现？时间复杂度和稳定性有什么区别？","item":"https://fe.hushifa.top/questions/ds-sorting/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/data-structures/">数据结构与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">快速排序和归并排序怎样实现？时间复杂度和稳定性有什么区别？</span></nav><h1 tabindex="-1">快速排序和归并排序怎样实现？时间复杂度和稳定性有什么区别？</h1><p class="reading-summary">快速排序选一个基准，把数组分成比它小和比它大的两部分再递归，平均 O(n log n)，最坏 O(n²)，不稳定。归并排序把数组对半拆到只剩一个元素，再两两有序合并，始终 O(n log n)，稳定但要额外空间。JS 的 Array.prototype.sort 从 ES2019 起要求稳定。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>快速排序的做法是：从数组里挑一个数当基准，把比它小的放左边、比它大的放右边，然后对左右两部分分别重复这个过程，直到每部分只剩一个数。归并排序反过来：先把数组对半拆，一直拆到每份只有一个数，再把相邻的两份按大小合并成一份有序的，一层层合并回去。</p>
+<p>两者平均都是 O(n log n)。区别在最坏情况和稳定性。快速排序如果每次选的基准都是最大或最小值，比如对已经有序的数组总选第一个数，每次只分出一个数，就退化成 O(n²)，所以基准一般随机选或取中间位置。归并排序无论输入怎样都是 O(n log n)，但合并时需要一块额外数组，空间是 O(n)。</p>
+<p>稳定性是说值相同的两项，排序后还保持原来的先后顺序。归并排序合并时遇到相等的值优先取左边那份，所以是稳定的；快速排序分区时会交换位置，一般不稳定。</p>
+<p>要注意，日常开发直接用 <code>arr.sort((a, b) =&gt; a - b)</code>。ES2019 起规范要求 <code>sort</code> 是稳定的；不传比较函数时它按字符串排序，<code>[10, 2, 1].sort()</code> 会得到 <code>[1, 10, 2]</code>。</p>
+</blockquote>
+<h2>两种排序的实现</h2>
+<p>下面的实现都返回新数组，不修改输入：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">quickSort</span>(<span class="hljs-params">arr</span>) {
+  <span class="hljs-keyword">if</span> (arr.<span class="hljs-property">length</span> &lt;= <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> arr;
+  <span class="hljs-keyword">const</span> pivot = arr[<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(arr.<span class="hljs-property">length</span> / <span class="hljs-number">2</span>)];
+  <span class="hljs-keyword">const</span> left = [];
+  <span class="hljs-keyword">const</span> middle = [];
+  <span class="hljs-keyword">const</span> right = [];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> item <span class="hljs-keyword">of</span> arr) {
+    <span class="hljs-keyword">if</span> (item &lt; pivot) left.<span class="hljs-title function_">push</span>(item);
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (item &gt; pivot) right.<span class="hljs-title function_">push</span>(item);
+    <span class="hljs-keyword">else</span> middle.<span class="hljs-title function_">push</span>(item);
+  }
+  <span class="hljs-keyword">return</span> [...<span class="hljs-title function_">quickSort</span>(left), ...middle, ...<span class="hljs-title function_">quickSort</span>(right)];
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">mergeSort</span>(<span class="hljs-params">arr</span>) {
+  <span class="hljs-keyword">if</span> (arr.<span class="hljs-property">length</span> &lt;= <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> arr;
+  <span class="hljs-keyword">const</span> mid = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(arr.<span class="hljs-property">length</span> / <span class="hljs-number">2</span>);
+  <span class="hljs-keyword">const</span> left = <span class="hljs-title function_">mergeSort</span>(arr.<span class="hljs-title function_">slice</span>(<span class="hljs-number">0</span>, mid));
+  <span class="hljs-keyword">const</span> right = <span class="hljs-title function_">mergeSort</span>(arr.<span class="hljs-title function_">slice</span>(mid));
+  <span class="hljs-keyword">const</span> result = [];
+  <span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> j = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">while</span> (i &lt; left.<span class="hljs-property">length</span> &amp;&amp; j &lt; right.<span class="hljs-property">length</span>) {
+    <span class="hljs-comment">// 相等时取左边，保证稳定</span>
+    <span class="hljs-keyword">if</span> (left[i] &lt;= right[j]) result.<span class="hljs-title function_">push</span>(left[i++]);
+    <span class="hljs-keyword">else</span> result.<span class="hljs-title function_">push</span>(right[j++]);
+  }
+  <span class="hljs-keyword">return</span> result.<span class="hljs-title function_">concat</span>(left.<span class="hljs-title function_">slice</span>(i), right.<span class="hljs-title function_">slice</span>(j));
+}
+
+<span class="hljs-keyword">const</span> data = [<span class="hljs-number">5</span>, <span class="hljs-number">3</span>, <span class="hljs-number">8</span>, <span class="hljs-number">1</span>, <span class="hljs-number">9</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">quickSort</span>(data).<span class="hljs-title function_">join</span>()); <span class="hljs-comment">// 1,2,3,3,5,8,9</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">mergeSort</span>(data).<span class="hljs-title function_">join</span>()); <span class="hljs-comment">// 1,2,3,3,5,8,9</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(data.<span class="hljs-title function_">join</span>()); <span class="hljs-comment">// 5,3,8,1,9,2,3</span>
+</code></pre></div>
+<p>快速排序为什么要单独放一个 <code>middle</code>？数组里可能有很多和基准相等的值，比如全是 3。如果把相等的值也放进 <code>left</code> 或 <code>right</code>，每次递归数组都不会变小，就会无限递归。单独收进 <code>middle</code>，每轮至少能确定基准这一组的位置。</p>
+<p>这个快速排序写法好懂，但每层都新建数组，空间开销大。面试中如果被要求原地排序，就改成在原数组上用两个指针交换元素来分区，空间降到 O(log n) 的递归栈。</p>
+<p>归并排序里 <code>left[i] &lt;= right[j]</code> 的等号不能去掉。去掉以后相等的值会优先取右边，原本在后面的项跑到了前面，排序就不稳定了。</p>
+<h2>稳定性在什么时候有用</h2>
+<p>表格先按姓名排好，用户再点“按部门排序”，希望同一个部门里的人仍然按姓名排列。这就要求第二次排序是稳定的：部门相同的两人，保持第一次排序后的先后顺序。因为现在 <code>Array.prototype.sort</code> 是稳定的，这种多次排序可以直接做。</p>
+<h2>常见追问</h2>
+<p><strong>还有哪些排序要知道？</strong></p>
+<blockquote>
+<p>冒泡排序和插入排序都是 O(n²)，插入排序在数组几乎有序时很快，接近 O(n)。堆排序是 O(n log n)、原地但不稳定，前端里更常见的是用堆做优先队列，见<a href="/questions/alg-priority-queue/">《前端任务怎样按优先级排队？二叉堆为什么不需要每次完整排序？》</a>。</p>
+</blockquote>
+<p><strong>为什么基于比较的排序不能比 O(n log n) 更快？</strong></p>
+<blockquote>
+<p>n 个数有 n! 种排列，每次比较只能把可能性分成两半，要确定唯一一种排列至少需要 log₂(n!) 次比较，这个量级就是 n log n。计数排序、桶排序不靠比较，在数值范围有限时可以做到线性时间。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort" target="_blank" rel="noreferrer">MDN · Array.prototype.sort()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E5%92%8C%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%EF%BC%9F%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%92%8C%E7%A8%B3%E5%AE%9A%E6%80%A7%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E5%92%8C%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%EF%BC%9F%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%92%8C%E7%A8%B3%E5%AE%9A%E6%80%A7%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ads-sorting%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fds-sorting%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：快速排序和归并排序怎样实现？时间复杂度和稳定性有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ds-linked-list/">怎样反转链表、判断链表有环？</a></li><li><a href="/questions/ds-two-sum-hash/">两数之和怎样从 O(n²) 优化到 O(n)？哈希表在算法题里怎么用？</a></li><li><a href="/questions/ds-binary-tree-bfs/">二叉树怎样层序遍历、求最大深度？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>
