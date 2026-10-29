@@ -1,0 +1,58 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>用 Web Component 做服务端渲染时有个问题：Shadow DOM 只能用 JavaScript 的 <code>attachShadow()</code> 创建，所以脚本加载之前，页面上的组件没有样式和内部结构。</p>
+<p>Declarative Shadow DOM 就是把 Shadow Root 直接写在 HTML 里。在宿主元素里放一个 <code>&lt;template shadowrootmode=&quot;open&quot;&gt;</code>，HTML 解析器看到它，就把模板内容直接挂成 Shadow Root，不用等脚本。</p>
+<p>这样首屏一出来就有带样式的组件，对 SEO 和无 JavaScript 的场景也友好。现在主流浏览器都支持 <code>shadowrootmode</code>，旧的 <code>shadowroot</code> 属性已废弃。</p>
+<p>要注意的是组件脚本加载后，要先读取已有的根再决定要不要 <code>attachShadow()</code>，因为对已有声明式根调用它会把内容清空。另外 <code>innerHTML</code> 不处理这个属性，动态插入要用 <code>setHTMLUnsafe()</code> 或 <code>Document.parseHTMLUnsafe()</code>。</p>
+</blockquote>
+<h2>在 HTML 里写出 Shadow Root</h2>
+<p>下面是一张用户卡片，样式和结构都写在 <code>&lt;template shadowrootmode=&quot;open&quot;&gt;</code> 里。</p>
+<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">user-card</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">template</span> <span class="hljs-attr">shadowrootmode</span>=<span class="hljs-string">&quot;open&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+      <span class="hljs-selector-pseudo">:host</span> { <span class="hljs-attribute">display</span>: block; <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid <span class="hljs-number">#ddd</span>; <span class="hljs-attribute">padding</span>: <span class="hljs-number">12px</span>; }
+    </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">strong</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;name&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">slot</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">slot</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;button&quot;</span>&gt;</span>关注<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">slot</span>=<span class="hljs-string">&quot;name&quot;</span>&gt;</span>张三<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">user-card</span>&gt;</span>
+</code></pre></div>
+<p>浏览器解析到这里，就把 template 的内容变成 <code>user-card</code> 的 Shadow Root。所以页面在 JavaScript 加载前就显示带样式的卡片，“张三”也已经通过插槽显示在 <code>.name</code> 里了。</p>
+<h2>组件脚本加载后怎样接手</h2>
+<p>组件脚本到了以后，要接手已经存在的 Shadow Root，而不是重新创建一个。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">UserCard</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">HTMLElement</span> {
+  #internals = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">attachInternals</span>();
+
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">super</span>();
+    <span class="hljs-keyword">const</span> root = <span class="hljs-variable language_">this</span>.#internals.<span class="hljs-property">shadowRoot</span> ?? <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">attachShadow</span>({ <span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;open&#x27;</span> });
+    <span class="hljs-keyword">if</span> (!root.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;.name&#x27;</span>)) {
+      root.<span class="hljs-property">innerHTML</span> = <span class="hljs-string">&#x27;&lt;strong class=&quot;name&quot;&gt;&lt;slot name=&quot;name&quot;&gt;&lt;/slot&gt;&lt;/strong&gt;&lt;button type=&quot;button&quot;&gt;关注&lt;/button&gt;&#x27;</span>;
+    }
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">button</span> = root.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;button&#x27;</span>);
+  }
+
+  <span class="hljs-title function_">connectedCallback</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">button</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">follow</span>());
+  }
+}
+
+customElements.<span class="hljs-title function_">define</span>(<span class="hljs-string">&#x27;user-card&#x27;</span>, <span class="hljs-title class_">UserCard</span>);
+</code></pre></div>
+<p>为什么要先判断？因为已有声明式根时，<code>attachShadow()</code> 不会报错，而是把这个根的所有内容清空再返回它，服务端渲染好的结构就丢了。所以先读已有的根。open 模式可以读 <code>this.shadowRoot</code>，closed 模式外部读不到，要用 <code>ElementInternals.shadowRoot</code>，例子里统一用了后者。</p>
+<p>客户端用 JavaScript 新建的 <code>user-card</code> 没有声明式根，<code>shadowRoot</code> 是空的，就走 <code>attachShadow()</code> 分支，自己生成内容。</p>
+<h2>为什么动态插入的 HTML 没有生效</h2>
+<p>用 <code>innerHTML</code> 插入一段带 <code>&lt;template shadowrootmode&gt;</code> 的 HTML，浏览器不会处理这个属性，它只是一个普通的 template。这是为了安全，避免旧代码意外创建 Shadow Root。要让它生效，改用 <code>setHTMLUnsafe()</code> 或 <code>Document.parseHTMLUnsafe()</code>。</p>
+<h2>适合哪些场景，有什么代价</h2>
+<p>它适合需要服务端渲染、在意首屏和 SEO 的 Web Component，也适合给多种框架共用的设计系统组件，要求没有 JavaScript 时也能基本展示。</p>
+<p>代价是每个组件实例都要把 <code>&lt;style&gt;</code> 写进模板，HTML 会变大。可以在组件升级后改用 <code>adoptedStyleSheets</code> 共享样式。另外，声明式根只解决了结构和样式，事件监听仍要等脚本执行后才绑定，所以按钮在此之前点击是没反应的。</p>
+<h2>常见追问</h2>
+<p><strong><code>attachShadow()</code> 的其他选项在声明式写法里怎么写？</strong></p>
+<blockquote>
+<p>用 template 上的属性。<code>shadowrootdelegatesfocus</code> 对应 <code>delegatesFocus</code>，<code>shadowrootclonable</code> 对应 <code>clonable</code>。</p>
+</blockquote>
+<p><strong>脚本加载前，组件能交互吗？</strong></p>
+<blockquote>
+<p>能看不能用。样式和结构已经在了，但事件监听要等组件脚本执行后才绑上，在那之前点击按钮没有效果。</p>
+</blockquote>`};export{e as default};

@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Web API面试题：tee() 把一个流拆成两个读取相同数据的分支；两个分支的读取速度不同时，快的一边读到的数据要为慢的一边缓存在内存里。" />
+    <meta name="description" content="Web API面试题：tee() 把一个流复制成两个分支。两边读得一快一慢时，慢的那边没读的数据全堆在内存里；只取消一边不会停掉源流，两边都取消才会。" />
     <title>ReadableStream 的 tee 分流有什么代价？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/api-readable-streams-tee/" />
     <meta name="robots" content="index,follow" />
@@ -19,21 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="ReadableStream 的 tee 分流有什么代价？" />
-    <meta property="og:description" content="Web API面试题：tee() 把一个流拆成两个读取相同数据的分支；两个分支的读取速度不同时，快的一边读到的数据要为慢的一边缓存在内存里。" />
+    <meta property="og:description" content="Web API面试题：tee() 把一个流复制成两个分支。两边读得一快一慢时，慢的那边没读的数据全堆在内存里；只取消一边不会停掉源流，两边都取消才会。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/api-readable-streams-tee/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/api-readable-streams-tee/#webpage","url":"https://fe.hushifa.top/questions/api-readable-streams-tee/","name":"ReadableStream 的 tee 分流有什么代价？","description":"Web API面试题：tee() 把一个流拆成两个读取相同数据的分支；两个分支的读取速度不同时，快的一边读到的数据要为慢的一边缓存在内存里。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/api-readable-streams-tee/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/api-readable-streams-tee/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Web API面试题","item":"https://fe.hushifa.top/topics/web-apis/"},{"@type":"ListItem","position":3,"name":"ReadableStream 的 tee 分流有什么代价？","item":"https://fe.hushifa.top/questions/api-readable-streams-tee/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/api-readable-streams-tee/#webpage","url":"https://fe.hushifa.top/questions/api-readable-streams-tee/","name":"ReadableStream 的 tee 分流有什么代价？","description":"Web API面试题：tee() 把一个流复制成两个分支。两边读得一快一慢时，慢的那边没读的数据全堆在内存里；只取消一边不会停掉源流，两边都取消才会。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/api-readable-streams-tee/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/api-readable-streams-tee/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Web API面试题","item":"https://fe.hushifa.top/topics/web-apis/"},{"@type":"ListItem","position":3,"name":"ReadableStream 的 tee 分流有什么代价？","item":"https://fe.hushifa.top/questions/api-readable-streams-tee/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/web-apis/">Web API面试题</a><span aria-hidden="true">/</span><span aria-current="page">ReadableStream 的 tee 分流有什么代价？</span></nav><h1 tabindex="-1">ReadableStream 的 tee 分流有什么代价？</h1><p class="reading-summary">tee() 把一个流拆成两个读取相同数据的分支；两个分支的读取速度不同时，快的一边读到的数据要为慢的一边缓存在内存里。只有两个分支都取消，源流才会被取消。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li><code>stream.tee()</code> 返回两个新的 <code>ReadableStream</code>，原流被锁定，之后只能读这两个分支。</li>
-<li>拉取速度由读得快的分支决定，慢的分支没读的数据在内存中排队，不会对源流产生背压。</li>
-<li>只取消一个分支不会停止源流，两个分支都取消后，源流才收到取消。</li>
-<li>适合&quot;同一份响应既写入缓存又交给页面&quot;这类两边都会读完的场景；一边可能长期不读时不要用 tee。</li>
-</ul>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/web-apis/">Web API面试题</a><span aria-hidden="true">/</span><span aria-current="page">ReadableStream 的 tee 分流有什么代价？</span></nav><h1 tabindex="-1">ReadableStream 的 tee 分流有什么代价？</h1><p class="reading-summary">tee() 把一个流复制成两个分支。两边读得一快一慢时，慢的那边没读的数据全堆在内存里；只取消一边不会停掉源流，两边都取消才会。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>一个流只能被读一次。如果同一份响应既要交给页面、又要写进缓存，就用 <code>stream.tee()</code>，它返回两个新的 <code>ReadableStream</code>，两边读到的是同样的数据。原来的流会被锁住，之后只能读这两个分支。</p>
+<p>代价在内存。源流的拉取速度由读得快的那一边决定，慢的那一边没读的数据会在它的队列里排队，不会让源流放慢，这叫没有背压。一边一直不读，整个响应最后都会堆在内存里。</p>
+<p>取消也要注意。只取消一个分支，源流不会停；两个分支都取消了，源流才收到取消。</p>
+<p>所以 tee 适合“两边都会读完”的场景，比如 Service Worker 边返回边缓存。一边可能长期不读，就不要用 tee；只是想顺便统计字节数，用 <code>TransformStream</code> 在一条管道里处理更好。</p>
+</blockquote>
 <h2>典型用法：Service Worker 边返回边缓存</h2>
+<p>下面把响应体分成两份，一份给页面，一份写进缓存。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-variable language_">self</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;fetch&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
   event.<span class="hljs-title function_">respondWith</span>(
     (<span class="hljs-title function_">async</span> () =&gt; {
@@ -48,18 +49,15 @@
   );
 });
 </code></pre></div>
-<p>这里更常见的写法是 <code>response.clone()</code>，它内部也是 tee，代价相同。</p>
-<h2>内存问题</h2>
+<p>为什么不直接把 <code>response</code> 同时交给页面和缓存？因为响应体是一个流，读过一次就没了。所以要先分成两份。实际中更常见的写法是 <code>response.clone()</code>，它内部也是用 tee 实现的，代价一样。</p>
+<h2>两边读得不一样快会怎样</h2>
+<p>先看一个会出问题的写法：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> [fast, slow] = hugeStream.<span class="hljs-title function_">tee</span>();
 <span class="hljs-keyword">await</span> <span class="hljs-title function_">consume</span>(fast);
 </code></pre></div>
-<p><code>slow</code> 一直不读，<code>fast</code> 读过的每一块都留在 <code>slow</code> 的队列里，最终整个响应都留在内存中。</p>
-<p>规避方式：</p>
-<ul>
-<li>两个分支并发消费：<code>await Promise.all([consume(a), consume(b)])</code>。</li>
-<li>某个分支不再需要时立即 <code>cancel()</code>，队列会被丢弃。</li>
-<li>只需要计算摘要或进度时，用 <code>TransformStream</code> 在一条管道里顺带处理，不分叉：</li>
-</ul>
+<p><code>fast</code> 被读完了，<code>slow</code> 一直没人读。可是 <code>fast</code> 读过的每一块，都要给 <code>slow</code> 留一份，因为 <code>slow</code> 以后可能会读。所以这些数据全堆在 <code>slow</code> 的队列里，最后整个响应都留在了内存中。</p>
+<p>为什么源流不等一等慢的那边？因为 tee 的设计是按快的一边拉数据，慢的一边只是缓存，不会反过来让源流暂停。</p>
+<p>改法有三种。第一，两个分支同时消费：<code>await Promise.all([consume(a), consume(b)])</code>。第二，某个分支不再需要时立刻 <code>cancel()</code>，它的队列会被丢掉。第三，如果只是想计算摘要或进度，就别分叉，用 <code>TransformStream</code> 在一条管道里顺带处理：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">let</span> bytes = <span class="hljs-number">0</span>;
 <span class="hljs-keyword">const</span> counter = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TransformStream</span>({
   <span class="hljs-title function_">transform</span>(<span class="hljs-params">chunk, controller</span>) {
@@ -69,8 +67,38 @@
 });
 <span class="hljs-keyword">await</span> response.<span class="hljs-property">body</span>.<span class="hljs-title function_">pipeThrough</span>(counter).<span class="hljs-title function_">pipeTo</span>(destination);
 </code></pre></div>
-<h2>错误传播</h2>
-<p>源流出错时，两个分支都会出错。一个分支的消费方出错不会影响另一个分支，但要记得取消它，否则缓存会持续增长。</p></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream/tee" target="_blank" rel="noreferrer">MDN · ReadableStream.tee()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+ReadableStream+%E7%9A%84+tee+%E5%88%86%E6%B5%81%E6%9C%89%E4%BB%80%E4%B9%88%E4%BB%A3%E4%BB%B7%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReadableStream+%E7%9A%84+tee+%E5%88%86%E6%B5%81%E6%9C%89%E4%BB%80%E4%B9%88%E4%BB%A3%E4%BB%B7%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aapi-readable-streams-tee%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AWeb+API%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fapi-readable-streams-tee%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：ReadableStream 的 tee 分流有什么代价？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/api-abort/">AbortController 能取消什么，不能取消什么？</a></li><li><a href="/questions/api-readable-streams/">怎样正确消费 Fetch 返回的 ReadableStream？</a></li><li><a href="/questions/web-serial/">Web Serial API 适合怎样的硬件交互？</a></li><li><a href="/questions/api-web-components/">Custom Elements、Shadow DOM 和 template 分别负责什么？</a></li></ul></nav></main></div></div>
+<p>数据流过 <code>counter</code> 时顺便累加字节数，原样往下传，全程只有一份数据。</p>
+<h2>只取消一个分支，源流会停吗</h2>
+<p>不会。下面这个例子在 Node 里能直接运行：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> source = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ReadableStream</span>({
+  <span class="hljs-title function_">pull</span>(<span class="hljs-params">controller</span>) {
+    controller.<span class="hljs-title function_">enqueue</span>(<span class="hljs-number">1</span>);
+  },
+  <span class="hljs-title function_">cancel</span>(<span class="hljs-params">reason</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;源流被取消&#x27;</span>, reason);
+  },
+});
+<span class="hljs-keyword">const</span> [a, b] = source.<span class="hljs-title function_">tee</span>();
+
+a.<span class="hljs-title function_">cancel</span>(<span class="hljs-string">&#x27;a&#x27;</span>);
+<span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> <span class="hljs-built_in">setTimeout</span>(resolve, <span class="hljs-number">10</span>));
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;只取消了 a&#x27;</span>);
+<span class="hljs-keyword">await</span> b.<span class="hljs-title function_">cancel</span>(<span class="hljs-string">&#x27;b&#x27;</span>);
+<span class="hljs-comment">// 只取消了 a</span>
+<span class="hljs-comment">// 源流被取消 [ &#x27;a&#x27;, &#x27;b&#x27; ]</span>
+</code></pre></div>
+<p>取消 <code>a</code> 以后，源流的 <code>cancel</code> 没有被调用，因为 <code>b</code> 还可能要读。等 <code>b</code> 也取消了，源流才收到取消，取消原因是两个分支各自的原因合成的数组。</p>
+<h2>出错时会怎样</h2>
+<p>源流出错时，两个分支都会出错。但一个分支的消费方自己出错，不会影响另一个分支。这时候要记得把出错那边的分支取消掉，否则另一边继续读，这边的队列会一直增长。</p>
+<h2>常见追问</h2>
+<p><strong><code>response.clone()</code> 和 tee 有什么关系？</strong></p>
+<blockquote>
+<p><code>clone()</code> 内部就是对响应体做 tee。所以克隆以后两份都要读完，或者把不用的那份取消，否则一样会把数据堆在内存里。</p>
+</blockquote>
+<p><strong>只想显示下载进度，需要 tee 吗？</strong></p>
+<blockquote>
+<p>不需要。用一个 <code>TransformStream</code> 接在管道中间，每块经过时累加 <code>byteLength</code> 再原样传下去，不用分叉，也没有额外的内存占用。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream/tee" target="_blank" rel="noreferrer">MDN · ReadableStream.tee()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+ReadableStream+%E7%9A%84+tee+%E5%88%86%E6%B5%81%E6%9C%89%E4%BB%80%E4%B9%88%E4%BB%A3%E4%BB%B7%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReadableStream+%E7%9A%84+tee+%E5%88%86%E6%B5%81%E6%9C%89%E4%BB%80%E4%B9%88%E4%BB%A3%E4%BB%B7%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aapi-readable-streams-tee%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AWeb+API%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fapi-readable-streams-tee%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：ReadableStream 的 tee 分流有什么代价？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/api-abort/">AbortController 能取消什么，不能取消什么？</a></li><li><a href="/questions/api-readable-streams/">怎样正确消费 Fetch 返回的 ReadableStream？</a></li><li><a href="/questions/web-serial/">Web Serial API 适合怎样的硬件交互？</a></li><li><a href="/questions/api-web-components/">Custom Elements、Shadow DOM 和 template 分别负责什么？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

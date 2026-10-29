@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="JavaScript面试题：迭代器的 return() 方法是&quot;消费者不再读取&quot;的通知。" />
+    <meta name="description" content="JavaScript面试题：迭代器的 return() 是消费者在说&quot;我不读了，你清理吧&quot;。" />
     <title>JavaScript 迭代器关闭和 return 方法有什么作用？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/js-iterator-closing/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,21 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="JavaScript 迭代器关闭和 return 方法有什么作用？" />
-    <meta property="og:description" content="JavaScript面试题：迭代器的 return() 方法是&quot;消费者不再读取&quot;的通知。" />
+    <meta property="og:description" content="JavaScript面试题：迭代器的 return() 是消费者在说&quot;我不读了，你清理吧&quot;。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/js-iterator-closing/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-iterator-closing/#webpage","url":"https://fe.hushifa.top/questions/js-iterator-closing/","name":"JavaScript 迭代器关闭和 return 方法有什么作用？","description":"JavaScript面试题：迭代器的 return() 方法是\"消费者不再读取\"的通知。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-iterator-closing/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-iterator-closing/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"JavaScript 迭代器关闭和 return 方法有什么作用？","item":"https://fe.hushifa.top/questions/js-iterator-closing/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-iterator-closing/#webpage","url":"https://fe.hushifa.top/questions/js-iterator-closing/","name":"JavaScript 迭代器关闭和 return 方法有什么作用？","description":"JavaScript面试题：迭代器的 return() 是消费者在说\"我不读了，你清理吧\"。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-iterator-closing/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-iterator-closing/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"JavaScript 迭代器关闭和 return 方法有什么作用？","item":"https://fe.hushifa.top/questions/js-iterator-closing/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">JavaScript 迭代器关闭和 return 方法有什么作用？</span></nav><h1 tabindex="-1">JavaScript 迭代器关闭和 return 方法有什么作用？</h1><p class="reading-summary">迭代器的 return() 方法是&quot;消费者不再读取&quot;的通知。for...of 和解构在 break、return 或循环体抛错而提前退出时会调用它，生成器借此运行 finally 释放资源。迭代正常结束、next() 自身抛错或手动丢弃迭代器时不会调用。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li><code>return()</code> 是迭代器的可选方法，用于通知生产者&quot;不再读取，请清理&quot;，它必须返回一个对象。</li>
-<li><code>for...of</code> 因 <code>break</code>、<code>return</code> 或循环体抛错提前退出时会调用 <code>return()</code>；数组解构没取完所有值时也会调用。</li>
-<li>生成器的 <code>return()</code> 会从暂停的 <code>yield</code> 处结束执行，运行 <code>finally</code>，所以资源释放写在生成器的 <code>try/finally</code> 里。</li>
-<li>迭代正常结束（<code>done: true</code>）、<code>next()</code> 自身抛错、手动调用 <code>next()</code> 后丢弃迭代器，这三种情况都不会调用 <code>return()</code>。</li>
-<li>循环体已经抛错时，<code>return()</code> 中的错误会被丢弃，保留循环体的错误。</li>
-</ul>
-<h2>break 触发 finally</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">JavaScript 迭代器关闭和 return 方法有什么作用？</span></nav><h1 tabindex="-1">JavaScript 迭代器关闭和 return 方法有什么作用？</h1><p class="reading-summary">迭代器的 return() 是消费者在说&quot;我不读了，你清理吧&quot;。for...of 被 break、return 或抛错打断时会调用它，生成器借此执行 finally。正常读完、next() 自己抛错时不会调用。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>迭代器除了 <code>next()</code>，还可以有一个可选的 <code>return()</code> 方法。它的意思是消费者通知生产者：“我不再读了，请清理资源。”它必须返回一个对象。</p>
+<p><code>for...of</code> 因为 <code>break</code>、<code>return</code> 或者循环体抛错提前退出时，会自动调用 <code>return()</code>；数组解构没有取完所有值时也会调用。对生成器来说，<code>return()</code> 会让它从暂停的 <code>yield</code> 处结束，并执行 <code>finally</code>，所以资源释放就写在生成器的 <code>try/finally</code> 里。</p>
+<p>有三种情况不会调用 <code>return()</code>：迭代正常结束，<code>next()</code> 自己抛了错，以及手动调用 <code>next()</code> 后把迭代器丢下不管。</p>
+<p>还有一个细节：如果循环体已经抛错，<code>return()</code> 里再抛的错会被丢掉，最终保留的是循环体的错误。</p>
+</blockquote>
+<h2>break 以后为什么还会输出“释放资源”</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span>* <span class="hljs-title function_">values</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">try</span> {
     <span class="hljs-keyword">yield</span> <span class="hljs-number">1</span>;
@@ -50,8 +49,10 @@
 }
 <span class="hljs-comment">// 随后输出：释放资源</span>
 </code></pre></div>
-<p><code>const [first] = values()</code> 同样会输出&quot;释放资源&quot;。</p>
-<h2>不会关闭的情况</h2>
+<p>循环只读了第一个值就 <code>break</code> 了，按理说生成器停在 <code>yield 1</code> 那里，后面的代码都不会执行。可它还是打印了“释放资源”。</p>
+<p>因为 <code>for...of</code> 提前退出时，会调用迭代器的 <code>return()</code>。生成器收到 <code>return()</code>，就从暂停的 <code>yield</code> 处结束，结束之前要先执行 <code>finally</code>。所以写在 <code>finally</code> 里的清理代码一定会跑。</p>
+<p>只取一部分的数组解构也一样，<code>const [first] = values()</code> 同样会输出“释放资源”。</p>
+<h2>哪些情况不会调用 return</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">let</span> closed = <span class="hljs-literal">false</span>;
 <span class="hljs-keyword">const</span> source = {
   [<span class="hljs-title class_">Symbol</span>.<span class="hljs-property">iterator</span>]() {
@@ -74,8 +75,9 @@
 }
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(closed); <span class="hljs-comment">// false</span>
 </code></pre></div>
-<p>规范认为 <code>next()</code> 抛错时迭代器已经损坏，不再调用 <code>return()</code>。手写迭代器的 <code>next()</code> 需要在抛错前自己清理；用生成器的 <code>try/finally</code> 可以同时覆盖这三条路径。</p>
-<p>手动消费时要自己负责关闭：</p>
+<p>循环确实因为错误提前退出了，可 <code>closed</code> 还是 <code>false</code>，<code>return()</code> 没有被调用。</p>
+<p>区别在于错误是谁抛的。上一节是循环体自己要走，迭代器还是好的，需要通知它清理。这里是 <code>next()</code> 自己抛了错，规范认为迭代器已经坏了，不再调用它的 <code>return()</code>。所以手写迭代器时，<code>next()</code> 抛错之前要自己先清理。用生成器加 <code>try/finally</code> 就省心得多，正常结束、提前退出、内部出错这三条路径都会执行 <code>finally</code>。</p>
+<p>手动调用 <code>next()</code> 的时候，没有 <code>for...of</code> 帮你关闭，要自己负责：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> iterator = <span class="hljs-title function_">values</span>();
 <span class="hljs-keyword">try</span> {
   iterator.<span class="hljs-title function_">next</span>();
@@ -83,15 +85,23 @@
   iterator.<span class="hljs-property">return</span>?.();
 }
 </code></pre></div>
+<p><code>return</code> 是可选方法，所以用 <code>?.()</code> 调用，没有这个方法也不会报错。</p>
 <h2>清理也失败时保留哪个错误</h2>
+<p>如果 <code>return()</code> 本身也抛错，最终抛出哪个，取决于循环是怎么退出的：</p>
 <table><thead><tr><th>退出原因</th><th><code>return()</code> 抛错</th><th>最终抛出</th></tr></thead><tbody><tr><td><code>break</code></td><td>是</td><td><code>return()</code> 的错误</td></tr><tr><td>循环体抛错</td><td>是</td><td>循环体的错误</td></tr></tbody></table>
-<h2>异步迭代器</h2>
-<p><code>for await...of</code> 提前退出时会 <code>await</code> 异步迭代器的 <code>return()</code>，所以异步生成器的 <code>finally</code> 中可以 <code>await reader.cancel()</code> 等清理操作。如果 <code>next()</code> 一直挂起，循环无法到达 <code>break</code>，关闭也不会发生；这时需要 <code>AbortSignal</code> 从外部取消底层请求。</p>
+<p><code>break</code> 时本来没有错误，<code>return()</code> 的错误就是唯一的错误。循环体已经抛错时，那个错误更重要，<code>return()</code> 的错误会被丢掉。</p>
+<h2>异步迭代器怎样关闭</h2>
+<p><code>for await...of</code> 提前退出时，会调用并 <code>await</code> 异步迭代器的 <code>return()</code>。所以异步生成器的 <code>finally</code> 里可以写 <code>await reader.cancel()</code> 这类异步清理，循环会等它完成。</p>
+<p>但如果 <code>next()</code> 一直挂起，比如卡在一个网络请求上，循环体根本执行不到，也就没机会 <code>break</code>，关闭不会发生。这时要用 <code>AbortSignal</code> 从外部取消底层请求。</p>
 <h2>常见追问</h2>
-<ul>
-<li>生成器 <code>finally</code> 中再 <code>yield</code> 会怎样？<code>return()</code> 返回 <code>{ done: false }</code> 并再次暂停，清理没有完成；不要在 <code>finally</code> 中 <code>yield</code>。</li>
-<li>Iterator helpers（<code>take</code>、<code>find</code> 等）会关闭源迭代器吗？会，提前结束时它们调用源迭代器的 <code>return()</code>。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols" target="_blank" rel="noreferrer">MDN · Iteration protocols<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+JavaScript+%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%85%B3%E9%97%AD%E5%92%8C+return+%E6%96%B9%E6%B3%95%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AJavaScript+%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%85%B3%E9%97%AD%E5%92%8C+return+%E6%96%B9%E6%B3%95%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-iterator-closing%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-iterator-closing%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：JavaScript 迭代器关闭和 return 方法有什么作用？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-iterators-generators/">迭代器、可迭代对象和 Generator 有什么关系？</a></li><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-this/">普通函数和箭头函数的 this 有什么区别？</a></li></ul></nav></main></div></div>
+<p><strong>生成器的 <code>finally</code> 里再写 <code>yield</code> 会怎样？</strong></p>
+<blockquote>
+<p><code>return()</code> 会返回 <code>{ done: false }</code>，生成器又停在了这个 <code>yield</code> 上，清理并没有做完。所以不要在 <code>finally</code> 里 <code>yield</code>。</p>
+</blockquote>
+<p><strong>Iterator helpers（<code>take</code>、<code>find</code> 等）会关闭源迭代器吗？</strong></p>
+<blockquote>
+<p>会。它们提前结束时，比如 <code>take(3)</code> 取够了 3 个，会调用源迭代器的 <code>return()</code>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols" target="_blank" rel="noreferrer">MDN · Iteration protocols<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+JavaScript+%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%85%B3%E9%97%AD%E5%92%8C+return+%E6%96%B9%E6%B3%95%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AJavaScript+%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%85%B3%E9%97%AD%E5%92%8C+return+%E6%96%B9%E6%B3%95%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-iterator-closing%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-iterator-closing%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：JavaScript 迭代器关闭和 return 方法有什么作用？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-iterators-generators/">迭代器、可迭代对象和 Generator 有什么关系？</a></li><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-this/">普通函数和箭头函数的 this 有什么区别？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

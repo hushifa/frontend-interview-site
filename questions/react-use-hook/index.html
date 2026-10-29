@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="React面试题：use 在渲染中读取 Promise 或 Context。" />
+    <meta name="description" content="React面试题：use 可以在渲染时读 Promise 或 Context。" />
     <title>React use API 可以读取哪些值？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/react-use-hook/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="React use API 可以读取哪些值？ · 前端知库" />
-    <meta property="og:description" content="React面试题：use 在渲染中读取 Promise 或 Context。" />
+    <meta property="og:description" content="React面试题：use 可以在渲染时读 Promise 或 Context。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/react-use-hook/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-use-hook/#webpage","url":"https://fe.hushifa.top/questions/react-use-hook/","name":"React use API 可以读取哪些值？ · 前端知库","description":"React面试题：use 在渲染中读取 Promise 或 Context。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-use-hook/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-use-hook/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"React use API 可以读取哪些值？","item":"https://fe.hushifa.top/questions/react-use-hook/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-use-hook/#webpage","url":"https://fe.hushifa.top/questions/react-use-hook/","name":"React use API 可以读取哪些值？ · 前端知库","description":"React面试题：use 可以在渲染时读 Promise 或 Context。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-use-hook/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-use-hook/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"React use API 可以读取哪些值？","item":"https://fe.hushifa.top/questions/react-use-hook/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">React use API 可以读取哪些值？</span></nav><h1 tabindex="-1">React use API 可以读取哪些值？</h1><p class="reading-summary">use 在渲染中读取 Promise 或 Context。读取未完成的 Promise 时组件会挂起，由最近的 Suspense 显示 fallback，失败交给 Error Boundary。它可以在条件语句中调用，但 Promise 必须缓存，不能在渲染时新建。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li><code>use(context)</code>：等同于 <code>useContext</code>，但可以写在 <code>if</code> 和循环里。</li>
-<li><code>use(promise)</code>：Promise 未完成时组件挂起，显示最近 Suspense 的 fallback；成功时返回结果；失败时交给最近的 Error Boundary。</li>
-<li><code>use</code> 不是 Hook，可以条件调用，但仍然只能在组件或 Hook 中调用，也不能包在 <code>try/catch</code> 里。</li>
-<li>传入的 Promise 必须在多次渲染间保持同一个实例，通常来自 Server Component 的 props、数据请求库或缓存；在渲染中写 <code>use(fetch(url))</code> 会不断重新请求。</li>
-<li>Server Components 中直接用 <code>await</code>；<code>use(context)</code> 不能在 Server Components 中使用。</li>
-</ul>
-<h2>服务端创建 Promise，客户端读取</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">React use API 可以读取哪些值？</span></nav><h1 tabindex="-1">React use API 可以读取哪些值？</h1><p class="reading-summary">use 可以在渲染时读 Promise 或 Context。Promise 还没完成时组件进入等待，由外层 Suspense 显示加载提示，失败交给 Error Boundary。它能写在 if 里，但传进去的 Promise 必须缓存，不能在渲染时新建。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p><code>use</code> 能读两种东西。<code>use(context)</code> 跟 <code>useContext</code> 一样，读最近的 Context 值。<code>use(promise)</code> 读一个 Promise 的结果。</p>
+<p>读 Promise 时，如果它还没完成，组件就会暂停渲染，这叫挂起，最近的 Suspense 会显示 fallback。完成后组件继续渲染，<code>use</code> 返回结果；失败了，错误交给最近的 Error Boundary。</p>
+<p>它的特别之处是它不是 Hook，可以写在 <code>if</code> 和循环里。但也只能在组件或 Hook 中调用，而且不能包在 <code>try/catch</code> 里。</p>
+<p>最要注意的是 Promise 必须在多次渲染之间保持同一个实例，通常来自 Server Component 传下来的 props、数据请求库或缓存。在渲染里写 <code>use(fetch(url))</code> 会不断重新请求。另外，Server Components 里直接用 <code>await</code> 就行，<code>use(context)</code> 也不能在 Server Components 里用。</p>
+</blockquote>
+<h2>服务端发请求，客户端读结果</h2>
+<p>常见用法是在 Server Component 里发起请求，但不等它，把 Promise 直接传给客户端组件：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-comment">// app/page.jsx（Server Component）</span>
 <span class="hljs-keyword">import</span> { <span class="hljs-title class_">Suspense</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 <span class="hljs-keyword">import</span> { <span class="hljs-title class_">Comments</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./comments&#x27;</span>;
@@ -49,6 +49,7 @@
   );
 }
 </code></pre></div>
+<p>客户端组件用 <code>use</code> 读它：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-comment">// app/comments.jsx</span>
 <span class="hljs-string">&#x27;use client&#x27;</span>;
 
@@ -59,34 +60,43 @@
   <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span>{comments.map((c) =&gt; <span class="hljs-tag">&lt;<span class="hljs-name">li</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{c.id}</span>&gt;</span>{c.text}<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span>)}<span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span>;
 }
 </code></pre></div>
-<p>页面其余部分先显示，评论数据到达后再填充。Promise 的结果必须可序列化。</p>
-<h2>条件读取 Context</h2>
+<p>为什么不在 Page 里 <code>await</code> 完再传？因为那样整个页面都要等评论回来。现在页面其他部分先显示，评论区先显示“评论加载中”，数据到了再填进去。注意 Promise 的结果要从服务端传到客户端，所以必须可序列化。</p>
+<h2>在提前 return 之后读 Context</h2>
+<p><code>useContext</code> 是 Hook，必须在顶层调用。<code>use</code> 没有这个限制：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">Heading</span>(<span class="hljs-params">{ children }</span>) {
   <span class="hljs-keyword">if</span> (children == <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
   <span class="hljs-keyword">const</span> theme = <span class="hljs-title function_">use</span>(<span class="hljs-title class_">ThemeContext</span>); <span class="hljs-comment">// 提前 return 之后调用，useContext 做不到</span>
   <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">color:</span> <span class="hljs-attr">theme.color</span> }}&gt;</span>{children}<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span></span>;
 }
 </code></pre></div>
-<h2>为什么 Promise 要缓存</h2>
+<p><code>use</code> 能这样写，是因为它读的是你传进去的 Context 本身，不需要靠调用顺序去找自己的状态，详见<a href="/questions/react-hooks-rules/">《为什么 Hook 通常必须在组件顶层调用？》</a>。</p>
+<h2>为什么 Promise 必须缓存</h2>
+<p>下面这种写法看起来很自然，却永远加载不出来：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-comment">// 错误：每次渲染都创建新 Promise，组件反复挂起</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">Profile</span>(<span class="hljs-params">{ id }</span>) {
   <span class="hljs-keyword">const</span> user = <span class="hljs-title function_">use</span>(<span class="hljs-title function_">fetch</span>(<span class="hljs-string">`/api/users/<span class="hljs-subst">${id}</span>`</span>).<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">r</span>) =&gt;</span> r.<span class="hljs-title function_">json</span>()));
 }
 </code></pre></div>
-<p>挂起后重新渲染时又会创建一个新 Promise，永远等不到结果，React 会警告 &quot;A component was suspended by an uncached promise&quot;。客户端组件中需要发起请求时，在事件处理器或路由 loader 中创建 Promise，存入 state，或者使用支持 Suspense 的数据请求库。</p>
-<h2>错误处理</h2>
+<p>第一次渲染时创建了一个 Promise，没完成，组件挂起。等 React 重新渲染这个组件，又执行了一遍 <code>fetch</code>，得到另一个新的 Promise，还是没完成，又挂起。就这样一直在等新请求，React 会警告 “A component was suspended by an uncached promise”。</p>
+<p>客户端组件里要发请求，可以在事件处理器或路由 loader 里创建 Promise，存进 state；或者用支持 Suspense 的数据请求库，由它负责缓存。</p>
+<h2>失败了怎么处理</h2>
+<p>在 Suspense 外面再包一层 Error Boundary，Promise 失败时显示错误界面：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx">&lt;<span class="hljs-title class_">ErrorBoundary</span> fallback={<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>加载失败<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>}&gt;
   <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Suspense</span> <span class="hljs-attr">fallback</span>=<span class="hljs-string">{</span>&lt;<span class="hljs-attr">p</span>&gt;</span>加载中…<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>}&gt;
     <span class="hljs-tag">&lt;<span class="hljs-name">Comments</span> <span class="hljs-attr">commentsPromise</span>=<span class="hljs-string">{commentsPromise}</span> /&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-name">Suspense</span>&gt;</span></span>
 &lt;/<span class="hljs-title class_">ErrorBoundary</span>&gt;
 </code></pre></div>
-<p>不想显示错误界面时，可以在创建 Promise 的地方 <code>.catch(() =&gt; [])</code> 提供兜底值。</p>
+<p>如果不想显示错误界面，可以在创建 Promise 的地方加 <code>.catch(() =&gt; [])</code>，失败时给一个兜底值。</p>
 <h2>常见追问</h2>
-<ul>
-<li>和 <code>await</code> 的区别？<code>await</code> 只能在 async 函数中使用，客户端组件不能是 async 函数；<code>use</code> 在普通组件函数中实现等待。</li>
-<li>刷新数据怎么办？在 <code>startTransition</code> 中创建新的 Promise 并存入 state，组件读取新 Promise，期间保留旧内容。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/reference/react/use" target="_blank" rel="noreferrer">React · use<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+use+API+%E5%8F%AF%E4%BB%A5%E8%AF%BB%E5%8F%96%E5%93%AA%E4%BA%9B%E5%80%BC%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+use+API+%E5%8F%AF%E4%BB%A5%E8%AF%BB%E5%8F%96%E5%93%AA%E4%BA%9B%E5%80%BC%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-use-hook%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-use-hook%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React use API 可以读取哪些值？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-error-suspense/">Error Boundary 和 Suspense 分别处理什么？</a></li><li><a href="/questions/react-server-cache/">React 的 cache API 解决什么问题？</a></li><li><a href="/questions/react-use-effect-event/">React useEffectEvent 适合解决什么依赖问题？</a></li><li><a href="/questions/react-server-actions/">React Server Functions/Actions 的边界是什么？</a></li></ul></nav></main></div></div>
+<p><strong>和 <code>await</code> 有什么区别？</strong></p>
+<blockquote>
+<p><code>await</code> 只能在 async 函数里用，而客户端组件不能是 async 函数。<code>use</code> 让普通的组件函数也能“等”一个 Promise。</p>
+</blockquote>
+<p><strong>数据要刷新怎么办？</strong></p>
+<blockquote>
+<p>在 <code>startTransition</code> 里创建一个新的 Promise 存进 state，组件读到新 Promise。因为在 Transition 里，等待期间会保留旧内容，不会退回 fallback。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/reference/react/use" target="_blank" rel="noreferrer">React · use<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+use+API+%E5%8F%AF%E4%BB%A5%E8%AF%BB%E5%8F%96%E5%93%AA%E4%BA%9B%E5%80%BC%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+use+API+%E5%8F%AF%E4%BB%A5%E8%AF%BB%E5%8F%96%E5%93%AA%E4%BA%9B%E5%80%BC%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-use-hook%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-use-hook%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React use API 可以读取哪些值？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-error-suspense/">Error Boundary 和 Suspense 分别处理什么？</a></li><li><a href="/questions/react-server-cache/">React 的 cache API 解决什么问题？</a></li><li><a href="/questions/react-use-effect-event/">React useEffectEvent 适合解决什么依赖问题？</a></li><li><a href="/questions/react-server-actions/">React Server Functions/Actions 的边界是什么？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

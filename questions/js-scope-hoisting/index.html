@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="JavaScript面试题：var 是函数作用域，进入函数时就初始化为 undefined；let 和 const 是块作用域，在声明执行前处于暂时性死区…" />
+    <meta name="description" content="JavaScript面试题：var 的作用范围是整个函数，声明之前读到的是 undefined。" />
     <title>var、let、const 和暂时性死区有什么关系？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/js-scope-hoisting/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,21 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="var、let、const 和暂时性死区有什么关系？" />
-    <meta property="og:description" content="JavaScript面试题：var 是函数作用域，进入函数时就初始化为 undefined；let 和 const 是块作用域，在声明执行前处于暂时性死区…" />
+    <meta property="og:description" content="JavaScript面试题：var 的作用范围是整个函数，声明之前读到的是 undefined。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/js-scope-hoisting/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-scope-hoisting/#webpage","url":"https://fe.hushifa.top/questions/js-scope-hoisting/","name":"var、let、const 和暂时性死区有什么关系？","description":"JavaScript面试题：var 是函数作用域，进入函数时就初始化为 undefined；let 和 const 是块作用域，在声明执行前处于暂时性死区…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-scope-hoisting/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-scope-hoisting/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"var、let、const 和暂时性死区有什么关系？","item":"https://fe.hushifa.top/questions/js-scope-hoisting/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-scope-hoisting/#webpage","url":"https://fe.hushifa.top/questions/js-scope-hoisting/","name":"var、let、const 和暂时性死区有什么关系？","description":"JavaScript面试题：var 的作用范围是整个函数，声明之前读到的是 undefined。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-scope-hoisting/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-scope-hoisting/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"var、let、const 和暂时性死区有什么关系？","item":"https://fe.hushifa.top/questions/js-scope-hoisting/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">var、let、const 和暂时性死区有什么关系？</span></nav><h1 tabindex="-1">var、let、const 和暂时性死区有什么关系？</h1><p class="reading-summary">var 是函数作用域，进入函数时就初始化为 undefined；let 和 const 是块作用域，在声明执行前处于暂时性死区，访问会抛 ReferenceError。const 只禁止重新赋值，不冻结对象。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li><code>var</code> 是函数作用域，进入函数时绑定已创建并初始化为 <code>undefined</code>，所以声明前读取得到 <code>undefined</code>。</li>
-<li><code>let</code>、<code>const</code> 是块作用域，绑定在进入块时就存在，但到声明执行前处于暂时性死区（TDZ），访问抛 <code>ReferenceError</code>。</li>
-<li><code>const</code> 禁止重新赋值，对象属性仍可修改。</li>
-<li><code>for</code> 循环头的 <code>let</code> 每次迭代创建新绑定，<code>var</code> 整个循环只有一个绑定。</li>
-<li>函数声明会整体提升，可以在声明前调用；<code>var fn = function () {}</code> 只提升变量。</li>
-</ul>
-<h2>声明前读取</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">var、let、const 和暂时性死区有什么关系？</span></nav><h1 tabindex="-1">var、let、const 和暂时性死区有什么关系？</h1><p class="reading-summary">var 的作用范围是整个函数，声明之前读到的是 undefined。let 和 const 只在代码块里有效，声明那一行执行之前访问会直接报错，这段时间叫暂时性死区。const 只是不能重新赋值，对象内容还能改。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p><code>var</code> 声明的变量在整个函数里都有效，叫函数作用域。进入函数时它就已经存在了，值是 <code>undefined</code>，所以在声明之前读取不会报错，只会拿到 <code>undefined</code>。</p>
+<p><code>let</code> 和 <code>const</code> 只在所在的代码块，也就是一对大括号里有效，叫块作用域。它们在进入代码块时其实也已经存在，但在执行到声明那一行之前不能访问，一访问就抛 <code>ReferenceError</code>。从块开始到声明这一段，叫暂时性死区，简称 TDZ。</p>
+<p><code>const</code> 只是禁止重新赋值，如果它指向一个对象，对象的属性照样能改。</p>
+<p>还有两个常考点。<code>for</code> 循环头里用 <code>let</code>，每一轮都会创建一个新变量，而 <code>var</code> 整个循环只有一个。函数声明会整体提升，可以在声明之前调用；<code>var fn = function () {}</code> 只提升了变量，提前调用会报错。</p>
+</blockquote>
+<h2>声明之前读取会发生什么</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">inspectBindings</span>(<span class="hljs-params"></span>) {
   <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(count); <span class="hljs-comment">// undefined</span>
   <span class="hljs-keyword">var</span> count = <span class="hljs-number">1</span>;
@@ -52,8 +51,11 @@
 
 <span class="hljs-title function_">inspectBindings</span>();
 </code></pre></div>
-<p>&quot;提升&quot;只是对现象的描述：引擎在执行前为作用域内的所有声明创建绑定，<code>var</code> 同时初始化为 <code>undefined</code>，<code>let</code>/<code>const</code> 要等执行到声明那一行才初始化。</p>
-<h2>TDZ 会遮住外层同名变量</h2>
+<p>同样是在声明之前读取，<code>var</code> 声明的 <code>count</code> 读到了 <code>undefined</code>，<code>let</code> 声明的 <code>score</code> 却抛了 <code>ReferenceError</code>。</p>
+<p>原因要从函数开始执行时说起。引擎在运行函数里的代码之前，会先把里面所有声明的变量都创建出来。<code>var</code> 的变量在这时就被初始化成 <code>undefined</code>，所以随时能读。<code>let</code> 和 <code>const</code> 的变量也被创建了，但要等执行到声明那一行才初始化，在这之前访问就会报错。</p>
+<p>平时说的“变量提升”，只是对这种现象的一种描述，代码并没有真的被挪到函数开头。</p>
+<h2>let 到底有没有提升</h2>
+<p>很多人说 <code>let</code> 没有提升，下面这个例子能说明并不是这样：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> value = <span class="hljs-string">&#x27;外层&#x27;</span>;
 {
   <span class="hljs-keyword">try</span> {
@@ -64,15 +66,16 @@
   <span class="hljs-keyword">let</span> value = <span class="hljs-string">&#x27;内层&#x27;</span>;
 }
 </code></pre></div>
-<p>块内的 <code>value</code> 从块开始就存在，所以第一次读取命中的是还在 TDZ 里的内层绑定，而不是外层的 <code>&#x27;外层&#x27;</code>。这也说明 <code>let</code> 并非&quot;没有提升&quot;。</p>
-<p><code>typeof</code> 对从未声明的名字返回 <code>&#x27;undefined&#x27;</code>，但对 TDZ 中的名字同样抛 <code>ReferenceError</code>。</p>
-<h2>const 与对象</h2>
+<p>如果 <code>let</code> 没有提升，块里第一次读 <code>value</code>，应该读到外层的 <code>&#x27;外层&#x27;</code>。可实际上抛了 <code>ReferenceError</code>。</p>
+<p>因为块里的 <code>value</code> 从块开始就已经存在了，它把外层的同名变量挡住了。第一次读取找到的是这个还在暂时性死区里的内层变量，所以报错。</p>
+<p><code>typeof</code> 也逃不过这个规则。对一个从来没声明过的名字，<code>typeof</code> 会返回 <code>&#x27;undefined&#x27;</code>；但对一个还在暂时性死区里的变量，<code>typeof</code> 也会抛 <code>ReferenceError</code>。</p>
+<h2>const 为什么还能改对象</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> settings = { <span class="hljs-attr">theme</span>: <span class="hljs-string">&#x27;light&#x27;</span> };
 settings.<span class="hljs-property">theme</span> = <span class="hljs-string">&#x27;dark&#x27;</span>; <span class="hljs-comment">// 允许，修改的是对象</span>
 settings = {};           <span class="hljs-comment">// TypeError，重新赋值绑定</span>
 </code></pre></div>
-<p>需要防止属性被修改时用 <code>Object.freeze</code>，它只冻结一层。</p>
-<h2>循环中的闭包</h2>
+<p><code>const</code> 锁住的是 <code>settings</code> 这个变量，让它不能再指向别的值。可它指向的那个对象本身没被锁，改属性是允许的。想让属性也不能改，要用 <code>Object.freeze</code>，而且它只冻结一层。</p>
+<h2>for 循环里 var 和 let 有什么不同</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> fromVar = [];
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++) fromVar.<span class="hljs-title function_">push</span>(<span class="hljs-function">() =&gt;</span> i);
 
@@ -82,14 +85,20 @@ settings = {};           <span class="hljs-comment">// TypeError，重新赋值�
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(fromVar.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">read</span> =&gt;</span> <span class="hljs-title function_">read</span>()).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 3,3,3</span>
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(fromLet.<span class="hljs-title function_">map</span>(<span class="hljs-function"><span class="hljs-params">read</span> =&gt;</span> <span class="hljs-title function_">read</span>()).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 0,1,2</span>
 </code></pre></div>
-<p><code>var</code> 的三个回调共享同一个 <code>i</code>，循环结束时是 3。<code>let</code> 每轮有独立的 <code>j</code>。以前用立即执行函数制造新作用域来解决，现在直接用 <code>let</code>。</p>
-<h2>其他区别</h2>
+<p>两个循环写法几乎一样，<code>var</code> 那组函数全都返回 3，<code>let</code> 那组返回 0、1、2。</p>
+<p><code>var</code> 整个循环只有一个 <code>i</code>，三个函数记住的都是这同一个变量。等调用它们时，循环早就跑完了，<code>i</code> 已经是 3。<code>let</code> 不一样，循环每一轮都会创建一个新的 <code>j</code>，每个函数记住的是自己那一轮的 <code>j</code>。以前没有 <code>let</code> 时，要用立即执行函数给每一轮造一个新作用域，现在直接用 <code>let</code> 就行。</p>
+<h2>三者的其他区别</h2>
 <table><thead><tr><th></th><th><code>var</code></th><th><code>let</code></th><th><code>const</code></th></tr></thead><tbody><tr><td>作用域</td><td>函数</td><td>块</td><td>块</td></tr><tr><td>同作用域重复声明</td><td>允许</td><td>语法错误</td><td>语法错误</td></tr><tr><td>声明前访问</td><td><code>undefined</code></td><td><code>ReferenceError</code></td><td><code>ReferenceError</code></td></tr><tr><td>经典脚本顶层</td><td>成为 <code>window</code> 属性</td><td>不会</td><td>不会</td></tr><tr><td>必须初始化</td><td>否</td><td>否</td><td>是</td></tr></tbody></table>
+<p><code>var</code> 在经典脚本最外层声明时，会变成 <code>window</code> 的属性，容易和别的脚本互相覆盖。<code>const</code> 声明时必须给初始值，因为之后不能再赋值了。</p>
 <h2>常见追问</h2>
-<ul>
-<li><code>let x = x</code> 为什么报错？右侧读取 <code>x</code> 时它还在 TDZ。</li>
-<li>ES 模块顶层的 <code>var</code> 会挂到 <code>window</code> 上吗？不会，模块有自己的作用域。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let" target="_blank" rel="noreferrer">MDN · let<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+var%E3%80%81let%E3%80%81const+%E5%92%8C%E6%9A%82%E6%97%B6%E6%80%A7%E6%AD%BB%E5%8C%BA%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Avar%E3%80%81let%E3%80%81const+%E5%92%8C%E6%9A%82%E6%97%B6%E6%80%A7%E6%AD%BB%E5%8C%BA%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-scope-hoisting%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-scope-hoisting%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：var、let、const 和暂时性死区有什么关系？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-this/">普通函数和箭头函数的 this 有什么区别？</a></li><li><a href="/questions/js-promise-combinators/">Promise.all、allSettled、race 和 any 如何选择？</a></li></ul></nav></main></div></div>
+<p><strong><code>let x = x</code> 为什么会报错？</strong></p>
+<blockquote>
+<p>右边读取 <code>x</code> 的时候，左边这个 <code>x</code> 已经存在了，但还没初始化，正处在暂时性死区里，所以抛 <code>ReferenceError</code>。</p>
+</blockquote>
+<p><strong>ES 模块最外层的 <code>var</code> 会挂到 <code>window</code> 上吗？</strong></p>
+<blockquote>
+<p>不会。模块有自己的作用域，模块里的顶层变量只属于这个模块。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let" target="_blank" rel="noreferrer">MDN · let<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+var%E3%80%81let%E3%80%81const+%E5%92%8C%E6%9A%82%E6%97%B6%E6%80%A7%E6%AD%BB%E5%8C%BA%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Avar%E3%80%81let%E3%80%81const+%E5%92%8C%E6%9A%82%E6%97%B6%E6%80%A7%E6%AD%BB%E5%8C%BA%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-scope-hoisting%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-scope-hoisting%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：var、let、const 和暂时性死区有什么关系？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-this/">普通函数和箭头函数的 this 有什么区别？</a></li><li><a href="/questions/js-promise-combinators/">Promise.all、allSettled、race 和 any 如何选择？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

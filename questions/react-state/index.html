@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="React面试题：每次渲染拿到的 state 是一份快照，setter 只是请求下一次渲染。" />
+    <meta name="description" content="React面试题：每次渲染拿到的 state 是一份快照，调用 setter 只是预约下一次渲染，当前这次的变量不会变。" />
     <title>为什么调用 setState 后，当前变量还是旧值？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/react-state/" />
     <meta name="robots" content="index,follow" />
@@ -19,21 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="为什么调用 setState 后，当前变量还是旧值？" />
-    <meta property="og:description" content="React面试题：每次渲染拿到的 state 是一份快照，setter 只是请求下一次渲染。" />
+    <meta property="og:description" content="React面试题：每次渲染拿到的 state 是一份快照，调用 setter 只是预约下一次渲染，当前这次的变量不会变。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/react-state/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-state/#webpage","url":"https://fe.hushifa.top/questions/react-state/","name":"为什么调用 setState 后，当前变量还是旧值？","description":"React面试题：每次渲染拿到的 state 是一份快照，setter 只是请求下一次渲染。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-state/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-state/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"为什么调用 setState 后，当前变量还是旧值？","item":"https://fe.hushifa.top/questions/react-state/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-state/#webpage","url":"https://fe.hushifa.top/questions/react-state/","name":"为什么调用 setState 后，当前变量还是旧值？","description":"React面试题：每次渲染拿到的 state 是一份快照，调用 setter 只是预约下一次渲染，当前这次的变量不会变。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-state/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-state/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"为什么调用 setState 后，当前变量还是旧值？","item":"https://fe.hushifa.top/questions/react-state/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">为什么调用 setState 后，当前变量还是旧值？</span></nav><h1 tabindex="-1">为什么调用 setState 后，当前变量还是旧值？</h1><p class="reading-summary">每次渲染拿到的 state 是一份快照，setter 只是请求下一次渲染。替换更新和函数式更新在队列里的含义不同，自动批处理会合并同一事件里的多次更新。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>组件每次渲染时，<code>useState</code> 返回这一轮的状态值，事件处理器捕获的也是这一份快照。</li>
-<li>调用 setter 是把更新排进队列、请求重新渲染，当前函数里的 <code>count</code> 变量不会变。</li>
-<li><code>setCount(count + 1)</code> 连写三次只加 1；要基于前值累加，用 <code>setCount(c =&gt; c + 1)</code>。</li>
-<li>React 18 起所有更新默认自动批处理，包括 Promise、setTimeout 和原生事件回调里的更新。</li>
-</ul>
-<h2>快照与队列</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">为什么调用 setState 后，当前变量还是旧值？</span></nav><h1 tabindex="-1">为什么调用 setState 后，当前变量还是旧值？</h1><p class="reading-summary">每次渲染拿到的 state 是一份快照，调用 setter 只是预约下一次渲染，当前这次的变量不会变。直接传值和传函数在排队时含义不同，同一个事件里的多次更新会被合并成一次渲染。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>组件每次渲染，<code>useState</code> 返回的都是这一次的状态值。事件处理器里读到的 <code>count</code>，就是这次渲染的那个值，可以把它理解成一张快照。</p>
+<p>调用 <code>setCount</code> 并不会改这个变量，它只是把一个更新排进队列，请求 React 再渲染一次。新的值要到下一次渲染才拿得到，所以当前函数里的 <code>count</code> 还是旧的。</p>
+<p>这也解释了为什么 <code>setCount(count + 1)</code> 连写三次只加 1：三次用的都是同一张快照。要基于前一个值累加，就传函数 <code>setCount(c =&gt; c + 1)</code>，React 会把上一步的结果传给下一步。</p>
+<p>另外，React 18 起所有更新默认自动批处理，同一个事件里的多次 setter 只触发一次渲染，包括 Promise、<code>setTimeout</code> 和原生事件回调里的更新。</p>
+</blockquote>
+<h2>先看三个按钮</h2>
+<p>下面三个按钮分别演示直接传值、传函数和两者混用：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Counter</span>(<span class="hljs-params"></span>) {
@@ -67,22 +68,39 @@
   );
 }
 </code></pre></div>
-<p>从 0 开始：</p>
-<ul>
-<li><code>replaceThreeTimes</code> 三次都用快照 0 算出 1，队列里是&quot;替换为 1&quot;三次，结果为 1。</li>
-<li><code>incrementThreeTimes</code> 排入三个函数，React 依次把上一步结果传给下一步：0→1→2→3。</li>
-<li><code>replaceThenIncrement</code> 先替换为 5，再对 5 加 1，结果为 6。</li>
-</ul>
-<h2>批处理</h2>
-<p>批处理把同一个事件里的多次 setter 合并成一次渲染。React 18 之前只有 React 事件处理器里会批处理，React 18 的 <code>createRoot</code> 下，<code>setTimeout</code>、Promise 回调和原生事件里的更新也会自动批处理。</p>
-<p>setter 不返回 Promise，<code>await setCount(x)</code> 等不到新状态。需要在更新后读 DOM，应把逻辑放进 Effect；极少数必须同步刷新的场景可以用 <code>flushSync</code>，但当前处理器里的局部变量仍是旧快照。</p>
-<h2>更新函数要纯</h2>
-<p><code>c =&gt; c + 1</code> 只能根据参数计算下一状态。开发环境的严格模式会调用两次更新函数来暴露副作用，所以不要在里面发请求、修改外部变量或写日志当作业务依据。</p>
+<p>从 0 开始点第一个按钮，结果是 1，而且 <code>console.log</code> 打印的还是 0。因为这次渲染里 <code>count</code> 就是 0，三次都算出 <code>0 + 1</code>，队列里是三次“替换成 1”。</p>
+<p>点第二个按钮结果是 3。传进去的是函数，React 处理队列时把上一步的结果交给下一步：0 变 1，1 变 2，2 变 3。</p>
+<p>点第三个按钮结果是 6。先“替换成 5”，再对 5 执行“加 1”。</p>
+<h2>用纯 JavaScript 模拟这个队列</h2>
+<p>React 处理队列的方式，可以用几行代码模拟出来，用 node 运行就能看到同样的结果：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">processQueue</span>(<span class="hljs-params">base, queue</span>) {
+  <span class="hljs-keyword">return</span> queue.<span class="hljs-title function_">reduce</span>(
+    <span class="hljs-function">(<span class="hljs-params">state, update</span>) =&gt;</span> (<span class="hljs-keyword">typeof</span> update === <span class="hljs-string">&#x27;function&#x27;</span> ? <span class="hljs-title function_">update</span>(state) : update),
+    base,
+  );
+}
+
+<span class="hljs-keyword">const</span> count = <span class="hljs-number">0</span>; <span class="hljs-comment">// 这次渲染的快照</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">processQueue</span>(count, [count + <span class="hljs-number">1</span>, count + <span class="hljs-number">1</span>, count + <span class="hljs-number">1</span>])); <span class="hljs-comment">// 1</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">processQueue</span>(count, [<span class="hljs-function">(<span class="hljs-params">c</span>) =&gt;</span> c + <span class="hljs-number">1</span>, <span class="hljs-function">(<span class="hljs-params">c</span>) =&gt;</span> c + <span class="hljs-number">1</span>, <span class="hljs-function">(<span class="hljs-params">c</span>) =&gt;</span> c + <span class="hljs-number">1</span>])); <span class="hljs-comment">// 3</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">processQueue</span>(count, [count + <span class="hljs-number">5</span>, <span class="hljs-function">(<span class="hljs-params">c</span>) =&gt;</span> c + <span class="hljs-number">1</span>])); <span class="hljs-comment">// 6</span>
+</code></pre></div>
+<p>直接传值时，值在放进队列之前就已经算好了，用的都是快照里的 0。传函数时，函数要等 React 处理队列时才执行，拿到的是上一步的结果。区别就在于“什么时候算”。</p>
+<h2>批处理是什么</h2>
+<p>批处理就是 React 把同一个事件里的多次 setter 攒在一起，最后只渲染一次。上面每个按钮都调了好几次 setter，但每次点击只渲染一次。</p>
+<p>React 18 之前，只有 React 事件处理器里会这样做。React 18 用 <code>createRoot</code> 以后，<code>setTimeout</code>、Promise 回调和原生事件里的更新也会自动批处理。</p>
+<p>因为 setter 只是排队，它也不返回 Promise，<code>await setCount(x)</code> 等不到新状态。想在更新后读 DOM，把逻辑放进 Effect。极少数必须马上刷新的场景可以用 <code>flushSync</code>，但当前函数里的局部变量依然是旧快照。</p>
+<h2>更新函数要保持纯</h2>
+<p><code>c =&gt; c + 1</code> 只应该根据参数算出下一个状态。开发环境的严格模式会把更新函数调用两次，来暴露里面的副作用。所以不要在里面发请求、改外部变量，或者写日志当作业务依据。</p>
 <h2>常见追问</h2>
-<ul>
-<li>想拿到更新后的值？直接用计算出的新值：<code>const next = count + 1; setCount(next); send(next);</code>。</li>
-<li>对象状态怎么更新？创建新对象：<code>setForm({ ...form, name })</code>，原地修改后再 set 同一个引用不会触发渲染。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/learn/state-as-a-snapshot" target="_blank" rel="noreferrer">React · State as a Snapshot<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%B8%BA%E4%BB%80%E4%B9%88%E8%B0%83%E7%94%A8+setState+%E5%90%8E%EF%BC%8C%E5%BD%93%E5%89%8D%E5%8F%98%E9%87%8F%E8%BF%98%E6%98%AF%E6%97%A7%E5%80%BC%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E8%B0%83%E7%94%A8+setState+%E5%90%8E%EF%BC%8C%E5%BD%93%E5%89%8D%E5%8F%98%E9%87%8F%E8%BF%98%E6%98%AF%E6%97%A7%E5%80%BC%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-state%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-state%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：为什么调用 setState 后，当前变量还是旧值？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-hooks-rules/">为什么 Hook 通常必须在组件顶层调用？</a></li><li><a href="/questions/react-controlled-forms/">受控组件与非受控组件应该如何选择？</a></li><li><a href="/questions/react-effect/">useEffect 的依赖数组和清理函数应该怎么写？</a></li><li><a href="/questions/react-key/">列表中的 key 为什么不能随意使用数组下标？</a></li></ul></nav></main></div></div>
+<p><strong>想马上用到更新后的值怎么办？</strong></p>
+<blockquote>
+<p>自己先算出来再用：<code>const next = count + 1; setCount(next); send(next);</code>。不要指望 setter 之后读 <code>count</code>。</p>
+</blockquote>
+<p><strong>对象类型的 state 怎么更新？</strong></p>
+<blockquote>
+<p>要创建新对象，比如 <code>setForm({ ...form, name })</code>。如果原地改了对象再把同一个引用传给 setter，React 认为没变，不会重新渲染。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/learn/state-as-a-snapshot" target="_blank" rel="noreferrer">React · State as a Snapshot<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%B8%BA%E4%BB%80%E4%B9%88%E8%B0%83%E7%94%A8+setState+%E5%90%8E%EF%BC%8C%E5%BD%93%E5%89%8D%E5%8F%98%E9%87%8F%E8%BF%98%E6%98%AF%E6%97%A7%E5%80%BC%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E8%B0%83%E7%94%A8+setState+%E5%90%8E%EF%BC%8C%E5%BD%93%E5%89%8D%E5%8F%98%E9%87%8F%E8%BF%98%E6%98%AF%E6%97%A7%E5%80%BC%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-state%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-state%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：为什么调用 setState 后，当前变量还是旧值？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-hooks-rules/">为什么 Hook 通常必须在组件顶层调用？</a></li><li><a href="/questions/react-controlled-forms/">受控组件与非受控组件应该如何选择？</a></li><li><a href="/questions/react-effect/">useEffect 的依赖数组和清理函数应该怎么写？</a></li><li><a href="/questions/react-key/">列表中的 key 为什么不能随意使用数组下标？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

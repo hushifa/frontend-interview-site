@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="JavaScript面试题：垃圾回收只回收从根出发不可达的对象。" />
+    <meta name="description" content="JavaScript面试题：垃圾回收只回收已经找不到的对象。" />
     <title>垃圾回收为什么无法自动解决所有内存泄漏？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/js-garbage-collection/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="垃圾回收为什么无法自动解决所有内存泄漏？ · 前端知库" />
-    <meta property="og:description" content="JavaScript面试题：垃圾回收只回收从根出发不可达的对象。" />
+    <meta property="og:description" content="JavaScript面试题：垃圾回收只回收已经找不到的对象。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/js-garbage-collection/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-garbage-collection/#webpage","url":"https://fe.hushifa.top/questions/js-garbage-collection/","name":"垃圾回收为什么无法自动解决所有内存泄漏？ · 前端知库","description":"JavaScript面试题：垃圾回收只回收从根出发不可达的对象。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-garbage-collection/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-garbage-collection/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"垃圾回收为什么无法自动解决所有内存泄漏？","item":"https://fe.hushifa.top/questions/js-garbage-collection/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-garbage-collection/#webpage","url":"https://fe.hushifa.top/questions/js-garbage-collection/","name":"垃圾回收为什么无法自动解决所有内存泄漏？ · 前端知库","description":"JavaScript面试题：垃圾回收只回收已经找不到的对象。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-garbage-collection/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-garbage-collection/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"垃圾回收为什么无法自动解决所有内存泄漏？","item":"https://fe.hushifa.top/questions/js-garbage-collection/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">垃圾回收为什么无法自动解决所有内存泄漏？</span></nav><h1 tabindex="-1">垃圾回收为什么无法自动解决所有内存泄漏？</h1><p class="reading-summary">垃圾回收只回收从根出发不可达的对象。前端常见泄漏是&quot;业务上已经不用、但仍被引用&quot;：未移除的监听器、未清除的定时器、无上限的缓存、长期订阅。循环引用本身不会泄漏。排查用堆快照比较对象数量和保留路径。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>现代引擎使用标记清除：从全局对象、调用栈等根出发标记所有可达对象，未被标记的被回收。</li>
-<li>两个对象互相引用但从根不可达时会被回收，循环引用不是泄漏原因。</li>
-<li>泄漏是&quot;可达但不再需要&quot;：未移除的事件监听器、未清除的定时器、只增不减的 <code>Map</code> 缓存、未取消的订阅、全局变量。</li>
-<li><code>WeakMap</code> 和 <code>WeakRef</code> 不阻止目标被回收，但回收时机不确定；<code>FinalizationRegistry</code> 的回调可能不执行。</li>
-<li>排查方法：重复同一操作，比较 DevTools 堆快照中对象数量的增长，并查看到 GC 根的保留路径。</li>
-</ul>
-<h2>监听器与定时器</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">垃圾回收为什么无法自动解决所有内存泄漏？</span></nav><h1 tabindex="-1">垃圾回收为什么无法自动解决所有内存泄漏？</h1><p class="reading-summary">垃圾回收只回收已经找不到的对象。前端的内存泄漏大多是&quot;业务上不用了，但还有东西引用着&quot;，比如没移除的监听器、没清除的定时器、只增不减的缓存。排查时用堆快照找谁还在引用它。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>垃圾回收器判断一个对象能不能回收，看的是还能不能找到它。从全局对象、调用栈这些“根”出发，顺着引用一路标记，能走到的就留着，走不到的就回收，这叫标记清除。</p>
+<p>所以两个对象互相引用，只要从根走不到它们，照样会被回收，循环引用不是泄漏的原因。</p>
+<p>真正的泄漏是“还能找到，但业务上已经不需要了”。最常见的有：没移除的事件监听器、没清除的定时器、只增不减的 <code>Map</code> 缓存、没取消的订阅，还有挂在全局变量上的数据。垃圾回收器没法知道你不再需要它们。</p>
+<p>排查时，在 DevTools 里重复同一个操作，比较前后两次堆快照里对象数量的变化，再沿着保留路径找出是谁还引用着它。<code>WeakMap</code> 和 <code>WeakRef</code> 不会阻止对象被回收，但回收时机不确定，<code>FinalizationRegistry</code> 的回调甚至可能不执行，不能用来做必须完成的清理。</p>
+</blockquote>
+<h2>为什么移除了元素，内存还是没释放</h2>
+<p>下面的函数给按钮加点击监听，再开一个每秒更新面板的定时器。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">attachPreview</span>(<span class="hljs-params">button, panel</span>) {
   <span class="hljs-keyword">function</span> <span class="hljs-title function_">onClick</span>(<span class="hljs-params"></span>) {
     panel.<span class="hljs-property">textContent</span> = <span class="hljs-string">&#x27;预览已更新&#x27;</span>;
@@ -51,40 +51,42 @@
   };
 }
 </code></pre></div>
-<p><code>panel</code> 从页面移除后，定时器回调仍引用它，定时器又被浏览器持有，所以 <code>panel</code> 一直可达。创建资源的函数返回 <code>dispose</code>，在组件卸载时调用。</p>
-<p>也可以用 <code>AbortController</code> 一次移除多个监听器：</p>
+<p>假设后来 <code>panel</code> 从页面上移除了，看起来它已经没用了，可它占的内存不会释放。</p>
+<p>原因是定时器回调里用到了 <code>panel</code>，而定时器由浏览器持有，每秒还要执行。顺着“浏览器 → 定时器 → 回调 → <code>panel</code>”这条路，<code>panel</code> 依然能被找到，垃圾回收器就不会回收它。</p>
+<p>改法是谁创建资源，谁负责提供清理办法。这个函数返回一个 <code>dispose</code>，里面移除监听、清掉定时器，组件卸载时调用它，引用断开，<code>panel</code> 才能被回收。</p>
+<p>监听器多的时候，也可以用 <code>AbortController</code> 一次全部移除：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> controller = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AbortController</span>();
 button.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;click&#x27;</span>, onClick, { <span class="hljs-attr">signal</span>: controller.<span class="hljs-property">signal</span> });
 <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;resize&#x27;</span>, onResize, { <span class="hljs-attr">signal</span>: controller.<span class="hljs-property">signal</span> });
 controller.<span class="hljs-title function_">abort</span>(); <span class="hljs-comment">// 两个监听器同时移除</span>
 </code></pre></div>
-<h2>其他常见来源</h2>
-<ul>
-<li>缓存没有容量上限：用 LRU 或 <code>WeakMap</code>（键是对象时）。</li>
-<li>被移出 DOM 的节点仍被 JS 变量或数组引用（DevTools 中显示为 Detached）。</li>
-<li>闭包持有不必要的大对象：闭包只保留它实际引用的变量，但同一作用域内的多个闭包可能共享环境。</li>
-<li>控制台 <code>console.log</code> 打印的对象会被 DevTools 保留，排查时关闭控制台或清空。</li>
-</ul>
-<h2>排查流程</h2>
+<h2>还有哪些常见的泄漏来源</h2>
+<p>缓存是一个。一个只往里加、从不删除的 <code>Map</code>，会越来越大。可以给它设容量上限，比如用 LRU 淘汰最久没用的；如果缓存的键是对象，也可以改用 <code>WeakMap</code>。</p>
+<p>被移出 DOM 的节点也是一个。节点从页面上删了，但如果某个 JS 变量或数组还引用着它，它就留在内存里，DevTools 里会显示为 Detached。</p>
+<p>闭包也可能拖住大对象。闭包只保留它实际用到的变量，但同一个作用域里的多个闭包可能共用一份环境，其中一个用到了大对象，其他闭包活着时也可能让它释放不掉。</p>
+<p>最后是排查本身。用 <code>console.log</code> 打印过的对象，DevTools 会一直保留着，以便你在控制台里展开查看。排查泄漏时要关掉控制台或者清空它，免得干扰结果。</p>
+<h2>怎样用堆快照排查</h2>
+<p>堆快照就是某一时刻内存里所有对象的清单。排查步骤如下：</p>
 <ol>
 <li>在 Chrome DevTools 的 Memory 面板拍一次堆快照。</li>
-<li>重复执行怀疑泄漏的操作（打开再关闭弹窗）若干次，再拍快照。</li>
-<li>选择 Comparison 视图，按 <code># Delta</code> 排序，找数量持续增长的构造函数。</li>
-<li>选中对象查看 Retainers，沿保留路径找到本应断开的引用。</li>
+<li>重复执行怀疑泄漏的操作若干次，比如打开再关闭弹窗，然后再拍一次。</li>
+<li>选择 Comparison 视图，按 <code># Delta</code> 排序，找出数量一直在涨的构造函数。</li>
+<li>选中这些对象查看 Retainers，沿着保留路径找到本应断开却没断开的引用。</li>
 </ol>
-<p><code>Retained size</code> 是释放该对象后能回收的总内存，比 <code>Shallow size</code> 更能反映影响。内存没有立刻回落不一定是泄漏，引擎会保留已申请的堆以复用；判断依据是相同操作下对象数持续增长。</p>
-<h2>弱引用</h2>
-<ul>
-<li><code>WeakMap</code>：把元数据附加在对象上，对象被回收后条目自动消失。</li>
-<li><code>WeakRef</code>：<code>deref()</code> 可能返回 <code>undefined</code>，用于可以丢失的缓存。</li>
-<li><code>FinalizationRegistry</code>：回收后的回调时间不确定，不能用于关闭连接、取消订阅等必须执行的清理。</li>
-</ul>
-<p>文件句柄、网络连接、订阅这类外部资源要显式释放，GC 只管内存。</p>
+<p>看大小时，<code>Retained size</code> 表示释放这个对象后总共能回收多少内存，比只算对象自身的 <code>Shallow size</code> 更能说明问题。</p>
+<p>还要注意，内存占用没有马上回落，不一定就是泄漏。引擎会保留已经申请到的堆空间留着复用。判断标准是：同样的操作重复做，对象数量持续增长。</p>
+<h2>弱引用能解决什么</h2>
+<p>弱引用就是“引用着，但不阻止它被回收”。<code>WeakMap</code> 适合给对象附加元数据，对象被回收后，对应的条目自动消失。<code>WeakRef</code> 的 <code>deref()</code> 可能返回 <code>undefined</code>，因为对象可能已经被回收了，所以只适合做丢了也没关系的缓存。<code>FinalizationRegistry</code> 能在对象被回收后执行回调，但时间不确定，甚至可能不执行，不能用来关闭连接、取消订阅这类必须完成的清理。</p>
+<p>要记住，文件句柄、网络连接、订阅这些外部资源必须显式释放，垃圾回收只管内存。</p>
 <h2>常见追问</h2>
-<ul>
-<li>React 中怎样避免？在 <code>useEffect</code> 返回清理函数；异步请求结束时组件已卸载，用 <code>AbortController</code> 取消。</li>
-<li>引用计数为什么被淘汰？无法回收循环引用。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Memory_management" target="_blank" rel="noreferrer">MDN · Memory management<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E4%B8%BA%E4%BB%80%E4%B9%88%E6%97%A0%E6%B3%95%E8%87%AA%E5%8A%A8%E8%A7%A3%E5%86%B3%E6%89%80%E6%9C%89%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E4%B8%BA%E4%BB%80%E4%B9%88%E6%97%A0%E6%B3%95%E8%87%AA%E5%8A%A8%E8%A7%A3%E5%86%B3%E6%89%80%E6%9C%89%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-garbage-collection%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-garbage-collection%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：垃圾回收为什么无法自动解决所有内存泄漏？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-this/">普通函数和箭头函数的 this 有什么区别？</a></li><li><a href="/questions/js-promise-combinators/">Promise.all、allSettled、race 和 any 如何选择？</a></li></ul></nav></main></div></div>
+<p><strong>React 里怎样避免这类泄漏？</strong></p>
+<blockquote>
+<p>在 <code>useEffect</code> 里返回清理函数，把监听、定时器、订阅在里面清掉。异步请求可能在组件卸载后才回来，用 <code>AbortController</code> 在清理函数里取消它。</p>
+</blockquote>
+<p><strong>引用计数为什么被淘汰了？</strong></p>
+<blockquote>
+<p>引用计数是记录每个对象被引用了几次，降到 0 就回收。它的问题是处理不了循环引用：两个对象互相引用，计数永远不为 0，就永远回收不掉。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Memory_management" target="_blank" rel="noreferrer">MDN · Memory management<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E4%B8%BA%E4%BB%80%E4%B9%88%E6%97%A0%E6%B3%95%E8%87%AA%E5%8A%A8%E8%A7%A3%E5%86%B3%E6%89%80%E6%9C%89%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E4%B8%BA%E4%BB%80%E4%B9%88%E6%97%A0%E6%B3%95%E8%87%AA%E5%8A%A8%E8%A7%A3%E5%86%B3%E6%89%80%E6%9C%89%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-garbage-collection%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-garbage-collection%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：垃圾回收为什么无法自动解决所有内存泄漏？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-this/">普通函数和箭头函数的 this 有什么区别？</a></li><li><a href="/questions/js-promise-combinators/">Promise.all、allSettled、race 和 any 如何选择？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

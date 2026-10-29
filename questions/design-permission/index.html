@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="场景设计面试题：前端根据服务端下发的权限码控制路由可达、菜单与按钮的显示，以及请求拦截后的统一处理；这些都只是展示控制，可以被绕过…" />
+    <meta name="description" content="场景设计面试题：前端根据服务端下发的权限码控制路由能不能进、菜单与按钮显不显示，并在请求拦截里统一处理 401 和 403。" />
     <title>前端权限控制怎样设计路由、按钮和接口三层？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/design-permission/" />
     <meta name="robots" content="index,follow" />
@@ -19,35 +19,38 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="前端权限控制怎样设计路由、按钮和接口三层？ · 前端知库" />
-    <meta property="og:description" content="场景设计面试题：前端根据服务端下发的权限码控制路由可达、菜单与按钮的显示，以及请求拦截后的统一处理；这些都只是展示控制，可以被绕过…" />
+    <meta property="og:description" content="场景设计面试题：前端根据服务端下发的权限码控制路由能不能进、菜单与按钮显不显示，并在请求拦截里统一处理 401 和 403。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/design-permission/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/design-permission/#webpage","url":"https://fe.hushifa.top/questions/design-permission/","name":"前端权限控制怎样设计路由、按钮和接口三层？ · 前端知库","description":"场景设计面试题：前端根据服务端下发的权限码控制路由可达、菜单与按钮的显示，以及请求拦截后的统一处理；这些都只是展示控制，可以被绕过…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/design-permission/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/design-permission/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"场景设计面试题","item":"https://fe.hushifa.top/topics/system-design/"},{"@type":"ListItem","position":3,"name":"前端权限控制怎样设计路由、按钮和接口三层？","item":"https://fe.hushifa.top/questions/design-permission/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/design-permission/#webpage","url":"https://fe.hushifa.top/questions/design-permission/","name":"前端权限控制怎样设计路由、按钮和接口三层？ · 前端知库","description":"场景设计面试题：前端根据服务端下发的权限码控制路由能不能进、菜单与按钮显不显示，并在请求拦截里统一处理 401 和 403。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/design-permission/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/design-permission/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"场景设计面试题","item":"https://fe.hushifa.top/topics/system-design/"},{"@type":"ListItem","position":3,"name":"前端权限控制怎样设计路由、按钮和接口三层？","item":"https://fe.hushifa.top/questions/design-permission/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/system-design/">场景设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">前端权限控制怎样设计路由、按钮和接口三层？</span></nav><h1 tabindex="-1">前端权限控制怎样设计路由、按钮和接口三层？</h1><p class="reading-summary">前端根据服务端下发的权限码控制路由可达、菜单与按钮的显示，以及请求拦截后的统一处理；这些都只是展示控制，可以被绕过，真正的授权必须由服务端对每个请求、每个资源校验。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>前端权限只做展示控制：隐藏无权访问的菜单、按钮，拦截无权进入的路由，目的是体验，不是安全。</li>
-<li>代码、接口地址和请求都在用户手里，前端判断可以被绕过；服务端必须对每个请求做授权，并检查具体资源是否属于当前用户。</li>
-<li>权限数据由服务端下发（角色或权限码列表），前端不硬编码&quot;某角色能做什么&quot;，权限变化时只改服务端配置。</li>
-<li>接口层统一处理 401 和 403：401 表示未登录或登录过期，跳转登录；403 表示无权限，给出提示并刷新权限数据。</li>
-</ul>
-<h2>权限数据</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/system-design/">场景设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">前端权限控制怎样设计路由、按钮和接口三层？</span></nav><h1 tabindex="-1">前端权限控制怎样设计路由、按钮和接口三层？</h1><p class="reading-summary">前端根据服务端下发的权限码控制路由能不能进、菜单与按钮显不显示，并在请求拦截里统一处理 401 和 403。这些都只是展示控制，可以被绕过，真正的授权必须由服务端对每个请求、每个资源校验。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>前端权限只做展示控制：把没权限的菜单、按钮藏起来，拦住进不去的路由。它的目的是体验，不是安全。</p>
+<p>为什么说不是安全？因为代码、接口地址、请求全都在用户手里，前端的判断随时可以绕过。真正的授权必须由服务端对每个请求做，而且不光要看用户有没有这个操作权限，还要看这条具体的数据是不是属于他。</p>
+<p>权限数据由服务端下发，一般是角色或权限码列表。前端不要写死“某个角色能做什么”，这样权限调整时只改服务端配置就行。</p>
+<p>接口层要统一处理两种状态码。401 表示没登录或登录过期，跳转登录页；403 表示登录了但没权限，给出提示，并刷新一下权限数据。</p>
+</blockquote>
+<h2>权限数据长什么样</h2>
+<p>登录后从服务端拿到权限码列表，前端用一个函数判断：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 登录后从服务端获取</span>
 <span class="hljs-keyword">const</span> session = { <span class="hljs-attr">userId</span>: <span class="hljs-string">&#x27;u1&#x27;</span>, <span class="hljs-attr">permissions</span>: [<span class="hljs-string">&#x27;order:read&#x27;</span>, <span class="hljs-string">&#x27;order:export&#x27;</span>] };
 <span class="hljs-keyword">const</span> <span class="hljs-title function_">can</span> = (<span class="hljs-params">code</span>) =&gt; session.<span class="hljs-property">permissions</span>.<span class="hljs-title function_">includes</span>(code);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">can</span>(<span class="hljs-string">&#x27;order:export&#x27;</span>)); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">can</span>(<span class="hljs-string">&#x27;order:delete&#x27;</span>)); <span class="hljs-comment">// false</span>
 </code></pre></div>
-<p>用细粒度权限码而不是角色名做判断：页面只关心&quot;能否导出订单&quot;，不关心用户是管理员还是运营。角色与权限码的映射留在服务端。</p>
-<p>缺少权限码时默认不可见、不可进，与 OWASP 建议的&quot;默认拒绝&quot;一致。</p>
-<h2>路由层</h2>
-<ul>
-<li>路由配置上声明所需权限码，全局导航守卫中检查，不满足则跳转 403 页或首页。</li>
-<li>菜单从同一份路由配置生成，避免菜单可见但进入后被拦的不一致。</li>
-<li>动态添加路由（只注册有权限的路由）可以让无权路由彻底不存在，但对应的代码分包仍可能被下载和阅读，因此也不构成安全保障。</li>
-</ul>
-<p>权限在使用中变化（被管理员收回）或导航并发时的处理见<a href="/questions/state-route-concurrency/">《路由并发导航和权限变化应该怎样处理？》</a>。</p>
-<h2>按钮层</h2>
+<p>为什么用细粒度的权限码，而不是直接判断角色名？因为页面只关心“能不能导出订单”，不关心用户是管理员还是运营。角色和权限码怎么对应，留在服务端管。</p>
+<p>列表里没有的权限码，<code>can</code> 一律返回 <code>false</code>，也就是默认不可见、不可进。这和 OWASP 建议的“默认拒绝”是一致的。</p>
+<h2>路由层怎么做</h2>
+<p>在路由配置上声明每个页面需要的权限码，在全局导航守卫里检查，不满足就跳到 403 页或首页。</p>
+<p>菜单也从同一份路由配置生成。否则很容易出现菜单能看见、点进去却被拦住的情况。</p>
+<p>还有一种做法是动态添加路由，只注册有权限的路由，没权限的路由在前端根本不存在。但对应页面的代码分包仍然可能被下载、被阅读，所以这也不算安全保障。</p>
+<p>用户用着用着权限被管理员收回了，或者几次导航同时进行时怎么办，见<a href="/questions/state-route-concurrency/">《路由并发导航和权限变化应该怎样处理？》</a>。</p>
+<h2>按钮层怎么做</h2>
+<p>把判断封装成一个组件：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">Can</span>(<span class="hljs-params">{ code, children, fallback = <span class="hljs-literal">null</span> }</span>) {
   <span class="hljs-keyword">return</span> <span class="hljs-title function_">can</span>(code) ? children : fallback;
 }
@@ -56,8 +59,8 @@
   <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{exportOrders}</span>&gt;</span>导出<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>
 &lt;/<span class="hljs-title class_">Can</span>&gt;;
 </code></pre></div>
-<p>封装成组件或指令，避免权限判断散落在各处。对重要但无权限的操作，可以显示禁用状态并说明原因，而不是让功能神秘消失，按产品需求选择。</p>
-<h2>接口层</h2>
+<p>封装成组件或者指令，权限判断就不会散落在代码各处。对于重要但当前没权限的操作，也可以显示成禁用状态并说明原因，而不是让功能莫名其妙地消失，具体按产品需求选择。</p>
+<h2>接口层能做什么</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">request</span>(<span class="hljs-params">url, init</span>) {
   <span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(url, init);
   <span class="hljs-keyword">if</span> (res.<span class="hljs-property">status</span> === <span class="hljs-number">401</span>) <span class="hljs-title function_">redirectToLogin</span>();
@@ -68,15 +71,23 @@
   <span class="hljs-keyword">return</span> res;
 }
 </code></pre></div>
-<p>前端在接口层能做的是统一的错误处理，不是授权。服务端要在每个请求上校验：当前用户是否有该操作权限，以及目标对象是否在其范围内。只校验&quot;已登录&quot;而不校验&quot;这张订单是不是你的&quot;，会产生越权访问漏洞。</p>
-<h2>数据层面的限制</h2>
-<p>隐藏字段不等于保护字段。接口如果把手机号、成本价返回给无权用户，前端不显示也能在开发者工具里看到。敏感字段应由服务端按权限裁剪后再返回。</p>
+<p>前端在接口层能做的，是统一处理错误，不是授权。</p>
+<p>授权是服务端的事，每个请求都要校验两件事：当前用户有没有这个操作的权限，目标数据在不在他的范围内。很多越权漏洞就出在只校验了“已登录”，没校验“这张订单是不是你的”，结果改一下 URL 里的订单 ID，就能看到别人的订单。</p>
+<h2>隐藏字段不等于保护字段</h2>
+<p>如果接口把手机号、成本价返回给了没权限的用户，前端就算不显示，用户打开开发者工具照样能看到。所以敏感字段要由服务端按权限裁剪掉再返回。</p>
 <h2>常见追问</h2>
-<ul>
-<li>权限数据存在 <code>localStorage</code> 被改了怎么办？只会让用户看到更多按钮，点击后接口仍会返回 403，这正说明授权必须在服务端。</li>
-<li>页面级权限能用 JWT 里的声明吗？可以用于展示判断，但服务端校验时以服务端的权限数据为准，并考虑令牌未过期但权限已变更的情况。</li>
-<li>多租户系统要注意什么？服务端每个查询都要带租户条件，前端传来的租户 ID 不能直接信任。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html" target="_blank" rel="noreferrer">OWASP · Authorization Cheat Sheet<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E8%B7%AF%E7%94%B1%E3%80%81%E6%8C%89%E9%92%AE%E5%92%8C%E6%8E%A5%E5%8F%A3%E4%B8%89%E5%B1%82%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E8%B7%AF%E7%94%B1%E3%80%81%E6%8C%89%E9%92%AE%E5%92%8C%E6%8E%A5%E5%8F%A3%E4%B8%89%E5%B1%82%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Adesign-permission%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9C%BA%E6%99%AF%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fdesign-permission%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端权限控制怎样设计路由、按钮和接口三层？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/design-large-upload/">大文件上传怎样设计分片、断点续传、秒传和并发控制？</a></li><li><a href="/questions/design-countdown/">前端倒计时为什么会走慢？怎样用服务端时间校准？</a></li><li><a href="/questions/design-infinite-scroll/">无限滚动和虚拟列表怎样选型？怎样触发加载并恢复滚动位置？</a></li><li><a href="/questions/design-autocomplete/">搜索联想（自动补全）组件要处理哪些问题？</a></li></ul></nav></main></div></div>
+<p><strong>权限数据存在 <code>localStorage</code> 里，被用户改了怎么办？</strong></p>
+<blockquote>
+<p>改了也只是多看到几个按钮，点下去接口照样返回 403。这恰好说明授权必须在服务端做。</p>
+</blockquote>
+<p><strong>页面级权限能用 JWT 里的声明吗？</strong></p>
+<blockquote>
+<p>可以用来做展示判断。但服务端校验时要以服务端的权限数据为准，还要考虑令牌没过期、权限却已经变了的情况。</p>
+</blockquote>
+<p><strong>多租户系统要注意什么？</strong></p>
+<blockquote>
+<p>服务端的每个查询都要带上租户条件，前端传上来的租户 ID 不能直接信任。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html" target="_blank" rel="noreferrer">OWASP · Authorization Cheat Sheet<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E8%B7%AF%E7%94%B1%E3%80%81%E6%8C%89%E9%92%AE%E5%92%8C%E6%8E%A5%E5%8F%A3%E4%B8%89%E5%B1%82%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E8%B7%AF%E7%94%B1%E3%80%81%E6%8C%89%E9%92%AE%E5%92%8C%E6%8E%A5%E5%8F%A3%E4%B8%89%E5%B1%82%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Adesign-permission%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9C%BA%E6%99%AF%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fdesign-permission%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端权限控制怎样设计路由、按钮和接口三层？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/design-large-upload/">大文件上传怎样设计分片、断点续传、秒传和并发控制？</a></li><li><a href="/questions/design-countdown/">前端倒计时为什么会走慢？怎样用服务端时间校准？</a></li><li><a href="/questions/design-infinite-scroll/">无限滚动和虚拟列表怎样选型？怎样触发加载并恢复滚动位置？</a></li><li><a href="/questions/design-autocomplete/">搜索联想（自动补全）组件要处理哪些问题？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

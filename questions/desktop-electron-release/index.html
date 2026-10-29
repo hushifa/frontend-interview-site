@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="桌面端面试题：梳理 Electron 应用从打包、制作安装包、Windows 与 macOS 代码签名、Apple 公证到自动更新的发布链路…" />
+    <meta name="description" content="桌面端面试题：Electron 应用的发布链路依次是打包、制作安装包、Windows 与 macOS 代码签名、Apple 公证，最后接入自动更新。" />
     <title>Electron 应用如何打包发布？代码签名、macOS 公证和自动更新要注意什么？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/desktop-electron-release/" />
     <meta name="robots" content="index,follow" />
@@ -19,52 +19,38 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Electron 应用如何打包发布？代码签名、macOS 公证和自动更新要注意什么？" />
-    <meta property="og:description" content="桌面端面试题：梳理 Electron 应用从打包、制作安装包、Windows 与 macOS 代码签名、Apple 公证到自动更新的发布链路…" />
+    <meta property="og:description" content="桌面端面试题：Electron 应用的发布链路依次是打包、制作安装包、Windows 与 macOS 代码签名、Apple 公证，最后接入自动更新。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/desktop-electron-release/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/desktop-electron-release/#webpage","url":"https://fe.hushifa.top/questions/desktop-electron-release/","name":"Electron 应用如何打包发布？代码签名、macOS 公证和自动更新要注意什么？","description":"桌面端面试题：梳理 Electron 应用从打包、制作安装包、Windows 与 macOS 代码签名、Apple 公证到自动更新的发布链路…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/desktop-electron-release/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/desktop-electron-release/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"桌面端面试题","item":"https://fe.hushifa.top/topics/desktop/"},{"@type":"ListItem","position":3,"name":"Electron 应用如何打包发布？代码签名、macOS 公证和自动更新要注意什么？","item":"https://fe.hushifa.top/questions/desktop-electron-release/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/desktop-electron-release/#webpage","url":"https://fe.hushifa.top/questions/desktop-electron-release/","name":"Electron 应用如何打包发布？代码签名、macOS 公证和自动更新要注意什么？","description":"桌面端面试题：Electron 应用的发布链路依次是打包、制作安装包、Windows 与 macOS 代码签名、Apple 公证，最后接入自动更新。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/desktop-electron-release/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/desktop-electron-release/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"桌面端面试题","item":"https://fe.hushifa.top/topics/desktop/"},{"@type":"ListItem","position":3,"name":"Electron 应用如何打包发布？代码签名、macOS 公证和自动更新要注意什么？","item":"https://fe.hushifa.top/questions/desktop-electron-release/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/desktop/">桌面端面试题</a><span aria-hidden="true">/</span><span aria-current="page">Electron 应用如何打包发布？代码签名、macOS 公证和自动更新要注意什么？</span></nav><h1 tabindex="-1">Electron 应用如何打包发布？代码签名、macOS 公证和自动更新要注意什么？</h1><p class="reading-summary">梳理 Electron 应用从打包、制作安装包、Windows 与 macOS 代码签名、Apple 公证到自动更新的发布链路，比较内置 autoUpdater 与 electron-updater。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>发布流程是：构建前端资源 → 把应用代码和 Electron 二进制打包成各平台应用 → 制作安装包 → 签名（macOS 还要公证）→ 上传到更新源。官方推荐使用 Electron Forge，electron-builder 也是常用方案。</li>
-<li>macOS 应用需要用 Apple 开发者证书签名，再提交 Apple 公证；没有签名，内置 <code>autoUpdater</code> 依赖的 Squirrel.Mac 根本无法自动更新。</li>
-<li>Windows 签名用于减少 SmartScreen 等安全警告，Electron 文档介绍了 EV 证书（密钥需存放在认证硬件或云签名服务中）和 Azure 的云签名服务两类方案。</li>
-<li>自动更新可以用 Electron 内置的 <code>autoUpdater</code>（基于 Squirrel，支持 macOS 和 Windows），也可以用 electron-builder 的 electron-updater（额外支持 Linux 和下载进度）。</li>
-<li>更新相关代码只在打包后运行（用 <code>app.isPackaged</code> 判断），出了问题要发布更高的版本号来覆盖，而不是重发同一版本。</li>
-</ul>
-<h2>打包和制作安装包</h2>
-<p>打包工具做两件事：</p>
-<ol>
-<li><strong>打包</strong>：把应用代码（通常已经用 Vite、Webpack 等打包成少量文件）放进 Electron 的 resources 目录，修改可执行文件名、图标和元数据。代码可以合并成 <code>app.asar</code> 归档，在未使用打包器时能改善 Windows 等平台上的文件读取性能。</li>
-<li><strong>制作安装包</strong>：生成 DMG、ZIP、NSIS、MSI、DEB、RPM、AppImage 等格式。</li>
-</ol>
-<p>Electron Forge 内部集成了 <code>@electron/packager</code>、<code>@electron/osx-sign</code>、<code>@electron/notarize</code>；electron-builder 有自己的一套配置。原生模块要针对目标 Electron 版本重新编译，不同架构（x64、arm64）分别构建或制作通用包。</p>
-<h2>macOS：签名和公证</h2>
-<p>前提条件：付费的 Apple Developer Program 会员、一台装有 Xcode 的 Mac，以及 Apple 签发的签名证书。</p>
-<ul>
-<li><strong>签名</strong>证明应用来自谁、未被篡改。签名身份保持一致时，系统才会把新版本识别为同一个应用；否则 <code>safeStorage</code> 和 Cookie 加密可能在每次更新后重新请求钥匙串权限，登录项也可能静默失效。</li>
-<li><strong>公证</strong>是把签名后的应用上传给 Apple 做自动化检查，确认没有危害用户的行为。Forge 通过 <code>@electron/notarize</code> 完成，<code>@electron/packager</code> 也提供 <code>osxNotarize</code> 选项。</li>
-<li>Mac App Store 版本有单独的签名和沙箱要求，按官方 MAS 指南处理。</li>
-</ul>
-<h2>Windows：签名</h2>
-<ul>
-<li>Electron 文档说明，自 2023 年 6 月起，用旧的 OV 证书签名会得到和未签名应用相同的警告，需要 EV 证书。EV 证书的私钥必须存放在认证硬件上，不能直接复制到 CI 机器，所以 CI 中通常使用厂商提供的云签名服务。SmartScreen 的信誉策略由微软调整，以 Electron 和微软当前文档为准。</li>
-<li>Azure Artifact Signing（原名 Azure Trusted Signing）是微软的云签名服务，文档称它是 Windows 上成本最低的选项，但只在部分国家和地区提供。</li>
-<li>Forge、Packager 等 Electron 官方工具通过 <code>@electron/windows-sign</code> 和统一的 <code>windowsSign</code> 配置完成签名。</li>
-</ul>
-<h2>自动更新</h2>
-<p><strong>内置 autoUpdater + Squirrel</strong></p>
-<ul>
-<li>支持 macOS（Squirrel.Mac）和 Windows（Squirrel.Windows）。</li>
-<li>公开 GitHub 仓库并发布到 GitHub Releases 的应用，可以用官方免费服务 update.electronjs.org，配合 <code>update-electron-app</code> 模块即可接入。</li>
-<li>也可以用静态存储（macOS 读 <code>releases.json</code>，Windows 读 <code>RELEASES</code>）或自建 Hazel、Nuts 等更新服务器。</li>
-</ul>
-<p><strong>electron-updater</strong></p>
-<ul>
-<li>由 electron-builder 在构建时生成更新元数据，除 macOS、Windows 外还支持 Linux，并提供下载进度事件；支持的安装包格式和分阶段发布配置以 electron.build 当前文档为准。</li>
-</ul>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/desktop/">桌面端面试题</a><span aria-hidden="true">/</span><span aria-current="page">Electron 应用如何打包发布？代码签名、macOS 公证和自动更新要注意什么？</span></nav><h1 tabindex="-1">Electron 应用如何打包发布？代码签名、macOS 公证和自动更新要注意什么？</h1><p class="reading-summary">Electron 应用的发布链路依次是打包、制作安装包、Windows 与 macOS 代码签名、Apple 公证，最后接入自动更新。自动更新可以用内置 autoUpdater，也可以用 electron-updater。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>发布一个 Electron 应用，大致是这几步：先构建前端资源，再把应用代码和 Electron 二进制打包成各平台的应用，然后制作安装包，签名（macOS 还要公证），最后上传到更新源。工具方面，官方推荐 Electron Forge，electron-builder 也很常用。</p>
+<p>签名是给应用盖个章，证明它来自谁、没被改过。macOS 上要用 Apple 开发者证书签名，再提交给 Apple 公证；不签名的话，内置 <code>autoUpdater</code> 依赖的 Squirrel.Mac 根本没法自动更新。Windows 上签名是为了减少 SmartScreen 之类的安全警告，Electron 文档介绍了 EV 证书（私钥要放在认证硬件或云签名服务里）和 Azure 云签名服务两类方案。</p>
+<p>自动更新有两种选择：Electron 内置的 <code>autoUpdater</code>，基于 Squirrel，支持 macOS 和 Windows；或者 electron-builder 的 electron-updater，额外支持 Linux 和下载进度。</p>
+<p>要注意，更新代码只在打包后的应用里运行，用 <code>app.isPackaged</code> 判断。发错了版本，要发一个更高的版本号来覆盖，不能重发同一个版本。</p>
+</blockquote>
+<h2>打包工具具体做了什么</h2>
+<p>打包工具做两件事。</p>
+<p>第一件是打包：把应用代码（通常已经用 Vite、Webpack 等打成少量文件）放进 Electron 的 resources 目录，改掉可执行文件名、图标和元数据。代码可以合并成一个 <code>app.asar</code> 归档，在没有使用打包器时，它能改善 Windows 等平台上的文件读取性能。</p>
+<p>第二件是制作安装包：生成 DMG、ZIP、NSIS、MSI、DEB、RPM、AppImage 等格式。</p>
+<p>Electron Forge 内部集成了 <code>@electron/packager</code>、<code>@electron/osx-sign</code>、<code>@electron/notarize</code>；electron-builder 有自己的一套配置。原生模块要针对目标 Electron 版本重新编译，不同架构（x64、arm64）要分别构建，或者做成通用包。</p>
+<h2>macOS 上要做签名和公证</h2>
+<p>前提条件有三个：付费的 Apple Developer Program 会员、一台装有 Xcode 的 Mac，以及 Apple 签发的签名证书。</p>
+<p>签名证明应用来自谁、没被篡改。还有一个容易忽略的作用：签名身份保持一致，系统才会把新版本认成同一个应用。如果身份变了，<code>safeStorage</code> 和 Cookie 加密可能每次更新后都重新请求钥匙串权限，登录项也可能悄悄失效。</p>
+<p>公证是把签好名的应用上传给 Apple 做自动化检查，确认没有危害用户的行为。Forge 通过 <code>@electron/notarize</code> 完成，<code>@electron/packager</code> 也提供 <code>osxNotarize</code> 选项。</p>
+<p>Mac App Store 版本有单独的签名和沙箱要求，按官方 MAS 指南处理。</p>
+<h2>Windows 上的签名怎么做</h2>
+<p>Electron 文档说明，自 2023 年 6 月起，用旧的 OV 证书签名，会得到和没签名一样的警告，需要 EV 证书。EV 证书的私钥必须存放在认证硬件上，不能直接复制到 CI 机器，所以 CI 里通常用厂商提供的云签名服务。SmartScreen 的信誉策略由微软调整，以 Electron 和微软的当前文档为准。</p>
+<p>Azure Artifact Signing（原名 Azure Trusted Signing）是微软的云签名服务，文档称它是 Windows 上成本最低的选项，但只在部分国家和地区提供。</p>
+<p>Forge、Packager 等 Electron 官方工具通过 <code>@electron/windows-sign</code> 和统一的 <code>windowsSign</code> 配置完成签名。</p>
+<h2>自动更新选哪种</h2>
+<p>内置的 <code>autoUpdater</code> 基于 Squirrel，支持 macOS（Squirrel.Mac）和 Windows（Squirrel.Windows）。如果应用是公开 GitHub 仓库、发布在 GitHub Releases 上，可以用官方免费服务 update.electronjs.org，配合 <code>update-electron-app</code> 模块就能接入。也可以用静态存储（macOS 读 <code>releases.json</code>，Windows 读 <code>RELEASES</code>），或者自建 Hazel、Nuts 等更新服务器。</p>
+<p>electron-updater 由 electron-builder 在构建时生成更新元数据，除了 macOS、Windows 还支持 Linux，并提供下载进度事件。它支持的安装包格式和分阶段发布配置，以 electron.build 的当前文档为准。</p>
+<p>下面是 electron-updater 的最简接入，注意开头的 <code>app.isPackaged</code> 判断：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 主进程：只在打包后的应用中检查更新</span>
 <span class="hljs-keyword">const</span> { app } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;electron&#x27;</span>);
 <span class="hljs-keyword">const</span> { autoUpdater } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;electron-updater&#x27;</span>);
@@ -75,17 +61,20 @@ app.<span class="hljs-title function_">whenReady</span>().<span class="hljs-titl
   autoUpdater.<span class="hljs-title function_">checkForUpdatesAndNotify</span>();
 });
 </code></pre></div>
-<h2>发布中的常见问题</h2>
-<ul>
-<li>发布出错的版本时，发布一个更高的版本号。重新发布同一版本，已经更新到坏版本的用户不会再收到修复。</li>
-<li>更新包和元数据都要走 HTTPS，并保护好签名证书和发布凭据，CI 中使用密钥管理服务而不是把证书提交到仓库。</li>
-<li>打包时用 <code>@electron/fuses</code> 关闭不需要的能力，见<a href="/questions/mobile-electron-security/">《Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？》</a>。</li>
-</ul>
+<p>开发时直接运行源码，不是打包后的应用，也没有对应的更新元数据，所以用这个判断跳过更新检查。</p>
+<h2>发布时容易踩的坑</h2>
+<p>发出了一个有问题的版本，怎么办？要发一个更高的版本号。如果重新发布同一个版本号，已经更新到坏版本的用户不会再收到修复。</p>
+<p>更新包和元数据都要走 HTTPS。签名证书和发布凭据要保护好，CI 里用密钥管理服务，不要把证书提交到仓库。</p>
+<p>打包时用 <code>@electron/fuses</code> 关掉不需要的能力，见<a href="/questions/mobile-electron-security/">《Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？》</a>。</p>
 <h2>常见追问</h2>
-<ul>
-<li>不签名能发布吗？可以分发，但 macOS 会阻止或警告用户打开未公证的应用，Windows 会弹出安全警告，并且 macOS 上的自动更新无法工作。</li>
-<li>Forge 和 electron-builder 怎么选？Forge 是 Electron 官方推荐、使用官方签名和打包模块；electron-builder 配置集中，自带 electron-updater 和多种发布源。两者都能满足常见需求，按团队现有流程选择。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.electronjs.org/docs/latest/tutorial/code-signing" target="_blank" rel="noreferrer">Electron · Code Signing<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Electron+%E5%BA%94%E7%94%A8%E5%A6%82%E4%BD%95%E6%89%93%E5%8C%85%E5%8F%91%E5%B8%83%EF%BC%9F%E4%BB%A3%E7%A0%81%E7%AD%BE%E5%90%8D%E3%80%81macOS+%E5%85%AC%E8%AF%81%E5%92%8C%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AElectron+%E5%BA%94%E7%94%A8%E5%A6%82%E4%BD%95%E6%89%93%E5%8C%85%E5%8F%91%E5%B8%83%EF%BC%9F%E4%BB%A3%E7%A0%81%E7%AD%BE%E5%90%8D%E3%80%81macOS+%E5%85%AC%E8%AF%81%E5%92%8C%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Adesktop-electron-release%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%8C%E9%9D%A2%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fdesktop-electron-release%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Electron 应用如何打包发布？代码签名、macOS 公证和自动更新要注意什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/mobile-electron-security/">Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？</a></li><li><a href="/questions/desktop-electron-process/">Electron 的主进程、渲染进程、preload 和 utility 进程分别负责什么？</a></li><li><a href="/questions/desktop-electron-ipc/">Electron 的 IPC 和 contextBridge 怎样设计？</a></li><li><a href="/questions/desktop-electron-tauri/">Electron 和 Tauri 有什么区别？桌面应用怎么选型？</a></li></ul></nav></main></div></div>
+<p><strong>不签名能发布吗？</strong></p>
+<blockquote>
+<p>能分发，但 macOS 会阻止或警告用户打开没公证的应用，Windows 会弹出安全警告，而且 macOS 上的自动更新没法工作。</p>
+</blockquote>
+<p><strong>Forge 和 electron-builder 怎么选？</strong></p>
+<blockquote>
+<p>Forge 是 Electron 官方推荐的，用的是官方签名和打包模块；electron-builder 配置集中，自带 electron-updater 和多种发布源。两者都能满足常见需求，按团队现有流程选。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.electronjs.org/docs/latest/tutorial/code-signing" target="_blank" rel="noreferrer">Electron · Code Signing<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Electron+%E5%BA%94%E7%94%A8%E5%A6%82%E4%BD%95%E6%89%93%E5%8C%85%E5%8F%91%E5%B8%83%EF%BC%9F%E4%BB%A3%E7%A0%81%E7%AD%BE%E5%90%8D%E3%80%81macOS+%E5%85%AC%E8%AF%81%E5%92%8C%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AElectron+%E5%BA%94%E7%94%A8%E5%A6%82%E4%BD%95%E6%89%93%E5%8C%85%E5%8F%91%E5%B8%83%EF%BC%9F%E4%BB%A3%E7%A0%81%E7%AD%BE%E5%90%8D%E3%80%81macOS+%E5%85%AC%E8%AF%81%E5%92%8C%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Adesktop-electron-release%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%8C%E9%9D%A2%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fdesktop-electron-release%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Electron 应用如何打包发布？代码签名、macOS 公证和自动更新要注意什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/mobile-electron-security/">Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？</a></li><li><a href="/questions/desktop-electron-process/">Electron 的主进程、渲染进程、preload 和 utility 进程分别负责什么？</a></li><li><a href="/questions/desktop-electron-ipc/">Electron 的 IPC 和 contextBridge 怎样设计？</a></li><li><a href="/questions/desktop-electron-tauri/">Electron 和 Tauri 有什么区别？桌面应用怎么选型？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

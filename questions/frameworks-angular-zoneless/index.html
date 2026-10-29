@@ -26,15 +26,15 @@
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/frameworks/">框架与选型面试题</a><span aria-hidden="true">/</span><span aria-current="page">Angular Zoneless 模式会改变哪些更新假设？</span></nav><h1 tabindex="-1">Angular Zoneless 模式会改变哪些更新假设？</h1><p class="reading-summary">Zoneless 模式不再用 Zone.js 拦截所有异步任务来触发变更检测，而是依靠 Signal 更新、模板事件、markForCheck 等明确通知。Angular v21 起新项目默认 zoneless；原来依赖&quot;任何异步回调后自动刷新&quot;的代码需要改写。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>Angular v21 起默认 zoneless；v20 需要在启动时加 <code>provideZonelessChangeDetection()</code>。如果项目中存在 <code>provideZoneChangeDetection()</code>，它会覆盖默认值，恢复 Zone.js 模式。</li>
-<li>以下操作会触发变更检测：模板读取的 Signal 被修改、模板或宿主上绑定的事件回调、<code>ChangeDetectorRef.markForCheck()</code>（<code>AsyncPipe</code> 会自动调用）、<code>ComponentRef.setInput()</code>。</li>
-<li><code>setTimeout</code>、<code>fetch</code>、第三方库回调中直接修改普通字段，不再自动刷新界面。</li>
-<li>Reactive Forms 的 <code>setValue</code>、<code>patchValue</code> 不会自动安排检测，需要配合 Signal 或 <code>markForCheck()</code>。</li>
-<li><code>NgZone.onStable</code>、<code>onMicrotaskEmpty</code> 不会再触发；SSR 中需要等待的异步工作要用 <code>PendingTasks</code> 登记。</li>
-</ul>
-<h2>改写示例</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/frameworks/">框架与选型面试题</a><span aria-hidden="true">/</span><span aria-current="page">Angular Zoneless 模式会改变哪些更新假设？</span></nav><h1 tabindex="-1">Angular Zoneless 模式会改变哪些更新假设？</h1><p class="reading-summary">Zoneless 模式不再用 Zone.js 拦截所有异步任务来触发变更检测，而是依靠 Signal 更新、模板事件、markForCheck 等明确的通知。Angular v21 起新项目默认 zoneless；原来依赖“任何异步回调后自动刷新”的代码需要改写。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>以前 Angular 靠 Zone.js 知道什么时候该刷新界面。Zone.js 给 <code>setTimeout</code>、<code>fetch</code>、事件这些异步 API 都打了补丁，任何异步回调跑完，Angular 就做一次变更检测，也就是检查界面要不要更新。Zoneless 就是去掉 Zone.js，改成“有人明确通知才检查”。</p>
+<p>Angular v21 起默认就是 zoneless；v20 要在启动时加 <code>provideZonelessChangeDetection()</code>。如果项目里写了 <code>provideZoneChangeDetection()</code>，它会覆盖默认值，回到 Zone.js 模式。</p>
+<p>会触发检查的通知有这几种：模板读取的 Signal 被修改；模板或宿主上绑定的事件回调；调用 <code>ChangeDetectorRef.markForCheck()</code>，<code>AsyncPipe</code> 会自动调它；还有 <code>ComponentRef.setInput()</code>。反过来，在 <code>setTimeout</code>、<code>fetch</code> 或第三方库回调里直接改普通字段，界面就不会自动刷新了。</p>
+<p>还有几处要注意：Reactive Forms 的 <code>setValue</code>、<code>patchValue</code> 不会自动安排检查，要配合 Signal 或 <code>markForCheck()</code>；<code>NgZone.onStable</code>、<code>onMicrotaskEmpty</code> 不会再触发；SSR 里需要等待的异步工作要用 <code>PendingTasks</code> 登记。</p>
+</blockquote>
+<h2>为什么界面不更新了</h2>
+<p>下面这个时钟在 Zone.js 模式下没问题，换成 zoneless 以后，时间就停住不动了。</p>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-comment">// Zone.js 模式下能工作，zoneless 下界面不更新</span>
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ClockComponent</span> {
   time = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>();
@@ -43,6 +43,8 @@
   }
 }
 </code></pre></div>
+<p><code>this.time</code> 其实每秒都在变，只是没人告诉 Angular。以前 Zone.js 会在 <code>setInterval</code> 回调跑完后自动触发检查，现在没有它了，Angular 不知道要更新。</p>
+<p>改法是把 <code>time</code> 换成 Signal。Signal 被修改时会主动通知 Angular：</p>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-comment">// zoneless 写法：用 Signal</span>
 <span class="hljs-keyword">import</span> { <span class="hljs-title class_">Component</span>, <span class="hljs-title class_">DestroyRef</span>, inject, signal } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/core&#x27;</span>;
 
@@ -56,16 +58,17 @@
   }
 }
 </code></pre></div>
-<h2>迁移步骤</h2>
+<p>顺便用 <code>DestroyRef</code> 在组件销毁时清掉定时器，原来的写法漏了这一步。</p>
+<h2>迁移分几步</h2>
 <ol>
-<li>v20 项目在 <code>bootstrapApplication</code> 的 providers 中加入 <code>provideZonelessChangeDetection()</code>。</li>
-<li>把在异步回调里修改、并在模板中显示的状态改成 Signal，或在修改后调用 <code>markForCheck()</code>。</li>
-<li>推荐组件使用 <code>OnPush</code>，它要求的通知方式与 zoneless 一致，能提前暴露问题；但 <code>OnPush</code> 不是必须的。</li>
-<li>从 <code>angular.json</code> 的 <code>build</code> 和 <code>test</code> 目标的 <code>polyfills</code> 中删除 <code>zone.js</code> 和 <code>zone.js/testing</code>，然后卸载 <code>zone.js</code>。</li>
-<li>把依赖 <code>onStable</code> 的逻辑改成 <code>afterNextRender</code> 或 <code>afterEveryRender</code>。</li>
+<li>v20 项目在 <code>bootstrapApplication</code> 的 providers 里加 <code>provideZonelessChangeDetection()</code>。</li>
+<li>找出在异步回调里修改、又在模板里显示的状态，改成 Signal，或者改完后调用 <code>markForCheck()</code>。</li>
+<li>推荐组件用 <code>OnPush</code>。它要求的通知方式和 zoneless 一样，能提前暴露问题，但不是必须的。</li>
+<li>从 <code>angular.json</code> 里 <code>build</code> 和 <code>test</code> 目标的 <code>polyfills</code> 中删掉 <code>zone.js</code> 和 <code>zone.js/testing</code>，再卸载 <code>zone.js</code>。</li>
+<li>依赖 <code>onStable</code> 的逻辑改用 <code>afterNextRender</code> 或 <code>afterEveryRender</code>。</li>
 </ol>
-<h2>SSR 中等待异步任务</h2>
-<p>Zone.js 模式下，服务端会等所有宏任务完成再序列化 HTML。zoneless 下需要显式登记：</p>
+<h2>SSR 怎样知道什么时候渲染完</h2>
+<p>服务端渲染要等数据都到了才能输出 HTML。Zone.js 模式下，服务端会等所有宏任务完成再序列化，因为 Zone.js 知道还有哪些任务没完成。zoneless 下没人跟踪这些任务了，需要自己登记：</p>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">PendingTasks</span>, inject } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/core&#x27;</span>;
 
 <span class="hljs-keyword">const</span> tasks = <span class="hljs-title function_">inject</span>(<span class="hljs-title class_">PendingTasks</span>);
@@ -73,17 +76,18 @@ tasks.<span class="hljs-title function_">run</span>(<span class="hljs-title func
   <span class="hljs-variable language_">this</span>.<span class="hljs-property">data</span>.<span class="hljs-title function_">set</span>(<span class="hljs-keyword">await</span> <span class="hljs-title function_">loadData</span>());
 });
 </code></pre></div>
-<p>Router 导航和 <code>HttpClient</code> 请求 Angular 已经自动登记。</p>
-<h2>收益</h2>
-<ul>
-<li>少了 Zone.js 的包体积和对所有异步 API 的补丁。</li>
-<li>变更检测只在有明确通知时运行，调用栈更清晰，也不会因为第三方库的频繁回调而反复检测。</li>
-</ul>
+<p>Router 导航和 <code>HttpClient</code> 请求，Angular 已经自动登记了，不用自己处理。</p>
+<h2>换来了什么</h2>
+<p>一是少了 Zone.js 的包体积，也不用再给所有异步 API 打补丁。二是变更检测只在有明确通知时运行，调用栈更清楚，第三方库频繁触发回调时也不会跟着反复检测。</p>
 <h2>常见追问</h2>
-<ul>
-<li>测试有什么变化？<code>TestBed</code> 默认也是 zoneless，依赖 Zone.js 行为的测试需要在 providers 中加 <code>provideZoneChangeDetection()</code>。</li>
-<li><code>NgZone.runOutsideAngular</code> 还需要吗？不必删除。zoneless 应用里它不会造成问题；库被仍运行 Zone.js 的应用引用时，删掉它反而可能拖慢性能。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://angular.dev/guide/zoneless" target="_blank" rel="noreferrer">Angular · Zoneless<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Angular+Zoneless+%E6%A8%A1%E5%BC%8F%E4%BC%9A%E6%94%B9%E5%8F%98%E5%93%AA%E4%BA%9B%E6%9B%B4%E6%96%B0%E5%81%87%E8%AE%BE%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAngular+Zoneless+%E6%A8%A1%E5%BC%8F%E4%BC%9A%E6%94%B9%E5%8F%98%E5%93%AA%E4%BA%9B%E6%9B%B4%E6%96%B0%E5%81%87%E8%AE%BE%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aframeworks-angular-zoneless%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%86%E6%9E%B6%E4%B8%8E%E9%80%89%E5%9E%8B%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fframeworks-angular-zoneless%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Angular Zoneless 模式会改变哪些更新假设？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/framework-angular/">Angular Signals 的依赖追踪与 computed 有什么特点？</a></li><li><a href="/questions/frameworks-angular-di/">Angular 依赖注入的层级和作用域怎样理解？</a></li><li><a href="/questions/frameworks-angular-rxjs/">Angular 中 Observable 和 Signals 怎样协作？</a></li><li><a href="/questions/frameworks-angular-hydration/">Angular Hydration 解决什么问题？</a></li></ul></nav></main></div></div>
+<p><strong>测试有什么变化？</strong></p>
+<blockquote>
+<p><code>TestBed</code> 默认也是 zoneless。依赖 Zone.js 行为的测试，要在 providers 里加 <code>provideZoneChangeDetection()</code>。</p>
+</blockquote>
+<p><strong><code>NgZone.runOutsideAngular</code> 还要留着吗？</strong></p>
+<blockquote>
+<p>不必删。在 zoneless 应用里它不会造成问题。如果你写的是库，被仍在用 Zone.js 的应用引用时，删掉它反而可能拖慢性能。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://angular.dev/guide/zoneless" target="_blank" rel="noreferrer">Angular · Zoneless<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Angular+Zoneless+%E6%A8%A1%E5%BC%8F%E4%BC%9A%E6%94%B9%E5%8F%98%E5%93%AA%E4%BA%9B%E6%9B%B4%E6%96%B0%E5%81%87%E8%AE%BE%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAngular+Zoneless+%E6%A8%A1%E5%BC%8F%E4%BC%9A%E6%94%B9%E5%8F%98%E5%93%AA%E4%BA%9B%E6%9B%B4%E6%96%B0%E5%81%87%E8%AE%BE%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aframeworks-angular-zoneless%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%86%E6%9E%B6%E4%B8%8E%E9%80%89%E5%9E%8B%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fframeworks-angular-zoneless%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Angular Zoneless 模式会改变哪些更新假设？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/framework-angular/">Angular Signals 的依赖追踪与 computed 有什么特点？</a></li><li><a href="/questions/frameworks-angular-di/">Angular 依赖注入的层级和作用域怎样理解？</a></li><li><a href="/questions/frameworks-angular-rxjs/">Angular 中 Observable 和 Signals 怎样协作？</a></li><li><a href="/questions/frameworks-angular-hydration/">Angular Hydration 解决什么问题？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

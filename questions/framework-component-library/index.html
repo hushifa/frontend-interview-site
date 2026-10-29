@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="框架与选型面试题：组件库的公共 API 包括 props、默认行为、键盘与焦点、样式扩展方式和发布产物。" />
+    <meta name="description" content="框架与选型面试题：组件库的公共 API 不只是 props，还包括默认行为、键盘与焦点、样式扩展方式和发布产物。" />
     <title>前端组件库怎样设计才能让业务方稳定使用？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/framework-component-library/" />
     <meta name="robots" content="index,follow" />
@@ -19,29 +19,31 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="前端组件库怎样设计才能让业务方稳定使用？ · 前端知库" />
-    <meta property="og:description" content="框架与选型面试题：组件库的公共 API 包括 props、默认行为、键盘与焦点、样式扩展方式和发布产物。" />
+    <meta property="og:description" content="框架与选型面试题：组件库的公共 API 不只是 props，还包括默认行为、键盘与焦点、样式扩展方式和发布产物。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/framework-component-library/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/framework-component-library/#webpage","url":"https://fe.hushifa.top/questions/framework-component-library/","name":"前端组件库怎样设计才能让业务方稳定使用？ · 前端知库","description":"框架与选型面试题：组件库的公共 API 包括 props、默认行为、键盘与焦点、样式扩展方式和发布产物。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/framework-component-library/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/framework-component-library/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"框架与选型面试题","item":"https://fe.hushifa.top/topics/frameworks/"},{"@type":"ListItem","position":3,"name":"前端组件库怎样设计才能让业务方稳定使用？","item":"https://fe.hushifa.top/questions/framework-component-library/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/framework-component-library/#webpage","url":"https://fe.hushifa.top/questions/framework-component-library/","name":"前端组件库怎样设计才能让业务方稳定使用？ · 前端知库","description":"框架与选型面试题：组件库的公共 API 不只是 props，还包括默认行为、键盘与焦点、样式扩展方式和发布产物。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/framework-component-library/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/framework-component-library/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"框架与选型面试题","item":"https://fe.hushifa.top/topics/frameworks/"},{"@type":"ListItem","position":3,"name":"前端组件库怎样设计才能让业务方稳定使用？","item":"https://fe.hushifa.top/questions/framework-component-library/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/frameworks/">框架与选型面试题</a><span aria-hidden="true">/</span><span aria-current="page">前端组件库怎样设计才能让业务方稳定使用？</span></nav><h1 tabindex="-1">前端组件库怎样设计才能让业务方稳定使用？</h1><p class="reading-summary">组件库的公共 API 包括 props、默认行为、键盘与焦点、样式扩展方式和发布产物。设计时明确受控与非受控模式、提供稳定的样式入口、把无障碍行为当作契约，用文档、测试和语义化版本保证升级可预期。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>公共 API 不只是 props 类型，还包括默认值、事件触发时机、键盘操作、焦点行为、DOM 语义和 CSS 覆盖方式，改动任何一项都可能是破坏性变更。</li>
-<li>有状态的组件同时支持受控（<code>value</code> + <code>onChange</code>）和非受控（<code>defaultValue</code>）模式，受控时以外部传入的值为准。</li>
-<li>样式扩展通过 CSS 变量、<code>className</code>、<code>data-*</code> 状态属性等明确入口提供，不让使用方依赖内部 DOM 结构或哈希类名。</li>
-<li>无障碍行为是组件的职责：Dialog 的焦点陷阱和恢复、Combobox 的键盘导航等，参考 WAI-ARIA APG 实现。</li>
-<li>用语义化版本标识破坏性变更，先弃用并警告再删除，提供迁移指南。</li>
-</ul>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/frameworks/">框架与选型面试题</a><span aria-hidden="true">/</span><span aria-current="page">前端组件库怎样设计才能让业务方稳定使用？</span></nav><h1 tabindex="-1">前端组件库怎样设计才能让业务方稳定使用？</h1><p class="reading-summary">组件库的公共 API 不只是 props，还包括默认行为、键盘与焦点、样式扩展方式和发布产物。设计时明确受控与非受控模式、提供稳定的样式入口、把无障碍行为当作契约，再用文档、测试和语义化版本让升级可预期。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>业务方用组件库，依赖的不只是 props 的类型。默认值、事件什么时候触发、键盘怎么操作、焦点去哪、渲染出什么 DOM、CSS 怎么覆盖，这些都是公共 API，改了任何一项都可能让业务方的页面出问题。</p>
+<p>所以设计时有几件事要定清楚。有状态的组件要同时支持受控和非受控：受控是外面传 <code>value</code> 和 <code>onChange</code>，以外面为准；非受控是只给 <code>defaultValue</code>，组件自己管。样式要给明确的入口，比如 CSS 变量、<code>className</code>、<code>data-*</code> 状态属性，别让业务方去依赖内部 DOM 结构或者哈希类名。</p>
+<p>无障碍是组件自己的责任。Dialog 的焦点困在弹窗里、关闭后回到原处，Combobox 的键盘导航，这些照着 WAI-ARIA APG 实现，业务方不用再操心。</p>
+<p>最后是升级。用语义化版本标出破坏性变更，删东西之前先弃用、给警告，再提供迁移指南，业务方升级时心里才有数。</p>
+</blockquote>
 <h2>用变体代替互相冲突的布尔值</h2>
+<p>先看一个 props 设计上的常见问题：</p>
 <div class="not-prose code-block"><div class="code-language">TSX</div><pre><code class="hljs language-tsx"><span class="hljs-comment">// 不好：primary 和 danger 同时为 true 时是什么样？</span>
 &lt;<span class="hljs-title class_">Button</span> primary danger small /&gt;
 
 <span class="hljs-comment">// 好：每个维度只有一个取值</span>
 <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Button</span> <span class="hljs-attr">variant</span>=<span class="hljs-string">&quot;danger&quot;</span> <span class="hljs-attr">size</span>=<span class="hljs-string">&quot;sm&quot;</span> /&gt;</span></span>
 </code></pre></div>
-<h2>受控与非受控</h2>
+<p>用一堆布尔值，业务方很容易写出组件作者没想过的组合，结果谁也说不清该长什么样。改成 <code>variant</code>、<code>size</code> 这样的枚举，每个维度只能选一个值，冲突从写法上就排除了。</p>
+<h2>受控和非受控怎样同时支持</h2>
+<p>受控的意思是，值存在组件外面，组件只负责显示和通知；非受控的意思是，值存在组件里面，外面只给一个初始值。下面这个 Hook 把两种模式合在一起：</p>
 <div class="not-prose code-block"><div class="code-language">TSX</div><pre><code class="hljs language-tsx"><span class="hljs-keyword">function</span> useControllableState&lt;T&gt;(<span class="hljs-attr">value</span>: T | <span class="hljs-literal">undefined</span>, <span class="hljs-attr">defaultValue</span>: T, <span class="hljs-attr">onChange</span>?: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">v</span>: T</span>) =&gt;</span> <span class="hljs-built_in">void</span>) {
   <span class="hljs-keyword">const</span> [inner, setInner] = <span class="hljs-title function_">useState</span>(defaultValue);
   <span class="hljs-keyword">const</span> controlled = value !== <span class="hljs-literal">undefined</span>;
@@ -53,8 +55,10 @@
   <span class="hljs-keyword">return</span> [current, set] <span class="hljs-keyword">as</span> <span class="hljs-keyword">const</span>;
 }
 </code></pre></div>
-<p><code>Tabs</code>、<code>Select</code>、<code>Disclosure</code> 等组件都可以用这个模式，使用方既能简单使用，也能完全接管状态。</p>
-<h2>稳定的样式入口</h2>
+<p>判断依据是 <code>value</code> 有没有传。传了就是受控，组件显示外面的值，改动只通过 <code>onChange</code> 告诉外面，自己不存。没传就是非受控，组件用内部 state，同时也调用 <code>onChange</code>，方便外面监听。</p>
+<p><code>Tabs</code>、<code>Select</code>、<code>Disclosure</code> 这类组件都能用这个模式。简单场景业务方什么都不传就能用，复杂场景又可以完全接管状态。</p>
+<h2>怎样给样式留稳定的入口</h2>
+<p>如果业务方为了改颜色，写了 <code>.button &gt; span:first-child</code> 这样的选择器，组件内部结构一调整，他的样式就失效了。所以组件库要主动提供不依赖结构的入口：</p>
 <div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.button</span> {
   <span class="hljs-attr">--button-bg</span>: <span class="hljs-number">#2563eb</span>;
   <span class="hljs-attr">--button-fg</span>: <span class="hljs-number">#fff</span>;
@@ -70,31 +74,34 @@
   <span class="hljs-attribute">cursor</span>: progress;
 }
 </code></pre></div>
-<p>主题通过修改 CSS 变量实现。组件库的样式放进 <code>@layer</code>，业务样式不需要提高优先级就能覆盖。</p>
-<h2>无障碍契约</h2>
+<p>主题通过改 CSS 变量实现，状态通过 <code>data-*</code> 属性暴露，业务方用的都是约定好的名字。另外，把组件库的样式放进 <code>@layer</code>，业务样式不需要提高选择器优先级就能覆盖它。</p>
+<h2>无障碍为什么算契约</h2>
+<p>键盘和读屏用户依赖的是组件的行为，这部分一旦改坏，测试可能都发现不了。所以要把它当成和 props 一样的承诺来维护：</p>
 <ul>
-<li>优先使用原生元素：按钮用 <code>&lt;button&gt;</code>，链接用 <code>&lt;a&gt;</code>，开关可以用 <code>&lt;input type=&quot;checkbox&quot; role=&quot;switch&quot;&gt;</code>。</li>
-<li>Dialog：打开时焦点移入，Tab 不离开对话框，Esc 关闭，关闭后焦点回到触发元素。</li>
-<li>表单字段：label、帮助文字、错误信息通过 <code>id</code> 和 <code>aria-describedby</code> 关联。</li>
-<li>状态不只用颜色表达。</li>
+<li>优先用原生元素：按钮用 <code>&lt;button&gt;</code>，链接用 <code>&lt;a&gt;</code>，开关可以用 <code>&lt;input type=&quot;checkbox&quot; role=&quot;switch&quot;&gt;</code>。</li>
+<li>Dialog 打开时焦点移进去，按 Tab 不会跑出对话框，Esc 关闭，关闭后焦点回到打开它的那个元素。</li>
+<li>表单字段的 label、帮助文字、错误信息通过 <code>id</code> 和 <code>aria-describedby</code> 关联起来。</li>
+<li>状态不能只靠颜色表达。</li>
 </ul>
-<h2>测试与文档</h2>
+<h2>文档和测试覆盖什么</h2>
+<p>文档要写清楚什么时候用、什么时候不用、键盘行为是什么、受控怎么用、样式怎么扩展。Storybook 里把默认、禁用、加载、错误、长文本、窄屏、暗色、RTL 这些状态都摆出来。</p>
+<p>测试分几层。组件测试按角色和名称查找元素、模拟用户操作，这样测的是用户能感知的行为，而不是内部实现。视觉回归测试检查样式有没有意外变化，axe 检查结构上的无障碍问题。</p>
+<h2>发布前检查什么</h2>
+<p>包能不能被正确使用，也是 API 的一部分：</p>
 <ul>
-<li>文档写清何时使用、何时不用、键盘行为、受控用法和样式扩展方式。</li>
-<li>Storybook 覆盖默认、禁用、加载、错误、长文本、窄屏、暗色、RTL 等状态。</li>
-<li>组件测试按角色和名称查询元素、模拟用户操作；视觉回归测试检查样式变化；axe 检查结构问题。</li>
-</ul>
-<h2>发布</h2>
-<ul>
-<li>检查 <code>exports</code>、ESM 产物、类型声明、CSS 文件和 <code>sideEffects</code> 配置，确保按需导入有效。</li>
-<li>React、Vue 等框架声明为 <code>peerDependencies</code>，避免打包两份运行时。</li>
-<li>发布前用一个独立的示例项目，按真实包名安装并构建。</li>
+<li>检查 <code>exports</code>、ESM 产物、类型声明、CSS 文件和 <code>sideEffects</code> 配置，保证按需导入真的有效。</li>
+<li>React、Vue 这些框架声明为 <code>peerDependencies</code>，避免业务方打包进两份运行时。</li>
+<li>发布前用一个独立的示例项目，按真实包名安装并构建一遍。</li>
 </ul>
 <h2>常见追问</h2>
-<ul>
-<li>组件库要不要包含业务逻辑？不要。权限判断、接口调用、业务校验留在应用中，组件库只提供交互和展示。</li>
-<li>headless 组件库是什么？只提供状态和无障碍行为、不带样式的组件（如 Radix UI、Headless UI），样式完全由使用方决定。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.w3.org/WAI/ARIA/apg/" target="_blank" rel="noreferrer">WAI-ARIA Authoring Practices Guide<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E7%BB%84%E4%BB%B6%E5%BA%93%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E6%89%8D%E8%83%BD%E8%AE%A9%E4%B8%9A%E5%8A%A1%E6%96%B9%E7%A8%B3%E5%AE%9A%E4%BD%BF%E7%94%A8%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E7%BB%84%E4%BB%B6%E5%BA%93%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E6%89%8D%E8%83%BD%E8%AE%A9%E4%B8%9A%E5%8A%A1%E6%96%B9%E7%A8%B3%E5%AE%9A%E4%BD%BF%E7%94%A8%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aframework-component-library%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%86%E6%9E%B6%E4%B8%8E%E9%80%89%E5%9E%8B%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fframework-component-library%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端组件库怎样设计才能让业务方稳定使用？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/framework-angular/">Angular Signals 的依赖追踪与 computed 有什么特点？</a></li><li><a href="/questions/framework-svelte/">Svelte 的编译思路与 Runes 模型如何理解？</a></li><li><a href="/questions/framework-selection/">选择前端框架时应该先比较哪些约束？</a></li><li><a href="/questions/frameworks-angular-di/">Angular 依赖注入的层级和作用域怎样理解？</a></li></ul></nav></main></div></div>
+<p><strong>组件库要不要包含业务逻辑？</strong></p>
+<blockquote>
+<p>不要。权限判断、接口调用、业务校验留在应用里，组件库只管交互和展示。否则组件库会跟某个业务绑死，别的团队没法用。</p>
+</blockquote>
+<p><strong>headless 组件库是什么？</strong></p>
+<blockquote>
+<p>就是只提供状态管理和无障碍行为、不带任何样式的组件，比如 Radix UI、Headless UI。样式完全由使用方决定，适合有自己设计规范的团队。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.w3.org/WAI/ARIA/apg/" target="_blank" rel="noreferrer">WAI-ARIA Authoring Practices Guide<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E7%BB%84%E4%BB%B6%E5%BA%93%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E6%89%8D%E8%83%BD%E8%AE%A9%E4%B8%9A%E5%8A%A1%E6%96%B9%E7%A8%B3%E5%AE%9A%E4%BD%BF%E7%94%A8%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E7%BB%84%E4%BB%B6%E5%BA%93%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E6%89%8D%E8%83%BD%E8%AE%A9%E4%B8%9A%E5%8A%A1%E6%96%B9%E7%A8%B3%E5%AE%9A%E4%BD%BF%E7%94%A8%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aframework-component-library%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%86%E6%9E%B6%E4%B8%8E%E9%80%89%E5%9E%8B%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fframework-component-library%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端组件库怎样设计才能让业务方稳定使用？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/framework-angular/">Angular Signals 的依赖追踪与 computed 有什么特点？</a></li><li><a href="/questions/framework-svelte/">Svelte 的编译思路与 Runes 模型如何理解？</a></li><li><a href="/questions/framework-selection/">选择前端框架时应该先比较哪些约束？</a></li><li><a href="/questions/frameworks-angular-di/">Angular 依赖注入的层级和作用域怎样理解？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -27,14 +27,14 @@
   </head>
   <body>
     <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/rendering/">SSR 与渲染面试题</a><span aria-hidden="true">/</span><span aria-current="page">React Server Components 和 SSR 是同一件事吗？</span></nav><h1 tabindex="-1">React Server Components 和 SSR 是同一件事吗？</h1><p class="reading-summary">不是。SSR 把组件树渲染成 HTML，客户端组件也参与 SSR，之后还要 hydration。Server Components 只在服务端或构建时运行，可以直接访问数据库，代码不会发到浏览器，输出的是序列化的组件结果。两者可以配合使用。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>SSR 解决&quot;首屏 HTML 怎样在服务端生成&quot;：组件在服务端执行一次生成 HTML，客户端下载同样的组件代码再 hydration。</li>
-<li>Server Components 解决&quot;哪些组件只在服务端运行&quot;：它们可以是 async 函数、直接查询数据库，代码和依赖不进入客户端包，也不会 hydration。</li>
-<li><code>&#x27;use client&#x27;</code> 标记客户端边界：该文件及其导入的模块进入客户端包，可以使用 state、Effect 和浏览器 API。</li>
-<li>Server Component 可以渲染 Client Component，传给它的 props 必须可序列化；Client Component 不能导入 Server Component，但可以通过 <code>children</code> 接收已经渲染好的 Server Component。</li>
-<li><code>&#x27;use server&#x27;</code> 标记的是 Server Function（客户端可调用的服务端函数），不是 Server Component；Server Component 不需要任何指令。</li>
-</ul>
-<h2>示例</h2>
+<blockquote>
+<p>不是一回事，它们解决的问题不同。SSR 解决的是“首屏 HTML 怎样在服务端生成”：组件在服务端执行一次，生成 HTML；浏览器再下载同一份组件代码，做 hydration 接上事件。</p>
+<p>Server Components 解决的是“哪些组件只在服务端跑”。它们可以写成 async 函数，直接查数据库，代码和依赖都不会进客户端的包，也不需要 hydration。</p>
+<p>两种组件靠 <code>&#x27;use client&#x27;</code> 分开。写了它的文件，连同它导入的模块，都会进客户端包，可以用 state、Effect 和浏览器 API。Server Component 可以渲染 Client Component，但传过去的 props 必须能序列化。反过来，Client Component 不能导入 Server Component，但可以通过 <code>children</code> 接收一个已经渲染好的 Server Component。</p>
+<p>容易混的一点是 <code>&#x27;use server&#x27;</code>。它标记的是 Server Function，也就是客户端可以调用的服务端函数，不是 Server Component。Server Component 不需要任何指令。</p>
+</blockquote>
+<h2>先看一个文章页</h2>
+<p>文章页本身是 Server Component，收藏按钮需要点击状态，是 Client Component。</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-comment">// app/article/[id]/page.jsx —— Server Component</span>
 <span class="hljs-keyword">import</span> { db } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@/lib/db&#x27;</span>;
 <span class="hljs-keyword">import</span> { marked } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;marked&#x27;</span>; <span class="hljs-comment">// 只在服务端使用，不进入客户端包</span>
@@ -62,15 +62,19 @@
   <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setSaved(!saved)}&gt;{saved ? &#x27;已收藏&#x27; : &#x27;收藏&#x27;}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>;
 }
 </code></pre></div>
-<p>浏览器只下载 <code>BookmarkButton</code> 的代码；<code>marked</code> 和数据库客户端都留在服务端。（示例中正文若来自用户输入，渲染为 HTML 前必须先做清洗。）</p>
-<h2>一次请求中发生了什么</h2>
+<p>浏览器最后只下载 <code>BookmarkButton</code> 的代码。<code>marked</code> 这个 Markdown 库和数据库客户端都留在服务端，因为用到它们的组件从来不在浏览器里运行。如果只用 SSR，这些依赖也要打包给浏览器，因为 hydration 时组件要在客户端再跑一遍。</p>
+<p>示例里的正文如果来自用户输入，渲染成 HTML 之前必须先做清洗。</p>
+<h2>一次请求里发生了什么</h2>
+<p>两者配合时，大致是这样的顺序：</p>
 <ol>
-<li>服务端运行 Server Components，生成 RSC payload：一种描述组件树的序列化格式，其中 Client Component 的位置只是一个引用和它的 props。</li>
-<li>框架再用 SSR 把这棵树（含 Client Components）渲染成 HTML，与 RSC payload 一起发送。</li>
-<li>浏览器显示 HTML，下载 Client Component 代码并 hydration。</li>
-<li>之后的客户端导航只请求新的 RSC payload，不需要整页 HTML。</li>
+<li>服务端运行 Server Components，生成 RSC payload。这是一种描述组件树的序列化格式，其中 Client Component 的位置只放一个引用和它的 props。</li>
+<li>框架再用 SSR 把这棵树，包括 Client Components，渲染成 HTML，和 RSC payload 一起发出去。</li>
+<li>浏览器先显示 HTML，然后下载 Client Component 的代码并 hydration。</li>
+<li>之后在客户端导航，只请求新页面的 RSC payload，不用整页 HTML。</li>
 </ol>
-<h2>组合方式</h2>
+<p>所以 SSR 负责的是“先给一份 HTML”，Server Components 负责的是“哪些组件只在服务端跑”，两者是叠在一起用的。</p>
+<h2>Client Component 怎样包住服务端内容</h2>
+<p>Client Component 不能导入 Server Component，可是像标签页这种外壳需要交互、里面内容来自服务端的场景很常见。办法是用 <code>children</code>：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-comment">// Client Component 通过 children 接收服务端内容</span>
 <span class="hljs-string">&#x27;use client&#x27;</span>;
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Tabs</span>(<span class="hljs-params">{ children }</span>) {
@@ -83,18 +87,20 @@
   <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">ServerRenderedList</span> /&gt;</span></span>
 &lt;/<span class="hljs-title class_">Tabs</span>&gt;
 </code></pre></div>
-<p><code>ServerRenderedList</code> 在服务端渲染好后作为 props 传入，<code>Tabs</code> 不需要知道它的实现。</p>
-<h2>注意点</h2>
-<ul>
-<li>传给 Client Component 的 props 会发送到浏览器，不要直接传整个数据库记录，只传需要的字段。</li>
-<li>只能在服务端使用的模块，可以导入 <code>server-only</code> 包，被客户端误导入时构建会报错。</li>
-<li>Server Components 需要框架支持打包和路由，例如 Next.js App Router，单独使用 React 无法直接启用。</li>
-</ul>
+<p><code>ServerRenderedList</code> 在服务端就渲染好了，作为 props 传给 <code>Tabs</code>。<code>Tabs</code> 只管把它放到某个位置，不需要知道它是怎么实现的，所以也不用导入它。</p>
+<h2>有哪些要注意</h2>
+<p>传给 Client Component 的 props 会发到浏览器。所以不要把整条数据库记录直接传过去，只传需要的字段。</p>
+<p>只能在服务端用的模块，可以导入 <code>server-only</code> 包。万一被客户端代码误导入，构建时就会报错，而不是悄悄把它打包出去。</p>
+<p>Server Components 需要框架支持打包和路由，比如 Next.js App Router。单独用 React 没办法直接启用。</p>
 <h2>常见追问</h2>
-<ul>
-<li>Server Components 能用 Hook 吗？不能用 <code>useState</code>、<code>useEffect</code> 这类有状态或副作用的 Hook。</li>
-<li>和 Server Functions 的区别，见<a href="/questions/react-server-actions/">《React Server Functions/Actions 的边界是什么？》</a>。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/reference/rsc/server-components" target="_blank" rel="noreferrer">React · Server Components<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+Server+Components+%E5%92%8C+SSR+%E6%98%AF%E5%90%8C%E4%B8%80%E4%BB%B6%E4%BA%8B%E5%90%97%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+Server+Components+%E5%92%8C+SSR+%E6%98%AF%E5%90%8C%E4%B8%80%E4%BB%B6%E4%BA%8B%E5%90%97%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Arender-server-components%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ASSR+%E4%B8%8E%E6%B8%B2%E6%9F%93%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Frender-server-components%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React Server Components 和 SSR 是同一件事吗？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/rendering-streaming-ssr/">React 流式 SSR 解决什么问题？</a></li><li><a href="/questions/render-ssr-ssg/">CSR、SSR、SSG 和混合渲染如何选择？</a></li><li><a href="/questions/render-hydration/">Hydration mismatch 为什么发生，应该怎样修复？</a></li><li><a href="/questions/rendering-cache-semantics/">SSR 和 SSG 中的缓存层应该怎样区分？</a></li></ul></nav></main></div></div>
+<p><strong>Server Components 能用 Hook 吗？</strong></p>
+<blockquote>
+<p>不能用 <code>useState</code>、<code>useEffect</code> 这类有状态或者有副作用的 Hook，因为它不在浏览器里运行，也不会重新渲染。</p>
+</blockquote>
+<p><strong>和 Server Functions 有什么区别？</strong></p>
+<blockquote>
+<p>Server Function 是客户端可以调用的服务端函数，用 <code>&#x27;use server&#x27;</code> 标记，详见<a href="/questions/react-server-actions/">《React Server Functions/Actions 的边界是什么？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/reference/rsc/server-components" target="_blank" rel="noreferrer">React · Server Components<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+Server+Components+%E5%92%8C+SSR+%E6%98%AF%E5%90%8C%E4%B8%80%E4%BB%B6%E4%BA%8B%E5%90%97%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+Server+Components+%E5%92%8C+SSR+%E6%98%AF%E5%90%8C%E4%B8%80%E4%BB%B6%E4%BA%8B%E5%90%97%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Arender-server-components%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ASSR+%E4%B8%8E%E6%B8%B2%E6%9F%93%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Frender-server-components%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React Server Components 和 SSR 是同一件事吗？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/rendering-streaming-ssr/">React 流式 SSR 解决什么问题？</a></li><li><a href="/questions/render-ssr-ssg/">CSR、SSR、SSG 和混合渲染如何选择？</a></li><li><a href="/questions/render-hydration/">Hydration mismatch 为什么发生，应该怎样修复？</a></li><li><a href="/questions/rendering-cache-semantics/">SSR 和 SSG 中的缓存层应该怎样区分？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

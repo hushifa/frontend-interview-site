@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="React面试题：Error Boundary 捕获子树在渲染、生命周期中抛出的错误并显示备用界面…" />
+    <meta name="description" content="React面试题：Error Boundary 管&quot;出错了&quot;，子组件渲染时抛错就显示备用界面；Suspense 管&quot;还在等&quot;，代码或数据没到就显示加载提示。" />
     <title>Error Boundary 和 Suspense 分别处理什么？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/react-error-suspense/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Error Boundary 和 Suspense 分别处理什么？" />
-    <meta property="og:description" content="React面试题：Error Boundary 捕获子树在渲染、生命周期中抛出的错误并显示备用界面…" />
+    <meta property="og:description" content="React面试题：Error Boundary 管&quot;出错了&quot;，子组件渲染时抛错就显示备用界面；Suspense 管&quot;还在等&quot;，代码或数据没到就显示加载提示。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/react-error-suspense/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-error-suspense/#webpage","url":"https://fe.hushifa.top/questions/react-error-suspense/","name":"Error Boundary 和 Suspense 分别处理什么？","description":"React面试题：Error Boundary 捕获子树在渲染、生命周期中抛出的错误并显示备用界面…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-error-suspense/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-error-suspense/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"Error Boundary 和 Suspense 分别处理什么？","item":"https://fe.hushifa.top/questions/react-error-suspense/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-error-suspense/#webpage","url":"https://fe.hushifa.top/questions/react-error-suspense/","name":"Error Boundary 和 Suspense 分别处理什么？","description":"React面试题：Error Boundary 管\"出错了\"，子组件渲染时抛错就显示备用界面；Suspense 管\"还在等\"，代码或数据没到就显示加载提示。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-error-suspense/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-error-suspense/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"Error Boundary 和 Suspense 分别处理什么？","item":"https://fe.hushifa.top/questions/react-error-suspense/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">Error Boundary 和 Suspense 分别处理什么？</span></nav><h1 tabindex="-1">Error Boundary 和 Suspense 分别处理什么？</h1><p class="reading-summary">Error Boundary 捕获子树在渲染、生命周期中抛出的错误并显示备用界面；Suspense 在子树等待数据或代码加载时显示 fallback。两者常一起包在异步区域外，分别处理&quot;失败&quot;和&quot;等待&quot;。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>Error Boundary 捕获后代组件在渲染、生命周期方法和构造函数中抛出的错误，显示备用 UI，避免整棵树卸载。</li>
-<li>Error Boundary 不捕获事件处理器、<code>setTimeout</code> 等异步回调里的错误，也不捕获服务端渲染的错误和它自身的错误。</li>
-<li>目前只能用类组件实现（<code>getDerivedStateFromError</code> + <code>componentDidCatch</code>），实践中常用 <code>react-error-boundary</code> 库。</li>
-<li>Suspense 在子树&quot;挂起&quot;时显示 <code>fallback</code>。能触发挂起的是 <code>lazy</code> 组件、<code>use(promise)</code> 和支持 Suspense 的框架数据加载，普通 Effect 里的 fetch 不会。</li>
-<li>已经显示过内容的 Suspense 边界，如果更新包在 Transition 里，React 会保留旧内容而不是切回 fallback。</li>
-</ul>
-<h2>组合使用</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">Error Boundary 和 Suspense 分别处理什么？</span></nav><h1 tabindex="-1">Error Boundary 和 Suspense 分别处理什么？</h1><p class="reading-summary">Error Boundary 管&quot;出错了&quot;，子组件渲染时抛错就显示备用界面；Suspense 管&quot;还在等&quot;，代码或数据没到就显示加载提示。两者常一起包在一块异步区域外面。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>一块界面在加载时可能遇到两种情况：还没加载完，或者加载失败了。Suspense 处理前一种，子树在等代码或数据时，先显示它的 <code>fallback</code>。Error Boundary 处理后一种，子组件在渲染、生命周期方法或构造函数里抛了错，它显示备用界面，不让整个应用白屏。</p>
+<p>能让 Suspense 进入等待的，是 <code>lazy</code> 组件、<code>use(promise)</code> 和支持 Suspense 的框架数据加载。在普通 Effect 里 fetch 是不会触发的。</p>
+<p>它们的用处是把“等待”和“失败”限制在一小块区域里，其他部分照常显示。Error Boundary 目前只能用类组件写，实际项目常用 <code>react-error-boundary</code> 库。</p>
+<p>要注意，Error Boundary 抓不到事件处理器、<code>setTimeout</code> 这类异步回调里的错误，也抓不到服务端渲染的错误和它自己抛的错误。另外，已经显示过内容的 Suspense，如果更新包在 Transition 里，React 会保留旧内容，不会退回 fallback。</p>
+</blockquote>
+<h2>先看两个一起用</h2>
+<p>下面的仪表盘按需加载一个图表组件。Suspense 负责加载中，ErrorBoundary 负责加载失败。</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Suspense</span>, lazy } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 <span class="hljs-keyword">import</span> { <span class="hljs-title class_">ErrorBoundary</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-error-boundary&#x27;</span>;
 
@@ -57,11 +57,10 @@
   );
 }
 </code></pre></div>
-<ul>
-<li>加载 <code>Chart</code> 的代码块时显示&quot;加载中&quot;；加载失败（如网络断开）时 Promise reject，错误交给 ErrorBoundary。</li>
-<li>ErrorBoundary 放在 Suspense 外面，等待和失败都只影响这一块区域。</li>
-</ul>
-<h2>手写 Error Boundary</h2>
+<p><code>Chart</code> 的代码还在下载时，<code>lazy</code> 让组件进入等待，Suspense 显示“图表加载中”。如果网络断了，<code>import()</code> 返回的 Promise 失败，错误就交给外面的 ErrorBoundary，显示失败提示和重试按钮。</p>
+<p>ErrorBoundary 放在 Suspense 外面，所以等待和失败都只影响这一块。页面其他地方不受影响。</p>
+<h2>Error Boundary 自己怎么写</h2>
+<p>目前只有类组件能当 Error Boundary，因为要用到两个类组件专有的方法：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ErrorBoundary</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">React.Component</span> {
   state = { <span class="hljs-attr">error</span>: <span class="hljs-literal">null</span> };
 
@@ -79,14 +78,10 @@
   }
 }
 </code></pre></div>
-<p><code>getDerivedStateFromError</code> 在渲染阶段决定显示备用 UI，<code>componentDidCatch</code> 在提交阶段做上报。</p>
-<h2>边界放在哪里</h2>
-<ul>
-<li>按用户可以独立理解的区域划分：一个卡片、一个面板、一个路由页面。整个应用只有一个顶层边界的话，任何小错误都会让全屏变成错误页。</li>
-<li>多个并排的 Suspense 会各自显示 fallback；希望它们一起出现，就包在同一个 Suspense 里。</li>
-<li>嵌套 Suspense 可以逐级显示：外层先出页面骨架，内层再出详细数据。</li>
-</ul>
-<h2>事件处理器里的错误</h2>
+<p><code>getDerivedStateFromError</code> 在渲染阶段运行，它把错误存进 state，决定接下来显示备用界面。<code>componentDidCatch</code> 在提交阶段运行，适合做错误上报。一个管“显示什么”，一个管“上报”。</p>
+<h2>为什么事件里的错误抓不到</h2>
+<p>Error Boundary 只能抓到 React 渲染组件过程中抛出的错误。点击事件、<code>setTimeout</code> 回调、<code>await</code> 之后的代码，执行时 React 早就渲染完了，错误不经过渲染流程，边界自然拦不住。</p>
+<p>这类错误要自己 <code>try/catch</code>，再用 state 显示：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">handleSave</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">try</span> {
     <span class="hljs-keyword">await</span> <span class="hljs-title function_">save</span>(form);
@@ -95,12 +90,18 @@
   }
 }
 </code></pre></div>
-<p>事件和异步回调的错误不会进入 Error Boundary，要自己 <code>try/catch</code> 并更新状态显示。</p>
+<h2>边界应该放在哪里</h2>
+<p>按用户能独立理解的区域来划：一张卡片、一个面板、一个路由页面。如果整个应用只有一个顶层边界，任何一个小组件出错，全屏都会变成错误页。</p>
+<p>Suspense 也是同样的思路。几个并排的 Suspense 会各自显示自己的 fallback，想让它们一起出现，就包进同一个 Suspense。嵌套的 Suspense 可以逐级显示，外层先出页面骨架，内层再出详细数据。</p>
 <h2>常见追问</h2>
-<ul>
-<li>错误恢复后怎么重新渲染？<code>react-error-boundary</code> 的 <code>resetErrorBoundary</code> 或 <code>resetKeys</code> 会清空错误状态，重新渲染子树。</li>
-<li>React 19 在错误处理上有什么变化？<code>createRoot</code> 新增 <code>onCaughtError</code>、<code>onUncaughtError</code> 选项，用于统一上报。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/reference/react/Suspense" target="_blank" rel="noreferrer">React · Suspense<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Error+Boundary+%E5%92%8C+Suspense+%E5%88%86%E5%88%AB%E5%A4%84%E7%90%86%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AError+Boundary+%E5%92%8C+Suspense+%E5%88%86%E5%88%AB%E5%A4%84%E7%90%86%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-error-suspense%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-error-suspense%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Error Boundary 和 Suspense 分别处理什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-use-hook/">React use API 可以读取哪些值？</a></li><li><a href="/questions/react-state/">为什么调用 setState 后，当前变量还是旧值？</a></li><li><a href="/questions/react-effect/">useEffect 的依赖数组和清理函数应该怎么写？</a></li><li><a href="/questions/react-key/">列表中的 key 为什么不能随意使用数组下标？</a></li></ul></nav></main></div></div>
+<p><strong>出错以后怎么让它重新渲染？</strong></p>
+<blockquote>
+<p><code>react-error-boundary</code> 提供了 <code>resetErrorBoundary</code> 函数和 <code>resetKeys</code> 属性，调用或者 key 变化时会清掉错误状态，重新渲染子树。</p>
+</blockquote>
+<p><strong>React 19 在错误处理上有什么变化？</strong></p>
+<blockquote>
+<p><code>createRoot</code> 新增了 <code>onCaughtError</code> 和 <code>onUncaughtError</code> 两个选项，分别处理被边界捕获的错误和没被捕获的错误，方便统一上报。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/reference/react/Suspense" target="_blank" rel="noreferrer">React · Suspense<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Error+Boundary+%E5%92%8C+Suspense+%E5%88%86%E5%88%AB%E5%A4%84%E7%90%86%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AError+Boundary+%E5%92%8C+Suspense+%E5%88%86%E5%88%AB%E5%A4%84%E7%90%86%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-error-suspense%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-error-suspense%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Error Boundary 和 Suspense 分别处理什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-use-hook/">React use API 可以读取哪些值？</a></li><li><a href="/questions/react-state/">为什么调用 setState 后，当前变量还是旧值？</a></li><li><a href="/questions/react-effect/">useEffect 的依赖数组和清理函数应该怎么写？</a></li><li><a href="/questions/react-key/">列表中的 key 为什么不能随意使用数组下标？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

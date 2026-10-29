@@ -1,0 +1,66 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>故障注入就是在测试里故意把东西弄坏，看页面撑不撑得住。第一步是想清楚故障会出在哪一层：接口可能慢、返回 5xx 或 4xx、格式不对；网络可能断开或超时；静态资源，比如脚本和图片，可能 404；浏览器能力也可能不可用，比如存储满了、权限被拒。</p>
+<p>Playwright 里用 <code>page.route</code> 延迟或修改响应，用 <code>route.abort()</code> 模拟请求失败，用 <code>context.setOffline(true)</code> 模拟断网。</p>
+<p>验证时不能只看“出现了错误提示”，还要看用户能不能重试、填的内容有没有保留、会不会重复提交。前端还有一个特有的故障：发布新版本后，旧页面去加载的异步模块已经 404 了，页面要能提示用户刷新。</p>
+<p>这些故障都只在测试环境里注入。在生产环境做混沌实验是另一回事，要严格限定范围，并且能随时停下来。</p>
+</blockquote>
+<h2>慢响应怎样测</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;慢请求显示加载状态，并能取消&#x27;</span>, <span class="hljs-title function_">async</span> ({ page }) =&gt; {
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">route</span>(<span class="hljs-string">&#x27;**/api/report&#x27;</span>, <span class="hljs-title function_">async</span> (route) =&gt; {
+    <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> <span class="hljs-built_in">setTimeout</span>(resolve, <span class="hljs-number">3000</span>));
+    <span class="hljs-keyword">await</span> route.<span class="hljs-title function_">fulfill</span>({ <span class="hljs-attr">json</span>: { <span class="hljs-attr">rows</span>: [] } });
+  });
+
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">goto</span>(<span class="hljs-string">&#x27;/report&#x27;</span>);
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;status&#x27;</span>)).<span class="hljs-title function_">toHaveText</span>(<span class="hljs-string">&#x27;加载中&#x27;</span>);
+  <span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;button&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;取消&#x27;</span> }).<span class="hljs-title function_">click</span>();
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;status&#x27;</span>)).<span class="hljs-title function_">toHaveText</span>(<span class="hljs-string">&#x27;已取消&#x27;</span>);
+});
+</code></pre></div>
+<p>处理器先等 3 秒再返回，测试就有时间检查“加载中”是否出现、取消按钮是否有效。如果接口在测试里总是瞬间返回，加载状态和取消功能就永远测不到。</p>
+<h2>接口返回了 200，却不是 JSON</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">await</span> page.<span class="hljs-title function_">route</span>(<span class="hljs-string">&#x27;**/api/orders&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">route</span>) =&gt;</span>
+  route.<span class="hljs-title function_">fulfill</span>({ <span class="hljs-attr">status</span>: <span class="hljs-number">200</span>, <span class="hljs-attr">contentType</span>: <span class="hljs-string">&#x27;text/html&#x27;</span>, <span class="hljs-attr">body</span>: <span class="hljs-string">&#x27;&lt;html&gt;网关错误&lt;/html&gt;&#x27;</span> }),
+);
+</code></pre></div>
+<p>代理或 CDN 出问题时，接口可能返回状态码 200，内容却是一段 HTML 错误页。前端如果只看状态码，接着调用 <code>response.json()</code>，就会抛出解析错误：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> response = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Response</span>(<span class="hljs-string">&#x27;&lt;html&gt;网关错误&lt;/html&gt;&#x27;</span>, { <span class="hljs-attr">status</span>: <span class="hljs-number">200</span> });
+<span class="hljs-keyword">try</span> {
+  <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>();
+} <span class="hljs-keyword">catch</span> (error) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(response.<span class="hljs-property">ok</span>, error.<span class="hljs-property">name</span>); <span class="hljs-comment">// true SyntaxError</span>
+}
+</code></pre></div>
+<p><code>ok</code> 是 <code>true</code>，解析却失败了。如果代码没有捕获这个错误，页面可能直接白屏。所以这种情况要单独注入一次，确认页面能给出提示。</p>
+<h2>新版本发布后旧页面加载不到分块</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">await</span> page.<span class="hljs-title function_">route</span>(<span class="hljs-string">&#x27;**/assets/*.js&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">route</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (route.<span class="hljs-title function_">request</span>().<span class="hljs-title function_">url</span>().<span class="hljs-title function_">includes</span>(<span class="hljs-string">&#x27;Settings&#x27;</span>)) <span class="hljs-keyword">return</span> route.<span class="hljs-title function_">abort</span>();
+  <span class="hljs-keyword">return</span> route.<span class="hljs-title function_">continue</span>();
+});
+<span class="hljs-keyword">await</span> page.<span class="hljs-title function_">goto</span>(<span class="hljs-string">&#x27;/&#x27;</span>);
+<span class="hljs-keyword">await</span> page.<span class="hljs-title function_">getByRole</span>(<span class="hljs-string">&#x27;link&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;设置&#x27;</span> }).<span class="hljs-title function_">click</span>();
+<span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(page.<span class="hljs-title function_">getByText</span>(<span class="hljs-string">&#x27;页面已更新，请刷新&#x27;</span>)).<span class="hljs-title function_">toBeVisible</span>();
+</code></pre></div>
+<p>这个测试模拟的是：部署新版本时旧版本的分块文件被删了，用户还停在旧页面上，点“设置”时懒加载路由失败。期望的结果是页面提示用户刷新，而不是什么反应都没有。</p>
+<h2>浏览器存储不可用</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">await</span> page.<span class="hljs-title function_">addInitScript</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title class_">Storage</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">setItem</span> = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DOMException</span>(<span class="hljs-string">&#x27;quota exceeded&#x27;</span>, <span class="hljs-string">&#x27;QuotaExceededError&#x27;</span>);
+  };
+});
+</code></pre></div>
+<p><code>addInitScript</code> 会在页面脚本运行之前执行，这里把 <code>setItem</code> 换成一个总是抛错的函数。<code>localStorage</code> 写满了或者在隐私模式下不可用时，草稿保存这类功能应该提示用户，而不是让整个页面报错。</p>
+<h2>注入以后要检查什么</h2>
+<p>每个故障用例都要回答三个问题：</p>
+<ul>
+<li>用户看到了什么提示，有没有说清楚下一步该怎么做？</li>
+<li>故障消除以后，比如第二次请求成功了，页面有没有回到正常状态？</li>
+<li>有没有留下重复的数据、一直转圈的加载状态或者错误的缓存？</li>
+</ul>
+<p>接口模拟的基本用法见<a href="/questions/test-api-mocks/">《Playwright 接口模拟怎样覆盖成功和失败场景？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>这和单元测试里模拟 <code>fetch</code> 失败有什么区别？</strong></p>
+<blockquote>
+<p>单元测试验证的是某个函数的错误处理。在浏览器里注入故障，还能发现加载状态、焦点、整页渲染和缓存层这些单元测试看不到的问题。</p>
+</blockquote>`};export{e as default};

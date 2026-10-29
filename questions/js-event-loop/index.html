@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="JavaScript面试题：同步代码执行完、调用栈清空后，宿主会进入微任务检查点，把微任务队列清空（包括清空过程中新加入的），然后再取下一个任务…" />
+    <meta name="description" content="JavaScript面试题：同步代码先跑完，再把微任务（比如 Promise 的 then）全部执行完，最后才轮到下一个任务（比如 setTimeout）。" />
     <title>事件循环中，任务和微任务按什么顺序执行？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/js-event-loop/" />
     <meta name="robots" content="index,follow" />
@@ -19,38 +19,52 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="事件循环中，任务和微任务按什么顺序执行？ · 前端知库" />
-    <meta property="og:description" content="JavaScript面试题：同步代码执行完、调用栈清空后，宿主会进入微任务检查点，把微任务队列清空（包括清空过程中新加入的），然后再取下一个任务…" />
+    <meta property="og:description" content="JavaScript面试题：同步代码先跑完，再把微任务（比如 Promise 的 then）全部执行完，最后才轮到下一个任务（比如 setTimeout）。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/js-event-loop/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-event-loop/#webpage","url":"https://fe.hushifa.top/questions/js-event-loop/","name":"事件循环中，任务和微任务按什么顺序执行？ · 前端知库","description":"JavaScript面试题：同步代码执行完、调用栈清空后，宿主会进入微任务检查点，把微任务队列清空（包括清空过程中新加入的），然后再取下一个任务…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-event-loop/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-event-loop/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"事件循环中，任务和微任务按什么顺序执行？","item":"https://fe.hushifa.top/questions/js-event-loop/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-event-loop/#webpage","url":"https://fe.hushifa.top/questions/js-event-loop/","name":"事件循环中，任务和微任务按什么顺序执行？ · 前端知库","description":"JavaScript面试题：同步代码先跑完，再把微任务（比如 Promise 的 then）全部执行完，最后才轮到下一个任务（比如 setTimeout）。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-event-loop/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-event-loop/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"事件循环中，任务和微任务按什么顺序执行？","item":"https://fe.hushifa.top/questions/js-event-loop/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">事件循环中，任务和微任务按什么顺序执行？</span></nav><h1 tabindex="-1">事件循环中，任务和微任务按什么顺序执行？</h1><p class="reading-summary">同步代码执行完、调用栈清空后，宿主会进入微任务检查点，把微任务队列清空（包括清空过程中新加入的），然后再取下一个任务，浏览器在合适时机渲染。Promise 回调是微任务，定时器回调是任务。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>当前同步代码先运行到调用栈清空，期间注册的回调只是入队。</li>
-<li>调用栈清空后进入微任务检查点，微任务队列会被清空，清空过程中新加入的微任务也在这一轮执行。</li>
-<li>Promise 回调、<code>queueMicrotask</code> 和 <code>MutationObserver</code> 回调属于微任务；<code>setTimeout</code>、用户事件、<code>MessageChannel</code> 消息属于任务。</li>
-<li>浏览器可以在两个任务之间渲染，但不保证每个任务后都渲染；<code>requestAnimationFrame</code> 回调在渲染前执行。</li>
-<li>微任务不断产生新的微任务，会让后续任务和渲染一直等待。</li>
-</ul>
-<h2>经典输出题</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">事件循环中，任务和微任务按什么顺序执行？</span></nav><h1 tabindex="-1">事件循环中，任务和微任务按什么顺序执行？</h1><p class="reading-summary">同步代码先跑完，再把微任务（比如 Promise 的 then）全部执行完，最后才轮到下一个任务（比如 setTimeout）。浏览器在任务之间找时机渲染页面。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>JavaScript 是单线程的，一次只能做一件事。异步回调不会马上执行，而是先排队，等当前的代码跑完再按顺序取出来执行。</p>
+<p>排队的地方分两种：一种叫任务，也叫宏任务，比如 <code>setTimeout</code>、点击事件；另一种叫微任务，比如 Promise 的 <code>then</code>、<code>await</code> 后面的代码。</p>
+<p>执行顺序是：先把当前的同步代码跑完，然后把微任务队列全部清空，清空的过程中新加进来的微任务也一起执行完，接着才去取下一个任务。所以同一段同步代码里安排的 Promise 回调，会比 <code>setTimeout</code> 的回调先执行。浏览器会在两个任务之间找时机渲染页面，但不保证每个任务后面都渲染一次。</p>
+<p>要注意的是，如果微任务里不停地产生新的微任务，后面的任务和页面渲染就会一直等着，页面看起来就卡住了。</p>
+</blockquote>
+<h2>先看一道经典输出题</h2>
+<p>下面四行代码，有同步打印，有 <code>setTimeout</code>，有 Promise。先猜一下输出顺序。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;A&#x27;</span>);
 <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;B&#x27;</span>), <span class="hljs-number">0</span>);
 <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;C&#x27;</span>));
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;D&#x27;</span>);
 <span class="hljs-comment">// 输出顺序：A → D → C → B</span>
 </code></pre></div>
-<p><code>A</code>、<code>D</code> 是同步代码。<code>then</code> 回调进入微任务队列，<code>setTimeout</code> 回调进入定时器对应的任务源。脚本执行完后先清空微任务输出 <code>C</code>，之后事件循环才取出定时器任务输出 <code>B</code>。</p>
-<h2>一轮循环大致做什么</h2>
+<p>很多人第一反应是 <code>setTimeout</code> 写的是 0 毫秒，应该马上执行。可实际上 <code>B</code> 最后才打印，比后面写的 Promise 回调还晚。</p>
+<p>原因是这样的。<code>A</code> 和 <code>D</code> 是同步代码，按顺序直接执行。<code>setTimeout</code> 的回调不会马上跑，它被放进了定时器对应的任务队列。<code>then</code> 的回调也不会马上跑，它被放进了微任务队列。等这段脚本整个执行完，引擎先清空微任务队列，打印 <code>C</code>。微任务清空以后，事件循环才去取下一个任务，这时才轮到定时器回调，打印 <code>B</code>。</p>
+<h2>一轮事件循环在做什么</h2>
+<p>事件循环说白了就是浏览器一直在重复的一套流程：取一件事做完，再取下一件。每一圈大致是这样：</p>
 <ol>
-<li>从某个任务队列取出一个任务执行（脚本本身、定时器回调、事件回调等）。</li>
-<li>调用栈清空后执行微任务检查点，直到微任务队列为空。</li>
-<li>如果到了渲染时机，依次处理 resize/scroll 等事件、<code>requestAnimationFrame</code> 回调、样式与布局、绘制。</li>
-<li>回到第 1 步。</li>
+<li>从某个任务队列里取出一个任务执行，比如整段脚本、一个定时器回调、一个点击事件回调。</li>
+<li>这个任务跑完、调用栈空了以后，把微任务队列全部执行完。这一步叫微任务检查点。</li>
+<li>如果到了该渲染的时候，就依次处理 resize、scroll 这类事件，执行 <code>requestAnimationFrame</code> 回调，计算样式和布局，再把页面画出来。</li>
+<li>回到第 1 步，取下一个任务。</li>
 </ol>
-<p>HTML 规范允许浏览器在多个任务源之间按优先级选择，所以&quot;不同来源的任务谁先执行&quot;不是固定顺序，只能保证同一任务源内按入队顺序。</p>
-<h2>await 与微任务</h2>
+<p>这里有两点容易误解。第一，渲染不是每个任务后面都有，浏览器会根据屏幕刷新等情况自己找时机，所以只能说“在任务之间可能渲染”。第二，任务队列不止一个，定时器、用户交互、网络回调可能来自不同的任务源。HTML 规范允许浏览器在不同任务源之间按优先级挑选，所以“不同来源的任务谁先执行”没有固定顺序，能保证的只是同一个任务源里按放进去的顺序执行。</p>
+<h2>微任务里加的微任务，也排在定时器前面</h2>
+<p>既然第 2 步要把微任务“全部”清空，那微任务里再加一个微任务会怎样？</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;timeout&#x27;</span>), <span class="hljs-number">0</span>);
+
+<span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;then 1&#x27;</span>);
+  <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;then 2&#x27;</span>));
+});
+<span class="hljs-comment">// then 1 → then 2 → timeout</span>
+</code></pre></div>
+<p><code>then 2</code> 是在 <code>then 1</code> 执行时才加进去的，看起来已经“晚了”，可它还是排在 <code>timeout</code> 前面。因为微任务检查点会一直执行到队列为空，中途新加进来的也算在这一轮里。只有微任务彻底没了，定时器任务才有机会执行。</p>
+<h2>await 后面的代码什么时候执行</h2>
+<p><code>await</code> 看起来像是停在原地等，其实它把函数拆成了前后两半。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">run</span>(<span class="hljs-params"></span>) {
   <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-number">1</span>);
   <span class="hljs-keyword">await</span> <span class="hljs-literal">null</span>;
@@ -60,18 +74,24 @@
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-number">2</span>);
 <span class="hljs-comment">// 1 → 2 → 3</span>
 </code></pre></div>
-<p><code>await</code> 之前的代码同步执行；<code>await</code> 之后的部分作为微任务恢复。</p>
-<h2>微任务饥饿</h2>
+<p>调用 <code>run()</code> 时，<code>await</code> 之前的代码是同步执行的，所以先打印 1。遇到 <code>await</code>，函数先暂停，把控制权交回外面，于是外面的 <code>console.log(2)</code> 先执行。<code>await</code> 后面的部分作为微任务恢复，等当前同步代码跑完才打印 3。所以常说“<code>await</code> 后面的代码相当于写在了 <code>then</code> 里”，就是这个意思。</p>
+<h2>微任务一直不停会发生什么</h2>
+<p>如果微任务一直在产生新的微任务，会怎样？</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">loop</span>(<span class="hljs-params"></span>) {
   <span class="hljs-title function_">queueMicrotask</span>(loop); <span class="hljs-comment">// 永远不会让出给定时器和渲染</span>
 }
 </code></pre></div>
-<p>需要长时间分片处理时，应把每片放进任务（<code>setTimeout</code>、<code>MessageChannel</code>、<code>scheduler.postTask</code>）或用 <code>scheduler.yield()</code> 让出，而不是放在微任务里循环。</p>
+<p>现象是页面直接卡死，点击没反应，定时器也不触发。原因是每执行一次 <code>loop</code>，它又往微任务队列里放了一个自己，队列永远清不空，事件循环就一直停在第 2 步，到不了渲染，也取不到下一个任务。这种情况叫微任务饥饿。</p>
+<p>改法是把耗时的工作切成小块，每块放进<strong>任务</strong>里，而不是放进微任务里。比如用 <code>setTimeout</code>、<code>MessageChannel</code> 或 <code>scheduler.postTask</code> 安排下一块；也可以在每块之间 <code>await scheduler.yield()</code> 主动让出。这样两块之间，浏览器就有机会渲染页面、响应用户操作。</p>
 <h2>常见追问</h2>
-<ul>
-<li>Node.js 的顺序一样吗？大体模型相同，但 Node 有 <code>process.nextTick</code> 队列和 libuv 的阶段划分，见<a href="/questions/node-eventloop/">《Node.js 事件循环和浏览器有什么不同？nextTick 一定先于 Promise 吗？》</a>。</li>
-<li><code>setTimeout(fn, 0)</code> 是否立刻执行？不会，它至少等当前任务和微任务完成；嵌套层级较深时浏览器还会把延迟钳制到至少 4ms。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide" target="_blank" rel="noreferrer">MDN · Using microtasks in JavaScript<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E4%B8%AD%EF%BC%8C%E4%BB%BB%E5%8A%A1%E5%92%8C%E5%BE%AE%E4%BB%BB%E5%8A%A1%E6%8C%89%E4%BB%80%E4%B9%88%E9%A1%BA%E5%BA%8F%E6%89%A7%E8%A1%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E4%B8%AD%EF%BC%8C%E4%BB%BB%E5%8A%A1%E5%92%8C%E5%BE%AE%E4%BB%BB%E5%8A%A1%E6%8C%89%E4%BB%80%E4%B9%88%E9%A1%BA%E5%BA%8F%E6%89%A7%E8%A1%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-event-loop%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-event-loop%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：事件循环中，任务和微任务按什么顺序执行？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-promise-combinators/">Promise.all、allSettled、race 和 any 如何选择？</a></li><li><a href="/questions/js-promise-with-resolvers/">Promise.withResolvers 适合解决什么问题？怎样避免 deferred 泄漏？</a></li><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-this/">普通函数和箭头函数的 this 有什么区别？</a></li></ul></nav></main></div></div>
+<p><strong>Node.js 里的顺序也一样吗？</strong></p>
+<blockquote>
+<p>大体模型一样，同步代码、微任务、任务的先后关系不变。但 Node 多了一个 <code>process.nextTick</code> 队列，还有 libuv 划分的几个阶段，细节上有区别，详见<a href="/questions/node-eventloop/">《Node.js 事件循环和浏览器有什么不同？nextTick 一定先于 Promise 吗？》</a>。</p>
+</blockquote>
+<p><strong><code>setTimeout(fn, 0)</code> 会立刻执行吗？</strong></p>
+<blockquote>
+<p>不会。它的回调是一个任务，至少要等当前任务和所有微任务都执行完才轮得到。而且定时器嵌套层级比较深时，浏览器还会把延迟强制拉到至少 4 毫秒。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide" target="_blank" rel="noreferrer">MDN · Using microtasks in JavaScript<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E4%B8%AD%EF%BC%8C%E4%BB%BB%E5%8A%A1%E5%92%8C%E5%BE%AE%E4%BB%BB%E5%8A%A1%E6%8C%89%E4%BB%80%E4%B9%88%E9%A1%BA%E5%BA%8F%E6%89%A7%E8%A1%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E4%B8%AD%EF%BC%8C%E4%BB%BB%E5%8A%A1%E5%92%8C%E5%BE%AE%E4%BB%BB%E5%8A%A1%E6%8C%89%E4%BB%80%E4%B9%88%E9%A1%BA%E5%BA%8F%E6%89%A7%E8%A1%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-event-loop%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-event-loop%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：事件循环中，任务和微任务按什么顺序执行？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-promise-combinators/">Promise.all、allSettled、race 和 any 如何选择？</a></li><li><a href="/questions/js-promise-with-resolvers/">Promise.withResolvers 适合解决什么问题？怎样避免 deferred 泄漏？</a></li><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-this/">普通函数和箭头函数的 this 有什么区别？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

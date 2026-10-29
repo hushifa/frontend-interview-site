@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="移动端与 PWA面试题：区分布局视口和可视视口，用 VisualViewport…" />
+    <meta name="description" content="移动端与 PWA面试题：键盘弹出时，用户能看到的区域变小了，页面布局却没变。" />
     <title>移动端虚拟键盘出现时怎样避免布局被遮挡？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/mobile-virtual-keyboard/" />
     <meta name="robots" content="index,follow" />
@@ -19,28 +19,25 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="移动端虚拟键盘出现时怎样避免布局被遮挡？ · 前端知库" />
-    <meta property="og:description" content="移动端与 PWA面试题：区分布局视口和可视视口，用 VisualViewport…" />
+    <meta property="og:description" content="移动端与 PWA面试题：键盘弹出时，用户能看到的区域变小了，页面布局却没变。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/mobile-virtual-keyboard/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/mobile-virtual-keyboard/#webpage","url":"https://fe.hushifa.top/questions/mobile-virtual-keyboard/","name":"移动端虚拟键盘出现时怎样避免布局被遮挡？ · 前端知库","description":"移动端与 PWA面试题：区分布局视口和可视视口，用 VisualViewport…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/mobile-virtual-keyboard/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/mobile-virtual-keyboard/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"移动端与 PWA面试题","item":"https://fe.hushifa.top/topics/mobile/"},{"@type":"ListItem","position":3,"name":"移动端虚拟键盘出现时怎样避免布局被遮挡？","item":"https://fe.hushifa.top/questions/mobile-virtual-keyboard/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/mobile-virtual-keyboard/#webpage","url":"https://fe.hushifa.top/questions/mobile-virtual-keyboard/","name":"移动端虚拟键盘出现时怎样避免布局被遮挡？ · 前端知库","description":"移动端与 PWA面试题：键盘弹出时，用户能看到的区域变小了，页面布局却没变。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/mobile-virtual-keyboard/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/mobile-virtual-keyboard/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"移动端与 PWA面试题","item":"https://fe.hushifa.top/topics/mobile/"},{"@type":"ListItem","position":3,"name":"移动端虚拟键盘出现时怎样避免布局被遮挡？","item":"https://fe.hushifa.top/questions/mobile-virtual-keyboard/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/mobile/">移动端与 PWA面试题</a><span aria-hidden="true">/</span><span aria-current="page">移动端虚拟键盘出现时怎样避免布局被遮挡？</span></nav><h1 tabindex="-1">移动端虚拟键盘出现时怎样避免布局被遮挡？</h1><p class="reading-summary">区分布局视口和可视视口，用 VisualViewport、interactive-widget 和 VirtualKeyboard API 适配输入框与底部操作栏，并说明各方案的浏览器支持边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>键盘弹出时，多数移动浏览器默认只缩小可视视口（visual viewport），布局视口不变，所以 <code>position: fixed; bottom: 0</code> 的元素会被键盘挡住。</li>
-<li><code>window.visualViewport</code> 提供可视区域的尺寸和偏移，监听它的 <code>resize</code> 和 <code>scroll</code> 事件可以让底部栏贴在键盘上方，主流移动浏览器都支持。</li>
-<li>viewport meta 的 <code>interactive-widget=resizes-content</code> 让键盘弹出时缩小布局视口，Chrome for Android 和 Firefox for Android 支持，Safari 不支持。</li>
-<li>VirtualKeyboard API（<code>navigator.virtualKeyboard</code>）只在 Chromium 中可用，适合需要精确控制键盘区域的场景。</li>
-<li>输入框聚焦时用 <code>scrollIntoView</code> 确保它在可视区域内，并在真机上测试 iOS 和 Android。</li>
-</ul>
-<h2>两个视口</h2>
-<ul>
-<li><strong>布局视口</strong>：CSS 布局的基准，<code>fixed</code> 定位相对它计算。</li>
-<li><strong>可视视口</strong>：用户当前实际看到的区域，键盘弹出、双指缩放时会变小或移动。</li>
-</ul>
-<p>键盘弹出后可视视口变矮，但布局视口高度不变，固定在布局视口底部的元素就落在了键盘下面。</p>
-<h2>用 VisualViewport 跟随键盘</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/mobile/">移动端与 PWA面试题</a><span aria-hidden="true">/</span><span aria-current="page">移动端虚拟键盘出现时怎样避免布局被遮挡？</span></nav><h1 tabindex="-1">移动端虚拟键盘出现时怎样避免布局被遮挡？</h1><p class="reading-summary">键盘弹出时，用户能看到的区域变小了，页面布局却没变。区分布局视口和可视视口，用 VisualViewport、interactive-widget 和 VirtualKeyboard API 适配输入框与底部操作栏，并说明各方案的浏览器支持边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>手机上点输入框，键盘弹起来，底部的操作栏经常被盖住。原因是多数移动浏览器默认只缩小“用户能看到的区域”，也就是可视视口，而页面布局用的布局视口不变。<code>position: fixed; bottom: 0</code> 是按布局视口算的，所以落到了键盘下面。</p>
+<p>最通用的办法是 <code>window.visualViewport</code>。它能告诉你可视区域的尺寸和偏移，监听它的 <code>resize</code> 和 <code>scroll</code>，就能算出键盘高度，把底部栏挪上来。主流移动浏览器都支持。</p>
+<p>另外两种办法支持范围小一些。viewport meta 里写 <code>interactive-widget=resizes-content</code>，键盘弹出时连布局视口一起缩小，Chrome 和 Firefox 的 Android 版支持，Safari 不支持。VirtualKeyboard API 只在 Chromium 里能用，适合要精确控制键盘区域的场景。</p>
+<p>最后别忘了，输入框聚焦时用 <code>scrollIntoView</code> 保证它能被看到，并且要在 iOS 和 Android 真机上测。</p>
+</blockquote>
+<h2>两个视口有什么区别</h2>
+<p>布局视口是 CSS 布局的基准，<code>fixed</code> 定位就是相对它算的。可视视口是用户当前实际看到的那块区域，键盘弹出、双指缩放时它会变小或者移动。</p>
+<p>键盘弹出以后，可视视口变矮了，布局视口的高度却没变。所以固定在布局视口底部的元素，就跑到了键盘下面。</p>
+<h2>用 VisualViewport 让底部栏跟着键盘</h2>
+<p>下面的代码算出键盘挡住的高度，再把底部栏往上移这么多。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> bar = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;.bottom-bar&#x27;</span>);
 <span class="hljs-keyword">const</span> vv = <span class="hljs-variable language_">window</span>.<span class="hljs-property">visualViewport</span>;
 
@@ -54,13 +51,17 @@
   vv.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;scroll&#x27;</span>, update);
 }
 </code></pre></div>
-<p><code>innerHeight</code> 是布局视口高度，减去可视视口高度和偏移，就是被键盘占据的高度。用 <code>transform</code> 移动比修改 <code>bottom</code> 更不容易引起布局抖动。</p>
-<h2>声明式方案：interactive-widget</h2>
+<p><code>innerHeight</code> 是布局视口的高度，减去可视视口的高度和它的偏移，剩下的就是被键盘占掉的高度。</p>
+<p>为什么用 <code>transform</code> 而不改 <code>bottom</code>？因为 <code>transform</code> 不会引起重新布局，更不容易抖动。</p>
+<h2>能不能让浏览器自己缩小布局</h2>
+<p>可以在 viewport meta 里加 <code>interactive-widget</code>：</p>
 <div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;viewport&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;width=device-width, initial-scale=1, interactive-widget=resizes-content&quot;</span> /&gt;</span>
 </code></pre></div>
+<p>它有三个取值：</p>
 <table><thead><tr><th>值</th><th>键盘弹出时</th></tr></thead><tbody><tr><td><code>resizes-visual</code>（默认）</td><td>只缩小可视视口</td></tr><tr><td><code>resizes-content</code></td><td>布局视口也缩小，<code>fixed</code> 元素和 <code>dvh</code> 自动避开键盘</td></tr><tr><td><code>overlays-content</code></td><td>都不缩小，键盘覆盖在内容上</td></tr></tbody></table>
-<p>不支持的浏览器（如 Safari）忽略这个参数，仍需 VisualViewport 方案兜底。</p>
-<h2>VirtualKeyboard API</h2>
+<p>写了 <code>resizes-content</code>，布局视口跟着变矮，固定元素自然就避开了键盘，不用写 JS。可是 Safari 这类不支持的浏览器会直接忽略它，所以还得用 VisualViewport 方案兜底。</p>
+<h2>VirtualKeyboard API 怎么用</h2>
+<p>这个 API 反过来做：让浏览器完全不管视口，由页面自己给键盘留位置。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">if</span> (<span class="hljs-string">&#x27;virtualKeyboard&#x27;</span> <span class="hljs-keyword">in</span> navigator) {
   navigator.<span class="hljs-property">virtualKeyboard</span>.<span class="hljs-property">overlaysContent</span> = <span class="hljs-literal">true</span>;
 }
@@ -71,23 +72,24 @@
   <span class="hljs-attribute">height</span>: <span class="hljs-number">100</span>dvh;
 }
 </code></pre></div>
-<p>开启 <code>overlaysContent</code> 后浏览器不再调整视口，由页面用 <code>env(keyboard-inset-*)</code> 自己留出键盘空间。这个 API 是实验性的，只在 Chromium 系浏览器的安全上下文中可用。</p>
-<h2>输入框被挡住</h2>
+<p>打开 <code>overlaysContent</code> 以后，浏览器不再调整视口，键盘直接盖在内容上。页面用 <code>env(keyboard-inset-height)</code> 拿到键盘高度，在网格最后一行把空间留出来。这个 API 是实验性的，只在 Chromium 系浏览器的安全上下文里能用。</p>
+<h2>输入框本身被挡住怎么办</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">input.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;focus&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
   <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> input.<span class="hljs-title function_">scrollIntoView</span>({ <span class="hljs-attr">block</span>: <span class="hljs-string">&#x27;center&#x27;</span> }), <span class="hljs-number">300</span>);
 });
 </code></pre></div>
-<p>键盘动画结束后可视视口才稳定，延迟后再滚动更可靠。滚动容器内的输入框还要确认容器本身的高度会随键盘变化。</p>
-<h2>测试要点</h2>
-<ul>
-<li>iOS Safari、Android Chrome 和目标 App 的 WebView 分别测试，WebView 的行为还受原生配置影响。</li>
-<li>测试横屏、外接键盘、第三方输入法（高度不同）以及键盘收起后布局是否恢复。</li>
-</ul>
+<p>为什么要延迟？因为键盘弹出有动画，动画结束可视视口才稳定，这时再滚动更可靠。如果输入框在一个滚动容器里，还要确认容器的高度会随键盘变化，否则滚了也看不到。</p>
+<h2>测试时要注意什么</h2>
+<p>iOS Safari、Android Chrome 和你的 App 里的 WebView 要分别测，WebView 的表现还受原生配置影响。横屏、外接键盘、第三方输入法（高度各不相同）也要测，并且看键盘收起后布局能不能恢复。</p>
 <h2>常见追问</h2>
-<ul>
-<li>为什么 <code>100vh</code> 的页面键盘弹出后还能滚动？<code>vh</code> 不随键盘变化，用 <code>dvh</code> 或配合 <code>interactive-widget</code> 处理。</li>
-<li>安全区域和键盘有什么关系？两者独立，底部栏同时要避开手势条和键盘，见<a href="/questions/mobile-safe-area/">《移动端安全区域怎样避免内容被刘海和底部手势条遮挡？》</a>。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/VisualViewport" target="_blank" rel="noreferrer">MDN · VisualViewport API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E7%A7%BB%E5%8A%A8%E7%AB%AF%E8%99%9A%E6%8B%9F%E9%94%AE%E7%9B%98%E5%87%BA%E7%8E%B0%E6%97%B6%E6%80%8E%E6%A0%B7%E9%81%BF%E5%85%8D%E5%B8%83%E5%B1%80%E8%A2%AB%E9%81%AE%E6%8C%A1%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E8%99%9A%E6%8B%9F%E9%94%AE%E7%9B%98%E5%87%BA%E7%8E%B0%E6%97%B6%E6%80%8E%E6%A0%B7%E9%81%BF%E5%85%8D%E5%B8%83%E5%B1%80%E8%A2%AB%E9%81%AE%E6%8C%A1%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Amobile-virtual-keyboard%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E4%B8%8E+PWA%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fmobile-virtual-keyboard%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：移动端虚拟键盘出现时怎样避免布局被遮挡？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/mobile-pointer-events/">Pointer Events 为什么适合统一鼠标、触摸和触控笔交互？</a></li><li><a href="/questions/mobile-web-share/">Web Share API 使用时要处理哪些降级？</a></li><li><a href="/questions/mobile-safe-area/">移动端安全区域怎样避免内容被刘海和底部手势条遮挡？</a></li><li><a href="/questions/mobile-screen-orientation/">Screen Orientation API 的锁定和解锁有什么限制？</a></li></ul></nav></main></div></div>
+<p><strong>为什么 100vh 的页面，键盘弹出后还能滚动？</strong></p>
+<blockquote>
+<p>因为 <code>vh</code> 不随键盘变化，页面还是原来那么高，可视区域却变小了。可以改用 <code>dvh</code>，或者配合 <code>interactive-widget</code> 处理。</p>
+</blockquote>
+<p><strong>安全区域和键盘有什么关系？</strong></p>
+<blockquote>
+<p>两者互不相干。底部栏既要避开手势条，也要避开键盘，两件事要分别处理，见<a href="/questions/mobile-safe-area/">《移动端安全区域怎样避免内容被刘海和底部手势条遮挡？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/VisualViewport" target="_blank" rel="noreferrer">MDN · VisualViewport API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E7%A7%BB%E5%8A%A8%E7%AB%AF%E8%99%9A%E6%8B%9F%E9%94%AE%E7%9B%98%E5%87%BA%E7%8E%B0%E6%97%B6%E6%80%8E%E6%A0%B7%E9%81%BF%E5%85%8D%E5%B8%83%E5%B1%80%E8%A2%AB%E9%81%AE%E6%8C%A1%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E8%99%9A%E6%8B%9F%E9%94%AE%E7%9B%98%E5%87%BA%E7%8E%B0%E6%97%B6%E6%80%8E%E6%A0%B7%E9%81%BF%E5%85%8D%E5%B8%83%E5%B1%80%E8%A2%AB%E9%81%AE%E6%8C%A1%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Amobile-virtual-keyboard%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E4%B8%8E+PWA%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fmobile-virtual-keyboard%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：移动端虚拟键盘出现时怎样避免布局被遮挡？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/mobile-pointer-events/">Pointer Events 为什么适合统一鼠标、触摸和触控笔交互？</a></li><li><a href="/questions/mobile-web-share/">Web Share API 使用时要处理哪些降级？</a></li><li><a href="/questions/mobile-safe-area/">移动端安全区域怎样避免内容被刘海和底部手势条遮挡？</a></li><li><a href="/questions/mobile-screen-orientation/">Screen Orientation API 的锁定和解锁有什么限制？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

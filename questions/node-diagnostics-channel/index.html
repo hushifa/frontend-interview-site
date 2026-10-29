@@ -27,14 +27,14 @@
   </head>
   <body>
     <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/node/">Node.js面试题</a><span aria-hidden="true">/</span><span aria-current="page">Node.js 的 diagnostics_channel 适合解决什么问题？</span></nav><h1 tabindex="-1">Node.js 的 diagnostics_channel 适合解决什么问题？</h1><p class="reading-summary">diagnostics_channel 是进程内的命名发布订阅通道，库在关键操作处发布诊断事件，APM 和日志工具订阅这些事件，不需要给库打补丁。没有订阅者时发布几乎没有开销；tracingChannel 为一次调用统一提供开始、结束和错误事件。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>库通过 <code>diagnostics_channel.channel(name)</code> 发布事件，观测工具订阅同名通道，双方不需要互相依赖，APM 不必再对库的函数打补丁。</li>
-<li>发布前用 <code>channel.hasSubscribers</code> 判断，没有订阅者时可以跳过构造消息。</li>
-<li>订阅回调同步执行，回调里抛出的错误会触发 <code>uncaughtException</code>，耗时操作会拖慢发布方，订阅者应只做轻量的提取。</li>
-<li><code>tracingChannel</code> 为一次调用提供 <code>start</code>、<code>end</code>、<code>asyncStart</code>、<code>asyncEnd</code>、<code>error</code> 五个事件，自 Node.js 19.9.0、18.19.0 提供，26.8.0 起标为稳定。</li>
-<li>通道只在当前进程内有效，没有历史记录和持久化；订阅之前发布的事件收不到。</li>
-</ul>
-<h2>发布与订阅</h2>
+<blockquote>
+<p>监控工具想知道数据库查询花了多久、缓存有没有命中，以前常见的办法是去改写库里的函数，也就是打补丁。diagnostics_channel 换了个思路：库在关键位置往一个有名字的通道里发布事件，监控工具订阅同名通道，两边不需要互相依赖。它是进程内的发布订阅。</p>
+<p>没人订阅的时候，发布几乎没有开销。发布前还可以用 <code>channel.hasSubscribers</code> 判断一下，没人听就连消息都不用构造。</p>
+<p>如果要统计一次调用的耗时，可以用 <code>tracingChannel</code>，它为一次调用提供 <code>start</code>、<code>end</code>、<code>asyncStart</code>、<code>asyncEnd</code>、<code>error</code> 五个事件。它自 Node.js 19.9.0、18.19.0 提供，26.8.0 起标为稳定。</p>
+<p>要注意，订阅回调是同步执行的，回调里抛错会触发 <code>uncaughtException</code>，回调慢了也会拖慢发布方，所以订阅者只做轻量的提取。另外通道只在当前进程内有效，没有历史记录，订阅之前发布的事件收不到。</p>
+</blockquote>
+<h2>发布和订阅是怎么写的</h2>
+<p>库这边创建一个通道，在缓存未命中时发布事件：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> diagnosticsChannel <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:diagnostics_channel&#x27;</span>;
 
 <span class="hljs-keyword">const</span> cacheMiss = diagnosticsChannel.<span class="hljs-title function_">channel</span>(<span class="hljs-string">&#x27;app.cache.miss&#x27;</span>);
@@ -47,14 +47,17 @@
   <span class="hljs-keyword">return</span> value;
 }
 </code></pre></div>
+<p>观测模块那边订阅同一个名字：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 观测模块</span>
 diagnosticsChannel.<span class="hljs-title function_">subscribe</span>(<span class="hljs-string">&#x27;app.cache.miss&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">{ key }</span>) =&gt;</span> {
   missCounter.<span class="hljs-title function_">add</span>(<span class="hljs-number">1</span>, { <span class="hljs-attr">prefix</span>: key });
 });
 </code></pre></div>
-<p>消息里只放统计需要的字段。示例只发布键的前缀，避免把用户 ID 等高基数的值变成指标标签，也避免敏感数据进入日志。</p>
-<p>Node.js 内置模块也发布诊断事件，例如 <code>http.client.request.start</code>、<code>undici:request:create</code>，OpenTelemetry 等工具通过订阅这些通道采集 HTTP 请求，不需要修改应用代码。可用的通道名和消息结构以对应版本的文档为准。</p>
-<h2>tracingChannel</h2>
+<p>两段代码之间没有任何 <code>import</code> 关系，靠的只是通道名 <code>app.cache.miss</code>。</p>
+<p>你可能注意到，示例只发布了键的前缀，没有发布完整的键。因为完整的键里可能有用户 ID，变成指标标签以后取值太多（这叫高基数），也可能把敏感数据带进日志。消息里只放统计需要的字段。</p>
+<p>Node.js 的内置模块自己也发布诊断事件，例如 <code>http.client.request.start</code>、<code>undici:request:create</code>。OpenTelemetry 等工具就是订阅这些通道来采集 HTTP 请求的，不用改应用代码。可用的通道名和消息结构以对应版本的文档为准。</p>
+<h2>怎样统计一次调用的耗时</h2>
+<p>只有一个事件的话，没法知道调用什么时候开始、什么时候结束。<code>tracingChannel</code> 把一次调用拆成了几个固定的事件：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> queryChannel = diagnosticsChannel.<span class="hljs-title function_">tracingChannel</span>(<span class="hljs-string">&#x27;app.db.query&#x27;</span>);
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">query</span>(<span class="hljs-params">sql</span>) {
@@ -75,16 +78,23 @@ queryChannel.<span class="hljs-title function_">subscribe</span>({
   <span class="hljs-title function_">error</span>(<span class="hljs-params"></span>) {},
 });
 </code></pre></div>
-<p><code>tracePromise</code> 会把同一个 context 对象传给五个事件，订阅者可以在 <code>start</code> 中记录时间，在 <code>asyncEnd</code> 中计算耗时。失败时 context 上会带有 <code>error</code>。同步调用和回调式调用分别使用 <code>traceSync</code>、<code>traceCallback</code>。</p>
-<h2>与日志、指标、追踪的分工</h2>
+<p><code>tracePromise</code> 会把同一个 context 对象传给这五个事件。所以订阅者可以在 <code>start</code> 里往 context 上记一个开始时间，到 <code>asyncEnd</code> 里再读出来算耗时。调用失败时，context 上会带着 <code>error</code>。同步调用和回调式调用，分别用 <code>traceSync</code> 和 <code>traceCallback</code>。</p>
+<h2>它和日志、指标、追踪怎么分工</h2>
 <table><thead><tr><th>机制</th><th>用途</th></tr></thead><tbody><tr><td>diagnostics_channel</td><td>进程内事件入口，连接库和观测工具</td></tr><tr><td>日志</td><td>需要人阅读的事实和错误详情</td></tr><tr><td>指标</td><td>计数、延迟、错误率的聚合和告警</td></tr><tr><td>追踪</td><td>跨服务关联一次请求</td></tr><tr><td>审计记录</td><td>支付、权限变更等必须留存的业务事实</td></tr></tbody></table>
-<p>诊断通道可以没有订阅者，所以审计记录不能依赖它。需要关联请求时，订阅者在回调中通过 AsyncLocalStorage 读取当前请求 ID，见<a href="/questions/node-async-local-storage/">《AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？》</a>。</p>
+<p>诊断通道完全可能没有订阅者，事件发了也就丢了，所以审计记录不能依赖它。需要关联请求时，订阅者在回调里通过 AsyncLocalStorage 读当前请求 ID，见<a href="/questions/node-async-local-storage/">《AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？》</a>。</p>
 <h2>常见追问</h2>
-<ul>
-<li><strong>订阅者怎样避免影响业务请求？</strong> 回调里只提取字段放进有界队列，由后台批量发送；回调内部自己捕获异常。</li>
-<li><strong>测试里要注意什么？</strong> 每个用例结束时 <code>unsubscribe</code>，否则后续用例会重复收到事件。</li>
-<li><strong>浏览器里有这个模块吗？</strong> 没有。同时运行在浏览器和 Node.js 的库应把诊断代码做成可选的。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://nodejs.org/api/diagnostics_channel.html" target="_blank" rel="noreferrer">Node.js · diagnostics_channel<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Node.js+%E7%9A%84+diagnostics_channel+%E9%80%82%E5%90%88%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ANode.js+%E7%9A%84+diagnostics_channel+%E9%80%82%E5%90%88%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anode-diagnostics-channel%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ANode.js%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnode-diagnostics-channel%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Node.js 的 diagnostics_channel 适合解决什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/node-worker-pool/">Node.js 为什么要用 Worker Threads 任务池？</a></li><li><a href="/questions/node-async-local-storage/">AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？</a></li><li><a href="/questions/node-eventloop/">Node.js 事件循环和浏览器有什么不同？nextTick 一定先于 Promise 吗？</a></li><li><a href="/questions/node-bff/">前端工程师编写 Node 服务时需要守住哪些安全边界？</a></li></ul></nav></main></div></div>
+<p><strong>订阅者怎样避免影响业务请求？</strong></p>
+<blockquote>
+<p>回调里只提取字段，放进一个有上限的队列，由后台批量发送；回调内部自己捕获异常，不让错误冒出去。</p>
+</blockquote>
+<p><strong>测试里要注意什么？</strong></p>
+<blockquote>
+<p>每个用例结束时调用 <code>unsubscribe</code>，否则后面的用例会重复收到事件。</p>
+</blockquote>
+<p><strong>浏览器里有这个模块吗？</strong></p>
+<blockquote>
+<p>没有。同时跑在浏览器和 Node.js 里的库，应该把诊断代码做成可选的。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://nodejs.org/api/diagnostics_channel.html" target="_blank" rel="noreferrer">Node.js · diagnostics_channel<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Node.js+%E7%9A%84+diagnostics_channel+%E9%80%82%E5%90%88%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ANode.js+%E7%9A%84+diagnostics_channel+%E9%80%82%E5%90%88%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anode-diagnostics-channel%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ANode.js%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnode-diagnostics-channel%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Node.js 的 diagnostics_channel 适合解决什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/node-worker-pool/">Node.js 为什么要用 Worker Threads 任务池？</a></li><li><a href="/questions/node-async-local-storage/">AsyncLocalStorage 如何在 Node.js 请求链路中传递上下文？</a></li><li><a href="/questions/node-eventloop/">Node.js 事件循环和浏览器有什么不同？nextTick 一定先于 Promise 吗？</a></li><li><a href="/questions/node-bff/">前端工程师编写 Node 服务时需要守住哪些安全边界？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

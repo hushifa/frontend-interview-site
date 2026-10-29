@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="框架与选型面试题：服务端渲染时请求的数据会写进页面 payload，客户端 hydration 时直接复用，不再请求一次。" />
+    <meta name="description" content="框架与选型面试题：服务端渲染时请求到的数据会写进页面 payload，客户端 hydration 时直接复用，不再请求一次。" />
     <title>Nuxt 的 useFetch 和 useAsyncData 怎样避免重复请求？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/framework-nuxt-data/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Nuxt 的 useFetch 和 useAsyncData 怎样避免重复请求？" />
-    <meta property="og:description" content="框架与选型面试题：服务端渲染时请求的数据会写进页面 payload，客户端 hydration 时直接复用，不再请求一次。" />
+    <meta property="og:description" content="框架与选型面试题：服务端渲染时请求到的数据会写进页面 payload，客户端 hydration 时直接复用，不再请求一次。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/framework-nuxt-data/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/framework-nuxt-data/#webpage","url":"https://fe.hushifa.top/questions/framework-nuxt-data/","name":"Nuxt 的 useFetch 和 useAsyncData 怎样避免重复请求？","description":"框架与选型面试题：服务端渲染时请求的数据会写进页面 payload，客户端 hydration 时直接复用，不再请求一次。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/framework-nuxt-data/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/framework-nuxt-data/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"框架与选型面试题","item":"https://fe.hushifa.top/topics/frameworks/"},{"@type":"ListItem","position":3,"name":"Nuxt 的 useFetch 和 useAsyncData 怎样避免重复请求？","item":"https://fe.hushifa.top/questions/framework-nuxt-data/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/framework-nuxt-data/#webpage","url":"https://fe.hushifa.top/questions/framework-nuxt-data/","name":"Nuxt 的 useFetch 和 useAsyncData 怎样避免重复请求？","description":"框架与选型面试题：服务端渲染时请求到的数据会写进页面 payload，客户端 hydration 时直接复用，不再请求一次。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/framework-nuxt-data/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/framework-nuxt-data/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"框架与选型面试题","item":"https://fe.hushifa.top/topics/frameworks/"},{"@type":"ListItem","position":3,"name":"Nuxt 的 useFetch 和 useAsyncData 怎样避免重复请求？","item":"https://fe.hushifa.top/questions/framework-nuxt-data/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/frameworks/">框架与选型面试题</a><span aria-hidden="true">/</span><span aria-current="page">Nuxt 的 useFetch 和 useAsyncData 怎样避免重复请求？</span></nav><h1 tabindex="-1">Nuxt 的 useFetch 和 useAsyncData 怎样避免重复请求？</h1><p class="reading-summary">服务端渲染时请求的数据会写进页面 payload，客户端 hydration 时直接复用，不再请求一次。相同 key 的调用共享同一份 data、error 和 status。Nuxt 4 中 data 默认是 shallowRef、初始值是 undefined，共享 key 的调用必须使用一致的 handler、transform 等选项。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>首次访问页面时，<code>useAsyncData</code> / <code>useFetch</code> 在服务端执行，结果序列化进 payload；客户端 hydration 时读取 payload，不重复请求。</li>
-<li>之后在客户端导航到该页面，请求在浏览器中执行。</li>
-<li>数据按 key 存储：<code>useFetch</code> 根据 URL 和选项自动生成 key，<code>useAsyncData</code> 推荐显式传 key。相同 key 的调用共享 <code>data</code>、<code>error</code>、<code>status</code>。</li>
-<li>Nuxt 4 的默认值：<code>data</code> 和 <code>error</code> 初始为 <code>undefined</code>；<code>deep</code> 默认 <code>false</code>，即 <code>data</code> 是 shallowRef，修改内部属性不会触发更新。</li>
-<li>共享同一 key 的调用，<code>handler</code>、<code>deep</code>、<code>transform</code>、<code>pick</code>、<code>getCachedData</code>、<code>default</code>、<code>middleware</code> 必须一致，否则开发环境会警告。</li>
-</ul>
-<h2>基本用法</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/frameworks/">框架与选型面试题</a><span aria-hidden="true">/</span><span aria-current="page">Nuxt 的 useFetch 和 useAsyncData 怎样避免重复请求？</span></nav><h1 tabindex="-1">Nuxt 的 useFetch 和 useAsyncData 怎样避免重复请求？</h1><p class="reading-summary">服务端渲染时请求到的数据会写进页面 payload，客户端 hydration 时直接复用，不再请求一次。相同 key 的调用共享同一份 data、error 和 status。Nuxt 4 中 data 默认是 shallowRef、初始值是 undefined，共享 key 的调用要使用一致的 handler、transform 等选项。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>用户第一次打开页面时，<code>useFetch</code> 或 <code>useAsyncData</code> 在服务端执行，拿到的数据会被序列化，放进页面里一起发给浏览器，这份数据叫 payload。客户端 hydration 时直接读 payload，所以不会再请求一遍。之后在客户端导航到这个页面，请求才在浏览器里发。</p>
+<p>数据是按 key 存的。<code>useFetch</code> 会根据 URL 和选项自动生成 key，<code>useAsyncData</code> 建议自己传 key。相同 key 的调用共享同一份 <code>data</code>、<code>error</code> 和 <code>status</code>。</p>
+<p>Nuxt 4 有两个默认值要记住：<code>data</code> 和 <code>error</code> 初始是 <code>undefined</code>；<code>deep</code> 默认是 <code>false</code>，也就是 <code>data</code> 是 shallowRef，改它内部的属性不会触发更新。</p>
+<p>另外，共享同一个 key 的几处调用，<code>handler</code>、<code>deep</code>、<code>transform</code>、<code>pick</code>、<code>getCachedData</code>、<code>default</code>、<code>middleware</code> 这些选项要保持一致，不一致开发环境会警告。</p>
+</blockquote>
+<h2>先看基本用法</h2>
+<p>下面是一个文章详情页，根据路由参数请求文章。</p>
 <div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;script setup lang=&quot;ts&quot;&gt;
 const route = useRoute();
 
@@ -53,32 +53,38 @@ const { data: post, status, error, refresh } = await useFetch(
   &lt;/article&gt;
 &lt;/template&gt;
 </code></pre></div>
-<ul>
-<li>URL 写成 getter，路由参数变化时自动重新请求。</li>
-<li><code>pick</code> 只保留需要的字段，减少 payload 体积。</li>
-</ul>
-<h2>status 的取值</h2>
+<p>URL 写成了一个函数，而不是直接拼好的字符串。这样路由参数变了，<code>useFetch</code> 能感知到并自动重新请求。<code>pick</code> 只保留需要的三个字段，因为 payload 会跟着 HTML 发给浏览器，字段越少页面越小。</p>
+<h2>为什么不会重复请求</h2>
+<p>如果在组件里直接调用请求函数，服务端渲染时执行一次，客户端 hydration 时组件再执行一次，接口就被打了两遍。<code>useFetch</code> 的做法是：服务端请求完，把结果按 key 存进 payload；客户端执行到同一个调用时，先按 key 去 payload 里找，找到了就直接用。</p>
+<p>所以 key 很重要。两处调用 key 一样，就会拿到同一份数据；这也是为什么共享 key 的调用选项必须一致，否则两处对“这份数据长什么样”的理解就不一样了。</p>
+<h2>status 有哪些取值</h2>
 <table><thead><tr><th>值</th><th>含义</th></tr></thead><tbody><tr><td><code>idle</code></td><td>还没执行，例如设置了 <code>immediate: false</code>，或 <code>server: false</code> 时的服务端渲染阶段</td></tr><tr><td><code>pending</code></td><td>请求中</td></tr><tr><td><code>success</code></td><td>成功</td></tr><tr><td><code>error</code></td><td>失败</td></tr></tbody></table>
-<p>使用 <code>immediate: false</code> 时，模板要处理 <code>idle</code> 状态，否则页面会显示空白。</p>
+<p>用了 <code>immediate: false</code> 时，请求不会马上发，状态停在 <code>idle</code>。模板如果只处理了 <code>pending</code>、<code>error</code> 和有数据三种情况，这时就会什么都不显示，所以要记得处理 <code>idle</code>。</p>
 <h2>常用选项</h2>
 <ul>
 <li><code>lazy: true</code>：不阻塞导航，先渲染页面再加载数据，需要自己显示加载状态。</li>
 <li><code>server: false</code>：只在客户端请求，适合依赖浏览器信息或不需要 SEO 的数据。</li>
 <li><code>watch: [source]</code>：额外指定变化时重新请求的来源。</li>
-<li><code>dedupe</code>：已有请求进行中又被触发时的策略，默认 <code>&#x27;cancel&#x27;</code> 取消旧请求，<code>&#x27;defer&#x27;</code> 则复用进行中的请求。</li>
+<li><code>dedupe</code>：已经有请求在进行，又被触发一次时怎么办。默认 <code>&#x27;cancel&#x27;</code> 取消旧请求，<code>&#x27;defer&#x27;</code> 则复用进行中的请求。</li>
 <li><code>getCachedData(key, nuxtApp)</code>：自定义缓存读取，返回非空值时跳过请求。</li>
 </ul>
-<h2>在别处读取同一份数据</h2>
+<h2>在别的组件里读同一份数据</h2>
+<p>既然数据按 key 存，别处也可以按 key 拿：</p>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">const</span> { data } = <span class="hljs-title function_">useNuxtData</span>(<span class="hljs-string">&#x27;post-42&#x27;</span>);
 </code></pre></div>
-<p>例如列表页已经加载过文章，详情页可以先显示缓存，再刷新。</p>
-<h2>权限边界</h2>
-<p>服务端请求时，<code>useFetch</code> 调用内部 API 会转发部分请求头，但调用第三方接口不会自动带 cookie。<code>/server/api</code> 中的接口仍需自己校验身份，payload 中的数据会被发送到浏览器，不要放入敏感字段。</p>
+<p>比如列表页已经加载过这篇文章，详情页可以先把缓存显示出来，再去刷新。</p>
+<h2>权限边界要注意什么</h2>
+<p>服务端请求时，<code>useFetch</code> 调用自己的内部 API 会转发一部分请求头，但调用第三方接口不会自动带上 cookie。<code>/server/api</code> 里的接口仍然要自己校验身份，不能因为是“服务端调用”就放松。</p>
+<p>还有一点，payload 里的数据最终会发到浏览器，任何人打开页面源码都能看到。所以不要把敏感字段放进去，这也是要用 <code>pick</code> 精简字段的另一个原因。</p>
 <h2>常见追问</h2>
-<ul>
-<li><code>useFetch</code> 和 <code>$fetch</code> 的区别？<code>$fetch</code> 只是请求函数，在组件中直接调用会在服务端和客户端各请求一次；<code>useFetch</code> 负责 payload 复用和状态管理。事件处理器中提交数据用 <code>$fetch</code>。</li>
-<li>为什么修改 <code>data.value.title</code> 界面没变？Nuxt 4 默认 shallowRef，整体替换 <code>data.value = {...}</code>，或设置 <code>deep: true</code>。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://nuxt.com/docs/4.x/api/composables/use-async-data" target="_blank" rel="noreferrer">Nuxt · useAsyncData<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Nuxt+%E7%9A%84+useFetch+%E5%92%8C+useAsyncData+%E6%80%8E%E6%A0%B7%E9%81%BF%E5%85%8D%E9%87%8D%E5%A4%8D%E8%AF%B7%E6%B1%82%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ANuxt+%E7%9A%84+useFetch+%E5%92%8C+useAsyncData+%E6%80%8E%E6%A0%B7%E9%81%BF%E5%85%8D%E9%87%8D%E5%A4%8D%E8%AF%B7%E6%B1%82%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aframework-nuxt-data%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%86%E6%9E%B6%E4%B8%8E%E9%80%89%E5%9E%8B%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fframework-nuxt-data%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Nuxt 的 useFetch 和 useAsyncData 怎样避免重复请求？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/frameworks-sveltekit/">SvelteKit 的路由、load 和服务端边界怎样协作？</a></li><li><a href="/questions/frameworks-angular-hydration/">Angular Hydration 解决什么问题？</a></li><li><a href="/questions/framework-angular/">Angular Signals 的依赖追踪与 computed 有什么特点？</a></li><li><a href="/questions/framework-svelte/">Svelte 的编译思路与 Runes 模型如何理解？</a></li></ul></nav></main></div></div>
+<p><strong><code>useFetch</code> 和 <code>$fetch</code> 有什么区别？</strong></p>
+<blockquote>
+<p><code>$fetch</code> 只是一个请求函数。在组件里直接调用，服务端和客户端会各请求一次。<code>useFetch</code> 在它外面加了 payload 复用和状态管理。所以渲染要用的数据用 <code>useFetch</code>，点击按钮提交数据这种事件处理里用 <code>$fetch</code>。</p>
+</blockquote>
+<p><strong>为什么改了 <code>data.value.title</code>，界面没变？</strong></p>
+<blockquote>
+<p>因为 Nuxt 4 里 <code>data</code> 默认是 shallowRef，只有整体替换才会触发更新。要么写 <code>data.value = { ...data.value, title }</code>，要么在选项里设置 <code>deep: true</code>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://nuxt.com/docs/4.x/api/composables/use-async-data" target="_blank" rel="noreferrer">Nuxt · useAsyncData<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Nuxt+%E7%9A%84+useFetch+%E5%92%8C+useAsyncData+%E6%80%8E%E6%A0%B7%E9%81%BF%E5%85%8D%E9%87%8D%E5%A4%8D%E8%AF%B7%E6%B1%82%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ANuxt+%E7%9A%84+useFetch+%E5%92%8C+useAsyncData+%E6%80%8E%E6%A0%B7%E9%81%BF%E5%85%8D%E9%87%8D%E5%A4%8D%E8%AF%B7%E6%B1%82%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aframework-nuxt-data%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%86%E6%9E%B6%E4%B8%8E%E9%80%89%E5%9E%8B%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fframework-nuxt-data%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Nuxt 的 useFetch 和 useAsyncData 怎样避免重复请求？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/frameworks-sveltekit/">SvelteKit 的路由、load 和服务端边界怎样协作？</a></li><li><a href="/questions/frameworks-angular-hydration/">Angular Hydration 解决什么问题？</a></li><li><a href="/questions/framework-angular/">Angular Signals 的依赖追踪与 computed 有什么特点？</a></li><li><a href="/questions/framework-svelte/">Svelte 的编译思路与 Runes 模型如何理解？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

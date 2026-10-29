@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="性能优化面试题：性能预算是&quot;在指定场景下某项指标不能超过的上限&quot;，分为资源预算（JS、CSS、图片体积）、运行时预算（长任务、主线程阻塞）和体验预算（LCP…" />
+    <meta name="description" content="性能优化面试题：性能预算就是“在指定场景下某项指标不能超过的上限”，分资源预算（JS、CSS、图片体积）、运行时预算（长任务、主线程阻塞）和体验预算（LCP…" />
     <title>前端性能预算应该怎样制定和落地？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/performance-budget/" />
     <meta name="robots" content="index,follow" />
@@ -19,30 +19,27 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="前端性能预算应该怎样制定和落地？ · 前端知库" />
-    <meta property="og:description" content="性能优化面试题：性能预算是&quot;在指定场景下某项指标不能超过的上限&quot;，分为资源预算（JS、CSS、图片体积）、运行时预算（长任务、主线程阻塞）和体验预算（LCP…" />
+    <meta property="og:description" content="性能优化面试题：性能预算就是“在指定场景下某项指标不能超过的上限”，分资源预算（JS、CSS、图片体积）、运行时预算（长任务、主线程阻塞）和体验预算（LCP…" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/performance-budget/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/performance-budget/#webpage","url":"https://fe.hushifa.top/questions/performance-budget/","name":"前端性能预算应该怎样制定和落地？ · 前端知库","description":"性能优化面试题：性能预算是\"在指定场景下某项指标不能超过的上限\"，分为资源预算（JS、CSS、图片体积）、运行时预算（长任务、主线程阻塞）和体验预算（LCP…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/performance-budget/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/performance-budget/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"前端性能预算应该怎样制定和落地？","item":"https://fe.hushifa.top/questions/performance-budget/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/performance-budget/#webpage","url":"https://fe.hushifa.top/questions/performance-budget/","name":"前端性能预算应该怎样制定和落地？ · 前端知库","description":"性能优化面试题：性能预算就是“在指定场景下某项指标不能超过的上限”，分资源预算（JS、CSS、图片体积）、运行时预算（长任务、主线程阻塞）和体验预算（LCP…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/performance-budget/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/performance-budget/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"前端性能预算应该怎样制定和落地？","item":"https://fe.hushifa.top/questions/performance-budget/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">前端性能预算应该怎样制定和落地？</span></nav><h1 tabindex="-1">前端性能预算应该怎样制定和落地？</h1><p class="reading-summary">性能预算是&quot;在指定场景下某项指标不能超过的上限&quot;，分为资源预算（JS、CSS、图片体积）、运行时预算（长任务、主线程阻塞）和体验预算（LCP、INP、CLS）。数值来自现有基线和目标，在 CI 中用构建产物和实验室测试检查，线上用 RUM 跟踪趋势。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>预算必须带条件：哪个页面、什么设备和网络、冷缓存还是热缓存、测哪个指标。</li>
-<li>三类预算：资源（首屏 JS 压缩后体积、图片总量）、运行时（Total Blocking Time、最长任务）、体验（LCP、INP、CLS 的 75 分位）。</li>
-<li>数值从当前基线出发，结合 Core Web Vitals 的&quot;良好&quot;阈值（LCP ≤ 2.5s、INP ≤ 200ms、CLS ≤ 0.1）设定，不照搬别人的数字。</li>
-<li>设两条线：超过警告线在 PR 中提示，超过阻断线禁止合并，例外要写明原因和复查时间。</li>
-<li>体积预算不等于体验：把关键代码改成懒加载，体积达标了，首次交互可能更慢。</li>
-</ul>
-<h2>预算示例</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">前端性能预算应该怎样制定和落地？</span></nav><h1 tabindex="-1">前端性能预算应该怎样制定和落地？</h1><p class="reading-summary">性能预算就是“在指定场景下某项指标不能超过的上限”，分资源预算（JS、CSS、图片体积）、运行时预算（长任务、主线程阻塞）和体验预算（LCP、INP、CLS）。数值从现有基线和目标出发，在 CI 里用构建产物和实验室测试检查，线上用 RUM 跟踪趋势。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>性能预算就是给性能定一条不能超的线，比如首页首屏 JS 压缩后不超过 170KB。关键是预算必须带条件：哪个页面、什么设备和网络、冷缓存还是热缓存、测哪个指标，不带条件的数字没法比较。</p>
+<p>预算一般分三类。资源预算管体积，比如首屏 JS、图片总量；运行时预算管主线程，比如总阻塞时间、最长任务；体验预算管用户感受，比如 LCP、INP、CLS 的 75 分位。数值从项目现在的基线出发，结合 Core Web Vitals 的“良好”阈值来定，不照搬别人的数字。</p>
+<p>落地时放进 CI，设两条线：超过警告线在 PR 里提示，超过阻断线禁止合并，例外要写明原因和复查时间。上线以后再用 RUM 跟踪真实用户的趋势。</p>
+<p>要注意，体积达标不等于体验好。比如把关键代码改成懒加载，体积是降下来了，用户第一次用这个功能时反而更慢。</p>
+</blockquote>
+<h2>预算长什么样</h2>
+<p>下面是几个示例，每一条都写明了页面和条件：</p>
 <table><thead><tr><th>页面</th><th>条件</th><th>预算</th></tr></thead><tbody><tr><td>首页</td><td>移动端、4G、冷缓存</td><td>首屏 JS（gzip）≤ 170 KB，LCP p75 ≤ 2.5s，CLS p75 ≤ 0.1</td></tr><tr><td>题目详情</td><td>直接打开深链接</td><td>首屏 JS ≤ 150 KB，正文出现 ≤ 2s</td></tr><tr><td>搜索</td><td>真实数据量，连续输入</td><td>单次输入处理 ≤ 50ms，INP p75 ≤ 200ms</td></tr></tbody></table>
-<p>数值只是示例，按项目基线制定。</p>
-<h2>在 CI 中检查</h2>
-<ul>
-<li>资源预算：读取构建产物的清单（如 Vite 的 manifest），计算每个入口静态依赖的分块去重后的压缩体积。不要硬编码带哈希的文件名。动态导入的分块单独计入&quot;首次使用该功能&quot;的预算。</li>
-<li>实验室预算：用 Lighthouse CI 等工具在固定条件下运行多次取中位数，检查 LCP、TBT、CLS。</li>
-<li>交互预算：用 Playwright 等脚本执行关键交互，结合 Performance API 测量处理时间。</li>
-</ul>
+<p>这些数字只是示例，要按自己项目的基线来定。Core Web Vitals 的良好阈值是 LCP ≤ 2.5s、INP ≤ 200ms、CLS ≤ 0.1，可以作为体验预算的参考目标。</p>
+<h2>在 CI 里怎么检查</h2>
+<p>资源预算的检查方式，是读取构建产物的清单，比如 Vite 的 manifest，算出每个入口静态依赖的所有分块，去重以后加起来的压缩体积。为什么不能直接写文件名？因为文件名带内容哈希，每次构建都会变。动态导入的分块要单独计入“首次使用这个功能”的预算，不能混进首屏。</p>
+<p>实验室预算可以用 Lighthouse CI 这类工具，在固定条件下跑多次取中位数，检查 LCP、TBT、CLS。下面是一个示意配置：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// lighthouserc.js（示意）</span>
 <span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
   <span class="hljs-attr">ci</span>: {
@@ -57,21 +54,27 @@
   },
 };
 </code></pre></div>
-<p>实验室测不到真实 INP，只能用 TBT 和脚本化交互作为替代。</p>
-<h2>超出预算时</h2>
+<p><code>error</code> 对应阻断线，超了就失败；<code>warn</code> 对应警告线，只提示。<code>numberOfRuns: 3</code> 是为了减少单次结果的波动。</p>
+<p>为什么这里没有 INP？因为实验室工具不会去点页面，测不到真实 INP，只能用 TBT 代替。要测交互，可以用 Playwright 这类脚本执行关键操作，再用 Performance API 测处理时间。</p>
+<h2>超出预算了怎么办</h2>
+<p>超了不代表一定要砍功能，按下面的顺序处理：</p>
 <ol>
-<li>用构建分析工具找出增长来源：新依赖、重复打包的模块、意外的静态导入、polyfill、图片字体。</li>
-<li>判断是否值得：新功能带来的价值能否抵消代价，有没有更轻的替代库。</li>
-<li>处理：按需加载低频功能、替换依赖、压缩资源、移除重复模块。</li>
-<li>确有必要时调整预算，并记录原因。</li>
+<li>用构建分析工具找出增长来自哪里：新依赖、重复打包的模块、意外的静态导入、polyfill、图片和字体。</li>
+<li>判断值不值：新功能带来的价值能不能抵消代价，有没有更轻的替代库。</li>
+<li>处理：低频功能按需加载、换依赖、压缩资源、去掉重复模块。</li>
+<li>确实有必要时调整预算，并把原因记下来。</li>
 </ol>
-<h2>线上跟踪</h2>
-<p>CI 只能防止明显退化，真实用户的体验还要看 RUM：按版本对比 75 分位，关注连续多个版本的小幅上涨，见<a href="/questions/perf-rum/">《真实用户监测与实验室性能测试为什么要结合？》</a>。</p>
+<h2>上线以后怎么跟踪</h2>
+<p>CI 只能挡住明显的退化，真实用户的体验还要看 RUM。按版本对比 75 分位，特别要留意连续好几个版本的小幅上涨，每次都不超线，累计起来就很可观了，见<a href="/questions/perf-rum/">《真实用户监测与实验室性能测试为什么要结合？》</a>。</p>
 <h2>常见追问</h2>
-<ul>
-<li>第三方脚本算不算？算。它们同样占用带宽和主线程，应单独设预算并定期复查。</li>
-<li>压缩用 gzip 还是 Brotli 算？和线上实际使用的一致，并固定压缩参数，否则前后不可比。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/Performance_budgets" target="_blank" rel="noreferrer">MDN · Performance budgets<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E9%A2%84%E7%AE%97%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%88%B6%E5%AE%9A%E5%92%8C%E8%90%BD%E5%9C%B0%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E9%A2%84%E7%AE%97%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%88%B6%E5%AE%9A%E5%92%8C%E8%90%BD%E5%9C%B0%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aperformance-budget%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fperformance-budget%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端性能预算应该怎样制定和落地？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/engineering-vitals/">LCP、INP、CLS 分别衡量什么？</a></li><li><a href="/questions/perf-longtasks/">什么是长任务，为什么会影响交互响应？怎样观测和拆分？</a></li><li><a href="/questions/perf-lazy-images/">懒加载为什么有时反而让首屏和首次交互变慢？</a></li><li><a href="/questions/perf-virtual-list/">虚拟列表通过什么方式减少渲染成本？</a></li></ul></nav></main></div></div>
+<p><strong>第三方脚本算不算进预算？</strong></p>
+<blockquote>
+<p>算。它们一样占带宽和主线程，应该单独设预算，并且定期复查。</p>
+</blockquote>
+<p><strong>压缩体积用 gzip 还是 Brotli 算？</strong></p>
+<blockquote>
+<p>和线上实际用的一致，并且固定压缩参数。否则前后两次的数字没法比较。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/Performance_budgets" target="_blank" rel="noreferrer">MDN · Performance budgets<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E9%A2%84%E7%AE%97%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%88%B6%E5%AE%9A%E5%92%8C%E8%90%BD%E5%9C%B0%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E9%A2%84%E7%AE%97%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%88%B6%E5%AE%9A%E5%92%8C%E8%90%BD%E5%9C%B0%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aperformance-budget%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fperformance-budget%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端性能预算应该怎样制定和落地？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/engineering-vitals/">LCP、INP、CLS 分别衡量什么？</a></li><li><a href="/questions/perf-longtasks/">什么是长任务，为什么会影响交互响应？怎样观测和拆分？</a></li><li><a href="/questions/perf-lazy-images/">懒加载为什么有时反而让首屏和首次交互变慢？</a></li><li><a href="/questions/perf-virtual-list/">虚拟列表通过什么方式减少渲染成本？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

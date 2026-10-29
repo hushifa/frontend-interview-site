@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="React面试题：Effect 用来让组件与外部系统保持同步。依赖数组列出 Effect 读取的所有响应式值，清理函数撤销上一轮同步。" />
+    <meta name="description" content="React面试题：Effect 用来让组件和外部系统（订阅、定时器、网络连接）保持同步。依赖数组要写全 Effect 里用到的值，清理函数负责撤掉上一轮的同步。" />
     <title>useEffect 的依赖数组和清理函数应该怎么写？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/react-effect/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="useEffect 的依赖数组和清理函数应该怎么写？" />
-    <meta property="og:description" content="React面试题：Effect 用来让组件与外部系统保持同步。依赖数组列出 Effect 读取的所有响应式值，清理函数撤销上一轮同步。" />
+    <meta property="og:description" content="React面试题：Effect 用来让组件和外部系统（订阅、定时器、网络连接）保持同步。依赖数组要写全 Effect 里用到的值，清理函数负责撤掉上一轮的同步。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/react-effect/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-effect/#webpage","url":"https://fe.hushifa.top/questions/react-effect/","name":"useEffect 的依赖数组和清理函数应该怎么写？","description":"React面试题：Effect 用来让组件与外部系统保持同步。依赖数组列出 Effect 读取的所有响应式值，清理函数撤销上一轮同步。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-effect/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-effect/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"useEffect 的依赖数组和清理函数应该怎么写？","item":"https://fe.hushifa.top/questions/react-effect/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-effect/#webpage","url":"https://fe.hushifa.top/questions/react-effect/","name":"useEffect 的依赖数组和清理函数应该怎么写？","description":"React面试题：Effect 用来让组件和外部系统（订阅、定时器、网络连接）保持同步。依赖数组要写全 Effect 里用到的值，清理函数负责撤掉上一轮的同步。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-effect/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-effect/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"useEffect 的依赖数组和清理函数应该怎么写？","item":"https://fe.hushifa.top/questions/react-effect/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">useEffect 的依赖数组和清理函数应该怎么写？</span></nav><h1 tabindex="-1">useEffect 的依赖数组和清理函数应该怎么写？</h1><p class="reading-summary">Effect 用来让组件与外部系统保持同步。依赖数组列出 Effect 读取的所有响应式值，清理函数撤销上一轮同步。由渲染计算得出的值和由用户操作触发的逻辑不应放进 Effect。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>Effect 用于和外部系统同步，例如订阅、计时器、网络连接、非 React 组件。</li>
-<li>依赖数组必须包含 Effect 内读取的所有 props、state 和组件内定义的值，由 <code>eslint-plugin-react-hooks</code> 检查。</li>
-<li>依赖变化时，React 先运行上一轮的清理函数，再用新值运行 Effect；卸载时也会运行清理。</li>
-<li>开发环境的严格模式会额外执行一次&quot;挂载 → 清理 → 挂载&quot;，用来暴露没写清理的 Effect。</li>
-<li>能在渲染时算出的值直接计算，用户点击触发的逻辑写在事件处理器里，都不需要 Effect。</li>
-</ul>
-<h2>一个完整的同步</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">useEffect 的依赖数组和清理函数应该怎么写？</span></nav><h1 tabindex="-1">useEffect 的依赖数组和清理函数应该怎么写？</h1><p class="reading-summary">Effect 用来让组件和外部系统（订阅、定时器、网络连接）保持同步。依赖数组要写全 Effect 里用到的值，清理函数负责撤掉上一轮的同步。能在渲染时算出来的值、由用户点击触发的逻辑，都不该放进 Effect。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>组件显示出来以后，有时要跟 React 之外的东西对接，比如连上聊天服务器、开一个定时器、订阅窗口事件。<code>useEffect</code> 就是用来做这种同步的。</p>
+<p>依赖数组要写上 Effect 里读到的所有 props、state 和组件内定义的值。它的意思是“这些值变了，就要重新同步”，而不是“我想在什么时候执行”。值一变，React 先运行上一轮返回的清理函数，再用新值执行 Effect；组件卸载时也会运行清理。</p>
+<p>这样写的好处是 Effect 永远跟最新的 props 对得上，比如切换房间就自动断开旧房间、连上新房间。<code>eslint-plugin-react-hooks</code> 会帮你检查依赖写没写全。</p>
+<p>要注意两点。开发环境的严格模式会故意多跑一次“挂载 → 清理 → 挂载”，用来暴露没写清理的 Effect。另外，能在渲染时直接算出来的值，和用户点击触发的逻辑，都不需要 Effect。</p>
+</blockquote>
+<h2>先看一个聊天室</h2>
+<p>下面的组件要连到某个房间。连接是 React 之外的东西，所以放在 Effect 里，并返回一个断开连接的清理函数。</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { useEffect, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">ChatRoom</span>(<span class="hljs-params">{ roomId, serverUrl }</span>) {
@@ -50,16 +50,13 @@
   <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">MessageList</span> <span class="hljs-attr">items</span>=<span class="hljs-string">{messages}</span> /&gt;</span></span>;
 }
 </code></pre></div>
-<p>切换 <code>roomId</code> 时，React 先断开旧房间，再连接新房间。依赖数组描述的是&quot;哪些值变了需要重新同步&quot;，不是&quot;想在什么时候执行&quot;。</p>
-<h2>三种依赖写法</h2>
-<table><thead><tr><th>写法</th><th>执行时机</th></tr></thead><tbody><tr><td>不传数组</td><td>每次提交后都执行</td></tr><tr><td><code>[]</code></td><td>只在挂载后执行，卸载时清理</td></tr><tr><td><code>[a, b]</code></td><td>挂载后执行，之后 <code>a</code> 或 <code>b</code> 变化（<code>Object.is</code> 比较）时重新执行</td></tr></tbody></table>
-<p>不要为了&quot;少执行&quot;删掉依赖。Effect 用到的值没写进数组，它就会读到旧渲染里的值。依赖太多时，应改代码结构：</p>
-<ul>
-<li>只在 Effect 里用的对象或函数，挪到 Effect 内部创建。</li>
-<li>基于前值更新状态，用函数式更新 <code>setX(x =&gt; ...)</code>，就不必依赖 <code>x</code>。</li>
-<li>只想读最新值、不想因它重连的逻辑，提取成 <code>useEffectEvent</code>（React 19.2 起稳定）。</li>
-</ul>
-<h2>请求数据时处理竞态</h2>
+<p>用户从房间 A 切到房间 B，<code>roomId</code> 变了。React 先调用上一轮的清理函数，断开 A；再用新的 <code>roomId</code> 执行 Effect，连上 B。整个过程你不用写“如果房间变了就先断开”，依赖数组和清理函数已经把这件事表达清楚了。</p>
+<h2>依赖数组的三种写法</h2>
+<p>不传数组，Effect 在每次提交后都执行。传 <code>[]</code>，只在挂载后执行一次，卸载时清理。传 <code>[a, b]</code>，挂载后执行，之后 <code>a</code> 或 <code>b</code> 变了才重新执行，比较用的是 <code>Object.is</code>。</p>
+<p>很多人为了让 Effect “少执行几次”，把依赖删掉。可是 Effect 用到的值没写进数组，它就会一直读旧渲染里的那个值，这就是过期闭包，详见<a href="/questions/react-stale-closure/">《React 中的过期闭包为什么会读到旧状态？》</a>。</p>
+<p>依赖太多时，应该改代码结构，而不是删依赖。只在 Effect 里用的对象或函数，挪到 Effect 内部去创建，它就不再是依赖。要根据旧值更新状态，用函数式更新 <code>setX(x =&gt; ...)</code>，就不用依赖 <code>x</code>。只想读最新值、不想因它重新连接的逻辑，提取成 <code>useEffectEvent</code>，它在 React 19.2 起成为稳定 API。</p>
+<h2>请求数据时，旧请求可能覆盖新结果</h2>
+<p>用户快速切换 <code>id</code>，先发的请求可能后回来，把新数据覆盖掉。这种情况叫竞态。用清理函数取消旧请求就能避免：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
   <span class="hljs-keyword">const</span> controller = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AbortController</span>();
   <span class="hljs-title function_">fetch</span>(<span class="hljs-string">`/api/users/<span class="hljs-subst">${id}</span>`</span>, { <span class="hljs-attr">signal</span>: controller.<span class="hljs-property">signal</span> })
@@ -71,20 +68,23 @@
   <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> controller.<span class="hljs-title function_">abort</span>();
 }, [id]);
 </code></pre></div>
-<p>快速切换 <code>id</code> 时，旧请求在清理中被取消，不会覆盖新结果。实际项目更推荐用框架的数据加载或 TanStack Query 这类库，它们处理了缓存和去重。</p>
-<h2>不需要 Effect 的情况</h2>
-<ul>
-<li>由 props 或 state 推导的值：在渲染中直接计算，开销大时用 <code>useMemo</code>。</li>
-<li>提交表单、点击购买：写在事件处理器里，因为它们由具体操作触发，不是&quot;显示这个组件就要做&quot;。</li>
-<li>props 变化时重置状态：给组件换 <code>key</code>，而不是在 Effect 里 <code>setState</code>。</li>
-</ul>
-<h2>执行时机</h2>
-<p>Effect 在提交之后执行。由用户点击等离散事件触发的更新，React 可能在浏览器绘制前就同步执行 Effect；其他情况通常在绘制后执行。需要在绘制前测量布局、避免闪烁时，用 <code>useLayoutEffect</code>。</p>
+<p><code>id</code> 变化时，上一轮的清理函数调用 <code>abort()</code>，旧请求被取消，自然就不会再 <code>setUser</code>。不过实际项目更推荐用框架自带的数据加载，或者 TanStack Query 这类库，它们还处理了缓存和去重。</p>
+<h2>哪些事不该放进 Effect</h2>
+<p>由 props 或 state 推导出来的值，直接在渲染里算就行。放进 Effect 再 <code>setState</code>，会多渲染一次，还容易不同步。计算开销大时用 <code>useMemo</code>。</p>
+<p>提交表单、点击购买这类操作，写在事件处理器里。它们是用户某个具体动作触发的，不是“这个组件一显示就要做”的事。</p>
+<p>props 变了想重置状态，给组件换一个 <code>key</code>，React 会重新创建它，不用在 Effect 里手动清空。</p>
+<h2>Effect 什么时候执行</h2>
+<p>Effect 在提交之后执行，也就是 React 已经把改动写进 DOM 以后。由点击这类离散事件触发的更新，React 可能在浏览器绘制前就同步执行 Effect；其他情况通常在绘制之后执行。</p>
+<p>如果你需要在绘制前测量布局，避免画面闪一下，就改用 <code>useLayoutEffect</code>。</p>
 <h2>常见追问</h2>
-<ul>
-<li>为什么开发环境 Effect 执行两次？严格模式故意模拟一次卸载再挂载，正确写了清理的 Effect 用户看不出区别。</li>
-<li>Effect 里能直接写 async 函数吗？不能把 async 函数传给 <code>useEffect</code>，因为它返回 Promise 而不是清理函数；在内部定义 async 函数再调用。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/reference/react/useEffect" target="_blank" rel="noreferrer">React · useEffect<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+useEffect+%E7%9A%84%E4%BE%9D%E8%B5%96%E6%95%B0%E7%BB%84%E5%92%8C%E6%B8%85%E7%90%86%E5%87%BD%E6%95%B0%E5%BA%94%E8%AF%A5%E6%80%8E%E4%B9%88%E5%86%99%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AuseEffect+%E7%9A%84%E4%BE%9D%E8%B5%96%E6%95%B0%E7%BB%84%E5%92%8C%E6%B8%85%E7%90%86%E5%87%BD%E6%95%B0%E5%BA%94%E8%AF%A5%E6%80%8E%E4%B9%88%E5%86%99%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-effect%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-effect%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：useEffect 的依赖数组和清理函数应该怎么写？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-state/">为什么调用 setState 后，当前变量还是旧值？</a></li><li><a href="/questions/react-key/">列表中的 key 为什么不能随意使用数组下标？</a></li><li><a href="/questions/react-memo/">memo、useMemo、useCallback 各自优化什么？</a></li><li><a href="/questions/react-render-commit/">React 的渲染阶段与提交阶段有什么区别？</a></li></ul></nav></main></div></div>
+<p><strong>为什么开发环境 Effect 执行了两次？</strong></p>
+<blockquote>
+<p>这是严格模式故意的，它模拟一次卸载再挂载，看你的清理写没写对。清理写正确的话，用户看不出区别。生产环境不会这样。</p>
+</blockquote>
+<p><strong>可以直接把 async 函数传给 <code>useEffect</code> 吗？</strong></p>
+<blockquote>
+<p>不行。async 函数返回的是 Promise，而 <code>useEffect</code> 期望的返回值是清理函数。正确做法是在 Effect 里面定义一个 async 函数，然后立即调用它。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/reference/react/useEffect" target="_blank" rel="noreferrer">React · useEffect<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+useEffect+%E7%9A%84%E4%BE%9D%E8%B5%96%E6%95%B0%E7%BB%84%E5%92%8C%E6%B8%85%E7%90%86%E5%87%BD%E6%95%B0%E5%BA%94%E8%AF%A5%E6%80%8E%E4%B9%88%E5%86%99%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AuseEffect+%E7%9A%84%E4%BE%9D%E8%B5%96%E6%95%B0%E7%BB%84%E5%92%8C%E6%B8%85%E7%90%86%E5%87%BD%E6%95%B0%E5%BA%94%E8%AF%A5%E6%80%8E%E4%B9%88%E5%86%99%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-effect%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-effect%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：useEffect 的依赖数组和清理函数应该怎么写？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-state/">为什么调用 setState 后，当前变量还是旧值？</a></li><li><a href="/questions/react-key/">列表中的 key 为什么不能随意使用数组下标？</a></li><li><a href="/questions/react-memo/">memo、useMemo、useCallback 各自优化什么？</a></li><li><a href="/questions/react-render-commit/">React 的渲染阶段与提交阶段有什么区别？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

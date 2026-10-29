@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Vue面试题：Vue 2 的 updateChildren 用新旧两组子节点的首尾四个指针做双端比较，依次尝试头头、尾尾、旧头新尾、旧尾新头四种命中…" />
+    <meta name="description" content="Vue面试题：Vue 2 比较新旧两组子节点时，在两头各放一个指针，先试四种首尾配对，配不上再用 key 去找能复用的旧节点。" />
     <title>Vue 2 的 diff 算法是怎样比较子节点的？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/vue2-diff/" />
     <meta name="robots" content="index,follow" />
@@ -19,65 +19,74 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Vue 2 的 diff 算法是怎样比较子节点的？" />
-    <meta property="og:description" content="Vue面试题：Vue 2 的 updateChildren 用新旧两组子节点的首尾四个指针做双端比较，依次尝试头头、尾尾、旧头新尾、旧尾新头四种命中…" />
+    <meta property="og:description" content="Vue面试题：Vue 2 比较新旧两组子节点时，在两头各放一个指针，先试四种首尾配对，配不上再用 key 去找能复用的旧节点。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/vue2-diff/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue2-diff/#webpage","url":"https://fe.hushifa.top/questions/vue2-diff/","name":"Vue 2 的 diff 算法是怎样比较子节点的？","description":"Vue面试题：Vue 2 的 updateChildren 用新旧两组子节点的首尾四个指针做双端比较，依次尝试头头、尾尾、旧头新尾、旧尾新头四种命中…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue2-diff/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue2-diff/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"Vue 2 的 diff 算法是怎样比较子节点的？","item":"https://fe.hushifa.top/questions/vue2-diff/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue2-diff/#webpage","url":"https://fe.hushifa.top/questions/vue2-diff/","name":"Vue 2 的 diff 算法是怎样比较子节点的？","description":"Vue面试题：Vue 2 比较新旧两组子节点时，在两头各放一个指针，先试四种首尾配对，配不上再用 key 去找能复用的旧节点。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue2-diff/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue2-diff/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"Vue 2 的 diff 算法是怎样比较子节点的？","item":"https://fe.hushifa.top/questions/vue2-diff/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue 2 的 diff 算法是怎样比较子节点的？</span></nav><h1 tabindex="-1">Vue 2 的 diff 算法是怎样比较子节点的？</h1><p class="reading-summary">Vue 2 的 updateChildren 用新旧两组子节点的首尾四个指针做双端比较，依次尝试头头、尾尾、旧头新尾、旧尾新头四种命中，都不命中时用 key 映射查找可复用节点。Vue 3 先同步首尾相同部分，再用最长递增子序列减少移动，并借助编译期的 PatchFlags、Block 与静态缓存跳过不变内容。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>Vue 2 已于 2023-12-31 停止维护，本题 Vue 2 部分以 2.7 源码为准。</li>
-<li>同层比较：只在同一父节点的子节点之间比较；<code>sameVnode</code> 要求 key、标签等一致才复用，否则销毁重建。</li>
-<li>Vue 2 的 <code>updateChildren</code> 维护旧头、旧尾、新头、新尾四个指针，依次尝试四种命中，命中后 patch 并按需移动 DOM，指针向中间收缩。</li>
-<li>四种都不命中时，为剩余旧节点建立 key → 下标的映射查找新头；找不到就新建。循环结束后批量新增或删除剩余节点。</li>
-<li>Vue 3 先同步相同前缀和后缀，对中间乱序部分用最长递增子序列确定不需要移动的节点；编译器生成的 PatchFlags、Block 和静态缓存（Cache Static）让运行时跳过不变内容。</li>
-</ul>
-<h2>sameVnode</h2>
-<p>两个 vnode 视为&quot;同一个节点&quot;需要：<code>key</code> 相同、<code>asyncFactory</code> 相同，并且标签相同、是否注释节点相同、是否都有 <code>data</code>，<code>input</code> 还要 <code>type</code> 相同（异步占位节点另有判断）。没有写 key 时两边 key 都是 <code>undefined</code>，同标签的节点会被就地复用，这就是列表用下标或不写 key 时状态错位的原因。</p>
-<h2>双端比较的四种命中</h2>
-<p>设 <code>oldStart</code>、<code>oldEnd</code>、<code>newStart</code>、<code>newEnd</code> 四个指针，循环条件为两组都还有未处理的节点（循环开头会跳过被置为 <code>undefined</code> 的旧节点）：</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue 2 的 diff 算法是怎样比较子节点的？</span></nav><h1 tabindex="-1">Vue 2 的 diff 算法是怎样比较子节点的？</h1><p class="reading-summary">Vue 2 比较新旧两组子节点时，在两头各放一个指针，先试四种首尾配对，配不上再用 key 去找能复用的旧节点。Vue 3 先跳过首尾相同的部分，再用最长递增子序列减少移动，并靠编译信息跳过不变的内容。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><blockquote>
+<p>Vue 2 已于 2023-12-31 停止维护，本题 Vue 2 部分以 2.7 源码为准。</p>
+</blockquote>
+<h2>简答</h2>
+<blockquote>
+<p>diff 要回答的问题是：数据变了以后，新旧两组子节点怎么对应，哪些能复用、哪些要移动、哪些要新建或删除。Vue 只在同一个父节点的子节点之间比较，不跨层级。两个节点 key 相同、标签相同等条件都满足，才算“同一个节点”可以复用，源码里这个判断叫 <code>sameVnode</code>，不满足就销毁重建。</p>
+<p>Vue 2 的子节点比较在 <code>updateChildren</code> 里。它给新旧两组各放头尾两个指针，一共四个，每轮依次尝试旧头对新头、旧尾对新尾、旧头对新尾、旧尾对新头四种配对。配上了就更新这个节点，必要时移动 DOM，然后指针往中间收。这个办法叫双端比较。</p>
+<p>四种都配不上时，就为剩下的旧节点建一张“key → 下标”的表，用新头的 key 去查；查不到就新建。循环结束后，多出来的新节点批量插入，多出来的旧节点批量删除。</p>
+<p>Vue 3 换了思路。它先把开头和结尾相同的部分同步掉，中间乱序的部分用最长递增子序列找出不需要动的节点，只移动其余的。再加上编译器生成的 PatchFlags、Block 和静态缓存，运行时能跳过大量不变的内容。</p>
+</blockquote>
+<h2>什么样的两个节点算“同一个”</h2>
+<p>源码中 <code>sameVnode</code> 的条件是：<code>key</code> 相同、<code>asyncFactory</code> 相同，并且标签相同、是否注释节点相同、是否都有 <code>data</code>，<code>input</code> 元素还要求 <code>type</code> 相同（异步占位节点另有判断）。</p>
+<p>这里有个关键点。没写 key 时，两边的 key 都是 <code>undefined</code>，也算“相同”。所以同标签的节点会被直接就地复用，不管它们背后对应的是不是同一条数据。列表用下标当 key 或者不写 key 时出现状态错位，原因就在这里。</p>
+<h2>双端比较怎么走</h2>
+<p>设 <code>oldStart</code>、<code>oldEnd</code>、<code>newStart</code>、<code>newEnd</code> 四个指针。只要两组都还有没处理的节点，就一直循环（循环开头会跳过之前被置为 <code>undefined</code> 的旧节点）。每轮按下面的顺序尝试：</p>
 <ol>
-<li>旧头 vs 新头：命中则 patch，两个头指针后移。</li>
-<li>旧尾 vs 新尾：命中则 patch，两个尾指针前移。</li>
-<li>旧头 vs 新尾：命中说明节点被移到了后面，patch 后把旧头的 DOM 插到旧尾 DOM 的后面。</li>
-<li>旧尾 vs 新头：命中说明节点被移到了前面，patch 后把旧尾的 DOM 插到旧头 DOM 的前面。</li>
-<li>都不命中：首次用 <code>createKeyToOldIdx</code> 为剩余旧节点建 key 映射。新头有 key 就查映射，没有 key 就用 <code>findIdxInOld</code> 逐个 <code>sameVnode</code> 比较。找到且 <code>sameVnode</code> 成立则 patch，把旧位置置为 <code>undefined</code> 并移到旧头之前；找不到或 key 相同但元素不同，就新建并插到旧头之前。新头指针后移。</li>
+<li>旧头 vs 新头：命中就 patch，两个头指针后移。</li>
+<li>旧尾 vs 新尾：命中就 patch，两个尾指针前移。</li>
+<li>旧头 vs 新尾：命中说明这个节点被移到了后面，patch 后把旧头的 DOM 插到旧尾 DOM 的后面。</li>
+<li>旧尾 vs 新头：命中说明这个节点被移到了前面，patch 后把旧尾的 DOM 插到旧头 DOM 的前面。</li>
+<li>都不命中：第一次走到这里时用 <code>createKeyToOldIdx</code> 为剩余旧节点建 key 映射。新头有 key 就查映射，没有 key 就用 <code>findIdxInOld</code> 逐个做 <code>sameVnode</code> 比较。找到且 <code>sameVnode</code> 成立就 patch，把旧位置置为 <code>undefined</code>，把 DOM 移到旧头之前；找不到，或者 key 相同但元素不同，就新建一个插到旧头之前。然后新头指针后移。</li>
 </ol>
-<p>循环结束后：旧节点先用完，把剩余新节点插入；新节点先用完，删除剩余旧节点。</p>
+<p>循环结束后，如果旧节点先用完，就把剩下的新节点插进去；如果新节点先用完，就把剩下的旧节点删掉。</p>
+<p>看一个具体例子，把最后一项挪到最前面：</p>
 <div class="not-prose code-block"><div class="code-language">text</div><pre><code class="hljs language-text">旧：A B C D      新：D A B C
 旧头 A vs 新头 D ✗；旧尾 D vs 新尾 C ✗；旧头 A vs 新尾 C ✗
 旧尾 D vs 新头 D ✓ → 把 D 移到 A 前面，只移动一次
 </code></pre></div>
-<h2>Vue 3 的做法</h2>
-<p><code>patchKeyedChildren</code> 分五步：</p>
+<p>这个例子里，第四种配对就找到了 D，不需要建映射表。之后剩下的 <code>A B C</code> 每轮都是头对头命中，不再移动。在头尾增删、把一项挪到头或尾这类变化，都能靠首尾配对直接处理。</p>
+<h2>Vue 3 换成了什么做法</h2>
+<p>Vue 3 带 key 的子节点比较在 <code>patchKeyedChildren</code> 里，分五步：</p>
 <ol>
-<li>从头同步，<code>isSameVNodeType</code> 成立就 patch，直到不同。</li>
-<li>从尾同步。</li>
-<li>旧的用完，挂载剩余新节点。</li>
-<li>新的用完，卸载剩余旧节点。</li>
-<li>中间未知序列：为新节点建 key → 下标映射，遍历旧节点 patch 可复用的、卸载找不到的，并记录 <code>newIndexToOldIndexMap</code>。只有检测到节点移动时才调用 <code>getSequence</code> 求最长递增子序列；从后往前遍历，在子序列中的节点不动，其余节点移动或新挂载。</li>
+<li>从头开始同步，<code>isSameVNodeType</code> 成立就 patch，直到遇到不同的。</li>
+<li>从尾开始同步。</li>
+<li>如果旧的用完了，挂载剩下的新节点。</li>
+<li>如果新的用完了，卸载剩下的旧节点。</li>
+<li>剩下中间一段乱序的部分：为新节点建 key → 下标映射，遍历旧节点，能复用的 patch，找不到的卸载，同时记录 <code>newIndexToOldIndexMap</code>。只有检测到节点发生了移动，才调用 <code>getSequence</code> 求最长递增子序列；然后从后往前遍历，在子序列里的节点不动，其余节点移动或新挂载。</li>
 </ol>
-<h2>编译期优化</h2>
-<p>Vue 2 编译器会标记静态根节点，patch 时跳过它们，但动态节点仍按完整树比较。Vue 3 的模板编译结果带有更多提示：</p>
+<p>最长递增子序列是什么意思？把中间这段新节点在旧列表里的位置排出来，其中保持原有先后顺序的最长那一串，彼此之间的相对位置没变，就不用动它们，只需要移动别的节点。这样移动次数最少。</p>
+<h2>编译器又帮了什么忙</h2>
+<p>Vue 2 的编译器会标记静态根节点，patch 时跳过它们，但其余动态节点仍然按整棵树比较。Vue 3 的编译结果带了更多提示：</p>
 <ul>
-<li>PatchFlags：标记节点哪些部分是动态的，如 <code>TEXT</code>、<code>CLASS</code>、<code>PROPS</code>，<code>patchElement</code> 只更新这些部分。</li>
-<li>Block：块节点收集内部的动态后代到 <code>dynamicChildren</code>，更新时只遍历这个扁平数组，而不是整棵子树。</li>
-<li>静态缓存（Cache Static，早期版本称为静态提升）：静态节点只创建一次，Vue 3.5 的编译器把它缓存到 <code>_cache</code> 中并标记为 <code>CACHED</code>，更新时完全跳过。</li>
+<li>PatchFlags：标记节点哪些部分是动态的，比如 <code>TEXT</code>、<code>CLASS</code>、<code>PROPS</code>，<code>patchElement</code> 只更新这些部分。</li>
+<li>Block：块节点把内部的动态后代收集到 <code>dynamicChildren</code>，更新时只遍历这个扁平数组，不用走整棵子树。</li>
+<li>静态缓存（Cache Static，早期版本叫静态提升）：静态节点只创建一次。Vue 3.5 的编译器把它缓存到 <code>_cache</code> 里并标记为 <code>CACHED</code>，更新时完全跳过。</li>
 </ul>
-<p>具体的编译策略见<a href="/questions/vue-compiler-optimizations/">《Vue 模板编译如何减少运行时更新工作？》</a>。</p>
-<h2>示例</h2>
-<p>用 <code>@vue/compiler-dom</code>（<a href="mailto:vue@3.5.x">vue@3.5.x</a> 依赖）编译 <code>&lt;div&gt;&lt;p&gt;static&lt;/p&gt;&lt;span :class=&quot;c&quot;&gt;{{msg}}&lt;/span&gt;&lt;/div&gt;</code>，输出的关键部分：</p>
+<p>用 <code>@vue/compiler-dom</code>（<a href="mailto:vue@3.5.x">vue@3.5.x</a> 依赖）编译 <code>&lt;div&gt;&lt;p&gt;static&lt;/p&gt;&lt;span :class=&quot;c&quot;&gt;{{msg}}&lt;/span&gt;&lt;/div&gt;</code>，输出的关键部分是：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">_cache[<span class="hljs-number">0</span>] || (_cache[<span class="hljs-number">0</span>] = <span class="hljs-title function_">_createElementVNode</span>(<span class="hljs-string">&quot;p&quot;</span>, <span class="hljs-literal">null</span>, <span class="hljs-string">&quot;static&quot;</span>, -<span class="hljs-number">1</span> <span class="hljs-comment">/* CACHED */</span>)),
 <span class="hljs-title function_">_createElementVNode</span>(<span class="hljs-string">&quot;span&quot;</span>, { <span class="hljs-attr">class</span>: <span class="hljs-title function_">_normalizeClass</span>(_ctx.<span class="hljs-property">c</span>) },
   <span class="hljs-title function_">_toDisplayString</span>(_ctx.<span class="hljs-property">msg</span>), <span class="hljs-number">3</span> <span class="hljs-comment">/* TEXT, CLASS */</span>)
 </code></pre></div>
+<p>静态的 <code>p</code> 只在第一次渲染时创建，之后直接从 <code>_cache[0]</code> 拿；<code>span</code> 后面的 <code>3</code> 表示只有文本和 class 会变。具体的编译策略见<a href="/questions/vue-compiler-optimizations/">《Vue 模板编译如何减少运行时更新工作？》</a>。</p>
 <h2>常见追问</h2>
-<ul>
-<li>为什么不推荐用下标作 key？插入或删除中间项后，下标与数据的对应关系改变，<code>sameVnode</code> 会把不同数据的节点当成同一个复用，带状态的子组件或输入框就会错位。</li>
-<li>双端比较和最长递增子序列哪个更好？两者都是启发式减少 DOM 移动，Vue 3 的方案在中间乱序部分能得到最少移动次数，但这里不给出普适的性能结论。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://github.com/vuejs/vue/blob/main/src/core/vdom/patch.ts" target="_blank" rel="noreferrer">vuejs/vue · src/core/vdom/patch.ts<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://github.com/vuejs/core/blob/main/packages/runtime-core/src/renderer.ts" target="_blank" rel="noreferrer">vuejs/core · packages/runtime-core/src/renderer.ts<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://vuejs.org/guide/extras/rendering-mechanism.html" target="_blank" rel="noreferrer">Vue · Rendering Mechanism<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vue+2+%E7%9A%84+diff+%E7%AE%97%E6%B3%95%E6%98%AF%E6%80%8E%E6%A0%B7%E6%AF%94%E8%BE%83%E5%AD%90%E8%8A%82%E7%82%B9%E7%9A%84%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVue+2+%E7%9A%84+diff+%E7%AE%97%E6%B3%95%E6%98%AF%E6%80%8E%E6%A0%B7%E6%AF%94%E8%BE%83%E5%AD%90%E8%8A%82%E7%82%B9%E7%9A%84%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue2-diff%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue2-diff%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vue 2 的 diff 算法是怎样比较子节点的？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-compiler-optimizations/">Vue 模板编译如何减少运行时更新工作？</a></li><li><a href="/questions/vue2-vs-vue3-reactivity/">defineProperty 和 Proxy 实现的响应式有什么区别？</a></li><li><a href="/questions/vue-ref-reactive/">Vue 3 中 ref 和 reactive 有什么区别？</a></li><li><a href="/questions/vue-reactivity-tracking/">Vue 3 响应式依赖是怎样收集和触发的？</a></li></ul></nav></main></div></div>
+<p><strong>为什么不推荐用下标当 key？</strong></p>
+<blockquote>
+<p>在中间插入或删除一项以后，下标和数据的对应关系就变了。<code>sameVnode</code> 只看 key，会把原本对应不同数据的节点当成同一个复用，带状态的子组件或者输入框就会错位。</p>
+</blockquote>
+<p><strong>双端比较和最长递增子序列哪个更好？</strong></p>
+<blockquote>
+<p>两者都是减少 DOM 移动的启发式方法。Vue 3 的方案在中间乱序的部分能得到最少的移动次数，但这里不给出普适的性能结论，实际差异取决于列表怎么变。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://github.com/vuejs/vue/blob/main/src/core/vdom/patch.ts" target="_blank" rel="noreferrer">vuejs/vue · src/core/vdom/patch.ts<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://github.com/vuejs/core/blob/main/packages/runtime-core/src/renderer.ts" target="_blank" rel="noreferrer">vuejs/core · packages/runtime-core/src/renderer.ts<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://vuejs.org/guide/extras/rendering-mechanism.html" target="_blank" rel="noreferrer">Vue · Rendering Mechanism<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vue+2+%E7%9A%84+diff+%E7%AE%97%E6%B3%95%E6%98%AF%E6%80%8E%E6%A0%B7%E6%AF%94%E8%BE%83%E5%AD%90%E8%8A%82%E7%82%B9%E7%9A%84%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVue+2+%E7%9A%84+diff+%E7%AE%97%E6%B3%95%E6%98%AF%E6%80%8E%E6%A0%B7%E6%AF%94%E8%BE%83%E5%AD%90%E8%8A%82%E7%82%B9%E7%9A%84%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue2-diff%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue2-diff%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vue 2 的 diff 算法是怎样比较子节点的？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-compiler-optimizations/">Vue 模板编译如何减少运行时更新工作？</a></li><li><a href="/questions/vue2-vs-vue3-reactivity/">defineProperty 和 Proxy 实现的响应式有什么区别？</a></li><li><a href="/questions/vue-ref-reactive/">Vue 3 中 ref 和 reactive 有什么区别？</a></li><li><a href="/questions/vue-reactivity-tracking/">Vue 3 响应式依赖是怎样收集和触发的？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

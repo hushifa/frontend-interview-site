@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="网络面试题：Range 请求只取资源的一段字节，用于断点续传、视频拖动和读取大文件的局部。" />
+    <meta name="description" content="网络面试题：Range 请求只拿文件的一段字节，用在断点续传、视频拖动和读大文件的局部。" />
     <title>HTTP Range 请求适合什么场景？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/network-range-request/" />
     <meta name="robots" content="index,follow" />
@@ -19,28 +19,29 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="HTTP Range 请求适合什么场景？ · 前端知库" />
-    <meta property="og:description" content="网络面试题：Range 请求只取资源的一段字节，用于断点续传、视频拖动和读取大文件的局部。" />
+    <meta property="og:description" content="网络面试题：Range 请求只拿文件的一段字节，用在断点续传、视频拖动和读大文件的局部。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/network-range-request/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/network-range-request/#webpage","url":"https://fe.hushifa.top/questions/network-range-request/","name":"HTTP Range 请求适合什么场景？ · 前端知库","description":"网络面试题：Range 请求只取资源的一段字节，用于断点续传、视频拖动和读取大文件的局部。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/network-range-request/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/network-range-request/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"网络面试题","item":"https://fe.hushifa.top/topics/network/"},{"@type":"ListItem","position":3,"name":"HTTP Range 请求适合什么场景？","item":"https://fe.hushifa.top/questions/network-range-request/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/network-range-request/#webpage","url":"https://fe.hushifa.top/questions/network-range-request/","name":"HTTP Range 请求适合什么场景？ · 前端知库","description":"网络面试题：Range 请求只拿文件的一段字节，用在断点续传、视频拖动和读大文件的局部。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/network-range-request/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/network-range-request/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"网络面试题","item":"https://fe.hushifa.top/topics/network/"},{"@type":"ListItem","position":3,"name":"HTTP Range 请求适合什么场景？","item":"https://fe.hushifa.top/questions/network-range-request/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/network/">网络面试题</a><span aria-hidden="true">/</span><span aria-current="page">HTTP Range 请求适合什么场景？</span></nav><h1 tabindex="-1">HTTP Range 请求适合什么场景？</h1><p class="reading-summary">Range 请求只取资源的一段字节，用于断点续传、视频拖动和读取大文件的局部。服务器支持时返回 206 和 Content-Range，不支持时返回完整的 200，范围无效时返回 416；配合 If-Range 防止文件更新后把新旧内容拼在一起。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>请求头 <code>Range: bytes=0-1023</code> 表示取第 0 到 1023 字节，两端都包含。</li>
-<li>服务器用 <code>Accept-Ranges: bytes</code> 声明支持；返回 <code>206 Partial Content</code> 和 <code>Content-Range: bytes 0-1023/5000</code>。</li>
-<li>服务器忽略 Range 时返回 <code>200</code> 和完整内容，客户端必须检查状态码，否则会把整个文件当成一段。</li>
-<li>范围超出文件大小返回 <code>416 Range Not Satisfiable</code>，<code>Content-Range: bytes */5000</code> 给出实际大小。</li>
-<li>续传时带 <code>If-Range: &quot;etag&quot;</code>：文件没变返回 206，变了返回完整的 200，避免拼出损坏的文件。</li>
-</ul>
-<h2>写法</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/network/">网络面试题</a><span aria-hidden="true">/</span><span aria-current="page">HTTP Range 请求适合什么场景？</span></nav><h1 tabindex="-1">HTTP Range 请求适合什么场景？</h1><p class="reading-summary">Range 请求只拿文件的一段字节，用在断点续传、视频拖动和读大文件的局部。服务器支持就回 206，不支持就回完整的 200，范围不对回 416；续传时带上 If-Range，防止文件更新后新旧内容拼在一起。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>下载一个大文件下到一半断了，没必要从头再来，只要把剩下的部分要回来。Range 请求就是干这个的：请求头写 <code>Range: bytes=0-1023</code>，表示只要第 0 到第 1023 字节，两头都包含。</p>
+<p>服务器用 <code>Accept-Ranges: bytes</code> 表示支持。支持的话，返回 <code>206 Partial Content</code>，并用 <code>Content-Range: bytes 0-1023/5000</code> 说明给的是哪一段、文件一共多大。</p>
+<p>有两种情况要处理。服务器不支持或者忽略了 Range，会直接返回 <code>200</code> 和完整内容，客户端必须检查状态码，不然会把整个文件当成一段。范围超出文件大小，返回 <code>416 Range Not Satisfiable</code>，<code>Content-Range: bytes */5000</code> 告诉你实际大小。</p>
+<p>续传时还要带 <code>If-Range: &quot;etag&quot;</code>。文件没变，服务器回 206；文件变了，就回完整的 200。这样不会把旧文件的前半段和新文件的后半段拼成一个坏文件。</p>
+</blockquote>
+<h2>Range 有哪几种写法</h2>
 <div class="not-prose code-block"><div class="code-language">http</div><pre><code class="hljs language-http">Range: bytes=0-1023      # 前 1024 字节
 Range: bytes=1024-       # 从 1024 到末尾
 Range: bytes=-500        # 最后 500 字节
 Range: bytes=0-99,200-299 # 多段，响应为 multipart/byteranges
 </code></pre></div>
-<h2>校验一段下载</h2>
+<p>注意 <code>-500</code> 不是“到第 500 字节”，而是“最后 500 字节”。多段请求时，响应是 <code>multipart/byteranges</code> 格式，几段内容包在一起返回。</p>
+<h2>下载一段时要检查什么</h2>
+<p>下面的函数请求一段字节，并检查服务器给的到底是不是这一段：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">fetchRange</span>(<span class="hljs-params">url, start, end, etag</span>) {
   <span class="hljs-keyword">const</span> headers = { <span class="hljs-title class_">Range</span>: <span class="hljs-string">`bytes=<span class="hljs-subst">${start}</span>-<span class="hljs-subst">${end}</span>`</span> };
   <span class="hljs-keyword">if</span> (etag) headers[<span class="hljs-string">&#x27;If-Range&#x27;</span>] = etag;
@@ -67,24 +68,32 @@ Range: bytes=0-99,200-299 # 多段，响应为 multipart/byteranges
   };
 }
 </code></pre></div>
-<p>跨源请求时，<code>Range</code> 头会触发预检（除非是简单的单段范围），服务器还要用 <code>Access-Control-Expose-Headers</code> 暴露 <code>Content-Range</code> 和 <code>ETag</code>，脚本才能读到。</p>
-<h2>场景</h2>
-<ul>
-<li>断点续传下载：记录已下载字节数，重连后从断点继续。</li>
-<li>视频和音频：<code>&lt;video&gt;</code> 拖动进度条时，浏览器自动发 Range 请求，服务器不支持会导致无法拖动。</li>
-<li>大文件局部读取：只读 ZIP 的目录区、PDF 的某一页、Parquet 文件的元数据。</li>
-</ul>
-<h2>注意</h2>
-<ul>
-<li><code>If-Range</code> 应该用强 ETag，弱 ETag 不能用于范围请求。</li>
-<li>内容经过 gzip 等压缩时，范围是针对编码后的字节，大文件下载通常不做动态压缩。</li>
-<li>CDN 要正确缓存和切分范围响应，部分 CDN 需要单独开启。</li>
-</ul>
+<p>收到 200 时不能当成功拼接，因为可能是服务器不支持 Range，也可能是 <code>If-Range</code> 发现文件变了，两种情况都只能从头下载。</p>
+<p>收到 206 也不要直接信，要解析 <code>Content-Range</code>，确认起点和你请求的一样。总大小那一位可能是 <code>*</code>，表示服务器也不知道总长度。这个正则可以在 Node 里单独试一下：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> pattern = <span class="hljs-regexp">/^bytes (\d+)-(\d+)\/(\d+|\*)$/</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(pattern.<span class="hljs-title function_">exec</span>(<span class="hljs-string">&#x27;bytes 0-1023/5000&#x27;</span>).<span class="hljs-title function_">slice</span>(<span class="hljs-number">1</span>)); <span class="hljs-comment">// [ &#x27;0&#x27;, &#x27;1023&#x27;, &#x27;5000&#x27; ]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(pattern.<span class="hljs-title function_">exec</span>(<span class="hljs-string">&#x27;bytes 0-1023/*&#x27;</span>).<span class="hljs-title function_">slice</span>(<span class="hljs-number">1</span>)); <span class="hljs-comment">// [ &#x27;0&#x27;, &#x27;1023&#x27;, &#x27;*&#x27; ]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(pattern.<span class="hljs-title function_">exec</span>(<span class="hljs-string">&#x27;bytes */5000&#x27;</span>)); <span class="hljs-comment">// null</span>
+</code></pre></div>
+<p>最后一种是 416 的格式，不会出现在 206 里，所以匹配失败是对的。</p>
+<p>跨源请求时，<code>Range</code> 头会触发预检，除非是简单的单段范围。服务器还要用 <code>Access-Control-Expose-Headers</code> 暴露 <code>Content-Range</code> 和 <code>ETag</code>，脚本才能读到。</p>
+<h2>实际用在哪些地方</h2>
+<p>最常见的是断点续传下载：记下已经下了多少字节，重连后从断点继续。</p>
+<p>音视频也离不开它。<code>&lt;video&gt;</code> 拖动进度条时，浏览器会自动发 Range 请求。服务器不支持的话，视频就没法拖。</p>
+<p>还有大文件的局部读取，比如只读 ZIP 的目录区、PDF 的某一页、Parquet 文件的元数据，不用把整个文件下下来。</p>
+<h2>还有哪些坑</h2>
+<p><code>If-Range</code> 要用强 ETag，弱 ETag 不能用于范围请求，因为弱 ETag 只保证意思一样，不保证字节一样。</p>
+<p>内容经过 gzip 等压缩时，范围算的是压缩后的字节，所以大文件下载一般不做动态压缩。</p>
+<p>CDN 要能正确缓存和切分范围响应，有些 CDN 需要单独开启这个功能。</p>
 <h2>常见追问</h2>
-<ul>
-<li>和分片上传有什么关系？Range 用于下载；上传的分片由应用协议或对象存储接口定义，见<a href="/questions/network-resumable-upload/">《浏览器分片上传如何实现可靠的暂停与续传？》</a>。</li>
-<li>浏览器下载管理器的续传也用它吗？是的，前提是服务器支持 Range 并提供验证器。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Range_requests" target="_blank" rel="noreferrer">MDN · HTTP range requests<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+HTTP+Range+%E8%AF%B7%E6%B1%82%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AHTTP+Range+%E8%AF%B7%E6%B1%82%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anetwork-range-request%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%BD%91%E7%BB%9C%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnetwork-range-request%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：HTTP Range 请求适合什么场景？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/http-cache/">强缓存与协商缓存如何配合？</a></li><li><a href="/questions/network-early-hints/">HTTP 103 Early Hints 适合怎样的加载优化？</a></li><li><a href="/questions/network-content-negotiation/">HTTP 内容协商会怎样影响前端资源和接口响应？</a></li><li><a href="/questions/network-protocol-debugging/">前端网络问题应该怎样按协议层排查？</a></li></ul></nav></main></div></div>
+<p><strong>和分片上传有什么关系？</strong></p>
+<blockquote>
+<p>Range 是用来下载的。上传的分片由应用自己的协议或者对象存储的接口定义，见<a href="/questions/network-resumable-upload/">《浏览器分片上传如何实现可靠的暂停与续传？》</a>。</p>
+</blockquote>
+<p><strong>浏览器下载管理器的续传也用它吗？</strong></p>
+<blockquote>
+<p>是的，前提是服务器支持 Range，并且提供了 ETag 这类验证器。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Range_requests" target="_blank" rel="noreferrer">MDN · HTTP range requests<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+HTTP+Range+%E8%AF%B7%E6%B1%82%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AHTTP+Range+%E8%AF%B7%E6%B1%82%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anetwork-range-request%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%BD%91%E7%BB%9C%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnetwork-range-request%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：HTTP Range 请求适合什么场景？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/http-cache/">强缓存与协商缓存如何配合？</a></li><li><a href="/questions/network-early-hints/">HTTP 103 Early Hints 适合怎样的加载优化？</a></li><li><a href="/questions/network-content-negotiation/">HTTP 内容协商会怎样影响前端资源和接口响应？</a></li><li><a href="/questions/network-protocol-debugging/">前端网络问题应该怎样按协议层排查？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="工程化面试题：区分仓库组织、工作区链接和任务编排，用应用与组件包示例说明依赖声明、构建顺序、发布验证及逐步采用的边界。" />
+    <meta name="description" content="工程化面试题：Monorepo 把相关项目放进一个仓库，工作区负责本地包互相链接，任务编排工具负责构建顺序和缓存。" />
     <title>Monorepo 与 npm workspaces 能解决什么问题？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/eng-monorepo/" />
     <meta name="robots" content="index,follow" />
@@ -19,28 +19,26 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Monorepo 与 npm workspaces 能解决什么问题？" />
-    <meta property="og:description" content="工程化面试题：区分仓库组织、工作区链接和任务编排，用应用与组件包示例说明依赖声明、构建顺序、发布验证及逐步采用的边界。" />
+    <meta property="og:description" content="工程化面试题：Monorepo 把相关项目放进一个仓库，工作区负责本地包互相链接，任务编排工具负责构建顺序和缓存。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/eng-monorepo/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/eng-monorepo/#webpage","url":"https://fe.hushifa.top/questions/eng-monorepo/","name":"Monorepo 与 npm workspaces 能解决什么问题？","description":"工程化面试题：区分仓库组织、工作区链接和任务编排，用应用与组件包示例说明依赖声明、构建顺序、发布验证及逐步采用的边界。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/eng-monorepo/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/eng-monorepo/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"工程化面试题","item":"https://fe.hushifa.top/topics/engineering/"},{"@type":"ListItem","position":3,"name":"Monorepo 与 npm workspaces 能解决什么问题？","item":"https://fe.hushifa.top/questions/eng-monorepo/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/eng-monorepo/#webpage","url":"https://fe.hushifa.top/questions/eng-monorepo/","name":"Monorepo 与 npm workspaces 能解决什么问题？","description":"工程化面试题：Monorepo 把相关项目放进一个仓库，工作区负责本地包互相链接，任务编排工具负责构建顺序和缓存。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/eng-monorepo/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/eng-monorepo/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"工程化面试题","item":"https://fe.hushifa.top/topics/engineering/"},{"@type":"ListItem","position":3,"name":"Monorepo 与 npm workspaces 能解决什么问题？","item":"https://fe.hushifa.top/questions/eng-monorepo/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/engineering/">工程化面试题</a><span aria-hidden="true">/</span><span aria-current="page">Monorepo 与 npm workspaces 能解决什么问题？</span></nav><h1 tabindex="-1">Monorepo 与 npm workspaces 能解决什么问题？</h1><p class="reading-summary">区分仓库组织、工作区链接和任务编排，用应用与组件包示例说明依赖声明、构建顺序、发布验证及逐步采用的边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>Monorepo 是把多个相关项目放在一个仓库里，解决的是跨项目同时修改、统一工具链和代码共享的问题。</li>
-<li>工作区（workspaces）负责把本地包互相链接，省去发布后再安装的步骤。</li>
-<li>任务编排工具（Turborepo、Nx 等）负责按依赖顺序构建、并行执行和缓存结果，工作区本身不做这些。</li>
-<li>代价是仓库变大、CI 需要按改动范围执行，权限和发布流程也要重新设计。</li>
-<li>团队规模小、项目之间几乎不共享代码时，多仓库往往更简单。</li>
-</ul>
-<h2>解决了什么</h2>
-<ul>
-<li><strong>原子修改</strong>：组件库改了 API，所有使用它的应用在同一个提交里一起改，评审时能看到全部影响。</li>
-<li><strong>统一工具</strong>：ESLint、TypeScript、测试配置放在根目录共享，避免各项目版本漂移。</li>
-<li><strong>本地联调</strong>：应用直接使用组件库源码，不用 <code>npm link</code> 或反复发布测试版本。</li>
-</ul>
-<h2>npm workspaces 示例</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/engineering/">工程化面试题</a><span aria-hidden="true">/</span><span aria-current="page">Monorepo 与 npm workspaces 能解决什么问题？</span></nav><h1 tabindex="-1">Monorepo 与 npm workspaces 能解决什么问题？</h1><p class="reading-summary">Monorepo 把相关项目放进一个仓库，工作区负责本地包互相链接，任务编排工具负责构建顺序和缓存。文中用应用与组件包的例子讲依赖声明、构建顺序、发布验证和逐步采用的边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>Monorepo 就是把多个相关项目放在同一个仓库里，比如一个组件库和用它的几个应用。这样组件库改了 API，所有应用可以在同一个提交里一起改，工具链也能统一。</p>
+<p>这里面有三件不同的事。仓库组织是 Monorepo 本身；工作区，也就是 workspaces，负责把本地包互相链接起来，不用发布了再安装；按依赖顺序构建、并行执行、缓存结果，是 Turborepo、Nx 这类任务编排工具做的，工作区本身不做。</p>
+<p>代价是仓库变大，CI 要按改动范围执行，权限和发布流程也要重新设计。</p>
+<p>所以团队小、项目之间几乎不共享代码时，多仓库往往更简单。</p>
+</blockquote>
+<h2>Monorepo 解决了什么</h2>
+<p>最大的好处是原子修改。组件库改了 API，所有用到它的应用在同一个提交里一起改，评审的人能一次看到全部影响。</p>
+<p>其次是工具统一。ESLint、TypeScript、测试配置放在根目录共享，各个项目的工具版本不会越漂越远。</p>
+<p>还有本地联调方便。应用直接用组件库的源码，不需要 <code>npm link</code>，也不用反复发布测试版本。</p>
+<h2>npm workspaces 怎样用</h2>
+<p>先在根目录的 <code>package.json</code> 里声明哪些目录是工作区，再让应用像平常一样依赖组件库。</p>
 <div class="not-prose code-block"><div class="code-language">json</div><pre><code class="hljs language-json">// 根 package.json
 {
   &quot;private&quot;: true,
@@ -52,27 +50,31 @@
   &quot;dependencies&quot;: { &quot;@acme/ui&quot;: &quot;^1.0.0&quot; }
 }
 </code></pre></div>
-<p><code>npm install</code> 发现 <code>@acme/ui</code> 是本地工作区包且版本满足范围，就把它链接到 <code>node_modules/@acme/ui</code>。</p>
+<p>运行 <code>npm install</code> 时，npm 发现 <code>@acme/ui</code> 是本地的工作区包，而且版本满足范围，就把它链接到 <code>node_modules/@acme/ui</code>，不会去 registry 下载。</p>
+<p>运行脚本时可以指定某个包，也可以对所有包执行：</p>
 <div class="not-prose code-block"><div class="code-language">bash</div><pre><code class="hljs language-bash">npm run build --workspace=@acme/ui
 npm run test --workspaces --if-present
 </code></pre></div>
-<p><code>--workspaces</code> 依次在每个包运行脚本，不会自动按依赖拓扑排序。包多、依赖链长时需要任务编排工具。</p>
-<h2>任务编排</h2>
-<p>以 Turborepo 为例，声明 <code>build</code> 依赖上游包的 <code>build</code>，工具会算出执行顺序，并按输入文件哈希缓存输出。改了一个包时，只重新构建它和它的下游，其他包直接命中缓存。</p>
+<p>要注意，<code>--workspaces</code> 只是依次在每个包里运行脚本，它不会自动按依赖关系排序。包多、依赖链长的时候，就需要任务编排工具。</p>
+<h2>任务编排工具做了什么</h2>
+<p>以 Turborepo 为例，你声明“一个包的 <code>build</code> 依赖上游包的 <code>build</code>”，工具就能算出执行顺序。它还会按输入文件的哈希缓存输出。</p>
+<p>所以改了一个包，只有它和它的下游需要重新构建，其他包直接命中缓存。</p>
 <h2>需要额外注意的地方</h2>
-<ul>
-<li><strong>依赖声明</strong>：每个包要在自己的 <code>package.json</code> 里声明用到的依赖。npm 默认把依赖提升到根目录，漏写依赖在本地也能运行，发布后才出错。</li>
-<li><strong>构建产物</strong>：组件库如果需要先编译，应用开发时引用的是源码还是产物，要在 <code>exports</code> 和构建配置里约定清楚。</li>
-<li><strong>发布</strong>：多个包的版本号和变更日志可以用 Changesets 管理，发布前在干净环境里安装打包结果验证。</li>
-<li><strong>CI 规模</strong>：按改动范围筛选受影响的包，否则每次提交都全量构建。</li>
-</ul>
-<h2>逐步采用</h2>
-<p>可以先把共享配置和一个组件库放进同一仓库，确认链接、构建顺序和发布流程都顺畅，再迁入更多项目。迁移时保留各项目的 Git 历史（如 <code>git subtree</code>）便于追溯。</p>
+<p>第一是依赖声明。每个包要在自己的 <code>package.json</code> 里写清用到的依赖。npm 默认把依赖提升到根目录，所以漏写的依赖在本地也能跑，发布出去才出错。</p>
+<p>第二是构建产物。组件库如果要先编译，应用开发时引用的是源码还是编译产物，要在 <code>exports</code> 和构建配置里约定清楚。</p>
+<p>第三是发布。多个包的版本号和变更日志可以用 Changesets 管理，发布前在干净的环境里安装打包结果验证一遍。</p>
+<p>第四是 CI 规模。要按改动范围筛选受影响的包，否则每次提交都全量构建。</p>
+<h2>怎样逐步采用</h2>
+<p>不必一次全迁。可以先把共享配置和一个组件库放进同一个仓库，确认链接、构建顺序、发布流程都顺畅，再迁入更多项目。迁移时最好保留各项目的 Git 历史，比如用 <code>git subtree</code>，方便以后追溯。</p>
 <h2>常见追问</h2>
-<ul>
-<li>选 npm、pnpm 还是 Yarn 的工作区？pnpm 提供 <code>workspace:</code> 协议和严格隔离，适合包较多的仓库，见<a href="/questions/engineering-pnpm-workspaces/">《pnpm workspace 怎样管理多包前端仓库？》</a>。</li>
-<li>Monorepo 一定要用 Nx/Turborepo 吗？包少时 <code>--workspaces</code> 加手动排序足够，包多、构建慢时再引入。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://docs.npmjs.com/cli/v11/using-npm/workspaces" target="_blank" rel="noreferrer">npm · Workspaces<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Monorepo+%E4%B8%8E+npm+workspaces+%E8%83%BD%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AMonorepo+%E4%B8%8E+npm+workspaces+%E8%83%BD%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aeng-monorepo%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Feng-monorepo%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Monorepo 与 npm workspaces 能解决什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/engineering-lockfile/">为什么需要提交 lockfile？npm ci 和 npm install 有何区别？</a></li><li><a href="/questions/engineering-pnpm-workspaces/">pnpm workspace 怎样管理多包前端仓库？</a></li><li><a href="/questions/engineering-treeshaking/">Tree shaking 如何工作？为什么有些代码无法移除？</a></li><li><a href="/questions/engineering-lazy/">代码分割与懒加载适合哪些场景？</a></li></ul></nav></main></div></div>
+<p><strong>选 npm、pnpm 还是 Yarn 的工作区？</strong></p>
+<blockquote>
+<p>pnpm 提供 <code>workspace:</code> 协议和严格的依赖隔离，适合包比较多的仓库，详见<a href="/questions/engineering-pnpm-workspaces/">《pnpm workspace 怎样管理多包前端仓库？》</a>。</p>
+</blockquote>
+<p><strong>Monorepo 一定要用 Nx 或 Turborepo 吗？</strong></p>
+<blockquote>
+<p>不一定。包少的时候，<code>--workspaces</code> 加上手动安排顺序就够了。等包多了、构建变慢了，再引入编排工具。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://docs.npmjs.com/cli/v11/using-npm/workspaces" target="_blank" rel="noreferrer">npm · Workspaces<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Monorepo+%E4%B8%8E+npm+workspaces+%E8%83%BD%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AMonorepo+%E4%B8%8E+npm+workspaces+%E8%83%BD%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aeng-monorepo%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Feng-monorepo%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Monorepo 与 npm workspaces 能解决什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/engineering-lockfile/">为什么需要提交 lockfile？npm ci 和 npm install 有何区别？</a></li><li><a href="/questions/engineering-pnpm-workspaces/">pnpm workspace 怎样管理多包前端仓库？</a></li><li><a href="/questions/engineering-treeshaking/">Tree shaking 如何工作？为什么有些代码无法移除？</a></li><li><a href="/questions/engineering-lazy/">代码分割与懒加载适合哪些场景？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

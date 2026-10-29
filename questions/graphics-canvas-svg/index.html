@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="图形与可视化面试题：SVG 把图形保留为 DOM 元素，可以用 CSS 和事件直接操作；Canvas 2D 把绘制命令变成像素，图形对象和命中检测由应用管理。" />
+    <meta name="description" content="图形与可视化面试题：SVG 画出来的每个图形都是 DOM 元素，可以用 CSS 和事件直接操作；Canvas 2D 画完只剩像素，图形对象和命中检测由应用管理。" />
     <title>Canvas 和 SVG 怎样选择？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/graphics-canvas-svg/" />
     <meta name="robots" content="index,follow" />
@@ -19,27 +19,28 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Canvas 和 SVG 怎样选择？ · 前端知库" />
-    <meta property="og:description" content="图形与可视化面试题：SVG 把图形保留为 DOM 元素，可以用 CSS 和事件直接操作；Canvas 2D 把绘制命令变成像素，图形对象和命中检测由应用管理。" />
+    <meta property="og:description" content="图形与可视化面试题：SVG 画出来的每个图形都是 DOM 元素，可以用 CSS 和事件直接操作；Canvas 2D 画完只剩像素，图形对象和命中检测由应用管理。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/graphics-canvas-svg/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/graphics-canvas-svg/#webpage","url":"https://fe.hushifa.top/questions/graphics-canvas-svg/","name":"Canvas 和 SVG 怎样选择？ · 前端知库","description":"图形与可视化面试题：SVG 把图形保留为 DOM 元素，可以用 CSS 和事件直接操作；Canvas 2D 把绘制命令变成像素，图形对象和命中检测由应用管理。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/graphics-canvas-svg/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/graphics-canvas-svg/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"图形与可视化面试题","item":"https://fe.hushifa.top/topics/graphics/"},{"@type":"ListItem","position":3,"name":"Canvas 和 SVG 怎样选择？","item":"https://fe.hushifa.top/questions/graphics-canvas-svg/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/graphics-canvas-svg/#webpage","url":"https://fe.hushifa.top/questions/graphics-canvas-svg/","name":"Canvas 和 SVG 怎样选择？ · 前端知库","description":"图形与可视化面试题：SVG 画出来的每个图形都是 DOM 元素，可以用 CSS 和事件直接操作；Canvas 2D 画完只剩像素，图形对象和命中检测由应用管理。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/graphics-canvas-svg/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/graphics-canvas-svg/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"图形与可视化面试题","item":"https://fe.hushifa.top/topics/graphics/"},{"@type":"ListItem","position":3,"name":"Canvas 和 SVG 怎样选择？","item":"https://fe.hushifa.top/questions/graphics-canvas-svg/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/graphics/">图形与可视化面试题</a><span aria-hidden="true">/</span><span aria-current="page">Canvas 和 SVG 怎样选择？</span></nav><h1 tabindex="-1">Canvas 和 SVG 怎样选择？</h1><p class="reading-summary">SVG 把图形保留为 DOM 元素，可以用 CSS 和事件直接操作；Canvas 2D 把绘制命令变成像素，图形对象和命中检测由应用管理。对象数量、更新频率、交互、清晰度和无障碍共同决定选型。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>SVG 是保留模式：每个圆、路径都是 DOM 元素，可以改属性、加 CSS、监听事件，浏览器负责重绘和命中。</li>
-<li>Canvas 2D 是即时模式：画完只剩像素，要拖动某个图形，应用自己保存坐标、计算命中并重绘。</li>
-<li>图标、流程图、几百到几千个元素的交互图表适合 SVG；上万个点、粒子动画、绘图板、像素处理适合 Canvas。</li>
-<li>Canvas 要按 <code>devicePixelRatio</code> 设置内部尺寸才清晰，宽高各翻倍像素数就变成四倍，内存随之增加。</li>
-<li>两者都不会自动无障碍：SVG 要加标题和角色，Canvas 要另外提供文字或 HTML 替代。</li>
-</ul>
-<h2>同一个圆</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/graphics/">图形与可视化面试题</a><span aria-hidden="true">/</span><span aria-current="page">Canvas 和 SVG 怎样选择？</span></nav><h1 tabindex="-1">Canvas 和 SVG 怎样选择？</h1><p class="reading-summary">SVG 画出来的每个图形都是 DOM 元素，可以用 CSS 和事件直接操作；Canvas 2D 画完只剩像素，图形对象和命中检测由应用管理。对象数量、更新频率、交互、清晰度和无障碍共同决定选型。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>SVG 画的每个圆、每条路径都是一个 DOM 元素，可以改属性、加 CSS、绑事件，浏览器会负责重绘和判断点中了谁。这种“图形一直保留着”的方式叫保留模式。</p>
+<p>Canvas 2D 正好相反，画完就只剩像素，这叫即时模式。想拖动某个图形，应用得自己记住坐标、自己算点中了没有、自己重画。</p>
+<p>所以图标、流程图、几百到几千个元素的交互图表适合 SVG；上万个点、粒子动画、绘图板、像素处理适合 Canvas。</p>
+<p>有两点要注意。Canvas 要按 <code>devicePixelRatio</code> 设置内部尺寸才清晰，宽高各翻一倍，像素数就是四倍，内存也跟着涨。另外两者都不会自动无障碍：SVG 要加标题和角色，Canvas 要另外提供文字或 HTML 替代。</p>
+</blockquote>
+<h2>同一个圆，两种画法</h2>
+<p>先用 SVG 画：</p>
 <div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">svg</span> <span class="hljs-attr">viewBox</span>=<span class="hljs-string">&quot;0 0 200 100&quot;</span> <span class="hljs-attr">role</span>=<span class="hljs-string">&quot;img&quot;</span> <span class="hljs-attr">aria-labelledby</span>=<span class="hljs-string">&quot;t&quot;</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">title</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;t&quot;</span>&gt;</span>蓝色圆形<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-name">circle</span> <span class="hljs-attr">cx</span>=<span class="hljs-string">&quot;50&quot;</span> <span class="hljs-attr">cy</span>=<span class="hljs-string">&quot;50&quot;</span> <span class="hljs-attr">r</span>=<span class="hljs-string">&quot;20&quot;</span> <span class="hljs-attr">fill</span>=<span class="hljs-string">&quot;royalblue&quot;</span> /&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">svg</span>&gt;</span>
 </code></pre></div>
+<p>再用 Canvas 画：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> ctx = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;canvas&#x27;</span>).<span class="hljs-title function_">getContext</span>(<span class="hljs-string">&#x27;2d&#x27;</span>);
 ctx.<span class="hljs-property">fillStyle</span> = <span class="hljs-string">&#x27;royalblue&#x27;</span>;
 ctx.<span class="hljs-title function_">beginPath</span>();
@@ -47,10 +48,13 @@ ctx.<span class="hljs-title function_">arc</span>(<span class="hljs-number">50</
 ctx.<span class="hljs-title function_">fill</span>();
 <span class="hljs-comment">// 页面里只有一个 canvas 元素，querySelector 找不到这个圆</span>
 </code></pre></div>
-<h2>对比</h2>
+<p>看起来画出来一样。可是 SVG 版里有个真实的 <code>&lt;circle&gt;</code> 元素，你可以给它加 <code>click</code> 监听，或者用 CSS 改它的颜色。Canvas 版画完，页面里只有一个 canvas，那个圆已经变成了像素，没有任何东西可以选中。</p>
+<h2>两者具体差在哪里</h2>
 <table><thead><tr><th></th><th>SVG</th><th>Canvas 2D</th></tr></thead><tbody><tr><td>图形对象</td><td>DOM 元素</td><td>应用自己维护</td></tr><tr><td>交互</td><td>直接绑定事件</td><td>自己做命中检测</td></tr><tr><td>缩放</td><td>矢量，任意放大都清晰</td><td>位图，需要按缩放重绘</td></tr><tr><td>大量对象</td><td>DOM 和样式成本高</td><td>只受绘制成本影响</td></tr><tr><td>像素访问</td><td>不支持</td><td><code>getImageData</code></td></tr><tr><td>导出</td><td>序列化 XML</td><td><code>toBlob</code>、<code>toDataURL</code></td></tr></tbody></table>
-<p>两者之间没有固定的对象数量分界，用真实数据在目标设备上测试。</p>
-<h2>Canvas 清晰度</h2>
+<p>为什么对象多了 SVG 会慢？因为每个图形都是 DOM 元素，浏览器要为它们算样式、维护节点。Canvas 不管画了多少东西，都只有一个元素，成本只在绘制本身。</p>
+<p>不过两者之间没有固定的数量分界线，要用真实数据在目标设备上测。</p>
+<h2>为什么 Canvas 在高清屏上会模糊</h2>
+<p>高清屏上，一个 CSS 像素对应好几个物理像素，这个比例就是 <code>devicePixelRatio</code>。canvas 的位图如果只按 CSS 尺寸设置，就会被拉伸显示，看起来发虚。所以要把位图尺寸乘上这个比例：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">setupCanvas</span>(<span class="hljs-params">canvas, cssWidth, cssHeight</span>) {
   <span class="hljs-keyword">const</span> dpr = <span class="hljs-variable language_">window</span>.<span class="hljs-property">devicePixelRatio</span> || <span class="hljs-number">1</span>;
   canvas.<span class="hljs-property">style</span>.<span class="hljs-property">width</span> = <span class="hljs-string">`<span class="hljs-subst">${cssWidth}</span>px`</span>;
@@ -62,18 +66,22 @@ ctx.<span class="hljs-title function_">fill</span>();
   <span class="hljs-keyword">return</span> ctx;
 }
 </code></pre></div>
-<h2>混合方案</h2>
-<p>复杂编辑器常用 Canvas 绘制画布内容，用 HTML 做工具栏、输入框和属性面板，用 SVG 画选择框和控制点。图表可以用 Canvas 绘制大量数据点，再提供一个 HTML 数据表作为无障碍替代，见<a href="/questions/graphics-chart-accessibility/">《前端图表如何同时满足无障碍和高性能？》</a>。</p>
-<h2>安全</h2>
-<ul>
-<li>用户上传的 SVG 可以包含脚本和外部引用，不要直接内联插入页面，用 <code>&lt;img&gt;</code> 引用或先净化。</li>
-<li>Canvas 绘制了没有 CORS 授权的跨源图片后会被&quot;污染&quot;，<code>getImageData</code> 和 <code>toBlob</code> 会抛出 <code>SecurityError</code>。</li>
-</ul>
+<p><code>style</code> 上的宽高决定它在页面上占多大，<code>canvas.width</code>、<code>canvas.height</code> 决定位图有多少像素。最后 <code>scale(dpr, dpr)</code>，之后的绘图代码就还能按 CSS 像素来写。</p>
+<h2>能不能混着用</h2>
+<p>可以，而且很常见。复杂编辑器常用 Canvas 画画布内容，用 HTML 做工具栏、输入框和属性面板，用 SVG 画选择框和控制点。</p>
+<p>图表也可以用 Canvas 画大量数据点，再提供一个 HTML 数据表作为无障碍替代，见<a href="/questions/graphics-chart-accessibility/">《前端图表如何同时满足无障碍和高性能？》</a>。</p>
+<h2>安全上要注意什么</h2>
+<p>用户上传的 SVG 里可以带脚本和外部引用。所以不要直接把它内联插进页面，用 <code>&lt;img&gt;</code> 引用，或者先净化。</p>
+<p>Canvas 画了没有 CORS 授权的跨源图片以后，会被“污染”。之后调用 <code>getImageData</code> 和 <code>toBlob</code> 会抛 <code>SecurityError</code>。</p>
 <h2>常见追问</h2>
-<ul>
-<li><strong>Canvas 卡了怎么办？</strong> 分层（静态背景一层、动态内容一层）、只重绘变化区域、把绘制移到 Worker 里的 OffscreenCanvas。</li>
-<li><strong>WebGL 也是画在 canvas 上，它属于哪一边？</strong> 它是 canvas 的另一种上下文，绘制模型和 Canvas 2D 完全不同，适合更大规模的绘制，见<a href="/questions/graphics-webgl/">《什么场景值得用 WebGL？GPU 加速有哪些成本？》</a>。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API" target="_blank" rel="noreferrer">MDN · Canvas API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Canvas+%E5%92%8C+SVG+%E6%80%8E%E6%A0%B7%E9%80%89%E6%8B%A9%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ACanvas+%E5%92%8C+SVG+%E6%80%8E%E6%A0%B7%E9%80%89%E6%8B%A9%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Agraphics-canvas-svg%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9B%BE%E5%BD%A2%E4%B8%8E%E5%8F%AF%E8%A7%86%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fgraphics-canvas-svg%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Canvas 和 SVG 怎样选择？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/graphics-chart-accessibility/">前端图表如何同时满足无障碍和高性能？</a></li><li><a href="/questions/graphics-canvas-transform/">Canvas 的 transform 怎样影响坐标和绘制？</a></li><li><a href="/questions/graphics-canvas-hit-test/">Canvas 图形命中测试应该怎样实现？</a></li><li><a href="/questions/graphics-webgl/">什么场景值得用 WebGL？GPU 加速有哪些成本？</a></li></ul></nav></main></div></div>
+<p><strong>Canvas 卡了怎么办？</strong></p>
+<blockquote>
+<p>可以分层，静态背景画一层，动态内容画另一层；只重画变化的区域；或者把绘制移到 Worker 里的 OffscreenCanvas，不占主线程。</p>
+</blockquote>
+<p><strong>WebGL 也是画在 canvas 上，它算哪一边？</strong></p>
+<blockquote>
+<p>它是 canvas 的另一种上下文，绘制模型和 Canvas 2D 完全不同，适合更大规模的绘制，见<a href="/questions/graphics-webgl/">《什么场景值得用 WebGL？GPU 加速有哪些成本？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API" target="_blank" rel="noreferrer">MDN · Canvas API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Canvas+%E5%92%8C+SVG+%E6%80%8E%E6%A0%B7%E9%80%89%E6%8B%A9%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ACanvas+%E5%92%8C+SVG+%E6%80%8E%E6%A0%B7%E9%80%89%E6%8B%A9%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Agraphics-canvas-svg%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9B%BE%E5%BD%A2%E4%B8%8E%E5%8F%AF%E8%A7%86%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fgraphics-canvas-svg%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Canvas 和 SVG 怎样选择？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/graphics-chart-accessibility/">前端图表如何同时满足无障碍和高性能？</a></li><li><a href="/questions/graphics-canvas-transform/">Canvas 的 transform 怎样影响坐标和绘制？</a></li><li><a href="/questions/graphics-canvas-hit-test/">Canvas 图形命中测试应该怎样实现？</a></li><li><a href="/questions/graphics-webgl/">什么场景值得用 WebGL？GPU 加速有哪些成本？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

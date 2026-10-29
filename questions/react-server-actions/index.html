@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="React面试题：Server Function 是用 &#39;use server&#39; 标记、在服务端执行的异步函数，客户端拿到的只是一个调用引用…" />
+    <meta name="description" content="React面试题：Server Function 是标了 &#39;use server&#39;、只在服务端执行的函数，客户端拿到的只是一个引用…" />
     <title>React Server Functions/Actions 的边界是什么？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/react-server-actions/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="React Server Functions/Actions 的边界是什么？" />
-    <meta property="og:description" content="React面试题：Server Function 是用 &#39;use server&#39; 标记、在服务端执行的异步函数，客户端拿到的只是一个调用引用…" />
+    <meta property="og:description" content="React面试题：Server Function 是标了 &#39;use server&#39;、只在服务端执行的函数，客户端拿到的只是一个引用…" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/react-server-actions/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-server-actions/#webpage","url":"https://fe.hushifa.top/questions/react-server-actions/","name":"React Server Functions/Actions 的边界是什么？","description":"React面试题：Server Function 是用 'use server' 标记、在服务端执行的异步函数，客户端拿到的只是一个调用引用…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-server-actions/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-server-actions/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"React Server Functions/Actions 的边界是什么？","item":"https://fe.hushifa.top/questions/react-server-actions/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-server-actions/#webpage","url":"https://fe.hushifa.top/questions/react-server-actions/","name":"React Server Functions/Actions 的边界是什么？","description":"React面试题：Server Function 是标了 'use server'、只在服务端执行的函数，客户端拿到的只是一个引用…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-server-actions/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-server-actions/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"React Server Functions/Actions 的边界是什么？","item":"https://fe.hushifa.top/questions/react-server-actions/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">React Server Functions/Actions 的边界是什么？</span></nav><h1 tabindex="-1">React Server Functions/Actions 的边界是什么？</h1><p class="reading-summary">Server Function 是用 &#x27;use server&#x27; 标记、在服务端执行的异步函数，客户端拿到的只是一个调用引用，调用时框架通过网络请求执行它。参数和返回值必须可序列化，每个 Server Function 都是一个公开接口，要自己做认证、授权和输入校验。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>在函数体或文件顶部写 <code>&#x27;use server&#x27;</code>，打包工具会把函数留在服务端，只给客户端一个引用；客户端调用时，框架发送请求、在服务端执行并返回结果。</li>
-<li>传给 <code>&lt;form action&gt;</code> 或在 Action 中调用时，通常称为 Server Action。</li>
-<li>参数和返回值必须能被 React 序列化：基本类型、普通对象、数组、<code>Date</code>、<code>FormData</code>、Promise 等可以，类实例、函数（Server Function 除外）不可以。</li>
-<li>每个 Server Function 等同于一个任何人都能调用的 HTTP 接口，必须在函数内部做认证、授权和参数校验，不能依赖&quot;按钮只对管理员显示&quot;。</li>
-<li>需要框架支持（如 Next.js App Router），并使用打过安全补丁的版本：2025 年 12 月披露的 CVE-2025-55182 影响 <code>react-server-dom-*</code> 的多个 19.x 版本。</li>
-</ul>
-<h2>示例</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">React Server Functions/Actions 的边界是什么？</span></nav><h1 tabindex="-1">React Server Functions/Actions 的边界是什么？</h1><p class="reading-summary">Server Function 是标了 &#x27;use server&#x27;、只在服务端执行的函数，客户端拿到的只是一个引用，调用时框架发请求去服务端执行。参数和返回值必须能序列化，而且每个 Server Function 都等于一个公开接口，认证、授权和校验都要自己做。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>在函数体或文件顶部写上 <code>&#x27;use server&#x27;</code>，打包工具就会把这个函数留在服务端，客户端只拿到一个引用。客户端调用它时，框架发一个请求到服务端，执行完再把结果送回来。这种函数叫 Server Function；传给 <code>&lt;form action&gt;</code> 或在 Action 里调用时，通常叫 Server Action。</p>
+<p>因为中间隔了一次网络传输，参数和返回值必须能被 React 序列化。基本类型、普通对象、数组、<code>Date</code>、<code>FormData</code>、Promise 都可以；类实例和普通函数不行，Server Function 本身除外。</p>
+<p>它的好处是写表单提交、改数据时不用自己定义接口和写 fetch。它需要框架支持，比如 Next.js App Router。</p>
+<p>最要注意的是安全。每个 Server Function 都相当于一个任何人都能调用的 HTTP 接口，必须在函数内部做认证、授权和参数校验，不能指望“按钮只对管理员显示”。另外要用打过安全补丁的版本，2025 年 12 月披露的 CVE-2025-55182 影响 <code>react-server-dom-*</code> 的多个 19.x 版本。</p>
+</blockquote>
+<h2>先看一个发帖的例子</h2>
+<p>服务端的 Action 放在单独的文件里，文件顶部写 <code>&#x27;use server&#x27;</code>：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-comment">// app/actions.js</span>
 <span class="hljs-string">&#x27;use server&#x27;</span>;
 
@@ -55,6 +55,7 @@
   <span class="hljs-keyword">return</span> { <span class="hljs-attr">error</span>: <span class="hljs-literal">null</span> };
 }
 </code></pre></div>
+<p>客户端组件直接导入它，交给 <code>useActionState</code>：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-comment">// app/new-post.jsx</span>
 <span class="hljs-string">&#x27;use client&#x27;</span>;
 
@@ -72,20 +73,23 @@
   );
 }
 </code></pre></div>
-<p><code>authorId</code> 从服务端会话中获取，而不是由表单提交，防止用户冒充他人。</p>
-<h2>闭包变量也会被发送</h2>
-<p>在 Server Component 里内联定义 Server Function 时，它捕获的外部变量会被序列化后发给客户端，调用时再传回服务端。不要在闭包中捕获密钥或不想让用户看到的数据；需要保密的值在函数内部重新读取。</p>
-<h2>与 Server Components 的区别</h2>
-<ul>
-<li>Server Component 在服务端渲染并输出 UI，不能被客户端主动调用。</li>
-<li>Server Function 是客户端可以调用的服务端函数，用于修改数据。</li>
-</ul>
-<p><code>&#x27;use server&#x27;</code> 不是用来标记 Server Component 的，Server Component 不需要任何指令。详见<a href="/questions/render-server-components/">《React Server Components 和 SSR 是同一件事吗？》</a>。</p>
+<p>客户端看起来是直接导入了一个函数，但打包后它拿到的只是引用。<code>db</code>、<code>auth</code> 这些服务端代码不会进入浏览器的包。</p>
+<p>注意 <code>createPost</code> 一上来就检查登录、校验标题，而且 <code>authorId</code> 是从服务端的会话里取的，不是从表单里拿的。因为任何人都能绕过页面，直接构造请求调用这个函数。如果 <code>authorId</code> 由表单提交，用户改一下就能冒充别人发帖。</p>
+<h2>闭包里的变量也会发到客户端</h2>
+<p>在 Server Component 里直接内联定义 Server Function 时，它用到的外部变量会被序列化后发给客户端，调用时再传回服务端。</p>
+<p>这意味着用户能看到这些值。所以不要在闭包里捕获密钥或者不想让用户看到的数据，需要保密的值放在函数内部重新读取。</p>
+<h2>和 Server Components 有什么区别</h2>
+<p>两者都在服务端运行，但方向相反。Server Component 在服务端渲染、输出 UI，客户端不能主动调用它。Server Function 是客户端可以调用的服务端函数，主要用来改数据。</p>
+<p>还有一个常见误会：<code>&#x27;use server&#x27;</code> 不是用来标记 Server Component 的。Server Component 不需要任何指令。详见<a href="/questions/render-server-components/">《React Server Components 和 SSR 是同一件事吗？》</a>。</p>
 <h2>常见追问</h2>
-<ul>
-<li>修改数据后怎么刷新页面？由框架提供，例如 Next.js 中调用 <code>revalidatePath</code> 或 <code>updateTag</code>。</li>
-<li>能用来读数据吗？不推荐，框架通常一次只处理一个 Action，读数据应放在 Server Component 或数据加载层里。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/reference/rsc/server-functions" target="_blank" rel="noreferrer">React · Server Functions<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+Server+Functions%2FActions+%E7%9A%84%E8%BE%B9%E7%95%8C%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+Server+Functions%2FActions+%E7%9A%84%E8%BE%B9%E7%95%8C%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-server-actions%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-server-actions%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React Server Functions/Actions 的边界是什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-server-cache/">React 的 cache API 解决什么问题？</a></li><li><a href="/questions/react-use-effect-event/">React useEffectEvent 适合解决什么依赖问题？</a></li><li><a href="/questions/react-use-hook/">React use API 可以读取哪些值？</a></li><li><a href="/questions/react-compiler/">React Compiler 解决了哪些优化问题？</a></li></ul></nav></main></div></div>
+<p><strong>改完数据以后页面怎么刷新？</strong></p>
+<blockquote>
+<p>由框架提供。例如在 Next.js 里，在 Action 中调用 <code>revalidatePath</code> 或 <code>updateTag</code>，让相关页面重新获取数据。</p>
+</blockquote>
+<p><strong>能用 Server Function 读数据吗？</strong></p>
+<blockquote>
+<p>不推荐。框架通常一次只处理一个 Action，用它读数据会排队变慢。读数据应该放在 Server Component 或数据加载层里。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/reference/rsc/server-functions" target="_blank" rel="noreferrer">React · Server Functions<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+Server+Functions%2FActions+%E7%9A%84%E8%BE%B9%E7%95%8C%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+Server+Functions%2FActions+%E7%9A%84%E8%BE%B9%E7%95%8C%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-server-actions%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-server-actions%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React Server Functions/Actions 的边界是什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-server-cache/">React 的 cache API 解决什么问题？</a></li><li><a href="/questions/react-use-effect-event/">React useEffectEvent 适合解决什么依赖问题？</a></li><li><a href="/questions/react-use-hook/">React use API 可以读取哪些值？</a></li><li><a href="/questions/react-compiler/">React Compiler 解决了哪些优化问题？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

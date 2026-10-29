@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Node.js面试题：Node 服务能访问网络、文件系统、子进程和密钥，权限远大于浏览器页面。" />
+    <meta name="description" content="Node.js面试题：Node 服务能访问网络、文件系统、子进程和密钥，权限比浏览器页面大得多。" />
     <title>前端工程师编写 Node 服务时需要守住哪些安全边界？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/node-bff/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="前端工程师编写 Node 服务时需要守住哪些安全边界？" />
-    <meta property="og:description" content="Node.js面试题：Node 服务能访问网络、文件系统、子进程和密钥，权限远大于浏览器页面。" />
+    <meta property="og:description" content="Node.js面试题：Node 服务能访问网络、文件系统、子进程和密钥，权限比浏览器页面大得多。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/node-bff/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/node-bff/#webpage","url":"https://fe.hushifa.top/questions/node-bff/","name":"前端工程师编写 Node 服务时需要守住哪些安全边界？","description":"Node.js面试题：Node 服务能访问网络、文件系统、子进程和密钥，权限远大于浏览器页面。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/node-bff/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/node-bff/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Node.js面试题","item":"https://fe.hushifa.top/topics/node/"},{"@type":"ListItem","position":3,"name":"前端工程师编写 Node 服务时需要守住哪些安全边界？","item":"https://fe.hushifa.top/questions/node-bff/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/node-bff/#webpage","url":"https://fe.hushifa.top/questions/node-bff/","name":"前端工程师编写 Node 服务时需要守住哪些安全边界？","description":"Node.js面试题：Node 服务能访问网络、文件系统、子进程和密钥，权限比浏览器页面大得多。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/node-bff/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/node-bff/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Node.js面试题","item":"https://fe.hushifa.top/topics/node/"},{"@type":"ListItem","position":3,"name":"前端工程师编写 Node 服务时需要守住哪些安全边界？","item":"https://fe.hushifa.top/questions/node-bff/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/node/">Node.js面试题</a><span aria-hidden="true">/</span><span aria-current="page">前端工程师编写 Node 服务时需要守住哪些安全边界？</span></nav><h1 tabindex="-1">前端工程师编写 Node 服务时需要守住哪些安全边界？</h1><p class="reading-summary">Node 服务能访问网络、文件系统、子进程和密钥，权限远大于浏览器页面。所有输入和权限都要在服务端重新校验；下游地址由服务端决定以防 SSRF；文件路径和命令不拼接用户输入；请求体、超时和并发都要设上限，日志里不记录凭据。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>用户可以绕过页面直接调用接口，参数类型、长度、枚举和资源归属都要在服务端重新校验；认证确认身份，授权还要按资源逐项检查。</li>
-<li>不接受客户端传来的完整 URL 让服务端去请求，客户端只传业务 ID，由服务端选择固定的上游，否则会出现 SSRF。</li>
-<li>文件访问用服务端维护的 ID 映射，外部命令用 <code>execFile</code> 或 <code>spawn</code> 加参数数组，不经过 shell 拼接字符串。</li>
-<li>请求体大小、超时、并发和速率都要设上限；同步的重计算和回溯严重的正则会阻塞整个事件循环。</li>
-<li>日志和错误响应中不出现令牌、Cookie 和内部堆栈，依赖与生产凭据按最小权限管理。</li>
-</ul>
-<h2>输入与授权</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/node/">Node.js面试题</a><span aria-hidden="true">/</span><span aria-current="page">前端工程师编写 Node 服务时需要守住哪些安全边界？</span></nav><h1 tabindex="-1">前端工程师编写 Node 服务时需要守住哪些安全边界？</h1><p class="reading-summary">Node 服务能访问网络、文件系统、子进程和密钥，权限比浏览器页面大得多。所有输入和权限都要在服务端重新校验；下游地址由服务端决定以防 SSRF；文件路径和命令不拼接用户输入；请求体、超时和并发都要设上限，日志里不记录凭据。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>写页面时，代码跑在用户的浏览器里，能做的事有限。写 Node 服务就不一样了，它能读写文件、发内网请求、启动子进程、拿到数据库密码。所以前端在页面上做的校验，到了服务端都要重新做一遍，因为用户完全可以绕过页面直接调接口。参数的类型、长度、取值范围要校验，“这条数据是不是你的”也要逐条检查。</p>
+<p>有几类输入绝不能直接用。客户端传来的完整 URL 不能拿去请求，否则就是 SSRF，应该只收业务 ID，由服务端决定请求哪个上游。文件路径用服务端维护的 ID 映射；外部命令用 <code>execFile</code> 或 <code>spawn</code> 加参数数组，不经过 shell 拼字符串。</p>
+<p>资源也要设上限：请求体大小、超时、并发和速率。另外同步的重计算和回溯严重的正则会卡住整个事件循环，所有请求都会跟着变慢。</p>
+<p>最后，日志和错误响应里不要出现令牌、Cookie 和内部堆栈，依赖和生产凭据按最小权限管理。</p>
+</blockquote>
+<h2>为什么页面校验过了，服务端还要再校验</h2>
+<p>页面上的表单校验只是为了体验，攻击者可以用 curl 直接发请求。所以服务端要在入口把参数校验一遍，后面的代码只用校验后的值：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">parseListQuery</span>(<span class="hljs-params">query</span>) {
   <span class="hljs-keyword">const</span> page = <span class="hljs-title class_">Number</span>(query.<span class="hljs-property">page</span> ?? <span class="hljs-number">1</span>);
   <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Number</span>.<span class="hljs-title function_">isSafeInteger</span>(page) || page &lt; <span class="hljs-number">1</span> || page &gt; <span class="hljs-number">1000</span>) {
@@ -47,9 +47,11 @@
   <span class="hljs-keyword">return</span> { page, sort };
 }
 </code></pre></div>
-<p>校验在服务端边界做一次，后续代码只使用校验后的值。客户端提交的 <code>userId</code>、<code>role</code>、价格不能当作事实，应从会话和数据库中取得。</p>
-<p>认证回答&quot;你是谁&quot;，授权回答&quot;你能不能操作这条数据&quot;。只校验登录状态而不检查资源归属，用户改一下 URL 里的 ID 就能读到别人的数据，这是最常见的越权漏洞（IDOR）。</p>
-<h2>SSRF：下游地址由服务端决定</h2>
+<p>客户端提交的 <code>userId</code>、<code>role</code>、价格，都不能当成事实，要从会话和数据库里取。</p>
+<p>还有一个容易漏的点。认证回答的是“你是谁”，授权回答的是“你能不能操作这条数据”。如果只检查了登录状态，不检查资源归属，用户把 URL 里的 ID 改一下，就能读到别人的数据。这是最常见的越权漏洞，叫 IDOR。</p>
+<h2>为什么不能让客户端决定请求哪个地址</h2>
+<p>假设接口接受 <code>?url=</code> 参数，替用户去抓取内容。攻击者就可以传一个内网地址，或者云厂商的元数据地址，让你的服务器帮他访问本来访问不到的东西。这种攻击叫 SSRF，服务端请求伪造。</p>
+<p>稳妥的做法是客户端只传业务 ID，上游地址写死在服务端：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">UPSTREAM</span> = <span class="hljs-string">&#x27;https://catalog.internal.example&#x27;</span>;
 
 <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">loadProduct</span>(<span class="hljs-params">productId, signal</span>) {
@@ -60,28 +62,28 @@
   });
 }
 </code></pre></div>
-<p>如果接口接受 <code>?url=</code> 并替用户请求，攻击者就能让服务端访问内网服务或云厂商的元数据地址。确实需要抓取外部 URL 时，要限制协议和目标主机，解析 DNS 后拒绝内网地址段，禁止或逐跳校验重定向，最好再加一层网络出口限制。只检查字符串前缀不够：<code>https://example.com.evil.net</code> 也以 <code>https://example.com</code> 开头。</p>
-<p>转发请求头时只带必要的几个。把浏览器的 Cookie、Authorization 原样转给所有上游，凭据就可能发到不该去的服务。</p>
-<h2>文件与命令</h2>
-<ul>
-<li><code>path.join(base, userInput)</code> 无法阻止 <code>../</code> 穿越。按 ID 查表得到文件名最安全；必须接受路径时，<code>path.resolve</code> 后检查结果仍在允许的目录下，并考虑符号链接。</li>
-<li><code>exec(\</code>convert ${name}`)<code> 会经过 shell 解析，</code>name<code>里的</code>;<code>、</code>$()<code>都能执行任意命令。改用</code>execFile(&#x27;convert&#x27;, [name])<code>。参数数组能防 shell 注入，但以 </code>-` 开头的参数仍可能被工具当成选项，需要额外校验。</li>
-<li>不要用 <code>eval</code>、<code>new Function</code> 或 <code>vm</code> 处理用户数据，<code>vm</code> 不是安全沙箱。</li>
-</ul>
-<h2>资源上限</h2>
+<p>确实需要抓取外部 URL 时，要限制协议和目标主机，解析 DNS 后拒绝内网地址段，禁止重定向或者每一跳都重新校验，最好再加一层网络出口限制。只检查字符串前缀是不够的，<code>https://example.com.evil.net</code> 也是以 <code>https://example.com</code> 开头的。</p>
+<p>转发请求头时也只带必要的几个。如果把浏览器的 Cookie、Authorization 原样转给所有上游，凭据就可能被发到不该去的服务。</p>
+<h2>文件路径和命令为什么不能拼用户输入</h2>
+<p>先说文件。<code>path.join(base, userInput)</code> 拦不住 <code>../</code>，用户可以一路往上跳到任意目录，这叫路径穿越。最安全的是按 ID 查表得到文件名；必须接受路径时，<code>path.resolve</code> 之后检查结果还在允许的目录下，并考虑符号链接。</p>
+<p>再说命令。<code>exec(\</code>convert ${name}`)<code> 会交给 shell 解析，</code>name<code>里的</code>;<code>、</code>$()<code>都能让攻击者执行任意命令。改成</code>execFile(&#x27;convert&#x27;, [name])<code>，参数不经过 shell。不过参数数组只能防 shell 注入，以 </code>-` 开头的参数仍可能被工具当成选项，需要额外校验。</p>
+<p>还有，不要用 <code>eval</code>、<code>new Function</code> 或 <code>vm</code> 处理用户数据，<code>vm</code> 不是安全沙箱。</p>
+<h2>资源要设哪些上限</h2>
 <table><thead><tr><th>风险</th><th>处理</th></tr></thead><tbody><tr><td>超大请求体</td><td>在框架解析前限制大小，例如 1MB，超出直接返回 413</td></tr><tr><td>下游不返回</td><td>每个调用都有超时，整次请求有总预算</td></tr><tr><td>正则回溯</td><td>避免嵌套量词，限制输入长度</td></tr><tr><td>暴力请求</td><td>按 IP 或用户限流</td></tr><tr><td>同步重计算</td><td>移到 Worker，见<a href="/questions/node-worker-threads/">《Node.js Worker Threads 适合解决什么问题？》</a></td></tr></tbody></table>
-<p>Node.js HTTP 服务器的 <code>requestTimeout</code> 默认 300 秒，<code>headersTimeout</code> 默认 60 秒，限制的是接收完整个请求的时间，用来防慢速请求攻击，处理请求本身的耗时要靠业务代码里的超时来控制。</p>
-<h2>依赖与密钥</h2>
-<ul>
-<li>密钥放在环境变量或密钥管理服务中，不提交到仓库，不写进前端构建产物。</li>
-<li>锁定依赖版本，在 CI 中运行 <code>npm audit</code> 等检查；安装脚本会以当前用户权限运行，不认识的包要先审查。</li>
-<li>错误响应只返回 <code>code</code> 和请求 ID，详细堆栈留在服务端日志里，日志同样要脱敏。</li>
-</ul>
+<p>Node.js HTTP 服务器的 <code>requestTimeout</code> 默认 300 秒，<code>headersTimeout</code> 默认 60 秒。它们限制的是接收完整个请求的时间，用来防慢速请求攻击。处理请求本身花多久，要靠业务代码里的超时来控制。</p>
+<h2>依赖和密钥怎么管</h2>
+<p>密钥放在环境变量或密钥管理服务里，不提交到仓库，也不能写进前端构建产物。</p>
+<p>依赖要锁定版本，在 CI 里运行 <code>npm audit</code> 等检查。安装脚本会以当前用户的权限运行，不认识的包先审查再装。</p>
+<p>错误响应只返回 <code>code</code> 和请求 ID，详细堆栈留在服务端日志里，日志同样要脱敏。</p>
 <h2>常见追问</h2>
-<ul>
-<li><strong>BFF 已经校验过，下游还要校验吗？</strong> 要。其他调用方可能绕过 BFF 直接访问下游，每个服务都要守住自己的边界。</li>
-<li><strong>Node.js 的权限模型能防住这些问题吗？</strong> <code>--permission</code> 能限制进程读写哪些文件、能否创建子进程，可以减小漏洞被利用后的影响范围，但不能代替输入校验和授权。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://nodejs.org/en/learn/getting-started/security-best-practices" target="_blank" rel="noreferrer">Security Best Practices | Node.js Learn<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%BC%96%E5%86%99+Node+%E6%9C%8D%E5%8A%A1%E6%97%B6%E9%9C%80%E8%A6%81%E5%AE%88%E4%BD%8F%E5%93%AA%E4%BA%9B%E5%AE%89%E5%85%A8%E8%BE%B9%E7%95%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%BC%96%E5%86%99+Node+%E6%9C%8D%E5%8A%A1%E6%97%B6%E9%9C%80%E8%A6%81%E5%AE%88%E4%BD%8F%E5%93%AA%E4%BA%9B%E5%AE%89%E5%85%A8%E8%BE%B9%E7%95%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anode-bff%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ANode.js%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnode-bff%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端工程师编写 Node 服务时需要守住哪些安全边界？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/node-bff-api-design/">BFF 聚合接口怎样设计才能避免把前端耦合到后端细节？</a></li><li><a href="/questions/node-eventloop/">Node.js 事件循环和浏览器有什么不同？nextTick 一定先于 Promise 吗？</a></li><li><a href="/questions/node-worker-threads/">Node.js Worker Threads 适合解决什么问题？</a></li><li><a href="/questions/node-module-resolution/">Node.js 的 package exports 会怎样影响模块解析？</a></li></ul></nav></main></div></div>
+<p><strong>BFF 已经校验过，下游还要校验吗？</strong></p>
+<blockquote>
+<p>要。其他调用方可能绕过 BFF 直接访问下游，每个服务都要守住自己的边界。</p>
+</blockquote>
+<p><strong>Node.js 的权限模型能防住这些问题吗？</strong></p>
+<blockquote>
+<p><code>--permission</code> 能限制进程读写哪些文件、能不能创建子进程，漏洞被利用以后影响范围会小一些。但它代替不了输入校验和授权。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://nodejs.org/en/learn/getting-started/security-best-practices" target="_blank" rel="noreferrer">Security Best Practices | Node.js Learn<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%BC%96%E5%86%99+Node+%E6%9C%8D%E5%8A%A1%E6%97%B6%E9%9C%80%E8%A6%81%E5%AE%88%E4%BD%8F%E5%93%AA%E4%BA%9B%E5%AE%89%E5%85%A8%E8%BE%B9%E7%95%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%BC%96%E5%86%99+Node+%E6%9C%8D%E5%8A%A1%E6%97%B6%E9%9C%80%E8%A6%81%E5%AE%88%E4%BD%8F%E5%93%AA%E4%BA%9B%E5%AE%89%E5%85%A8%E8%BE%B9%E7%95%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anode-bff%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ANode.js%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnode-bff%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端工程师编写 Node 服务时需要守住哪些安全边界？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/node-bff-api-design/">BFF 聚合接口怎样设计才能避免把前端耦合到后端细节？</a></li><li><a href="/questions/node-eventloop/">Node.js 事件循环和浏览器有什么不同？nextTick 一定先于 Promise 吗？</a></li><li><a href="/questions/node-worker-threads/">Node.js Worker Threads 适合解决什么问题？</a></li><li><a href="/questions/node-module-resolution/">Node.js 的 package exports 会怎样影响模块解析？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

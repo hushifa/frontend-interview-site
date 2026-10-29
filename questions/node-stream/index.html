@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Node.js面试题：流把数据分成小块依次处理，内存占用由缓冲区大小决定，而不是由文件大小决定。" />
+    <meta name="description" content="Node.js面试题：流把数据分成小块依次处理，内存占用取决于缓冲区大小，而不是文件大小。" />
     <title>流和背压为什么能避免一次性读入大文件？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/node-stream/" />
     <meta name="robots" content="index,follow" />
@@ -19,25 +19,26 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="流和背压为什么能避免一次性读入大文件？ · 前端知库" />
-    <meta property="og:description" content="Node.js面试题：流把数据分成小块依次处理，内存占用由缓冲区大小决定，而不是由文件大小决定。" />
+    <meta property="og:description" content="Node.js面试题：流把数据分成小块依次处理，内存占用取决于缓冲区大小，而不是文件大小。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/node-stream/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/node-stream/#webpage","url":"https://fe.hushifa.top/questions/node-stream/","name":"流和背压为什么能避免一次性读入大文件？ · 前端知库","description":"Node.js面试题：流把数据分成小块依次处理，内存占用由缓冲区大小决定，而不是由文件大小决定。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/node-stream/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/node-stream/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Node.js面试题","item":"https://fe.hushifa.top/topics/node/"},{"@type":"ListItem","position":3,"name":"流和背压为什么能避免一次性读入大文件？","item":"https://fe.hushifa.top/questions/node-stream/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/node-stream/#webpage","url":"https://fe.hushifa.top/questions/node-stream/","name":"流和背压为什么能避免一次性读入大文件？ · 前端知库","description":"Node.js面试题：流把数据分成小块依次处理，内存占用取决于缓冲区大小，而不是文件大小。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/node-stream/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/node-stream/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Node.js面试题","item":"https://fe.hushifa.top/topics/node/"},{"@type":"ListItem","position":3,"name":"流和背压为什么能避免一次性读入大文件？","item":"https://fe.hushifa.top/questions/node-stream/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/node/">Node.js面试题</a><span aria-hidden="true">/</span><span aria-current="page">流和背压为什么能避免一次性读入大文件？</span></nav><h1 tabindex="-1">流和背压为什么能避免一次性读入大文件？</h1><p class="reading-summary">流把数据分成小块依次处理，内存占用由缓冲区大小决定，而不是由文件大小决定。背压让写入端在缓冲区满时通知上游暂停；用 stream.pipeline 连接各个流，可以同时得到背压传递、错误传播和统一清理。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>流按块读写，同一时刻只在内存里保留缓冲区中的若干块，适合大文件、网络响应和压缩这类数据量不可控的场景。</li>
-<li>背压是写入端处理不过来时让上游暂停的机制：<code>write()</code> 返回 <code>false</code> 表示缓冲区已超过 <code>highWaterMark</code>，应等 <code>drain</code> 事件再继续写。</li>
-<li><code>stream.pipeline</code> 自动处理背压，任一环节出错时会销毁链路上的所有流并把错误交给调用方。</li>
-<li>可读流支持 <code>for await...of</code> 逐块消费，循环体里的 <code>await</code> 本身就形成背压。</li>
-</ul>
-<h2>一次性读取的问题</h2>
-<p><code>fs.readFile</code> 会把整个文件放进一个 Buffer。文件有几个 GB 时，进程内存随之上涨，还可能超过 Buffer 的长度上限；请求并发时问题会成倍放大。流把读取拆成默认 64KB（文件流）的块，处理完一块再读下一块，内存占用和文件大小基本无关。</p>
-<h2>背压怎样发生</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/node/">Node.js面试题</a><span aria-hidden="true">/</span><span aria-current="page">流和背压为什么能避免一次性读入大文件？</span></nav><h1 tabindex="-1">流和背压为什么能避免一次性读入大文件？</h1><p class="reading-summary">流把数据分成小块依次处理，内存占用取决于缓冲区大小，而不是文件大小。背压让写入端在缓冲区满时通知上游暂停；用 stream.pipeline 连接各个流，可以同时得到背压传递、错误传播和统一清理。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>读一个几 GB 的文件，如果用 <code>fs.readFile</code> 一次读进来，内存就跟着涨几 GB。流的做法是一小块一小块地读，处理完一块再读下一块，内存里只留缓冲区里的那几块。所以大文件、网络响应、压缩这类数据量说不准的场景，都适合用流。</p>
+<p>可是写入往往比读取慢，读得快写得慢，数据就会堆在中间。背压就是写入端处理不过来时让上游先停一停：<code>write()</code> 返回 <code>false</code>，表示缓冲区已经超过 <code>highWaterMark</code>，这时应该等 <code>drain</code> 事件再继续写。</p>
+<p>实际写代码时用 <code>stream.pipeline</code> 把流串起来，它自动处理背压；任何一个环节出错，它会把链路上所有流都销毁，再把错误交给调用方。</p>
+<p>另外，可读流也可以用 <code>for await...of</code> 一块块地消费，循环体里的 <code>await</code> 本身就起到了背压的作用。</p>
+</blockquote>
+<h2>一次性读取有什么问题</h2>
+<p><code>fs.readFile</code> 会把整个文件放进一个 Buffer。文件有几个 GB 时，进程内存随之上涨，还可能超过 Buffer 的长度上限；如果多个请求同时这样读，问题会成倍放大。</p>
+<p>流把读取拆成块，文件流默认每块 64KB，处理完一块再读下一块。这样内存占用基本和文件大小无关。</p>
+<h2>背压是怎么发生的</h2>
 <p>写入目标（磁盘、网络、压缩）通常比读取慢。如果不管写入端的状态一直往里写，数据就会堆在可写流的内部缓冲区里，效果和一次性读入差不多。</p>
-<p>可写流用 <code>write()</code> 的返回值通知上游：</p>
+<p>所以可写流用 <code>write()</code> 的返回值告诉上游要不要暂停。下面这段代码遇到 <code>false</code> 就停下，等 <code>drain</code> 再接着写：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">writeMany</span>(<span class="hljs-params">writable, chunks</span>) {
   <span class="hljs-keyword">let</span> index = <span class="hljs-number">0</span>;
   <span class="hljs-keyword">function</span> <span class="hljs-title function_">writeNext</span>(<span class="hljs-params"></span>) {
@@ -53,8 +54,9 @@
   <span class="hljs-title function_">writeNext</span>();
 }
 </code></pre></div>
-<p><code>false</code> 不代表写入失败，这块数据已经进入缓冲区；它只是要求调用方暂停，等 <code>drain</code> 后再写。</p>
-<h2>用 pipeline 连接</h2>
+<p>很多人以为 <code>false</code> 是写失败了，其实不是。这块数据已经进了缓冲区，<code>false</code> 只是在说“缓冲区满了，你先别写”。等缓冲区清空，可写流触发 <code>drain</code>，再继续。</p>
+<h2>为什么推荐用 pipeline 连接</h2>
+<p>下面把读文件、转大写、gzip 压缩、写文件串成一条链路：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { createReadStream, createWriteStream } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:fs&#x27;</span>;
 <span class="hljs-keyword">import</span> { <span class="hljs-title class_">Transform</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:stream&#x27;</span>;
 <span class="hljs-keyword">import</span> { pipeline } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:stream/promises&#x27;</span>;
@@ -73,21 +75,30 @@
   <span class="hljs-title function_">createWriteStream</span>(<span class="hljs-string">&#x27;out.gz&#x27;</span>),
 );
 </code></pre></div>
-<p><code>pipeline</code> 做了三件事：下游缓冲区满时暂停上游；任一流出错时销毁其余流，避免文件句柄泄漏；全部完成或出错时让 Promise 结束。旧写法 <code>a.pipe(b).pipe(c)</code> 能传递背压，但不会传播错误，中间某个流出错时其他流不会被关闭。</p>
-<p>上面的 Transform 直接对块调用 <code>toString()</code>，多字节 UTF-8 字符恰好被切在块边界时会出现乱码。处理文本时应给可读流设置 <code>encoding</code>，或使用 <code>string_decoder</code>。</p>
+<p><code>pipeline</code> 做了三件事：下游缓冲区满时暂停上游；任何一个流出错时销毁其余的流，避免文件句柄泄漏；全部完成或者出错时，让返回的 Promise 结束。</p>
+<p>那旧写法 <code>a.pipe(b).pipe(c)</code> 不行吗？它能传递背压，但不会传播错误。中间某个流出错，其他流不会被关闭，资源就漏掉了。</p>
+<p>上面的 Transform 还有一个小坑。它直接对每块调用 <code>toString()</code>，如果一个中文这样的多字节 UTF-8 字符恰好被切在两块中间，就会出现乱码。处理文本时，应该给可读流设置 <code>encoding</code>，或者使用 <code>string_decoder</code>。</p>
 <h2>用异步迭代消费</h2>
+<p>可读流也能用 <code>for await...of</code> 一块块读：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">let</span> lines = <span class="hljs-number">0</span>;
 <span class="hljs-keyword">for</span> <span class="hljs-keyword">await</span> (<span class="hljs-keyword">const</span> chunk <span class="hljs-keyword">of</span> <span class="hljs-title function_">createReadStream</span>(<span class="hljs-string">&#x27;in.txt&#x27;</span>, { <span class="hljs-attr">encoding</span>: <span class="hljs-string">&#x27;utf8&#x27;</span> })) {
   lines += chunk.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;\n&#x27;</span>).<span class="hljs-property">length</span> - <span class="hljs-number">1</span>;
 }
 </code></pre></div>
-<p>循环体在 <code>await</code> 时不会读取下一块，所以这种写法天然带背压。循环中途 <code>break</code> 或抛错时，流会被销毁。</p>
+<p>循环体在 <code>await</code> 的时候不会去读下一块，所以这种写法天然带背压。循环中途 <code>break</code> 或者抛错，流也会被销毁。</p>
 <h2>常见追问</h2>
-<ul>
-<li><strong>HTTP 响应也是流吗？</strong> 是。<code>http.ServerResponse</code> 是可写流，<code>IncomingMessage</code> 是可读流，可以直接放进 <code>pipeline</code>。</li>
-<li><strong>highWaterMark 是硬上限吗？</strong> 不是。它是 <code>write()</code> 开始返回 <code>false</code> 的阈值，不理会返回值继续写，缓冲区会超过它。</li>
-<li><strong>Web Streams 和 Node 流怎么转换？</strong> 用 <code>Readable.fromWeb()</code>、<code>Readable.toWeb()</code> 等方法；<code>fetch</code> 返回的 <code>response.body</code> 是 Web ReadableStream。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://nodejs.org/api/stream.html" target="_blank" rel="noreferrer">Node.js · Stream<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%B5%81%E5%92%8C%E8%83%8C%E5%8E%8B%E4%B8%BA%E4%BB%80%E4%B9%88%E8%83%BD%E9%81%BF%E5%85%8D%E4%B8%80%E6%AC%A1%E6%80%A7%E8%AF%BB%E5%85%A5%E5%A4%A7%E6%96%87%E4%BB%B6%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%B5%81%E5%92%8C%E8%83%8C%E5%8E%8B%E4%B8%BA%E4%BB%80%E4%B9%88%E8%83%BD%E9%81%BF%E5%85%8D%E4%B8%80%E6%AC%A1%E6%80%A7%E8%AF%BB%E5%85%A5%E5%A4%A7%E6%96%87%E4%BB%B6%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anode-stream%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ANode.js%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnode-stream%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：流和背压为什么能避免一次性读入大文件？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/node-eventloop/">Node.js 事件循环和浏览器有什么不同？nextTick 一定先于 Promise 吗？</a></li><li><a href="/questions/node-bff/">前端工程师编写 Node 服务时需要守住哪些安全边界？</a></li><li><a href="/questions/node-worker-threads/">Node.js Worker Threads 适合解决什么问题？</a></li><li><a href="/questions/node-module-resolution/">Node.js 的 package exports 会怎样影响模块解析？</a></li></ul></nav></main></div></div>
+<p><strong>HTTP 响应也是流吗？</strong></p>
+<blockquote>
+<p>是。<code>http.ServerResponse</code> 是可写流，<code>IncomingMessage</code> 是可读流，都可以直接放进 <code>pipeline</code>。</p>
+</blockquote>
+<p><strong>highWaterMark 是硬上限吗？</strong></p>
+<blockquote>
+<p>不是。它只是 <code>write()</code> 开始返回 <code>false</code> 的阈值。如果不理会返回值继续写，缓冲区会超过它。</p>
+</blockquote>
+<p><strong>Web Streams 和 Node 流怎么转换？</strong></p>
+<blockquote>
+<p>用 <code>Readable.fromWeb()</code>、<code>Readable.toWeb()</code> 等方法。<code>fetch</code> 返回的 <code>response.body</code> 是 Web ReadableStream。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://nodejs.org/api/stream.html" target="_blank" rel="noreferrer">Node.js · Stream<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%B5%81%E5%92%8C%E8%83%8C%E5%8E%8B%E4%B8%BA%E4%BB%80%E4%B9%88%E8%83%BD%E9%81%BF%E5%85%8D%E4%B8%80%E6%AC%A1%E6%80%A7%E8%AF%BB%E5%85%A5%E5%A4%A7%E6%96%87%E4%BB%B6%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%B5%81%E5%92%8C%E8%83%8C%E5%8E%8B%E4%B8%BA%E4%BB%80%E4%B9%88%E8%83%BD%E9%81%BF%E5%85%8D%E4%B8%80%E6%AC%A1%E6%80%A7%E8%AF%BB%E5%85%A5%E5%A4%A7%E6%96%87%E4%BB%B6%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anode-stream%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ANode.js%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnode-stream%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：流和背压为什么能避免一次性读入大文件？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/node-eventloop/">Node.js 事件循环和浏览器有什么不同？nextTick 一定先于 Promise 吗？</a></li><li><a href="/questions/node-bff/">前端工程师编写 Node 服务时需要守住哪些安全边界？</a></li><li><a href="/questions/node-worker-threads/">Node.js Worker Threads 适合解决什么问题？</a></li><li><a href="/questions/node-module-resolution/">Node.js 的 package exports 会怎样影响模块解析？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

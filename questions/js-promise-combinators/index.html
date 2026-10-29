@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="JavaScript面试题：四个组合方法只定义&quot;何时完成、结果是什么&quot;。" />
+    <meta name="description" content="JavaScript面试题：四个方法都是把一组 Promise 合成一个，区别在于什么时候结束、结果是什么。" />
     <title>Promise.all、allSettled、race 和 any 如何选择？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/js-promise-combinators/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Promise.all、allSettled、race 和 any 如何选择？" />
-    <meta property="og:description" content="JavaScript面试题：四个组合方法只定义&quot;何时完成、结果是什么&quot;。" />
+    <meta property="og:description" content="JavaScript面试题：四个方法都是把一组 Promise 合成一个，区别在于什么时候结束、结果是什么。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/js-promise-combinators/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-promise-combinators/#webpage","url":"https://fe.hushifa.top/questions/js-promise-combinators/","name":"Promise.all、allSettled、race 和 any 如何选择？","description":"JavaScript面试题：四个组合方法只定义\"何时完成、结果是什么\"。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-promise-combinators/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-promise-combinators/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"Promise.all、allSettled、race 和 any 如何选择？","item":"https://fe.hushifa.top/questions/js-promise-combinators/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-promise-combinators/#webpage","url":"https://fe.hushifa.top/questions/js-promise-combinators/","name":"Promise.all、allSettled、race 和 any 如何选择？","description":"JavaScript面试题：四个方法都是把一组 Promise 合成一个，区别在于什么时候结束、结果是什么。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-promise-combinators/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-promise-combinators/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"Promise.all、allSettled、race 和 any 如何选择？","item":"https://fe.hushifa.top/questions/js-promise-combinators/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">Promise.all、allSettled、race 和 any 如何选择？</span></nav><h1 tabindex="-1">Promise.all、allSettled、race 和 any 如何选择？</h1><p class="reading-summary">四个组合方法只定义&quot;何时完成、结果是什么&quot;。all 全部成功才成功、遇到首个拒绝即拒绝；allSettled 等全部敲定并返回状态；race 跟随首个敲定的结果；any 等首个成功，全部失败时以 AggregateError 拒绝。它们都不会启动、限流或取消任务。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li><code>all</code>：全部成功时按输入顺序返回结果数组；任一拒绝立刻拒绝。适合&quot;缺一不可&quot;。</li>
-<li><code>allSettled</code>：等全部敲定，返回 <code>{ status, value | reason }</code> 数组，自身不会拒绝。适合批量操作后汇总成败。</li>
-<li><code>race</code>：跟随第一个敲定的 Promise，成功失败都算。常用于超时竞争。</li>
-<li><code>any</code>：第一个成功即成功；全部失败时以 <code>AggregateError</code> 拒绝，<code>errors</code> 按输入顺序保存原因。适合多源择优。</li>
-<li>空输入：<code>all</code>、<code>allSettled</code> 立即以 <code>[]</code> 成功，<code>any</code> 立即以 <code>AggregateError</code> 拒绝，<code>race</code> 永远挂起。</li>
-</ul>
-<h2>对比示例</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">Promise.all、allSettled、race 和 any 如何选择？</span></nav><h1 tabindex="-1">Promise.all、allSettled、race 和 any 如何选择？</h1><p class="reading-summary">四个方法都是把一组 Promise 合成一个，区别在于什么时候结束、结果是什么。all 要全部成功，allSettled 等全部结束，race 看谁先结束，any 看谁先成功；它们都不会帮你启动、限流或取消任务。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>这四个方法都是把一组 Promise 合成一个新的 Promise，区别只在于新的 Promise 什么时候结束、结束时给什么结果。</p>
+<p><code>Promise.all</code> 要求全部成功，成功时按传入的顺序返回结果数组，只要有一个失败就立刻失败，适合“缺一不可”的场景，比如页面要同时拿到几份数据才能渲染。<code>Promise.allSettled</code> 会等所有 Promise 都有结果，不管成功失败，返回每一个的状态和值，它自己不会失败，适合批量操作后汇总成败。<code>Promise.race</code> 谁先有结果就跟谁，成功失败都算，常用来做超时。<code>Promise.any</code> 等第一个成功的，失败的先不管，全部失败时才以 <code>AggregateError</code> 失败，适合多个来源里取最快的那个可用结果。</p>
+<p>传空数组时也不一样：<code>all</code> 和 <code>allSettled</code> 立刻以 <code>[]</code> 成功，<code>any</code> 立刻以 <code>AggregateError</code> 失败，<code>race</code> 会一直挂着，永远不结束。</p>
+<p>要注意，这几个方法只负责“等结果”。任务在传进去之前就已经开始跑了，它们不会帮你限制并发数，也不会在失败或超时后把其他任务停下来。</p>
+</blockquote>
+<h2>先看一个对比</h2>
+<p>下面用同一组任务分别跑四个方法：第一个失败，第二个成功。注意看每个方法怎么对待那个失败。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">compare</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">const</span> tasks = [
     <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">reject</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;A失败&#x27;</span>)),
@@ -64,13 +64,41 @@
 
 <span class="hljs-title function_">compare</span>();
 </code></pre></div>
-<h2>组合方法不负责的事</h2>
-<ul>
-<li><strong>启动</strong>：传进去时请求已经发出。<code>Promise.all(urls.map(fetch))</code> 会同时发出全部请求，需要限流时用并发池，见<a href="/questions/alg-concurrency-pool/">《怎样实现有明确失败语义的异步并发池？》</a>。</li>
-<li><strong>取消</strong>：<code>all</code> 拒绝或 <code>race</code> 超时后，其余任务仍在运行。需要停止时给每个任务传同一个 <code>AbortSignal</code>，在失败时调用 <code>controller.abort()</code>。</li>
-<li><strong>未处理拒绝</strong>：<code>all</code> 拒绝后，其余 Promise 再拒绝不会触发 <code>unhandledrejection</code>，因为组合方法已经给它们挂了处理器。</li>
-</ul>
-<h2>超时写法</h2>
+<p><code>all</code> 遇到 A 失败，整体就失败了，B 成功了也没用。</p>
+<p><code>allSettled</code> 没有走 <code>catch</code>，它把两个结果都交了回来。每一项是一个对象：成功的是 <code>{ status: &#x27;fulfilled&#x27;, value }</code>，失败的是 <code>{ status: &#x27;rejected&#x27;, reason }</code>。所以遍历时先看 <code>status</code>，再决定读 <code>value</code> 还是 <code>reason</code>。</p>
+<p><code>race</code> 也失败了，因为 A 先有结果，而 <code>race</code> 不挑成功失败，谁先结束就跟谁。<code>any</code> 则跳过了 A 的失败，拿到了 B 的成功。<code>race</code> 和 <code>any</code> 最大的区别就在这里：<code>race</code> 会被第一个失败打断，<code>any</code> 会忽略失败继续等成功。</p>
+<h2>结果顺序和完成先后有关系吗</h2>
+<p>没有关系。<code>all</code> 和 <code>allSettled</code> 返回的数组，顺序跟传进去的顺序一致，不是谁先完成谁排前面。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">wait</span> = (<span class="hljs-params">ms, value</span>) =&gt;
+  <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">resolve</span>(value), ms));
+
+<span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">all</span>([<span class="hljs-title function_">wait</span>(<span class="hljs-number">30</span>, <span class="hljs-string">&#x27;慢&#x27;</span>), <span class="hljs-title function_">wait</span>(<span class="hljs-number">10</span>, <span class="hljs-string">&#x27;快&#x27;</span>), <span class="hljs-number">3</span>]).<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">result</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(result); <span class="hljs-comment">// [ &#x27;慢&#x27;, &#x27;快&#x27;, 3 ]</span>
+});
+</code></pre></div>
+<p>“快”先完成，可它还是排在第二个位置，因为它是第二个传进去的。另外数组里的 <code>3</code> 不是 Promise，组合方法会用 <code>Promise.resolve</code> 把它包一层，当作一个已经成功的 Promise 处理，所以结果里直接就是 3。</p>
+<h2>全部失败和空数组会怎样</h2>
+<p><code>any</code> 只有在所有 Promise 都失败时才会失败，这时给出的错误是 <code>AggregateError</code>，它的 <code>errors</code> 属性按传入顺序保存了每一个失败原因。空数组则是几个方法差别最大的地方。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">any</span>([
+  <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">reject</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;甲&#x27;</span>)),
+  <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">reject</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;乙&#x27;</span>)),
+]).<span class="hljs-title function_">catch</span>(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(error.<span class="hljs-property">name</span>); <span class="hljs-comment">// AggregateError</span>
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(error.<span class="hljs-property">errors</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> item.<span class="hljs-property">message</span>)); <span class="hljs-comment">// [ &#x27;甲&#x27;, &#x27;乙&#x27; ]</span>
+});
+
+<span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">all</span>([]).<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;all&#x27;</span>, value)); <span class="hljs-comment">// all []</span>
+<span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">allSettled</span>([]).<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;allSettled&#x27;</span>, value)); <span class="hljs-comment">// allSettled []</span>
+<span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">any</span>([]).<span class="hljs-title function_">catch</span>(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;any&#x27;</span>, error.<span class="hljs-property">name</span>)); <span class="hljs-comment">// any AggregateError</span>
+</code></pre></div>
+<p>空数组时 <code>all</code> 和 <code>allSettled</code> 没有需要等的东西，所以立刻以 <code>[]</code> 成功；<code>any</code> 一个成功都等不到，所以立刻失败。<code>race</code> 没有写在这里，因为它传空数组时既不成功也不失败，<code>then</code> 和 <code>catch</code> 都不会被调用。</p>
+<h2>这几个方法不负责的事</h2>
+<p>很多误用都来自以为组合方法会“管理”任务。其实它们只是在等结果。</p>
+<p>第一，它们不负责启动。传进去的 Promise 在创建时就已经开始执行了。<code>Promise.all(urls.map(fetch))</code> 里，<code>map</code> 那一刻所有请求就都发出去了。所以要限制同时发几个请求，得自己写并发池，详见<a href="/questions/alg-concurrency-pool/">《怎样实现有明确失败语义的异步并发池？》</a>。</p>
+<p>第二，它们不负责取消。<code>all</code> 失败了，或者 <code>race</code> 超时了，其他任务其实还在跑，请求还在下载。需要真正停下来时，可以给每个任务传同一个 <code>AbortSignal</code>，在失败时调用 <code>controller.abort()</code>。</p>
+<p>第三，关于未处理的失败。<code>all</code> 已经因为第一个失败而失败后，其他 Promise 再失败，不会触发 <code>unhandledrejection</code> 事件，因为组合方法已经给每个传入的 Promise 挂好了处理函数。</p>
+<h2>用 race 做超时</h2>
+<p><code>race</code> 最常见的用法是让请求和一个定时器赛跑，定时器先结束就当作超时。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">withTimeout</span>(<span class="hljs-params">promise, ms</span>) {
   <span class="hljs-keyword">return</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">race</span>([
     promise,
@@ -79,13 +107,20 @@
   ]);
 }
 </code></pre></div>
-<p>更好的写法是让底层请求也停止：<code>fetch(url, { signal: AbortSignal.timeout(ms) })</code>。</p>
+<p>这个写法能让调用方及时拿到“超时”错误，可是原来的请求并没有停，还在后台继续跑。按上一节说的，<code>race</code> 不负责取消。如果底层是 <code>fetch</code>，更好的写法是让请求本身到时间就中止：<code>fetch(url, { signal: AbortSignal.timeout(ms) })</code>。</p>
 <h2>常见追问</h2>
-<ul>
-<li><code>all</code> 返回的结果顺序？按输入顺序，与完成先后无关。</li>
-<li>输入里有非 Promise 值怎么办？会被 <code>Promise.resolve</code> 包装，当作已成功。</li>
-<li><code>any</code> 和 <code>race</code> 的区别？<code>race</code> 被第一个失败打断，<code>any</code> 会忽略失败继续等成功。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noreferrer">MDN · Promise<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Promise.all%E3%80%81allSettled%E3%80%81race+%E5%92%8C+any+%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9APromise.all%E3%80%81allSettled%E3%80%81race+%E5%92%8C+any+%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-promise-combinators%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-promise-combinators%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Promise.all、allSettled、race 和 any 如何选择？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-promise-with-resolvers/">Promise.withResolvers 适合解决什么问题？怎样避免 deferred 泄漏？</a></li><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-this/">普通函数和箭头函数的 this 有什么区别？</a></li></ul></nav></main></div></div>
+<p><strong><code>all</code> 返回的结果是什么顺序？</strong></p>
+<blockquote>
+<p>按传入的顺序，跟谁先完成没有关系。第一个传进去的结果就在第一个位置。</p>
+</blockquote>
+<p><strong>输入里有不是 Promise 的值怎么办？</strong></p>
+<blockquote>
+<p>会被 <code>Promise.resolve</code> 包一层，当作已经成功的 Promise，结果里就是这个值本身。</p>
+</blockquote>
+<p><strong><code>any</code> 和 <code>race</code> 有什么区别？</strong></p>
+<blockquote>
+<p><code>race</code> 看谁先结束，第一个结束的是失败，整体就失败。<code>any</code> 只看成功，会跳过失败继续等，全部失败了才以 <code>AggregateError</code> 失败。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noreferrer">MDN · Promise<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Promise.all%E3%80%81allSettled%E3%80%81race+%E5%92%8C+any+%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9APromise.all%E3%80%81allSettled%E3%80%81race+%E5%92%8C+any+%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-promise-combinators%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-promise-combinators%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Promise.all、allSettled、race 和 any 如何选择？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-promise-with-resolvers/">Promise.withResolvers 适合解决什么问题？怎样避免 deferred 泄漏？</a></li><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-this/">普通函数和箭头函数的 this 有什么区别？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

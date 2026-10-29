@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Git 与部署面试题：从 HTML 与资源混版出发，区分构建成功、文件完整性、来源证明和发布一致性，解释清单校验、原子切换与回滚的边界。" />
+    <meta name="description" content="Git 与部署面试题：发布时 HTML 和资源可能混版。" />
     <title>前端发布怎样校验构建产物？文件哈希能证明发布安全吗？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/git-artifact-integrity/" />
     <meta name="robots" content="index,follow" />
@@ -19,24 +19,25 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="前端发布怎样校验构建产物？文件哈希能证明发布安全吗？" />
-    <meta property="og:description" content="Git 与部署面试题：从 HTML 与资源混版出发，区分构建成功、文件完整性、来源证明和发布一致性，解释清单校验、原子切换与回滚的边界。" />
+    <meta property="og:description" content="Git 与部署面试题：发布时 HTML 和资源可能混版。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/git-artifact-integrity/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/git-artifact-integrity/#webpage","url":"https://fe.hushifa.top/questions/git-artifact-integrity/","name":"前端发布怎样校验构建产物？文件哈希能证明发布安全吗？","description":"Git 与部署面试题：从 HTML 与资源混版出发，区分构建成功、文件完整性、来源证明和发布一致性，解释清单校验、原子切换与回滚的边界。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/git-artifact-integrity/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/git-artifact-integrity/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Git 与部署面试题","item":"https://fe.hushifa.top/topics/git-deploy/"},{"@type":"ListItem","position":3,"name":"前端发布怎样校验构建产物？文件哈希能证明发布安全吗？","item":"https://fe.hushifa.top/questions/git-artifact-integrity/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/git-artifact-integrity/#webpage","url":"https://fe.hushifa.top/questions/git-artifact-integrity/","name":"前端发布怎样校验构建产物？文件哈希能证明发布安全吗？","description":"Git 与部署面试题：发布时 HTML 和资源可能混版。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/git-artifact-integrity/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/git-artifact-integrity/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Git 与部署面试题","item":"https://fe.hushifa.top/topics/git-deploy/"},{"@type":"ListItem","position":3,"name":"前端发布怎样校验构建产物？文件哈希能证明发布安全吗？","item":"https://fe.hushifa.top/questions/git-artifact-integrity/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/git-deploy/">Git 与部署面试题</a><span aria-hidden="true">/</span><span aria-current="page">前端发布怎样校验构建产物？文件哈希能证明发布安全吗？</span></nav><h1 tabindex="-1">前端发布怎样校验构建产物？文件哈希能证明发布安全吗？</h1><p class="reading-summary">从 HTML 与资源混版出发，区分构建成功、文件完整性、来源证明和发布一致性，解释清单校验、原子切换与回滚的边界。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>构建成功只说明命令没报错；发布前还要检查产物是否完整、HTML 引用的资源是否都存在。</li>
-<li>文件哈希证明&quot;文件和清单记录的一致&quot;，能发现上传缺失或被篡改，但不能证明代码本身安全，也不能证明它来自可信的构建。</li>
-<li>证明来源需要在受控 CI 中构建并生成签名或构建证明（如 GitHub 的 artifact attestation）。</li>
-<li>发布要原子切换：先上传所有带哈希的资源，最后再替换 HTML 入口，避免用户拿到新 HTML 却加载不到新资源。</li>
-<li>保留上一版完整产物，回滚时整体切回，而不是逐个文件恢复。</li>
-</ul>
-<h2>混版问题</h2>
-<p>静态站点由一个入口 HTML 和一批带哈希的 JS、CSS 组成。如果上传顺序是先覆盖 <code>index.html</code>，资源还没传完，这段时间访问的用户会请求不存在的文件；如果部署时删除了旧资源，停留在旧页面的用户点击懒加载功能也会 404。</p>
-<h2>生成和校验清单</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/git-deploy/">Git 与部署面试题</a><span aria-hidden="true">/</span><span aria-current="page">前端发布怎样校验构建产物？文件哈希能证明发布安全吗？</span></nav><h1 tabindex="-1">前端发布怎样校验构建产物？文件哈希能证明发布安全吗？</h1><p class="reading-summary">发布时 HTML 和资源可能混版。构建成功、文件完整、来源可信、发布一致是四件不同的事；文件哈希和清单校验只管文件完整，原子切换和回滚解决发布一致。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>构建命令没报错，只说明构建成功了。发布前还要检查产物完不完整，HTML 里引用的每个资源是不是都在。</p>
+<p>文件哈希能证明“这个文件和清单上记的一样”，所以能发现上传漏了或被篡改。可是它证明不了代码本身是安全的，也证明不了产物来自可信的构建。要证明来源，得在受控的 CI 里构建，并生成签名或构建证明，比如 GitHub 的 artifact attestation。</p>
+<p>发布过程还要做到原子切换：先把所有带哈希的资源传上去，最后一步才替换 HTML 入口，避免用户拿到新 HTML 却加载不到新资源。</p>
+<p>上一版的完整产物要保留下来。出问题时整体切回旧版，而不是一个文件一个文件地恢复。</p>
+</blockquote>
+<h2>什么是混版</h2>
+<p>静态站点由一个入口 HTML 和一批带哈希的 JS、CSS 组成，HTML 写着要加载哪些资源。所谓混版，就是用户拿到的 HTML 和服务器上的资源不是同一个版本。</p>
+<p>它有两种出现方式。一种是上传顺序不对：先覆盖了 <code>index.html</code>，资源还没传完，这段时间访问的用户会去请求还不存在的文件。另一种是部署时把旧资源删了：停留在旧页面的用户点开一个懒加载功能，请求的是旧文件名，结果 404。</p>
+<h2>怎样生成和校验清单</h2>
+<p>清单就是一份“文件路径 → 哈希”的记录。下面的脚本遍历 <code>dist</code> 目录，给每个文件算 SHA-256：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// scripts/manifest.mjs</span>
 <span class="hljs-keyword">import</span> { createHash } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:crypto&#x27;</span>;
 <span class="hljs-keyword">import</span> { readFile, readdir, writeFile } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:fs/promises&#x27;</span>;
@@ -58,26 +59,38 @@
 }
 <span class="hljs-keyword">await</span> <span class="hljs-title function_">writeFile</span>(<span class="hljs-string">&#x27;manifest.json&#x27;</span>, <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(files, <span class="hljs-literal">null</span>, <span class="hljs-number">2</span>));
 </code></pre></div>
-<p>部署脚本上传完成后，按清单逐个下载或查询远端文件哈希并比对。再解析 HTML，确认每个 <code>&lt;script src&gt;</code>、<code>&lt;link href&gt;</code> 指向的文件都在清单里。任何一项失败就停止切换入口。</p>
-<h2>哈希不能证明什么</h2>
-<ul>
-<li><strong>代码安全</strong>：如果依赖被投毒，构建产物会忠实包含恶意代码，哈希完全一致。</li>
-<li><strong>来源可信</strong>：攻击者可以在自己的机器上构建出产物并生成匹配的清单。</li>
-<li><strong>运行正确</strong>：文件都在不代表功能正常，仍需冒烟测试。</li>
-</ul>
-<p>需要证明来源时，在 CI 中构建并用 <code>actions/attest-build-provenance</code> 等工具为产物生成签名证明，部署前验证签名和构建流水线。</p>
-<h2>原子发布和回滚</h2>
+<p>最后一行的 <code>replaceAll(&#x27;\\&#x27;, &#x27;/&#x27;)</code> 是为了让 Windows 上生成的路径也用斜杠，和服务器上的路径对得上。</p>
+<p>哈希为什么能发现文件问题？因为内容哪怕只差一个字符，算出来的哈希就完全不同：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { createHash } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:crypto&#x27;</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">sha</span> = (<span class="hljs-params">text</span>) =&gt; <span class="hljs-title function_">createHash</span>(<span class="hljs-string">&#x27;sha256&#x27;</span>).<span class="hljs-title function_">update</span>(text).<span class="hljs-title function_">digest</span>(<span class="hljs-string">&#x27;hex&#x27;</span>).<span class="hljs-title function_">slice</span>(<span class="hljs-number">0</span>, <span class="hljs-number">12</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">sha</span>(<span class="hljs-string">&#x27;console.log(1)&#x27;</span>) === <span class="hljs-title function_">sha</span>(<span class="hljs-string">&#x27;console.log(1)&#x27;</span>)); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">sha</span>(<span class="hljs-string">&#x27;console.log(1)&#x27;</span>) === <span class="hljs-title function_">sha</span>(<span class="hljs-string">&#x27;console.log(2)&#x27;</span>)); <span class="hljs-comment">// false</span>
+</code></pre></div>
+<p>部署脚本上传完以后，按清单逐个下载远端文件或者查询它的哈希，和清单比对。然后再解析 HTML，确认每个 <code>&lt;script src&gt;</code>、<code>&lt;link href&gt;</code> 指向的文件都在清单里。任何一项不对，就停下来，不去切换入口。</p>
+<h2>哈希证明不了什么</h2>
+<p>哈希只能说明文件没变样，下面三件事它都管不了。</p>
+<p>第一是代码安全。如果某个依赖被投了毒，构建产物会原样带上恶意代码，哈希和清单完全一致。</p>
+<p>第二是来源可信。攻击者在自己的机器上也能构建出一份产物，再生成一份匹配的清单。</p>
+<p>第三是运行正确。文件都在，不代表功能正常，还需要冒烟测试。</p>
+<p>需要证明来源时，要在 CI 里构建，用 <code>actions/attest-build-provenance</code> 这类工具给产物生成签名证明，部署前验证签名和构建它的流水线。</p>
+<h2>怎样做到原子发布和快速回滚</h2>
 <ol>
-<li>资源上传到以版本号命名的目录，或依靠内容哈希文件名，与旧资源共存。</li>
-<li>校验通过后，最后一步更新 HTML 入口（或切换 CDN 指向的版本目录）。</li>
+<li>资源上传到以版本号命名的目录，或者靠内容哈希文件名，和旧资源共存。</li>
+<li>校验通过后，最后一步才更新 HTML 入口，或者切换 CDN 指向的版本目录。</li>
 <li>HTML 设置 <code>Cache-Control: no-cache</code>，带哈希的资源设置长期缓存。</li>
-<li>保留至少上一版完整产物，回滚时把入口切回旧版本即可。</li>
+<li>至少保留上一版的完整产物，回滚时把入口切回旧版本就行。</li>
 </ol>
+<p>这几步的关键是：资源先到位，入口最后换。入口一换，用户就整体拿到新版本；回滚时入口一换回，又整体回到旧版本，中间不会出现半新半旧。</p>
 <h2>常见追问</h2>
-<ul>
-<li>为什么不用 SRI？SRI（<code>integrity</code> 属性）在浏览器端校验第三方或 CDN 资源未被篡改，和部署前校验是两个阶段的保护，可以同时使用。</li>
-<li>部署到 GitHub Pages 这类平台怎么保证原子性？平台在一次部署完成后整体切换，可以依赖它；自建对象存储时要自己控制顺序。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://nodejs.org/api/crypto.html#cryptocreatehashalgorithm-options" target="_blank" rel="noreferrer">Node.js · crypto.createHash<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E5%8F%91%E5%B8%83%E6%80%8E%E6%A0%B7%E6%A0%A1%E9%AA%8C%E6%9E%84%E5%BB%BA%E4%BA%A7%E7%89%A9%EF%BC%9F%E6%96%87%E4%BB%B6%E5%93%88%E5%B8%8C%E8%83%BD%E8%AF%81%E6%98%8E%E5%8F%91%E5%B8%83%E5%AE%89%E5%85%A8%E5%90%97%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E5%8F%91%E5%B8%83%E6%80%8E%E6%A0%B7%E6%A0%A1%E9%AA%8C%E6%9E%84%E5%BB%BA%E4%BA%A7%E7%89%A9%EF%BC%9F%E6%96%87%E4%BB%B6%E5%93%88%E5%B8%8C%E8%83%BD%E8%AF%81%E6%98%8E%E5%8F%91%E5%B8%83%E5%AE%89%E5%85%A8%E5%90%97%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Agit-artifact-integrity%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AGit+%E4%B8%8E%E9%83%A8%E7%BD%B2%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fgit-artifact-integrity%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端发布怎样校验构建产物？文件哈希能证明发布安全吗？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/git-static-deploy/">静态托管发布时为什么要检查资源路径和缓存？</a></li><li><a href="/questions/git-canary-release/">前端怎样做灰度发布和金丝雀发布？出问题怎样回滚？</a></li><li><a href="/questions/git-merge-rebase/">git merge 与 rebase 应该怎样选择？</a></li><li><a href="/questions/git-ci/">GitHub Actions 中 workflow、job、step 和 runner 是什么关系？</a></li></ul></nav></main></div></div>
+<p><strong>为什么不用 SRI？</strong></p>
+<blockquote>
+<p>SRI 是给 <code>&lt;script&gt;</code>、<code>&lt;link&gt;</code> 加 <code>integrity</code> 属性，让浏览器加载时校验第三方或 CDN 上的资源没被篡改。它管的是浏览器加载那一刻，部署前校验管的是发布之前，两个阶段的保护可以同时用。</p>
+</blockquote>
+<p><strong>部署到 GitHub Pages 这类平台，怎么保证原子性？</strong></p>
+<blockquote>
+<p>平台会在一次部署完成后整体切换，可以依赖它。如果是自己搭的对象存储，上传顺序就要自己控制。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://nodejs.org/api/crypto.html#cryptocreatehashalgorithm-options" target="_blank" rel="noreferrer">Node.js · crypto.createHash<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E5%8F%91%E5%B8%83%E6%80%8E%E6%A0%B7%E6%A0%A1%E9%AA%8C%E6%9E%84%E5%BB%BA%E4%BA%A7%E7%89%A9%EF%BC%9F%E6%96%87%E4%BB%B6%E5%93%88%E5%B8%8C%E8%83%BD%E8%AF%81%E6%98%8E%E5%8F%91%E5%B8%83%E5%AE%89%E5%85%A8%E5%90%97%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E5%8F%91%E5%B8%83%E6%80%8E%E6%A0%B7%E6%A0%A1%E9%AA%8C%E6%9E%84%E5%BB%BA%E4%BA%A7%E7%89%A9%EF%BC%9F%E6%96%87%E4%BB%B6%E5%93%88%E5%B8%8C%E8%83%BD%E8%AF%81%E6%98%8E%E5%8F%91%E5%B8%83%E5%AE%89%E5%85%A8%E5%90%97%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Agit-artifact-integrity%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AGit+%E4%B8%8E%E9%83%A8%E7%BD%B2%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fgit-artifact-integrity%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端发布怎样校验构建产物？文件哈希能证明发布安全吗？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/git-static-deploy/">静态托管发布时为什么要检查资源路径和缓存？</a></li><li><a href="/questions/git-canary-release/">前端怎样做灰度发布和金丝雀发布？出问题怎样回滚？</a></li><li><a href="/questions/git-merge-rebase/">git merge 与 rebase 应该怎样选择？</a></li><li><a href="/questions/git-ci/">GitHub Actions 中 workflow、job、step 和 runner 是什么关系？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

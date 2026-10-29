@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="桌面端面试题：说明渲染进程到主进程的单向与双向通信、主进程推送、渲染进程之间的 MessagePort 通信，以及通过 contextBridge 暴露窄接口…" />
+    <meta name="description" content="桌面端面试题：渲染进程到主进程有单向与双向两种通信，主进程可以向指定窗口推送，渲染进程之间用 MessagePort 直接通信。" />
     <title>Electron 的 IPC 和 contextBridge 怎样设计？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/desktop-electron-ipc/" />
     <meta name="robots" content="index,follow" />
@@ -19,23 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Electron 的 IPC 和 contextBridge 怎样设计？" />
-    <meta property="og:description" content="桌面端面试题：说明渲染进程到主进程的单向与双向通信、主进程推送、渲染进程之间的 MessagePort 通信，以及通过 contextBridge 暴露窄接口…" />
+    <meta property="og:description" content="桌面端面试题：渲染进程到主进程有单向与双向两种通信，主进程可以向指定窗口推送，渲染进程之间用 MessagePort 直接通信。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/desktop-electron-ipc/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/desktop-electron-ipc/#webpage","url":"https://fe.hushifa.top/questions/desktop-electron-ipc/","name":"Electron 的 IPC 和 contextBridge 怎样设计？","description":"桌面端面试题：说明渲染进程到主进程的单向与双向通信、主进程推送、渲染进程之间的 MessagePort 通信，以及通过 contextBridge 暴露窄接口…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/desktop-electron-ipc/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/desktop-electron-ipc/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"桌面端面试题","item":"https://fe.hushifa.top/topics/desktop/"},{"@type":"ListItem","position":3,"name":"Electron 的 IPC 和 contextBridge 怎样设计？","item":"https://fe.hushifa.top/questions/desktop-electron-ipc/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/desktop-electron-ipc/#webpage","url":"https://fe.hushifa.top/questions/desktop-electron-ipc/","name":"Electron 的 IPC 和 contextBridge 怎样设计？","description":"桌面端面试题：渲染进程到主进程有单向与双向两种通信，主进程可以向指定窗口推送，渲染进程之间用 MessagePort 直接通信。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/desktop-electron-ipc/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/desktop-electron-ipc/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"桌面端面试题","item":"https://fe.hushifa.top/topics/desktop/"},{"@type":"ListItem","position":3,"name":"Electron 的 IPC 和 contextBridge 怎样设计？","item":"https://fe.hushifa.top/questions/desktop-electron-ipc/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/desktop/">桌面端面试题</a><span aria-hidden="true">/</span><span aria-current="page">Electron 的 IPC 和 contextBridge 怎样设计？</span></nav><h1 tabindex="-1">Electron 的 IPC 和 contextBridge 怎样设计？</h1><p class="reading-summary">说明渲染进程到主进程的单向与双向通信、主进程推送、渲染进程之间的 MessagePort 通信，以及通过 contextBridge 暴露窄接口、处理可序列化数据的设计方法。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>渲染进程需要结果时用 <code>ipcRenderer.invoke</code> 配合主进程的 <code>ipcMain.handle</code>，返回 Promise；只通知不等结果时用 <code>ipcRenderer.send</code> 配合 <code>ipcMain.on</code>。</li>
-<li>主进程向渲染进程推送要指定目标窗口，调用 <code>webContents.send</code>，渲染进程用 <code>ipcRenderer.on</code> 接收；这个方向没有对应的 <code>invoke</code>。</li>
-<li>渲染进程之间没有直接通道，可以由主进程转发，或由主进程分发一对 <code>MessagePort</code> 让它们直接通信。</li>
-<li>preload 通过 <code>contextBridge</code> 只暴露具体的业务函数，不暴露 <code>ipcRenderer</code> 本身；监听回调要包一层，避免把 <code>event</code> 对象传给页面。</li>
-<li>IPC 数据使用结构化克隆算法，DOM 对象、<code>BrowserWindow</code> 等由 C++ 支撑的对象不能传递；<code>sendSync</code> 会阻塞渲染进程，官方建议避免使用。</li>
-</ul>
-<h2>四种通信模式</h2>
-<p><strong>1. 渲染进程 → 主进程，单向</strong></p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/desktop/">桌面端面试题</a><span aria-hidden="true">/</span><span aria-current="page">Electron 的 IPC 和 contextBridge 怎样设计？</span></nav><h1 tabindex="-1">Electron 的 IPC 和 contextBridge 怎样设计？</h1><p class="reading-summary">渲染进程到主进程有单向与双向两种通信，主进程可以向指定窗口推送，渲染进程之间用 MessagePort 直接通信。preload 通过 contextBridge 只暴露窄接口，跨进程只传可序列化数据。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>Electron 的页面跑在渲染进程里，打开文件、改窗口标题这些事要交给主进程做，两个进程之间传消息就叫 IPC。页面要等结果时，用 <code>ipcRenderer.invoke</code> 配合主进程的 <code>ipcMain.handle</code>，拿到一个 Promise；只通知不等结果，用 <code>ipcRenderer.send</code> 配合 <code>ipcMain.on</code>。</p>
+<p>反过来，主进程推消息给页面，要指定是哪个窗口，调用它的 <code>webContents.send</code>，页面用 <code>ipcRenderer.on</code> 接收，这个方向没有对应的 <code>invoke</code>。两个渲染进程之间没有直接的通道，可以让主进程转发，或者由主进程分发一对 <code>MessagePort</code>，让它们直接通信。</p>
+<p>这些能力不是直接给页面的，而是由 preload 脚本通过 <code>contextBridge</code> 暴露几个具体的业务函数。不要把 <code>ipcRenderer</code> 本身暴露出去；监听回调也要包一层，不能把 <code>event</code> 对象交给页面。</p>
+<p>要注意，IPC 数据走结构化克隆，DOM 对象、<code>BrowserWindow</code> 这类由 C++ 支撑的对象传不过去。<code>sendSync</code> 会阻塞渲染进程，官方建议避免使用。</p>
+</blockquote>
+<h2>页面通知主进程，不需要结果</h2>
+<p>改窗口标题只是发个通知，用 <code>send</code> 和 <code>on</code> 就够了：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// preload.js</span>
 contextBridge.<span class="hljs-title function_">exposeInMainWorld</span>(<span class="hljs-string">&#x27;api&#x27;</span>, {
   <span class="hljs-attr">setTitle</span>: <span class="hljs-function">(<span class="hljs-params">title</span>) =&gt;</span> ipcRenderer.<span class="hljs-title function_">send</span>(<span class="hljs-string">&#x27;window:set-title&#x27;</span>, title),
@@ -46,7 +45,9 @@ ipcMain.<span class="hljs-title function_">on</span>(<span class="hljs-string">&
   <span class="hljs-title class_">BrowserWindow</span>.<span class="hljs-title function_">fromWebContents</span>(event.<span class="hljs-property">sender</span>)?.<span class="hljs-title function_">setTitle</span>(<span class="hljs-title class_">String</span>(title));
 });
 </code></pre></div>
-<p><strong>2. 渲染进程 → 主进程，双向</strong></p>
+<p>主进程通过 <code>event.sender</code> 找到是哪个窗口发来的，再改它的标题。页面调用的是 <code>window.api.setTitle</code>，碰不到 <code>ipcRenderer</code>。</p>
+<h2>页面调用主进程，并等待结果</h2>
+<p>打开文件对话框要拿回用户选的路径，用 <code>invoke</code> 和 <code>handle</code>：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// preload.js</span>
 contextBridge.<span class="hljs-title function_">exposeInMainWorld</span>(<span class="hljs-string">&#x27;api&#x27;</span>, {
   <span class="hljs-attr">openFile</span>: <span class="hljs-function">() =&gt;</span> ipcRenderer.<span class="hljs-title function_">invoke</span>(<span class="hljs-string">&#x27;dialog:open-file&#x27;</span>),
@@ -58,9 +59,10 @@ ipcMain.<span class="hljs-title function_">handle</span>(<span class="hljs-strin
   <span class="hljs-keyword">return</span> canceled ? <span class="hljs-literal">null</span> : filePaths[<span class="hljs-number">0</span>];
 });
 </code></pre></div>
-<p><code>invoke</code> 从 Electron 7 开始提供，官方推荐尽量使用它。handler 中抛出的错误会被序列化，渲染进程只能拿到 <code>message</code>，需要错误码时应在返回值里显式约定。</p>
-<p>旧写法 <code>send</code> + <code>event.reply</code> 需要另外注册监听器，也没有内置机制把响应和请求对应起来；<code>sendSync</code> 在主进程回复前会阻塞渲染进程。</p>
-<p><strong>3. 主进程 → 渲染进程</strong></p>
+<p><code>invoke</code> 从 Electron 7 开始提供，官方推荐尽量用它。handler 的返回值就是页面拿到的 Promise 结果。handler 里抛出的错误会被序列化，页面只能拿到 <code>message</code>，需要错误码的话，要在返回值里自己约定。</p>
+<p>那以前是怎么做的？旧写法是 <code>send</code> 加 <code>event.reply</code>，需要另外注册一个监听器收回复，也没有内置机制把响应和请求对上号。<code>sendSync</code> 更不推荐，主进程回复之前，渲染进程会一直卡着。</p>
+<h2>主进程主动推消息给页面</h2>
+<p>比如用户点了菜单里的缩放，主进程要通知对应的窗口：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// main.js</span>
 win.<span class="hljs-property">webContents</span>.<span class="hljs-title function_">send</span>(<span class="hljs-string">&#x27;menu:zoom&#x27;</span>, <span class="hljs-number">1</span>);
 
@@ -73,22 +75,25 @@ contextBridge.<span class="hljs-title function_">exposeInMainWorld</span>(<span 
   },
 });
 </code></pre></div>
-<p>不要写成 <code>ipcRenderer.on(&#x27;menu:zoom&#x27;, callback)</code>：回调的第一个参数是 <code>event</code>，可以通过 <code>event.sender</code> 拿到 <code>ipcRenderer</code>，等于把整个 IPC 能力交给了页面。返回取消函数可以让组件卸载时移除监听，避免重复注册和内存泄漏。</p>
-<p><strong>4. 渲染进程 ↔ 渲染进程</strong></p>
-<p>主进程用 <code>MessageChannelMain</code> 创建一对端口，通过 <code>webContents.postMessage</code> 分别发给两个窗口，之后两个窗口直接收发消息，不再经过主进程转发。utility 进程也可以用同样的方式和渲染进程直连。</p>
-<h2>接口设计建议</h2>
-<ul>
-<li><strong>按业务命名</strong>：通道名用 <code>领域:动作</code> 的形式（如 <code>note:save</code>），前缀只是为了可读，Electron 不会据此做任何处理。</li>
-<li><strong>窄接口</strong>：每个能力一个函数，参数固定，不暴露 <code>invoke(channel, ...args)</code> 这种通用转发。</li>
-<li><strong>集中声明</strong>：把通道名、参数和返回值类型放在一个共享的 TypeScript 文件里，主进程、preload 和页面共用，避免拼写不一致。</li>
-<li><strong>只传可序列化数据</strong>：IPC 使用结构化克隆，<code>Element</code>、<code>process.env</code>、<code>WebContents</code>、<code>BrowserWindow</code> 等对象无法传递，函数也不能跨进程调用。传大文件时优先传路径或分块处理。</li>
-<li><strong>主进程不信任输入</strong>：每个 handler 校验发送方和参数，具体做法见<a href="/questions/mobile-electron-security/">《Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？》</a>。</li>
-</ul>
+<p>为什么不直接写 <code>ipcRenderer.on(&#x27;menu:zoom&#x27;, callback)</code>？因为回调的第一个参数是 <code>event</code>，通过 <code>event.sender</code> 能拿到 <code>ipcRenderer</code>，这等于把整个 IPC 能力交给了页面。包一层只把 <code>value</code> 传过去，就没有这个问题。</p>
+<p>返回一个取消函数，是为了组件卸载时能移除监听。不然组件每挂载一次就多注册一个，既重复触发又泄漏内存。</p>
+<h2>两个窗口之间怎么直接通信</h2>
+<p>主进程用 <code>MessageChannelMain</code> 创建一对端口，通过 <code>webContents.postMessage</code> 分别发给两个窗口。之后两个窗口直接收发消息，不再经过主进程转发。utility 进程也可以用同样的方式和渲染进程直连。</p>
+<h2>接口应该怎么设计</h2>
+<p>通道名按业务来起，用 <code>领域:动作</code> 的形式，比如 <code>note:save</code>。这个前缀只是为了好读，Electron 不会据此做任何处理。</p>
+<p>接口要窄。每个能力一个函数，参数固定，不要暴露 <code>invoke(channel, ...args)</code> 这种通用转发，否则页面可以调用任意通道。</p>
+<p>通道名、参数和返回值类型最好集中放在一个共享的 TypeScript 文件里，主进程、preload 和页面共用，避免拼写对不上。</p>
+<p>只传可序列化的数据。IPC 使用结构化克隆，<code>Element</code>、<code>process.env</code>、<code>WebContents</code>、<code>BrowserWindow</code> 等对象无法传递，函数也不能跨进程调用。传大文件时，优先传路径或者分块处理。</p>
+<p>最后，主进程不能信任收到的任何输入，每个 handler 都要校验发送方和参数，具体做法见<a href="/questions/mobile-electron-security/">《Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？》</a>。</p>
 <h2>常见追问</h2>
-<ul>
-<li>为什么不直接用 <code>@electron/remote</code>？它让渲染进程同步调用主进程对象，既有性能问题，也扩大了渲染进程的权限，官方性能指南建议避免使用。</li>
-<li>多个窗口同时调用同一个 handler 怎么区分？handler 的 <code>event.sender</code> 和 <code>event.senderFrame</code> 标识了调用方，可以据此找到对应窗口或校验来源。进程职责划分见<a href="/questions/desktop-electron-process/">《Electron 的主进程、渲染进程、preload 和 utility 进程分别负责什么？》</a>。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.electronjs.org/docs/latest/tutorial/ipc" target="_blank" rel="noreferrer">Electron · Inter-Process Communication<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Electron+%E7%9A%84+IPC+%E5%92%8C+contextBridge+%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AElectron+%E7%9A%84+IPC+%E5%92%8C+contextBridge+%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Adesktop-electron-ipc%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%8C%E9%9D%A2%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fdesktop-electron-ipc%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Electron 的 IPC 和 contextBridge 怎样设计？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/mobile-electron-security/">Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？</a></li><li><a href="/questions/desktop-electron-process/">Electron 的主进程、渲染进程、preload 和 utility 进程分别负责什么？</a></li><li><a href="/questions/desktop-electron-release/">Electron 应用如何打包发布？代码签名、macOS 公证和自动更新要注意什么？</a></li><li><a href="/questions/desktop-electron-tauri/">Electron 和 Tauri 有什么区别？桌面应用怎么选型？</a></li></ul></nav></main></div></div>
+<p><strong>为什么不直接用 <code>@electron/remote</code>？</strong></p>
+<blockquote>
+<p>它让渲染进程同步调用主进程里的对象，既有性能问题，也扩大了渲染进程的权限，官方性能指南建议避免使用。</p>
+</blockquote>
+<p><strong>多个窗口同时调用同一个 handler，怎么区分？</strong></p>
+<blockquote>
+<p>handler 收到的 <code>event.sender</code> 和 <code>event.senderFrame</code> 标识了调用方，可以据此找到对应窗口，或者校验来源。进程职责划分见<a href="/questions/desktop-electron-process/">《Electron 的主进程、渲染进程、preload 和 utility 进程分别负责什么？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.electronjs.org/docs/latest/tutorial/ipc" target="_blank" rel="noreferrer">Electron · Inter-Process Communication<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Electron+%E7%9A%84+IPC+%E5%92%8C+contextBridge+%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AElectron+%E7%9A%84+IPC+%E5%92%8C+contextBridge+%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Adesktop-electron-ipc%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%8C%E9%9D%A2%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fdesktop-electron-ipc%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Electron 的 IPC 和 contextBridge 怎样设计？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/mobile-electron-security/">Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？</a></li><li><a href="/questions/desktop-electron-process/">Electron 的主进程、渲染进程、preload 和 utility 进程分别负责什么？</a></li><li><a href="/questions/desktop-electron-release/">Electron 应用如何打包发布？代码签名、macOS 公证和自动更新要注意什么？</a></li><li><a href="/questions/desktop-electron-tauri/">Electron 和 Tauri 有什么区别？桌面应用怎么选型？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

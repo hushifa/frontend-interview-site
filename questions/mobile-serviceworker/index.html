@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="移动端与 PWA面试题：Service Worker 有独立的安装、等待和激活生命周期，注册成功不代表立即控制页面；更新要处理等待中的新版本…" />
+    <meta name="description" content="移动端与 PWA面试题：Service Worker 有自己的安装、等待和激活生命周期，注册成功不代表马上接管页面。" />
     <title>Service Worker 的安装、激活与缓存更新有哪些坑？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/mobile-serviceworker/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Service Worker 的安装、激活与缓存更新有哪些坑？" />
-    <meta property="og:description" content="移动端与 PWA面试题：Service Worker 有独立的安装、等待和激活生命周期，注册成功不代表立即控制页面；更新要处理等待中的新版本…" />
+    <meta property="og:description" content="移动端与 PWA面试题：Service Worker 有自己的安装、等待和激活生命周期，注册成功不代表马上接管页面。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/mobile-serviceworker/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/mobile-serviceworker/#webpage","url":"https://fe.hushifa.top/questions/mobile-serviceworker/","name":"Service Worker 的安装、激活与缓存更新有哪些坑？","description":"移动端与 PWA面试题：Service Worker 有独立的安装、等待和激活生命周期，注册成功不代表立即控制页面；更新要处理等待中的新版本…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/mobile-serviceworker/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/mobile-serviceworker/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"移动端与 PWA面试题","item":"https://fe.hushifa.top/topics/mobile/"},{"@type":"ListItem","position":3,"name":"Service Worker 的安装、激活与缓存更新有哪些坑？","item":"https://fe.hushifa.top/questions/mobile-serviceworker/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/mobile-serviceworker/#webpage","url":"https://fe.hushifa.top/questions/mobile-serviceworker/","name":"Service Worker 的安装、激活与缓存更新有哪些坑？","description":"移动端与 PWA面试题：Service Worker 有自己的安装、等待和激活生命周期，注册成功不代表马上接管页面。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/mobile-serviceworker/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/mobile-serviceworker/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"移动端与 PWA面试题","item":"https://fe.hushifa.top/topics/mobile/"},{"@type":"ListItem","position":3,"name":"Service Worker 的安装、激活与缓存更新有哪些坑？","item":"https://fe.hushifa.top/questions/mobile-serviceworker/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/mobile/">移动端与 PWA面试题</a><span aria-hidden="true">/</span><span aria-current="page">Service Worker 的安装、激活与缓存更新有哪些坑？</span></nav><h1 tabindex="-1">Service Worker 的安装、激活与缓存更新有哪些坑？</h1><p class="reading-summary">Service Worker 有独立的安装、等待和激活生命周期，注册成功不代表立即控制页面；更新要处理等待中的新版本、缓存清理和新旧资源混用。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>生命周期是 注册 → 安装（install）→ 等待（waiting）→ 激活（activate）→ 控制页面；首次注册的页面默认不受控，刷新后才被控制。</li>
-<li>新版本安装完成后会等待，直到所有使用旧版本的页面关闭才激活；这是保护机制，避免同一页面中途换了缓存逻辑。</li>
-<li><code>skipWaiting()</code> 让新版本立即激活，<code>clients.claim()</code> 让它立即控制已打开的页面，但可能导致旧页面加载到新版本的资源。</li>
-<li>在 activate 阶段删除旧版本的缓存，缓存名带版本号便于区分。</li>
-<li><code>updateViaCache</code> 默认是 <code>&#x27;imports&#x27;</code>：检查更新时主脚本绕过 HTTP 缓存，<code>importScripts()</code> 引入的脚本仍走缓存，所以被导入的脚本要带版本号。</li>
-</ul>
-<h2>生命周期示例</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/mobile/">移动端与 PWA面试题</a><span aria-hidden="true">/</span><span aria-current="page">Service Worker 的安装、激活与缓存更新有哪些坑？</span></nav><h1 tabindex="-1">Service Worker 的安装、激活与缓存更新有哪些坑？</h1><p class="reading-summary">Service Worker 有自己的安装、等待和激活生命周期，注册成功不代表马上接管页面。更新时要处理等待中的新版本、缓存清理和新旧资源混用。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>Service Worker 是一段在页面背后运行的脚本，能拦截页面发出的请求，决定从缓存还是从网络拿资源，离线访问就靠它。</p>
+<p>它有自己的生命周期：注册、安装（install）、等待（waiting）、激活（activate），然后才控制页面。第一次注册的那个页面默认不受它控制，刷新以后才会。</p>
+<p>新版本装好以后不会马上生效，要等所有用旧版本的页面都关掉才激活，这是为了避免一个页面用到一半换了缓存逻辑。想马上生效可以用 <code>skipWaiting()</code> 和 <code>clients.claim()</code>，但旧页面可能因此加载到新版本的资源，出现新旧混用。</p>
+<p>还有两点要注意：在 activate 阶段删掉旧版本的缓存，缓存名带上版本号；<code>importScripts()</code> 引入的脚本默认还走 HTTP 缓存，所以它们的地址也要带版本号。</p>
+</blockquote>
+<h2>先看一个完整的 sw.js</h2>
+<p>下面这个 Service Worker 做了三件事：安装时预缓存文件，激活时清理旧缓存，请求时先查缓存。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// sw.js</span>
 <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">CACHE</span> = <span class="hljs-string">&#x27;app-v3&#x27;</span>;
 <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">PRECACHE</span> = [<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-string">&#x27;/index.html&#x27;</span>, <span class="hljs-string">&#x27;/assets/app.3f9a.js&#x27;</span>, <span class="hljs-string">&#x27;/assets/app.8c21.css&#x27;</span>];
@@ -56,13 +56,13 @@
   event.<span class="hljs-title function_">respondWith</span>(caches.<span class="hljs-title function_">match</span>(event.<span class="hljs-property">request</span>).<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">hit</span>) =&gt;</span> hit ?? <span class="hljs-title function_">fetch</span>(event.<span class="hljs-property">request</span>)));
 });
 </code></pre></div>
-<ul>
-<li><code>install</code> 中预缓存失败（任何一个文件 404），整个安装失败，旧版本继续工作。</li>
-<li><code>activate</code> 时删除其他版本的缓存。</li>
-<li>非 GET 请求直接交给网络，不缓存。</li>
-</ul>
-<h2>更新流程</h2>
-<p>浏览器在作用域内的页面导航时检查 Service Worker 脚本是否有变化（逐字节比较）；距上次检查超过 24 小时后，<code>push</code>、<code>sync</code> 等功能性事件也会触发检查；页面还可以调用 <code>registration.update()</code> 主动检查。有变化就安装新版本。新版本进入 waiting 状态，旧页面继续由旧版本控制。</p>
+<p><code>install</code> 里预缓存时，只要有一个文件失败，比如 404，整个安装就失败，旧版本继续工作。这是好事，不会装上一个残缺的版本。</p>
+<p><code>activate</code> 时把名字不是 <code>app-v3</code> 的缓存都删掉，所以缓存名要带版本号，否则分不清哪个是旧的。非 GET 请求直接 <code>return</code>，交给网络，不缓存。</p>
+<h2>浏览器什么时候检查更新</h2>
+<p>浏览器会逐字节比较 Service Worker 脚本有没有变化。检查的时机有三种：用户在作用域内的页面导航时；距上次检查超过 24 小时后，<code>push</code>、<code>sync</code> 这类功能性事件触发时；页面主动调用 <code>registration.update()</code> 时。</p>
+<p>有变化就安装新版本。可是装好的新版本会进入 waiting 状态，已经打开的页面还由旧版本控制。所以“改了代码用户还看到旧版”，多半就是新版本在等。</p>
+<h2>怎样提示用户刷新</h2>
+<p>常见做法是发现新版本时弹一个提示，用户点“刷新”才让新版本激活，然后重新加载页面。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 页面中：发现新版本时提示用户刷新</span>
 <span class="hljs-keyword">const</span> reg = <span class="hljs-keyword">await</span> navigator.<span class="hljs-property">serviceWorker</span>.<span class="hljs-title function_">register</span>(<span class="hljs-string">&#x27;/sw.js&#x27;</span>);
 
@@ -87,24 +87,24 @@ navigator.<span class="hljs-property">serviceWorker</span>.<span class="hljs-tit
   <span class="hljs-keyword">if</span> (event.<span class="hljs-property">data</span>?.<span class="hljs-property">type</span> === <span class="hljs-string">&#x27;SKIP_WAITING&#x27;</span>) <span class="hljs-variable language_">self</span>.<span class="hljs-title function_">skipWaiting</span>();
 });
 </code></pre></div>
-<ul>
-<li><code>navigator.serviceWorker.controller</code> 存在说明这是更新而不是首次安装。</li>
-<li>用户点击&quot;刷新&quot;后新版本才激活，激活后页面重新加载，避免新旧资源混用。</li>
-<li><code>reloaded</code> 标记防止重复刷新。</li>
-</ul>
-<h2>常见坑</h2>
+<p>为什么要判断 <code>navigator.serviceWorker.controller</code>？因为它有值，说明页面已经被旧版本控制着，这次是更新；没有值就是首次安装，不用提示。</p>
+<p>用户点了刷新，页面才发消息让新版本 <code>skipWaiting()</code>。新版本接管后触发 <code>controllerchange</code>，页面重新加载，这样整个页面都换成新资源，不会新旧混用。<code>reloaded</code> 标记是防止重复刷新。</p>
+<h2>常见的坑</h2>
 <table><thead><tr><th>问题</th><th>原因</th><th>处理</th></tr></thead><tbody><tr><td>改了代码用户一直看到旧版</td><td>新版本在等待，或 <code>index.html</code> 被缓存优先策略返回</td><td>提示刷新；HTML 用网络优先</td></tr><tr><td>直接 <code>skipWaiting</code> 后页面报错</td><td>旧页面请求的旧 chunk 已被删除缓存</td><td>激活后刷新页面，或保留旧资源</td></tr><tr><td>Service Worker 不更新</td><td>改的是 <code>importScripts()</code> 引入的脚本，URL 没变；或注册时设了 <code>updateViaCache: &#x27;all&#x27;</code></td><td>被导入的脚本带版本号，主脚本保持固定 URL</td></tr><tr><td>开发时缓存干扰调试</td><td>旧 Service Worker 仍在控制</td><td>DevTools 中勾选 Update on reload 或注销</td></tr><tr><td>作用范围不对</td><td>默认作用域是脚本所在目录</td><td>把 <code>sw.js</code> 放在根目录或设置 <code>scope</code></td></tr></tbody></table>
-<h2>缓存策略选择</h2>
-<ul>
-<li>HTML 入口：网络优先，离线时回退缓存。</li>
-<li>带哈希的静态资源：缓存优先，文件名变化即视为新资源。</li>
-<li>API 数据：网络优先或&quot;先返回缓存再后台更新&quot;，并按用户或租户区分。</li>
-</ul>
+<p>第三行要多说一句。注册时有个 <code>updateViaCache</code> 选项，默认值是 <code>&#x27;imports&#x27;</code>，意思是检查更新时主脚本绕过 HTTP 缓存，但 <code>importScripts()</code> 引入的脚本还走缓存。所以只改了被导入的脚本、地址又没变，浏览器可能发现不了更新。</p>
+<h2>不同资源用什么缓存策略</h2>
+<p>HTML 入口用网络优先，离线时再回退到缓存。因为入口要是被缓存住，用户就一直拿到旧页面。</p>
+<p>带哈希的静态资源用缓存优先。文件内容一变，文件名就变，相当于一个新资源，所以缓存不会过期出错。</p>
+<p>API 数据用网络优先，或者“先返回缓存，再在后台更新”，同时要按用户或租户分开缓存。</p>
 <h2>常见追问</h2>
-<ul>
-<li>怎样彻底移除 Service Worker？部署一个新版本，在 activate 中删除所有缓存并调用 <code>self.registration.unregister()</code>。</li>
-<li>要不要用 Workbox？它封装了预缓存清单、缓存策略和过期清理，能减少手写错误，原理仍是上面的生命周期。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers" target="_blank" rel="noreferrer">MDN · Using Service Workers<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Service+Worker+%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E6%BF%80%E6%B4%BB%E4%B8%8E%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E6%9C%89%E5%93%AA%E4%BA%9B%E5%9D%91%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AService+Worker+%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E6%BF%80%E6%B4%BB%E4%B8%8E%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E6%9C%89%E5%93%AA%E4%BA%9B%E5%9D%91%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Amobile-serviceworker%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E4%B8%8E+PWA%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fmobile-serviceworker%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Service Worker 的安装、激活与缓存更新有哪些坑？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/mobile-pwa/">PWA 由哪些能力组成，是否所有浏览器体验都一致？</a></li><li><a href="/questions/mobile-rn/">React Native 与浏览器里的 React 有哪些共同点和差异？</a></li><li><a href="/questions/mobile-pointer-events/">Pointer Events 为什么适合统一鼠标、触摸和触控笔交互？</a></li><li><a href="/questions/mobile-virtual-keyboard/">移动端虚拟键盘出现时怎样避免布局被遮挡？</a></li></ul></nav></main></div></div>
+<p><strong>怎样彻底移除 Service Worker？</strong></p>
+<blockquote>
+<p>部署一个新版本，在 activate 里删掉所有缓存，并调用 <code>self.registration.unregister()</code>。</p>
+</blockquote>
+<p><strong>要不要用 Workbox？</strong></p>
+<blockquote>
+<p>可以。它封装了预缓存清单、缓存策略和过期清理，能少写错。但原理还是上面这套生命周期，出问题时还得按生命周期去排查。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers" target="_blank" rel="noreferrer">MDN · Using Service Workers<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Service+Worker+%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E6%BF%80%E6%B4%BB%E4%B8%8E%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E6%9C%89%E5%93%AA%E4%BA%9B%E5%9D%91%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AService+Worker+%E7%9A%84%E5%AE%89%E8%A3%85%E3%80%81%E6%BF%80%E6%B4%BB%E4%B8%8E%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E6%9C%89%E5%93%AA%E4%BA%9B%E5%9D%91%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Amobile-serviceworker%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E4%B8%8E+PWA%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fmobile-serviceworker%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Service Worker 的安装、激活与缓存更新有哪些坑？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/mobile-pwa/">PWA 由哪些能力组成，是否所有浏览器体验都一致？</a></li><li><a href="/questions/mobile-rn/">React Native 与浏览器里的 React 有哪些共同点和差异？</a></li><li><a href="/questions/mobile-pointer-events/">Pointer Events 为什么适合统一鼠标、触摸和触控笔交互？</a></li><li><a href="/questions/mobile-virtual-keyboard/">移动端虚拟键盘出现时怎样避免布局被遮挡？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="手写与算法面试题：节流限制函数在每个时间窗口内最多执行一次。" />
+    <meta name="description" content="手写与算法面试题：节流是限制函数在每段时间里最多执行一次。" />
     <title>怎样实现首沿节流？它与尾沿节流、防抖有什么区别？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/alg-throttle/" />
     <meta name="robots" content="index,follow" />
@@ -19,26 +19,26 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="怎样实现首沿节流？它与尾沿节流、防抖有什么区别？ · 前端知库" />
-    <meta property="og:description" content="手写与算法面试题：节流限制函数在每个时间窗口内最多执行一次。" />
+    <meta property="og:description" content="手写与算法面试题：节流是限制函数在每段时间里最多执行一次。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/alg-throttle/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-throttle/#webpage","url":"https://fe.hushifa.top/questions/alg-throttle/","name":"怎样实现首沿节流？它与尾沿节流、防抖有什么区别？ · 前端知库","description":"手写与算法面试题：节流限制函数在每个时间窗口内最多执行一次。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-throttle/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-throttle/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"怎样实现首沿节流？它与尾沿节流、防抖有什么区别？","item":"https://fe.hushifa.top/questions/alg-throttle/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-throttle/#webpage","url":"https://fe.hushifa.top/questions/alg-throttle/","name":"怎样实现首沿节流？它与尾沿节流、防抖有什么区别？ · 前端知库","description":"手写与算法面试题：节流是限制函数在每段时间里最多执行一次。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-throttle/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-throttle/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"怎样实现首沿节流？它与尾沿节流、防抖有什么区别？","item":"https://fe.hushifa.top/questions/alg-throttle/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样实现首沿节流？它与尾沿节流、防抖有什么区别？</span></nav><h1 tabindex="-1">怎样实现首沿节流？它与尾沿节流、防抖有什么区别？</h1><p class="reading-summary">节流限制函数在每个时间窗口内最多执行一次。首沿节流在窗口开始时立即执行并丢弃窗口内的其他调用；尾沿节流在窗口结束时用最后一次调用的参数执行；防抖则要等调用停止一段时间后才执行。节流限制的是开始执行的频率，不等待异步操作完成。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>首沿节流：第一次调用立即执行并开启一个 <code>wait</code> 毫秒的窗口，窗口内的调用直接丢弃，窗口结束后下一次调用再次立即执行。</li>
-<li>尾沿节流：第一次调用开启窗口但不执行，窗口内持续记录最新的参数，窗口结束时执行一次，结束时间不会因新调用而推后。</li>
-<li>防抖每次调用都重新计时，持续调用期间一直不执行；节流在持续调用期间也会按固定节奏执行。</li>
-<li>首沿节流要在调用 <code>fn</code> 之前设置 <code>blocked</code>，这样 <code>fn</code> 内部再次调用或同步抛错时，窗口仍然生效。</li>
-<li>节流只控制开始执行的频率。<code>fn</code> 返回的 Promise 还没完成时，下一个窗口照样会再次调用它；需要限制同时进行的数量，要用并发控制。</li>
-</ul>
-<h2>三种策略的对比</h2>
-<p>等待时间 100 毫秒，在 0、30、60 毫秒依次调用 A、B、C，之后停止：</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样实现首沿节流？它与尾沿节流、防抖有什么区别？</span></nav><h1 tabindex="-1">怎样实现首沿节流？它与尾沿节流、防抖有什么区别？</h1><p class="reading-summary">节流是限制函数在每段时间里最多执行一次。首沿节流在一段时间开始时马上执行，这段时间里的其他调用都丢掉；尾沿节流在这段时间结束时，用最后一次调用的参数执行；防抖则要等调用停下来一段时间才执行。节流只管多久开始执行一次，不等异步操作做完。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>节流是限制函数的执行频率：每 <code>wait</code> 毫秒最多执行一次。按在什么时候执行，分成首沿和尾沿两种。</p>
+<p>首沿节流是第一次调用马上执行，同时开一个 <code>wait</code> 毫秒的窗口，窗口里的调用全部丢掉，窗口结束后，下一次调用又马上执行。尾沿节流是第一次调用只开窗口、不执行，窗口里一直记下最新的参数，窗口结束时执行一次，而且结束时间不会因为新调用往后推。</p>
+<p>和防抖的区别在于：防抖每次调用都重新计时，一直有调用就一直不执行；节流就算调用不停，也会按固定节奏执行。</p>
+<p>实现首沿节流有个细节：要在调用 <code>fn</code> 之前就把 <code>blocked</code> 设上，这样 <code>fn</code> 内部又调了自己，或者同步抛了错，窗口照样生效。还要知道，节流只控制多久开始一次，<code>fn</code> 返回的 Promise 还没完成，下一个窗口照样会再调它。要限制同时进行的数量，得用并发控制。</p>
+</blockquote>
+<h2>三种策略放在一起比</h2>
+<p>等待时间 100 毫秒，在 0、30、60 毫秒依次调用 A、B、C，之后不再调用：</p>
 <table><thead><tr><th>策略</th><th>执行</th><th>典型场景</th></tr></thead><tbody><tr><td>首沿节流</td><td>0 毫秒执行 A，B、C 被丢弃</td><td>按钮防连点、立即响应的快捷键</td></tr><tr><td>尾沿节流</td><td>100 毫秒执行 C</td><td>滚动时更新位置，需要拿到最新值</td></tr><tr><td>尾沿防抖</td><td>160 毫秒执行 C</td><td>搜索框输入停止后再请求</td></tr></tbody></table>
-<p>Lodash 的 <code>throttle</code> 默认同时启用首沿和尾沿，只调用一次时只在首沿执行。用库之前要看清它的选项。</p>
-<h2>首沿节流实现</h2>
+<p>尾沿节流和防抖最后执行的都是 C，区别在时间。尾沿节流的窗口从 A 开始算，100 毫秒准时结束；防抖每次调用都往后推，从最后一次 C 的 60 毫秒再等 100 毫秒，到 160 毫秒才执行。</p>
+<p>用现成的库之前，要看清它的默认选项。比如 Lodash 的 <code>throttle</code>，默认首沿和尾沿都开，只调用一次的话，只在首沿执行。</p>
+<h2>首沿节流的实现</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">throttle</span>(<span class="hljs-params">fn, wait</span>) {
   <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> fn !== <span class="hljs-string">&#x27;function&#x27;</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;需要传入函数&#x27;</span>);
   <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Number</span>.<span class="hljs-title function_">isInteger</span>(wait) || wait &lt; <span class="hljs-number">0</span> || wait &gt; <span class="hljs-number">2_147_483_647</span>) {
@@ -69,12 +69,10 @@
   <span class="hljs-keyword">return</span> wrapped;
 }
 </code></pre></div>
-<ul>
-<li><code>timer</code> 只用于 <code>cancel</code> 时清除窗口；窗口期间的状态由 <code>blocked</code> 判断。</li>
-<li>窗口内被丢弃的调用返回 <code>undefined</code>，只有真正执行的那次返回 <code>fn</code> 的结果。</li>
-<li><code>cancel</code> 立即结束当前窗口，之后的调用会马上执行。</li>
-</ul>
-<h2>尾沿节流实现</h2>
+<p>窗口开没开，看的是 <code>blocked</code>。<code>timer</code> 只是为了 <code>cancel</code> 时能把定时器清掉。</p>
+<p>为什么 <code>blocked = true</code> 要写在 <code>fn.apply</code> 前面？假设反过来写，先执行 <code>fn</code>，<code>fn</code> 里面又调了一次 <code>wrapped</code>，这时 <code>blocked</code> 还是 <code>false</code>，就会再执行一次，窗口等于没开。<code>fn</code> 同步抛错也一样，抛错后就走不到设 <code>blocked</code> 那一行了。先设好，这两种情况都不怕。</p>
+<p>被丢掉的调用返回 <code>undefined</code>，只有真正执行的那次返回 <code>fn</code> 的结果。<code>cancel</code> 会马上结束当前窗口，之后的调用立刻就能执行。</p>
+<h2>尾沿节流的实现</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">throttleTrailing</span>(<span class="hljs-params">fn, wait</span>) {
   <span class="hljs-keyword">let</span> timer;
   <span class="hljs-keyword">let</span> lastArgs;
@@ -101,15 +99,24 @@
   <span class="hljs-keyword">return</span> wrapped;
 }
 </code></pre></div>
-<p>每 25 毫秒调用一次、共调用 10 次，等待 100 毫秒，本机实测执行了 3 次，分别拿到第 4、8、10 次调用的参数：每个窗口从它的第一次调用开始计时，结束时使用窗口内最新的参数。如果每次调用都 <code>clearTimeout</code> 再重新计时，就变成了防抖，持续调用期间一次都不会执行。</p>
+<p>和防抖比，关键区别就在 <code>if (timer !== undefined) return</code> 这一行。窗口已经开了，就只更新参数，不碰定时器。</p>
+<p>实际跑一下：每 25 毫秒调用一次，一共 10 次，等待时间 100 毫秒，结果执行了 3 次，拿到的分别是第 4、8、10 次调用的参数。每个窗口从它的第一次调用开始计时，结束时用的是窗口里最新的参数。</p>
+<p>如果把那一行换成“每次都 <code>clearTimeout</code> 再重新计时”，就变成了防抖，调用不停的那段时间里一次都不会执行。</p>
 <h2>和 requestAnimationFrame 的关系</h2>
-<p>滚动、拖拽这类和画面更新相关的事件，可以用 <code>requestAnimationFrame</code> 合并：同一帧内只处理最后一次事件，执行频率自动和屏幕刷新率一致，页面在后台时还会暂停。这比固定毫秒数的节流更贴合渲染节奏。</p>
+<p>滚动、拖拽这类跟画面更新有关的事件，还可以用 <code>requestAnimationFrame</code> 来合并：同一帧里只处理最后一次事件，执行频率自动跟屏幕刷新率一致，页面切到后台时还会暂停。这比写死一个毫秒数的节流，更贴合渲染的节奏。</p>
 <h2>常见追问</h2>
-<ul>
-<li><strong>节流函数里的 <code>this</code> 怎样保持？</strong> <code>wrapped</code> 用普通函数定义，调用时用 <code>fn.apply(this, args)</code> 转发；箭头函数没有自己的 <code>this</code>，不能用来定义 <code>wrapped</code>。</li>
-<li><strong>为什么等待时间要校验范围？</strong> 浏览器和 Node.js 的计时器把超过 2147483647 毫秒的延迟当作 1 毫秒处理，非整数或负数也会产生不直观的行为，所以实现在创建计时器之前拒绝这些值。</li>
-<li><strong>防抖怎样实现？</strong> 见<a href="/questions/alg-debounce/">《怎样实现只在停止调用后执行的防抖函数？》</a>。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Throttle" target="_blank" rel="noreferrer">MDN · Throttle<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E9%A6%96%E6%B2%BF%E8%8A%82%E6%B5%81%EF%BC%9F%E5%AE%83%E4%B8%8E%E5%B0%BE%E6%B2%BF%E8%8A%82%E6%B5%81%E3%80%81%E9%98%B2%E6%8A%96%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E9%A6%96%E6%B2%BF%E8%8A%82%E6%B5%81%EF%BC%9F%E5%AE%83%E4%B8%8E%E5%B0%BE%E6%B2%BF%E8%8A%82%E6%B5%81%E3%80%81%E9%98%B2%E6%8A%96%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-throttle%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-throttle%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样实现首沿节流？它与尾沿节流、防抖有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-debounce/">怎样实现只在停止调用后执行的防抖函数？</a></li><li><a href="/questions/alg-promise-aplus/">怎样手写一个符合 Promises/A+ 规范的 Promise？</a></li><li><a href="/questions/alg-deep-clone/">怎样手写深拷贝？和 structuredClone 有什么区别？</a></li><li><a href="/questions/alg-call-apply-bind/">怎样手写 call、apply 和 bind？用 new 调用 bind 返回的函数会怎样？</a></li></ul></nav></main></div></div>
+<p><strong>节流函数里的 <code>this</code> 怎么保持？</strong></p>
+<blockquote>
+<p><code>wrapped</code> 要用普通函数定义，调用时用 <code>fn.apply(this, args)</code> 转过去。箭头函数没有自己的 <code>this</code>，不能用来定义 <code>wrapped</code>。</p>
+</blockquote>
+<p><strong>为什么要校验等待时间的范围？</strong></p>
+<blockquote>
+<p>浏览器和 Node.js 的定时器，碰到超过 2147483647 毫秒的延迟，会当成 1 毫秒处理。小数和负数也会有不直观的行为。所以在创建定时器之前，就把这些值拒绝掉。</p>
+</blockquote>
+<p><strong>防抖怎么实现？</strong></p>
+<blockquote>
+<p>见<a href="/questions/alg-debounce/">《怎样实现只在停止调用后执行的防抖函数？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Throttle" target="_blank" rel="noreferrer">MDN · Throttle<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E9%A6%96%E6%B2%BF%E8%8A%82%E6%B5%81%EF%BC%9F%E5%AE%83%E4%B8%8E%E5%B0%BE%E6%B2%BF%E8%8A%82%E6%B5%81%E3%80%81%E9%98%B2%E6%8A%96%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E9%A6%96%E6%B2%BF%E8%8A%82%E6%B5%81%EF%BC%9F%E5%AE%83%E4%B8%8E%E5%B0%BE%E6%B2%BF%E8%8A%82%E6%B5%81%E3%80%81%E9%98%B2%E6%8A%96%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-throttle%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-throttle%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样实现首沿节流？它与尾沿节流、防抖有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-debounce/">怎样实现只在停止调用后执行的防抖函数？</a></li><li><a href="/questions/alg-promise-aplus/">怎样手写一个符合 Promises/A+ 规范的 Promise？</a></li><li><a href="/questions/alg-deep-clone/">怎样手写深拷贝？和 structuredClone 有什么区别？</a></li><li><a href="/questions/alg-call-apply-bind/">怎样手写 call、apply 和 bind？用 new 调用 bind 返回的函数会怎样？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="国际化面试题：把语言、地区、时区和书写方向当作独立变量，按风险选代表性组合组成测试矩阵；用伪本地化提前暴露写死宽度和字符串拼接；测试固定 locale 和时区…" />
+    <meta name="description" content="国际化面试题：把语言、地区、时区和书写方向当作四个独立变量，按风险挑代表性组合组成测试矩阵；用伪本地化提前暴露写死宽度和字符串拼接…" />
     <title>国际化页面怎样做跨地区测试，避免上线后才发现布局和时间错误？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/i18n-locale-testing/" />
     <meta name="robots" content="index,follow" />
@@ -19,58 +19,60 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="国际化页面怎样做跨地区测试，避免上线后才发现布局和时间错误？" />
-    <meta property="og:description" content="国际化面试题：把语言、地区、时区和书写方向当作独立变量，按风险选代表性组合组成测试矩阵；用伪本地化提前暴露写死宽度和字符串拼接；测试固定 locale 和时区…" />
+    <meta property="og:description" content="国际化面试题：把语言、地区、时区和书写方向当作四个独立变量，按风险挑代表性组合组成测试矩阵；用伪本地化提前暴露写死宽度和字符串拼接…" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/i18n-locale-testing/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/i18n-locale-testing/#webpage","url":"https://fe.hushifa.top/questions/i18n-locale-testing/","name":"国际化页面怎样做跨地区测试，避免上线后才发现布局和时间错误？","description":"国际化面试题：把语言、地区、时区和书写方向当作独立变量，按风险选代表性组合组成测试矩阵；用伪本地化提前暴露写死宽度和字符串拼接；测试固定 locale 和时区…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/i18n-locale-testing/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/i18n-locale-testing/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"国际化面试题","item":"https://fe.hushifa.top/topics/internationalization/"},{"@type":"ListItem","position":3,"name":"国际化页面怎样做跨地区测试，避免上线后才发现布局和时间错误？","item":"https://fe.hushifa.top/questions/i18n-locale-testing/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/i18n-locale-testing/#webpage","url":"https://fe.hushifa.top/questions/i18n-locale-testing/","name":"国际化页面怎样做跨地区测试，避免上线后才发现布局和时间错误？","description":"国际化面试题：把语言、地区、时区和书写方向当作四个独立变量，按风险挑代表性组合组成测试矩阵；用伪本地化提前暴露写死宽度和字符串拼接…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/i18n-locale-testing/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/i18n-locale-testing/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"国际化面试题","item":"https://fe.hushifa.top/topics/internationalization/"},{"@type":"ListItem","position":3,"name":"国际化页面怎样做跨地区测试，避免上线后才发现布局和时间错误？","item":"https://fe.hushifa.top/questions/i18n-locale-testing/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/internationalization/">国际化面试题</a><span aria-hidden="true">/</span><span aria-current="page">国际化页面怎样做跨地区测试，避免上线后才发现布局和时间错误？</span></nav><h1 tabindex="-1">国际化页面怎样做跨地区测试，避免上线后才发现布局和时间错误？</h1><p class="reading-summary">把语言、地区、时区和书写方向当作独立变量，按风险选代表性组合组成测试矩阵；用伪本地化提前暴露写死宽度和字符串拼接；测试固定 locale 和时区，覆盖夏令时边界；RTL 和读屏要人工检查。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>语言、地区、时区、书写方向是四个变量。浏览器语言是英文，不代表用户在美国，也不代表要用纽约时区。</li>
-<li>测试矩阵按风险挑代表：一种文字较长的语言、一种复杂文字、一种 RTL 语言、一个日期和数字格式不同的地区、两个相差较大的时区。</li>
-<li>伪本地化把文案加长、加上重音字符和边界标记，不用真实翻译就能发现溢出、截断和写死的字符串。</li>
-<li>自动化测试显式固定 locale 和时区，不依赖运行机器的系统设置，并覆盖夏令时切换和跨午夜。</li>
-<li>方向、焦点顺序、读屏输出和翻译质量需要人工检查。</li>
-</ul>
-<h2>测试矩阵示例</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/internationalization/">国际化面试题</a><span aria-hidden="true">/</span><span aria-current="page">国际化页面怎样做跨地区测试，避免上线后才发现布局和时间错误？</span></nav><h1 tabindex="-1">国际化页面怎样做跨地区测试，避免上线后才发现布局和时间错误？</h1><p class="reading-summary">把语言、地区、时区和书写方向当作四个独立变量，按风险挑代表性组合组成测试矩阵；用伪本地化提前暴露写死宽度和字符串拼接；测试固定 locale 和时区，覆盖夏令时边界；RTL 和读屏要人工检查。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>国际化测试最常见的误区，是只把浏览器语言切成英文看一眼。其实语言、地区、时区、书写方向是四个独立的变量。浏览器语言是英文，不代表用户在美国，更不代表要用纽约时区。</p>
+<p>组合太多，全测不现实，所以按风险挑代表：一种文字较长的语言、一种复杂文字、一种从右到左的语言、一个日期和数字格式不同的地区，再加两个相差较大的时区。</p>
+<p>还没拿到真实翻译时，可以先做伪本地化。把文案加长、加上重音字符和边界标记，溢出、截断和写死的字符串马上就能看出来。自动化测试要显式固定 locale 和时区，不依赖运行机器的系统设置，并覆盖夏令时切换和跨午夜。</p>
+<p>要注意，方向、焦点顺序、读屏输出和翻译质量，工具判断不了，需要人工检查。</p>
+</blockquote>
+<h2>测试矩阵怎样挑</h2>
+<p>下面每一行都对应一类容易出问题的情况。</p>
 <table><thead><tr><th>维度</th><th>代表值</th><th>发现的问题</th></tr></thead><tbody><tr><td>长文本</td><td><code>de-DE</code></td><td>按钮、表头、导航溢出</td></tr><tr><td>复杂文字</td><td><code>ja-JP</code>、<code>th-TH</code></td><td>换行、截断、字体回退</td></tr><tr><td>RTL</td><td><code>ar</code></td><td>方向、图标镜像、焦点顺序</td></tr><tr><td>格式</td><td><code>en-IN</code>（数字写作 <code>12,34,567.891</code>）、<code>de-CH</code></td><td>千位分隔、日期顺序、货币</td></tr><tr><td>时区</td><td><code>Asia/Shanghai</code>、<code>America/New_York</code></td><td>跨日、夏令时</td></tr></tbody></table>
-<p>再叠加窄屏、200% 字号和读屏器。</p>
-<h2>伪本地化</h2>
+<p>在这些组合上，再叠加窄屏、200% 字号和读屏器，大部分布局和格式问题都能暴露出来。</p>
+<h2>伪本地化是什么</h2>
+<p>伪本地化就是不用真翻译，先用程序把原文“变个样”，看页面扛不扛得住。下面是一个最简单的版本。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 只变换纯文字片段，变量由调用方另外拼接</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">pseudo</span>(<span class="hljs-params">text</span>) {
   <span class="hljs-keyword">const</span> accented = text.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/[A-Za-z]/g</span>, <span class="hljs-function">(<span class="hljs-params">ch</span>) =&gt;</span> <span class="hljs-string">`<span class="hljs-subst">${ch}</span>̄`</span>);
   <span class="hljs-keyword">return</span> <span class="hljs-string">`[<span class="hljs-subst">${accented}</span>~~~~]`</span>; <span class="hljs-comment">// 方括号标出边界，波浪线模拟变长</span>
 }
 </code></pre></div>
-<ul>
-<li>页面上出现不带方括号的文字，说明这段文字写死在代码里，没有走翻译。</li>
-<li>方括号被截掉，说明容器宽度写死或使用了截断。</li>
-<li>真实消息含有 ICU 语法时，要用消息解析器只改写文字节点，保留变量名和 <code>plural</code>、<code>select</code> 的分支键，不能用正则直接处理整条消息。</li>
-</ul>
-<h2>固定环境</h2>
+<p>它给每个字母加上一个组合用的横线，再在两头加上方括号和波浪线。</p>
+<p>方括号是用来找问题的。页面上出现了不带方括号的文字，说明这段文字写死在代码里，没有走翻译。方括号被截掉了一半，说明容器宽度写死了，或者用了截断。</p>
+<p>可是真实消息里常带 ICU 语法。这时不能用正则直接处理整条消息，否则变量名和 <code>plural</code>、<code>select</code> 的分支键也会被改掉。要用消息解析器，只改写其中的文字节点。</p>
+<h2>测试为什么要固定时区</h2>
+<p>如果测试依赖运行机器的系统时区，本地能过、CI 上就挂。所以格式化时直接把时区传进去。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 不依赖系统时区，直接在格式化时指定</span>
 <span class="hljs-keyword">const</span> <span class="hljs-title function_">format</span> = (<span class="hljs-params">date, locale, timeZone</span>) =&gt;
   <span class="hljs-keyword">new</span> <span class="hljs-title class_">Intl</span>.<span class="hljs-title class_">DateTimeFormat</span>(locale, { <span class="hljs-attr">dateStyle</span>: <span class="hljs-string">&#x27;short&#x27;</span>, <span class="hljs-attr">timeStyle</span>: <span class="hljs-string">&#x27;short&#x27;</span>, timeZone }).<span class="hljs-title function_">format</span>(date);
 
 <span class="hljs-title function_">format</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(<span class="hljs-string">&#x27;2026-01-01T00:00:00Z&#x27;</span>), <span class="hljs-string">&#x27;en-GB&#x27;</span>, <span class="hljs-string">&#x27;America/New_York&#x27;</span>); <span class="hljs-comment">// &#x27;31/12/2025, 19:00&#x27;</span>
 </code></pre></div>
-<p>用例包括夏令时切换当天、闰日、跨午夜、月末。时间戳与时区的建模见<a href="/questions/intl-timezones/">《时间戳、时区和只有日期的业务值应该怎样区分？》</a>。</p>
-<p>Playwright 等工具可以为每个测试项目设置 <code>locale</code> 和 <code>timezoneId</code>，在同一套用例上跑多个地区。</p>
-<h2>RTL 与人工检查</h2>
-<ul>
-<li>布局使用逻辑属性，见<a href="/questions/i18n-rtl/">《前端页面如何支持从右到左的语言？》</a>。</li>
-<li>逐项检查：箭头和返回图标是否镜像、方向键行为、弹出层位置、数字与英文混排。</li>
-<li>母语审校检查翻译是否自然、术语是否一致，伪本地化代替不了这一步。</li>
-</ul>
-<h2>业务规则</h2>
-<p>税费按哪个地区算、订单时间显示用户时区还是商家时区、一周从周几开始，这些是产品规则，要写进需求，并和后端一起测试。</p>
+<p>同一个 UTC 时刻，在纽约还是前一年的 12 月 31 日。这种跨日的情况正是要测的。</p>
+<p>用例要包括夏令时切换当天、闰日、跨午夜和月末。时间戳和时区怎样建模，见<a href="/questions/intl-timezones/">《时间戳、时区和只有日期的业务值应该怎样区分？》</a>。</p>
+<p>Playwright 这类工具可以给每个测试项目设置 <code>locale</code> 和 <code>timezoneId</code>，同一套用例就能在多个地区上各跑一遍。</p>
+<h2>哪些要人工检查</h2>
+<p>从右到左的布局先用逻辑属性写对，见<a href="/questions/i18n-rtl/">《前端页面如何支持从右到左的语言？》</a>。写完以后，还要人工逐项看：箭头和返回图标有没有镜像，方向键的行为对不对，弹出层的位置对不对，数字和英文混排时有没有乱。</p>
+<p>翻译质量只能靠母语审校，看句子是否自然、术语是否一致。伪本地化能发现布局问题，但代替不了这一步。</p>
+<h2>业务规则也要写进测试</h2>
+<p>税费按哪个地区算，订单时间显示用户的时区还是商家的时区，一周从周几开始，这些都不是技术问题，而是产品规则。所以它们要写进需求，并和后端一起测试。</p>
 <h2>常见追问</h2>
-<ul>
-<li><strong>视觉回归在多语言下怎么做？</strong> 对代表性语言和方向分别截图，字体渲染差异用合理阈值处理。</li>
-<li><strong>缺失翻译怎么测？</strong> 构建时检查键集合，界面测试中故意删掉一个键，确认回退语言生效、没有显示空白。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.w3.org/International/" target="_blank" rel="noreferrer">W3C · Internationalization<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%9B%BD%E9%99%85%E5%8C%96%E9%A1%B5%E9%9D%A2%E6%80%8E%E6%A0%B7%E5%81%9A%E8%B7%A8%E5%9C%B0%E5%8C%BA%E6%B5%8B%E8%AF%95%EF%BC%8C%E9%81%BF%E5%85%8D%E4%B8%8A%E7%BA%BF%E5%90%8E%E6%89%8D%E5%8F%91%E7%8E%B0%E5%B8%83%E5%B1%80%E5%92%8C%E6%97%B6%E9%97%B4%E9%94%99%E8%AF%AF%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%9B%BD%E9%99%85%E5%8C%96%E9%A1%B5%E9%9D%A2%E6%80%8E%E6%A0%B7%E5%81%9A%E8%B7%A8%E5%9C%B0%E5%8C%BA%E6%B5%8B%E8%AF%95%EF%BC%8C%E9%81%BF%E5%85%8D%E4%B8%8A%E7%BA%BF%E5%90%8E%E6%89%8D%E5%8F%91%E7%8E%B0%E5%B8%83%E5%B1%80%E5%92%8C%E6%97%B6%E9%97%B4%E9%94%99%E8%AF%AF%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ai18n-locale-testing%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9B%BD%E9%99%85%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fi18n-locale-testing%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：国际化页面怎样做跨地区测试，避免上线后才发现布局和时间错误？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/i18n-rtl/">前端页面如何支持从右到左的语言？</a></li><li><a href="/questions/intl-format/">为什么日期、金额和排序不应该手动拼接格式？</a></li><li><a href="/questions/intl-timezones/">时间戳、时区和只有日期的业务值应该怎样区分？</a></li><li><a href="/questions/i18n-plural-rules/">Intl.PluralRules 怎样帮助实现国际化复数？</a></li></ul></nav></main></div></div>
+<p><strong>多语言下视觉回归怎么做？</strong></p>
+<blockquote>
+<p>对代表性的语言和书写方向分别截图对比。不同环境的字体渲染会有细微差异，用合理的阈值处理，别让它们一直误报。</p>
+</blockquote>
+<p><strong>缺失翻译怎么测？</strong></p>
+<blockquote>
+<p>构建时先检查各语言的键集合是否齐全。界面测试里再故意删掉一个键，确认回退语言生效，页面上没有出现空白。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.w3.org/International/" target="_blank" rel="noreferrer">W3C · Internationalization<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%9B%BD%E9%99%85%E5%8C%96%E9%A1%B5%E9%9D%A2%E6%80%8E%E6%A0%B7%E5%81%9A%E8%B7%A8%E5%9C%B0%E5%8C%BA%E6%B5%8B%E8%AF%95%EF%BC%8C%E9%81%BF%E5%85%8D%E4%B8%8A%E7%BA%BF%E5%90%8E%E6%89%8D%E5%8F%91%E7%8E%B0%E5%B8%83%E5%B1%80%E5%92%8C%E6%97%B6%E9%97%B4%E9%94%99%E8%AF%AF%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%9B%BD%E9%99%85%E5%8C%96%E9%A1%B5%E9%9D%A2%E6%80%8E%E6%A0%B7%E5%81%9A%E8%B7%A8%E5%9C%B0%E5%8C%BA%E6%B5%8B%E8%AF%95%EF%BC%8C%E9%81%BF%E5%85%8D%E4%B8%8A%E7%BA%BF%E5%90%8E%E6%89%8D%E5%8F%91%E7%8E%B0%E5%B8%83%E5%B1%80%E5%92%8C%E6%97%B6%E9%97%B4%E9%94%99%E8%AF%AF%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ai18n-locale-testing%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9B%BD%E9%99%85%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fi18n-locale-testing%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：国际化页面怎样做跨地区测试，避免上线后才发现布局和时间错误？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/i18n-rtl/">前端页面如何支持从右到左的语言？</a></li><li><a href="/questions/intl-format/">为什么日期、金额和排序不应该手动拼接格式？</a></li><li><a href="/questions/intl-timezones/">时间戳、时区和只有日期的业务值应该怎样区分？</a></li><li><a href="/questions/i18n-plural-rules/">Intl.PluralRules 怎样帮助实现国际化复数？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

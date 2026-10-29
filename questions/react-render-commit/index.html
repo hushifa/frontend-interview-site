@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="React面试题：渲染阶段调用组件函数，计算出新的元素树并和上一次比较；提交阶段把差异应用到 DOM，再运行 Effect。" />
+    <meta name="description" content="React面试题：渲染阶段是 React 调用组件函数，算出界面应该变成什么样；提交阶段是把算出来的差异真正改到 DOM 上，再执行 Effect。" />
     <title>React 的渲染阶段与提交阶段有什么区别？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/react-render-commit/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="React 的渲染阶段与提交阶段有什么区别？ · 前端知库" />
-    <meta property="og:description" content="React面试题：渲染阶段调用组件函数，计算出新的元素树并和上一次比较；提交阶段把差异应用到 DOM，再运行 Effect。" />
+    <meta property="og:description" content="React面试题：渲染阶段是 React 调用组件函数，算出界面应该变成什么样；提交阶段是把算出来的差异真正改到 DOM 上，再执行 Effect。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/react-render-commit/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-render-commit/#webpage","url":"https://fe.hushifa.top/questions/react-render-commit/","name":"React 的渲染阶段与提交阶段有什么区别？ · 前端知库","description":"React面试题：渲染阶段调用组件函数，计算出新的元素树并和上一次比较；提交阶段把差异应用到 DOM，再运行 Effect。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-render-commit/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-render-commit/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"React 的渲染阶段与提交阶段有什么区别？","item":"https://fe.hushifa.top/questions/react-render-commit/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-render-commit/#webpage","url":"https://fe.hushifa.top/questions/react-render-commit/","name":"React 的渲染阶段与提交阶段有什么区别？ · 前端知库","description":"React面试题：渲染阶段是 React 调用组件函数，算出界面应该变成什么样；提交阶段是把算出来的差异真正改到 DOM 上，再执行 Effect。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-render-commit/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-render-commit/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"React 的渲染阶段与提交阶段有什么区别？","item":"https://fe.hushifa.top/questions/react-render-commit/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">React 的渲染阶段与提交阶段有什么区别？</span></nav><h1 tabindex="-1">React 的渲染阶段与提交阶段有什么区别？</h1><p class="reading-summary">渲染阶段调用组件函数，计算出新的元素树并和上一次比较；提交阶段把差异应用到 DOM，再运行 Effect。渲染可能被中断、重复或丢弃，所以必须是纯计算；副作用只能放在提交之后。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>一次更新分三步：触发（初次渲染或 setState）→ 渲染（调用组件函数，计算新元素树并找出差异）→ 提交（修改 DOM，执行 ref 和 Effect）。</li>
-<li>&quot;组件重新渲染&quot;指函数被重新调用，不等于 DOM 被重建；React 只修改有差异的节点。</li>
-<li>并发渲染中，渲染阶段可以被更高优先级的更新打断、重新开始，结果也可能被丢弃，只有提交阶段一定一次性完成。</li>
-<li>所以组件函数必须是纯函数：相同输入返回相同结果，不修改外部变量、不发请求、不操作 DOM。</li>
-<li>严格模式在开发环境会调用组件函数两次，用来暴露不纯的渲染逻辑。</li>
-</ul>
-<h2>一次更新的流程</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">React 的渲染阶段与提交阶段有什么区别？</span></nav><h1 tabindex="-1">React 的渲染阶段与提交阶段有什么区别？</h1><p class="reading-summary">渲染阶段是 React 调用组件函数，算出界面应该变成什么样；提交阶段是把算出来的差异真正改到 DOM 上，再执行 Effect。渲染可能被打断、重来或丢弃，所以组件函数里只能做纯计算。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>一次更新分三步。先是触发，比如初次渲染或者调用 <code>setState</code>。然后是渲染，React 调用组件函数，算出新的元素树，再跟上一次比较找出差异。最后是提交，React 把差异改到 DOM 上，设置 ref，执行 Effect。</p>
+<p>所以“组件重新渲染”只是说函数被重新调用了一次，不等于 DOM 被重建，React 只改有差异的节点。</p>
+<p>分成两个阶段，是因为并发渲染下渲染阶段可以被更高优先级的更新打断、重新开始，结果也可能被丢弃。只有提交阶段是一口气做完的。</p>
+<p>这带来一个要求：组件函数必须是纯函数，相同的输入返回相同的结果，不改外部变量、不发请求、不操作 DOM。开发环境的严格模式会把组件函数调用两次，专门暴露不纯的渲染逻辑。</p>
+</blockquote>
+<h2>一次点击经历了什么</h2>
+<p>下面的计数器在渲染时和 Effect 里各打一行日志，方便看清先后：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">Counter</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
   <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;render&#x27;</span>, count); <span class="hljs-comment">// 渲染阶段</span>
@@ -44,8 +44,10 @@
   <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> setCount(count + 1)}&gt;{count}<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>;
 }
 </code></pre></div>
-<p>点击后：<code>setCount</code> 安排更新 → React 调用 <code>Counter</code> 打印 <code>render 1</code> → 比较发现只有按钮文字变了 → 提交时只更新这个文本节点 → 浏览器绘制，Effect 通常在此后打印 <code>effect 1</code>。</p>
-<h2>不纯渲染的问题</h2>
+<p>点一下按钮，<code>setCount</code> 先安排一次更新。React 进入渲染阶段，调用 <code>Counter</code>，打印 <code>render 1</code>，然后拿新结果和上次比较，发现只有按钮上的文字从 0 变成了 1。</p>
+<p>接着进入提交阶段，React 只更新这一个文本节点，按钮元素本身没动。提交之后执行 Effect，打印 <code>effect 1</code>。一般情况下 Effect 在浏览器绘制之后才执行；但这次更新是点击触发的，React 可能在绘制之前就把它执行掉。</p>
+<h2>为什么渲染必须是纯的</h2>
+<p>下面这个组件在渲染时修改了外部变量：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">let</span> renderCount = <span class="hljs-number">0</span>;
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">Item</span>(<span class="hljs-params">{ title }</span>) {
@@ -53,21 +55,24 @@
   <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span>{title}（第 {renderCount} 次）<span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span>;
 }
 </code></pre></div>
-<p>严格模式下每次渲染会执行两次，被中断重来的渲染也会计数，显示的数字和实际提交次数对不上。需要记录次数时用 ref 并在 Effect 里修改，需要显示就放进 state。</p>
-<h2>父组件渲染会带动子组件</h2>
-<p>父组件重新渲染时，默认会重新调用所有子组件函数，即使子组件的 props 没变。这通常很快，因为最终 DOM 改动很少。确实有性能问题时，用 <code>memo</code> 跳过子组件，或者启用 React Compiler，详见<a href="/questions/react-memo/">《memo、useMemo、useCallback 各自优化什么？》</a>。</p>
-<h2>提交阶段的顺序</h2>
-<ol>
-<li>应用 DOM 变更。</li>
-<li>设置 ref，执行 <code>useLayoutEffect</code>（同步，阻塞绘制）。</li>
-<li>浏览器绘制。</li>
-<li>执行 <code>useEffect</code>（通常在绘制之后）。</li>
-</ol>
+<p>你可能以为它显示的是第几次渲染，实际上数字会对不上。严格模式下组件每次会被调用两次；并发渲染中，被打断重来的渲染也会计数。但这些多出来的调用并没有提交到页面上，所以显示的数字比实际提交的次数多。</p>
+<p>只要渲染不纯，React 多调一次、少调一次、扔掉一次，结果就会不一样。纯函数则不怕这些，调多少次结果都相同。</p>
+<p>要记录次数，就用 ref，在 Effect 里修改；要显示在页面上，就放进 state。</p>
+<h2>父组件渲染会带着子组件一起渲染</h2>
+<p>父组件重新渲染时，默认会把所有子组件函数也重新调用一遍，即使子组件的 props 根本没变。</p>
+<p>这一般不是问题，因为调用函数很快，最后真正改到 DOM 上的很少。确实有性能问题时，可以用 <code>memo</code> 跳过子组件，或者启用 React Compiler，详见<a href="/questions/react-memo/">《memo、useMemo、useCallback 各自优化什么？》</a>。</p>
+<h2>提交阶段内部的顺序</h2>
+<p>提交阶段里，React 先把变更应用到 DOM。然后设置 ref，同步执行 <code>useLayoutEffect</code>，这一步会挡住浏览器绘制。接着浏览器绘制画面。最后执行 <code>useEffect</code>，通常在绘制之后。</p>
+<p>这个顺序决定了：要在用户看到之前改布局，用 <code>useLayoutEffect</code>；其他副作用用 <code>useEffect</code>。</p>
 <h2>常见追问</h2>
-<ul>
-<li>什么叫&quot;协调&quot;（reconciliation）？就是渲染阶段比较新旧元素树、决定如何更新的过程：类型不同就替换整棵子树，类型相同就复用并更新属性，列表按 key 匹配。</li>
-<li>渲染阶段能调用 setState 吗？只能在&quot;根据 props 调整自身 state&quot;这类特殊场景下有条件地调用，常规情况会造成无限循环。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/learn/render-and-commit" target="_blank" rel="noreferrer">React · Render and Commit<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+%E7%9A%84%E6%B8%B2%E6%9F%93%E9%98%B6%E6%AE%B5%E4%B8%8E%E6%8F%90%E4%BA%A4%E9%98%B6%E6%AE%B5%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+%E7%9A%84%E6%B8%B2%E6%9F%93%E9%98%B6%E6%AE%B5%E4%B8%8E%E6%8F%90%E4%BA%A4%E9%98%B6%E6%AE%B5%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-render-commit%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-render-commit%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React 的渲染阶段与提交阶段有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-state/">为什么调用 setState 后，当前变量还是旧值？</a></li><li><a href="/questions/react-effect/">useEffect 的依赖数组和清理函数应该怎么写？</a></li><li><a href="/questions/react-key/">列表中的 key 为什么不能随意使用数组下标？</a></li><li><a href="/questions/react-memo/">memo、useMemo、useCallback 各自优化什么？</a></li></ul></nav></main></div></div>
+<p><strong>什么叫“协调”（reconciliation）？</strong></p>
+<blockquote>
+<p>就是渲染阶段比较新旧元素树、决定怎么更新的过程。同一个位置上元素类型不同，就替换整棵子树；类型相同，就复用并更新属性；列表则按 key 来匹配。</p>
+</blockquote>
+<p><strong>渲染阶段能调用 <code>setState</code> 吗？</strong></p>
+<blockquote>
+<p>一般不能，会造成无限循环。只有“根据 props 的变化调整自身 state”这种特殊场景，可以在渲染时有条件地调用。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/learn/render-and-commit" target="_blank" rel="noreferrer">React · Render and Commit<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+%E7%9A%84%E6%B8%B2%E6%9F%93%E9%98%B6%E6%AE%B5%E4%B8%8E%E6%8F%90%E4%BA%A4%E9%98%B6%E6%AE%B5%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+%E7%9A%84%E6%B8%B2%E6%9F%93%E9%98%B6%E6%AE%B5%E4%B8%8E%E6%8F%90%E4%BA%A4%E9%98%B6%E6%AE%B5%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-render-commit%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-render-commit%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React 的渲染阶段与提交阶段有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-state/">为什么调用 setState 后，当前变量还是旧值？</a></li><li><a href="/questions/react-effect/">useEffect 的依赖数组和清理函数应该怎么写？</a></li><li><a href="/questions/react-key/">列表中的 key 为什么不能随意使用数组下标？</a></li><li><a href="/questions/react-memo/">memo、useMemo、useCallback 各自优化什么？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

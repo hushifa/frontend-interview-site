@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="性能优化面试题：先用 RUM 按页面、版本、设备拆分，确认哪些用户、哪个指标、从哪个版本开始变慢；再在实验室固定条件复现，用瀑布图分析 LCP…" />
+    <meta name="description" content="性能优化面试题：先用 RUM 按页面、版本、设备拆分，找出谁变慢、哪个指标、从哪个版本开始；再在实验室固定条件复现，用瀑布图查 LCP…" />
     <title>一个线上页面变慢后应该怎样完成性能诊断闭环？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/perf-diagnostics-case/" />
     <meta name="robots" content="index,follow" />
@@ -19,47 +19,52 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="一个线上页面变慢后应该怎样完成性能诊断闭环？ · 前端知库" />
-    <meta property="og:description" content="性能优化面试题：先用 RUM 按页面、版本、设备拆分，确认哪些用户、哪个指标、从哪个版本开始变慢；再在实验室固定条件复现，用瀑布图分析 LCP…" />
+    <meta property="og:description" content="性能优化面试题：先用 RUM 按页面、版本、设备拆分，找出谁变慢、哪个指标、从哪个版本开始；再在实验室固定条件复现，用瀑布图查 LCP…" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/perf-diagnostics-case/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-diagnostics-case/#webpage","url":"https://fe.hushifa.top/questions/perf-diagnostics-case/","name":"一个线上页面变慢后应该怎样完成性能诊断闭环？ · 前端知库","description":"性能优化面试题：先用 RUM 按页面、版本、设备拆分，确认哪些用户、哪个指标、从哪个版本开始变慢；再在实验室固定条件复现，用瀑布图分析 LCP…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-diagnostics-case/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-diagnostics-case/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"一个线上页面变慢后应该怎样完成性能诊断闭环？","item":"https://fe.hushifa.top/questions/perf-diagnostics-case/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-diagnostics-case/#webpage","url":"https://fe.hushifa.top/questions/perf-diagnostics-case/","name":"一个线上页面变慢后应该怎样完成性能诊断闭环？ · 前端知库","description":"性能优化面试题：先用 RUM 按页面、版本、设备拆分，找出谁变慢、哪个指标、从哪个版本开始；再在实验室固定条件复现，用瀑布图查 LCP…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-diagnostics-case/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-diagnostics-case/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"一个线上页面变慢后应该怎样完成性能诊断闭环？","item":"https://fe.hushifa.top/questions/perf-diagnostics-case/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">一个线上页面变慢后应该怎样完成性能诊断闭环？</span></nav><h1 tabindex="-1">一个线上页面变慢后应该怎样完成性能诊断闭环？</h1><p class="reading-summary">先用 RUM 按页面、版本、设备拆分，确认哪些用户、哪个指标、从哪个版本开始变慢；再在实验室固定条件复现，用瀑布图分析 LCP、用 Performance 面板分析 INP；修复要对应找到的瓶颈，最后通过对照测试和分批发布验证真实用户数据是否改善。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>确认范围：看 75 分位而不是平均值，按页面、版本、设备、网络拆分，找出问题从哪次发布开始、影响哪类用户。</li>
-<li>复现：在实验室固定设备（或 CPU 降速）、网络、缓存状态和数据量，每次只改变一个因素，多次运行比较。</li>
-<li>定位：LCP 看瀑布图中最大内容在哪一段等待；INP 看最慢交互慢在输入延迟、处理还是呈现。</li>
-<li>修复：措施要对应瓶颈，图片压缩修不了主线程长任务，代码拆分修不了慢接口。</li>
-<li>验证：同场景对比修复前后，再小比例发布观察 RUM，同时看错误率和业务完成率。</li>
-</ul>
-<h2>案例：题库首页 INP 从 180ms 升到 420ms，LCP 也变差</h2>
-<p><strong>1. 确认范围</strong></p>
-<p>RUM 显示问题集中在中低端 Android、新版本发布之后，INP 的慢交互主要是&quot;输入搜索关键词&quot;，LCP 元素是首屏的题目列表文本。</p>
-<p><strong>2. 复现</strong></p>
-<p>用 DevTools 开启 4 倍 CPU 降速和慢速 4G，加载与线上相同规模的题目数据，录制&quot;冷启动首页&quot;和&quot;输入关键词&quot;两个流程。</p>
-<p><strong>3. 定位 LCP</strong></p>
-<p>瀑布图显示列表数据在 JS 包下载、执行后才请求，新版本的 JS 包增大了 40%。列表依赖客户端渲染，形成&quot;HTML → JS → 数据 → 渲染&quot;的串行链路。</p>
-<p><strong>4. 定位 INP</strong></p>
-<p>Performance 面板里，每次按键触发对全部题目的同步过滤和全量重渲染，单次处理超过 300ms。web-vitals 的 attribution 数据也显示处理时间占大部分，见<a href="/questions/perf-inp-diagnosis/">《INP 很高时，如何定位到底是哪一段交互变慢？》</a>。</p>
-<p><strong>5. 修复</strong></p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">一个线上页面变慢后应该怎样完成性能诊断闭环？</span></nav><h1 tabindex="-1">一个线上页面变慢后应该怎样完成性能诊断闭环？</h1><p class="reading-summary">先用 RUM 按页面、版本、设备拆分，找出谁变慢、哪个指标、从哪个版本开始；再在实验室固定条件复现，用瀑布图查 LCP、用 Performance 面板查 INP；按瓶颈修复，最后用对照测试和分批发布确认真实用户数据变好。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>线上变慢了，第一步不是动手改代码，而是先搞清楚谁慢了。我会看真实用户监测，也就是 RUM 的数据，看 75 分位而不是平均值，按页面、版本、设备、网络拆开，找出问题从哪次发布开始、影响的是哪类用户。</p>
+<p>然后在实验室里复现。固定设备或者 CPU 降速、网络、缓存状态和数据量，每次只改一个因素，多跑几次比较。复现出来以后再定位：LCP 慢就看瀑布图，最大的那块内容卡在哪一段等待；INP 慢就看最慢的那次交互，是输入延迟、处理时间还是呈现延迟。</p>
+<p>修复要对准瓶颈。图片压缩修不了主线程长任务，代码拆分也修不了慢接口。</p>
+<p>最后要验证。同一个实验室场景对比修复前后，再小比例发布观察 RUM，同时看错误率和业务完成率有没有变差，确认没问题再全量。</p>
+</blockquote>
+<h2>用一个案例走一遍</h2>
+<p>假设题库首页发版以后，RUM 显示 INP 从 180ms 升到 420ms，LCP 也变差了。下面按顺序走一遍。</p>
+<h3>先确认范围</h3>
+<p>RUM 拆开一看，问题集中在中低端 Android，时间点是新版本发布之后。慢的交互主要是“输入搜索关键词”，LCP 元素是首屏的题目列表文字。</p>
+<p>这一步拿到的是“谁慢、哪里慢、什么时候开始”，还不知道为什么慢。</p>
+<h3>在实验室复现</h3>
+<p>用 DevTools 开 4 倍 CPU 降速和慢速 4G，加载和线上同样规模的题目数据，录两个流程：冷启动打开首页，以及输入关键词。</p>
+<p>为什么要降速？因为开发用的电脑通常比用户的手机快得多，不降速可能根本看不到问题。</p>
+<h3>定位 LCP</h3>
+<p>瀑布图显示，列表数据要等 JS 包下载、执行完以后才去请求，而新版本的 JS 包大了 40%。列表靠客户端渲染，形成了“HTML → JS → 数据 → 渲染”一环套一环的串行链路，JS 包一变大，整条链都往后推。</p>
+<h3>定位 INP</h3>
+<p>Performance 面板里能看到，每按一次键，都会对全部题目做一次同步过滤，再把整个列表重新渲染，单次处理超过 300ms。web-vitals 的 attribution 数据也显示处理时间占了大头。具体怎么拆这三段，见<a href="/questions/perf-inp-diagnosis/">《INP 很高时，如何定位到底是哪一段交互变慢？》</a>。</p>
+<h3>对着瓶颈修复</h3>
+<p>每个措施都对应上面找到的一个原因：</p>
 <table><thead><tr><th>瓶颈</th><th>措施</th></tr></thead><tbody><tr><td>列表靠客户端渲染</td><td>首屏列表改为预渲染进 HTML</td></tr><tr><td>JS 包变大</td><td>分析产物，把新引入的大依赖改为按需加载</td></tr><tr><td>每次按键全量过滤</td><td>预先建立搜索索引，输入防抖，结果区域用低优先级更新</td></tr><tr><td>全量重渲染</td><td>虚拟列表，只渲染可见的行</td></tr></tbody></table>
-<p><strong>6. 验证</strong></p>
-<p>同一实验室场景多次运行，对比中位数和 75 分位。灰度发布 10% 流量，按设备分组对比 RUM 的 INP、LCP，同时确认搜索成功率没有下降，再全量发布。</p>
-<h2>容易出错的地方</h2>
-<ul>
-<li>只看平均值：少数严重慢的用户被淹没。</li>
-<li>看一次最好成绩：实验室结果有波动，要多次运行。</li>
-<li>修复与瓶颈不对应：给组件加 memo 但瓶颈其实是网络。</li>
-<li>只看技术指标：把结果推迟到点击后才显示，指标好看了，用户完成任务的时间却变长。</li>
-<li>流量结构变化：新增了大量高端设备用户，整体指标变好不代表代码变快。</li>
-</ul>
+<h3>验证</h3>
+<p>同一个实验室场景多跑几次，对比中位数和 75 分位。然后灰度发布 10% 的流量，按设备分组对比 RUM 里的 INP 和 LCP，同时确认搜索成功率没有下降，再全量发布。</p>
+<h2>容易在哪里出错</h2>
+<p>最常见的是只看平均值。少数用户特别慢，平均一下就被淹没了，所以要看分位数。</p>
+<p>第二个是只看一次最好成绩。实验室结果本身有波动，跑一次说明不了问题，要多跑几次。</p>
+<p>第三个是修复和瓶颈对不上，比如瓶颈其实在网络，却去给组件加 memo，改完自然没效果。</p>
+<p>第四个是只盯技术指标。比如把结果推迟到点击后才显示，指标好看了，用户完成任务反而更慢了。</p>
+<p>还有一个是流量结构变了。如果新来了大量高端设备用户，整体指标变好也不代表代码变快了，所以要按设备分组对比。</p>
 <h2>常见追问</h2>
-<ul>
-<li>RUM 和实验室测试怎么配合？RUM 回答&quot;谁慢、有多普遍&quot;，实验室回答&quot;为什么慢&quot;，见<a href="/questions/perf-rum/">《真实用户监测与实验室性能测试为什么要结合？》</a>。</li>
-<li>怎样防止再次退化？在 CI 中加入性能预算，见<a href="/questions/performance-budget/">《前端性能预算应该怎样制定和落地？》</a>。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/Rum-vs-Synthetic" target="_blank" rel="noreferrer">MDN · Performance monitoring: RUM vs. synthetic monitoring<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%B8%80%E4%B8%AA%E7%BA%BF%E4%B8%8A%E9%A1%B5%E9%9D%A2%E5%8F%98%E6%85%A2%E5%90%8E%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%AE%8C%E6%88%90%E6%80%A7%E8%83%BD%E8%AF%8A%E6%96%AD%E9%97%AD%E7%8E%AF%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%B8%80%E4%B8%AA%E7%BA%BF%E4%B8%8A%E9%A1%B5%E9%9D%A2%E5%8F%98%E6%85%A2%E5%90%8E%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%AE%8C%E6%88%90%E6%80%A7%E8%83%BD%E8%AF%8A%E6%96%AD%E9%97%AD%E7%8E%AF%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aperf-diagnostics-case%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fperf-diagnostics-case%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：一个线上页面变慢后应该怎样完成性能诊断闭环？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/perf-inp-diagnosis/">INP 很高时，如何定位到底是哪一段交互变慢？</a></li><li><a href="/questions/perf-rum/">真实用户监测与实验室性能测试为什么要结合？</a></li><li><a href="/questions/performance-memory-diagnosis/">前端内存泄漏应该怎样定位？</a></li><li><a href="/questions/engineering-vitals/">LCP、INP、CLS 分别衡量什么？</a></li></ul></nav></main></div></div>
+<p><strong>RUM 和实验室测试怎么配合？</strong></p>
+<blockquote>
+<p>RUM 回答“谁慢、有多普遍”，实验室回答“为什么慢”。一般是 RUM 发现问题，实验室复现定位，修完再回到 RUM 看是否恢复，详见<a href="/questions/perf-rum/">《真实用户监测与实验室性能测试为什么要结合？》</a>。</p>
+</blockquote>
+<p><strong>怎样防止以后再退化？</strong></p>
+<blockquote>
+<p>在 CI 里加性能预算，构建产物超出体积或者实验室指标超标就提示或拦截合并，详见<a href="/questions/performance-budget/">《前端性能预算应该怎样制定和落地？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/Rum-vs-Synthetic" target="_blank" rel="noreferrer">MDN · Performance monitoring: RUM vs. synthetic monitoring<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%B8%80%E4%B8%AA%E7%BA%BF%E4%B8%8A%E9%A1%B5%E9%9D%A2%E5%8F%98%E6%85%A2%E5%90%8E%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%AE%8C%E6%88%90%E6%80%A7%E8%83%BD%E8%AF%8A%E6%96%AD%E9%97%AD%E7%8E%AF%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%B8%80%E4%B8%AA%E7%BA%BF%E4%B8%8A%E9%A1%B5%E9%9D%A2%E5%8F%98%E6%85%A2%E5%90%8E%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E5%AE%8C%E6%88%90%E6%80%A7%E8%83%BD%E8%AF%8A%E6%96%AD%E9%97%AD%E7%8E%AF%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aperf-diagnostics-case%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fperf-diagnostics-case%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：一个线上页面变慢后应该怎样完成性能诊断闭环？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/perf-inp-diagnosis/">INP 很高时，如何定位到底是哪一段交互变慢？</a></li><li><a href="/questions/perf-rum/">真实用户监测与实验室性能测试为什么要结合？</a></li><li><a href="/questions/performance-memory-diagnosis/">前端内存泄漏应该怎样定位？</a></li><li><a href="/questions/engineering-vitals/">LCP、INP、CLS 分别衡量什么？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="图形与可视化面试题：顶点着色器把顶点变换到裁剪空间，片元着色器计算每个片元的颜色，之后还有深度测试和混合。" />
+    <meta name="description" content="图形与可视化面试题：顶点着色器决定每个顶点画在哪，片元着色器决定每个片元是什么颜色，之后还有深度测试和混合。" />
     <title>WebGL 着色器如何工作？如何避免把 GPU 当成黑盒？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/graphics-webgl-shader-pipeline/" />
     <meta name="robots" content="index,follow" />
@@ -19,23 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="WebGL 着色器如何工作？如何避免把 GPU 当成黑盒？" />
-    <meta property="og:description" content="图形与可视化面试题：顶点着色器把顶点变换到裁剪空间，片元着色器计算每个片元的颜色，之后还有深度测试和混合。" />
+    <meta property="og:description" content="图形与可视化面试题：顶点着色器决定每个顶点画在哪，片元着色器决定每个片元是什么颜色，之后还有深度测试和混合。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/graphics-webgl-shader-pipeline/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/graphics-webgl-shader-pipeline/#webpage","url":"https://fe.hushifa.top/questions/graphics-webgl-shader-pipeline/","name":"WebGL 着色器如何工作？如何避免把 GPU 当成黑盒？","description":"图形与可视化面试题：顶点着色器把顶点变换到裁剪空间，片元着色器计算每个片元的颜色，之后还有深度测试和混合。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/graphics-webgl-shader-pipeline/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/graphics-webgl-shader-pipeline/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"图形与可视化面试题","item":"https://fe.hushifa.top/topics/graphics/"},{"@type":"ListItem","position":3,"name":"WebGL 着色器如何工作？如何避免把 GPU 当成黑盒？","item":"https://fe.hushifa.top/questions/graphics-webgl-shader-pipeline/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/graphics-webgl-shader-pipeline/#webpage","url":"https://fe.hushifa.top/questions/graphics-webgl-shader-pipeline/","name":"WebGL 着色器如何工作？如何避免把 GPU 当成黑盒？","description":"图形与可视化面试题：顶点着色器决定每个顶点画在哪，片元着色器决定每个片元是什么颜色，之后还有深度测试和混合。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/graphics-webgl-shader-pipeline/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/graphics-webgl-shader-pipeline/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"图形与可视化面试题","item":"https://fe.hushifa.top/topics/graphics/"},{"@type":"ListItem","position":3,"name":"WebGL 着色器如何工作？如何避免把 GPU 当成黑盒？","item":"https://fe.hushifa.top/questions/graphics-webgl-shader-pipeline/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/graphics/">图形与可视化面试题</a><span aria-hidden="true">/</span><span aria-current="page">WebGL 着色器如何工作？如何避免把 GPU 当成黑盒？</span></nav><h1 tabindex="-1">WebGL 着色器如何工作？如何避免把 GPU 当成黑盒？</h1><p class="reading-summary">顶点着色器把顶点变换到裁剪空间，片元着色器计算每个片元的颜色，之后还有深度测试和混合。理解坐标空间、属性与 uniform 的区别、片元阶段的分辨率成本和精度，并给出一个完整的三角形绘制示例。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>顶点着色器对每个顶点运行，输出裁剪空间坐标 <code>gl_Position</code>；片元着色器对光栅化出的每个片元运行，输出颜色，之后经过深度测试和混合才写入画面。</li>
-<li>数据有三种入口：顶点属性（每个顶点不同，放在缓冲区里）、uniform（一次绘制共享，如矩阵、时间）、纹理（图片或查找表）。</li>
-<li>多数显示错误来自坐标空间约定不清：模型、世界、视图、裁剪空间之间的矩阵顺序要写明。</li>
-<li>片元着色器的执行次数随像素数增长，全屏特效在高分辨率屏幕上开销很大。</li>
-<li>编译和链接失败要读 <code>getShaderInfoLog()</code>、<code>getProgramInfoLog()</code>，GLSL 错误不会以 JavaScript 异常的形式出现。</li>
-</ul>
-<h2>两段着色器</h2>
-<p>WebGL 1（GLSL ES 1.00）写法：</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/graphics/">图形与可视化面试题</a><span aria-hidden="true">/</span><span aria-current="page">WebGL 着色器如何工作？如何避免把 GPU 当成黑盒？</span></nav><h1 tabindex="-1">WebGL 着色器如何工作？如何避免把 GPU 当成黑盒？</h1><p class="reading-summary">顶点着色器决定每个顶点画在哪，片元着色器决定每个片元是什么颜色，之后还有深度测试和混合。讲清坐标空间、属性与 uniform 的区别、片元阶段的分辨率成本和精度，并给出一个完整的三角形绘制示例。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>着色器是跑在 GPU 上的小程序，WebGL 画一个图形要写两段。顶点着色器对每个顶点跑一次，算出它在屏幕上的位置，输出裁剪空间坐标 <code>gl_Position</code>。GPU 再把三角形拆成一个个片元，片元可以先理解成“候选像素”，片元着色器对每个片元跑一次，算出颜色。之后还要经过深度测试和混合，才真正写进画面。</p>
+<p>数据有三种入口：顶点属性，每个顶点各不相同，放在缓冲区里；uniform，一次绘制里所有顶点共用，比如矩阵、时间；还有纹理，也就是图片或查找表。</p>
+<p>画面不对时，多半是坐标空间没理清。模型、世界、视图、裁剪空间之间的矩阵顺序要写清楚。</p>
+<p>还要注意两点。片元着色器的执行次数跟像素数成正比，全屏特效在高分辨率屏上很费。另外 GLSL 的编译和链接错误不会变成 JavaScript 异常，要自己去读 <code>getShaderInfoLog()</code>、<code>getProgramInfoLog()</code>。</p>
+</blockquote>
+<h2>两段着色器长什么样</h2>
+<p>下面是 WebGL 1（GLSL ES 1.00）的写法。先看顶点着色器：</p>
 <div class="not-prose code-block"><div class="code-language">glsl</div><pre><code class="hljs language-glsl">// 顶点着色器
 attribute vec2 a_position;
 attribute vec3 a_color;
@@ -48,6 +47,7 @@ void main() {
   v_color = a_color;
 }
 </code></pre></div>
+<p>再看片元着色器：</p>
 <div class="not-prose code-block"><div class="code-language">glsl</div><pre><code class="hljs language-glsl">// 片元着色器
 precision mediump float;
 varying mediump vec3 v_color;
@@ -56,8 +56,11 @@ void main() {
   gl_FragColor = vec4(v_color, 1.0);
 }
 </code></pre></div>
-<p><code>v_color</code> 在三角形内部插值，所以每个片元拿到的是三个顶点颜色的混合值。WebGL 2 使用 <code>#version 300 es</code>，把 <code>attribute</code>/<code>varying</code> 改成 <code>in</code>/<code>out</code>，片元输出要自己声明 <code>out vec4</code>，不再用 <code>gl_FragColor</code>。</p>
-<h2>完成一次绘制</h2>
+<p><code>a_position</code>、<code>a_color</code> 是顶点属性，每个顶点一份。<code>u_transform</code> 是 uniform，所有顶点共用。<code>v_color</code> 是从顶点着色器传给片元着色器的值。</p>
+<p>可是顶点只有三个，片元却有成百上千个，每个片元的 <code>v_color</code> 从哪来？答案是 GPU 会在三角形内部插值。所以每个片元拿到的，是三个顶点颜色按距离混合的结果。</p>
+<p>WebGL 2 用 <code>#version 300 es</code>，把 <code>attribute</code>/<code>varying</code> 换成 <code>in</code>/<code>out</code>。片元输出也要自己声明一个 <code>out vec4</code>，不再用 <code>gl_FragColor</code>。</p>
+<h2>完整画一个三角形要哪些步骤</h2>
+<p>下面的函数编译着色器、上传顶点、画一个三角形，最后读回画布中心的像素：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">compile</span>(<span class="hljs-params">gl, type, source</span>) {
   <span class="hljs-keyword">const</span> shader = gl.<span class="hljs-title function_">createShader</span>(type);
   gl.<span class="hljs-title function_">shaderSource</span>(shader, source);
@@ -101,26 +104,30 @@ void main() {
   <span class="hljs-keyword">return</span> pixel;
 }
 </code></pre></div>
-<p>画布中心落在三角形内，<code>readPixels</code> 读出的像素是红色 <code>[255, 0, 0, 255]</code>。</p>
-<h2>坐标空间</h2>
+<p>步骤是：编译两段着色器，链接成一个程序；把三个顶点的坐标上传到缓冲区，告诉 GPU 怎么读；设好颜色和矩阵；最后 <code>drawArrays</code> 画出来。</p>
+<p>注意 <code>compile</code> 和链接后的检查。GLSL 写错了，<code>compileShader</code> 不会抛异常，只会把状态标成失败，所以要主动检查，再把日志读出来。</p>
+<p>颜色这里没用缓冲区，而是 <code>vertexAttrib3f</code> 设了一个常量，所以三个顶点都是红色。矩阵是单位矩阵，坐标原样输出。三个顶点 (-1, -1)、(1, -1)、(0, 1) 构成的三角形盖住了画布中心，所以 <code>readPixels</code> 读出的中心像素是红色 <code>[255, 0, 0, 255]</code>。</p>
+<h2>坐标是怎样一步步变到屏幕上的</h2>
 <div class="not-prose code-block"><div class="code-language">text</div><pre><code class="hljs language-text">裁剪坐标 = 投影矩阵 × 视图矩阵 × 模型矩阵 × 模型坐标
 </code></pre></div>
-<p>GPU 对裁剪坐标做透视除法得到标准化设备坐标（-1 到 1），再由 viewport 映射到像素。WebGL 的矩阵按列主序传入，和 JavaScript 端数学库的约定要一致。调试时先用单位矩阵画一个三角形，再逐个加入变换。</p>
-<h2>性能与精度</h2>
-<ul>
-<li>几何数据一次上传到缓冲区，每帧只更新 uniform。不要每帧重建缓冲区，也不要每个小物体用一个程序。</li>
-<li>相同材质的对象合并绘制，或使用实例化绘制。</li>
-<li><code>mediump</code> 的精度在不同设备上不同，大坐标场景会出现抖动，可以改用 <code>highp</code> 或让坐标相对摄像机。</li>
-<li>纹理颜色多为 sRGB，参与光照计算前要转换到线性空间，否则亮度会偏。</li>
-</ul>
-<h2>安全</h2>
-<p>不要把用户输入拼接进 GLSL 源码。用户数据通过属性、uniform 或纹理传入，模型和纹理要限制尺寸，防止耗尽显存。</p>
-<p>上下文丢失的处理见<a href="/questions/graphics-webgl/">《什么场景值得用 WebGL？GPU 加速有哪些成本？》</a>。</p>
+<p>模型矩阵把模型放进世界，视图矩阵相当于摆相机，投影矩阵决定透视效果。GPU 拿到裁剪坐标后做透视除法，得到标准化设备坐标，范围是 -1 到 1，再由 viewport 映射成像素。</p>
+<p>WebGL 的矩阵按列主序传入，所以要和 JavaScript 端数学库的约定一致，不然矩阵会被转置。调试时可以先用单位矩阵画一个三角形，确认能画出来，再一个个把变换加进去。</p>
+<h2>性能和精度要注意什么</h2>
+<p>几何数据一次上传到缓冲区，每帧只更新 uniform。不要每帧重建缓冲区，也不要每个小物体都用一个单独的程序。相同材质的对象合并起来画，或者用实例化绘制。</p>
+<p><code>mediump</code> 的精度在不同设备上不一样。坐标很大的场景会出现抖动，可以改用 <code>highp</code>，或者让坐标相对于相机来算，让数值变小。</p>
+<p>纹理里的颜色多数是 sRGB，参与光照计算之前要先转到线性空间，否则算出来的亮度会偏。</p>
+<h2>安全上要注意什么</h2>
+<p>不要把用户输入拼进 GLSL 源码里。用户的数据要通过属性、uniform 或纹理传进去。模型和纹理还要限制尺寸，防止把显存耗光。</p>
+<p>上下文丢失怎么处理，见<a href="/questions/graphics-webgl/">《什么场景值得用 WebGL？GPU 加速有哪些成本？》</a>。</p>
 <h2>常见追问</h2>
-<ul>
-<li><strong>为什么要把位置属性绑定到 0 号？</strong> 在部分 WebGL 1 实现上，0 号属性没有启用数组会走慢路径，把最常用的属性固定在 0 号可以避免。</li>
-<li><strong>透明物体为什么显示错乱？</strong> 混合依赖绘制顺序，透明物体通常要从远到近排序，并关闭深度写入。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Adding_2D_content_to_a_WebGL_context" target="_blank" rel="noreferrer">MDN · Adding 2D content to a WebGL context<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+WebGL+%E7%9D%80%E8%89%B2%E5%99%A8%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%EF%BC%9F%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D%E6%8A%8A+GPU+%E5%BD%93%E6%88%90%E9%BB%91%E7%9B%92%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AWebGL+%E7%9D%80%E8%89%B2%E5%99%A8%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%EF%BC%9F%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D%E6%8A%8A+GPU+%E5%BD%93%E6%88%90%E9%BB%91%E7%9B%92%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Agraphics-webgl-shader-pipeline%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9B%BE%E5%BD%A2%E4%B8%8E%E5%8F%AF%E8%A7%86%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fgraphics-webgl-shader-pipeline%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：WebGL 着色器如何工作？如何避免把 GPU 当成黑盒？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/graphics-webgl/">什么场景值得用 WebGL？GPU 加速有哪些成本？</a></li><li><a href="/questions/graphics-three-resource-lifecycle/">Three.js 页面退出后为什么还占内存？怎样管理模型和渲染器的生命周期？</a></li><li><a href="/questions/graphics-canvas-svg/">Canvas 和 SVG 怎样选择？</a></li><li><a href="/questions/graphics-webgpu/">WebGPU 与 WebGL 的关注点有哪些不同？</a></li></ul></nav></main></div></div>
+<p><strong>为什么要把位置属性绑定到 0 号？</strong></p>
+<blockquote>
+<p>在部分 WebGL 1 实现上，0 号属性如果没有启用数组，会走一条慢路径。把最常用的位置属性固定在 0 号，就能避开这个问题。</p>
+</blockquote>
+<p><strong>透明物体为什么显示错乱？</strong></p>
+<blockquote>
+<p>因为混合的结果依赖绘制顺序。透明物体通常要从远到近排序再画，并关掉深度写入。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Adding_2D_content_to_a_WebGL_context" target="_blank" rel="noreferrer">MDN · Adding 2D content to a WebGL context<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+WebGL+%E7%9D%80%E8%89%B2%E5%99%A8%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%EF%BC%9F%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D%E6%8A%8A+GPU+%E5%BD%93%E6%88%90%E9%BB%91%E7%9B%92%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AWebGL+%E7%9D%80%E8%89%B2%E5%99%A8%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%EF%BC%9F%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D%E6%8A%8A+GPU+%E5%BD%93%E6%88%90%E9%BB%91%E7%9B%92%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Agraphics-webgl-shader-pipeline%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9B%BE%E5%BD%A2%E4%B8%8E%E5%8F%AF%E8%A7%86%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fgraphics-webgl-shader-pipeline%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：WebGL 着色器如何工作？如何避免把 GPU 当成黑盒？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/graphics-webgl/">什么场景值得用 WebGL？GPU 加速有哪些成本？</a></li><li><a href="/questions/graphics-three-resource-lifecycle/">Three.js 页面退出后为什么还占内存？怎样管理模型和渲染器的生命周期？</a></li><li><a href="/questions/graphics-canvas-svg/">Canvas 和 SVG 怎样选择？</a></li><li><a href="/questions/graphics-webgpu/">WebGPU 与 WebGL 的关注点有哪些不同？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

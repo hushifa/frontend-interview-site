@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="AI 应用前端面试题：断线恢复需要服务端把一次生成保存为可查询的运行，事件带递增序号；客户端记录最后应用的序号，重连时按游标补发并去重。" />
+    <meta name="description" content="AI 应用前端面试题：服务端要把每次生成存成一个可以查询的&quot;运行&quot;，每条事件带递增序号。客户端记下最后处理到第几条，重连时带上这个位置让服务端补发，并自己去重。" />
     <title>AI 流式输出断线后，怎样恢复同一条生成任务？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/ai-stream-recovery/" />
     <meta name="robots" content="index,follow" />
@@ -19,36 +19,38 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="AI 流式输出断线后，怎样恢复同一条生成任务？ · 前端知库" />
-    <meta property="og:description" content="AI 应用前端面试题：断线恢复需要服务端把一次生成保存为可查询的运行，事件带递增序号；客户端记录最后应用的序号，重连时按游标补发并去重。" />
+    <meta property="og:description" content="AI 应用前端面试题：服务端要把每次生成存成一个可以查询的&quot;运行&quot;，每条事件带递增序号。客户端记下最后处理到第几条，重连时带上这个位置让服务端补发，并自己去重。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/ai-stream-recovery/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ai-stream-recovery/#webpage","url":"https://fe.hushifa.top/questions/ai-stream-recovery/","name":"AI 流式输出断线后，怎样恢复同一条生成任务？ · 前端知库","description":"AI 应用前端面试题：断线恢复需要服务端把一次生成保存为可查询的运行，事件带递增序号；客户端记录最后应用的序号，重连时按游标补发并去重。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ai-stream-recovery/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ai-stream-recovery/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"AI 应用前端面试题","item":"https://fe.hushifa.top/topics/ai-frontend/"},{"@type":"ListItem","position":3,"name":"AI 流式输出断线后，怎样恢复同一条生成任务？","item":"https://fe.hushifa.top/questions/ai-stream-recovery/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ai-stream-recovery/#webpage","url":"https://fe.hushifa.top/questions/ai-stream-recovery/","name":"AI 流式输出断线后，怎样恢复同一条生成任务？ · 前端知库","description":"AI 应用前端面试题：服务端要把每次生成存成一个可以查询的\"运行\"，每条事件带递增序号。客户端记下最后处理到第几条，重连时带上这个位置让服务端补发，并自己去重。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ai-stream-recovery/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ai-stream-recovery/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"AI 应用前端面试题","item":"https://fe.hushifa.top/topics/ai-frontend/"},{"@type":"ListItem","position":3,"name":"AI 流式输出断线后，怎样恢复同一条生成任务？","item":"https://fe.hushifa.top/questions/ai-stream-recovery/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/ai-frontend/">AI 应用前端面试题</a><span aria-hidden="true">/</span><span aria-current="page">AI 流式输出断线后，怎样恢复同一条生成任务？</span></nav><h1 tabindex="-1">AI 流式输出断线后，怎样恢复同一条生成任务？</h1><p class="reading-summary">断线恢复需要服务端把一次生成保存为可查询的运行，事件带递增序号；客户端记录最后应用的序号，重连时按游标补发并去重。恢复失败时要让用户明确选择重新生成。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>恢复的前提是服务端把每次生成保存为一个运行（run），有 ID、状态和按序号保存的事件日志。</li>
-<li>客户端记录最后一个已经应用的事件序号，重连时带上它，服务端只补发后面的事件。</li>
-<li>客户端按&quot;运行 ID + 事件序号&quot;去重，序号必须连续，出现缺口就停止并拉取快照。</li>
-<li>恢复和重新生成是两件事。日志过期或运行失败时，展示已收到的部分并让用户选择重新生成，不要自动重发。</li>
-<li>最终消息用运行 ID 做幂等写入，重复的完成事件不会生成两条消息。</li>
-</ul>
-<h2>服务端保存什么</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/ai-frontend/">AI 应用前端面试题</a><span aria-hidden="true">/</span><span aria-current="page">AI 流式输出断线后，怎样恢复同一条生成任务？</span></nav><h1 tabindex="-1">AI 流式输出断线后，怎样恢复同一条生成任务？</h1><p class="reading-summary">服务端要把每次生成存成一个可以查询的&quot;运行&quot;，每条事件带递增序号。客户端记下最后处理到第几条，重连时带上这个位置让服务端补发，并自己去重。恢复不了时，让用户自己选择要不要重新生成。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>能恢复的前提是服务端把每次生成存成一个“运行”，英文叫 run。它有 ID、有状态，还按序号保存了每一条事件。</p>
+<p>客户端记住自己最后处理到第几条事件，重连时把这个序号带上，服务端只补发后面的。客户端按“运行 ID 加序号”去重，而且序号必须连续，中间缺了就停下来，去拉一份完整快照。</p>
+<p>要分清恢复和重新生成。日志过期了或者运行失败了，就显示已经收到的部分，让用户自己选要不要重新生成，不要自动重发，因为那会生成一个不一样的回答，还要再花一次钱。</p>
+<p>最后保存消息时，用运行 ID 做幂等写入，这样就算完成事件重复到达，也不会存出两条消息。</p>
+</blockquote>
+<h2>服务端要保存什么</h2>
+<p>一次生成在服务端大概是这样存的：</p>
 <div class="not-prose code-block"><div class="code-language">text</div><pre><code class="hljs language-text">runId = run_123
 1 message-start
 2 text-delta &quot;你&quot;
 3 text-delta &quot;好&quot;
 4 message-complete
 </code></pre></div>
-<p>事件日志保留一段时间（例如几分钟到几小时），过期后运行标记为&quot;不可恢复&quot;。运行 ID 不可预测，每次查询都校验它属于当前用户。</p>
-<h2>重连请求</h2>
+<p>事件日志保留一段时间，比如几分钟到几小时，过期以后这个运行就标成“不可恢复”。运行 ID 要做成别人猜不到的，而且每次查询都要校验它是不是属于当前用户。</p>
+<h2>重连时怎么请求</h2>
+<p>假设客户端已经处理到第 3 条，重连时这样请求：</p>
 <div class="not-prose code-block"><div class="code-language">http</div><pre><code class="hljs language-http">GET /api/runs/run_123/events?after=3
 Accept: text/event-stream
 </code></pre></div>
-<p>服务端补发序号大于 3 的事件。如果运行在断线期间已经完成，补发剩余事件后就结束；日志已过期则返回当前状态和最终消息（如果有）。</p>
-<p>SSE 的 <code>Last-Event-ID</code> 请求头可以承载这个游标，但只有服务端真的保存了事件并按 ID 补发，它才有意义。用 fetch 实现 SSE 时，浏览器不会自动带这个头，要自己传。</p>
-<h2>客户端应用事件</h2>
+<p>服务端补发序号大于 3 的事件。如果断线期间运行已经结束了，补发完剩下的事件就关闭连接；如果日志已经过期，就返回当前状态，有最终消息的话也一起返回。</p>
+<p>SSE 本来有个 <code>Last-Event-ID</code> 请求头，可以用来传这个位置。但它只是个请求头，只有服务端真的保存了事件、并且按 ID 补发，它才有用。另外，用 fetch 实现 SSE 时，浏览器不会自动带这个头，要自己加。</p>
+<h2>客户端怎么处理收到的事件</h2>
+<p>下面这个函数接收当前状态和一条事件，返回新状态。注意前面三行判断，它们处理的是重复、乱序和缺口：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">applyEvent</span>(<span class="hljs-params">state, event</span>) {
   <span class="hljs-keyword">if</span> (state.<span class="hljs-property">status</span> !== <span class="hljs-string">&#x27;streaming&#x27;</span> || event.<span class="hljs-property">runId</span> !== state.<span class="hljs-property">runId</span>) <span class="hljs-keyword">return</span> state;
   <span class="hljs-keyword">if</span> (event.<span class="hljs-property">seq</span> &lt;= state.<span class="hljs-property">lastSeq</span>) <span class="hljs-keyword">return</span> state; <span class="hljs-comment">// 重复事件</span>
@@ -64,21 +66,23 @@ Accept: text/event-stream
   }
 }
 </code></pre></div>
-<ul>
-<li>按事件身份去重，不按文本内容去重，因为模型可能合法地输出相同片段。</li>
-<li>序号是本应用自定义的连续整数。SSE 规范里的 <code>id</code> 是字符串，没有连续性保证，需要在协议适配层转换。</li>
-<li>出现 <code>gap</code> 时关闭连接，拉取运行快照（已累积文本和最新序号），再从快照位置重新订阅。</li>
-<li>游标存进 IndexedDB 时，要和对应的文本一起保存。只存了游标、没存文本，刷新后会跳过那一段。</li>
-</ul>
-<h2>界面状态</h2>
-<table><thead><tr><th>情况</th><th>界面</th></tr></thead><tbody><tr><td>正在重连</td><td>保留已有文字，显示&quot;连接中断，正在恢复&quot;</td></tr><tr><td>恢复成功</td><td>继续追加，无需用户操作</td></tr><tr><td>运行已完成</td><td>直接显示最终消息</td></tr><tr><td>日志过期或运行失败</td><td>保留部分文字并标注&quot;未完成&quot;，提供&quot;重新生成&quot;按钮</td></tr></tbody></table>
-<p>重新生成会创建新运行，消息记录里保存新旧运行的关系。</p>
-<p>重连使用指数退避，避免服务端恢复时大量客户端同时涌入。</p>
+<p>为什么按序号去重，而不是看文字内容一样不一样？因为模型完全可能合法地连续输出两段一样的文字，比如两个“好”。按内容去重会把正常内容删掉。</p>
+<p>这里的序号是我们应用自己定义的连续整数。SSE 规范里事件的 <code>id</code> 是字符串，没有“必须连续”的保证，所以要在协议适配那一层转成整数序号。</p>
+<p>出现 <code>gap</code>，说明中间漏了事件。这时候要关闭连接，拉一份运行快照，里面有已经累积的文字和最新序号，然后从快照的位置重新订阅。</p>
+<p>如果要把序号存进 IndexedDB，一定要和对应的文字一起存。只存了序号、没存文字，刷新以后会从那个序号往后补，中间那段文字就永远丢了。</p>
+<h2>界面上怎么显示</h2>
+<table><thead><tr><th>情况</th><th>界面</th></tr></thead><tbody><tr><td>正在重连</td><td>保留已有文字，显示“连接中断，正在恢复”</td></tr><tr><td>恢复成功</td><td>继续追加，无需用户操作</td></tr><tr><td>运行已完成</td><td>直接显示最终消息</td></tr><tr><td>日志过期或运行失败</td><td>保留部分文字并标注“未完成”，提供“重新生成”按钮</td></tr></tbody></table>
+<p>用户点了重新生成，就会创建一个新的运行，消息记录里要记下新旧运行之间的关系。</p>
+<p>重连要用指数退避，就是每次失败后等待的时间翻倍。不然服务端一恢复，大量客户端同时涌进来，又把它压垮了。</p>
 <h2>常见追问</h2>
-<ul>
-<li><strong>只把最后一段文字发给服务端让它&quot;接着写&quot;行不行？</strong> 那是一次新生成，结果可能和原来的回答对不上，还会重复计费。</li>
-<li><strong>取消怎么记录？</strong> 取消请求针对运行 ID，服务端写入终止事件，其他标签页恢复时也能看到&quot;已停止&quot;。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://html.spec.whatwg.org/multipage/server.html#server-sent-events" target="_blank" rel="noreferrer">WHATWG · Server-sent events<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+AI+%E6%B5%81%E5%BC%8F%E8%BE%93%E5%87%BA%E6%96%AD%E7%BA%BF%E5%90%8E%EF%BC%8C%E6%80%8E%E6%A0%B7%E6%81%A2%E5%A4%8D%E5%90%8C%E4%B8%80%E6%9D%A1%E7%94%9F%E6%88%90%E4%BB%BB%E5%8A%A1%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAI+%E6%B5%81%E5%BC%8F%E8%BE%93%E5%87%BA%E6%96%AD%E7%BA%BF%E5%90%8E%EF%BC%8C%E6%80%8E%E6%A0%B7%E6%81%A2%E5%A4%8D%E5%90%8C%E4%B8%80%E6%9D%A1%E7%94%9F%E6%88%90%E4%BB%BB%E5%8A%A1%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aai-stream-recovery%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AAI+%E5%BA%94%E7%94%A8%E5%89%8D%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fai-stream-recovery%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：AI 流式输出断线后，怎样恢复同一条生成任务？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ai-stream-protocol/">AI 流式响应为什么不能每收到一块就 JSON.parse？</a></li><li><a href="/questions/ai-client-server-boundary/">AI 对话前端为什么不能直接内置服务商 API 密钥？</a></li><li><a href="/questions/ai-chat-state/">AI 聊天界面为什么不能只有 loading 一个状态？</a></li><li><a href="/questions/ai-cancel-generation/">点击“停止生成”后，服务端一定停止调用模型吗？</a></li></ul></nav></main></div></div>
+<p><strong>只把已经收到的文字发给服务端，让它“接着写”行不行？</strong></p>
+<blockquote>
+<p>不行。那其实是一次新的生成，接出来的内容可能和原来的思路对不上，而且又要计费一次。</p>
+</blockquote>
+<p><strong>用户取消怎么记录？</strong></p>
+<blockquote>
+<p>取消请求针对的是运行 ID。服务端收到后写一条终止事件，这样其他标签页恢复这个运行时，也能看到“已停止”。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://html.spec.whatwg.org/multipage/server.html#server-sent-events" target="_blank" rel="noreferrer">WHATWG · Server-sent events<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+AI+%E6%B5%81%E5%BC%8F%E8%BE%93%E5%87%BA%E6%96%AD%E7%BA%BF%E5%90%8E%EF%BC%8C%E6%80%8E%E6%A0%B7%E6%81%A2%E5%A4%8D%E5%90%8C%E4%B8%80%E6%9D%A1%E7%94%9F%E6%88%90%E4%BB%BB%E5%8A%A1%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAI+%E6%B5%81%E5%BC%8F%E8%BE%93%E5%87%BA%E6%96%AD%E7%BA%BF%E5%90%8E%EF%BC%8C%E6%80%8E%E6%A0%B7%E6%81%A2%E5%A4%8D%E5%90%8C%E4%B8%80%E6%9D%A1%E7%94%9F%E6%88%90%E4%BB%BB%E5%8A%A1%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aai-stream-recovery%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AAI+%E5%BA%94%E7%94%A8%E5%89%8D%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fai-stream-recovery%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：AI 流式输出断线后，怎样恢复同一条生成任务？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ai-stream-protocol/">AI 流式响应为什么不能每收到一块就 JSON.parse？</a></li><li><a href="/questions/ai-client-server-boundary/">AI 对话前端为什么不能直接内置服务商 API 密钥？</a></li><li><a href="/questions/ai-chat-state/">AI 聊天界面为什么不能只有 loading 一个状态？</a></li><li><a href="/questions/ai-cancel-generation/">点击“停止生成”后，服务端一定停止调用模型吗？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

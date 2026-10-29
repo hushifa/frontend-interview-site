@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="工程化面试题：用文本模块的完整构建例子串起依赖入口、产物、模块转换和生命周期扩展，说明 loader 顺序、publicPath、模式及排错方法。" />
+    <meta name="description" content="工程化面试题：entry 是依赖入口，output 决定产物，loader 做模块转换，plugin 通过生命周期钩子扩展构建。" />
     <title>webpack 的 entry、output、loader 和 plugin 分别负责什么？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/eng-webpack/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="webpack 的 entry、output、loader 和 plugin 分别负责什么？" />
-    <meta property="og:description" content="工程化面试题：用文本模块的完整构建例子串起依赖入口、产物、模块转换和生命周期扩展，说明 loader 顺序、publicPath、模式及排错方法。" />
+    <meta property="og:description" content="工程化面试题：entry 是依赖入口，output 决定产物，loader 做模块转换，plugin 通过生命周期钩子扩展构建。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/eng-webpack/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/eng-webpack/#webpage","url":"https://fe.hushifa.top/questions/eng-webpack/","name":"webpack 的 entry、output、loader 和 plugin 分别负责什么？","description":"工程化面试题：用文本模块的完整构建例子串起依赖入口、产物、模块转换和生命周期扩展，说明 loader 顺序、publicPath、模式及排错方法。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/eng-webpack/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/eng-webpack/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"工程化面试题","item":"https://fe.hushifa.top/topics/engineering/"},{"@type":"ListItem","position":3,"name":"webpack 的 entry、output、loader 和 plugin 分别负责什么？","item":"https://fe.hushifa.top/questions/eng-webpack/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/eng-webpack/#webpage","url":"https://fe.hushifa.top/questions/eng-webpack/","name":"webpack 的 entry、output、loader 和 plugin 分别负责什么？","description":"工程化面试题：entry 是依赖入口，output 决定产物，loader 做模块转换，plugin 通过生命周期钩子扩展构建。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/eng-webpack/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/eng-webpack/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"工程化面试题","item":"https://fe.hushifa.top/topics/engineering/"},{"@type":"ListItem","position":3,"name":"webpack 的 entry、output、loader 和 plugin 分别负责什么？","item":"https://fe.hushifa.top/questions/eng-webpack/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/engineering/">工程化面试题</a><span aria-hidden="true">/</span><span aria-current="page">webpack 的 entry、output、loader 和 plugin 分别负责什么？</span></nav><h1 tabindex="-1">webpack 的 entry、output、loader 和 plugin 分别负责什么？</h1><p class="reading-summary">用文本模块的完整构建例子串起依赖入口、产物、模块转换和生命周期扩展，说明 loader 顺序、publicPath、模式及排错方法。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li><code>entry</code> 是依赖图的起点，webpack 从这里递归分析所有 <code>import</code>/<code>require</code>。</li>
-<li><code>output</code> 决定产物写到哪里、叫什么名字，以及浏览器从哪个路径加载（<code>publicPath</code>）。</li>
-<li>loader 把非 JS 文件（CSS、图片、TypeScript）转换成 webpack 能处理的模块，一次处理一个文件。</li>
-<li>plugin 通过钩子介入整个构建生命周期，可以生成 HTML、提取 CSS、注入变量、分析产物。</li>
-<li><code>use</code> 数组里的 loader 从右往左（从下往上）执行。</li>
-</ul>
-<h2>一个完整配置</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/engineering/">工程化面试题</a><span aria-hidden="true">/</span><span aria-current="page">webpack 的 entry、output、loader 和 plugin 分别负责什么？</span></nav><h1 tabindex="-1">webpack 的 entry、output、loader 和 plugin 分别负责什么？</h1><p class="reading-summary">entry 是依赖入口，output 决定产物，loader 做模块转换，plugin 通过生命周期钩子扩展构建。文中用一个完整配置讲 loader 顺序、publicPath、mode 和排错方法。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>webpack 从 <code>entry</code> 指定的文件出发，顺着 <code>import</code> 和 <code>require</code> 一层层找下去，把用到的模块都找出来，这叫依赖图。<code>output</code> 决定打包结果写到哪里、叫什么名字，以及浏览器从哪个路径加载，也就是 <code>publicPath</code>。</p>
+<p>loader 负责把 CSS、图片、TypeScript 这类非 JS 文件转换成 webpack 能处理的模块，一次处理一个文件。plugin 则通过钩子介入整个构建过程，能生成 HTML、提取 CSS、注入变量、分析产物。</p>
+<p>所以两者的区别是，loader 面向单个文件，plugin 面向整个构建。</p>
+<p>要注意，<code>use</code> 数组里的 loader 是从右往左执行的，写反了就会出错。</p>
+</blockquote>
+<h2>先看一个完整配置</h2>
+<p>下面的配置处理 JS、CSS、文本和图片，并生成 HTML。后面逐个看每部分在做什么。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// webpack.config.js</span>
 <span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;node:path&#x27;</span>);
 <span class="hljs-keyword">const</span> <span class="hljs-title class_">HtmlWebpackPlugin</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;html-webpack-plugin&#x27;</span>);
@@ -62,24 +62,32 @@
   ],
 });
 </code></pre></div>
-<h2>各部分的分工</h2>
-<p><strong>entry</strong>：可以有多个入口，每个入口生成独立的 chunk。</p>
-<p><strong>output</strong>：<code>[contenthash]</code> 让文件名随内容变化，配合长期缓存；<code>publicPath</code> 决定运行时加载异步块和资源的 URL 前缀，部署到子目录时必须改成对应路径，否则会 404。</p>
-<p><strong>loader</strong>：<code>css-loader</code> 把 CSS 中的 <code>@import</code> 和 <code>url()</code> 解析成依赖，<code>MiniCssExtractPlugin.loader</code> 再把结果提取成独立的 CSS 文件。顺序反过来就会出错。webpack 5 内置的资源模块（<code>asset/resource</code>、<code>asset/source</code>、<code>asset/inline</code>）取代了以前的 <code>file-loader</code>、<code>raw-loader</code>、<code>url-loader</code>。</p>
-<p><strong>plugin</strong>：<code>HtmlWebpackPlugin</code> 在构建结束时生成 HTML 并插入带哈希的脚本标签。plugin 能做 loader 做不到的事，因为它面向整个编译过程，而不是单个文件。</p>
-<h2>mode 的作用</h2>
-<p><code>mode: &#x27;production&#x27;</code> 会开启压缩、tree shaking、作用域提升，并把 <code>process.env.NODE_ENV</code> 设为 <code>&#x27;production&#x27;</code>；<code>&#x27;development&#x27;</code> 保留可读代码，构建更快。</p>
-<h2>排错方法</h2>
-<ul>
-<li>用 <code>--stats verbose</code> 或输出 stats JSON 查看每个模块被哪个 loader 处理、进入了哪个 chunk。</li>
-<li>报 &quot;You may need an appropriate loader&quot; 时，说明某类文件没有匹配到任何规则，检查 <code>test</code> 和 <code>include</code>。</li>
-<li>开发服务器能用、部署后资源 404，多半是 <code>publicPath</code> 和实际部署路径不一致。</li>
-</ul>
+<h2>entry 和 output 管什么</h2>
+<p><code>entry</code> 是起点。可以有多个入口，每个入口会生成独立的 chunk，chunk 就是打包出来的一块代码。</p>
+<p><code>output</code> 里的 <code>[contenthash]</code> 会让文件名跟着内容变化。内容不变，文件名就不变，浏览器可以长期缓存。</p>
+<p><code>publicPath</code> 决定运行时加载异步块和资源用的 URL 前缀。部署到子目录时，必须把它改成对应的路径，否则浏览器会去错误的地址请求，结果就是 404。</p>
+<h2>loader 为什么要注意顺序</h2>
+<p>看 CSS 那条规则：<code>use: [MiniCssExtractPlugin.loader, &#x27;css-loader&#x27;]</code>。loader 从右往左执行，所以先跑 <code>css-loader</code>，它把 CSS 里的 <code>@import</code> 和 <code>url()</code> 解析成依赖；然后 <code>MiniCssExtractPlugin.loader</code> 把结果提取成独立的 CSS 文件。</p>
+<p>顺序反过来，提取的那一步拿到的就不是它能处理的东西，构建会出错。</p>
+<p>另外，webpack 5 内置了资源模块，就是配置里的 <code>asset/resource</code>、<code>asset/source</code>、<code>asset/inline</code>，它们取代了以前的 <code>file-loader</code>、<code>raw-loader</code>、<code>url-loader</code>。</p>
+<h2>plugin 能做什么 loader 做不到的事</h2>
+<p><code>HtmlWebpackPlugin</code> 在构建结束时生成 HTML，并插入带哈希的脚本标签。这件事 loader 做不了，因为它要等所有文件名都确定以后才能做。</p>
+<p>所以 plugin 能做 loader 做不到的事，原因在于它面向整个编译过程，而不是单个文件。</p>
+<h2>mode 有什么作用</h2>
+<p><code>mode: &#x27;production&#x27;</code> 会开启压缩、tree shaking、作用域提升，并把 <code>process.env.NODE_ENV</code> 设成 <code>&#x27;production&#x27;</code>。<code>&#x27;development&#x27;</code> 保留可读的代码，构建也更快。</p>
+<h2>出问题时怎样排查</h2>
+<p>用 <code>--stats verbose</code>，或者输出 stats JSON，可以看到每个模块被哪个 loader 处理、进了哪个 chunk。</p>
+<p>如果报 “You may need an appropriate loader”，说明某类文件没有匹配到任何规则，去检查 <code>test</code> 和 <code>include</code>。</p>
+<p>如果开发服务器正常、部署后资源 404，多半是 <code>publicPath</code> 和实际部署路径不一致。</p>
 <h2>常见追问</h2>
-<ul>
-<li>loader 和 plugin 的根本区别？loader 是&quot;文件进、模块出&quot;的转换函数；plugin 是订阅编译事件的对象，可以访问和修改整个编译结果。</li>
-<li>现在还需要学 webpack 吗？很多存量项目和企业内部工具链仍在使用，理解它的模型也有助于理解 Vite、Rspack 等工具。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://webpack.js.org/concepts/" target="_blank" rel="noreferrer">webpack · 核心概念<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+webpack+%E7%9A%84+entry%E3%80%81output%E3%80%81loader+%E5%92%8C+plugin+%E5%88%86%E5%88%AB%E8%B4%9F%E8%B4%A3%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Awebpack+%E7%9A%84+entry%E3%80%81output%E3%80%81loader+%E5%92%8C+plugin+%E5%88%86%E5%88%AB%E8%B4%9F%E8%B4%A3%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aeng-webpack%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Feng-webpack%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：webpack 的 entry、output、loader 和 plugin 分别负责什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/engineering-treeshaking/">Tree shaking 如何工作？为什么有些代码无法移除？</a></li><li><a href="/questions/engineering-lazy/">代码分割与懒加载适合哪些场景？</a></li><li><a href="/questions/engineering-lockfile/">为什么需要提交 lockfile？npm ci 和 npm install 有何区别？</a></li><li><a href="/questions/eng-vite/">Vite 开发模式为什么启动快，生产环境为什么仍需要构建？</a></li></ul></nav></main></div></div>
+<p><strong>loader 和 plugin 的根本区别是什么？</strong></p>
+<blockquote>
+<p>loader 是一个转换函数，进去一个文件，出来一个模块。plugin 是订阅编译事件的对象，可以访问和修改整个编译结果。</p>
+</blockquote>
+<p><strong>现在还需要学 webpack 吗？</strong></p>
+<blockquote>
+<p>需要。很多存量项目和企业内部工具链还在用它。而且理解了它的模型，再看 Vite、Rspack 这些工具也更容易。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://webpack.js.org/concepts/" target="_blank" rel="noreferrer">webpack · 核心概念<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+webpack+%E7%9A%84+entry%E3%80%81output%E3%80%81loader+%E5%92%8C+plugin+%E5%88%86%E5%88%AB%E8%B4%9F%E8%B4%A3%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Awebpack+%E7%9A%84+entry%E3%80%81output%E3%80%81loader+%E5%92%8C+plugin+%E5%88%86%E5%88%AB%E8%B4%9F%E8%B4%A3%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aeng-webpack%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Feng-webpack%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：webpack 的 entry、output、loader 和 plugin 分别负责什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/engineering-treeshaking/">Tree shaking 如何工作？为什么有些代码无法移除？</a></li><li><a href="/questions/engineering-lazy/">代码分割与懒加载适合哪些场景？</a></li><li><a href="/questions/engineering-lockfile/">为什么需要提交 lockfile？npm ci 和 npm install 有何区别？</a></li><li><a href="/questions/eng-vite/">Vite 开发模式为什么启动快，生产环境为什么仍需要构建？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Vue面试题：ref 把任意值包装进一个带 .value 的对象，可以整体替换；reactive 返回对象的 Proxy，只能用于对象…" />
+    <meta name="description" content="Vue面试题：ref 能包装任何值，通过 .value 读写，可以整体替换；reactive 只能包对象，解构或整体替换都会丢失响应式。官方推荐默认用 ref。" />
     <title>Vue 3 中 ref 和 reactive 有什么区别？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/vue-ref-reactive/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Vue 3 中 ref 和 reactive 有什么区别？" />
-    <meta property="og:description" content="Vue面试题：ref 把任意值包装进一个带 .value 的对象，可以整体替换；reactive 返回对象的 Proxy，只能用于对象…" />
+    <meta property="og:description" content="Vue面试题：ref 能包装任何值，通过 .value 读写，可以整体替换；reactive 只能包对象，解构或整体替换都会丢失响应式。官方推荐默认用 ref。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/vue-ref-reactive/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-ref-reactive/#webpage","url":"https://fe.hushifa.top/questions/vue-ref-reactive/","name":"Vue 3 中 ref 和 reactive 有什么区别？","description":"Vue面试题：ref 把任意值包装进一个带 .value 的对象，可以整体替换；reactive 返回对象的 Proxy，只能用于对象…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-ref-reactive/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-ref-reactive/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"Vue 3 中 ref 和 reactive 有什么区别？","item":"https://fe.hushifa.top/questions/vue-ref-reactive/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-ref-reactive/#webpage","url":"https://fe.hushifa.top/questions/vue-ref-reactive/","name":"Vue 3 中 ref 和 reactive 有什么区别？","description":"Vue面试题：ref 能包装任何值，通过 .value 读写，可以整体替换；reactive 只能包对象，解构或整体替换都会丢失响应式。官方推荐默认用 ref。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-ref-reactive/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-ref-reactive/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"Vue 3 中 ref 和 reactive 有什么区别？","item":"https://fe.hushifa.top/questions/vue-ref-reactive/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue 3 中 ref 和 reactive 有什么区别？</span></nav><h1 tabindex="-1">Vue 3 中 ref 和 reactive 有什么区别？</h1><p class="reading-summary">ref 把任意值包装进一个带 .value 的对象，可以整体替换；reactive 返回对象的 Proxy，只能用于对象，解构或整体替换都会丢失响应式。官方推荐优先使用 ref。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li><code>ref(x)</code> 可以包装任意类型，在 JS 中通过 <code>.value</code> 读写，在模板中自动解包；值是对象时，内部会用 <code>reactive</code> 转换。</li>
-<li><code>reactive(obj)</code> 只接受对象、数组、Map、Set，返回原对象的深层响应式 Proxy，读写不需要 <code>.value</code>。</li>
-<li><code>reactive</code> 的局限：不能整体替换（<code>state = {...}</code> 会断开连接），解构出的基本类型属性不再响应，传给函数的单个属性也会丢失响应式。</li>
-<li>需要解构 <code>reactive</code> 对象时用 <code>toRefs</code>，组合式函数通常返回包含多个 ref 的普通对象。</li>
-<li>Vue 官方建议默认使用 <code>ref</code>。</li>
-</ul>
-<h2>对比</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue 3 中 ref 和 reactive 有什么区别？</span></nav><h1 tabindex="-1">Vue 3 中 ref 和 reactive 有什么区别？</h1><p class="reading-summary">ref 能包装任何值，通过 .value 读写，可以整体替换；reactive 只能包对象，解构或整体替换都会丢失响应式。官方推荐默认用 ref。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p><code>ref</code> 把一个值装进一个盒子里，通过 <code>.value</code> 读写，什么类型都能装，数字、字符串、对象都行。在模板里会自动拆开，不用写 <code>.value</code>。如果装的是对象，里面会用 <code>reactive</code> 转换。</p>
+<p><code>reactive</code> 只能用于对象、数组、Map、Set，返回原对象的深层响应式 Proxy，读写时不用 <code>.value</code>。</p>
+<p>两者的差别主要在 <code>reactive</code> 的局限。它不能整体替换，<code>state = {...}</code> 以后就和原来断开了；解构出来的基本类型属性不再响应；把单个属性传给函数也会丢失响应式。需要解构时可以用 <code>toRefs</code>。</p>
+<p>因为这些坑，Vue 官方建议默认用 <code>ref</code>。组合式函数通常也返回由多个 ref 组成的普通对象。</p>
+</blockquote>
+<h2>对比两者的行为</h2>
+<p>下面这段代码把常见的对和错都放在一起：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { reactive, ref, toRefs, watch } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
 
 <span class="hljs-keyword">const</span> count = <span class="hljs-title function_">ref</span>(<span class="hljs-number">0</span>);
@@ -53,30 +53,31 @@ age.<span class="hljs-property">value</span>++; <span class="hljs-comment">// �
 <span class="hljs-title function_">watch</span>(user.<span class="hljs-property">name</span>, <span class="hljs-function">() =&gt;</span> {}); <span class="hljs-comment">// 错误：传入的是字符串</span>
 <span class="hljs-title function_">watch</span>(<span class="hljs-function">() =&gt;</span> user.<span class="hljs-property">name</span>, <span class="hljs-function">() =&gt;</span> {}); <span class="hljs-comment">// 正确：传入 getter</span>
 </code></pre></div>
-<h2>ref 的解包规则</h2>
-<ul>
-<li>模板中顶层的 ref 自动解包：<code>{{ count }}</code>。</li>
-<li>ref 作为 <code>reactive</code> 对象的属性时，访问时自动解包：<code>reactive({ count }).count</code> 返回数字。</li>
-<li>ref 放在数组或 Map 中时不会自动解包，要写 <code>list[0].value</code>。</li>
-</ul>
-<h2>浅层版本</h2>
-<p><code>shallowRef</code> 只追踪 <code>.value</code> 本身的替换，不深入转换内部对象；<code>shallowReactive</code> 只追踪第一层属性。用于大型不可变数据（例如接口返回的大列表、第三方类实例），更新时整体替换：</p>
+<p><code>let { name } = user</code> 为什么不响应？因为解构就是把 <code>user.name</code> 当时的值复制给一个新变量，这个变量是普通的字符串，和 Proxy 没有关系了，改它不会经过 Proxy 的拦截。<code>watch(user.name)</code> 也是同样的道理，传进去的只是字符串 <code>&#x27;Lin&#x27;</code>。</p>
+<p><code>toRefs</code> 能解决这个问题，它把每个属性转成一个 ref，读写 <code>age.value</code> 时实际上是在读写 <code>user.age</code>，所以两边同步。</p>
+<h2>ref 什么时候会自动拆开</h2>
+<p>在模板里，顶层的 ref 会自动拆开，直接写 <code>{{ count }}</code> 就行。ref 作为 <code>reactive</code> 对象的属性时，访问时也会自动拆开，<code>reactive({ count }).count</code> 拿到的就是数字。</p>
+<p>但 ref 放在数组或 Map 里时不会自动拆开，要写 <code>list[0].value</code>。</p>
+<h2>浅层版本适合什么场景</h2>
+<p><code>shallowRef</code> 只追踪 <code>.value</code> 本身有没有被换掉，不会深入转换里面的对象；<code>shallowReactive</code> 只追踪第一层属性。它们适合大块的不可变数据，比如接口返回的大列表、第三方类的实例，更新时整体替换：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> rows = <span class="hljs-title function_">shallowRef</span>([]);
 rows.<span class="hljs-property">value</span> = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetchRows</span>(); <span class="hljs-comment">// 触发更新</span>
 rows.<span class="hljs-property">value</span>.<span class="hljs-title function_">push</span>(item); <span class="hljs-comment">// 不触发</span>
 rows.<span class="hljs-property">value</span> = [...rows.<span class="hljs-property">value</span>, item]; <span class="hljs-comment">// 触发</span>
 </code></pre></div>
-<h2>实现原理</h2>
-<ul>
-<li><code>reactive</code> 用 <code>Proxy</code> 拦截 <code>get</code>（收集依赖）和 <code>set</code>（触发更新）。</li>
-<li><code>ref</code> 是一个带 <code>value</code> getter/setter 的对象，因为 Proxy 无法拦截基本类型。</li>
-</ul>
-<p>Vue 2 用 <code>Object.defineProperty</code> 实现，无法检测新增属性和数组下标赋值，需要 <code>Vue.set</code>；Vue 3 的 Proxy 没有这些限制。</p>
+<p><code>push</code> 为什么不触发？因为 <code>push</code> 改的是数组内部，<code>.value</code> 指向的还是同一个数组，<code>shallowRef</code> 看不到变化。换成一个新数组赋给 <code>.value</code>，才会触发。</p>
+<h2>背后是怎么实现的</h2>
+<p><code>reactive</code> 用 <code>Proxy</code> 拦截 <code>get</code> 和 <code>set</code>，读的时候收集依赖，写的时候触发更新。<code>ref</code> 则是一个带 <code>value</code> getter 和 setter 的对象，因为 Proxy 只能代理对象，没法拦截数字、字符串这种基本类型。</p>
+<p>Vue 2 用的是 <code>Object.defineProperty</code>，检测不到新增属性和数组下标赋值，需要 <code>Vue.set</code>。Vue 3 的 Proxy 没有这些限制。</p>
 <h2>常见追问</h2>
-<ul>
-<li><code>reactive</code> 返回的对象和原对象相等吗？不相等，修改原对象不会触发更新，应始终使用 Proxy。</li>
-<li>为什么不全部用 <code>reactive</code>？基本类型只能用 <code>ref</code>，而整体替换、解构、跨函数传递的场景 <code>ref</code> 更不容易出错。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://vuejs.org/guide/essentials/reactivity-fundamentals.html" target="_blank" rel="noreferrer">Vue · Reactivity Fundamentals<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vue+3+%E4%B8%AD+ref+%E5%92%8C+reactive+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVue+3+%E4%B8%AD+ref+%E5%92%8C+reactive+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-ref-reactive%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-ref-reactive%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vue 3 中 ref 和 reactive 有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue2-vs-vue3-reactivity/">defineProperty 和 Proxy 实现的响应式有什么区别？</a></li><li><a href="/questions/vue-computed-watch/">computed、watch 和 watchEffect 应该如何选择？</a></li><li><a href="/questions/vue-reactivity-tracking/">Vue 3 响应式依赖是怎样收集和触发的？</a></li><li><a href="/questions/vue-compiler-optimizations/">Vue 模板编译如何减少运行时更新工作？</a></li></ul></nav></main></div></div>
+<p><strong>reactive 返回的对象和原对象相等吗？</strong></p>
+<blockquote>
+<p>不相等，返回的是一个代理。直接修改原对象不会触发更新，所以应该始终通过代理去读写。</p>
+</blockquote>
+<p><strong>为什么不全部用 reactive？</strong></p>
+<blockquote>
+<p>基本类型只能用 <code>ref</code>。而且整体替换、解构、跨函数传递这些场景，用 <code>ref</code> 更不容易出错。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://vuejs.org/guide/essentials/reactivity-fundamentals.html" target="_blank" rel="noreferrer">Vue · Reactivity Fundamentals<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vue+3+%E4%B8%AD+ref+%E5%92%8C+reactive+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVue+3+%E4%B8%AD+ref+%E5%92%8C+reactive+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-ref-reactive%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-ref-reactive%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vue 3 中 ref 和 reactive 有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue2-vs-vue3-reactivity/">defineProperty 和 Proxy 实现的响应式有什么区别？</a></li><li><a href="/questions/vue-computed-watch/">computed、watch 和 watchEffect 应该如何选择？</a></li><li><a href="/questions/vue-reactivity-tracking/">Vue 3 响应式依赖是怎样收集和触发的？</a></li><li><a href="/questions/vue-compiler-optimizations/">Vue 模板编译如何减少运行时更新工作？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

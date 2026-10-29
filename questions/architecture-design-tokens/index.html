@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="架构设计面试题：用主题按钮说明基础值、语义与组件映射，解释 token 和 CSS 自定义属性的关系、继承时的求值边界，以及怎样避免无意义的抽象层。" />
+    <meta name="description" content="架构设计面试题：设计 token 是给设计决策起名字的数据，分基础值、语义和组件三层，组件只引用语义层，换主题只改映射。" />
     <title>设计 token 为什么比散落的颜色变量更适合大型前端项目？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/architecture-design-tokens/" />
     <meta name="robots" content="index,follow" />
@@ -19,28 +19,29 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="设计 token 为什么比散落的颜色变量更适合大型前端项目？" />
-    <meta property="og:description" content="架构设计面试题：用主题按钮说明基础值、语义与组件映射，解释 token 和 CSS 自定义属性的关系、继承时的求值边界，以及怎样避免无意义的抽象层。" />
+    <meta property="og:description" content="架构设计面试题：设计 token 是给设计决策起名字的数据，分基础值、语义和组件三层，组件只引用语义层，换主题只改映射。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/architecture-design-tokens/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/architecture-design-tokens/#webpage","url":"https://fe.hushifa.top/questions/architecture-design-tokens/","name":"设计 token 为什么比散落的颜色变量更适合大型前端项目？","description":"架构设计面试题：用主题按钮说明基础值、语义与组件映射，解释 token 和 CSS 自定义属性的关系、继承时的求值边界，以及怎样避免无意义的抽象层。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/architecture-design-tokens/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/architecture-design-tokens/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"架构设计面试题","item":"https://fe.hushifa.top/topics/architecture/"},{"@type":"ListItem","position":3,"name":"设计 token 为什么比散落的颜色变量更适合大型前端项目？","item":"https://fe.hushifa.top/questions/architecture-design-tokens/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/architecture-design-tokens/#webpage","url":"https://fe.hushifa.top/questions/architecture-design-tokens/","name":"设计 token 为什么比散落的颜色变量更适合大型前端项目？","description":"架构设计面试题：设计 token 是给设计决策起名字的数据，分基础值、语义和组件三层，组件只引用语义层，换主题只改映射。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/architecture-design-tokens/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/architecture-design-tokens/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"架构设计面试题","item":"https://fe.hushifa.top/topics/architecture/"},{"@type":"ListItem","position":3,"name":"设计 token 为什么比散落的颜色变量更适合大型前端项目？","item":"https://fe.hushifa.top/questions/architecture-design-tokens/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/architecture/">架构设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">设计 token 为什么比散落的颜色变量更适合大型前端项目？</span></nav><h1 tabindex="-1">设计 token 为什么比散落的颜色变量更适合大型前端项目？</h1><p class="reading-summary">用主题按钮说明基础值、语义与组件映射，解释 token 和 CSS 自定义属性的关系、继承时的求值边界，以及怎样避免无意义的抽象层。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>设计 token 是设计决策的命名数据（颜色、间距、字号等），由同一份来源生成 CSS、iOS、Android 等多个平台的代码。</li>
-<li>常见分层：基础 token（<code>blue-600</code>）→ 语义 token（<code>color-action-primary</code>）→ 必要时的组件 token（<code>button-bg</code>）。</li>
-<li>组件引用语义 token，换主题时只改语义层的映射，组件代码不用动。</li>
-<li>CSS 自定义属性是 token 在 Web 端最常见的输出形式，能在运行时切换主题。</li>
-<li>分层要有实际用途，不需要为每个组件都建一层 token。</li>
-</ul>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/architecture/">架构设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">设计 token 为什么比散落的颜色变量更适合大型前端项目？</span></nav><h1 tabindex="-1">设计 token 为什么比散落的颜色变量更适合大型前端项目？</h1><p class="reading-summary">设计 token 是给设计决策起名字的数据，分基础值、语义和组件三层，组件只引用语义层，换主题只改映射。Web 端常输出成 CSS 自定义属性，要注意继承时的求值边界，也别加没用的抽象层。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>设计 token 就是给设计决策起了名字的数据，比如颜色、间距、字号。它们写在一份来源里，再由工具生成 CSS、iOS、Android 各个平台的代码。</p>
+<p>token 通常分层。最底下是基础 token，比如 <code>blue-600</code>，只表示一个具体的值；上面是语义 token，比如 <code>color-action-primary</code>，表示“主操作用的颜色”；必要时再加组件 token，比如 <code>button-bg</code>。</p>
+<p>分层的好处是，组件只引用语义 token。换主题、做深色模式时，只改语义层指向哪个基础值，组件代码一行都不用动。在 Web 端，token 最常见的输出形式就是 CSS 自定义属性，也就是 CSS 变量，可以在运行时切换主题。</p>
+<p>要注意别过度设计。分层要有实际用处，不需要给每个组件都建一层 token。</p>
+</blockquote>
 <h2>散落的变量有什么问题</h2>
+<p>下面三处其实都是“主操作色”，写法却各不相同：</p>
 <div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.button</span> { <span class="hljs-attribute">background</span>: <span class="hljs-number">#2563eb</span>; }
 <span class="hljs-selector-class">.link</span>   { <span class="hljs-attribute">color</span>: <span class="hljs-number">#2563eb</span>; }
 <span class="hljs-selector-class">.badge</span>  { <span class="hljs-attribute">background</span>: <span class="hljs-built_in">var</span>(--blue); }
 </code></pre></div>
-<p>同一种&quot;主操作色&quot;出现了多种写法。要改品牌色或加深色模式时，只能全局搜索，还分不清哪些 <code>#2563eb</code> 是主操作色、哪些只是恰好相同的蓝色。</p>
-<h2>分层示例</h2>
+<p>要改品牌色或者加深色模式时，只能全局搜索。更麻烦的是，搜出来的 <code>#2563eb</code> 里，哪些是主操作色，哪些只是碰巧也用了这个蓝色，根本分不清。</p>
+<h2>分层以后是什么样</h2>
+<p>下面把基础值和语义分开写，再加一个深色主题：</p>
 <div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-pseudo">:root</span> {
   <span class="hljs-comment">/* 基础 token：可用的原始值 */</span>
   <span class="hljs-attr">--blue-600</span>: <span class="hljs-number">#2563eb</span>;
@@ -65,22 +66,27 @@
   <span class="hljs-attribute">color</span>: <span class="hljs-built_in">var</span>(--color-surface);
 }
 </code></pre></div>
-<p>深色主题只覆盖语义层，<code>.button</code> 不需要任何修改。</p>
-<h2>求值时机</h2>
-<p>自定义属性在使用它的元素上计算。上例中 <code>--color-action-primary: var(--blue-600)</code> 定义在 <code>:root</code>，子元素继承的是 <code>:root</code> 上已经算好的值。如果在某个子树里重新定义 <code>--blue-600</code>，子树中的 <code>--color-action-primary</code> 不会跟着变，因为它已在 <code>:root</code> 解析完毕。需要在局部换主题时，应在该元素上重新声明语义 token。</p>
-<h2>单一来源与生成</h2>
-<p>大型项目通常把 token 写在 JSON 中，由 Style Dictionary 等工具生成 CSS 变量、Sass 变量、TypeScript 常量和移动端资源。W3C 社区组 Design Tokens Community Group 在 2025 年 10 月发布了格式规范的首个稳定版，设计工具和代码工具可以用同一种格式交换 token。</p>
-<h2>避免过度抽象</h2>
-<ul>
-<li>只有一个组件用到的值不必做成全局 token。</li>
-<li>组件 token 只在需要单独调整某个组件、又不影响其他组件时才加。</li>
-<li>名称描述用途（<code>color-danger</code>），不描述外观（<code>color-red</code>），否则换颜色时名字就错了。</li>
-</ul>
+<p>深色主题只覆盖了语义层，把“主操作色”指向另一个蓝色。<code>.button</code> 没有任何修改，颜色就跟着变了。</p>
+<h2>在子树里改基础 token，为什么不生效</h2>
+<p>自定义属性是在使用它的元素上计算的，计算好的值再继承给子元素。</p>
+<p>上面的例子里，<code>--color-action-primary: var(--blue-600)</code> 定义在 <code>:root</code> 上，所以在 <code>:root</code> 就已经算成了 <code>#2563eb</code>，子元素继承的是这个算好的颜色值。</p>
+<p>这时如果你在某个子树里重新定义 <code>--blue-600</code>，想让这一块换个颜色，会发现子树里的 <code>--color-action-primary</code> 不跟着变。原因就是它早在 <code>:root</code> 上解析完了，继承下来的是结果，不是那句 <code>var(--blue-600)</code>。</p>
+<p>改法是在这个元素上直接重新声明语义 token，比如在这块区域上写 <code>--color-action-primary: ...</code>。</p>
+<h2>token 从哪里来</h2>
+<p>大型项目通常把 token 写在 JSON 里，用 Style Dictionary 这类工具生成 CSS 变量、Sass 变量、TypeScript 常量和移动端资源，这样各平台用的是同一份来源。</p>
+<p>W3C 社区组 Design Tokens Community Group 在 2025 年 10 月发布了 token 格式规范的首个稳定版。有了统一格式，设计工具和代码工具就能互相交换 token。</p>
+<h2>怎样避免过度抽象</h2>
+<p>只有一个组件用到的值，不必做成全局 token。组件 token 也只在一种情况下才加：需要单独调整某个组件，又不想影响其他组件。</p>
+<p>起名字要描述用途，比如 <code>color-danger</code>，不要描述外观，比如 <code>color-red</code>。否则哪天危险色改成了橙色，名字就错了。</p>
 <h2>常见追问</h2>
-<ul>
-<li>token 和 Tailwind 主题配置是什么关系？Tailwind 主题本身就是一套 token，可以由同一份来源生成。</li>
-<li>怎么防止开发者直接写颜色值？用 Stylelint 规则禁止在业务样式中出现硬编码颜色。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.designtokens.org/" target="_blank" rel="noreferrer">Design Tokens Community Group<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E8%AE%BE%E8%AE%A1+token+%E4%B8%BA%E4%BB%80%E4%B9%88%E6%AF%94%E6%95%A3%E8%90%BD%E7%9A%84%E9%A2%9C%E8%89%B2%E5%8F%98%E9%87%8F%E6%9B%B4%E9%80%82%E5%90%88%E5%A4%A7%E5%9E%8B%E5%89%8D%E7%AB%AF%E9%A1%B9%E7%9B%AE%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E8%AE%BE%E8%AE%A1+token+%E4%B8%BA%E4%BB%80%E4%B9%88%E6%AF%94%E6%95%A3%E8%90%BD%E7%9A%84%E9%A2%9C%E8%89%B2%E5%8F%98%E9%87%8F%E6%9B%B4%E9%80%82%E5%90%88%E5%A4%A7%E5%9E%8B%E5%89%8D%E7%AB%AF%E9%A1%B9%E7%9B%AE%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aarchitecture-design-tokens%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Farchitecture-design-tokens%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：设计 token 为什么比散落的颜色变量更适合大型前端项目？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/arch-design-system/">设计系统为什么不能只有一套视觉样式？</a></li><li><a href="/questions/arch-state-machine/">怎样避免加载、成功和失败状态互相矛盾？</a></li><li><a href="/questions/arch-progressive/">渐进增强和优雅降级怎样影响前端方案选择？</a></li><li><a href="/questions/architecture-feature-boundaries/">前端大型项目怎样划分功能边界？</a></li></ul></nav></main></div></div>
+<p><strong>token 和 Tailwind 的主题配置是什么关系？</strong></p>
+<blockquote>
+<p>Tailwind 的主题配置本身就是一套 token，可以和其他平台一样，由同一份来源生成。</p>
+</blockquote>
+<p><strong>怎么防止开发者在业务代码里直接写颜色值？</strong></p>
+<blockquote>
+<p>用 Stylelint 加规则，禁止业务样式里出现硬编码的颜色。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.designtokens.org/" target="_blank" rel="noreferrer">Design Tokens Community Group<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E8%AE%BE%E8%AE%A1+token+%E4%B8%BA%E4%BB%80%E4%B9%88%E6%AF%94%E6%95%A3%E8%90%BD%E7%9A%84%E9%A2%9C%E8%89%B2%E5%8F%98%E9%87%8F%E6%9B%B4%E9%80%82%E5%90%88%E5%A4%A7%E5%9E%8B%E5%89%8D%E7%AB%AF%E9%A1%B9%E7%9B%AE%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E8%AE%BE%E8%AE%A1+token+%E4%B8%BA%E4%BB%80%E4%B9%88%E6%AF%94%E6%95%A3%E8%90%BD%E7%9A%84%E9%A2%9C%E8%89%B2%E5%8F%98%E9%87%8F%E6%9B%B4%E9%80%82%E5%90%88%E5%A4%A7%E5%9E%8B%E5%89%8D%E7%AB%AF%E9%A1%B9%E7%9B%AE%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aarchitecture-design-tokens%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Farchitecture-design-tokens%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：设计 token 为什么比散落的颜色变量更适合大型前端项目？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/arch-design-system/">设计系统为什么不能只有一套视觉样式？</a></li><li><a href="/questions/arch-state-machine/">怎样避免加载、成功和失败状态互相矛盾？</a></li><li><a href="/questions/arch-progressive/">渐进增强和优雅降级怎样影响前端方案选择？</a></li><li><a href="/questions/architecture-feature-boundaries/">前端大型项目怎样划分功能边界？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

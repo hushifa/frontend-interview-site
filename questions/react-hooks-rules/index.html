@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="React面试题：React 按 Hook 的调用顺序把每个 useState、useEffect 对应到组件内部保存的状态槽。" />
+    <meta name="description" content="React面试题：React 不认 Hook 的名字，只按调用顺序把每个 Hook 对应到它保存的状态。" />
     <title>为什么 Hook 通常必须在组件顶层调用？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/react-hooks-rules/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="为什么 Hook 通常必须在组件顶层调用？ · 前端知库" />
-    <meta property="og:description" content="React面试题：React 按 Hook 的调用顺序把每个 useState、useEffect 对应到组件内部保存的状态槽。" />
+    <meta property="og:description" content="React面试题：React 不认 Hook 的名字，只按调用顺序把每个 Hook 对应到它保存的状态。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/react-hooks-rules/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-hooks-rules/#webpage","url":"https://fe.hushifa.top/questions/react-hooks-rules/","name":"为什么 Hook 通常必须在组件顶层调用？ · 前端知库","description":"React面试题：React 按 Hook 的调用顺序把每个 useState、useEffect 对应到组件内部保存的状态槽。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-hooks-rules/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-hooks-rules/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"为什么 Hook 通常必须在组件顶层调用？","item":"https://fe.hushifa.top/questions/react-hooks-rules/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-hooks-rules/#webpage","url":"https://fe.hushifa.top/questions/react-hooks-rules/","name":"为什么 Hook 通常必须在组件顶层调用？ · 前端知库","description":"React面试题：React 不认 Hook 的名字，只按调用顺序把每个 Hook 对应到它保存的状态。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-hooks-rules/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-hooks-rules/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"为什么 Hook 通常必须在组件顶层调用？","item":"https://fe.hushifa.top/questions/react-hooks-rules/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">为什么 Hook 通常必须在组件顶层调用？</span></nav><h1 tabindex="-1">为什么 Hook 通常必须在组件顶层调用？</h1><p class="reading-summary">React 按 Hook 的调用顺序把每个 useState、useEffect 对应到组件内部保存的状态槽。条件、循环或提前 return 改变了调用顺序，状态就会对错位置。条件逻辑应写在 Hook 内部，use API 是唯一可以条件调用的例外。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>React 不知道每个 Hook 的&quot;名字&quot;，只按调用顺序把第 1 个、第 2 个 Hook 和内部保存的状态对应起来。</li>
-<li>每次渲染的 Hook 调用顺序必须一致，所以不能在条件、循环、嵌套函数或提前 return 之后调用 Hook。</li>
-<li>Hook 只能在函数组件或自定义 Hook（名称以 <code>use</code> 开头）中调用，不能在普通函数或类组件里调用。</li>
-<li>自定义 Hook 复用的是逻辑，不是状态：两个组件调用同一个 Hook，各自有独立的 state。</li>
-<li><code>use(promise)</code> 和 <code>use(Context)</code> 不是 Hook，可以写在条件和循环里，但仍然只能在组件或 Hook 中调用。</li>
-</ul>
-<h2>顺序错位会发生什么</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">为什么 Hook 通常必须在组件顶层调用？</span></nav><h1 tabindex="-1">为什么 Hook 通常必须在组件顶层调用？</h1><p class="reading-summary">React 不认 Hook 的名字，只按调用顺序把每个 Hook 对应到它保存的状态。放进条件、循环或写在提前 return 后面，顺序一乱，状态就对错了。use 是唯一可以条件调用的例外。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>一个组件里写了好几个 <code>useState</code>、<code>useEffect</code>，React 并不知道哪个是哪个，它只记“第 1 个 Hook、第 2 个 Hook……”，按调用顺序把每个 Hook 和内部保存的状态对上。</p>
+<p>所以每次渲染，Hook 的调用顺序必须完全一样。如果把 Hook 放进 <code>if</code>、循环、嵌套函数，或者写在提前 <code>return</code> 的后面，某次渲染少调或多调一个，后面的状态就全对错了位置。</p>
+<p>这条规则让 Hook 不需要传 key，自定义 Hook 也能随便组合。另外 Hook 只能在函数组件或以 <code>use</code> 开头的自定义 Hook 里调用。自定义 Hook 复用的是逻辑，两个组件用同一个 Hook，各自有独立的状态。</p>
+<p>有一个例外：<code>use(promise)</code> 和 <code>use(Context)</code> 不是 Hook，可以写在条件和循环里，但也只能在组件或 Hook 中调用。</p>
+</blockquote>
+<h2>顺序乱了会发生什么</h2>
+<p>下面的组件在没有用户时先 <code>return</code>，Hook 写在后面：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">Profile</span>(<span class="hljs-params">{ user }</span>) {
   <span class="hljs-keyword">if</span> (!user) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; <span class="hljs-comment">// 错误：提前 return 在 Hook 之前</span>
   <span class="hljs-keyword">const</span> [tab, setTab] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;posts&#x27;</span>);
@@ -42,7 +42,8 @@
   <span class="hljs-comment">// ...</span>
 }
 </code></pre></div>
-<p><code>user</code> 从 <code>null</code> 变成对象时，这次渲染比上次多调用了两个 Hook，React 会报错 &quot;Rendered more hooks than during the previous render&quot;。正确写法是把所有 Hook 放在提前 return 之前：</p>
+<p>第一次渲染 <code>user</code> 是 <code>null</code>，组件直接返回，一个 Hook 都没调。等 <code>user</code> 变成对象，这次渲染调了两个 Hook，比上次多了。React 发现对不上，会报错 “Rendered more hooks than during the previous render”。</p>
+<p>改法是把所有 Hook 挪到提前 <code>return</code> 前面，条件写进 Hook 里面：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">Profile</span>(<span class="hljs-params">{ user }</span>) {
   <span class="hljs-keyword">const</span> [tab, setTab] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;posts&#x27;</span>);
   <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
@@ -52,12 +53,12 @@
   <span class="hljs-comment">// ...</span>
 }
 </code></pre></div>
-<h2>条件写在 Hook 内部或组件边界上</h2>
-<ul>
-<li>条件同步：把 <code>if</code> 写进 Effect 的函数体里。</li>
-<li>条件使用整块逻辑：把逻辑拆成子组件，用条件渲染决定是否渲染这个子组件，子组件内部照常调用 Hook。</li>
-</ul>
-<h2>自定义 Hook</h2>
+<p>现在不管 <code>user</code> 是不是空，每次渲染都调同样两个 Hook，顺序永远一致。</p>
+<h2>真的需要“有条件地用 Hook”怎么办</h2>
+<p>有两种思路。条件只影响要不要做某件事，就把 <code>if</code> 写进 Effect 的函数体里，像上面那样。</p>
+<p>如果是一整块逻辑要不要启用，就把它拆成子组件，用条件渲染决定渲不渲染这个子组件。子组件内部照常在顶层调 Hook，它要么整个存在，要么整个不存在，顺序不会乱。</p>
+<h2>自定义 Hook 复用的是逻辑，不是状态</h2>
+<p>下面写一个开关 Hook，同一个组件里调用两次：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">useToggle</span>(<span class="hljs-params">initial = <span class="hljs-literal">false</span></span>) {
   <span class="hljs-keyword">const</span> [on, setOn] = <span class="hljs-title function_">useState</span>(initial);
   <span class="hljs-keyword">const</span> toggle = <span class="hljs-title function_">useCallback</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">setOn</span>(<span class="hljs-function">(<span class="hljs-params">v</span>) =&gt;</span> !v), []);
@@ -70,14 +71,19 @@
   <span class="hljs-comment">// open 和 pinned 互不影响</span>
 }
 </code></pre></div>
-<p>需要多个组件共享同一份状态时，把状态提升到共同的父组件，或使用 Context 和外部 store。</p>
-<h2>工具检查</h2>
-<p><code>eslint-plugin-react-hooks</code> 的 <code>rules-of-hooks</code> 规则会检查调用位置，<code>exhaustive-deps</code> 检查依赖数组。新版的推荐预设还包含 React Compiler 相关规则，应在项目中默认开启。</p>
+<p><code>useToggle</code> 本质上就是把 <code>useState</code> 和 <code>useCallback</code> 打了个包。调用两次，就等于在 <code>Panel</code> 里按顺序调了两组 Hook，各有各的状态。所以切换 <code>open</code> 不会影响 <code>pinned</code>。</p>
+<p>如果想让多个组件共享同一份状态，自定义 Hook 做不到，要把状态提升到共同的父组件，或者用 Context、外部 store。</p>
+<h2>让工具帮你检查</h2>
+<p><code>eslint-plugin-react-hooks</code> 的 <code>rules-of-hooks</code> 规则会检查 Hook 的调用位置，<code>exhaustive-deps</code> 检查依赖数组。新版的推荐预设还带上了 React Compiler 相关的规则，项目里应该默认开着。</p>
 <h2>常见追问</h2>
-<ul>
-<li>为什么 React 不按名字保存状态？按顺序存储让 Hook 不需要传入 key，也便于自定义 Hook 任意组合而不产生命名冲突。</li>
-<li><code>use</code> 为什么可以条件调用？它读取的是传入的资源本身（Promise 或 Context），不依赖调用顺序来定位状态。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/reference/rules/rules-of-hooks" target="_blank" rel="noreferrer">React · Rules of Hooks<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%B8%BA%E4%BB%80%E4%B9%88+Hook+%E9%80%9A%E5%B8%B8%E5%BF%85%E9%A1%BB%E5%9C%A8%E7%BB%84%E4%BB%B6%E9%A1%B6%E5%B1%82%E8%B0%83%E7%94%A8%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88+Hook+%E9%80%9A%E5%B8%B8%E5%BF%85%E9%A1%BB%E5%9C%A8%E7%BB%84%E4%BB%B6%E9%A1%B6%E5%B1%82%E8%B0%83%E7%94%A8%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-hooks-rules%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-hooks-rules%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：为什么 Hook 通常必须在组件顶层调用？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-state/">为什么调用 setState 后，当前变量还是旧值？</a></li><li><a href="/questions/react-effect/">useEffect 的依赖数组和清理函数应该怎么写？</a></li><li><a href="/questions/react-key/">列表中的 key 为什么不能随意使用数组下标？</a></li><li><a href="/questions/react-memo/">memo、useMemo、useCallback 各自优化什么？</a></li></ul></nav></main></div></div>
+<p><strong>React 为什么不按名字保存状态？</strong></p>
+<blockquote>
+<p>按顺序存储，Hook 就不用传一个 key 进去。自定义 Hook 也能任意组合，不用担心两个 Hook 内部用了同一个名字而冲突。</p>
+</blockquote>
+<p><strong><code>use</code> 为什么可以条件调用？</strong></p>
+<blockquote>
+<p>因为它读的是你传进去的东西本身，也就是那个 Promise 或 Context，不需要靠调用顺序去找自己的状态。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/reference/rules/rules-of-hooks" target="_blank" rel="noreferrer">React · Rules of Hooks<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%B8%BA%E4%BB%80%E4%B9%88+Hook+%E9%80%9A%E5%B8%B8%E5%BF%85%E9%A1%BB%E5%9C%A8%E7%BB%84%E4%BB%B6%E9%A1%B6%E5%B1%82%E8%B0%83%E7%94%A8%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88+Hook+%E9%80%9A%E5%B8%B8%E5%BF%85%E9%A1%BB%E5%9C%A8%E7%BB%84%E4%BB%B6%E9%A1%B6%E5%B1%82%E8%B0%83%E7%94%A8%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-hooks-rules%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-hooks-rules%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：为什么 Hook 通常必须在组件顶层调用？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-state/">为什么调用 setState 后，当前变量还是旧值？</a></li><li><a href="/questions/react-effect/">useEffect 的依赖数组和清理函数应该怎么写？</a></li><li><a href="/questions/react-key/">列表中的 key 为什么不能随意使用数组下标？</a></li><li><a href="/questions/react-memo/">memo、useMemo、useCallback 各自优化什么？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

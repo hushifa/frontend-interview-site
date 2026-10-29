@@ -27,14 +27,14 @@
   </head>
   <body>
     <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/frameworks/">框架与选型面试题</a><span aria-hidden="true">/</span><span aria-current="page">Svelte 的编译思路与 Runes 模型如何理解？</span></nav><h1 tabindex="-1">Svelte 的编译思路与 Runes 模型如何理解？</h1><p class="reading-summary">Svelte 在构建时把组件编译成直接更新 DOM 的 JavaScript，不使用虚拟 DOM，但仍有一个小型运行时。Svelte 5 用 Runes 显式声明响应式：$state 声明状态，$derived 声明派生值，$effect 声明副作用，$props 接收属性。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>编译器在构建时分析模板和状态依赖，生成&quot;某个状态变了就更新这几个 DOM 节点&quot;的代码，运行时不需要比较虚拟 DOM 树。</li>
-<li>Svelte 5 的 Runes：<code>$state</code> 声明响应式状态，<code>$derived</code> 声明派生值，<code>$effect</code> 执行副作用，<code>$props</code> 接收组件属性。</li>
-<li><code>$state</code> 包装的普通对象和数组是深层响应式的，直接修改 <code>obj.a = 1</code> 或 <code>list.push(x)</code> 都会触发更新。</li>
-<li><code>$derived</code> 应是纯计算；<code>$effect</code> 只追踪同步读取的状态，返回的函数在重新执行前和组件销毁时调用。</li>
-<li>Runes 是编译器识别的语法，只能在 <code>.svelte</code> 和 <code>.svelte.js</code> / <code>.svelte.ts</code> 文件中使用。</li>
-</ul>
-<h2>示例</h2>
+<blockquote>
+<p>Svelte 的思路是把工作挪到构建时。编译器先分析组件的模板和状态，生成“某个状态变了就去更新这几个 DOM 节点”的代码。所以运行时不需要虚拟 DOM，也不用比较新旧两棵树。不过它不是完全没有运行时，还有一个小型运行时负责调度和响应式。</p>
+<p>Svelte 5 用 Runes 来声明响应式，就是几个以 <code>$</code> 开头、编译器认识的特殊写法：<code>$state</code> 声明状态，<code>$derived</code> 声明派生值，<code>$effect</code> 执行副作用，<code>$props</code> 接收组件属性。</p>
+<p><code>$state</code> 包住的普通对象和数组是深层响应式的，直接写 <code>obj.a = 1</code> 或者 <code>list.push(x)</code> 都会触发更新。</p>
+<p>要注意两点。<code>$derived</code> 应该是纯计算；<code>$effect</code> 只追踪同步读取的状态。另外 Runes 只能写在 <code>.svelte</code>、<code>.svelte.js</code>、<code>.svelte.ts</code> 文件里，因为它要靠编译器处理。</p>
+</blockquote>
+<h2>先看一个计数器</h2>
+<p>下面一个组件把四种 Rune 都用上了。</p>
 <div class="not-prose code-block"><div class="code-language">svelte</div><pre><code class="hljs language-svelte">&lt;script&gt;
   let { initial = 0 } = $props();
   let count = $state(initial);
@@ -48,8 +48,10 @@
 &lt;button onclick={() =&gt; count++}&gt;点击 {count} 次&lt;/button&gt;
 &lt;p&gt;两倍：{doubled}&lt;/p&gt;
 </code></pre></div>
-<p>编译后，点击按钮只会更新按钮文字、段落文字和标题，不会重新执行整个组件。</p>
-<h2>深层状态与快照</h2>
+<p><code>count++</code> 看起来只是改了一个普通变量，为什么界面会变？因为编译器看到 <code>count</code> 是用 <code>$state</code> 声明的，就把对它的读写都改写成了响应式的读写。</p>
+<p>编译后，点击按钮只会更新按钮文字、段落文字和页面标题这三处，不会把整个组件重新执行一遍。这就是“编译成直接更新 DOM 的代码”的意思。</p>
+<h2>深层状态和快照</h2>
+<p><code>$state</code> 包住数组和对象时，返回的其实是一个 Proxy，也就是一个能拦截读写的代理对象。所以直接改里面的属性也能被感知到。</p>
 <div class="not-prose code-block"><div class="code-language">svelte</div><pre><code class="hljs language-svelte">&lt;script&gt;
   let todos = $state([{ text: &#x27;学习 Runes&#x27;, done: false }]);
 
@@ -62,11 +64,10 @@
   }
 &lt;/script&gt;
 </code></pre></div>
-<ul>
-<li><code>$state</code> 返回的是 Proxy；交给第三方库或 <code>structuredClone</code> 时，用 <code>$state.snapshot()</code> 取得普通对象。</li>
-<li>大型且不需要深层追踪的数据用 <code>$state.raw</code>，只能通过整体替换来更新。</li>
-</ul>
-<h2>副作用与清理</h2>
+<p>可是 Proxy 交给第三方库或者 <code>structuredClone</code> 时可能出问题，所以 <code>save</code> 里先用 <code>$state.snapshot()</code> 取出一份普通对象。</p>
+<p>如果数据很大，又不需要深层追踪，可以用 <code>$state.raw</code>。它不会变成 Proxy，代价是只能整体替换来更新，改内部属性不会触发更新。</p>
+<h2>副作用怎样清理</h2>
+<p><code>$effect</code> 可以返回一个函数，这个函数会在 effect 下一次重新执行前，以及组件销毁时调用。下面用它取消过期的搜索请求：</p>
 <div class="not-prose code-block"><div class="code-language">svelte</div><pre><code class="hljs language-svelte">&lt;script&gt;
   let query = $state(&#x27;&#x27;);
   let results = $state([]);
@@ -88,15 +89,20 @@
   });
 &lt;/script&gt;
 </code></pre></div>
-<p><code>query</code> 变化时先执行返回的清理函数，取消上一次请求。</p>
-<h2>和 Svelte 4 的区别</h2>
+<p>effect 里同步读了 <code>query</code>，所以 <code>query</code> 一变它就重新执行。重新执行之前，先调用上一次返回的清理函数，把上一次还没回来的请求取消掉，这样慢的旧结果就不会覆盖新结果。</p>
+<h2>和 Svelte 4 有什么区别</h2>
+<p>Svelte 4 靠约定隐式声明响应式，Svelte 5 改成了显式的 Runes：</p>
 <table><thead><tr><th>Svelte 4</th><th>Svelte 5</th></tr></thead><tbody><tr><td>顶层 <code>let</code> 自动响应式</td><td><code>$state</code></td></tr><tr><td><code>$: doubled = count * 2</code></td><td><code>$derived</code></td></tr><tr><td><code>$: { ... }</code> 副作用</td><td><code>$effect</code></td></tr><tr><td><code>export let name</code></td><td><code>$props()</code></td></tr><tr><td><code>on:click</code></td><td><code>onclick</code></td></tr></tbody></table>
-<p>Svelte 5 仍能运行旧语法的组件，但一个组件里不能混用两种模式。</p>
+<p>Svelte 5 仍然能运行旧语法写的组件，但同一个组件里不能两种模式混着用。</p>
 <h2>常见追问</h2>
-<ul>
-<li>Svelte 真的没有运行时吗？有一个小型运行时，负责调度和响应式系统，只是比 React、Vue 的运行时小。</li>
-<li>Svelte 和 SvelteKit 的关系？Svelte 是组件框架，SvelteKit 提供路由、数据加载、SSR 和部署，见<a href="/questions/frameworks-sveltekit/">《SvelteKit 的路由、load 和服务端边界怎样协作？》</a>。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://svelte.dev/docs/svelte/overview" target="_blank" rel="noreferrer">Svelte · Overview<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Svelte+%E7%9A%84%E7%BC%96%E8%AF%91%E6%80%9D%E8%B7%AF%E4%B8%8E+Runes+%E6%A8%A1%E5%9E%8B%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ASvelte+%E7%9A%84%E7%BC%96%E8%AF%91%E6%80%9D%E8%B7%AF%E4%B8%8E+Runes+%E6%A8%A1%E5%9E%8B%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aframework-svelte%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%86%E6%9E%B6%E4%B8%8E%E9%80%89%E5%9E%8B%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fframework-svelte%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Svelte 的编译思路与 Runes 模型如何理解？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/framework-angular/">Angular Signals 的依赖追踪与 computed 有什么特点？</a></li><li><a href="/questions/framework-selection/">选择前端框架时应该先比较哪些约束？</a></li><li><a href="/questions/frameworks-angular-di/">Angular 依赖注入的层级和作用域怎样理解？</a></li><li><a href="/questions/frameworks-sveltekit/">SvelteKit 的路由、load 和服务端边界怎样协作？</a></li></ul></nav></main></div></div>
+<p><strong>Svelte 真的没有运行时吗？</strong></p>
+<blockquote>
+<p>有，只是比较小。它负责调度和响应式系统，比 React、Vue 的运行时小。没有的是虚拟 DOM 和比较新旧树的那部分。</p>
+</blockquote>
+<p><strong>Svelte 和 SvelteKit 是什么关系？</strong></p>
+<blockquote>
+<p>Svelte 是组件框架，管组件怎么写、怎么更新。SvelteKit 在它上面提供路由、数据加载、SSR 和部署，详见<a href="/questions/frameworks-sveltekit/">《SvelteKit 的路由、load 和服务端边界怎样协作？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://svelte.dev/docs/svelte/overview" target="_blank" rel="noreferrer">Svelte · Overview<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Svelte+%E7%9A%84%E7%BC%96%E8%AF%91%E6%80%9D%E8%B7%AF%E4%B8%8E+Runes+%E6%A8%A1%E5%9E%8B%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ASvelte+%E7%9A%84%E7%BC%96%E8%AF%91%E6%80%9D%E8%B7%AF%E4%B8%8E+Runes+%E6%A8%A1%E5%9E%8B%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aframework-svelte%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%86%E6%9E%B6%E4%B8%8E%E9%80%89%E5%9E%8B%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fframework-svelte%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Svelte 的编译思路与 Runes 模型如何理解？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/framework-angular/">Angular Signals 的依赖追踪与 computed 有什么特点？</a></li><li><a href="/questions/framework-selection/">选择前端框架时应该先比较哪些约束？</a></li><li><a href="/questions/frameworks-angular-di/">Angular 依赖注入的层级和作用域怎样理解？</a></li><li><a href="/questions/frameworks-sveltekit/">SvelteKit 的路由、load 和服务端边界怎样协作？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

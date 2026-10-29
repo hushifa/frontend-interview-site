@@ -27,21 +27,23 @@
   </head>
   <body>
     <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/frameworks/">框架与选型面试题</a><span aria-hidden="true">/</span><span aria-current="page">Angular Hydration 解决什么问题？</span></nav><h1 tabindex="-1">Angular Hydration 解决什么问题？</h1><p class="reading-summary">Hydration 让客户端 Angular 复用服务端渲染出的 DOM，而不是销毁后重新创建，从而避免页面闪烁、减少重复工作。它要求服务端和客户端渲染出相同的 DOM 结构，直接操作 DOM 的代码需要改写或跳过。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>没有 hydration 时，客户端启动会丢弃服务端 HTML 再重新渲染，可能出现闪烁，也会影响 LCP、CLS 等指标。</li>
-<li>用 <code>provideClientHydration()</code> 开启后，Angular 匹配现有 DOM 节点，只挂载事件监听和状态。</li>
-<li>服务端和客户端渲染出的 DOM 必须一致；不一致时 hydration 失败并抛出 DOM 不一致错误，应当作 bug 修复；只有加了 <code>ngSkipHydration</code> 的组件才会销毁后重新渲染。</li>
-<li>直接用 <code>document</code>、<code>innerHTML</code> 或第三方库修改 DOM 会导致不一致，应改用 Angular API，或给组件加 <code>ngSkipHydration</code> 跳过。</li>
-<li>事件重放（<code>withEventReplay()</code>）记录脚本加载完成前用户的点击，hydration 完成后重新派发；增量 hydration（<code>withIncrementalHydration()</code>）配合 <code>@defer</code> 按需激活部分区域。</li>
-</ul>
-<h2>开启</h2>
+<blockquote>
+<p>服务端渲染出 HTML 以后，浏览器已经能看到页面了。如果没有 hydration，客户端 Angular 启动时会把这份 HTML 丢掉，再自己重新渲染一遍，页面可能会闪一下，LCP、CLS 这些指标也会受影响。Hydration 的意思是不丢，直接复用已有的 DOM 节点，只把事件监听和状态接上去。</p>
+<p>开启方法是在启动时加 <code>provideClientHydration()</code>。前提是服务端和客户端渲染出的 DOM 必须一致。不一致时 hydration 会失败，抛出 DOM 不一致的错误，这要当 bug 修。只有加了 <code>ngSkipHydration</code> 的组件，才会销毁后重新渲染。</p>
+<p>最常见的不一致来源是直接操作 DOM，比如用 <code>document</code>、<code>innerHTML</code> 或者第三方库改结构。这种代码要改成 Angular 的 API，暂时改不了就给组件加 <code>ngSkipHydration</code>。</p>
+<p>还有两个增强功能。事件重放会记下脚本加载完之前用户的点击，hydration 完成后再派发一次；增量 hydration 配合 <code>@defer</code>，让一部分区域按需激活。Angular v22 起，<code>provideClientHydration()</code> 默认开启增量 hydration，并自动带上事件重放；更早的版本要分别加 <code>withEventReplay()</code> 和 <code>withIncrementalHydration()</code>。</p>
+</blockquote>
+<h2>怎样开启</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">import</span> { bootstrapApplication, provideClientHydration, withEventReplay } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/platform-browser&#x27;</span>;
 
 <span class="hljs-title function_">bootstrapApplication</span>(<span class="hljs-title class_">App</span>, {
   <span class="hljs-attr">providers</span>: [<span class="hljs-title function_">provideClientHydration</span>(<span class="hljs-title function_">withEventReplay</span>())],
 });
 </code></pre></div>
-<h2>常见的不一致来源</h2>
+<p>加上 <code>withEventReplay()</code> 是因为页面可见以后，脚本可能还没加载完。用户这时点了按钮，如果没有事件重放，这次点击就丢了。</p>
+<p>这是 v22 之前的写法。v22 起只写 <code>provideClientHydration()</code> 就行：增量 hydration 默认开启，它依赖事件重放，所以会把事件重放一起打开，已有的 <code>withEventReplay()</code> 可以删掉。不想要增量 hydration 时，写 <code>provideClientHydration(withNoIncrementalHydration(), withEventReplay())</code>，事件重放仍然保留。</p>
+<h2>两端为什么会不一致</h2>
+<p>先看一个时钟组件：</p>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-meta">@Component</span>({
   <span class="hljs-attr">template</span>: <span class="hljs-string">`&lt;p&gt;{{ now }}&lt;/p&gt;`</span>,
 })
@@ -49,26 +51,34 @@
   now = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>().<span class="hljs-title function_">toLocaleTimeString</span>(); <span class="hljs-comment">// 服务端和客户端时间不同</span>
 }
 </code></pre></div>
+<p>服务端渲染时算了一次时间，过了一会儿客户端又算一次，两次结果肯定不同，DOM 里的文字就对不上了。</p>
+<p>这类问题有几种常见来源，改法也不一样：</p>
 <ul>
-<li>时间、随机数：服务端生成后通过 <code>TransferState</code> 或接口数据传给客户端，或者只在浏览器中更新（<code>afterNextRender</code>）。</li>
-<li>浏览器专属 API：<code>window</code>、<code>localStorage</code> 在服务端不存在，放进 <code>afterNextRender</code> 中执行。</li>
-<li>无效的 HTML 嵌套，例如 <code>&lt;p&gt;</code> 里放 <code>&lt;div&gt;</code>：浏览器解析时会自动修正结构，导致和 Angular 预期的 DOM 不一致。</li>
+<li>时间、随机数：在服务端生成，通过 <code>TransferState</code> 或接口数据传给客户端；或者只在浏览器里更新，放进 <code>afterNextRender</code>。</li>
+<li>浏览器专属 API：<code>window</code>、<code>localStorage</code> 在服务端不存在，也放进 <code>afterNextRender</code> 里执行。</li>
+<li>不合法的 HTML 嵌套：比如 <code>&lt;p&gt;</code> 里放 <code>&lt;div&gt;</code>。浏览器解析 HTML 时会自动把结构修正掉，结果实际 DOM 和 Angular 以为的不一样。</li>
 </ul>
-<h2>跳过某个组件</h2>
+<h2>暂时改不了的组件怎么办</h2>
+<p>可以先跳过它：</p>
 <div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">legacy-chart</span> <span class="hljs-attr">ngSkipHydration</span> /&gt;</span>
 </code></pre></div>
-<p>该组件会在客户端重新渲染，适合暂时无法改造的第三方组件。只能加在组件宿主元素上。</p>
-<h2>增量 hydration</h2>
+<p>这个组件会在客户端重新渲染，适合暂时没法改造的第三方组件。这个属性只能加在组件的宿主元素上。</p>
+<h2>增量 hydration 是什么</h2>
+<p>普通 hydration 要把整页的组件代码都下载下来才能激活。增量 hydration 让某些区域晚一点再激活：</p>
 <div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html">@defer (hydrate on viewport) {
   <span class="hljs-tag">&lt;<span class="hljs-name">app-comments</span> /&gt;</span>
 }
 </code></pre></div>
-<p>服务端照常输出评论区的 HTML，客户端在它进入视口时才加载代码并 hydration。首屏需要下载和执行的 JavaScript 更少。</p>
+<p>服务端照常把评论区的 HTML 输出来，用户能直接看到内容。等评论区滚进视口，客户端才去加载它的代码并 hydration。这样首屏要下载和执行的 JavaScript 就少了。</p>
 <h2>常见追问</h2>
-<ul>
-<li>HTTP 请求会在客户端重复吗？开启 hydration 后，<code>HttpClient</code> 默认缓存服务端发出的 GET 请求结果并传给客户端，客户端不会再请求一次。</li>
-<li>和 React hydration 有什么共同点？都要求两端结构一致，原理类似，见<a href="/questions/render-hydration/">《Hydration mismatch 为什么发生，应该怎样修复？》</a>。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://angular.dev/guide/hydration" target="_blank" rel="noreferrer">Angular · Hydration<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Angular+Hydration+%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAngular+Hydration+%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aframeworks-angular-hydration%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%86%E6%9E%B6%E4%B8%8E%E9%80%89%E5%9E%8B%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fframeworks-angular-hydration%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Angular Hydration 解决什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/framework-angular/">Angular Signals 的依赖追踪与 computed 有什么特点？</a></li><li><a href="/questions/frameworks-angular-di/">Angular 依赖注入的层级和作用域怎样理解？</a></li><li><a href="/questions/frameworks-sveltekit/">SvelteKit 的路由、load 和服务端边界怎样协作？</a></li><li><a href="/questions/frameworks-angular-rxjs/">Angular 中 Observable 和 Signals 怎样协作？</a></li></ul></nav></main></div></div>
+<p><strong>开启 hydration 后，HTTP 请求会在客户端再发一遍吗？</strong></p>
+<blockquote>
+<p>不会。开启 hydration 后，<code>HttpClient</code> 默认会缓存服务端发出的 GET 请求结果并传给客户端，客户端直接用，不再请求一次。</p>
+</blockquote>
+<p><strong>和 React 的 hydration 有什么共同点？</strong></p>
+<blockquote>
+<p>原理类似，都要求两端渲染出的结构一致，不一致的排查思路也差不多，详见<a href="/questions/render-hydration/">《Hydration mismatch 为什么发生，应该怎样修复？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://angular.dev/guide/hydration" target="_blank" rel="noreferrer">Angular · Hydration<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://angular.dev/guide/incremental-hydration" target="_blank" rel="noreferrer">Angular · Incremental Hydration<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Angular+Hydration+%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAngular+Hydration+%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aframeworks-angular-hydration%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%86%E6%9E%B6%E4%B8%8E%E9%80%89%E5%9E%8B%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fframeworks-angular-hydration%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Angular Hydration 解决什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/framework-angular/">Angular Signals 的依赖追踪与 computed 有什么特点？</a></li><li><a href="/questions/frameworks-angular-di/">Angular 依赖注入的层级和作用域怎样理解？</a></li><li><a href="/questions/frameworks-sveltekit/">SvelteKit 的路由、load 和服务端边界怎样协作？</a></li><li><a href="/questions/frameworks-angular-rxjs/">Angular 中 Observable 和 Signals 怎样协作？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

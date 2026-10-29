@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="架构设计面试题：从租户上下文、权限、缓存、主题和路由出发，设计多租户前端的状态边界，说明哪些判断必须由服务端完成以及如何测试隔离。" />
+    <meta name="description" content="架构设计面试题：多租户前端要管好租户上下文：租户身份和权限由服务端判断，缓存键都带上租户，切换租户时清掉旧数据，主题和路由按租户加载。" />
     <title>多租户前端怎样设计，才能避免配置和数据串租户？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/architecture-multitenant-frontend/" />
     <meta name="robots" content="index,follow" />
@@ -19,45 +19,45 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="多租户前端怎样设计，才能避免配置和数据串租户？ · 前端知库" />
-    <meta property="og:description" content="架构设计面试题：从租户上下文、权限、缓存、主题和路由出发，设计多租户前端的状态边界，说明哪些判断必须由服务端完成以及如何测试隔离。" />
+    <meta property="og:description" content="架构设计面试题：多租户前端要管好租户上下文：租户身份和权限由服务端判断，缓存键都带上租户，切换租户时清掉旧数据，主题和路由按租户加载。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/architecture-multitenant-frontend/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/architecture-multitenant-frontend/#webpage","url":"https://fe.hushifa.top/questions/architecture-multitenant-frontend/","name":"多租户前端怎样设计，才能避免配置和数据串租户？ · 前端知库","description":"架构设计面试题：从租户上下文、权限、缓存、主题和路由出发，设计多租户前端的状态边界，说明哪些判断必须由服务端完成以及如何测试隔离。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/architecture-multitenant-frontend/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/architecture-multitenant-frontend/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"架构设计面试题","item":"https://fe.hushifa.top/topics/architecture/"},{"@type":"ListItem","position":3,"name":"多租户前端怎样设计，才能避免配置和数据串租户？","item":"https://fe.hushifa.top/questions/architecture-multitenant-frontend/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/architecture-multitenant-frontend/#webpage","url":"https://fe.hushifa.top/questions/architecture-multitenant-frontend/","name":"多租户前端怎样设计，才能避免配置和数据串租户？ · 前端知库","description":"架构设计面试题：多租户前端要管好租户上下文：租户身份和权限由服务端判断，缓存键都带上租户，切换租户时清掉旧数据，主题和路由按租户加载。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/architecture-multitenant-frontend/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/architecture-multitenant-frontend/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"架构设计面试题","item":"https://fe.hushifa.top/topics/architecture/"},{"@type":"ListItem","position":3,"name":"多租户前端怎样设计，才能避免配置和数据串租户？","item":"https://fe.hushifa.top/questions/architecture-multitenant-frontend/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/architecture/">架构设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">多租户前端怎样设计，才能避免配置和数据串租户？</span></nav><h1 tabindex="-1">多租户前端怎样设计，才能避免配置和数据串租户？</h1><p class="reading-summary">从租户上下文、权限、缓存、主题和路由出发，设计多租户前端的状态边界，说明哪些判断必须由服务端完成以及如何测试隔离。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>租户身份由服务端根据登录会话确定，前端传来的租户 ID 只能用于选择，不能作为授权依据。</li>
-<li>所有缓存（请求缓存、本地存储、Service Worker 缓存、CDN）的键都要包含租户，切换租户时清空上一个租户的数据。</li>
-<li>租户上下文放在 URL（子域名或路径前缀）中最清晰，刷新、分享链接和多标签页都能保持一致。</li>
-<li>主题、功能开关等租户配置在应用启动时加载，加载完成前不要渲染业务内容。</li>
-<li>用两个租户的测试账号做自动化测试，验证互相看不到对方的数据。</li>
-</ul>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/architecture/">架构设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">多租户前端怎样设计，才能避免配置和数据串租户？</span></nav><h1 tabindex="-1">多租户前端怎样设计，才能避免配置和数据串租户？</h1><p class="reading-summary">多租户前端要管好租户上下文：租户身份和权限由服务端判断，缓存键都带上租户，切换租户时清掉旧数据，主题和路由按租户加载。还要用两个租户的账号测试隔离。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>多租户就是一套系统同时给好几家公司用，每家是一个租户，数据必须互相看不到。前端最怕的就是“串租户”：A 公司的人看到了 B 公司的数据。</p>
+<p>第一条原则是，租户身份由服务端根据登录会话来定。前端传上去的租户 ID 只能用来“选择”，不能当成授权的依据。</p>
+<p>第二条是缓存。请求缓存、本地存储、Service Worker 缓存、CDN，所有缓存的键都要带上租户，切换租户时把上一个租户的数据清掉。租户放在 URL 里最清楚，比如子域名或路径前缀，刷新、分享链接、开多个标签页都不会乱。</p>
+<p>还要注意两点。主题、功能开关这些租户配置在启动时加载，加载完之前不要渲染业务内容。最后要用两个租户的测试账号做自动化测试，确认彼此看不到对方的数据。</p>
+</blockquote>
 <h2>租户从哪里来</h2>
 <table><thead><tr><th>方式</th><th>示例</th><th>特点</th></tr></thead><tbody><tr><td>子域名</td><td><code>acme.app.com</code></td><td>每个子域名是独立的源，存储天然隔离；Cookie 只要不设置父域 <code>Domain</code> 也互不共享。需要通配证书</td></tr><tr><td>路径前缀</td><td><code>app.com/t/acme/</code></td><td>部署简单，同源共享存储，需要在键中区分</td></tr><tr><td>登录后选择</td><td>同一 URL，账号属于多个租户</td><td>URL 中看不出租户，分享链接容易出错</td></tr></tbody></table>
-<p>无论哪种方式，服务端每次请求都要校验&quot;当前用户是否属于这个租户、是否有权访问这条记录&quot;。前端隐藏菜单只影响展示。</p>
-<h2>缓存键包含租户</h2>
+<p>子域名的隔离最好，因为浏览器把每个子域名当成不同的源，localStorage 这类存储天然分开。路径前缀部署简单，但所有租户同源，存储是共享的，只能自己在键里区分。</p>
+<p>不管选哪种，服务端每次请求都要校验两件事：当前用户是不是属于这个租户，有没有权限访问这条记录。前端把菜单藏起来，只影响显示，挡不住人。</p>
+<h2>缓存键为什么要带租户</h2>
+<p>先看请求缓存。用 TanStack Query 时，把租户 ID 放进查询的 key：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// TanStack Query 示例</span>
 <span class="hljs-title function_">useQuery</span>({
   <span class="hljs-attr">queryKey</span>: [<span class="hljs-string">&#x27;tenant&#x27;</span>, tenantId, <span class="hljs-string">&#x27;orders&#x27;</span>, filters],
   <span class="hljs-attr">queryFn</span>: <span class="hljs-function">() =&gt;</span> api.<span class="hljs-title function_">getOrders</span>(tenantId, filters),
 });
 </code></pre></div>
+<p>如果 key 里没有租户，切到另一个租户后，同样的 <code>[&#x27;orders&#x27;, filters]</code> 就会命中上一个租户的缓存，数据就串了。</p>
+<p>切换租户时，最稳妥的办法是把缓存清掉，整页跳过去：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">switchTenant</span>(<span class="hljs-params">nextId</span>) {
   queryClient.<span class="hljs-title function_">clear</span>();
   <span class="hljs-variable language_">sessionStorage</span>.<span class="hljs-title function_">clear</span>();
   location.<span class="hljs-title function_">assign</span>(<span class="hljs-string">`/t/<span class="hljs-subst">${nextId}</span>/`</span>); <span class="hljs-comment">// 整页切换，丢弃内存中的旧状态</span>
 }
 </code></pre></div>
-<ul>
-<li>本地存储的键加租户前缀：<code>acme:draft:123</code>。</li>
-<li>Service Worker 缓存 API 响应时，缓存键或缓存名包含租户。</li>
-<li>CDN 缓存接口响应时，响应要按租户或会话区分（如 <code>Vary</code> 或 <code>Cache-Control: private</code>），最安全的做法是租户数据不进共享缓存。</li>
-</ul>
-<h2>切换租户时的竞态</h2>
-<p>用户从 A 切到 B 时，A 的请求可能还在进行，返回后写入状态就会出现 A 的数据显示在 B 的页面里。整页跳转最简单可靠；在单页内切换时，要取消所有进行中的请求并让旧请求的结果失效。</p>
-<h2>租户配置</h2>
+<p>其他缓存也一样。本地存储的键加租户前缀，比如 <code>acme:draft:123</code>。Service Worker 缓存接口响应时，缓存键或缓存名里带上租户。CDN 缓存接口响应时，要按租户或会话区分，比如用 <code>Vary</code> 或 <code>Cache-Control: private</code>，最安全的做法是租户数据干脆不进共享缓存。</p>
+<h2>切换租户时为什么还会串</h2>
+<p>用户从 A 切到 B 的时候，A 的请求可能还没回来。等它回来了，结果写进状态，A 的数据就出现在 B 的页面上了。</p>
+<p>整页跳转是最简单可靠的办法，旧页面的内存状态和进行中的请求都跟着没了。如果非要在单页里切换，就得取消所有进行中的请求，并且让旧请求的结果失效，不能写进新租户的状态。</p>
+<h2>租户配置怎样加载</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">bootstrap</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">const</span> config = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">`/api/tenants/<span class="hljs-subst">${tenantId}</span>/config`</span>).<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">r</span>) =&gt;</span> r.<span class="hljs-title function_">json</span>());
   <span class="hljs-title function_">applyTheme</span>(config.<span class="hljs-property">theme</span>);   <span class="hljs-comment">// 设置 CSS 自定义属性</span>
@@ -65,22 +65,24 @@
   <span class="hljs-title function_">renderApp</span>();
 }
 </code></pre></div>
-<ul>
-<li>主题用 CSS 自定义属性实现，不为每个租户单独打包。</li>
-<li>租户自定义的文案、Logo 链接也是外部输入，要做转义和 URL 校验，不能直接插入 HTML。</li>
-</ul>
-<h2>测试隔离</h2>
+<p>先拿到配置，应用主题和功能开关，再渲染应用。这样不会出现先按默认主题渲染、再闪一下变成租户主题的情况。</p>
+<p>主题用 CSS 自定义属性实现就行，不用给每个租户单独打包。另外，租户自定义的文案、Logo 链接也是外部输入，要做转义和 URL 校验，不能直接插进 HTML。</p>
+<h2>怎样测试租户隔离</h2>
 <ol>
-<li>准备两个租户、各自的测试账号和测试数据。</li>
-<li>用 A 的账号访问 B 的资源 ID，期望服务端返回 403 或 404。</li>
-<li>在同一浏览器中先后登录两个租户，检查页面、本地存储和缓存中没有残留。</li>
-<li>对日志和错误上报也检查租户字段，确保排查时能区分。</li>
+<li>准备两个租户，各自有测试账号和测试数据。</li>
+<li>用 A 的账号去访问 B 的资源 ID，期望服务端返回 403 或 404。</li>
+<li>在同一个浏览器里先后登录两个租户，检查页面、本地存储和缓存里没有上一个租户的残留。</li>
+<li>检查日志和错误上报里也带租户字段，出问题时能分清是哪个租户。</li>
 </ol>
 <h2>常见追问</h2>
-<ul>
-<li>不同租户需要不同功能版本怎么办？用租户级功能开关控制，同一份代码部署，避免为每个租户维护分支。</li>
-<li>白标域名怎么处理？服务端根据请求的 Host 映射到租户，前端从配置接口拿到结果，不要信任前端自己解析的域名。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html" target="_blank" rel="noreferrer">OWASP · Authorization Cheat Sheet<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%A4%9A%E7%A7%9F%E6%88%B7%E5%89%8D%E7%AB%AF%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%EF%BC%8C%E6%89%8D%E8%83%BD%E9%81%BF%E5%85%8D%E9%85%8D%E7%BD%AE%E5%92%8C%E6%95%B0%E6%8D%AE%E4%B8%B2%E7%A7%9F%E6%88%B7%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%A4%9A%E7%A7%9F%E6%88%B7%E5%89%8D%E7%AB%AF%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%EF%BC%8C%E6%89%8D%E8%83%BD%E9%81%BF%E5%85%8D%E9%85%8D%E7%BD%AE%E5%92%8C%E6%95%B0%E6%8D%AE%E4%B8%B2%E7%A7%9F%E6%88%B7%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aarchitecture-multitenant-frontend%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Farchitecture-multitenant-frontend%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：多租户前端怎样设计，才能避免配置和数据串租户？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/architecture-api-evolution/">前端 API 如何演进，才能兼容旧客户端并安全迁移？</a></li><li><a href="/questions/arch-design-system/">设计系统为什么不能只有一套视觉样式？</a></li><li><a href="/questions/arch-state-machine/">怎样避免加载、成功和失败状态互相矛盾？</a></li><li><a href="/questions/arch-progressive/">渐进增强和优雅降级怎样影响前端方案选择？</a></li></ul></nav></main></div></div>
+<p><strong>不同租户需要不同的功能版本怎么办？</strong></p>
+<blockquote>
+<p>用租户级的功能开关控制。同一份代码部署，不要给每个租户维护一个分支。</p>
+</blockquote>
+<p><strong>白标域名怎么处理？</strong></p>
+<blockquote>
+<p>服务端根据请求的 Host 映射到租户，前端从配置接口拿到结果。不要信任前端自己解析出来的域名。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html" target="_blank" rel="noreferrer">OWASP · Authorization Cheat Sheet<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%A4%9A%E7%A7%9F%E6%88%B7%E5%89%8D%E7%AB%AF%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%EF%BC%8C%E6%89%8D%E8%83%BD%E9%81%BF%E5%85%8D%E9%85%8D%E7%BD%AE%E5%92%8C%E6%95%B0%E6%8D%AE%E4%B8%B2%E7%A7%9F%E6%88%B7%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%A4%9A%E7%A7%9F%E6%88%B7%E5%89%8D%E7%AB%AF%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%EF%BC%8C%E6%89%8D%E8%83%BD%E9%81%BF%E5%85%8D%E9%85%8D%E7%BD%AE%E5%92%8C%E6%95%B0%E6%8D%AE%E4%B8%B2%E7%A7%9F%E6%88%B7%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aarchitecture-multitenant-frontend%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Farchitecture-multitenant-frontend%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：多租户前端怎样设计，才能避免配置和数据串租户？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/architecture-api-evolution/">前端 API 如何演进，才能兼容旧客户端并安全迁移？</a></li><li><a href="/questions/arch-design-system/">设计系统为什么不能只有一套视觉样式？</a></li><li><a href="/questions/arch-state-machine/">怎样避免加载、成功和失败状态互相矛盾？</a></li><li><a href="/questions/arch-progressive/">渐进增强和优雅降级怎样影响前端方案选择？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

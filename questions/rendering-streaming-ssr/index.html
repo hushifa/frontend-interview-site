@@ -26,15 +26,14 @@
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/rendering/">SSR 与渲染面试题</a><span aria-hidden="true">/</span><span aria-current="page">React 流式 SSR 解决什么问题？</span></nav><h1 tabindex="-1">React 流式 SSR 解决什么问题？</h1><p class="reading-summary">流式 SSR 先把 Suspense 边界以外的页面外壳发送给浏览器，慢的部分先显示 fallback，数据就绪后再以 HTML 片段和内联脚本补上。用户能更早看到内容，客户端也可以按区域逐步 hydration。React 19.2 在此基础上新增了 resume 系列 API，用于部分预渲染。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>传统 SSR 要等整页数据都准备好才能发送 HTML，最慢的请求决定首字节时间。</li>
-<li>流式 SSR 以 <code>&lt;Suspense&gt;</code> 为边界：外壳先发送，边界内的内容就绪后再流式补上，替换掉 fallback。</li>
-<li>Node 中用 <code>renderToPipeableStream</code>，Web Streams 环境（Deno、边缘运行时）用 <code>renderToReadableStream</code>。</li>
-<li>状态码只能在开始发送前确定，所以在 <code>onShellReady</code> 或 <code>onShellError</code> 中设置；边界内出错时 React 发送 fallback，并在客户端重试渲染该部分。</li>
-<li>React 19.2 新增 <code>resume</code>、<code>resumeToPipeableStream</code> 等 API：<code>prerender</code> 现在可以返回 <code>postponed</code> 状态，构建时预渲染静态部分，请求时再从中断处继续渲染动态部分。</li>
-</ul>
-<h2>示例</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/rendering/">SSR 与渲染面试题</a><span aria-hidden="true">/</span><span aria-current="page">React 流式 SSR 解决什么问题？</span></nav><h1 tabindex="-1">React 流式 SSR 解决什么问题？</h1><p class="reading-summary">流式 SSR 先把 Suspense 边界以外的页面外壳发送给浏览器，慢的部分先显示 fallback，数据就绪后再以 HTML 片段和内联脚本补上。用户能更早看到内容，客户端也能按区域逐步 hydration。React 19.2 在此基础上新增了 resume 系列 API，用于部分预渲染。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>传统 SSR 要等整页的数据都准备好，才能把 HTML 发出去。页面上只要有一个接口慢，整页都得等它，最慢的请求决定了首字节时间。</p>
+<p>流式 SSR 就是边渲染边发。它以 <code>&lt;Suspense&gt;</code> 为边界，边界外面的页面外壳先发给浏览器，边界里面先显示 fallback；里面的内容准备好了，再接着往同一个响应里补，替换掉 fallback。Node 里用 <code>renderToPipeableStream</code>，Deno、边缘运行时这类 Web Streams 环境用 <code>renderToReadableStream</code>。</p>
+<p>要注意状态码。响应一旦开始发送，状态码就改不了了，所以要在 <code>onShellReady</code> 或 <code>onShellError</code> 里设好。如果是 Suspense 边界里面出错，React 会发送 fallback，再在客户端重试渲染这一块。</p>
+<p>React 19.2 又加了 <code>resume</code>、<code>resumeToPipeableStream</code> 等 API。<code>prerender</code> 现在能返回一个 <code>postponed</code> 状态，构建时先把静态部分预渲染好，请求时再从中断的地方接着渲染动态部分。</p>
+</blockquote>
+<h2>先看页面怎么划边界</h2>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">App</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">return</span> (
     <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
@@ -48,6 +47,8 @@
   );
 }
 </code></pre></div>
+<p><code>Header</code> 在边界外面，属于外壳，会先发出去。<code>Comments</code> 在边界里面，数据没好之前，浏览器先看到“评论加载中…”。</p>
+<h2>服务端怎么写</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { renderToPipeableStream } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom/server&#x27;</span>;
 
 app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;*&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
@@ -71,22 +72,24 @@ app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x2
   <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">abort</span>(), <span class="hljs-number">10_000</span>);
 });
 </code></pre></div>
+<p>这几个回调分别在不同时刻触发：</p>
 <ul>
-<li><code>onShellReady</code>：外壳渲染完成，开始发送。</li>
-<li><code>onShellError</code>：外壳渲染失败，还没有发送任何内容，可以返回备用页面。</li>
-<li><code>onAllReady</code>：全部内容完成，适合给爬虫或静态生成使用，此时没有渐进效果。</li>
-<li><code>abort()</code>：超时后把剩余边界的 fallback 发送出去，由客户端继续渲染。</li>
+<li><code>onShellReady</code>：外壳渲染完成，可以开始发送了，所以状态码在这里设，然后 <code>pipe</code> 出去。</li>
+<li><code>onShellError</code>：外壳渲染失败。这时还一个字节都没发，所以还能换成一个备用页面。</li>
+<li><code>onAllReady</code>：全部内容都完成了。适合给爬虫或者静态生成用，但这时就没有渐进显示的效果了。</li>
+<li><code>abort()</code>：超时后不再等，把剩下边界的 fallback 发出去，由客户端接着渲染。</li>
 </ul>
-<h2>浏览器收到什么</h2>
+<h2>浏览器收到了什么</h2>
+<p>“补上内容”具体是怎么做到的？浏览器收到的东西分几批：</p>
 <ol>
-<li>外壳 HTML，<code>Comments</code> 的位置是 fallback。</li>
-<li>评论数据就绪后，同一个响应中追加一段隐藏的 HTML 和一小段内联脚本，脚本把它移到 fallback 的位置。</li>
-<li>客户端 JS 加载后，React 可以先 hydration 已到达的部分；用户点击某个未 hydration 的区域时，优先 hydration 该区域。</li>
+<li>先是外壳 HTML，<code>Comments</code> 的位置是 fallback。</li>
+<li>评论数据好了以后，同一个响应里追加一段隐藏的 HTML，再加一小段内联脚本，脚本把这段 HTML 挪到 fallback 的位置。</li>
+<li>客户端 JS 加载后，React 可以先 hydration 已经到了的部分。用户如果点了某个还没 hydration 的区域，React 会优先处理那一块。</li>
 </ol>
-<h2>状态码与边界放置</h2>
-<p>由于外壳发出后就不能再改状态码，决定 404、重定向的数据应在外壳中加载（不放进 Suspense），例如&quot;文章是否存在&quot;。评论、推荐这类不影响状态码的内容放进 Suspense。</p>
-<p>React 19.2 起，服务端渲染的 Suspense 边界会被短暂地批量显示，与客户端行为保持一致。</p>
-<h2>部分预渲染</h2>
+<h2>边界放在哪里，影响状态码</h2>
+<p>因为外壳一发出去状态码就定了，所以凡是决定 404 或者重定向的数据，都要放在外壳里加载，不能放进 Suspense。比如“这篇文章存不存在”，要在外壳阶段就查清楚。评论、推荐这种不影响状态码的内容，才放进 Suspense。</p>
+<p>另外，React 19.2 起，服务端渲染出来的 Suspense 边界会被短暂地攒一批再显示，和客户端的行为保持一致。</p>
+<h2>部分预渲染是怎么回事</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { prerender } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom/static&#x27;</span>;
 <span class="hljs-keyword">import</span> { resume } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom/server&#x27;</span>;
 
@@ -95,13 +98,17 @@ app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x2
 <span class="hljs-comment">// 请求时</span>
 <span class="hljs-keyword">const</span> stream = <span class="hljs-keyword">await</span> <span class="hljs-title function_">resume</span>(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span></span>, postponed);
 </code></pre></div>
-<p>构建时得到的 <code>prelude</code> 是可以缓存到 CDN 的静态 HTML，<code>postponed</code> 记录了哪些部分需要在请求时完成。Next.js 的 Cache Components 就基于这种模式，见<a href="/questions/render-next-cache/">《Next.js App Router 中的几层缓存怎样区分？》</a>。</p>
-<p>React 19.2 也让 Web Streams 版本的 API 可以在 Node 中使用，但官方仍推荐在 Node 中使用 Node Streams 版本，速度更快且支持压缩。</p>
+<p>构建时得到的 <code>prelude</code> 是静态 HTML，可以缓存到 CDN。<code>postponed</code> 记下了哪些部分要等到请求时才能完成。请求来了，<code>resume</code> 从这里接着渲染。Next.js 的 Cache Components 就基于这种模式，详见<a href="/questions/render-next-cache/">《Next.js App Router 中的几层缓存怎样区分？》</a>。</p>
+<p>React 19.2 也让 Web Streams 版本的 API 能在 Node 里用了。不过官方仍然推荐 Node 里用 Node Streams 版本，因为速度更快，而且支持压缩。</p>
 <h2>常见追问</h2>
-<ul>
-<li>流式输出对 SEO 有影响吗？主流爬虫能处理流式 HTML；需要保证完整内容时，可以对爬虫使用 <code>onAllReady</code>。</li>
-<li>中间代理会缓冲响应吗？某些代理或压缩配置会等待完整响应再转发，部署时要确认流式输出确实生效。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/reference/react-dom/server/renderToPipeableStream" target="_blank" rel="noreferrer">React · renderToPipeableStream<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+%E6%B5%81%E5%BC%8F+SSR+%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+%E6%B5%81%E5%BC%8F+SSR+%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Arendering-streaming-ssr%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ASSR+%E4%B8%8E%E6%B8%B2%E6%9F%93%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Frendering-streaming-ssr%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React 流式 SSR 解决什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/render-server-components/">React Server Components 和 SSR 是同一件事吗？</a></li><li><a href="/questions/render-ssr-ssg/">CSR、SSR、SSG 和混合渲染如何选择？</a></li><li><a href="/questions/render-hydration/">Hydration mismatch 为什么发生，应该怎样修复？</a></li><li><a href="/questions/rendering-cache-semantics/">SSR 和 SSG 中的缓存层应该怎样区分？</a></li></ul></nav></main></div></div>
+<p><strong>流式输出对 SEO 有影响吗？</strong></p>
+<blockquote>
+<p>主流爬虫能处理流式 HTML。如果一定要保证爬虫拿到完整内容，可以对爬虫改用 <code>onAllReady</code>，等全部完成再发。</p>
+</blockquote>
+<p><strong>中间的代理会不会把响应攒起来？</strong></p>
+<blockquote>
+<p>会有这种情况。某些代理或压缩配置会等完整响应到了再转发，流式就失效了。所以部署时要确认流式输出真的生效了。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/reference/react-dom/server/renderToPipeableStream" target="_blank" rel="noreferrer">React · renderToPipeableStream<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+%E6%B5%81%E5%BC%8F+SSR+%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+%E6%B5%81%E5%BC%8F+SSR+%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Arendering-streaming-ssr%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ASSR+%E4%B8%8E%E6%B8%B2%E6%9F%93%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Frendering-streaming-ssr%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React 流式 SSR 解决什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/render-server-components/">React Server Components 和 SSR 是同一件事吗？</a></li><li><a href="/questions/render-ssr-ssg/">CSR、SSR、SSG 和混合渲染如何选择？</a></li><li><a href="/questions/render-hydration/">Hydration mismatch 为什么发生，应该怎样修复？</a></li><li><a href="/questions/rendering-cache-semantics/">SSR 和 SSG 中的缓存层应该怎样区分？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

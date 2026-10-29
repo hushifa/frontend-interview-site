@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="性能优化面试题：分别解释主要内容出现、交互响应和意外布局移动，说明良好阈值、真实用户分位数、实验室诊断与采集限制，并避免把一个分数当成全部体验。" />
+    <meta name="description" content="性能优化面试题：LCP 看主要内容多快出现，INP 看点击、按键后页面多快有反应，CLS 看内容有没有意外跳动。" />
     <title>LCP、INP、CLS 分别衡量什么？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/engineering-vitals/" />
     <meta name="robots" content="index,follow" />
@@ -19,28 +19,32 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="LCP、INP、CLS 分别衡量什么？ · 前端知库" />
-    <meta property="og:description" content="性能优化面试题：分别解释主要内容出现、交互响应和意外布局移动，说明良好阈值、真实用户分位数、实验室诊断与采集限制，并避免把一个分数当成全部体验。" />
+    <meta property="og:description" content="性能优化面试题：LCP 看主要内容多快出现，INP 看点击、按键后页面多快有反应，CLS 看内容有没有意外跳动。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/engineering-vitals/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/engineering-vitals/#webpage","url":"https://fe.hushifa.top/questions/engineering-vitals/","name":"LCP、INP、CLS 分别衡量什么？ · 前端知库","description":"性能优化面试题：分别解释主要内容出现、交互响应和意外布局移动，说明良好阈值、真实用户分位数、实验室诊断与采集限制，并避免把一个分数当成全部体验。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/engineering-vitals/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/engineering-vitals/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"LCP、INP、CLS 分别衡量什么？","item":"https://fe.hushifa.top/questions/engineering-vitals/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/engineering-vitals/#webpage","url":"https://fe.hushifa.top/questions/engineering-vitals/","name":"LCP、INP、CLS 分别衡量什么？ · 前端知库","description":"性能优化面试题：LCP 看主要内容多快出现，INP 看点击、按键后页面多快有反应，CLS 看内容有没有意外跳动。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/engineering-vitals/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/engineering-vitals/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"LCP、INP、CLS 分别衡量什么？","item":"https://fe.hushifa.top/questions/engineering-vitals/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">LCP、INP、CLS 分别衡量什么？</span></nav><h1 tabindex="-1">LCP、INP、CLS 分别衡量什么？</h1><p class="reading-summary">分别解释主要内容出现、交互响应和意外布局移动，说明良好阈值、真实用户分位数、实验室诊断与采集限制，并避免把一个分数当成全部体验。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>LCP（最大内容绘制）衡量主要内容多快出现，良好标准是 2.5 秒以内。</li>
-<li>INP（交互到下一次绘制）衡量页面对点击、按键的响应速度，良好标准是 200 毫秒以内；它在 2024 年 3 月取代了 FID。</li>
-<li>CLS（累积布局偏移）衡量内容意外移动的程度，良好标准是 0.1 以下。</li>
-<li>评估时取真实用户数据的第 75 百分位，桌面和移动端分开看。</li>
-<li>Lighthouse 等实验室工具适合诊断，但测不出真实用户的 INP，最终以现场数据为准。</li>
-</ul>
-<h2>三个指标</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">LCP、INP、CLS 分别衡量什么？</span></nav><h1 tabindex="-1">LCP、INP、CLS 分别衡量什么？</h1><p class="reading-summary">LCP 看主要内容多快出现，INP 看点击、按键后页面多快有反应，CLS 看内容有没有意外跳动。良好阈值按真实用户的 75 分位评估，实验室诊断和现场采集要配合着看。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>这三个指标是 Google 的 Core Web Vitals，分别对应用户最在意的三件事：页面主要内容多快出来，点了以后多快有反应，看的时候内容会不会突然跳。</p>
+<p>LCP 叫最大内容绘制，指视口里最大的图片或文字块画出来的时间，2.5 秒以内算良好。INP 叫交互到下一次绘制，指点击、按键之后到页面画出下一帧要多久，200 毫秒以内算良好，它在 2024 年 3 月取代了 FID。CLS 叫累积布局偏移，衡量内容意外移动的程度，0.1 以下算良好。</p>
+<p>评估时看的是真实用户数据的第 75 百分位，桌面和移动端分开算。Lighthouse 这类实验室工具适合找原因，但它不模拟用户交互，测不出真实的 INP，最后要以现场数据为准。</p>
+<p>要注意，三个指标都绿了也不等于体验好，它们只覆盖加载、响应和稳定性，业务流程的耗时还得自己定指标去测。</p>
+</blockquote>
+<h2>三个指标各管什么</h2>
+<p>先把三个指标的阈值放在一起看：</p>
 <table><thead><tr><th>指标</th><th>衡量什么</th><th>良好</th><th>较差</th></tr></thead><tbody><tr><td>LCP</td><td>视口内最大的图片或文本块渲染完成的时间</td><td>≤ 2.5 s</td><td>&gt; 4 s</td></tr><tr><td>INP</td><td>页面生命周期内交互延迟的代表值（接近最慢的那次）</td><td>≤ 200 ms</td><td>&gt; 500 ms</td></tr><tr><td>CLS</td><td>意外布局偏移的最大会话窗口得分</td><td>≤ 0.1</td><td>&gt; 0.25</td></tr></tbody></table>
-<h2>常见原因和优化方向</h2>
-<p><strong>LCP</strong>：服务器响应慢、LCP 图片被懒加载或发现得晚、渲染阻塞的 CSS/JS、客户端渲染才生成内容。优化方向是缩短 TTFB、用 <code>fetchpriority=&quot;high&quot;</code> 和预加载让 LCP 资源尽早下载、避免对首屏图片使用 <code>loading=&quot;lazy&quot;</code>。</p>
-<p><strong>INP</strong>：事件处理里有长任务、一次交互触发大量渲染、主线程被第三方脚本占用。优化方向是拆分长任务并让出主线程、先更新可见反馈再处理其余工作、减少不必要的重新渲染。</p>
-<p><strong>CLS</strong>：图片和广告位没有预留尺寸、字体切换导致文字重排、在已有内容上方插入横幅。优化方向是设置 <code>width</code>/<code>height</code> 或 <code>aspect-ratio</code>、给动态内容预留空间、用 <code>font-display</code> 和尺寸匹配的备用字体。用户交互后 500 毫秒内发生的偏移不计入 CLS。</p>
-<h2>采集真实数据</h2>
+<p>LCP 回答的是“用户什么时候觉得页面出来了”。浏览器会记下视口里最大的那块内容什么时候画完，通常是首屏大图或者标题文字。</p>
+<p>INP 回答的是“页面卡不卡”。用户在整个页面停留期间每一次点击、按键都会被记下来，INP 取的是接近最慢的那一次，所以只要有一次交互特别慢，INP 就会变差。</p>
+<p>CLS 回答的是“内容会不会乱跳”。比如正要点一个按钮，上方突然插进来一张广告图，按钮被挤下去，点到了别的地方，这种移动就会计入 CLS。用户自己操作后 500 毫秒内发生的偏移不算，因为那是用户预期之内的变化。</p>
+<h2>每个指标通常因为什么变差</h2>
+<p>LCP 慢，常见原因是服务器响应慢、LCP 图片被懒加载或者发现得太晚、有阻塞渲染的 CSS 和 JS，或者内容要等客户端 JS 跑完才生成。所以改法是缩短 TTFB，也就是服务器返回第一个字节的时间；用 <code>fetchpriority=&quot;high&quot;</code> 和预加载让 LCP 资源尽早下载；首屏图片不要加 <code>loading=&quot;lazy&quot;</code>。</p>
+<p>INP 高，常见原因是事件处理函数里有长任务、一次交互触发了大量渲染，或者主线程正被第三方脚本占着。改法是把长任务拆开、让出主线程，先把用户能看到的反馈更新出来，其余工作往后放，再减少不必要的重新渲染。</p>
+<p>CLS 高，常见原因是图片和广告位没有预留尺寸、字体切换导致文字重排，或者在已有内容上方插入横幅。改法是给图片写 <code>width</code>、<code>height</code> 或 <code>aspect-ratio</code>，给动态内容提前留好位置，用 <code>font-display</code> 和尺寸接近的备用字体。</p>
+<h2>怎样采集真实用户的数据</h2>
+<p>官方的 <code>web-vitals</code> 库把这三个指标的计算细节都处理好了，只要注册回调、把结果发出去。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { onLCP, onINP, onCLS } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;web-vitals&#x27;</span>;
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">send</span>(<span class="hljs-params">metric</span>) {
@@ -56,18 +60,21 @@
 <span class="hljs-title function_">onINP</span>(send);
 <span class="hljs-title function_">onCLS</span>(send);
 </code></pre></div>
-<ul>
-<li>INP 和 CLS 要到页面隐藏或卸载时才能得出最终值，<code>web-vitals</code> 会在页面进入后台时上报，所以用 <code>sendBeacon</code> 而不是普通请求。</li>
-<li>同时上报页面路径、设备类型、网络类型，才能定位是哪类用户变慢。</li>
-<li>Chrome 用户体验报告（CrUX）提供公开站点的真实数据；Safari 和 Firefox 对这些指标的支持不完整，自采数据会偏向 Chromium 用户。</li>
-</ul>
-<h2>实验室与现场</h2>
-<p>Lighthouse 在固定设备和网络条件下模拟加载，能稳定复现 LCP、CLS 问题，并用总阻塞时间（TBT）近似反映交互风险。真实用户的设备、网络和交互方式差异很大，两者数值不同是正常的。先用现场数据确定问题，再用实验室工具复现和验证修复。</p>
+<p>为什么用 <code>sendBeacon</code> 而不是普通的 <code>fetch</code>？因为 INP 和 CLS 要等用户一直用到页面隐藏或卸载时才能得出最终值，<code>web-vitals</code> 会在页面进入后台时上报。这个时候页面可能马上就关了，<code>sendBeacon</code> 交给浏览器在后台发送，不会因为页面关闭而丢掉。</p>
+<p>光有数值还不够。上报时最好一起带上页面路径、设备类型、网络类型，这样才能看出到底是哪一类用户变慢了。</p>
+<p>公开站点还可以看 Chrome 用户体验报告（CrUX），它是 Chrome 用户的真实数据。不过 Safari 和 Firefox 对这些指标支持不完整，所以自己采到的数据会偏向 Chromium 用户。</p>
+<h2>实验室数据和现场数据为什么对不上</h2>
+<p>Lighthouse 在固定的设备和网络条件下模拟一次加载，所以能稳定复现 LCP 和 CLS 的问题。它不会去点页面，所以用总阻塞时间（TBT）近似反映交互风险。</p>
+<p>真实用户的设备、网络和操作方式差别很大，两边的数值不一样是正常的。合理的顺序是先用现场数据确定问题在哪，再用实验室工具复现，修完之后再验证。</p>
 <h2>常见追问</h2>
-<ul>
-<li>单页应用路由切换算吗？这三个指标都以页面加载为单位，软导航不会重置 LCP；INP 和 CLS 会持续累计到页面卸载。</li>
-<li>指标全绿就代表体验好吗？它们只覆盖加载、响应和稳定性，业务关键流程的耗时还需要自定义指标。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://github.com/GoogleChrome/web-vitals" target="_blank" rel="noreferrer">GoogleChrome · web-vitals<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+LCP%E3%80%81INP%E3%80%81CLS+%E5%88%86%E5%88%AB%E8%A1%A1%E9%87%8F%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ALCP%E3%80%81INP%E3%80%81CLS+%E5%88%86%E5%88%AB%E8%A1%A1%E9%87%8F%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aengineering-vitals%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fengineering-vitals%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：LCP、INP、CLS 分别衡量什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/performance-budget/">前端性能预算应该怎样制定和落地？</a></li><li><a href="/questions/perf-longtasks/">什么是长任务，为什么会影响交互响应？怎样观测和拆分？</a></li><li><a href="/questions/perf-lazy-images/">懒加载为什么有时反而让首屏和首次交互变慢？</a></li><li><a href="/questions/perf-virtual-list/">虚拟列表通过什么方式减少渲染成本？</a></li></ul></nav></main></div></div>
+<p><strong>单页应用切换路由，指标会重新算吗？</strong></p>
+<blockquote>
+<p>这三个指标都以一次页面加载为单位。软导航，也就是 SPA 内部的路由切换，不会重置 LCP；INP 和 CLS 会一直累计到页面卸载。</p>
+</blockquote>
+<p><strong>指标全绿，就代表体验好吗？</strong></p>
+<blockquote>
+<p>不一定。它们只覆盖加载、响应和稳定性三个方面。比如下单流程从点击到完成要多久，这类业务关键流程的耗时还需要自定义指标来测。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://github.com/GoogleChrome/web-vitals" target="_blank" rel="noreferrer">GoogleChrome · web-vitals<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+LCP%E3%80%81INP%E3%80%81CLS+%E5%88%86%E5%88%AB%E8%A1%A1%E9%87%8F%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ALCP%E3%80%81INP%E3%80%81CLS+%E5%88%86%E5%88%AB%E8%A1%A1%E9%87%8F%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aengineering-vitals%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fengineering-vitals%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：LCP、INP、CLS 分别衡量什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/performance-budget/">前端性能预算应该怎样制定和落地？</a></li><li><a href="/questions/perf-longtasks/">什么是长任务，为什么会影响交互响应？怎样观测和拆分？</a></li><li><a href="/questions/perf-lazy-images/">懒加载为什么有时反而让首屏和首次交互变慢？</a></li><li><a href="/questions/perf-virtual-list/">虚拟列表通过什么方式减少渲染成本？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

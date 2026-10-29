@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="网络面试题：WebSocket 适合低延迟、双向、高频的通信，如聊天和协同编辑。" />
+    <meta name="description" content="网络面试题：WebSocket 适合聊天、协同编辑这类低延迟、双向、高频的通信。" />
     <title>WebSocket 适合什么场景，连接断开后怎样恢复？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/http-websocket/" />
     <meta name="robots" content="index,follow" />
@@ -19,29 +19,32 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="WebSocket 适合什么场景，连接断开后怎样恢复？" />
-    <meta property="og:description" content="网络面试题：WebSocket 适合低延迟、双向、高频的通信，如聊天和协同编辑。" />
+    <meta property="og:description" content="网络面试题：WebSocket 适合聊天、协同编辑这类低延迟、双向、高频的通信。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/http-websocket/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/http-websocket/#webpage","url":"https://fe.hushifa.top/questions/http-websocket/","name":"WebSocket 适合什么场景，连接断开后怎样恢复？","description":"网络面试题：WebSocket 适合低延迟、双向、高频的通信，如聊天和协同编辑。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/http-websocket/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/http-websocket/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"网络面试题","item":"https://fe.hushifa.top/topics/network/"},{"@type":"ListItem","position":3,"name":"WebSocket 适合什么场景，连接断开后怎样恢复？","item":"https://fe.hushifa.top/questions/http-websocket/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/http-websocket/#webpage","url":"https://fe.hushifa.top/questions/http-websocket/","name":"WebSocket 适合什么场景，连接断开后怎样恢复？","description":"网络面试题：WebSocket 适合聊天、协同编辑这类低延迟、双向、高频的通信。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/http-websocket/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/http-websocket/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"网络面试题","item":"https://fe.hushifa.top/topics/network/"},{"@type":"ListItem","position":3,"name":"WebSocket 适合什么场景，连接断开后怎样恢复？","item":"https://fe.hushifa.top/questions/http-websocket/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/network/">网络面试题</a><span aria-hidden="true">/</span><span aria-current="page">WebSocket 适合什么场景，连接断开后怎样恢复？</span></nav><h1 tabindex="-1">WebSocket 适合什么场景，连接断开后怎样恢复？</h1><p class="reading-summary">WebSocket 适合低延迟、双向、高频的通信，如聊天和协同编辑。它不自带重连、心跳和消息确认，恢复要分两步：用退避重连恢复连接，再用消息序号补齐断线期间的数据。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>WebSocket 通过一次 HTTP <code>Upgrade</code> 握手建立全双工连接，之后双方都能随时发文本或二进制消息。</li>
-<li>断线重连要自己实现，用指数退避加随机抖动，避免服务器重启后所有客户端同时涌入。</li>
-<li>连接恢复不等于数据恢复：客户端记录最后收到的消息序号，重连后请服务器补发；发出的消息要等服务器确认，超时重发，并用消息 ID 去重。</li>
-<li>只能推送、不需要双向时，SSE 更简单，见<a href="/questions/http-sse/">《SSE 与 WebSocket 有什么区别？》</a>。</li>
-</ul>
-<h2>握手</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/network/">网络面试题</a><span aria-hidden="true">/</span><span aria-current="page">WebSocket 适合什么场景，连接断开后怎样恢复？</span></nav><h1 tabindex="-1">WebSocket 适合什么场景，连接断开后怎样恢复？</h1><p class="reading-summary">WebSocket 适合聊天、协同编辑这类低延迟、双向、高频的通信。它不自带重连和消息确认，恢复要两步：先退避重连把连接接上，再按消息序号补齐断线期间的数据。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>WebSocket 先用一次 HTTP 请求做 <code>Upgrade</code> 握手，之后这条连接就变成双向的，浏览器和服务器都能随时发文本或二进制消息。所以它适合聊天、协同编辑、游戏这种低延迟、两边都要频繁说话的场景。</p>
+<p>它不管断线重连，要自己写。一般用指数退避加随机抖动，也就是每次失败等待时间翻倍，再随机打点折扣，免得服务器重启后所有客户端同一秒涌进来。</p>
+<p>还要分清楚，连接恢复了不等于数据恢复了。客户端要记下最后收到的消息序号，重连后让服务器补发；自己发出的消息要等服务器确认，超时就重发，用消息 ID 去重。</p>
+<p>如果只需要服务器推、不需要双向，SSE 更简单，见<a href="/questions/http-sse/">《SSE 与 WebSocket 有什么区别？》</a>。</p>
+</blockquote>
+<h2>握手长什么样</h2>
+<p>浏览器发的是一个普通的 GET，只是多了几个头：</p>
 <div class="not-prose code-block"><div class="code-language">http</div><pre><code class="hljs language-http">GET /chat HTTP/1.1
 Upgrade: websocket
 Connection: Upgrade
 Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==
 Origin: https://app.example
 </code></pre></div>
-<p>服务器回 <code>101 Switching Protocols</code>。WebSocket 不受 CORS 约束，服务器必须自己校验 <code>Origin</code>，否则任何网站都能借用户的 Cookie 建立连接（跨站 WebSocket 劫持）。</p>
+<p>服务器同意就回 <code>101 Switching Protocols</code>，之后这条连接就不再是 HTTP 了。</p>
+<p>这里有个安全问题。WebSocket 不受 CORS 约束，任何网站的脚本都能连你的服务器，而且浏览器会带上用户的 Cookie。所以服务器必须自己检查 <code>Origin</code>，不然恶意网站就能借用户身份建立连接，这叫跨站 WebSocket 劫持。</p>
 <h2>带重连和补发的客户端</h2>
+<p>下面这个客户端做了三件事：断线后退避重连，重连时带上最后的序号，收到重复消息就丢掉。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">connect</span>(<span class="hljs-params">url, onMessage</span>) {
   <span class="hljs-keyword">let</span> socket;
   <span class="hljs-keyword">let</span> attempt = <span class="hljs-number">0</span>;
@@ -80,15 +83,22 @@ Origin: https://app.example
   };
 }
 </code></pre></div>
-<h2>心跳</h2>
-<p>TCP 连接可能已经断开但两端都不知道，NAT 和代理也会清理空闲连接。浏览器 API 不能发送协议层的 ping 帧，常见做法是每隔 20–30 秒发一条应用层心跳消息，一段时间内没收到回应就主动关闭并重连。页面从后台恢复（<code>visibilitychange</code>）或网络恢复（<code>online</code> 事件）时，可以立即检查连接。</p>
-<h2>背压</h2>
-<p><code>send()</code> 不会阻塞，数据先进入浏览器缓冲区。快速发送大量数据时，检查 <code>socket.bufferedAmount</code>，超过阈值就暂停发送。</p>
+<p>重连地址里带着 <code>since=${lastSeq}</code>，服务器据此补发断线期间的消息。补发的和新来的可能重叠，所以 <code>onmessage</code> 里序号不大于 <code>lastSeq</code> 的直接跳过。</p>
+<p>等待时间是 1 秒、2 秒、4 秒这样翻倍，最多 30 秒，再乘上 0.5 到 1 之间的随机数。连上以后 <code>attempt</code> 清零。关闭码 1000 表示正常关闭，这时不重连，用户主动调用 <code>close</code> 也是。</p>
+<h2>为什么还要心跳</h2>
+<p>TCP 连接可能已经断了，两端却都不知道，比如手机进了电梯。NAT 和代理也会把长时间没动静的连接清掉。</p>
+<p>浏览器的 API 发不了协议层的 ping 帧，所以常见做法是每隔 20 到 30 秒发一条应用层的心跳消息，一段时间收不到回应，就主动关掉重连。另外，页面从后台切回来（<code>visibilitychange</code>）或者网络恢复（<code>online</code> 事件）时，可以马上检查一下连接。</p>
+<h2>发得太快怎么办</h2>
+<p><code>send()</code> 不会阻塞，数据先放进浏览器的缓冲区再慢慢发。如果一直猛发大量数据，缓冲区会越积越多。这时看 <code>socket.bufferedAmount</code>，超过阈值就先停一停，这叫背压。</p>
 <h2>常见追问</h2>
-<ul>
-<li>消息顺序有保证吗？单个连接内有序。重连后的补发和新消息可能交错，按序号处理。</li>
-<li>怎样鉴权？握手时带 Cookie，或连接后第一条消息发送短期令牌。不要把长期令牌放在 URL 查询参数里，它会进入服务器日志。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_client_applications" target="_blank" rel="noreferrer">MDN · Writing WebSocket client applications<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+WebSocket+%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%EF%BC%8C%E8%BF%9E%E6%8E%A5%E6%96%AD%E5%BC%80%E5%90%8E%E6%80%8E%E6%A0%B7%E6%81%A2%E5%A4%8D%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AWebSocket+%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%EF%BC%8C%E8%BF%9E%E6%8E%A5%E6%96%AD%E5%BC%80%E5%90%8E%E6%80%8E%E6%A0%B7%E6%81%A2%E5%A4%8D%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ahttp-websocket%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%BD%91%E7%BB%9C%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fhttp-websocket%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：WebSocket 适合什么场景，连接断开后怎样恢复？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/http-cache/">强缓存与协商缓存如何配合？</a></li><li><a href="/questions/http-cors/">什么是跨域？CORS 为什么需要服务端配合？</a></li><li><a href="/questions/http-https/">HTTPS 相比 HTTP 提供了哪些保障？</a></li><li><a href="/questions/http-versions/">HTTP/1.1、HTTP/2 和 HTTP/3 的主要区别是什么？</a></li></ul></nav></main></div></div>
+<p><strong>消息顺序有保证吗？</strong></p>
+<blockquote>
+<p>单个连接内是有序的。但重连后补发的消息和新消息可能交错，所以要按序号处理。</p>
+</blockquote>
+<p><strong>怎样鉴权？</strong></p>
+<blockquote>
+<p>握手时带 Cookie，或者连上以后第一条消息发一个短期令牌。不要把长期令牌放在 URL 查询参数里，它会被写进服务器日志。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_client_applications" target="_blank" rel="noreferrer">MDN · Writing WebSocket client applications<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+WebSocket+%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%EF%BC%8C%E8%BF%9E%E6%8E%A5%E6%96%AD%E5%BC%80%E5%90%8E%E6%80%8E%E6%A0%B7%E6%81%A2%E5%A4%8D%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AWebSocket+%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%EF%BC%8C%E8%BF%9E%E6%8E%A5%E6%96%AD%E5%BC%80%E5%90%8E%E6%80%8E%E6%A0%B7%E6%81%A2%E5%A4%8D%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ahttp-websocket%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%BD%91%E7%BB%9C%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fhttp-websocket%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：WebSocket 适合什么场景，连接断开后怎样恢复？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/http-cache/">强缓存与协商缓存如何配合？</a></li><li><a href="/questions/http-cors/">什么是跨域？CORS 为什么需要服务端配合？</a></li><li><a href="/questions/http-https/">HTTPS 相比 HTTP 提供了哪些保障？</a></li><li><a href="/questions/http-versions/">HTTP/1.1、HTTP/2 和 HTTP/3 的主要区别是什么？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

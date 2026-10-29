@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="TypeScript面试题：公共 API 的类型应像代码一样测试：正向用例检查推断结果是否精确…" />
+    <meta name="description" content="TypeScript面试题：公开 API 的类型也要像代码一样写测试：检查推断结果是否精确，检查非法调用会不会报错，再用精确相等判断防止类型悄悄退化成 any。" />
     <title>TypeScript 复杂类型应该怎样测试？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/ts-type-testing/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,21 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="TypeScript 复杂类型应该怎样测试？ · 前端知库" />
-    <meta property="og:description" content="TypeScript面试题：公共 API 的类型应像代码一样测试：正向用例检查推断结果是否精确…" />
+    <meta property="og:description" content="TypeScript面试题：公开 API 的类型也要像代码一样写测试：检查推断结果是否精确，检查非法调用会不会报错，再用精确相等判断防止类型悄悄退化成 any。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/ts-type-testing/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-type-testing/#webpage","url":"https://fe.hushifa.top/questions/ts-type-testing/","name":"TypeScript 复杂类型应该怎样测试？ · 前端知库","description":"TypeScript面试题：公共 API 的类型应像代码一样测试：正向用例检查推断结果是否精确…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-type-testing/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-type-testing/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"TypeScript 复杂类型应该怎样测试？","item":"https://fe.hushifa.top/questions/ts-type-testing/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-type-testing/#webpage","url":"https://fe.hushifa.top/questions/ts-type-testing/","name":"TypeScript 复杂类型应该怎样测试？ · 前端知库","description":"TypeScript面试题：公开 API 的类型也要像代码一样写测试：检查推断结果是否精确，检查非法调用会不会报错，再用精确相等判断防止类型悄悄退化成 any。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-type-testing/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-type-testing/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"TypeScript 复杂类型应该怎样测试？","item":"https://fe.hushifa.top/questions/ts-type-testing/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">TypeScript 复杂类型应该怎样测试？</span></nav><h1 tabindex="-1">TypeScript 复杂类型应该怎样测试？</h1><p class="reading-summary">公共 API 的类型应像代码一样测试：正向用例检查推断结果是否精确，负向用例用 @ts-expect-error 确认非法调用会报错，再用 Equal 类型或 expectTypeOf 检查类型完全相等以发现退化成 any。类型测试放进与发布一致的 tsc --noEmit 检查，与运行时测试互不替代。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>正向测试：把结果赋给期望类型的变量，能检查&quot;至少这么精确&quot;，但 <code>any</code> 会让它总是通过。</li>
-<li>负向测试：<code>// @ts-expect-error</code> 断言下一行必须有错误，没有错误时它自身报错；<code>@ts-ignore</code> 无条件吞掉错误，不能用于测试。</li>
-<li>精确相等：用 <code>Equal&lt;A, B&gt;</code> 工具类型，或 Vitest 的 <code>expectTypeOf(x).toEqualTypeOf&lt;T&gt;()</code>。</li>
-<li>测试联合输入、只读输入、空数组、<code>never</code> 等边界，以及从包名导入的真实入口。</li>
-<li>类型测试的结果依赖 <code>strict</code>、<code>exactOptionalPropertyTypes</code> 和 TypeScript 版本，配置要与发布时一致。</li>
-</ul>
-<h2>正向与负向</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">TypeScript 复杂类型应该怎样测试？</span></nav><h1 tabindex="-1">TypeScript 复杂类型应该怎样测试？</h1><p class="reading-summary">公开 API 的类型也要像代码一样写测试：检查推断结果是否精确，检查非法调用会不会报错，再用精确相等判断防止类型悄悄退化成 any。类型测试和运行时测试互相替代不了。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>类型测试测的是“编译器接受什么、拒绝什么”。正向测试是把结果赋给期望类型的变量，能检查结果至少这么精确；负向测试是在非法调用上面写 <code>// @ts-expect-error</code>，下一行必须有错误，没有错误它自己就报错。<code>@ts-ignore</code> 不行，它不管有没有错误都吞掉，不能用来测试。</p>
+<p>光靠赋值还不够，因为 <code>any</code> 能赋给任何类型，类型退化成 <code>any</code> 了测试照样通过。所以要用精确相等检查，比如自己写一个 <code>Equal&lt;A, B&gt;</code> 工具类型，或者用 Vitest 的 <code>expectTypeOf(x).toEqualTypeOf&lt;T&gt;()</code>。</p>
+<p>测试要覆盖边界：联合类型输入、只读输入、空数组、<code>never</code>，还有从包名导入的真实入口。</p>
+<p>要注意，类型测试的结果跟 <code>strict</code>、<code>exactOptionalPropertyTypes</code> 和 TypeScript 版本有关，配置要和发布时一致。它也替代不了运行时测试，两者测的是不同的东西。</p>
+</blockquote>
+<h2>正向测试和负向测试</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">function</span> wrap&lt;T&gt;(<span class="hljs-attr">value</span>: T): { <span class="hljs-attr">value</span>: T } {
   <span class="hljs-keyword">return</span> { value };
 }
@@ -44,8 +43,9 @@
 <span class="hljs-comment">// @ts-expect-error 字符串不能赋给 number</span>
 <span class="hljs-keyword">const</span> <span class="hljs-attr">impossible</span>: <span class="hljs-built_in">number</span> = <span class="hljs-title function_">wrap</span>(<span class="hljs-string">&#x27;text&#x27;</span>).<span class="hljs-property">value</span>;
 </code></pre></div>
-<p><code>@ts-expect-error</code> 只证明&quot;有错误&quot;，不证明是预期的那个错误。注释后写清原因，并让每条只覆盖一个表达式。</p>
-<h2>精确相等</h2>
+<p>第一行是正向测试：结果能赋给 <code>&#x27;ready&#x27;</code>，说明 <code>wrap</code> 保留了字面量类型。第二行是负向测试：字符串不该能赋给 <code>number</code>，所以这里应该报错；哪天 <code>wrap</code> 改坏了、返回了 <code>any</code>，这一行不再报错，<code>@ts-expect-error</code> 自己就会报“未使用的指令”。</p>
+<p>可 <code>@ts-expect-error</code> 只能证明“这里有错误”，不能证明是你预期的那个错误。所以注释后面要写清原因，每条只覆盖一个表达式，免得别的错误混进来。</p>
+<h2>为什么需要精确相等</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Equal</span>&lt;A, B&gt; =
   (&lt;T&gt;<span class="hljs-function">() =&gt;</span> T <span class="hljs-keyword">extends</span> A ? <span class="hljs-number">1</span> : <span class="hljs-number">2</span>) <span class="hljs-title function_">extends</span> (&lt;T&gt;<span class="hljs-function">() =&gt;</span> T <span class="hljs-keyword">extends</span> B ? <span class="hljs-number">1</span> : <span class="hljs-number">2</span>) ? <span class="hljs-literal">true</span> : <span class="hljs-literal">false</span>;
 <span class="hljs-keyword">type</span> <span class="hljs-title class_">Expect</span>&lt;T <span class="hljs-keyword">extends</span> <span class="hljs-literal">true</span>&gt; = T;
@@ -56,8 +56,8 @@
   <span class="hljs-title class_">Expect</span>&lt;<span class="hljs-title class_">Equal</span>&lt;<span class="hljs-built_in">any</span>, <span class="hljs-built_in">number</span>&gt;&gt;,
 ];
 </code></pre></div>
-<p>普通赋值无法区分 <code>any</code>，这个技巧利用了编译器对两个泛型函数类型是否相同的比较。</p>
-<h2>用 Vitest</h2>
+<p>普通赋值区分不了 <code>any</code>：<code>any</code> 能赋给 <code>number</code>，<code>number</code> 也能赋给 <code>any</code>，看起来“相等”。<code>Equal</code> 这个写法把 A 和 B 各放进一个泛型函数类型里，再比较这两个函数类型。编译器比较这种类型时要求两边完全相同，<code>any</code> 和 <code>number</code> 就会被判为不相等。<code>Expect</code> 只接受 <code>true</code>，结果是 <code>false</code> 就报错。</p>
+<h2>用 Vitest 写类型测试</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-comment">// wrap.test-d.ts</span>
 <span class="hljs-keyword">import</span> { expectTypeOf, test } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vitest&#x27;</span>;
 <span class="hljs-keyword">import</span> { wrap } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./wrap&#x27;</span>;
@@ -67,8 +67,8 @@
   <span class="hljs-title function_">expectTypeOf</span>(wrap).<span class="hljs-title function_">parameter</span>(<span class="hljs-number">0</span>).<span class="hljs-title function_">toBeUnknown</span>();
 });
 </code></pre></div>
-<p><code>vitest --typecheck</code> 会对 <code>*.test-d.ts</code> 运行 tsc，不执行代码。tsd、<code>@arethetypeswrong/cli</code> 适合检查发布后的包。</p>
-<h2>重载与联合</h2>
+<p><code>toEqualTypeOf</code> 做的就是精确相等检查。运行 <code>vitest --typecheck</code> 时，它会对 <code>*.test-d.ts</code> 文件跑 tsc，只做类型检查，不执行代码。检查已发布的包，可以用 tsd 或 <code>@arethetypeswrong/cli</code>。</p>
+<h2>重载和联合要单独测</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">parse</span>(<span class="hljs-params"><span class="hljs-attr">value</span>: <span class="hljs-built_in">string</span></span>): <span class="hljs-built_in">number</span>;
 <span class="hljs-keyword">declare</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">parse</span>(<span class="hljs-params"><span class="hljs-attr">value</span>: <span class="hljs-built_in">number</span></span>): <span class="hljs-built_in">string</span>;
 
@@ -77,14 +77,18 @@
 <span class="hljs-comment">// @ts-expect-error 没有接受联合的公开签名</span>
 <span class="hljs-title function_">parse</span>(input);
 </code></pre></div>
-<p>如果业务需要接受联合，修改 API 并更新测试，而不是删掉测试。</p>
-<h2>与运行时测试的分工</h2>
-<p>类型测试证明编译器接受或拒绝某些写法；运行时测试证明 JavaScript 行为正确。<code>.d.ts</code> 写错时运行时测试发现不了，<code>JSON.parse</code> 的结果是否合法类型测试也管不了。库项目两者都需要。</p>
+<p>重载函数传联合会报错，这正是它的行为，测试把它锁住了。如果业务确实需要接受联合，应该改 API、同时更新测试，而不是直接删掉这条测试。</p>
+<h2>和运行时测试怎么分工</h2>
+<p>类型测试证明编译器接受或拒绝某些写法；运行时测试证明 JavaScript 真正跑起来是对的。<code>.d.ts</code> 写错了，运行时测试发现不了；<code>JSON.parse</code> 出来的数据合不合法，类型测试也管不了。所以写库的项目两种测试都需要。</p>
 <h2>常见追问</h2>
-<ul>
-<li>类型测试放在哪里？单独的 <code>*.test-d.ts</code> 或 <code>type-tests/</code> 目录，并纳入 CI 的 <code>tsc --noEmit</code>。</li>
-<li>升级 TypeScript 后测试失败怎么办？逐条看新增或消失的诊断，判断是修正了旧的错误推断还是 API 真的变了，再决定改实现还是改测试。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://vitest.dev/guide/testing-types" target="_blank" rel="noreferrer">Vitest · Testing Types<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+TypeScript+%E5%A4%8D%E6%9D%82%E7%B1%BB%E5%9E%8B%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E6%B5%8B%E8%AF%95%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ATypeScript+%E5%A4%8D%E6%9D%82%E7%B1%BB%E5%9E%8B%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E6%B5%8B%E8%AF%95%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-type-testing%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-type-testing%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：TypeScript 复杂类型应该怎样测试？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-generics/">泛型解决了什么问题？如何约束泛型？</a></li><li><a href="/questions/ts-function-variance/">函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？</a></li><li><a href="/questions/ts-library-publishing/">TypeScript 库发布时怎样组织类型声明和入口？</a></li><li><a href="/questions/ts-declaration-merging/">TypeScript 声明合并和模块扩展有哪些边界？</a></li></ul></nav></main></div></div>
+<p><strong>类型测试放在哪里？</strong></p>
+<blockquote>
+<p>放在单独的 <code>*.test-d.ts</code> 文件或 <code>type-tests/</code> 目录里，并且纳入 CI 的 <code>tsc --noEmit</code> 检查。</p>
+</blockquote>
+<p><strong>升级 TypeScript 以后类型测试失败了怎么办？</strong></p>
+<blockquote>
+<p>逐条看新增或消失的报错，判断是新版本修正了以前错误的推断，还是 API 的行为真的变了，再决定改实现还是改测试。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://vitest.dev/guide/testing-types" target="_blank" rel="noreferrer">Vitest · Testing Types<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+TypeScript+%E5%A4%8D%E6%9D%82%E7%B1%BB%E5%9E%8B%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E6%B5%8B%E8%AF%95%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ATypeScript+%E5%A4%8D%E6%9D%82%E7%B1%BB%E5%9E%8B%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E6%B5%8B%E8%AF%95%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-type-testing%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-type-testing%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：TypeScript 复杂类型应该怎样测试？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-generics/">泛型解决了什么问题？如何约束泛型？</a></li><li><a href="/questions/ts-function-variance/">函数重载、联合参数与泛型怎样选择？函数类型何时可赋值？</a></li><li><a href="/questions/ts-library-publishing/">TypeScript 库发布时怎样组织类型声明和入口？</a></li><li><a href="/questions/ts-declaration-merging/">TypeScript 声明合并和模块扩展有哪些边界？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

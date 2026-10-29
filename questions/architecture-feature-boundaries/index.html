@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="架构设计面试题：围绕一起变化的业务能力组织模块，明确公开接口、依赖方向和状态归属，并用订单功能说明如何逐步拆分而不制造新的耦合。" />
+    <meta name="description" content="架构设计面试题：按一起变化的业务能力组织模块，每个模块只通过公开接口对外，依赖方向单向，每份状态只归一个模块。用订单功能说明怎样逐步拆分，而不是制造新的耦合。" />
     <title>前端大型项目怎样划分功能边界？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/architecture-feature-boundaries/" />
     <meta name="robots" content="index,follow" />
@@ -19,30 +19,31 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="前端大型项目怎样划分功能边界？ · 前端知库" />
-    <meta property="og:description" content="架构设计面试题：围绕一起变化的业务能力组织模块，明确公开接口、依赖方向和状态归属，并用订单功能说明如何逐步拆分而不制造新的耦合。" />
+    <meta property="og:description" content="架构设计面试题：按一起变化的业务能力组织模块，每个模块只通过公开接口对外，依赖方向单向，每份状态只归一个模块。用订单功能说明怎样逐步拆分，而不是制造新的耦合。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/architecture-feature-boundaries/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/architecture-feature-boundaries/#webpage","url":"https://fe.hushifa.top/questions/architecture-feature-boundaries/","name":"前端大型项目怎样划分功能边界？ · 前端知库","description":"架构设计面试题：围绕一起变化的业务能力组织模块，明确公开接口、依赖方向和状态归属，并用订单功能说明如何逐步拆分而不制造新的耦合。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/architecture-feature-boundaries/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/architecture-feature-boundaries/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"架构设计面试题","item":"https://fe.hushifa.top/topics/architecture/"},{"@type":"ListItem","position":3,"name":"前端大型项目怎样划分功能边界？","item":"https://fe.hushifa.top/questions/architecture-feature-boundaries/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/architecture-feature-boundaries/#webpage","url":"https://fe.hushifa.top/questions/architecture-feature-boundaries/","name":"前端大型项目怎样划分功能边界？ · 前端知库","description":"架构设计面试题：按一起变化的业务能力组织模块，每个模块只通过公开接口对外，依赖方向单向，每份状态只归一个模块。用订单功能说明怎样逐步拆分，而不是制造新的耦合。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/architecture-feature-boundaries/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/architecture-feature-boundaries/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"架构设计面试题","item":"https://fe.hushifa.top/topics/architecture/"},{"@type":"ListItem","position":3,"name":"前端大型项目怎样划分功能边界？","item":"https://fe.hushifa.top/questions/architecture-feature-boundaries/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/architecture/">架构设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">前端大型项目怎样划分功能边界？</span></nav><h1 tabindex="-1">前端大型项目怎样划分功能边界？</h1><p class="reading-summary">围绕一起变化的业务能力组织模块，明确公开接口、依赖方向和状态归属，并用订单功能说明如何逐步拆分而不制造新的耦合。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>按业务能力（订单、商品、账户）组织代码，比按技术类型（components、hooks、utils）更容易让一次需求只改一个目录。</li>
-<li>每个功能模块只通过一个公开入口（如 <code>index.ts</code>）对外暴露，其他模块不能深层导入它的内部文件。</li>
-<li>依赖方向单向：页面依赖功能模块，功能模块依赖共享层，共享层不依赖任何业务模块。</li>
-<li>每份状态只归一个模块所有，其他模块通过它的公开接口读取或触发变更。</li>
-<li>用 ESLint 规则或依赖检查工具强制这些约束，并按需求逐步迁移，而不是一次性重构。</li>
-</ul>
-<h2>按技术类型组织的问题</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/architecture/">架构设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">前端大型项目怎样划分功能边界？</span></nav><h1 tabindex="-1">前端大型项目怎样划分功能边界？</h1><p class="reading-summary">按一起变化的业务能力组织模块，每个模块只通过公开接口对外，依赖方向单向，每份状态只归一个模块。用订单功能说明怎样逐步拆分，而不是制造新的耦合。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>划分功能边界，最实用的标准是“哪些代码会一起改”。按业务能力组织，比如订单、商品、账户各一个目录，比按 components、hooks、utils 这种技术类型组织，更容易做到一次需求只改一个目录。</p>
+<p>每个功能模块只留一个公开入口，比如 <code>index.ts</code>，别的模块只能从这里导入，不能深入到它内部的文件。依赖方向也是单向的：页面依赖功能模块，功能模块依赖共享层，共享层不依赖任何业务模块。</p>
+<p>状态也要有归属。每份状态只归一个模块所有，其他模块想读或想改，都走它的公开接口。</p>
+<p>这些约定光靠自觉守不住，要用 ESLint 规则或依赖检查工具强制。迁移也要按需求一点点做，不要一次性大重构。</p>
+</blockquote>
+<h2>按技术类型组织有什么问题</h2>
+<p>很多项目一开始是这样分目录的：</p>
 <div class="not-prose code-block"><div class="code-language">代码</div><pre><code>src/
   components/OrderList.tsx
   hooks/useOrders.ts
   api/orders.ts
   store/orderSlice.ts
 </code></pre></div>
-<p>改一个订单需求要在四个目录间跳转，删除订单功能时也很难确认哪些文件可以一起删。</p>
-<h2>按功能组织</h2>
+<p>看着整齐，可改一个订单需求，要在四个目录之间来回跳。哪天要删掉订单功能，也很难确认哪些文件能一起删。因为同一个功能的代码被拆散了。</p>
+<h2>按功能组织是什么样</h2>
+<p>换成按功能分：</p>
 <div class="not-prose code-block"><div class="code-language">代码</div><pre><code>src/
   app/            路由、全局布局、组装各功能
   features/
@@ -54,40 +55,41 @@
     cart/
   shared/         与业务无关的 UI 组件、工具函数、请求封装
 </code></pre></div>
+<p>订单相关的东西都在 <code>features/orders/</code> 里。它对外只通过 <code>index.ts</code> 暴露：</p>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-comment">// features/orders/index.ts</span>
 <span class="hljs-keyword">export</span> { <span class="hljs-title class_">OrderList</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./OrderList&#x27;</span>;
 <span class="hljs-keyword">export</span> { useOrderSummary } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./useOrders&#x27;</span>;
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> { <span class="hljs-title class_">OrderSummary</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./types&#x27;</span>;
 </code></pre></div>
-<p>其他模块只能 <code>import { OrderList } from &#x27;@/features/orders&#x27;</code>，<code>api.ts</code> 和内部组件可以自由修改而不影响外部。</p>
-<h2>依赖方向</h2>
+<p>别的模块只能写 <code>import { OrderList } from &#x27;@/features/orders&#x27;</code>。这样 <code>api.ts</code> 和内部组件怎么改都行，只要入口导出的东西不变，外面就不受影响。</p>
+<h2>依赖方向为什么要单向</h2>
+<p>依赖只能这样走：</p>
 <div class="not-prose code-block"><div class="code-language">代码</div><pre><code>app → features → shared
 </code></pre></div>
-<ul>
-<li><code>shared</code> 不导入任何 <code>features</code>。</li>
-<li>功能之间尽量不直接依赖。确实需要时（例如购物车需要显示商品信息），只依赖对方的公开入口，并避免循环依赖。</li>
-<li>跨功能的组合放到 <code>app</code> 层或页面中完成：页面同时引入订单和购物车组件，并在两者之间传递数据。</li>
-</ul>
-<h2>状态归属</h2>
-<p>订单列表的数据只由 <code>orders</code> 模块获取和缓存。购物车下单后需要刷新订单列表时，调用 <code>orders</code> 暴露的刷新方法或触发查询失效，而不是直接修改订单的 store。这样排查订单数据问题时只需要看一个模块。</p>
-<h2>强制约束</h2>
-<ul>
-<li>ESLint 的 <code>no-restricted-imports</code> 禁止导入 <code>features/*/</code> 下的内部路径。</li>
-<li>dependency-cruiser 等工具检查依赖方向和循环依赖，放进 CI。</li>
-<li>monorepo 中可以把功能拆成独立包，用 <code>exports</code> 字段在包级别限制入口。</li>
-</ul>
-<h2>逐步迁移</h2>
+<p><code>shared</code> 不能导入任何 <code>features</code>，否则共享层就带上了业务，谁都离不开它。</p>
+<p>功能之间尽量不直接依赖。确实需要的时候，比如购物车要显示商品信息，也只依赖对方的公开入口，并且避免循环依赖。</p>
+<p>需要把几个功能组合起来时，放到 <code>app</code> 层或页面里做。页面同时引入订单和购物车的组件，在两者之间传数据，这样订单和购物车彼此都不用认识对方。</p>
+<h2>状态归谁管</h2>
+<p>订单列表的数据，只由 <code>orders</code> 模块负责获取和缓存。</p>
+<p>购物车下单以后，订单列表需要刷新。这时购物车不应该直接去改订单的 store，而是调用 <code>orders</code> 暴露的刷新方法，或者让对应的查询缓存失效。这样以后订单数据出了问题，只用看一个模块。</p>
+<h2>怎样强制执行这些约定</h2>
+<p>ESLint 的 <code>no-restricted-imports</code> 规则可以禁止导入 <code>features/*/</code> 下面的内部路径。dependency-cruiser 这类工具可以检查依赖方向和循环依赖，放进 CI 里，违规的代码合不进去。如果是 monorepo，还可以把功能拆成独立的包，用 <code>package.json</code> 的 <code>exports</code> 字段在包这一级限制入口。</p>
+<h2>旧项目怎样逐步迁移</h2>
 <ol>
-<li>新功能按新结构编写。</li>
-<li>修改旧功能时顺手把它迁移到 <code>features/</code> 下。</li>
+<li>新功能按新结构写。</li>
+<li>修改旧功能时，顺手把它迁到 <code>features/</code> 下面。</li>
 <li>先建立公开入口，再逐步收紧导入规则。</li>
 </ol>
-<p>一次性大规模搬迁会产生大量冲突，也很难评审。</p>
+<p>为什么不一次性搬完？因为大规模搬迁会和别人的代码产生大量冲突，评审也几乎没法做。</p>
 <h2>常见追问</h2>
-<ul>
-<li>共享组件放哪里？与业务无关的按钮、表格放 <code>shared</code>；只在两个功能间共享且带业务含义的组件，优先考虑放在其中一方并通过公开入口导出。</li>
-<li>这和微前端有什么关系？功能边界是代码组织层面；微前端还涉及独立部署和运行时集成，见<a href="/questions/architecture-microfrontend/">《微前端适合解决什么组织和部署问题？》</a>。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules" target="_blank" rel="noreferrer">MDN · JavaScript 模块<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E5%A4%A7%E5%9E%8B%E9%A1%B9%E7%9B%AE%E6%80%8E%E6%A0%B7%E5%88%92%E5%88%86%E5%8A%9F%E8%83%BD%E8%BE%B9%E7%95%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E5%A4%A7%E5%9E%8B%E9%A1%B9%E7%9B%AE%E6%80%8E%E6%A0%B7%E5%88%92%E5%88%86%E5%8A%9F%E8%83%BD%E8%BE%B9%E7%95%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aarchitecture-feature-boundaries%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Farchitecture-feature-boundaries%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端大型项目怎样划分功能边界？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/architecture-event-driven-ui/">事件驱动 UI 怎样避免状态互相覆盖？</a></li><li><a href="/questions/arch-design-system/">设计系统为什么不能只有一套视觉样式？</a></li><li><a href="/questions/arch-state-machine/">怎样避免加载、成功和失败状态互相矛盾？</a></li><li><a href="/questions/arch-progressive/">渐进增强和优雅降级怎样影响前端方案选择？</a></li></ul></nav></main></div></div>
+<p><strong>共享组件该放哪里？</strong></p>
+<blockquote>
+<p>跟业务无关的按钮、表格放 <code>shared</code>。只在两个功能之间共享、而且带业务含义的组件，优先放在其中一方，通过它的公开入口导出。</p>
+</blockquote>
+<p><strong>这和微前端有什么关系？</strong></p>
+<blockquote>
+<p>功能边界是代码组织层面的事。微前端还涉及独立部署和运行时集成，见<a href="/questions/architecture-microfrontend/">《微前端适合解决什么组织和部署问题？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules" target="_blank" rel="noreferrer">MDN · JavaScript 模块<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E5%A4%A7%E5%9E%8B%E9%A1%B9%E7%9B%AE%E6%80%8E%E6%A0%B7%E5%88%92%E5%88%86%E5%8A%9F%E8%83%BD%E8%BE%B9%E7%95%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E5%A4%A7%E5%9E%8B%E9%A1%B9%E7%9B%AE%E6%80%8E%E6%A0%B7%E5%88%92%E5%88%86%E5%8A%9F%E8%83%BD%E8%BE%B9%E7%95%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aarchitecture-feature-boundaries%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Farchitecture-feature-boundaries%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端大型项目怎样划分功能边界？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/architecture-event-driven-ui/">事件驱动 UI 怎样避免状态互相覆盖？</a></li><li><a href="/questions/arch-design-system/">设计系统为什么不能只有一套视觉样式？</a></li><li><a href="/questions/arch-state-machine/">怎样避免加载、成功和失败状态互相矛盾？</a></li><li><a href="/questions/arch-progressive/">渐进增强和优雅降级怎样影响前端方案选择？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

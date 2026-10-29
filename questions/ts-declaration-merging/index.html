@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="TypeScript面试题：同名 interface 合并成员，namespace 可以与函数、类、枚举合并来添加静态成员…" />
+    <meta name="description" content="TypeScript面试题：同名的 interface 会自动合成一个，declare module 和 declare global 可以给已有的模块或全局…" />
     <title>TypeScript 声明合并和模块扩展有哪些边界？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/ts-declaration-merging/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,21 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="TypeScript 声明合并和模块扩展有哪些边界？" />
-    <meta property="og:description" content="TypeScript面试题：同名 interface 合并成员，namespace 可以与函数、类、枚举合并来添加静态成员…" />
+    <meta property="og:description" content="TypeScript面试题：同名的 interface 会自动合成一个，declare module 和 declare global 可以给已有的模块或全局…" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/ts-declaration-merging/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-declaration-merging/#webpage","url":"https://fe.hushifa.top/questions/ts-declaration-merging/","name":"TypeScript 声明合并和模块扩展有哪些边界？","description":"TypeScript面试题：同名 interface 合并成员，namespace 可以与函数、类、枚举合并来添加静态成员…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-declaration-merging/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-declaration-merging/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"TypeScript 声明合并和模块扩展有哪些边界？","item":"https://fe.hushifa.top/questions/ts-declaration-merging/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-declaration-merging/#webpage","url":"https://fe.hushifa.top/questions/ts-declaration-merging/","name":"TypeScript 声明合并和模块扩展有哪些边界？","description":"TypeScript面试题：同名的 interface 会自动合成一个，declare module 和 declare global 可以给已有的模块或全局…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-declaration-merging/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-declaration-merging/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"TypeScript 声明合并和模块扩展有哪些边界？","item":"https://fe.hushifa.top/questions/ts-declaration-merging/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">TypeScript 声明合并和模块扩展有哪些边界？</span></nav><h1 tabindex="-1">TypeScript 声明合并和模块扩展有哪些边界？</h1><p class="reading-summary">同名 interface 合并成员，namespace 可以与函数、类、枚举合并来添加静态成员，declare module 和 declare global 可以给已有模块或全局对象补充类型。这些扩展只改变类型，运行时实现必须另外提供并确保被加载。含运行时代码的 namespace 不是可擦除语法，在 erasableSyntaxOnly 和 Node.js 类型剥离下会报错。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>同名 <code>interface</code> 合并为一个，同名属性类型必须相同；同名方法合并为重载，后声明的重载排在前面。</li>
-<li><code>namespace</code> 能与同名函数、类、枚举合并，给它们添加静态成员；但它会生成运行时代码。</li>
-<li><code>declare module &#x27;./x&#x27;</code> 给已有模块补充类型（模块增补），只能修改已有导出，不能新增顶层导出。</li>
-<li><code>declare global { interface Window { ... } }</code> 在模块文件中扩展全局类型。</li>
-<li>所有扩展都只是类型声明，运行时必须有对应的实现，并通过副作用导入确保它被执行。</li>
-</ul>
-<h2>接口合并</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">TypeScript 声明合并和模块扩展有哪些边界？</span></nav><h1 tabindex="-1">TypeScript 声明合并和模块扩展有哪些边界？</h1><p class="reading-summary">同名的 interface 会自动合成一个，declare module 和 declare global 可以给已有的模块或全局对象补类型。这些写法只补类型，真正的实现要另外写，并且确保那段代码被加载。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>声明合并就是同一个名字声明了好几次，TypeScript 把它们拼成一个。最常见的是同名 <code>interface</code>，成员会合到一起；同名属性的类型必须相同，同名方法会变成重载，后写的重载排在前面。<code>namespace</code> 还能和同名的函数、类、枚举合并，给它们加静态成员。</p>
+<p>在此基础上可以扩展别人的类型。<code>declare module &#x27;./x&#x27;</code> 给已有模块补类型，叫模块增补，它只能改已有的导出，不能新增顶层导出。<code>declare global</code> 用来在模块文件里扩展全局类型，比如给 <code>Window</code> 加字段。</p>
+<p>有用的地方是给库预留的扩展点补字段，比如 Vue 的 <code>ComponentCustomProperties</code>、Express 的 <code>Request</code>。</p>
+<p>最要注意的是，这些扩展都只是类型。运行时的实现得另外写，还要通过副作用导入确保它真的执行了。另外带运行时代码的 <code>namespace</code> 不能被直接擦掉，开启 <code>erasableSyntaxOnly</code> 或用 Node.js 直接运行时会报错。</p>
+</blockquote>
+<h2>同名 interface 会合成一个</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">PanelOptions</span> {
   <span class="hljs-attr">title</span>: <span class="hljs-built_in">string</span>;
 }
@@ -43,7 +42,9 @@
 }
 <span class="hljs-keyword">const</span> <span class="hljs-attr">panel</span>: <span class="hljs-title class_">PanelOptions</span> = { <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;阅读设置&#x27;</span>, <span class="hljs-attr">width</span>: <span class="hljs-number">320</span> };
 </code></pre></div>
-<h2>函数与 namespace 合并</h2>
+<p>两段 <code>PanelOptions</code> 分开写，用的时候却要求同时有 <code>title</code> 和 <code>width</code>，因为编译器把它们合并了。要是第二段也写了 <code>title: number</code>，就会报错，同名属性的类型必须一致。</p>
+<h2>函数和 namespace 合并</h2>
+<p>想给一个函数挂上 <code>version</code> 这样的静态属性，老写法是用同名 <code>namespace</code>：</p>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">formatLabel</span>(<span class="hljs-params"><span class="hljs-attr">value</span>: <span class="hljs-built_in">string</span></span>): <span class="hljs-built_in">string</span> {
   <span class="hljs-keyword">return</span> value.<span class="hljs-title function_">trim</span>();
 }
@@ -51,14 +52,15 @@
   <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> version = <span class="hljs-string">&#x27;1.0.0&#x27;</span>;
 }
 </code></pre></div>
-<p><code>namespace</code> 会编译成给函数对象赋值的 IIFE。开启 <code>erasableSyntaxOnly</code>（TS 5.8+）时报 <code>TS1294</code>，Node.js 直接运行也会失败。等价的可擦除写法：</p>
+<p>这样写类型上没问题，可 <code>namespace</code> 不是纯类型，它会被编译成一个立即执行函数，给函数对象赋值。所以只删类型的工具处理不了它：开启 <code>erasableSyntaxOnly</code>（TS 5.8+）时报 <code>TS1294</code>，Node.js 直接运行也会失败。换成下面这种只用普通 JS 的写法就没问题：</p>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> formatLabel = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">assign</span>(
   <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">value</span>: <span class="hljs-built_in">string</span></span>) =&gt;</span> value.<span class="hljs-title function_">trim</span>(),
   { <span class="hljs-attr">version</span>: <span class="hljs-string">&#x27;1.0.0&#x27;</span> },
 );
 </code></pre></div>
-<p>只含类型的 <code>namespace</code> 和 <code>declare namespace</code> 是可擦除的，不受影响。</p>
-<h2>模块增补</h2>
+<p>只有类型的 <code>namespace</code> 和 <code>declare namespace</code> 可以直接擦掉，不受这个限制。</p>
+<h2>模块增补：补了类型，实现呢</h2>
+<p>下面给一个已有的 <code>Counter</code> 类补一个 <code>reset</code> 方法，分三个文件来看。</p>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-comment">// counter.ts</span>
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Counter</span> {
   value = <span class="hljs-number">0</span>;
@@ -88,8 +90,10 @@
 counter.<span class="hljs-title function_">increment</span>();
 counter.<span class="hljs-title function_">reset</span>();
 </code></pre></div>
-<p>去掉 <code>main.ts</code> 中的副作用导入后，类型检查仍然通过，运行时 <code>reset</code> 不存在。增补文件自身必须是模块（有 <code>import</code> 或 <code>export</code>），否则 <code>declare module</code> 会声明一个新的环境模块而不是增补。</p>
-<h2>全局扩展</h2>
+<p><code>counter-reset.ts</code> 做了两件事：<code>declare module</code> 里那段告诉编译器 <code>Counter</code> 多了个 <code>reset</code>，下面那行给原型赋值才是真正的实现。</p>
+<p>现在试着删掉 <code>main.ts</code> 里的 <code>import &#x27;./counter-reset.js&#x27;</code>。类型检查照样通过，因为增补的声明在整个项目里都可见；可运行时实现那段没有执行，<code>counter.reset()</code> 就会报“不是函数”。所以补类型的同时，必须确认实现文件被导入了。</p>
+<p>还有一个容易漏的条件：增补文件自己必须是模块，也就是有 <code>import</code> 或 <code>export</code>。否则 <code>declare module &#x27;./counter.js&#x27;</code> 会被当成声明一个全新的模块，而不是给原有模块补充。</p>
+<h2>扩展全局类型</h2>
 <div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-comment">// globals.d.ts</span>
 <span class="hljs-keyword">export</span> {};
 <span class="hljs-keyword">declare</span> <span class="hljs-variable language_">global</span> {
@@ -98,18 +102,18 @@ counter.<span class="hljs-title function_">reset</span>();
   }
 }
 </code></pre></div>
-<p>这只告诉编译器 <code>window.appVersion</code> 可能存在，赋值要在别处完成。</p>
-<h2>常见场景与风险</h2>
-<ul>
-<li>给 Vue 的 <code>ComponentCustomProperties</code>、Express 的 <code>Request</code> 增加字段，这是库预留的扩展点。</li>
-<li>不要用增补掩盖版本不兼容：库删除了某个方法，补上类型只会让错误推迟到运行时。</li>
-<li>全局扩展影响整个项目，容易和其他库冲突。</li>
-</ul>
+<p><code>export {}</code> 让这个文件成为模块，这样才能用 <code>declare global</code>。写完以后 <code>window.appVersion</code> 不再报错，但这只是告诉编译器“它可能存在”，值要在别的代码里真正赋上去。</p>
+<h2>什么时候该用，什么时候不该用</h2>
+<p>给库预留的扩展点补字段是正当用法，比如 Vue 的 <code>ComponentCustomProperties</code>、Express 的 <code>Request</code>。不要用增补去掩盖版本不兼容：库已经删掉了某个方法，你把类型补回来，错误只是推迟到了运行时。全局扩展影响整个项目，也容易和别的库冲突，能不用就少用。</p>
 <h2>常见追问</h2>
-<ul>
-<li><code>type</code> 能合并吗？不能，同名 <code>type</code> 报重复标识符错误，见<a href="/questions/ts-interface-type/">《type 和 interface 有哪些区别？》</a>。</li>
-<li>类和接口能合并吗？能，同名 interface 会给类实例补充成员，但不提供实现，同样需要另外赋值。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.typescriptlang.org/docs/handbook/declaration-merging.html" target="_blank" rel="noreferrer">TypeScript · Declaration Merging<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+TypeScript+%E5%A3%B0%E6%98%8E%E5%90%88%E5%B9%B6%E5%92%8C%E6%A8%A1%E5%9D%97%E6%89%A9%E5%B1%95%E6%9C%89%E5%93%AA%E4%BA%9B%E8%BE%B9%E7%95%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ATypeScript+%E5%A3%B0%E6%98%8E%E5%90%88%E5%B9%B6%E5%92%8C%E6%A8%A1%E5%9D%97%E6%89%A9%E5%B1%95%E6%9C%89%E5%93%AA%E4%BA%9B%E8%BE%B9%E7%95%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-declaration-merging%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-declaration-merging%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：TypeScript 声明合并和模块扩展有哪些边界？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-library-publishing/">TypeScript 库发布时怎样组织类型声明和入口？</a></li><li><a href="/questions/ts-type-testing/">TypeScript 复杂类型应该怎样测试？</a></li><li><a href="/questions/ts-unknown/">any、unknown 和 never 分别适合什么场景？</a></li><li><a href="/questions/ts-interface-type/">type 和 interface 有哪些区别？</a></li></ul></nav></main></div></div>
+<p><strong><code>type</code> 能合并吗？</strong></p>
+<blockquote>
+<p>不能。同名的 <code>type</code> 会报重复标识符的错误，这也是它和 interface 的区别之一，见<a href="/questions/ts-interface-type/">《type 和 interface 有哪些区别？》</a>。</p>
+</blockquote>
+<p><strong>类和接口能合并吗？</strong></p>
+<blockquote>
+<p>能。同名的 interface 会给类的实例类型补成员，但它不提供实现，跟模块增补一样，需要另外给原型或实例赋值。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.typescriptlang.org/docs/handbook/declaration-merging.html" target="_blank" rel="noreferrer">TypeScript · Declaration Merging<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+TypeScript+%E5%A3%B0%E6%98%8E%E5%90%88%E5%B9%B6%E5%92%8C%E6%A8%A1%E5%9D%97%E6%89%A9%E5%B1%95%E6%9C%89%E5%93%AA%E4%BA%9B%E8%BE%B9%E7%95%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ATypeScript+%E5%A3%B0%E6%98%8E%E5%90%88%E5%B9%B6%E5%92%8C%E6%A8%A1%E5%9D%97%E6%89%A9%E5%B1%95%E6%9C%89%E5%93%AA%E4%BA%9B%E8%BE%B9%E7%95%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-declaration-merging%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-declaration-merging%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：TypeScript 声明合并和模块扩展有哪些边界？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-library-publishing/">TypeScript 库发布时怎样组织类型声明和入口？</a></li><li><a href="/questions/ts-type-testing/">TypeScript 复杂类型应该怎样测试？</a></li><li><a href="/questions/ts-unknown/">any、unknown 和 never 分别适合什么场景？</a></li><li><a href="/questions/ts-interface-type/">type 和 interface 有哪些区别？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

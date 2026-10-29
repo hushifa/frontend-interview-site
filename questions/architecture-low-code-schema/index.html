@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="架构设计面试题：用表单和页面配置说明 Schema、组件注册、数据绑定和版本迁移的边界，避免把任意 JavaScript 放进配置或把配置校验当成权限控制。" />
+    <meta name="description" content="架构设计面试题：Schema 驱动 UI 用 JSON 描述页面，渲染器只用注册过的组件，逻辑用声明式条件或注册函数名表达…" />
     <title>低代码和 Schema 驱动 UI 怎样保持可维护与安全？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/architecture-low-code-schema/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="低代码和 Schema 驱动 UI 怎样保持可维护与安全？" />
-    <meta property="og:description" content="架构设计面试题：用表单和页面配置说明 Schema、组件注册、数据绑定和版本迁移的边界，避免把任意 JavaScript 放进配置或把配置校验当成权限控制。" />
+    <meta property="og:description" content="架构设计面试题：Schema 驱动 UI 用 JSON 描述页面，渲染器只用注册过的组件，逻辑用声明式条件或注册函数名表达…" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/architecture-low-code-schema/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/architecture-low-code-schema/#webpage","url":"https://fe.hushifa.top/questions/architecture-low-code-schema/","name":"低代码和 Schema 驱动 UI 怎样保持可维护与安全？","description":"架构设计面试题：用表单和页面配置说明 Schema、组件注册、数据绑定和版本迁移的边界，避免把任意 JavaScript 放进配置或把配置校验当成权限控制。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/architecture-low-code-schema/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/architecture-low-code-schema/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"架构设计面试题","item":"https://fe.hushifa.top/topics/architecture/"},{"@type":"ListItem","position":3,"name":"低代码和 Schema 驱动 UI 怎样保持可维护与安全？","item":"https://fe.hushifa.top/questions/architecture-low-code-schema/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/architecture-low-code-schema/#webpage","url":"https://fe.hushifa.top/questions/architecture-low-code-schema/","name":"低代码和 Schema 驱动 UI 怎样保持可维护与安全？","description":"架构设计面试题：Schema 驱动 UI 用 JSON 描述页面，渲染器只用注册过的组件，逻辑用声明式条件或注册函数名表达…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/architecture-low-code-schema/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/architecture-low-code-schema/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"架构设计面试题","item":"https://fe.hushifa.top/topics/architecture/"},{"@type":"ListItem","position":3,"name":"低代码和 Schema 驱动 UI 怎样保持可维护与安全？","item":"https://fe.hushifa.top/questions/architecture-low-code-schema/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/architecture/">架构设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">低代码和 Schema 驱动 UI 怎样保持可维护与安全？</span></nav><h1 tabindex="-1">低代码和 Schema 驱动 UI 怎样保持可维护与安全？</h1><p class="reading-summary">用表单和页面配置说明 Schema、组件注册、数据绑定和版本迁移的边界，避免把任意 JavaScript 放进配置或把配置校验当成权限控制。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>Schema 驱动 UI 用 JSON 描述页面或表单，渲染器根据描述创建组件，适合结构相似、数量多的后台页面和表单。</li>
-<li>渲染器只能使用预先注册的组件白名单，配置里只写组件名和参数，不能写任意代码。</li>
-<li>逻辑（显隐、校验、联动）用受限的声明式表达式或注册好的函数名表示，不用 <code>eval</code> 或 <code>new Function</code> 执行配置中的字符串。</li>
-<li>Schema 要带版本号，渲染器升级时提供迁移函数，把旧配置转换成新格式。</li>
-<li>前端校验只是体验，权限和数据合法性必须由服务端校验。</li>
-</ul>
-<h2>一个表单 Schema</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/architecture/">架构设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">低代码和 Schema 驱动 UI 怎样保持可维护与安全？</span></nav><h1 tabindex="-1">低代码和 Schema 驱动 UI 怎样保持可维护与安全？</h1><p class="reading-summary">Schema 驱动 UI 用 JSON 描述页面，渲染器只用注册过的组件，逻辑用声明式条件或注册函数名表达，不在配置里执行任意 JavaScript。Schema 要带版本做数据迁移，配置校验也不能当成权限控制。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>Schema 驱动 UI，就是用一份 JSON 描述页面或表单长什么样，渲染器读这份描述，把组件创建出来。它适合结构差不多、数量又多的后台页面和表单。</p>
+<p>安全上最重要的一条是：配置里只能写组件名和参数，不能写代码。渲染器只认预先注册好的组件白名单。显隐、校验、联动这些逻辑，用受限的声明式条件，或者引用注册好的函数名来表示，不要用 <code>eval</code>、<code>new Function</code> 去执行配置里的字符串。</p>
+<p>可维护上，Schema 要带版本号。配置会在数据库里存很久，渲染器升级时要提供迁移函数，把旧配置自动转成新格式。</p>
+<p>还要注意，前端按配置做的校验只是为了体验。权限和数据是否合法，必须由服务端校验。</p>
+</blockquote>
+<h2>一份表单 Schema 长什么样</h2>
+<p>下面这份配置描述了两个字段，“企业名称”只在类型选了“企业”时显示：</p>
 <div class="not-prose code-block"><div class="code-language">json</div><pre><code class="hljs language-json">{
   &quot;version&quot;: 2,
   &quot;fields&quot;: [
@@ -46,7 +46,8 @@
   ]
 }
 </code></pre></div>
-<h2>组件注册</h2>
+<p>注意 <code>visibleWhen</code> 是一个对象，不是一段代码。渲染器读到它，自己去判断要不要显示。</p>
+<h2>渲染器怎样只用注册过的组件</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> registry = { <span class="hljs-title class_">Input</span>, <span class="hljs-title class_">Select</span>, <span class="hljs-title class_">DatePicker</span> };
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">renderField</span>(<span class="hljs-params">field</span>) {
@@ -55,17 +56,15 @@
   <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Component</span> {<span class="hljs-attr">...pickAllowedProps</span>(<span class="hljs-attr">field</span>)} /&gt;</span></span>;
 }
 </code></pre></div>
-<ul>
-<li>只渲染注册表中存在的组件，未知组件显示占位而不是崩溃。</li>
-<li>只把允许的参数传给组件，防止配置注入 <code>dangerouslySetInnerHTML</code> 或事件处理器。</li>
-</ul>
-<h2>逻辑表达</h2>
-<p>声明式条件（如上例的 <code>visibleWhen</code>）覆盖大多数显隐和联动场景，渲染器可以静态分析字段之间的依赖。</p>
-<p>复杂逻辑可以注册为命名函数，配置中只引用函数名：</p>
+<p>配置里写的组件名，只有在注册表里查得到才会渲染。查不到就显示一个占位，而不是整个页面崩掉。</p>
+<p>传给组件的参数也要过一遍白名单，也就是 <code>pickAllowedProps</code>。为什么？因为如果把配置原样展开传进去，能编辑配置的人就可以塞进 <code>dangerouslySetInnerHTML</code> 或者事件处理器。</p>
+<h2>逻辑怎样写进配置</h2>
+<p>大部分显隐和联动，用上面 <code>visibleWhen</code> 这种声明式条件就能覆盖。它还有个好处：渲染器不用运行就能分析出字段之间谁依赖谁。</p>
+<p>更复杂的逻辑，先在代码里注册成命名函数，配置里只写函数名：</p>
 <div class="not-prose code-block"><div class="code-language">json</div><pre><code class="hljs language-json">{ &quot;rules&quot;: [{ &quot;validator&quot;: &quot;isValidTaxId&quot; }] }
 </code></pre></div>
-<p>需要用户编写表达式时，使用只支持有限运算符的表达式解析器，而不是执行 JavaScript。配置执行任意代码相当于把 XSS 能力交给了能编辑配置的人。</p>
-<h2>版本迁移</h2>
+<p>如果确实需要让用户自己写表达式，就用一个只支持有限运算符的表达式解析器，而不是执行 JavaScript。允许配置执行任意代码，等于把 XSS 的能力交给了每一个能编辑配置的人。</p>
+<h2>旧配置怎样升级</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> migrations = {
   <span class="hljs-number">1</span>: <span class="hljs-function">(<span class="hljs-params">schema</span>) =&gt;</span> ({ ...schema, <span class="hljs-attr">version</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">fields</span>: schema.<span class="hljs-property">items</span> }),
 };
@@ -76,20 +75,23 @@
   <span class="hljs-keyword">return</span> current;
 }
 </code></pre></div>
-<p>配置会长期存储在数据库中，渲染器改动字段名或结构时，旧配置必须能被自动升级。迁移函数要有测试。</p>
-<h2>安全边界</h2>
-<ul>
-<li>表单配置里的 <code>required</code>、<code>maxLength</code> 只影响前端体验，服务端要用同一份规则（例如从 Schema 生成 JSON Schema）独立校验提交数据。</li>
-<li>字段是否隐藏不等于用户有没有权限，敏感字段要由服务端根据权限决定是否返回和接受。</li>
-<li>能编辑配置的人员本身要有权限控制和审计记录。</li>
-</ul>
-<h2>什么时候不适合</h2>
-<p>交互复杂、定制化强的页面用配置描述会比代码更难维护。常见做法是让 Schema 覆盖标准部分，同时允许嵌入注册好的自定义组件。</p>
+<p>每个版本对应一个迁移函数，把配置升到下一版。<code>migrate</code> 一级一级往上升，直到没有更新的迁移为止。</p>
+<p>为什么要这样做？因为配置长期存在数据库里，渲染器哪天改了字段名或结构，旧配置不能就这么坏掉，必须能自动升级。这些迁移函数也要写测试。</p>
+<h2>安全边界在哪里</h2>
+<p>表单配置里的 <code>required</code>、<code>maxLength</code> 只影响前端体验。服务端要用同一份规则独立校验提交的数据，比如从 Schema 生成 JSON Schema 来校验。</p>
+<p>字段隐藏了，不等于用户没有权限。敏感字段要由服务端根据权限决定返不返回、接不接受。</p>
+<p>能编辑配置的人本身也要有权限控制，修改要留审计记录。</p>
+<h2>什么时候不适合用</h2>
+<p>交互复杂、定制化强的页面，硬用配置去描述，往往比直接写代码更难维护。常见的折中是让 Schema 覆盖标准的部分，同时允许嵌入注册好的自定义组件。</p>
 <h2>常见追问</h2>
-<ul>
-<li>和 JSON Schema 是什么关系？JSON Schema 描述数据结构和校验规则；UI Schema 描述怎样展示，两者常配合使用。</li>
-<li>怎样调试配置问题？渲染器在开发模式下校验 Schema 并给出具体字段路径的错误信息。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://json-schema.org/specification" target="_blank" rel="noreferrer">JSON Schema · Specification<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%BD%8E%E4%BB%A3%E7%A0%81%E5%92%8C+Schema+%E9%A9%B1%E5%8A%A8+UI+%E6%80%8E%E6%A0%B7%E4%BF%9D%E6%8C%81%E5%8F%AF%E7%BB%B4%E6%8A%A4%E4%B8%8E%E5%AE%89%E5%85%A8%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%BD%8E%E4%BB%A3%E7%A0%81%E5%92%8C+Schema+%E9%A9%B1%E5%8A%A8+UI+%E6%80%8E%E6%A0%B7%E4%BF%9D%E6%8C%81%E5%8F%AF%E7%BB%B4%E6%8A%A4%E4%B8%8E%E5%AE%89%E5%85%A8%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aarchitecture-low-code-schema%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Farchitecture-low-code-schema%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：低代码和 Schema 驱动 UI 怎样保持可维护与安全？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/arch-design-system/">设计系统为什么不能只有一套视觉样式？</a></li><li><a href="/questions/arch-state-machine/">怎样避免加载、成功和失败状态互相矛盾？</a></li><li><a href="/questions/arch-progressive/">渐进增强和优雅降级怎样影响前端方案选择？</a></li><li><a href="/questions/architecture-feature-boundaries/">前端大型项目怎样划分功能边界？</a></li></ul></nav></main></div></div>
+<p><strong>这和 JSON Schema 是什么关系？</strong></p>
+<blockquote>
+<p>JSON Schema 描述的是数据结构和校验规则；UI Schema 描述的是怎么展示。两者经常配合使用。</p>
+</blockquote>
+<p><strong>配置出问题了怎么调试？</strong></p>
+<blockquote>
+<p>渲染器在开发模式下先校验 Schema，出错时给出具体到字段路径的错误信息。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://json-schema.org/specification" target="_blank" rel="noreferrer">JSON Schema · Specification<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%BD%8E%E4%BB%A3%E7%A0%81%E5%92%8C+Schema+%E9%A9%B1%E5%8A%A8+UI+%E6%80%8E%E6%A0%B7%E4%BF%9D%E6%8C%81%E5%8F%AF%E7%BB%B4%E6%8A%A4%E4%B8%8E%E5%AE%89%E5%85%A8%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%BD%8E%E4%BB%A3%E7%A0%81%E5%92%8C+Schema+%E9%A9%B1%E5%8A%A8+UI+%E6%80%8E%E6%A0%B7%E4%BF%9D%E6%8C%81%E5%8F%AF%E7%BB%B4%E6%8A%A4%E4%B8%8E%E5%AE%89%E5%85%A8%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aarchitecture-low-code-schema%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Farchitecture-low-code-schema%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：低代码和 Schema 驱动 UI 怎样保持可维护与安全？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/arch-design-system/">设计系统为什么不能只有一套视觉样式？</a></li><li><a href="/questions/arch-state-machine/">怎样避免加载、成功和失败状态互相矛盾？</a></li><li><a href="/questions/arch-progressive/">渐进增强和优雅降级怎样影响前端方案选择？</a></li><li><a href="/questions/architecture-feature-boundaries/">前端大型项目怎样划分功能边界？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

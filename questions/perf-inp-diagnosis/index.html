@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="性能优化面试题：INP 衡量点击、轻触和按键到下一帧绘制的延迟，≤200ms 为良好、&gt;500ms 为较差，按 75 分位评估…" />
+    <meta name="description" content="性能优化面试题：INP 衡量点击、轻触和按键到下一帧绘制要多久，≤200ms 良好、&gt;500ms 较差，按 75 分位评估…" />
     <title>INP 很高时，如何定位到底是哪一段交互变慢？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/perf-inp-diagnosis/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,25 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="INP 很高时，如何定位到底是哪一段交互变慢？ · 前端知库" />
-    <meta property="og:description" content="性能优化面试题：INP 衡量点击、轻触和按键到下一帧绘制的延迟，≤200ms 为良好、&gt;500ms 为较差，按 75 分位评估…" />
+    <meta property="og:description" content="性能优化面试题：INP 衡量点击、轻触和按键到下一帧绘制要多久，≤200ms 良好、&gt;500ms 较差，按 75 分位评估…" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/perf-inp-diagnosis/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-inp-diagnosis/#webpage","url":"https://fe.hushifa.top/questions/perf-inp-diagnosis/","name":"INP 很高时，如何定位到底是哪一段交互变慢？ · 前端知库","description":"性能优化面试题：INP 衡量点击、轻触和按键到下一帧绘制的延迟，≤200ms 为良好、>500ms 为较差，按 75 分位评估…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-inp-diagnosis/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-inp-diagnosis/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"INP 很高时，如何定位到底是哪一段交互变慢？","item":"https://fe.hushifa.top/questions/perf-inp-diagnosis/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-inp-diagnosis/#webpage","url":"https://fe.hushifa.top/questions/perf-inp-diagnosis/","name":"INP 很高时，如何定位到底是哪一段交互变慢？ · 前端知库","description":"性能优化面试题：INP 衡量点击、轻触和按键到下一帧绘制要多久，≤200ms 良好、>500ms 较差，按 75 分位评估…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-inp-diagnosis/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-inp-diagnosis/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"INP 很高时，如何定位到底是哪一段交互变慢？","item":"https://fe.hushifa.top/questions/perf-inp-diagnosis/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">INP 很高时，如何定位到底是哪一段交互变慢？</span></nav><h1 tabindex="-1">INP 很高时，如何定位到底是哪一段交互变慢？</h1><p class="reading-summary">INP 衡量点击、轻触和按键到下一帧绘制的延迟，≤200ms 为良好、&gt;500ms 为较差，按 75 分位评估，2024 年取代 FID 成为 Core Web Vitals。每次交互分为输入延迟、处理时间、呈现延迟三段，先用 Event Timing 或 web-vitals 库找到最慢的交互和慢在哪段，再针对性优化。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>阈值：≤200ms 良好，200–500ms 需要改进，&gt;500ms 较差，按页面访问的 75 分位评估。</li>
-<li>统计范围：页面生命周期内的点击、轻触和键盘交互，不包括滚动和缩放；交互达到 50 次及以上的页面取 98 分位，相当于每 50 次交互剔除一个最差值。</li>
-<li>三个阶段：输入延迟（等主线程空闲）、处理时间（事件回调执行）、呈现延迟（回调结束到下一帧绘制）。</li>
-<li>输入延迟高找长任务；处理时间高减少同步工作和更新范围；呈现延迟高检查样式、布局和 DOM 规模。</li>
-<li>生产环境用 web-vitals 库的 attribution 版本采集，开发环境用 DevTools Performance 面板复现。</li>
-</ul>
-<h2>采集</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">INP 很高时，如何定位到底是哪一段交互变慢？</span></nav><h1 tabindex="-1">INP 很高时，如何定位到底是哪一段交互变慢？</h1><p class="reading-summary">INP 衡量点击、轻触和按键到下一帧绘制要多久，≤200ms 良好、&gt;500ms 较差，按 75 分位评估，2024 年取代 FID 成为 Core Web Vitals。每次交互拆成输入延迟、处理时间、呈现延迟三段，用 Event Timing 或 web-vitals 库找到最慢的交互和慢在哪段，再对症优化。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>INP 衡量的是用户点击、轻触或按键以后，要等多久页面才画出下一帧。200 毫秒以内算良好，200 到 500 毫秒需要改进，超过 500 毫秒算较差，按页面访问的 75 分位评估。滚动和缩放不算在内。</p>
+<p>一次交互可以拆成三段。第一段是输入延迟，用户点了，但主线程正忙，事件要排队；第二段是处理时间，事件回调本身在执行；第三段是呈现延迟，回调跑完到浏览器把下一帧画出来。</p>
+<p>定位时先找到最慢的那次交互，再看它慢在哪一段。输入延迟高就去找当时占着主线程的长任务；处理时间高就减少回调里的同步工作和更新范围；呈现延迟高就检查样式、布局和 DOM 规模。</p>
+<p>线上用 web-vitals 库的 attribution 版本采集这三段，开发时用 DevTools 的 Performance 面板复现。</p>
+</blockquote>
+<h2>INP 取的是哪一次交互</h2>
+<p>页面停留期间会有很多次交互，INP 取的是接近最慢的那一次。为什么说“接近”？因为交互很多的页面，偶尔一次异常慢的可能是噪声。规则是交互达到 50 次及以上的页面取 98 分位，相当于每 50 次交互剔除一个最差值。</p>
+<p>所以 INP 变差，通常意味着某一类交互稳定地慢，而不是平均每次都慢一点。</p>
+<h2>线上怎么采集这三段</h2>
+<p><code>web-vitals</code> 库的 attribution 版本会直接给出最慢交互的目标元素、类型和三段耗时：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { onINP } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;web-vitals/attribution&#x27;</span>;
 
 <span class="hljs-title function_">onINP</span>(<span class="hljs-function">(<span class="hljs-params">{ value, rating, attribution }</span>) =&gt;</span> {
@@ -49,7 +52,8 @@
   });
 });
 </code></pre></div>
-<p>不用库时，可以直接观察 Event Timing：</p>
+<p><code>interactionTarget</code> 告诉你用户点的是哪个元素，三个耗时告诉你慢在哪一段。有了这两样，就知道该去看哪段代码了。</p>
+<p>不用库的话，也可以直接观察浏览器提供的 Event Timing 条目：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">new</span> <span class="hljs-title class_">PerformanceObserver</span>(<span class="hljs-function">(<span class="hljs-params">list</span>) =&gt;</span> {
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> entry <span class="hljs-keyword">of</span> list.<span class="hljs-title function_">getEntries</span>()) {
     <span class="hljs-keyword">if</span> (!entry.<span class="hljs-property">interactionId</span>) <span class="hljs-keyword">continue</span>;
@@ -61,31 +65,24 @@
   }
 }).<span class="hljs-title function_">observe</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;event&#x27;</span>, <span class="hljs-attr">durationThreshold</span>: <span class="hljs-number">16</span>, <span class="hljs-attr">buffered</span>: <span class="hljs-literal">true</span> });
 </code></pre></div>
-<p>一次交互会产生多个事件条目（如 <code>pointerdown</code>、<code>pointerup</code>、<code>click</code>），共用一个 <code>interactionId</code>，整页 INP 的计算规则比较复杂，生产环境优先使用 web-vitals 库。<code>duration</code> 精度为 8ms，阶段拆分只是估算。</p>
-<h2>按阶段优化</h2>
-<p><strong>输入延迟高</strong>：交互发生时主线程被别的任务占用。</p>
-<ul>
-<li>找出交互前后的长任务和长动画帧，见<a href="/questions/perf-long-animation-frames/">《如何用 Long Animation Frames API 定位卡顿来源？》</a>。</li>
-<li>拆分初始化和第三方脚本，非关键工作推迟到空闲时段。</li>
-</ul>
-<p><strong>处理时间高</strong>：事件回调本身慢。</p>
-<ul>
-<li>回调里先更新能立即给出反馈的状态，其余工作用 <code>scheduler.yield()</code> 或 <code>setTimeout</code> 延后，见<a href="/questions/perf-longtasks/">《什么是长任务，为什么会影响交互响应？怎样观测和拆分？》</a>。</li>
-<li>减少一次交互触发的组件重渲染范围，排序、过滤等纯计算移到 Worker。</li>
-</ul>
-<p><strong>呈现延迟高</strong>：回调结束后渲染慢。</p>
-<ul>
-<li>DOM 太大：虚拟列表、<code>content-visibility</code>。</li>
-<li>布局抖动：避免写样式后立即读 <code>offsetHeight</code> 等布局属性，先批量读再批量写。</li>
-<li>复杂选择器、大面积重绘：简化样式。</li>
-</ul>
-<h2>一个容易误解的点</h2>
-<p>INP 只算到下一帧绘制。点击后立即显示加载状态，下一帧很快出现，INP 就可能良好，即使数据两秒后才返回。端到端完成时间是另一个业务指标，需要单独测量。</p>
+<p>这里的三段就是用时间点相减算出来的：<code>startTime</code> 是用户操作的时刻，<code>processingStart</code> 和 <code>processingEnd</code> 是回调开始和结束，<code>startTime + duration</code> 是下一帧画出来的时刻。</p>
+<p>可是为什么生产环境还是推荐用库？因为一次点击会产生 <code>pointerdown</code>、<code>pointerup</code>、<code>click</code> 好几个事件条目，它们共用一个 <code>interactionId</code>，整页 INP 怎么从这些条目里算出来，规则比较复杂。另外 <code>duration</code> 的精度是 8ms，所以三段拆分只是估算。</p>
+<h2>慢在哪一段，就改哪一段</h2>
+<p>如果是输入延迟高，说明用户操作的时候主线程正被别的任务占着。要找出交互前后的长任务和长动画帧，见<a href="/questions/perf-long-animation-frames/">《如何用 Long Animation Frames API 定位卡顿来源？》</a>。然后把初始化逻辑和第三方脚本拆开，非关键的工作推迟到空闲时段。</p>
+<p>如果是处理时间高，说明事件回调本身太慢。回调里先更新能立即给用户反馈的状态，其余工作用 <code>scheduler.yield()</code> 或 <code>setTimeout</code> 往后放，见<a href="/questions/perf-longtasks/">《什么是长任务，为什么会影响交互响应？怎样观测和拆分？》</a>。另外减少一次交互触发的组件重渲染范围，排序、过滤这类纯计算可以挪到 Worker。</p>
+<p>如果是呈现延迟高，说明回调结束以后渲染很慢。DOM 太大可以用虚拟列表或 <code>content-visibility</code>。写完样式马上读 <code>offsetHeight</code> 这类布局属性，会逼浏览器立刻重新布局，这叫布局抖动，改成先批量读、再批量写。复杂选择器和大面积重绘也要简化。</p>
+<h2>INP 好不代表用户等得少</h2>
+<p>INP 只算到下一帧画出来为止。所以点击以后马上显示一个加载状态，下一帧很快出现，INP 就可能是良好的，哪怕数据两秒以后才回来。</p>
+<p>这本身是合理的优化，用户至少知道页面有反应了。但“从点击到真正完成”是另一个业务指标，需要单独测。</p>
 <h2>常见追问</h2>
-<ul>
-<li>为什么实验室测不到高 INP？Lighthouse 等工具不模拟用户交互，INP 必须靠真实用户数据或手动录制；实验室可以用 Total Blocking Time 作为参考。</li>
-<li>只优化事件回调够吗？不够。输入延迟和呈现延迟常常占主要部分。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Glossary/Interaction_to_next_paint" target="_blank" rel="noreferrer">MDN · Interaction to Next Paint<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+INP+%E5%BE%88%E9%AB%98%E6%97%B6%EF%BC%8C%E5%A6%82%E4%BD%95%E5%AE%9A%E4%BD%8D%E5%88%B0%E5%BA%95%E6%98%AF%E5%93%AA%E4%B8%80%E6%AE%B5%E4%BA%A4%E4%BA%92%E5%8F%98%E6%85%A2%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AINP+%E5%BE%88%E9%AB%98%E6%97%B6%EF%BC%8C%E5%A6%82%E4%BD%95%E5%AE%9A%E4%BD%8D%E5%88%B0%E5%BA%95%E6%98%AF%E5%93%AA%E4%B8%80%E6%AE%B5%E4%BA%A4%E4%BA%92%E5%8F%98%E6%85%A2%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aperf-inp-diagnosis%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fperf-inp-diagnosis%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：INP 很高时，如何定位到底是哪一段交互变慢？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/perf-diagnostics-case/">一个线上页面变慢后应该怎样完成性能诊断闭环？</a></li><li><a href="/questions/perf-rum/">真实用户监测与实验室性能测试为什么要结合？</a></li><li><a href="/questions/performance-memory-diagnosis/">前端内存泄漏应该怎样定位？</a></li><li><a href="/questions/engineering-vitals/">LCP、INP、CLS 分别衡量什么？</a></li></ul></nav></main></div></div>
+<p><strong>为什么实验室里测不到很高的 INP？</strong></p>
+<blockquote>
+<p>因为 Lighthouse 这类工具只模拟加载，不会去点页面。INP 必须靠真实用户数据，或者自己在 DevTools 里手动录交互。实验室里可以用总阻塞时间 TBT 作为参考。</p>
+</blockquote>
+<p><strong>只优化事件回调就够了吗？</strong></p>
+<blockquote>
+<p>不够。很多时候输入延迟和呈现延迟才是大头，回调本身并不慢。所以要先拆三段看清楚，再决定改哪里。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Glossary/Interaction_to_next_paint" target="_blank" rel="noreferrer">MDN · Interaction to Next Paint<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+INP+%E5%BE%88%E9%AB%98%E6%97%B6%EF%BC%8C%E5%A6%82%E4%BD%95%E5%AE%9A%E4%BD%8D%E5%88%B0%E5%BA%95%E6%98%AF%E5%93%AA%E4%B8%80%E6%AE%B5%E4%BA%A4%E4%BA%92%E5%8F%98%E6%85%A2%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AINP+%E5%BE%88%E9%AB%98%E6%97%B6%EF%BC%8C%E5%A6%82%E4%BD%95%E5%AE%9A%E4%BD%8D%E5%88%B0%E5%BA%95%E6%98%AF%E5%93%AA%E4%B8%80%E6%AE%B5%E4%BA%A4%E4%BA%92%E5%8F%98%E6%85%A2%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aperf-inp-diagnosis%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fperf-inp-diagnosis%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：INP 很高时，如何定位到底是哪一段交互变慢？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/perf-diagnostics-case/">一个线上页面变慢后应该怎样完成性能诊断闭环？</a></li><li><a href="/questions/perf-rum/">真实用户监测与实验室性能测试为什么要结合？</a></li><li><a href="/questions/performance-memory-diagnosis/">前端内存泄漏应该怎样定位？</a></li><li><a href="/questions/engineering-vitals/">LCP、INP、CLS 分别衡量什么？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="HTML / CSS面试题：锚点定位让绝对或固定定位元素直接依据另一个元素的位置和尺寸放置，并在空间不足时切换备选位置，替代大部分手写坐标计算。" />
+    <meta name="description" content="HTML / CSS面试题：锚点定位让提示框、下拉菜单这类浮层直接贴着某个元素放，空间不够时还能自动换个方向，大部分情况不用再用 JavaScript 算坐标。" />
     <title>CSS Anchor Positioning 适合解决哪些浮层布局问题？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/css-anchor-positioning/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="CSS Anchor Positioning 适合解决哪些浮层布局问题？" />
-    <meta property="og:description" content="HTML / CSS面试题：锚点定位让绝对或固定定位元素直接依据另一个元素的位置和尺寸放置，并在空间不足时切换备选位置，替代大部分手写坐标计算。" />
+    <meta property="og:description" content="HTML / CSS面试题：锚点定位让提示框、下拉菜单这类浮层直接贴着某个元素放，空间不够时还能自动换个方向，大部分情况不用再用 JavaScript 算坐标。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/css-anchor-positioning/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-anchor-positioning/#webpage","url":"https://fe.hushifa.top/questions/css-anchor-positioning/","name":"CSS Anchor Positioning 适合解决哪些浮层布局问题？","description":"HTML / CSS面试题：锚点定位让绝对或固定定位元素直接依据另一个元素的位置和尺寸放置，并在空间不足时切换备选位置，替代大部分手写坐标计算。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-anchor-positioning/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-anchor-positioning/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"CSS Anchor Positioning 适合解决哪些浮层布局问题？","item":"https://fe.hushifa.top/questions/css-anchor-positioning/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-anchor-positioning/#webpage","url":"https://fe.hushifa.top/questions/css-anchor-positioning/","name":"CSS Anchor Positioning 适合解决哪些浮层布局问题？","description":"HTML / CSS面试题：锚点定位让提示框、下拉菜单这类浮层直接贴着某个元素放，空间不够时还能自动换个方向，大部分情况不用再用 JavaScript 算坐标。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-anchor-positioning/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-anchor-positioning/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"CSS Anchor Positioning 适合解决哪些浮层布局问题？","item":"https://fe.hushifa.top/questions/css-anchor-positioning/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">CSS Anchor Positioning 适合解决哪些浮层布局问题？</span></nav><h1 tabindex="-1">CSS Anchor Positioning 适合解决哪些浮层布局问题？</h1><p class="reading-summary">锚点定位让绝对或固定定位元素直接依据另一个元素的位置和尺寸放置，并在空间不足时切换备选位置，替代大部分手写坐标计算。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>锚点元素用 <code>anchor-name</code> 声明名字，浮层用 <code>position: absolute</code> 或 <code>fixed</code> 加 <code>position-anchor</code> 关联它。</li>
-<li>关联本身不移动元素，还要用 <code>position-area</code>、<code>anchor()</code> 或 <code>anchor-center</code> 指定位置。</li>
-<li><code>position-try-fallbacks</code> 在默认位置溢出时依次尝试备选位置，例如 <code>flip-block</code>。</li>
-<li>列表里多个元素用同一个锚点名时，浮层默认绑定源码顺序最后一个；用 <code>anchor-scope</code> 把名字限定在子树内。</li>
-<li><code>anchor-name</code> 自 2026 年 1 月起进入 Baseline，较新的部分支持程度不一，旧浏览器仍需回退。</li>
-</ul>
-<h2>基本用法</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">CSS Anchor Positioning 适合解决哪些浮层布局问题？</span></nav><h1 tabindex="-1">CSS Anchor Positioning 适合解决哪些浮层布局问题？</h1><p class="reading-summary">锚点定位让提示框、下拉菜单这类浮层直接贴着某个元素放，空间不够时还能自动换个方向，大部分情况不用再用 JavaScript 算坐标。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>做提示框或下拉菜单时，以前要用 JavaScript 读按钮的位置，再算出浮层的坐标。锚点定位让 CSS 直接完成这件事：按钮用 <code>anchor-name</code> 起个名字，浮层用 <code>position: absolute</code> 或 <code>fixed</code>，再用 <code>position-anchor</code> 指向这个名字。</p>
+<p>光关联还不会移动浮层，还要说明放在哪里。简单的用 <code>position-area: top</code> 这类写法，精细的用 <code>anchor()</code> 取锚点的边，或者用 <code>anchor-center</code> 居中对齐。</p>
+<p>它最省事的地方是自动换位置。<code>position-try-fallbacks: flip-block</code> 表示上面放不下就翻到下面，不用自己判断溢出。</p>
+<p>要注意两点。列表里多个元素用同一个锚点名时，浮层默认绑到源码里最后一个，要用 <code>anchor-scope</code> 把名字限定在每一行里。另外 <code>anchor-name</code> 自 2026 年 1 月才进入 Baseline，较新的部分支持程度不一，旧浏览器要准备回退。</p>
+</blockquote>
+<h2>先看最基本的写法</h2>
+<p>下面给“保存”按钮加一个提示框，提示框放在按钮上方。</p>
 <div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;save&quot;</span>&gt;</span>保存<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;tip&quot;</span> <span class="hljs-attr">role</span>=<span class="hljs-string">&quot;tooltip&quot;</span>&gt;</span>保存后会同步到所有设备<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 </code></pre></div>
@@ -50,8 +50,10 @@
   <span class="hljs-attribute">position</span>-try-fallbacks: flip-block;
 }
 </code></pre></div>
-<p><code>position-area</code> 把锚点当成 3×3 网格的中心格，<code>top</code> 表示放在锚点上方并在水平方向跨满整行。上方空间不够时，<code>flip-block</code> 会把浮层翻到下方。</p>
-<p>需要更精细的控制时用 <code>anchor()</code>，它返回长度，可以参与 <code>calc()</code>：</p>
+<p>按钮叫 <code>--save</code>，提示框通过 <code>position-anchor</code> 认它当锚点。<code>position-area</code> 可以这样理解：把锚点想成一个 3×3 网格正中间的那一格，<code>top</code> 就是放在锚点上方那一整行，所以水平方向会跨满整行。</p>
+<p>如果按钮贴着视口顶部，上面放不下怎么办？<code>flip-block</code> 会把浮层沿块方向翻过去，放到按钮下方。这一步以前要靠监听滚动、比较坐标来做。</p>
+<h2>需要更精细地控制位置时</h2>
+<p><code>position-area</code> 只能选格子。想要“离按钮底边 6px”这种具体距离，就用 <code>anchor()</code>。它返回的是一个长度，所以能放进 <code>calc()</code> 里算：</p>
 <div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.tip</span> {
   <span class="hljs-attribute">position</span>: absolute;
   <span class="hljs-attribute">position-anchor</span>: --save;
@@ -59,8 +61,11 @@
   <span class="hljs-attribute">justify-self</span>: anchor-center;
 }
 </code></pre></div>
-<h2>重复组件里的锚点</h2>
-<p>表格每一行都有一个“更多”按钮时，所有按钮使用同一个锚点名，浮层会全部指向最后一个按钮。给行元素加 <code>anchor-scope</code>，让名字只在行内可见：</p>
+<p><code>anchor(bottom)</code> 取的是锚点底边的位置，加 6px 后就是浮层的顶边。<code>justify-self: anchor-center</code> 让浮层在水平方向和锚点居中对齐。</p>
+<h2>列表里每行都有菜单，为什么都指向最后一行</h2>
+<p>表格每一行都有一个“更多”按钮，按钮都叫 <code>--row-action</code>。结果所有菜单都跑到最后一个按钮旁边去了。</p>
+<p>原因是锚点名默认在整个文档里都能看到。同名的锚点有好几个时，浮层绑定源码顺序里最后一个。</p>
+<p>改法是在行元素上加 <code>anchor-scope</code>，让这个名字只在本行里面有效，每行的菜单就只能找到本行的按钮：</p>
 <div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.row</span> {
   anchor-scope: --row-action;
 }
@@ -75,23 +80,27 @@
   <span class="hljs-attribute">position</span>-area: bottom span-right;
 }
 </code></pre></div>
-<h2>和 Popover 配合</h2>
-<p>用 <code>popovertarget</code> 打开的 popover 会获得隐式锚点，就是触发它的按钮。这时可以不写 <code>anchor-name</code>，但要清掉 popover 默认的居中样式：</p>
+<h2>和 Popover 怎么配合</h2>
+<p>用 <code>popovertarget</code> 打开的 popover 会自动有一个隐式锚点，就是触发它的那个按钮。所以这时可以不写 <code>anchor-name</code>。不过 popover 默认是在屏幕中间显示的，要先把默认的居中样式清掉：</p>
 <div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-attr">[popover]</span> {
   <span class="hljs-attribute">inset</span>: auto;
   <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span>;
   <span class="hljs-attribute">position</span>-area: bottom;
 }
 </code></pre></div>
-<p>Popover 负责顶层显示、轻量关闭和焦点行为，锚点定位只负责位置，两者分工互补。</p>
-<h2>回退</h2>
-<p>不支持的浏览器里浮层会按普通绝对定位处理。可以先写一个可用的定位，再用 <code>@supports (anchor-name: --a)</code> 加强。需要支持旧浏览器的复杂场景，仍可使用 Floating UI 这类库计算位置。</p>
-<p>锚点必须被渲染；锚点是 <code>display: none</code> 时，浮层会退回最近的定位祖先。</p>
+<p>两者各管一件事。Popover 负责显示在顶层、点外面自动关闭和焦点行为，锚点定位只负责摆在哪里。</p>
+<h2>浏览器不支持时怎么办</h2>
+<p>不支持锚点定位的浏览器会把浮层当成普通的绝对定位来处理。所以先写一个能用的普通定位，再用 <code>@supports (anchor-name: --a)</code> 加上锚点定位的写法。如果要支持旧浏览器，场景又比较复杂，仍然可以用 Floating UI 这类库来算位置。</p>
+<p>还有一个容易踩的坑：锚点必须被渲染出来。锚点是 <code>display: none</code> 时，浮层会退回去，按最近的定位祖先来放。</p>
 <h2>常见追问</h2>
-<ul>
-<li>浮层离开视口后要不要隐藏？可以用 <code>position-visibility: anchors-visible</code>，在锚点滚出视口时隐藏浮层。</li>
-<li>锚点定位能代替 tooltip 的无障碍处理吗？不能。<code>aria-describedby</code>、键盘触发和 Esc 关闭仍需要单独实现。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Anchor_positioning/Using" target="_blank" rel="noreferrer">MDN · Using CSS anchor positioning<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+CSS+Anchor+Positioning+%E9%80%82%E5%90%88%E8%A7%A3%E5%86%B3%E5%93%AA%E4%BA%9B%E6%B5%AE%E5%B1%82%E5%B8%83%E5%B1%80%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ACSS+Anchor+Positioning+%E9%80%82%E5%90%88%E8%A7%A3%E5%86%B3%E5%93%AA%E4%BA%9B%E6%B5%AE%E5%B1%82%E5%B8%83%E5%B1%80%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-anchor-positioning%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-anchor-positioning%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：CSS Anchor Positioning 适合解决哪些浮层布局问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-starting-style-discrete-transition/">@starting-style 和离散属性过渡解决了什么问题？</a></li><li><a href="/questions/css-box/">标准盒模型和 border-box 有什么区别？</a></li><li><a href="/questions/css-flex-grid/">Flexbox 和 Grid 应该如何选择？</a></li><li><a href="/questions/html-accessibility/">触发操作为什么应优先使用 button，而不是可点击的 div？</a></li></ul></nav></main></div></div>
+<p><strong>锚点滚出视口以后，浮层要不要跟着隐藏？</strong></p>
+<blockquote>
+<p>可以用 <code>position-visibility: anchors-visible</code>。锚点滚出视口时，浮层就自动隐藏，不会孤零零地悬在那里。</p>
+</blockquote>
+<p><strong>用了锚点定位，tooltip 的无障碍问题就解决了吗？</strong></p>
+<blockquote>
+<p>没有。锚点定位只管位置。用 <code>aria-describedby</code> 关联说明文字、支持键盘触发、按 Esc 关闭，这些还要自己单独实现。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Anchor_positioning/Using" target="_blank" rel="noreferrer">MDN · Using CSS anchor positioning<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+CSS+Anchor+Positioning+%E9%80%82%E5%90%88%E8%A7%A3%E5%86%B3%E5%93%AA%E4%BA%9B%E6%B5%AE%E5%B1%82%E5%B8%83%E5%B1%80%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ACSS+Anchor+Positioning+%E9%80%82%E5%90%88%E8%A7%A3%E5%86%B3%E5%93%AA%E4%BA%9B%E6%B5%AE%E5%B1%82%E5%B8%83%E5%B1%80%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-anchor-positioning%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-anchor-positioning%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：CSS Anchor Positioning 适合解决哪些浮层布局问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-starting-style-discrete-transition/">@starting-style 和离散属性过渡解决了什么问题？</a></li><li><a href="/questions/css-box/">标准盒模型和 border-box 有什么区别？</a></li><li><a href="/questions/css-flex-grid/">Flexbox 和 Grid 应该如何选择？</a></li><li><a href="/questions/html-accessibility/">触发操作为什么应优先使用 button，而不是可点击的 div？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

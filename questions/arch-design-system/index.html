@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="架构设计面试题：从按钮和表单的实际使用说明设计系统还需要交互、语义和组件契约，并解释 token、业务组件、文档测试及版本迁移各自的职责。" />
+    <meta name="description" content="架构设计面试题：设计系统除了视觉样式，还要规定组件怎么交互、用什么语义元素、参数怎么定，也就是组件契约。token、业务组件、文档测试和版本迁移各管一摊。" />
     <title>设计系统为什么不能只有一套视觉样式？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/arch-design-system/" />
     <meta name="robots" content="index,follow" />
@@ -19,56 +19,51 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="设计系统为什么不能只有一套视觉样式？ · 前端知库" />
-    <meta property="og:description" content="架构设计面试题：从按钮和表单的实际使用说明设计系统还需要交互、语义和组件契约，并解释 token、业务组件、文档测试及版本迁移各自的职责。" />
+    <meta property="og:description" content="架构设计面试题：设计系统除了视觉样式，还要规定组件怎么交互、用什么语义元素、参数怎么定，也就是组件契约。token、业务组件、文档测试和版本迁移各管一摊。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/arch-design-system/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/arch-design-system/#webpage","url":"https://fe.hushifa.top/questions/arch-design-system/","name":"设计系统为什么不能只有一套视觉样式？ · 前端知库","description":"架构设计面试题：从按钮和表单的实际使用说明设计系统还需要交互、语义和组件契约，并解释 token、业务组件、文档测试及版本迁移各自的职责。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/arch-design-system/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/arch-design-system/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"架构设计面试题","item":"https://fe.hushifa.top/topics/architecture/"},{"@type":"ListItem","position":3,"name":"设计系统为什么不能只有一套视觉样式？","item":"https://fe.hushifa.top/questions/arch-design-system/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/arch-design-system/#webpage","url":"https://fe.hushifa.top/questions/arch-design-system/","name":"设计系统为什么不能只有一套视觉样式？ · 前端知库","description":"架构设计面试题：设计系统除了视觉样式，还要规定组件怎么交互、用什么语义元素、参数怎么定，也就是组件契约。token、业务组件、文档测试和版本迁移各管一摊。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/arch-design-system/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/arch-design-system/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"架构设计面试题","item":"https://fe.hushifa.top/topics/architecture/"},{"@type":"ListItem","position":3,"name":"设计系统为什么不能只有一套视觉样式？","item":"https://fe.hushifa.top/questions/arch-design-system/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/architecture/">架构设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">设计系统为什么不能只有一套视觉样式？</span></nav><h1 tabindex="-1">设计系统为什么不能只有一套视觉样式？</h1><p class="reading-summary">从按钮和表单的实际使用说明设计系统还需要交互、语义和组件契约，并解释 token、业务组件、文档测试及版本迁移各自的职责。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>视觉样式只回答&quot;长什么样&quot;；设计系统还要定义组件怎样交互、用什么语义元素、支持哪些状态和参数。</li>
-<li>组成部分通常包括：设计 token、基础组件、使用规范与文档、测试，以及版本和迁移流程。</li>
-<li>基础组件要内置键盘操作、焦点管理和可访问名称，避免每个业务团队重复实现、各自出错。</li>
-<li>组件的参数、事件和插槽就是它的公开 API，改动要按版本发布并提供迁移说明。</li>
-<li>业务组件建立在基础组件之上，放在业务仓库，不要都塞进设计系统。</li>
-</ul>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/architecture/">架构设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">设计系统为什么不能只有一套视觉样式？</span></nav><h1 tabindex="-1">设计系统为什么不能只有一套视觉样式？</h1><p class="reading-summary">设计系统除了视觉样式，还要规定组件怎么交互、用什么语义元素、参数怎么定，也就是组件契约。token、业务组件、文档测试和版本迁移各管一摊。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>视觉样式只回答“长什么样”。可是一个按钮还要回答很多别的问题：能不能用键盘按、屏幕阅读器读出来是什么、加载中能不能重复点。设计系统要把这些都定下来。</p>
+<p>所以设计系统一般包括几部分：设计 token 管颜色间距这些设计决策，基础组件管通用交互，再加上使用文档、测试，以及版本发布和迁移流程。</p>
+<p>基础组件的价值在于把键盘操作、焦点管理、可访问名称一次做对，业务团队直接用，不用每个团队各写一遍、各出各的错。组件的参数、事件和插槽就是它对外的 API，改动要按版本发布，并给出迁移说明。</p>
+<p>要注意分清边界。业务组件建立在基础组件之上，应该放在业务仓库里，不要什么都往设计系统里塞。</p>
+</blockquote>
 <h2>只有样式会出什么问题</h2>
-<p>假设设计系统只提供一套 <code>.btn-primary</code> 样式：</p>
-<ul>
-<li>有人给 <code>&lt;div&gt;</code> 加上这个类当按钮用，键盘无法聚焦，屏幕阅读器读不出它是按钮。</li>
-<li>加载状态、禁用状态各团队自己实现，有的禁用后还能提交，有的加载时没有反馈。</li>
-<li>图标按钮缺少可访问名称，读屏只能读出&quot;按钮&quot;。</li>
-</ul>
-<p>这些都是行为和语义问题，样式统一了也解决不了。</p>
-<h2>组件契约</h2>
+<p>假设设计系统只给了一个 <code>.btn-primary</code> 类，看看各团队会怎么用。</p>
+<p>有人把这个类加在 <code>&lt;div&gt;</code> 上当按钮。看起来一模一样，可是键盘没法聚焦到它，屏幕阅读器也读不出这是个按钮。加载状态和禁用状态各团队自己写，有的禁用了还能提交，有的加载时一点反馈都没有。图标按钮没有文字，读屏软件只能读出“按钮”两个字，用户根本不知道它是干什么的。</p>
+<p>这些都是行为和语义上的问题。样式统一得再好，也解决不了它们。</p>
+<h2>组件契约要约定什么</h2>
+<p>组件契约，就是组件对使用者做出的承诺：传什么参数、会渲染成什么、在各种状态下怎么表现。先看用法：</p>
 <div class="not-prose code-block"><div class="code-language">TSX</div><pre><code class="hljs language-tsx">&lt;<span class="hljs-title class_">Button</span> variant=<span class="hljs-string">&quot;primary&quot;</span> loading={saving} onClick={save}&gt;
   保存
 &lt;/<span class="hljs-title class_">Button</span>&gt;
 <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">IconButton</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;删除&quot;</span> <span class="hljs-attr">icon</span>=<span class="hljs-string">{</span>&lt;<span class="hljs-attr">TrashIcon</span> /&gt;</span>} onClick={remove} /&gt;</span>
 </code></pre></div>
-<p>契约包括：</p>
-<ul>
-<li><strong>语义</strong>：<code>Button</code> 渲染原生 <code>&lt;button&gt;</code>，默认 <code>type=&quot;button&quot;</code>，防止在表单里意外提交。</li>
-<li><strong>状态</strong>：<code>loading</code> 时设置 <code>aria-busy</code> 并阻止重复点击，同时保留按钮宽度避免布局跳动。</li>
-<li><strong>必填信息</strong>：<code>IconButton</code> 把 <code>label</code> 设为必填参数，类型检查直接阻止缺少可访问名称的写法。</li>
-<li><strong>扩展点</strong>：允许传入哪些原生属性、能否覆盖样式，都要明确。</li>
-</ul>
-<h2>各部分的职责</h2>
+<p>使用者只写了这几行，背后的契约要包括这些内容。</p>
+<p>语义上，<code>Button</code> 渲染原生的 <code>&lt;button&gt;</code>，并且默认 <code>type=&quot;button&quot;</code>。因为表单里的按钮默认是提交按钮，不写这个，放进表单就可能意外提交。</p>
+<p>状态上，<code>loading</code> 为真时设置 <code>aria-busy</code>，同时阻止重复点击，还要保留按钮宽度，免得文字变成转圈图标时布局跳一下。</p>
+<p>必填信息上，<code>IconButton</code> 把 <code>label</code> 设成必填参数。这样漏写可访问名称的代码，类型检查阶段就会报错，不用等上线后被读屏用户发现。</p>
+<p>扩展点上，允许传哪些原生属性、能不能覆盖样式，都要写清楚。不说清楚，使用者就会各自想办法绕。</p>
+<h2>各部分分别负责什么</h2>
 <table><thead><tr><th>部分</th><th>职责</th></tr></thead><tbody><tr><td>设计 token</td><td>颜色、间距、字号、圆角等设计决策的单一来源</td></tr><tr><td>基础组件</td><td>按钮、输入框、对话框等通用交互，内置语义和可访问性</td></tr><tr><td>文档</td><td>何时使用、何时不用、示例和反例</td></tr><tr><td>测试</td><td>交互测试、可访问性检查、视觉回归</td></tr><tr><td>版本发布</td><td>语义化版本、变更日志、迁移指南、废弃周期</td></tr></tbody></table>
-<p>复杂组件（组合框、菜单、对话框）可以参考 WAI-ARIA APG 的模式实现键盘交互，但 APG 示例不是生产级组件库，仍需在真实读屏软件中测试。</p>
-<h2>演进</h2>
-<ul>
-<li>新增参数保持向后兼容；修改默认行为或删除参数要升主版本。</li>
-<li>废弃前先在开发模式下给出警告，留出迁移时间，必要时提供代码转换脚本。</li>
-<li>统计各业务对组件的使用情况，判断改动影响面。</li>
-</ul>
+<p>组合框、菜单、对话框这类复杂组件，键盘交互可以参考 WAI-ARIA APG 里的模式来实现。APG 是 W3C 整理的无障碍交互模式指南，但它的示例不是生产级组件库，做完以后仍然要在真实的读屏软件里测试。</p>
+<h2>组件改了，怎样不把业务搞坏</h2>
+<p>新增参数时保持向后兼容，旧代码不用动。如果要修改默认行为或删掉参数，就要升主版本，因为这会让已有代码的表现发生变化。</p>
+<p>要废弃一个参数，不要直接删。先在开发模式下打警告，留出迁移时间，必要时提供代码转换脚本帮业务批量改。同时统计各业务对组件的使用情况，这样改之前就知道影响面有多大。</p>
 <h2>常见追问</h2>
-<ul>
-<li>设计系统团队和业务团队怎样分工？设计系统负责通用组件和规范，业务团队负责业务组件；业务中反复出现的模式再沉淀回设计系统。</li>
-<li>直接用现成组件库可以吗？可以作为基础，仍需要在其上统一 token、补充规范，并锁定版本管理升级。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.w3.org/WAI/ARIA/apg/practices/read-me-first/" target="_blank" rel="noreferrer">W3C WAI APG · 使用设计模式前的注意事项<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E8%AE%BE%E8%AE%A1%E7%B3%BB%E7%BB%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E5%8F%AA%E6%9C%89%E4%B8%80%E5%A5%97%E8%A7%86%E8%A7%89%E6%A0%B7%E5%BC%8F%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E8%AE%BE%E8%AE%A1%E7%B3%BB%E7%BB%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E5%8F%AA%E6%9C%89%E4%B8%80%E5%A5%97%E8%A7%86%E8%A7%89%E6%A0%B7%E5%BC%8F%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aarch-design-system%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Farch-design-system%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：设计系统为什么不能只有一套视觉样式？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/architecture-design-tokens/">设计 token 为什么比散落的颜色变量更适合大型前端项目？</a></li><li><a href="/questions/arch-state-machine/">怎样避免加载、成功和失败状态互相矛盾？</a></li><li><a href="/questions/arch-progressive/">渐进增强和优雅降级怎样影响前端方案选择？</a></li><li><a href="/questions/architecture-feature-boundaries/">前端大型项目怎样划分功能边界？</a></li></ul></nav></main></div></div>
+<p><strong>设计系统团队和业务团队怎样分工？</strong></p>
+<blockquote>
+<p>设计系统团队负责通用组件和规范，业务团队负责业务组件。业务里反复出现的模式，确认是通用的，再沉淀回设计系统。</p>
+</blockquote>
+<p><strong>直接用现成的组件库可以吗？</strong></p>
+<blockquote>
+<p>可以拿来当基础。但还需要在它上面统一 token、补充自己的使用规范，并锁定版本、有计划地升级。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.w3.org/WAI/ARIA/apg/practices/read-me-first/" target="_blank" rel="noreferrer">W3C WAI APG · 使用设计模式前的注意事项<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E8%AE%BE%E8%AE%A1%E7%B3%BB%E7%BB%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E5%8F%AA%E6%9C%89%E4%B8%80%E5%A5%97%E8%A7%86%E8%A7%89%E6%A0%B7%E5%BC%8F%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E8%AE%BE%E8%AE%A1%E7%B3%BB%E7%BB%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E5%8F%AA%E6%9C%89%E4%B8%80%E5%A5%97%E8%A7%86%E8%A7%89%E6%A0%B7%E5%BC%8F%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aarch-design-system%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Farch-design-system%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：设计系统为什么不能只有一套视觉样式？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/architecture-design-tokens/">设计 token 为什么比散落的颜色变量更适合大型前端项目？</a></li><li><a href="/questions/arch-state-machine/">怎样避免加载、成功和失败状态互相矛盾？</a></li><li><a href="/questions/arch-progressive/">渐进增强和优雅降级怎样影响前端方案选择？</a></li><li><a href="/questions/architecture-feature-boundaries/">前端大型项目怎样划分功能边界？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="移动端与 PWA面试题：安全区域适配要把背景铺满和内容可用范围分开，用 CSS 环境变量保护固定控件、滚动末尾和横屏边缘，同时处理动态工具栏和键盘的独立影响。" />
+    <meta name="description" content="移动端与 PWA面试题：背景可以铺满屏幕，文字和按钮要躲开刘海和手势条。" />
     <title>移动端安全区域怎样避免内容被刘海和底部手势条遮挡？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/mobile-safe-area/" />
     <meta name="robots" content="index,follow" />
@@ -19,26 +19,26 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="移动端安全区域怎样避免内容被刘海和底部手势条遮挡？" />
-    <meta property="og:description" content="移动端与 PWA面试题：安全区域适配要把背景铺满和内容可用范围分开，用 CSS 环境变量保护固定控件、滚动末尾和横屏边缘，同时处理动态工具栏和键盘的独立影响。" />
+    <meta property="og:description" content="移动端与 PWA面试题：背景可以铺满屏幕，文字和按钮要躲开刘海和手势条。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/mobile-safe-area/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/mobile-safe-area/#webpage","url":"https://fe.hushifa.top/questions/mobile-safe-area/","name":"移动端安全区域怎样避免内容被刘海和底部手势条遮挡？","description":"移动端与 PWA面试题：安全区域适配要把背景铺满和内容可用范围分开，用 CSS 环境变量保护固定控件、滚动末尾和横屏边缘，同时处理动态工具栏和键盘的独立影响。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/mobile-safe-area/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/mobile-safe-area/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"移动端与 PWA面试题","item":"https://fe.hushifa.top/topics/mobile/"},{"@type":"ListItem","position":3,"name":"移动端安全区域怎样避免内容被刘海和底部手势条遮挡？","item":"https://fe.hushifa.top/questions/mobile-safe-area/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/mobile-safe-area/#webpage","url":"https://fe.hushifa.top/questions/mobile-safe-area/","name":"移动端安全区域怎样避免内容被刘海和底部手势条遮挡？","description":"移动端与 PWA面试题：背景可以铺满屏幕，文字和按钮要躲开刘海和手势条。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/mobile-safe-area/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/mobile-safe-area/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"移动端与 PWA面试题","item":"https://fe.hushifa.top/topics/mobile/"},{"@type":"ListItem","position":3,"name":"移动端安全区域怎样避免内容被刘海和底部手势条遮挡？","item":"https://fe.hushifa.top/questions/mobile-safe-area/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/mobile/">移动端与 PWA面试题</a><span aria-hidden="true">/</span><span aria-current="page">移动端安全区域怎样避免内容被刘海和底部手势条遮挡？</span></nav><h1 tabindex="-1">移动端安全区域怎样避免内容被刘海和底部手势条遮挡？</h1><p class="reading-summary">安全区域适配要把背景铺满和内容可用范围分开，用 CSS 环境变量保护固定控件、滚动末尾和横屏边缘，同时处理动态工具栏和键盘的独立影响。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>页面要延伸到刘海和圆角区域，需要在 viewport meta 中设置 <code>viewport-fit=cover</code>。</li>
-<li>设置后用 <code>env(safe-area-inset-top/right/bottom/left)</code> 获取被遮挡的距离，给内容和固定控件加上对应的内边距。</li>
-<li>背景可以铺满整个屏幕，只有文字、按钮等可交互内容需要避开安全区域。</li>
-<li>底部固定栏、滚动列表末尾和横屏时的左右两侧最容易被遮挡。</li>
-<li>浏览器地址栏伸缩和虚拟键盘不属于安全区域，要用动态视口单位或 VisualViewport 单独处理。</li>
-</ul>
-<h2>开启全屏布局</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/mobile/">移动端与 PWA面试题</a><span aria-hidden="true">/</span><span aria-current="page">移动端安全区域怎样避免内容被刘海和底部手势条遮挡？</span></nav><h1 tabindex="-1">移动端安全区域怎样避免内容被刘海和底部手势条遮挡？</h1><p class="reading-summary">背景可以铺满屏幕，文字和按钮要躲开刘海和手势条。用 CSS 环境变量 env() 保护固定控件、滚动末尾和横屏边缘，动态工具栏和键盘要另外处理。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>现在的手机屏幕有刘海、圆角和底部手势条，这些地方放内容会被挡住。屏幕上不会被挡的那块区域，就叫安全区域。</p>
+<p>想让页面铺满整个屏幕，要先在 viewport meta 里加 <code>viewport-fit=cover</code>。加了以后，用 <code>env(safe-area-inset-top)</code> 这类变量拿到每条边被挡住的距离，给内容加上对应的内边距。</p>
+<p>原则是背景可以铺满，只有文字、按钮这些要看清、要点到的内容需要避开。最容易出问题的是底部固定栏、列表最后一项，以及横屏时的左右两侧。</p>
+<p>要注意，地址栏伸缩和虚拟键盘不算安全区域，得用动态视口单位或 VisualViewport 另外处理。</p>
+</blockquote>
+<h2>怎样让页面铺满屏幕</h2>
 <div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;viewport&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;width=device-width, initial-scale=1, viewport-fit=cover&quot;</span> /&gt;</span>
 </code></pre></div>
-<p>不设置 <code>viewport-fit=cover</code> 时，浏览器会自动在页面周围留出安全区域，<code>env()</code> 的值为 0；设置后页面占满屏幕，避让工作交给开发者。</p>
-<h2>常见写法</h2>
+<p>不写 <code>viewport-fit=cover</code> 时，浏览器会自己在页面四周留出安全区域，这时 <code>env()</code> 的值都是 0。写了以后页面占满屏幕，避让的工作就交给开发者了。</p>
+<h2>常见的几种写法</h2>
+<p>下面这段 CSS 分别处理底部工具栏、列表末尾和顶部。</p>
 <div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.toolbar</span> {
   <span class="hljs-attribute">position</span>: fixed;
   <span class="hljs-attribute">inset-inline</span>: <span class="hljs-number">0</span>;
@@ -56,28 +56,25 @@
   <span class="hljs-attribute">padding-top</span>: <span class="hljs-built_in">env</span>(safe-area-inset-top, <span class="hljs-number">0px</span>);
 }
 </code></pre></div>
-<ul>
-<li>底部工具栏的背景铺到屏幕底边，按钮通过内边距避开手势条。</li>
-<li>列表末尾留出工具栏高度加安全区域的空间，最后一项不会被挡住。</li>
-<li>横屏时刘海在左侧或右侧，用 <code>max()</code> 保证至少有正常的内边距。</li>
-<li><code>env()</code> 第二个参数是回退值，不支持的浏览器使用它。</li>
-</ul>
-<h2>动态工具栏和键盘</h2>
-<ul>
-<li>移动浏览器的地址栏会随滚动收起和展开，<code>100vh</code> 按工具栏收起时的高度计算，可能被遮挡。用 <code>100dvh</code>（随工具栏变化）或 <code>100svh</code>（按工具栏展开时计算）代替。</li>
-<li>虚拟键盘弹出时安全区域不会变化，底部固定栏可能被键盘遮挡，处理方式见<a href="/questions/mobile-virtual-keyboard/">《移动端虚拟键盘出现时怎样避免布局被遮挡？》</a>。</li>
-</ul>
-<h2>测试</h2>
-<ul>
-<li>iOS 模拟器选择带刘海和灵动岛的机型，分别测试竖屏和横屏。</li>
-<li>Android 设备上开启全面屏手势测试底部区域。</li>
-<li>Chrome DevTools 的设备模拟不能准确模拟安全区域，要以真机或模拟器为准。</li>
-</ul>
+<p>底部工具栏的背景一直铺到屏幕底边，按钮靠 <code>padding-bottom</code> 躲开手势条，所以看起来不会有一截空白。</p>
+<p>列表的问题是最后一项会被固定的工具栏挡住。所以列表底部要留出“工具栏高度 + 安全区域”的空间。</p>
+<p>横屏时刘海跑到了左边或右边。左右内边距用 <code>max()</code>，取“正常边距”和“安全区域”里大的那个，这样没刘海的一侧也有正常的边距。</p>
+<p><code>env()</code> 的第二个参数是回退值，浏览器不支持这个变量时就用它。</p>
+<h2>地址栏和键盘为什么要另外处理</h2>
+<p>移动浏览器的地址栏会随着滚动收起和展开。<code>100vh</code> 是按地址栏收起时的高度算的，地址栏展开时，页面底部就可能被挡住。可以改用 <code>100dvh</code>，它会跟着地址栏变；或者 <code>100svh</code>，它按地址栏展开时的高度算。</p>
+<p>虚拟键盘弹出时，安全区域不会变，所以底部固定栏可能被键盘盖住。处理方法见<a href="/questions/mobile-virtual-keyboard/">《移动端虚拟键盘出现时怎样避免布局被遮挡？》</a>。</p>
+<h2>怎样测试</h2>
+<p>iOS 模拟器里选带刘海和灵动岛的机型，竖屏横屏都测一遍。Android 设备上打开全面屏手势，测底部区域。</p>
+<p>Chrome DevTools 的设备模拟没法准确模拟安全区域，所以要以真机或模拟器为准。</p>
 <h2>常见追问</h2>
-<ul>
-<li><code>constant()</code> 还需要写吗？这是 iOS 11.0 的旧语法，iOS 11.2 起已改为 <code>env()</code>，现在不需要再写。</li>
-<li>WebView 中安全区域无效怎么办？需要原生侧允许 WebView 内容延伸到安全区域之外，否则原生已经留了空间，<code>env()</code> 的值为 0。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/env" target="_blank" rel="noreferrer">MDN · env()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E7%A7%BB%E5%8A%A8%E7%AB%AF%E5%AE%89%E5%85%A8%E5%8C%BA%E5%9F%9F%E6%80%8E%E6%A0%B7%E9%81%BF%E5%85%8D%E5%86%85%E5%AE%B9%E8%A2%AB%E5%88%98%E6%B5%B7%E5%92%8C%E5%BA%95%E9%83%A8%E6%89%8B%E5%8A%BF%E6%9D%A1%E9%81%AE%E6%8C%A1%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E5%AE%89%E5%85%A8%E5%8C%BA%E5%9F%9F%E6%80%8E%E6%A0%B7%E9%81%BF%E5%85%8D%E5%86%85%E5%AE%B9%E8%A2%AB%E5%88%98%E6%B5%B7%E5%92%8C%E5%BA%95%E9%83%A8%E6%89%8B%E5%8A%BF%E6%9D%A1%E9%81%AE%E6%8C%A1%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Amobile-safe-area%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E4%B8%8E+PWA%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fmobile-safe-area%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：移动端安全区域怎样避免内容被刘海和底部手势条遮挡？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/mobile-pointer-events/">Pointer Events 为什么适合统一鼠标、触摸和触控笔交互？</a></li><li><a href="/questions/mobile-virtual-keyboard/">移动端虚拟键盘出现时怎样避免布局被遮挡？</a></li><li><a href="/questions/mobile-web-share/">Web Share API 使用时要处理哪些降级？</a></li><li><a href="/questions/mobile-screen-orientation/">Screen Orientation API 的锁定和解锁有什么限制？</a></li></ul></nav></main></div></div>
+<p><strong>constant() 还需要写吗？</strong></p>
+<blockquote>
+<p>不需要了。<code>constant()</code> 是 iOS 11.0 的旧写法，iOS 11.2 起已经改成 <code>env()</code>。</p>
+</blockquote>
+<p><strong>WebView 里安全区域不生效怎么办？</strong></p>
+<blockquote>
+<p>要让原生那边允许 WebView 的内容延伸到安全区域外面。否则原生已经替你留好了空间，<code>env()</code> 拿到的值就是 0。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/env" target="_blank" rel="noreferrer">MDN · env()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E7%A7%BB%E5%8A%A8%E7%AB%AF%E5%AE%89%E5%85%A8%E5%8C%BA%E5%9F%9F%E6%80%8E%E6%A0%B7%E9%81%BF%E5%85%8D%E5%86%85%E5%AE%B9%E8%A2%AB%E5%88%98%E6%B5%B7%E5%92%8C%E5%BA%95%E9%83%A8%E6%89%8B%E5%8A%BF%E6%9D%A1%E9%81%AE%E6%8C%A1%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E5%AE%89%E5%85%A8%E5%8C%BA%E5%9F%9F%E6%80%8E%E6%A0%B7%E9%81%BF%E5%85%8D%E5%86%85%E5%AE%B9%E8%A2%AB%E5%88%98%E6%B5%B7%E5%92%8C%E5%BA%95%E9%83%A8%E6%89%8B%E5%8A%BF%E6%9D%A1%E9%81%AE%E6%8C%A1%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Amobile-safe-area%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E4%B8%8E+PWA%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fmobile-safe-area%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：移动端安全区域怎样避免内容被刘海和底部手势条遮挡？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/mobile-pointer-events/">Pointer Events 为什么适合统一鼠标、触摸和触控笔交互？</a></li><li><a href="/questions/mobile-virtual-keyboard/">移动端虚拟键盘出现时怎样避免布局被遮挡？</a></li><li><a href="/questions/mobile-web-share/">Web Share API 使用时要处理哪些降级？</a></li><li><a href="/questions/mobile-screen-orientation/">Screen Orientation API 的锁定和解锁有什么限制？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

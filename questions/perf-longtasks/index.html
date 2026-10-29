@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="性能优化面试题：主线程上连续执行 50ms 以上的任务是长任务。执行期间用户输入只能排队，渲染也被推迟，表现为点击没反应、INP 变差。" />
+    <meta name="description" content="性能优化面试题：主线程上连续执行 50ms 以上的任务就是长任务。它执行期间用户输入只能排队、渲染也被推迟，表现为点了没反应、INP 变差。" />
     <title>什么是长任务，为什么会影响交互响应？怎样观测和拆分？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/perf-longtasks/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,25 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="什么是长任务，为什么会影响交互响应？怎样观测和拆分？" />
-    <meta property="og:description" content="性能优化面试题：主线程上连续执行 50ms 以上的任务是长任务。执行期间用户输入只能排队，渲染也被推迟，表现为点击没反应、INP 变差。" />
+    <meta property="og:description" content="性能优化面试题：主线程上连续执行 50ms 以上的任务就是长任务。它执行期间用户输入只能排队、渲染也被推迟，表现为点了没反应、INP 变差。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/perf-longtasks/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-longtasks/#webpage","url":"https://fe.hushifa.top/questions/perf-longtasks/","name":"什么是长任务，为什么会影响交互响应？怎样观测和拆分？","description":"性能优化面试题：主线程上连续执行 50ms 以上的任务是长任务。执行期间用户输入只能排队，渲染也被推迟，表现为点击没反应、INP 变差。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-longtasks/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-longtasks/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"什么是长任务，为什么会影响交互响应？怎样观测和拆分？","item":"https://fe.hushifa.top/questions/perf-longtasks/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-longtasks/#webpage","url":"https://fe.hushifa.top/questions/perf-longtasks/","name":"什么是长任务，为什么会影响交互响应？怎样观测和拆分？","description":"性能优化面试题：主线程上连续执行 50ms 以上的任务就是长任务。它执行期间用户输入只能排队、渲染也被推迟，表现为点了没反应、INP 变差。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-longtasks/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-longtasks/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"什么是长任务，为什么会影响交互响应？怎样观测和拆分？","item":"https://fe.hushifa.top/questions/perf-longtasks/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">什么是长任务，为什么会影响交互响应？怎样观测和拆分？</span></nav><h1 tabindex="-1">什么是长任务，为什么会影响交互响应？怎样观测和拆分？</h1><p class="reading-summary">主线程上连续执行 50ms 以上的任务是长任务。执行期间用户输入只能排队，渲染也被推迟，表现为点击没反应、INP 变差。可以用 PerformanceObserver 观察 longtask 或更详细的 long-animation-frame 定位，再通过减少工作、分片让出主线程或移到 Worker 来优化。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>主线程同时负责 JavaScript、输入事件、样式、布局和绘制，一个任务连续占用 50ms 以上就是长任务。</li>
-<li>用户在长任务期间的点击要等它结束才能处理，这段等待计入 INP 的输入延迟。</li>
-<li>观测：<code>PerformanceObserver</code> 观察 <code>longtask</code>；Chromium 中优先用 Long Animation Frames（<code>long-animation-frame</code>），它以帧为单位，并能归因到具体脚本。</li>
-<li>优化顺序：先减少不必要的工作，再分片并在片之间让出主线程（<code>scheduler.yield()</code>，不支持时退回 <code>setTimeout</code>），纯计算移到 Worker。</li>
-<li><code>await Promise.resolve()</code> 只进入微任务队列，不会让浏览器处理输入或渲染。</li>
-</ul>
-<h2>观测</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">什么是长任务，为什么会影响交互响应？怎样观测和拆分？</span></nav><h1 tabindex="-1">什么是长任务，为什么会影响交互响应？怎样观测和拆分？</h1><p class="reading-summary">主线程上连续执行 50ms 以上的任务就是长任务。它执行期间用户输入只能排队、渲染也被推迟，表现为点了没反应、INP 变差。可以用 PerformanceObserver 观察 longtask 或更详细的 long-animation-frame 来定位，再通过减少工作、分片让出主线程或移到 Worker 来优化。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>浏览器的主线程要同时负责跑 JavaScript、处理输入事件、算样式、布局和绘制。一个任务连续占着主线程 50 毫秒以上，就叫长任务。</p>
+<p>长任务的问题是，它执行期间用户点了什么都只能排队，页面也没法渲染。所以用户会觉得点了没反应，这段等待会计入 INP 的输入延迟。</p>
+<p>观测可以用 <code>PerformanceObserver</code> 观察 <code>longtask</code>。在 Chromium 里更推荐 Long Animation Frames，也就是 <code>long-animation-frame</code>，它以帧为单位，还能归因到具体脚本。</p>
+<p>优化的顺序是：先减少不必要的工作；再把任务切成小片，每片之间让出主线程，优先用 <code>scheduler.yield()</code>，不支持就退回 <code>setTimeout</code>；纯计算挪到 Worker。要注意，<code>await Promise.resolve()</code> 只是进了微任务队列，浏览器在中间既不会处理输入，也不会渲染。</p>
+</blockquote>
+<h2>为什么一个任务太长，点击就没反应</h2>
+<p>事件循环里，浏览器一次只执行一个任务，执行完才能去处理下一个，比如用户的点击，或者渲染下一帧。所以一个任务跑了 200ms，这 200ms 里用户的点击只能干等。</p>
+<p>50ms 这个数字来自 RAIL 模型：要在 100ms 内响应用户输入，留一半时间给浏览器做其他工作。它只是观测阈值，不代表低于 50ms 就一定流畅。</p>
+<h2>怎样观测长任务</h2>
+<p>下面的代码观察所有长任务，记下时长和它来自哪个容器：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">new</span> <span class="hljs-title class_">PerformanceObserver</span>(<span class="hljs-function">(<span class="hljs-params">list</span>) =&gt;</span> {
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> entry <span class="hljs-keyword">of</span> list.<span class="hljs-title function_">getEntries</span>()) {
     <span class="hljs-comment">// containerSrc 可能带查询参数等敏感信息，上报前只保留来源</span>
@@ -44,8 +47,30 @@
   }
 }).<span class="hljs-title function_">observe</span>({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;longtask&#x27;</span>, <span class="hljs-attr">buffered</span>: <span class="hljs-literal">true</span> });
 </code></pre></div>
-<p>Long Tasks API 只告诉你&quot;有一段长时间占用&quot;。<code>attribution</code> 只到容器（哪个 iframe 或窗口），不是调用栈。<code>buffered: true</code> 只能拿到时间线缓冲区里仍保留的条目，不是完整历史。要判断长任务是否影响了用户，把条目的 <code>startTime</code> 和用户操作处的 <code>performance.mark()</code> 对齐比较。需要知道是哪个脚本、是否发生强制布局时，用 LoAF，见<a href="/questions/perf-long-animation-frames/">《如何用 Long Animation Frames API 定位卡顿来源？》</a>。LoAF 目前不是 Baseline。两种条目都先用 <code>PerformanceObserver.supportedEntryTypes.includes(&#x27;longtask&#x27;)</code> 或 <code>&#x27;long-animation-frame&#x27;</code> 检测再观察。</p>
-<h2>分片让出主线程</h2>
+<p>看完会发现，Long Tasks API 能告诉你的其实很少，它只说“这里有一段时间被占用了”。<code>attribution</code> 只能指到容器，也就是哪个 iframe 或窗口，不是调用栈。<code>buffered: true</code> 也只能拿到时间线缓冲区里还保留着的条目，不是完整历史。</p>
+<p>那怎么判断某个长任务有没有影响到用户？可以在用户操作的地方打 <code>performance.mark()</code>，再拿长任务的 <code>startTime</code> 去对齐比较。</p>
+<p>如果要知道是哪个脚本、有没有发生强制布局，就要用 LoAF，见<a href="/questions/perf-long-animation-frames/">《如何用 Long Animation Frames API 定位卡顿来源？》</a>。LoAF 目前不是 Baseline，所以两种条目都要先用 <code>PerformanceObserver.supportedEntryTypes.includes(&#x27;longtask&#x27;)</code> 或 <code>&#x27;long-animation-frame&#x27;</code> 检测，再去观察。</p>
+<h2>怎样把长任务切开</h2>
+<h3>await 一个已完成的 Promise 为什么没用</h3>
+<p>很多人想到的第一个办法是在循环里 <code>await</code> 一下。先看这样做会发生什么：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;定时器（代表输入和渲染的机会）&#x27;</span>), <span class="hljs-number">0</span>);
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">work</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i += <span class="hljs-number">1</span>) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;处理第&#x27;</span>, i, <span class="hljs-string">&#x27;片&#x27;</span>);
+    <span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>();
+  }
+}
+<span class="hljs-title function_">work</span>();
+<span class="hljs-comment">// 处理第 0 片</span>
+<span class="hljs-comment">// 处理第 1 片</span>
+<span class="hljs-comment">// 处理第 2 片</span>
+<span class="hljs-comment">// 定时器（代表输入和渲染的机会）</span>
+</code></pre></div>
+<p>代码确实停了三次，可是定时器回调一直等到所有片都处理完才执行。原因是 <code>await</code> 后面的代码进的是微任务队列，而浏览器要把微任务全部清空，才会去处理下一个任务。所以这几片在浏览器看来还是同一个长任务，用户的点击和渲染照样插不进来。</p>
+<p>改法是让出到任务层面，也就是真正把控制权还给浏览器。</p>
+<h3>真正让出主线程</h3>
+<p>下面的写法每处理约 8ms 就让出一次：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">yieldToBrowser</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">if</span> (globalThis.<span class="hljs-property">scheduler</span>?.<span class="hljs-property">yield</span>) <span class="hljs-keyword">return</span> globalThis.<span class="hljs-property">scheduler</span>.<span class="hljs-title function_">yield</span>();
   <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> <span class="hljs-built_in">setTimeout</span>(resolve, <span class="hljs-number">0</span>));
@@ -63,30 +88,28 @@
   }
 }
 </code></pre></div>
-<ul>
-<li>每处理约 8ms 让出一次，给输入和渲染机会，数值按设备调整。</li>
-<li><code>scheduler.yield()</code> 返回后的续作排在同优先级普通任务之前，不容易被其他任务插队；在 <code>scheduler.postTask()</code> 回调中调用时会继承该任务的优先级。MDN 标注其为有限可用，需要特性检测。</li>
-<li><code>setTimeout</code> 降级可能被浏览器节流，后台标签页里延迟更大。</li>
-<li>用户发起了新操作时，用 <code>AbortSignal</code> 取消旧任务，避免旧结果覆盖新状态。</li>
-</ul>
-<h2>其他手段</h2>
-<ul>
-<li>减少工作：避免每次输入都全量重新计算，缓存结果，对输入防抖。</li>
-<li>Worker：排序、解析、压缩这类纯计算放到 Worker，注意数据传输的克隆成本，大数据用 Transferable 转移。</li>
-<li>渲染成本：大量 DOM 用虚拟列表，避免读写布局交替导致强制同步布局。</li>
-<li>页面加载阶段：拆分打包产物，推迟非关键脚本。</li>
-</ul>
-<h2>和 TBT、INP 的区别</h2>
-<ul>
-<li>Long Task：单个超过 50ms 的任务，是原始观测数据。</li>
-<li>TBT（Total Blocking Time）：实验室指标，加载期间每个长任务超过 50ms 的部分累加。</li>
-<li>INP：现场指标，统计真实交互从输入到下一帧绘制的耗时。长任务是 INP 变差的常见原因，但没有交互时长任务不影响 INP。</li>
-</ul>
+<p>8ms 是给输入和渲染留出机会的一个经验值，可以按设备调整。</p>
+<p>为什么优先用 <code>scheduler.yield()</code>？因为它返回以后，剩下的工作会排在同优先级普通任务的前面，不容易被别的任务插队。如果是在 <code>scheduler.postTask()</code> 的回调里调用，还会继承那个任务的优先级。MDN 标注它为有限可用，所以要特性检测。</p>
+<p>退回到 <code>setTimeout</code> 也能让出，但浏览器可能对它节流，后台标签页里延迟会更大。</p>
+<p>代码里的 <code>signal</code> 是做什么的？用户发起了新操作时，用 <code>AbortSignal</code> 取消旧任务，避免旧结果覆盖新状态。</p>
+<h2>除了切片还有哪些办法</h2>
+<p>最根本的是减少工作。不要每次输入都全量重新算，能缓存就缓存，输入可以防抖。</p>
+<p>纯计算，比如排序、解析、压缩，可以放到 Worker 里，它跑在另一个线程上，不占主线程。不过数据传过去要复制一份，大数据可以用 Transferable 直接转移所有权。</p>
+<p>渲染成本也要控制。大量 DOM 用虚拟列表；不要读写布局交替进行，否则会触发强制同步布局。</p>
+<p>页面加载阶段的长任务，主要靠拆分打包产物、推迟非关键脚本来解决。</p>
+<h2>长任务、TBT、INP 有什么区别</h2>
+<p>长任务是原始的观测数据，指单个超过 50ms 的任务。</p>
+<p>TBT，总阻塞时间，是实验室指标，把加载期间每个长任务超过 50ms 的部分加起来。</p>
+<p>INP 是现场指标，统计真实交互从输入到下一帧绘制的耗时。长任务是 INP 变差的常见原因，可是如果长任务期间用户没有操作，它就不会影响 INP。</p>
 <h2>常见追问</h2>
-<ul>
-<li>50ms 是怎么来的？来自 RAIL 模型：在 100ms 内响应输入，留一半给浏览器的其他工作。它是观测阈值，不代表低于 50ms 就一定流畅。</li>
-<li>多个 30ms 的任务连在一起会怎样？单个都不算长任务，但可能共同让一帧超过 50ms，LoAF 能发现这种情况。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/PerformanceLongTaskTiming" target="_blank" rel="noreferrer">MDN · PerformanceLongTaskTiming<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%BB%80%E4%B9%88%E6%98%AF%E9%95%BF%E4%BB%BB%E5%8A%A1%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E5%BD%B1%E5%93%8D%E4%BA%A4%E4%BA%92%E5%93%8D%E5%BA%94%EF%BC%9F%E6%80%8E%E6%A0%B7%E8%A7%82%E6%B5%8B%E5%92%8C%E6%8B%86%E5%88%86%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E9%95%BF%E4%BB%BB%E5%8A%A1%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E5%BD%B1%E5%93%8D%E4%BA%A4%E4%BA%92%E5%93%8D%E5%BA%94%EF%BC%9F%E6%80%8E%E6%A0%B7%E8%A7%82%E6%B5%8B%E5%92%8C%E6%8B%86%E5%88%86%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aperf-longtasks%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fperf-longtasks%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：什么是长任务，为什么会影响交互响应？怎样观测和拆分？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/perf-long-animation-frames/">如何用 Long Animation Frames API 定位卡顿来源？</a></li><li><a href="/questions/engineering-vitals/">LCP、INP、CLS 分别衡量什么？</a></li><li><a href="/questions/perf-lazy-images/">懒加载为什么有时反而让首屏和首次交互变慢？</a></li><li><a href="/questions/perf-virtual-list/">虚拟列表通过什么方式减少渲染成本？</a></li></ul></nav></main></div></div>
+<p><strong>50ms 是怎么来的？</strong></p>
+<blockquote>
+<p>来自 RAIL 模型，目标是在 100ms 内响应输入，留一半时间给浏览器的其他工作。它是一个观测阈值，不代表低于 50ms 就一定流畅。</p>
+</blockquote>
+<p><strong>多个 30ms 的任务连在一起会怎样？</strong></p>
+<blockquote>
+<p>单个都不算长任务，Long Tasks API 也不会报。但它们可能一起让一帧超过 50ms，这种情况 LoAF 能发现。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/PerformanceLongTaskTiming" target="_blank" rel="noreferrer">MDN · PerformanceLongTaskTiming<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%BB%80%E4%B9%88%E6%98%AF%E9%95%BF%E4%BB%BB%E5%8A%A1%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E5%BD%B1%E5%93%8D%E4%BA%A4%E4%BA%92%E5%93%8D%E5%BA%94%EF%BC%9F%E6%80%8E%E6%A0%B7%E8%A7%82%E6%B5%8B%E5%92%8C%E6%8B%86%E5%88%86%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E9%95%BF%E4%BB%BB%E5%8A%A1%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E5%BD%B1%E5%93%8D%E4%BA%A4%E4%BA%92%E5%93%8D%E5%BA%94%EF%BC%9F%E6%80%8E%E6%A0%B7%E8%A7%82%E6%B5%8B%E5%92%8C%E6%8B%86%E5%88%86%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aperf-longtasks%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fperf-longtasks%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：什么是长任务，为什么会影响交互响应？怎样观测和拆分？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/perf-long-animation-frames/">如何用 Long Animation Frames API 定位卡顿来源？</a></li><li><a href="/questions/engineering-vitals/">LCP、INP、CLS 分别衡量什么？</a></li><li><a href="/questions/perf-lazy-images/">懒加载为什么有时反而让首屏和首次交互变慢？</a></li><li><a href="/questions/perf-virtual-list/">虚拟列表通过什么方式减少渲染成本？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

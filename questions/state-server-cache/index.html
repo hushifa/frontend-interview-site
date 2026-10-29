@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="状态与路由面试题：服务端数据的真实来源在服务器，前端拿到的只是某一时刻的缓存副本，会过期、会被别人修改。" />
+    <meta name="description" content="状态与路由面试题：服务端数据真正的来源在服务器，前端拿到的只是某一刻的缓存副本，会过期、会被别人改。" />
     <title>为什么要用 TanStack Query 或 SWR 管理服务端状态？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/state-server-cache/" />
     <meta name="robots" content="index,follow" />
@@ -19,24 +19,24 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="为什么要用 TanStack Query 或 SWR 管理服务端状态？" />
-    <meta property="og:description" content="状态与路由面试题：服务端数据的真实来源在服务器，前端拿到的只是某一时刻的缓存副本，会过期、会被别人修改。" />
+    <meta property="og:description" content="状态与路由面试题：服务端数据真正的来源在服务器，前端拿到的只是某一刻的缓存副本，会过期、会被别人改。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/state-server-cache/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/state-server-cache/#webpage","url":"https://fe.hushifa.top/questions/state-server-cache/","name":"为什么要用 TanStack Query 或 SWR 管理服务端状态？","description":"状态与路由面试题：服务端数据的真实来源在服务器，前端拿到的只是某一时刻的缓存副本，会过期、会被别人修改。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/state-server-cache/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/state-server-cache/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"状态与路由面试题","item":"https://fe.hushifa.top/topics/state-routing/"},{"@type":"ListItem","position":3,"name":"为什么要用 TanStack Query 或 SWR 管理服务端状态？","item":"https://fe.hushifa.top/questions/state-server-cache/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/state-server-cache/#webpage","url":"https://fe.hushifa.top/questions/state-server-cache/","name":"为什么要用 TanStack Query 或 SWR 管理服务端状态？","description":"状态与路由面试题：服务端数据真正的来源在服务器，前端拿到的只是某一刻的缓存副本，会过期、会被别人改。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/state-server-cache/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/state-server-cache/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"状态与路由面试题","item":"https://fe.hushifa.top/topics/state-routing/"},{"@type":"ListItem","position":3,"name":"为什么要用 TanStack Query 或 SWR 管理服务端状态？","item":"https://fe.hushifa.top/questions/state-server-cache/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/state-routing/">状态与路由面试题</a><span aria-hidden="true">/</span><span aria-current="page">为什么要用 TanStack Query 或 SWR 管理服务端状态？</span></nav><h1 tabindex="-1">为什么要用 TanStack Query 或 SWR 管理服务端状态？</h1><p class="reading-summary">服务端数据的真实来源在服务器，前端拿到的只是某一时刻的缓存副本，会过期、会被别人修改。TanStack Query 和 SWR 按 key 缓存请求结果，负责去重、过期判断、重新获取、重试和失效后刷新，组件只声明需要哪份数据。它们不适合用来存放纯客户端的界面状态。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>服务端状态与界面状态不同：数据由服务器持有，前端副本可能已经过期，需要决定何时重新获取，以及修改后哪些缓存要失效。</li>
-<li>两个库都按 key 缓存：相同 key 的组件共享同一份数据和同一个进行中的请求，key 变化时自动请求新数据。</li>
-<li>TanStack Query 默认 <code>staleTime</code> 为 0，数据一到手就视为过期；组件挂载、窗口重新聚焦、网络恢复时会在后台重新获取。没有组件使用的缓存 5 分钟后回收，失败的查询默认重试 3 次。</li>
-<li>SWR 按&quot;先返回缓存，再重新验证&quot;工作，窗口聚焦、网络恢复时可以重新验证，短时间内相同 key 的请求会去重。key 传 <code>null</code> 时不发请求，用于条件请求。</li>
-<li>修改数据后要让相关缓存失效：TanStack Query 用 <code>queryClient.invalidateQueries</code>，SWR 用 <code>mutate</code>。</li>
-</ul>
-<h2>手写的问题</h2>
-<p>用 <code>useEffect</code> 加 <code>useState</code> 请求数据时，每个组件各自请求，多处使用同一接口会重复请求；切换参数时旧响应可能晚到并覆盖新数据；回到页面时数据不会刷新；修改之后要手动通知所有使用方。把这些逻辑放进全局 store 也只是换了地方写。</p>
-<h2>TanStack Query</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/state-routing/">状态与路由面试题</a><span aria-hidden="true">/</span><span aria-current="page">为什么要用 TanStack Query 或 SWR 管理服务端状态？</span></nav><h1 tabindex="-1">为什么要用 TanStack Query 或 SWR 管理服务端状态？</h1><p class="reading-summary">服务端数据真正的来源在服务器，前端拿到的只是某一刻的缓存副本，会过期、会被别人改。TanStack Query 和 SWR 按 key 缓存请求结果，负责去重、过期判断、重新获取、重试和失效后刷新，组件只声明需要哪份数据。它们不适合存放纯客户端的界面状态。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>服务端状态和界面状态不是一回事。弹窗开没开，只有前端知道；订单列表的数据，真正的版本在服务器上，前端拿到的只是某一刻的副本，可能已经过期了。所以要决定什么时候重新获取，修改以后哪些缓存要作废。</p>
+<p>TanStack Query 和 SWR 都是按 key 缓存的。用同一个 key 的组件，共享同一份数据和同一个进行中的请求；key 变了，就自动请求新数据。</p>
+<p>两者的默认行为不太一样。TanStack Query 默认 <code>staleTime</code> 是 0，数据一到手就算过期，组件挂载、窗口重新聚焦、网络恢复时会在后台重新获取；没有组件使用的缓存 5 分钟后回收；失败的查询默认重试 3 次。SWR 的思路是“先返回缓存，再重新验证”，窗口聚焦、网络恢复时可以重新验证，短时间内相同 key 的请求会去重；key 传 <code>null</code> 就不发请求，用来做条件请求。</p>
+<p>要注意，修改数据以后要让相关缓存失效。TanStack Query 用 <code>queryClient.invalidateQueries</code>，SWR 用 <code>mutate</code>。</p>
+</blockquote>
+<h2>自己用 useEffect 请求有什么问题</h2>
+<p>用 <code>useEffect</code> 加 <code>useState</code> 请求数据，问题会一个个冒出来。每个组件各请求各的，好几处用同一个接口就重复请求。切换参数时，旧响应可能晚到，把新数据盖掉。回到页面时数据不会自动刷新。修改了数据，还得手动通知所有用到它的地方。</p>
+<p>把这些逻辑搬进全局 store，也只是换了个地方写，问题一个没少。查询库就是把这些事统一做掉了。</p>
+<h2>TanStack Query 怎么用</h2>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { keepPreviousData, useQuery, useMutation, useQueryClient } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@tanstack/react-query&#x27;</span>;
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">useTodos</span>(<span class="hljs-params">filter</span>) {
@@ -69,8 +69,10 @@
   });
 }
 </code></pre></div>
-<p><code>queryKey</code> 要包含 <code>queryFn</code> 用到的所有参数，否则参数变化时会命中旧缓存。<code>fetch</code> 遇到 4xx/5xx 不会拒绝，要自己抛错，查询才会进入错误状态并触发重试。返回结果默认做结构共享，内容没变时保持原引用。</p>
-<p>一个查询依赖另一个查询的结果时，用 <code>enabled</code> 控制何时执行：</p>
+<p><code>queryKey</code> 里要包含 <code>queryFn</code> 用到的所有参数。这里 <code>queryFn</code> 用了 <code>filter</code>，key 里就要有 <code>filter</code>。漏了的话，参数变了 key 却没变，拿到的还是旧缓存。</p>
+<p>为什么 <code>queryFn</code> 里要自己判断 <code>res.ok</code> 再抛错？因为 <code>fetch</code> 遇到 4xx、5xx 并不会 reject，只有网络错误才会。不抛错，查询库就以为请求成功了，既不会进入错误状态，也不会重试。</p>
+<p>新增待办成功后，<code>invalidateQueries</code> 让所有以 <code>[&#x27;todos&#x27;]</code> 开头的查询失效，于是列表会重新获取。另外，返回的结果默认做结构共享：新数据和旧数据内容一样的部分，会保留原来的引用，组件就不会白白重新渲染。</p>
+<p>一个查询要等另一个查询的结果时，用 <code>enabled</code> 控制什么时候执行：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">const</span> { <span class="hljs-attr">data</span>: user } = <span class="hljs-title function_">useQuery</span>({ <span class="hljs-attr">queryKey</span>: [<span class="hljs-string">&#x27;user&#x27;</span>, email], <span class="hljs-attr">queryFn</span>: getUserByEmail });
 <span class="hljs-keyword">const</span> userId = user?.<span class="hljs-property">id</span>;
 <span class="hljs-keyword">const</span> { <span class="hljs-attr">data</span>: projects } = <span class="hljs-title function_">useQuery</span>({
@@ -79,8 +81,9 @@
   <span class="hljs-attr">enabled</span>: !!userId, <span class="hljs-comment">// userId 就绪前不请求，状态为 pending、fetchStatus 为 idle</span>
 });
 </code></pre></div>
-<p><code>placeholderData: keepPreviousData</code> 让新 key 的数据到达前继续显示上一次成功的结果，<code>isPlaceholderData</code> 可以区分当前是不是占位数据，适合分页和筛选切换。</p>
-<h2>SWR</h2>
+<p><code>userId</code> 还没拿到时，第二个查询不发请求，状态是 pending，<code>fetchStatus</code> 是 idle，意思是“还没数据，但也没在请求”。</p>
+<p>前面用到的 <code>placeholderData: keepPreviousData</code>，作用是新 key 的数据到达之前，继续显示上一次成功的结果，而不是闪回加载状态。<code>isPlaceholderData</code> 可以告诉你当前显示的是不是占位数据。分页和筛选切换很适合这样用。</p>
+<h2>SWR 怎么用</h2>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> useSWR <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;swr&#x27;</span>;
 
 <span class="hljs-keyword">const</span> <span class="hljs-title function_">fetcher</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params">url</span>) =&gt; {
@@ -95,15 +98,23 @@
   <span class="hljs-comment">// ...修改成功后调用 mutate() 重新验证这一个 key</span>
 }
 </code></pre></div>
-<p><code>useSWR</code> 返回的 <code>mutate</code> 已绑定当前 key；要更新其他 key，用 <code>useSWRConfig()</code> 拿到全局 <code>mutate</code> 并传入 key。<code>revalidateOnFocus</code>、<code>revalidateOnReconnect</code>、<code>dedupingInterval</code> 等选项控制重新验证和去重，默认值以 SWR 官方 API 文档为准。</p>
-<h2>和全局 store 的分工</h2>
-<p>服务端数据交给查询库，弹窗开关、表单草稿、主题这类只存在于客户端的状态仍放在组件状态或 store 中，选择方法见<a href="/questions/state-store-choice/">《Zustand、Jotai 和 Redux Toolkit 应该怎样选择？》</a>。</p>
+<p><code>fetcher</code> 同样要自己抛错，道理和上面一样。<code>userId</code> 为空时 key 是 <code>null</code>，SWR 就不发请求。</p>
+<p><code>useSWR</code> 返回的 <code>mutate</code> 已经绑定了当前 key，调用它就重新验证这一份数据。要更新别的 key，用 <code>useSWRConfig()</code> 拿到全局的 <code>mutate</code>，再把 key 传进去。<code>revalidateOnFocus</code>、<code>revalidateOnReconnect</code>、<code>dedupingInterval</code> 这些选项控制重新验证和去重，默认值以 SWR 官方 API 文档为准。</p>
+<h2>和全局 store 怎么分工</h2>
+<p>服务端数据交给查询库。弹窗开关、表单草稿、主题这类只存在于客户端的状态，仍然放在组件状态或 store 里。怎么选 store，见<a href="/questions/state-store-choice/">《Zustand、Jotai 和 Redux Toolkit 应该怎样选择？》</a>。</p>
 <h2>常见追问</h2>
-<ul>
-<li><code>staleTime</code> 和 <code>gcTime</code> 有什么区别？<code>staleTime</code> 决定数据多久后需要重新获取，<code>gcTime</code> 决定没有组件使用的缓存多久后从内存删除。</li>
-<li>怎样做乐观更新？在修改前写入预期结果，失败时回滚到之前的快照，成功或失败后都让缓存失效，以服务器数据为准。</li>
-<li>快速切换参数会不会出现旧响应覆盖？查询库按 key 存放结果，旧 key 的响应写入旧 key 的缓存，不会显示到新 key 上。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://tanstack.com/query/latest/docs/framework/react/guides/important-defaults" target="_blank" rel="noreferrer">TanStack Query · Important Defaults<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8+TanStack+Query+%E6%88%96+SWR+%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%8A%B6%E6%80%81%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8+TanStack+Query+%E6%88%96+SWR+%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%8A%B6%E6%80%81%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Astate-server-cache%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%8A%B6%E6%80%81%E4%B8%8E%E8%B7%AF%E7%94%B1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fstate-server-cache%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：为什么要用 TanStack Query 或 SWR 管理服务端状态？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/state-pinia/">Pinia 中 state、getter 和 action 应如何分工？</a></li><li><a href="/questions/state-redux/">Redux 的单向数据流为什么强调 reducer 的纯粹性？</a></li><li><a href="/questions/state-store-choice/">Zustand、Jotai 和 Redux Toolkit 应该怎样选择？</a></li><li><a href="/questions/state-router/">前端路由除切换组件外还需要管理什么？</a></li></ul></nav></main></div></div>
+<p><strong><code>staleTime</code> 和 <code>gcTime</code> 有什么区别？</strong></p>
+<blockquote>
+<p><code>staleTime</code> 决定数据多久之后算过期、需要重新获取；<code>gcTime</code> 决定没有组件使用的缓存，多久之后从内存里删掉。</p>
+</blockquote>
+<p><strong>乐观更新怎么做？</strong></p>
+<blockquote>
+<p>修改之前先把预期的结果写进缓存，失败了就回滚到之前的快照。不管成功还是失败，最后都让缓存失效，以服务器的数据为准。</p>
+</blockquote>
+<p><strong>快速切换参数，会不会出现旧响应覆盖新数据？</strong></p>
+<blockquote>
+<p>不会。查询库按 key 存放结果，旧 key 的响应写进旧 key 的缓存，不会显示到新 key 上。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://tanstack.com/query/latest/docs/framework/react/guides/important-defaults" target="_blank" rel="noreferrer">TanStack Query · Important Defaults<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8+TanStack+Query+%E6%88%96+SWR+%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%8A%B6%E6%80%81%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8+TanStack+Query+%E6%88%96+SWR+%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%8A%B6%E6%80%81%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Astate-server-cache%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%8A%B6%E6%80%81%E4%B8%8E%E8%B7%AF%E7%94%B1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fstate-server-cache%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：为什么要用 TanStack Query 或 SWR 管理服务端状态？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/state-pinia/">Pinia 中 state、getter 和 action 应如何分工？</a></li><li><a href="/questions/state-redux/">Redux 的单向数据流为什么强调 reducer 的纯粹性？</a></li><li><a href="/questions/state-store-choice/">Zustand、Jotai 和 Redux Toolkit 应该怎样选择？</a></li><li><a href="/questions/state-router/">前端路由除切换组件外还需要管理什么？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

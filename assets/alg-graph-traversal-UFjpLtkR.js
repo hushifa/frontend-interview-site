@@ -1,0 +1,111 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>前端里很多关系都是图，比如模块之间的依赖。可以用一个 <code>Map&lt;节点, 邻居数组&gt;</code> 来表示，这叫邻接表，<code>app → router</code> 就表示 app 依赖 router。</p>
+<p>遍历有两种方式。DFS 是深度优先，用栈，先沿一条路一直走到底，适合找出所有能到达的节点。BFS 是广度优先，用队列，按距离一层层往外扩，所以第一次碰到目标时，走的就是边数最少的路。</p>
+<p>两种都要用一个 <code>Set</code> 记下访问过的节点，因为图里可能有环，不记的话会绕着环无限循环。时间复杂度都是 O(V + E)，V 是节点数，E 是边数。</p>
+<p>检查循环依赖要用 DFS 的三种状态：没访问、访问中、已完成。走着走着又碰到一个“访问中”的节点，说明绕回来了，就是有环。实现时用显式的栈或队列代替递归，图很深时不会栈溢出。</p>
+</blockquote>
+<h2>用邻接表表示依赖</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> dependencies = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>([
+  [<span class="hljs-string">&#x27;app&#x27;</span>, [<span class="hljs-string">&#x27;router&#x27;</span>, <span class="hljs-string">&#x27;ui&#x27;</span>]],
+  [<span class="hljs-string">&#x27;router&#x27;</span>, [<span class="hljs-string">&#x27;url&#x27;</span>]],
+  [<span class="hljs-string">&#x27;ui&#x27;</span>, [<span class="hljs-string">&#x27;button&#x27;</span>]],
+  [<span class="hljs-string">&#x27;button&#x27;</span>, []],
+  [<span class="hljs-string">&#x27;url&#x27;</span>, []],
+]);
+</code></pre></div>
+<p>这和树有什么不同？树里每个节点只有一个父节点，也不会有环。图里一个节点可以被好几个节点依赖，还可能 A 依赖 B、B 又依赖 A。所以遍历图时，必须记住哪些节点已经走过了。</p>
+<h2>DFS：找出所有能到达的节点</h2>
+<p>比如想知道从入口 <code>app</code> 出发，最终会打包进哪些模块：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">depthFirst</span>(<span class="hljs-params">start, graph</span>) {
+  <span class="hljs-keyword">if</span> (!graph.<span class="hljs-title function_">has</span>(start)) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">const</span> visited = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>();
+  <span class="hljs-keyword">const</span> stack = [start];
+
+  <span class="hljs-keyword">while</span> (stack.<span class="hljs-property">length</span> &gt; <span class="hljs-number">0</span>) {
+    <span class="hljs-keyword">const</span> node = stack.<span class="hljs-title function_">pop</span>();
+    <span class="hljs-keyword">if</span> (visited.<span class="hljs-title function_">has</span>(node)) <span class="hljs-keyword">continue</span>;
+    visited.<span class="hljs-title function_">add</span>(node);
+    <span class="hljs-keyword">const</span> neighbors = graph.<span class="hljs-title function_">get</span>(node) ?? [];
+    <span class="hljs-comment">// 反向入栈，让第一个邻居先出栈，与递归 DFS 的访问顺序一致。</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> index = neighbors.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>; index &gt;= <span class="hljs-number">0</span>; index--) {
+      <span class="hljs-keyword">if</span> (!visited.<span class="hljs-title function_">has</span>(neighbors[index])) stack.<span class="hljs-title function_">push</span>(neighbors[index]);
+    }
+  }
+  <span class="hljs-keyword">return</span> [...visited];
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">depthFirst</span>(<span class="hljs-string">&#x27;app&#x27;</span>, dependencies));
+<span class="hljs-comment">// [&#x27;app&#x27;, &#x27;router&#x27;, &#x27;url&#x27;, &#x27;ui&#x27;, &#x27;button&#x27;]</span>
+</code></pre></div>
+<p>为什么邻居要反着放进栈？因为栈是后进先出的。<code>app</code> 的邻居是 <code>router</code>、<code>ui</code>，反着放，<code>ui</code> 先进、<code>router</code> 后进，弹出来的就是 <code>router</code>。这样先走 <code>router</code> 那条路一直到底，访问顺序和递归写法一致。</p>
+<p>为什么出栈以后还要再判断一次 <code>visited</code>？因为同一个节点可能被好几个邻居都压进栈里，第二次弹出来时它已经访问过了，直接跳过。</p>
+<p>起点不在图里时，这里和下面的函数都统一返回 <code>null</code>。</p>
+<p>这类遍历的用途很多：分析一个入口文件会打包进哪些模块、删掉某个包会影响哪些页面。</p>
+<h2>BFS：找最短路径</h2>
+<p>想知道 <code>app</code> 是通过哪条最短的依赖链用到 <code>button</code> 的：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">shortestPath</span>(<span class="hljs-params">start, target, graph</span>) {
+  <span class="hljs-keyword">if</span> (!graph.<span class="hljs-title function_">has</span>(start)) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">const</span> queue = [start];
+  <span class="hljs-keyword">const</span> previous = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>([[start, <span class="hljs-literal">null</span>]]);
+
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> head = <span class="hljs-number">0</span>; head &lt; queue.<span class="hljs-property">length</span>; head++) {
+    <span class="hljs-keyword">const</span> node = queue[head];
+    <span class="hljs-keyword">if</span> (node === target) <span class="hljs-keyword">break</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> neighbor <span class="hljs-keyword">of</span> graph.<span class="hljs-title function_">get</span>(node) ?? []) {
+      <span class="hljs-keyword">if</span> (previous.<span class="hljs-title function_">has</span>(neighbor)) <span class="hljs-keyword">continue</span>;
+      previous.<span class="hljs-title function_">set</span>(neighbor, node);
+      queue.<span class="hljs-title function_">push</span>(neighbor);
+    }
+  }
+
+  <span class="hljs-keyword">if</span> (!previous.<span class="hljs-title function_">has</span>(target)) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">const</span> path = [];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> node = target; node !== <span class="hljs-literal">null</span>; node = previous.<span class="hljs-title function_">get</span>(node)) path.<span class="hljs-title function_">push</span>(node);
+  <span class="hljs-keyword">return</span> path.<span class="hljs-title function_">reverse</span>();
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">shortestPath</span>(<span class="hljs-string">&#x27;app&#x27;</span>, <span class="hljs-string">&#x27;button&#x27;</span>, dependencies)); <span class="hljs-comment">// [&#x27;app&#x27;, &#x27;ui&#x27;, &#x27;button&#x27;]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">shortestPath</span>(<span class="hljs-string">&#x27;url&#x27;</span>, <span class="hljs-string">&#x27;app&#x27;</span>, dependencies)); <span class="hljs-comment">// null，边是有向的</span>
+</code></pre></div>
+<p><code>previous</code> 一个变量干了两件事：它记录了访问过哪些节点，也记录了每个节点是从谁那里过来的。找到目标以后，顺着 <code>previous</code> 一路往回找，就是完整路径，最后反转一下。</p>
+<p>第二个调用返回 <code>null</code>，因为边是有方向的。<code>app</code> 依赖 <code>url</code>，不代表 <code>url</code> 能走到 <code>app</code>。</p>
+<p>队列为什么用 <code>head</code> 下标去读，而不是 <code>shift()</code>？因为 <code>shift()</code> 每次要把整个数组往前挪一位，队列大了会很慢。</p>
+<h2>检查循环依赖，并排出依赖优先的顺序</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">dependencyFirstOrder</span>(<span class="hljs-params">graph</span>) {
+  <span class="hljs-keyword">const</span> state = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+  <span class="hljs-keyword">const</span> order = [];
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">visit</span>(<span class="hljs-params">node</span>) {
+    <span class="hljs-keyword">const</span> current = state.<span class="hljs-title function_">get</span>(node);
+    <span class="hljs-keyword">if</span> (current === <span class="hljs-string">&#x27;visiting&#x27;</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">\`发现循环依赖：<span class="hljs-subst">\${node}</span>\`</span>);
+    <span class="hljs-keyword">if</span> (current === <span class="hljs-string">&#x27;done&#x27;</span>) <span class="hljs-keyword">return</span>;
+    state.<span class="hljs-title function_">set</span>(node, <span class="hljs-string">&#x27;visiting&#x27;</span>);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> neighbor <span class="hljs-keyword">of</span> graph.<span class="hljs-title function_">get</span>(node) ?? []) <span class="hljs-title function_">visit</span>(neighbor);
+    state.<span class="hljs-title function_">set</span>(node, <span class="hljs-string">&#x27;done&#x27;</span>);
+    order.<span class="hljs-title function_">push</span>(node);
+  }
+
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> node <span class="hljs-keyword">of</span> graph.<span class="hljs-title function_">keys</span>()) <span class="hljs-title function_">visit</span>(node);
+  <span class="hljs-keyword">return</span> order;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">dependencyFirstOrder</span>(dependencies));
+<span class="hljs-comment">// [&#x27;url&#x27;, &#x27;router&#x27;, &#x27;button&#x27;, &#x27;ui&#x27;, &#x27;app&#x27;]</span>
+</code></pre></div>
+<p>为什么要三种状态，两种不够吗？只用“访问过”的话，分不清两种情况：一种是这个节点在当前这条路上，又绕回来了，这是环；另一种是它之前从别的路走过、已经处理完了，这完全正常。“访问中”表示还在当前路径上，碰到它才是环。</p>
+<p>节点要等它所有的依赖都处理完了，才加进 <code>order</code>。所以结果里，被依赖的总是排在使用者前面，<code>url</code> 在 <code>router</code> 前，<code>app</code> 在最后。这就是一种拓扑排序。</p>
+<p>这里为了展示三种状态用了递归，依赖链很长时要改成显式栈。基于入度的另一种写法，见<a href="/questions/alg-topological-sort/">《如何用拓扑排序解析前端任务和模块依赖？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>DFS 和 BFS 的空间复杂度是多少？</strong></p>
+<blockquote>
+<p>都是 O(V)。但占空间的时机不同：图很宽时，BFS 的队列会很大；路径很长时，DFS 的栈会很深。</p>
+</blockquote>
+<p><strong>边有权重时，还能用 BFS 找最短路径吗？</strong></p>
+<blockquote>
+<p>不能。BFS 只保证经过的边数最少。边有权重时，要用 Dijkstra 算法。</p>
+</blockquote>
+<p><strong>依赖要异步加载时怎么遍历？</strong></p>
+<blockquote>
+<p>先把节点标记成访问过，再去发请求，这样同一个节点不会被重复加载。同时要限制并发的请求数量。</p>
+</blockquote>`};export{e as default};

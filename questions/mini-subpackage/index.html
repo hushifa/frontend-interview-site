@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="小程序与跨端面试题：说明 subPackages 的配置与引用规则、独立分包的启动特性与限制、preloadRule 预下载配置，以及分包异步化的作用。" />
+    <meta name="description" content="小程序与跨端面试题：分包让小程序启动时只下载必需的部分，其余用到再下。" />
     <title>小程序的分包、独立分包和分包预下载分别解决什么问题？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/mini-subpackage/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="小程序的分包、独立分包和分包预下载分别解决什么问题？" />
-    <meta property="og:description" content="小程序与跨端面试题：说明 subPackages 的配置与引用规则、独立分包的启动特性与限制、preloadRule 预下载配置，以及分包异步化的作用。" />
+    <meta property="og:description" content="小程序与跨端面试题：分包让小程序启动时只下载必需的部分，其余用到再下。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/mini-subpackage/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/mini-subpackage/#webpage","url":"https://fe.hushifa.top/questions/mini-subpackage/","name":"小程序的分包、独立分包和分包预下载分别解决什么问题？","description":"小程序与跨端面试题：说明 subPackages 的配置与引用规则、独立分包的启动特性与限制、preloadRule 预下载配置，以及分包异步化的作用。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/mini-subpackage/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/mini-subpackage/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"小程序与跨端面试题","item":"https://fe.hushifa.top/topics/mini-program/"},{"@type":"ListItem","position":3,"name":"小程序的分包、独立分包和分包预下载分别解决什么问题？","item":"https://fe.hushifa.top/questions/mini-subpackage/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/mini-subpackage/#webpage","url":"https://fe.hushifa.top/questions/mini-subpackage/","name":"小程序的分包、独立分包和分包预下载分别解决什么问题？","description":"小程序与跨端面试题：分包让小程序启动时只下载必需的部分，其余用到再下。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/mini-subpackage/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/mini-subpackage/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"小程序与跨端面试题","item":"https://fe.hushifa.top/topics/mini-program/"},{"@type":"ListItem","position":3,"name":"小程序的分包、独立分包和分包预下载分别解决什么问题？","item":"https://fe.hushifa.top/questions/mini-subpackage/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/mini-program/">小程序与跨端面试题</a><span aria-hidden="true">/</span><span aria-current="page">小程序的分包、独立分包和分包预下载分别解决什么问题？</span></nav><h1 tabindex="-1">小程序的分包、独立分包和分包预下载分别解决什么问题？</h1><p class="reading-summary">说明 subPackages 的配置与引用规则、独立分包的启动特性与限制、preloadRule 预下载配置，以及分包异步化的作用。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>分包把页面按功能拆成主包和多个分包，启动时只下载主包，进入分包页面时再下载对应分包，官方称之为优化启动耗时效果最明显的手段。</li>
-<li>分包之间不能互相引用 JS、template 和资源，只能引用主包和自身的内容；tabBar 页面必须放在主包。</li>
-<li>独立分包不依赖主包即可运行，从独立分包页面启动时不下载主包，适合活动页、广告页等独立场景，代价是不能使用主包内容，<code>getApp()</code> 可能拿不到 App。</li>
-<li>分包预下载通过 <code>app.json</code> 的 <code>preloadRule</code> 配置，在进入某个页面时提前下载后续可能用到的分包，减少首次进入分包页面的等待。</li>
-<li>分包异步化把粒度细化到组件和文件，让主包里的部分组件和逻辑也能拆到分包中异步加载。</li>
-</ul>
-<h2>普通分包</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/mini-program/">小程序与跨端面试题</a><span aria-hidden="true">/</span><span aria-current="page">小程序的分包、独立分包和分包预下载分别解决什么问题？</span></nav><h1 tabindex="-1">小程序的分包、独立分包和分包预下载分别解决什么问题？</h1><p class="reading-summary">分包让小程序启动时只下载必需的部分，其余用到再下。讲清 subPackages 的配置与引用规则、独立分包的启动特性与限制、preloadRule 预下载配置，以及分包异步化的作用。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>小程序第一次打开要先下载代码包，包越大等得越久。分包就是把页面按功能拆成一个主包和多个分包，启动时只下主包，进到某个分包的页面时再下那个分包。官方说这是优化启动耗时效果最明显的手段。</p>
+<p>分包有引用规则：分包之间不能互相引用 JS、template 和资源，只能用主包和自己的内容；tabBar 页面必须放在主包。</p>
+<p>独立分包更进一步，它不依赖主包也能运行。从独立分包的页面启动时，连主包都不下载，适合活动页、广告页这类独立场景。代价是用不了主包的内容，<code>getApp()</code> 也可能拿不到 App。</p>
+<p>分包预下载是在 <code>app.json</code> 里配 <code>preloadRule</code>，进入某个页面时提前把之后可能用到的分包下好，减少第一次进分包页面的等待。另外还有分包异步化，它把粒度细到组件和文件，让主包里的部分组件和逻辑也能拆到分包里异步加载。</p>
+</blockquote>
+<h2>普通分包怎么配</h2>
+<p>下面的配置有两个分包，<code>packageA</code> 和 <code>packageB</code>：</p>
 <div class="not-prose code-block"><div class="code-language">json</div><pre><code class="hljs language-json">{
   &quot;pages&quot;: [&quot;pages/index&quot;, &quot;pages/logs&quot;],
   &quot;subPackages&quot;: [
@@ -43,23 +43,16 @@
   ]
 }
 </code></pre></div>
-<p>规则：</p>
-<ul>
-<li><code>subPackages</code> 配置路径以外的目录都会打进主包，分包根目录不能嵌套在另一个分包里。</li>
-<li>packageA 不能 <code>require</code> packageB 的 JS，不能引用 packageB 的 template 和资源，但可以使用主包和自己的内容（使用分包异步化时 JS 不受此限制）。</li>
-<li>多个分包都会用到的工具代码应放在主包；只在某个分包用到的组件和插件应在分包内引用，而不是写在 <code>app.json</code> 的全局 <code>usingComponents</code> 里，否则会随主包一起下载和注入。</li>
-</ul>
-<h2>独立分包</h2>
-<p>在分包配置中加 <code>&quot;independent&quot;: true</code> 即可声明独立分包，一个小程序可以有多个。</p>
-<p>限制和注意事项：</p>
-<ul>
-<li>不能依赖主包和其他分包的 JS、template、wxss、自定义组件、插件（分包异步化场景下 JS、自定义组件、插件除外）。</li>
-<li>主包的 <code>app.wxss</code> 对独立分包无效；独立分包里不能定义 <code>App</code>。</li>
-<li>从独立分包启动时 <code>App</code> 还没注册，<code>getApp()</code> 返回 <code>undefined</code>。可以用 <code>getApp({ allowDefault: true })</code> 拿到默认实现，主包加载后其中的属性会合并到真正的 App 上。</li>
-<li>App 的 <code>onLaunch</code> 和首次 <code>onShow</code> 会推迟到首次进入主包或普通分包页面时才调用，独立分包内要监听应用生命周期可以使用 <code>wx.onAppShow</code>、<code>wx.onAppHide</code>。</li>
-<li>在不支持独立分包的旧版微信上，独立分包按普通分包处理，主包的 <code>app.wxss</code> 可能影响它的样式，所以不要依赖 <code>app.wxss</code>。</li>
-</ul>
-<h2>分包预下载</h2>
+<p><code>subPackages</code> 配置的路径以外，所有目录都会打进主包。分包的根目录也不能嵌套在另一个分包里。另外，tabBar 页面必须放在主包。</p>
+<p>引用规则要记清楚。packageA 不能 <code>require</code> packageB 的 JS，也不能引用 packageB 的 template 和资源，但可以用主包和自己的内容。用了分包异步化时，JS 不受这个限制。</p>
+<p>所以代码该放哪里，要看谁在用。多个分包都要用的工具代码放主包。只在某个分包用到的组件和插件，就在那个分包里引用，不要写进 <code>app.json</code> 的全局 <code>usingComponents</code>，否则它会跟着主包一起下载和注入，白白增加启动负担。</p>
+<h2>独立分包有什么不一样</h2>
+<p>在分包配置里加上 <code>&quot;independent&quot;: true</code>，它就成了独立分包，一个小程序可以有多个。</p>
+<p>因为它要能单独运行，所以不能依赖主包和其他分包的 JS、template、wxss、自定义组件、插件。分包异步化场景下，JS、自定义组件和插件除外。主包的 <code>app.wxss</code> 对它也无效，独立分包里也不能定义 <code>App</code>。</p>
+<p>最容易出问题的是 <code>getApp()</code>。从独立分包启动时，<code>App</code> 还没注册，<code>getApp()</code> 会返回 <code>undefined</code>。这时可以用 <code>getApp({ allowDefault: true })</code> 拿到一个默认实现，等主包加载以后，里面的属性会合并到真正的 App 上。</p>
+<p>生命周期也会推迟。App 的 <code>onLaunch</code> 和第一次 <code>onShow</code>，要等用户第一次进入主包或普通分包的页面时才调用。独立分包里想监听应用的生命周期，可以用 <code>wx.onAppShow</code>、<code>wx.onAppHide</code>。</p>
+<p>还有兼容问题。在不支持独立分包的旧版微信上，独立分包会被当成普通分包，主包的 <code>app.wxss</code> 可能影响它的样式。所以独立分包不要依赖 <code>app.wxss</code>。</p>
+<h2>分包预下载怎么配</h2>
 <div class="not-prose code-block"><div class="code-language">json</div><pre><code class="hljs language-json">{
   &quot;preloadRule&quot;: {
     &quot;pages/index&quot;: { &quot;network&quot;: &quot;all&quot;, &quot;packages&quot;: [&quot;important&quot;] },
@@ -67,17 +60,18 @@
   }
 }
 </code></pre></div>
-<ul>
-<li>key 是触发预下载的页面路径，<code>packages</code> 填分包的 <code>root</code> 或 <code>name</code>，<code>__APP__</code> 表示主包，可以让独立分包页面提前下载主包。</li>
-<li><code>network</code> 默认是 <code>wifi</code>，设为 <code>all</code> 表示任何网络都预下载。</li>
-<li>目前只能通过配置使用，不能用 API 触发。</li>
-<li>同一个分包内的页面共享预下载大小限额，官方文档写明为 2M，打包时由工具校验。</li>
-</ul>
+<p>key 是触发预下载的页面路径。比如用户进了 <code>pages/index</code>，就开始下 <code>important</code> 这个分包。<code>packages</code> 里填分包的 <code>root</code> 或 <code>name</code>，<code>__APP__</code> 表示主包，所以第二条的意思是：用户在独立分包页面时，提前把主包下好。</p>
+<p><code>network</code> 默认是 <code>wifi</code>，设成 <code>all</code> 表示任何网络下都预下载。</p>
+<p>预下载目前只能通过配置使用，不能用 API 触发。同一个分包里的页面共享预下载的大小限额，官方文档写的是 2M，打包时由开发者工具校验。</p>
 <h2>常见追问</h2>
-<ul>
-<li>分包能放多少代码？官方文档写明单个代码包上限为 2M，整个小程序所有分包不超过 30M（服务商代开发的小程序不超过 20M），单个分包或主包不能超过 2M（见微信开放文档《分包加载》）。</li>
-<li>图片要放进分包吗？代码包中的图片、字体等资源很难再压缩，对下载耗时影响比代码大，官方建议放到 CDN 用 URL 引用，包内只保留小图标。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developers.weixin.qq.com/miniprogram/dev/framework/subpackages/basic.html" target="_blank" rel="noreferrer">微信开放文档 · 使用分包<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%88%86%E5%8C%85%E3%80%81%E7%8B%AC%E7%AB%8B%E5%88%86%E5%8C%85%E5%92%8C%E5%88%86%E5%8C%85%E9%A2%84%E4%B8%8B%E8%BD%BD%E5%88%86%E5%88%AB%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%88%86%E5%8C%85%E3%80%81%E7%8B%AC%E7%AB%8B%E5%88%86%E5%8C%85%E5%92%8C%E5%88%86%E5%8C%85%E9%A2%84%E4%B8%8B%E8%BD%BD%E5%88%86%E5%88%AB%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Amini-subpackage%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B0%8F%E7%A8%8B%E5%BA%8F%E4%B8%8E%E8%B7%A8%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fmini-subpackage%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：小程序的分包、独立分包和分包预下载分别解决什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/mobile-mini-program-platform-differences/">Web、微信小程序和跨端框架的运行边界有什么不同？</a></li><li><a href="/questions/mini-dual-thread/">小程序的双线程模型是什么？逻辑层和渲染层如何协作？</a></li><li><a href="/questions/mini-setdata/">setData 为什么会慢？如何优化小程序的数据更新？</a></li><li><a href="/questions/mini-cross-compile/">Taro 和 uni-app 如何把代码转换成小程序？编译时和运行时有什么区别？</a></li></ul></nav></main></div></div>
+<p><strong>分包能放多少代码？</strong></p>
+<blockquote>
+<p>官方文档写明，整个小程序所有分包加起来不超过 30M，服务商代开发的小程序不超过 20M；单个分包或主包不能超过 2M。具体以微信开放文档《分包加载》为准。</p>
+</blockquote>
+<p><strong>图片要放进分包吗？</strong></p>
+<blockquote>
+<p>代码包里的图片、字体这类资源很难再压缩，对下载耗时的影响比代码还大。所以官方建议放到 CDN 上用 URL 引用，包里只留小图标。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developers.weixin.qq.com/miniprogram/dev/framework/subpackages/basic.html" target="_blank" rel="noreferrer">微信开放文档 · 使用分包<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%88%86%E5%8C%85%E3%80%81%E7%8B%AC%E7%AB%8B%E5%88%86%E5%8C%85%E5%92%8C%E5%88%86%E5%8C%85%E9%A2%84%E4%B8%8B%E8%BD%BD%E5%88%86%E5%88%AB%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%88%86%E5%8C%85%E3%80%81%E7%8B%AC%E7%AB%8B%E5%88%86%E5%8C%85%E5%92%8C%E5%88%86%E5%8C%85%E9%A2%84%E4%B8%8B%E8%BD%BD%E5%88%86%E5%88%AB%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Amini-subpackage%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B0%8F%E7%A8%8B%E5%BA%8F%E4%B8%8E%E8%B7%A8%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fmini-subpackage%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：小程序的分包、独立分包和分包预下载分别解决什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/mobile-mini-program-platform-differences/">Web、微信小程序和跨端框架的运行边界有什么不同？</a></li><li><a href="/questions/mini-dual-thread/">小程序的双线程模型是什么？逻辑层和渲染层如何协作？</a></li><li><a href="/questions/mini-setdata/">setData 为什么会慢？如何优化小程序的数据更新？</a></li><li><a href="/questions/mini-cross-compile/">Taro 和 uni-app 如何把代码转换成小程序？编译时和运行时有什么区别？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Vue面试题：KeepAlive 缓存被切换掉的组件实例，切回时保留状态，并触发 activated 和 deactivated 钩子…" />
+    <meta name="description" content="Vue面试题：KeepAlive 让切走的组件不销毁、切回来状态还在；Teleport 把一段模板渲染到页面别处，比如 body 下面，但组件关系不变。" />
     <title>KeepAlive 与 Teleport 有哪些使用边界？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/vue-keepalive-teleport/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="KeepAlive 与 Teleport 有哪些使用边界？" />
-    <meta property="og:description" content="Vue面试题：KeepAlive 缓存被切换掉的组件实例，切回时保留状态，并触发 activated 和 deactivated 钩子…" />
+    <meta property="og:description" content="Vue面试题：KeepAlive 让切走的组件不销毁、切回来状态还在；Teleport 把一段模板渲染到页面别处，比如 body 下面，但组件关系不变。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/vue-keepalive-teleport/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-keepalive-teleport/#webpage","url":"https://fe.hushifa.top/questions/vue-keepalive-teleport/","name":"KeepAlive 与 Teleport 有哪些使用边界？","description":"Vue面试题：KeepAlive 缓存被切换掉的组件实例，切回时保留状态，并触发 activated 和 deactivated 钩子…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-keepalive-teleport/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-keepalive-teleport/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"KeepAlive 与 Teleport 有哪些使用边界？","item":"https://fe.hushifa.top/questions/vue-keepalive-teleport/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-keepalive-teleport/#webpage","url":"https://fe.hushifa.top/questions/vue-keepalive-teleport/","name":"KeepAlive 与 Teleport 有哪些使用边界？","description":"Vue面试题：KeepAlive 让切走的组件不销毁、切回来状态还在；Teleport 把一段模板渲染到页面别处，比如 body 下面，但组件关系不变。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-keepalive-teleport/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-keepalive-teleport/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"KeepAlive 与 Teleport 有哪些使用边界？","item":"https://fe.hushifa.top/questions/vue-keepalive-teleport/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">KeepAlive 与 Teleport 有哪些使用边界？</span></nav><h1 tabindex="-1">KeepAlive 与 Teleport 有哪些使用边界？</h1><p class="reading-summary">KeepAlive 缓存被切换掉的组件实例，切回时保留状态，并触发 activated 和 deactivated 钩子；Teleport 把一段模板渲染到组件之外的 DOM 位置，组件之间的逻辑关系不变。前者解决状态保留，后者解决 DOM 位置，两者都不会自动处理资源暂停或弹窗交互。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li><code>&lt;KeepAlive&gt;</code> 包裹动态组件或路由视图，被切走的组件不会卸载，而是进入缓存；切回时触发 <code>onActivated</code>，切走时触发 <code>onDeactivated</code>。</li>
-<li>用 <code>include</code>、<code>exclude</code>（按组件 name 匹配）控制缓存哪些组件，用 <code>max</code> 限制数量，超出时淘汰最久未访问的实例。</li>
-<li>被缓存的组件仍在内存中，计时器、轮询、WebSocket 不会自动停止，要在 <code>onDeactivated</code> 中暂停、在 <code>onActivated</code> 中恢复。</li>
-<li><code>&lt;Teleport to=&quot;body&quot;&gt;</code> 把内容渲染到指定 DOM 节点下，常用于弹窗、提示，避免被父元素的 <code>overflow: hidden</code> 或层叠上下文影响。</li>
-<li>Teleport 只移动 DOM，props、事件、provide/inject 仍按组件树传递；目标节点必须在挂载时已存在，Vue 3.5 起可以用 <code>defer</code> 等待同一轮渲染中的目标。</li>
-</ul>
-<h2>KeepAlive</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">KeepAlive 与 Teleport 有哪些使用边界？</span></nav><h1 tabindex="-1">KeepAlive 与 Teleport 有哪些使用边界？</h1><p class="reading-summary">KeepAlive 让切走的组件不销毁、切回来状态还在；Teleport 把一段模板渲染到页面别处，比如 body 下面，但组件关系不变。前者管状态保留，后者管 DOM 位置，定时器暂停和弹窗交互都得自己处理。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>这两个内置组件解决的是不同问题。<code>&lt;KeepAlive&gt;</code> 包住动态组件或路由视图后，被切走的组件不会卸载，而是放进缓存，切回来时输入的内容、滚动位置都还在。<code>&lt;Teleport to=&quot;body&quot;&gt;</code> 则是把一段内容渲染到指定的 DOM 节点下，常用于弹窗，避免被父元素的 <code>overflow: hidden</code> 或层叠上下文挡住。</p>
+<p>KeepAlive 切走时触发 <code>onDeactivated</code>，切回时触发 <code>onActivated</code>。用 <code>include</code>、<code>exclude</code> 按组件 name 决定缓存谁，用 <code>max</code> 限制数量，超了就淘汰最久没访问的那个。</p>
+<p>它的边界在于，被缓存的组件还活着。定时器、轮询、WebSocket 不会自己停，要在 <code>onDeactivated</code> 里暂停、<code>onActivated</code> 里恢复。</p>
+<p>Teleport 只搬 DOM，props、事件、provide/inject 仍然按原来的组件树传。目标节点必须在挂载时已经存在，Vue 3.5 起可以加 <code>defer</code>，等同一轮渲染里的目标出来再挂。</p>
+</blockquote>
+<h2>KeepAlive 怎么用</h2>
+<p>下面用按钮在列表页和详情页之间切换，外面包一层 KeepAlive，最多缓存 5 个：</p>
 <div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;script setup&gt;
 import { shallowRef } from &#x27;vue&#x27;;
 import ListPage from &#x27;./ListPage.vue&#x27;;
@@ -51,6 +51,7 @@ const current = shallowRef(ListPage);
   &lt;/KeepAlive&gt;
 &lt;/template&gt;
 </code></pre></div>
+<p>从列表切到详情再切回来，列表页不会重新创建，状态都在。可是列表页如果开着一个每 10 秒刷新的轮询，切走以后它还会继续跑，白白发请求。所以要用那一对钩子控制它：</p>
 <div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;!-- ListPage.vue --&gt;
 &lt;script setup&gt;
 import { onActivated, onDeactivated } from &#x27;vue&#x27;;
@@ -64,16 +65,16 @@ onActivated(startPolling); // 首次挂载时也会调用
 onDeactivated(() =&gt; clearInterval(timer));
 &lt;/script&gt;
 </code></pre></div>
-<p><code>onActivated</code> 在首次挂载和每次从缓存恢复时都会调用，<code>onDeactivated</code> 在进入缓存和最终卸载时都会调用，所以轮询只需写在这一对钩子里。</p>
-<p>在 Vue Router 中，写法是：</p>
+<p>为什么轮询只写在这对钩子里就够了，不用再写 <code>onMounted</code>？因为 <code>onActivated</code> 在首次挂载和每次从缓存恢复时都会调用，<code>onDeactivated</code> 在进入缓存和最终卸载时都会调用，开和关正好一一对应。</p>
+<p>在 Vue Router 里的写法是这样：</p>
 <div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;RouterView v-slot=&quot;{ Component }&quot;&gt;
   &lt;KeepAlive include=&quot;ListPage&quot;&gt;
     &lt;component :is=&quot;Component&quot; /&gt;
   &lt;/KeepAlive&gt;
 &lt;/RouterView&gt;
 </code></pre></div>
-<p><code>include</code> 匹配的是组件的 <code>name</code>；<code>&lt;script setup&gt;</code> 组件会根据文件名自动推断 name。</p>
-<h2>Teleport</h2>
+<p><code>include</code> 匹配的是组件的 <code>name</code>。用 <code>&lt;script setup&gt;</code> 写的组件，会根据文件名自动推断 name，所以 <code>ListPage.vue</code> 就能被 <code>include=&quot;ListPage&quot;</code> 匹配到。</p>
+<h2>Teleport 怎么用</h2>
 <div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;script setup&gt;
 import { ref } from &#x27;vue&#x27;;
 const open = ref(false);
@@ -89,16 +90,18 @@ const open = ref(false);
   &lt;/Teleport&gt;
 &lt;/template&gt;
 </code></pre></div>
-<p>内容渲染在 <code>body</code> 下，但 <code>open</code> 仍由这个组件控制。真正的模态对话框还需要焦点移入、Esc 关闭、关闭后焦点返回触发按钮，使用原生 <code>&lt;dialog&gt;</code> 的 <code>showModal()</code> 能直接获得这些行为。</p>
-<ul>
-<li><code>:disabled=&quot;true&quot;</code> 可以让内容留在原位，例如在移动端内联显示。</li>
-<li>SSR 时 Teleport 的内容会单独输出，目标容器要在服务端模板中存在。</li>
-</ul>
+<p>对话框的 DOM 出现在 <code>body</code> 下面，可是 <code>open</code> 仍然由这个组件控制，点“取消”照样能改它。这就是“只搬 DOM，不改组件关系”。</p>
+<p>不过 Teleport 只解决位置问题。一个真正的模态对话框，还需要打开时把焦点移进去、按 Esc 关闭、关闭后焦点回到触发按钮。用原生 <code>&lt;dialog&gt;</code> 的 <code>showModal()</code> 能直接获得这些行为，Teleport 本身不提供。</p>
+<p>还有两个细节。<code>:disabled=&quot;true&quot;</code> 能让内容留在原位不搬走，比如移动端想内联显示时。服务端渲染时，Teleport 的内容会单独输出，所以目标容器要在服务端模板里就存在。</p>
 <h2>常见追问</h2>
-<ul>
-<li>KeepAlive 如何手动清除某个缓存？动态修改 <code>include</code> 列表，移除该组件的 name。</li>
-<li>两个 Teleport 指向同一个目标会怎样？按挂载顺序依次追加到目标节点中。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://vuejs.org/guide/built-ins/keep-alive.html" target="_blank" rel="noreferrer">Vue · KeepAlive<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+KeepAlive+%E4%B8%8E+Teleport+%E6%9C%89%E5%93%AA%E4%BA%9B%E4%BD%BF%E7%94%A8%E8%BE%B9%E7%95%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AKeepAlive+%E4%B8%8E+Teleport+%E6%9C%89%E5%93%AA%E4%BA%9B%E4%BD%BF%E7%94%A8%E8%BE%B9%E7%95%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-keepalive-teleport%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-keepalive-teleport%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：KeepAlive 与 Teleport 有哪些使用边界？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-ref-reactive/">Vue 3 中 ref 和 reactive 有什么区别？</a></li><li><a href="/questions/vue-computed-watch/">computed、watch 和 watchEffect 应该如何选择？</a></li><li><a href="/questions/vue-nexttick/">修改状态后，为什么有时需要 await nextTick()？</a></li><li><a href="/questions/vue-props/">为什么 Vue 提倡 props 单向数据流？</a></li></ul></nav></main></div></div>
+<p><strong>KeepAlive 怎么手动清掉某个组件的缓存？</strong></p>
+<blockquote>
+<p>动态修改 <code>include</code> 列表，把这个组件的 name 移出去，它的缓存就会被清掉。</p>
+</blockquote>
+<p><strong>两个 Teleport 指向同一个目标会怎样？</strong></p>
+<blockquote>
+<p>按挂载顺序依次追加到目标节点里，后挂载的排在后面。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://vuejs.org/guide/built-ins/keep-alive.html" target="_blank" rel="noreferrer">Vue · KeepAlive<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+KeepAlive+%E4%B8%8E+Teleport+%E6%9C%89%E5%93%AA%E4%BA%9B%E4%BD%BF%E7%94%A8%E8%BE%B9%E7%95%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AKeepAlive+%E4%B8%8E+Teleport+%E6%9C%89%E5%93%AA%E4%BA%9B%E4%BD%BF%E7%94%A8%E8%BE%B9%E7%95%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-keepalive-teleport%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-keepalive-teleport%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：KeepAlive 与 Teleport 有哪些使用边界？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-ref-reactive/">Vue 3 中 ref 和 reactive 有什么区别？</a></li><li><a href="/questions/vue-computed-watch/">computed、watch 和 watchEffect 应该如何选择？</a></li><li><a href="/questions/vue-nexttick/">修改状态后，为什么有时需要 await nextTick()？</a></li><li><a href="/questions/vue-props/">为什么 Vue 提倡 props 单向数据流？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="桌面端面试题：区分 Electron 主进程与渲染进程的权限，说明 preload、contextIsolation、IPC 校验和远程内容风险…" />
+    <meta name="description" content="桌面端面试题：Electron 主进程有系统权限，渲染进程只应有普通网页的权限。" />
     <title>Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/mobile-electron-security/" />
     <meta name="robots" content="index,follow" />
@@ -19,23 +19,23 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？" />
-    <meta property="og:description" content="桌面端面试题：区分 Electron 主进程与渲染进程的权限，说明 preload、contextIsolation、IPC 校验和远程内容风险…" />
+    <meta property="og:description" content="桌面端面试题：Electron 主进程有系统权限，渲染进程只应有普通网页的权限。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/mobile-electron-security/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/mobile-electron-security/#webpage","url":"https://fe.hushifa.top/questions/mobile-electron-security/","name":"Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？","description":"桌面端面试题：区分 Electron 主进程与渲染进程的权限，说明 preload、contextIsolation、IPC 校验和远程内容风险…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/mobile-electron-security/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/mobile-electron-security/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"桌面端面试题","item":"https://fe.hushifa.top/topics/desktop/"},{"@type":"ListItem","position":3,"name":"Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？","item":"https://fe.hushifa.top/questions/mobile-electron-security/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/mobile-electron-security/#webpage","url":"https://fe.hushifa.top/questions/mobile-electron-security/","name":"Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？","description":"桌面端面试题：Electron 主进程有系统权限，渲染进程只应有普通网页的权限。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/mobile-electron-security/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/mobile-electron-security/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"桌面端面试题","item":"https://fe.hushifa.top/topics/desktop/"},{"@type":"ListItem","position":3,"name":"Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？","item":"https://fe.hushifa.top/questions/mobile-electron-security/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/desktop/">桌面端面试题</a><span aria-hidden="true">/</span><span aria-current="page">Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？</span></nav><h1 tabindex="-1">Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？</h1><p class="reading-summary">区分 Electron 主进程与渲染进程的权限，说明 preload、contextIsolation、IPC 校验和远程内容风险，避免把桌面应用当成普通浏览器页面。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>主进程运行 Node.js，能访问文件系统和操作系统；渲染进程显示网页内容，应当只有普通网页的权限。</li>
-<li>渲染进程通过 preload 脚本用 <code>contextBridge</code> 暴露少量明确的函数，再由主进程经 IPC 执行特权操作。</li>
-<li>保持默认的安全设置：<code>nodeIntegration: false</code>（5.0 起默认）、<code>contextIsolation: true</code>（12.0 起默认）、<code>sandbox: true</code>（20.0 起默认）。</li>
-<li>主进程要校验每条 IPC 消息的发送方（<code>senderFrame</code> 的 origin）和参数，不能信任渲染进程传来的任何内容。</li>
-<li>用 <code>setWindowOpenHandler</code> 拦截新窗口，外部链接交给系统浏览器打开前要校验协议和地址；用 Fuses 关闭 <code>runAsNode</code> 等打包后不需要的能力。</li>
-</ul>
-<h2>为什么渲染进程要按&quot;不可信&quot;对待</h2>
-<p>渲染进程显示的内容可能包含第三方脚本、用户生成的富文本，或者加载了远程页面。只要出现一处 XSS，攻击者就能执行渲染进程里的任何能力。如果渲染进程能直接调用 <code>require(&#x27;child_process&#x27;)</code>，XSS 就变成了在用户电脑上执行任意命令。</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/desktop/">桌面端面试题</a><span aria-hidden="true">/</span><span aria-current="page">Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？</span></nav><h1 tabindex="-1">Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？</h1><p class="reading-summary">Electron 主进程有系统权限，渲染进程只应有普通网页的权限。要靠 preload、contextIsolation、沙箱和 IPC 校验守住两者的边界，谨慎处理远程内容和外部链接，不能把桌面应用当成普通浏览器页面。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>Electron 应用里有两种权限差别很大的进程。主进程运行 Node.js，能读写文件、执行命令；渲染进程显示网页，应该只有普通网页那点权限。安全的关键，就是不让渲染进程拿到主进程的能力。</p>
+<p>页面需要特权操作时，由 preload 脚本用 <code>contextBridge</code> 暴露几个明确的函数，再经 IPC 交给主进程执行。默认的安全设置要保持住：<code>nodeIntegration: false</code>（5.0 起默认）、<code>contextIsolation: true</code>（12.0 起默认）、<code>sandbox: true</code>（20.0 起默认）。</p>
+<p>主进程要把渲染进程当成不可信的，校验每条 IPC 消息的发送方（<code>senderFrame</code> 的 origin）和参数。</p>
+<p>另外要管住新窗口和外部链接：用 <code>setWindowOpenHandler</code> 拦截新窗口，交给系统浏览器打开之前先校验协议和地址；打包时用 Fuses 关掉 <code>runAsNode</code> 等不需要的能力。</p>
+</blockquote>
+<h2>为什么要把渲染进程当成不可信的</h2>
+<p>渲染进程显示的内容，可能包含第三方脚本、用户写的富文本，或者加载了远程页面。只要出现一处 XSS，攻击者就能使用渲染进程里的所有能力。</p>
+<p>在普通浏览器里，XSS 最多偷 Cookie、改页面。可在 Electron 里，如果渲染进程能直接 <code>require(&#x27;child_process&#x27;)</code>，同样一个 XSS 就变成了在用户电脑上执行任意命令。所以渲染进程的能力越小越好。</p>
 <h2>preload 只暴露最小能力</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// preload.js</span>
 <span class="hljs-keyword">const</span> { contextBridge, ipcRenderer } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;electron&#x27;</span>);
@@ -44,11 +44,10 @@ contextBridge.<span class="hljs-title function_">exposeInMainWorld</span>(<span 
   <span class="hljs-attr">saveNote</span>: <span class="hljs-function">(<span class="hljs-params">id, text</span>) =&gt;</span> ipcRenderer.<span class="hljs-title function_">invoke</span>(<span class="hljs-string">&#x27;note:save&#x27;</span>, { id, text }),
 });
 </code></pre></div>
-<ul>
-<li>暴露具体业务函数，不要暴露 <code>ipcRenderer</code> 本身或通用的 <code>invoke(channel, ...args)</code>，否则页面可以调用任意通道。</li>
-<li><code>contextIsolation</code> 让 preload 和页面运行在不同的 JavaScript 上下文，页面无法篡改 preload 中的对象。</li>
-</ul>
-<h2>主进程校验发送方和参数</h2>
+<p>页面只能调用 <code>window.api.saveNote</code>，别的什么都做不了。如果暴露的是 <code>ipcRenderer</code> 本身，或者一个通用的 <code>invoke(channel, ...args)</code>，页面就能调用任意通道，等于没设防。</p>
+<p><code>contextIsolation</code> 让 preload 和页面运行在不同的 JavaScript 上下文里，页面没法篡改 preload 里的对象。</p>
+<h2>主进程怎样校验发送方和参数</h2>
+<p>preload 限制了页面能调什么，但主进程不能因此就相信收到的消息。下面的 handler 先查发送方，再查参数：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// main.js</span>
 <span class="hljs-keyword">const</span> { ipcMain, app } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;electron&#x27;</span>);
 <span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;node:path&#x27;</span>);
@@ -72,12 +71,10 @@ ipcMain.<span class="hljs-title function_">handle</span>(<span class="hljs-strin
   <span class="hljs-keyword">await</span> fs.<span class="hljs-property">promises</span>.<span class="hljs-title function_">writeFile</span>(file, text, <span class="hljs-string">&#x27;utf8&#x27;</span>);
 });
 </code></pre></div>
-<ul>
-<li>iframe 和子窗口也能发送 IPC，所以要检查 <code>senderFrame</code>。官方示例比较的是 origin 而不是 URL，因为 <code>about:blank</code>、<code>blob:</code> 等地址看不出实际控制者；frame 已销毁时 <code>senderFrame</code> 为 <code>null</code>。</li>
-<li>ID 用白名单格式校验，防止 <code>../../</code> 路径穿越写到任意位置。</li>
-<li>示例中的 <code>app://bundle</code> 假设应用用自定义协议加载本地页面，需要和实际加载方式一致。</li>
-</ul>
-<h2>新窗口和外部链接</h2>
+<p>为什么要查发送方？因为 iframe 和子窗口也能发 IPC，消息不一定来自你自己的页面。官方示例比较的是 origin 而不是 URL，因为 <code>about:blank</code>、<code>blob:</code> 这类地址看不出实际是谁在控制。frame 已经销毁时，<code>senderFrame</code> 是 <code>null</code>，也要拒绝。</p>
+<p>ID 用白名单格式校验，是为了防止 <code>../../</code> 这样的路径穿越，把文件写到任意位置。</p>
+<p>示例里的 <code>app://bundle</code> 假设应用用自定义协议加载本地页面，实际使用时要和你的加载方式一致。</p>
+<h2>新窗口和外部链接怎么处理</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">win.<span class="hljs-property">webContents</span>.<span class="hljs-title function_">setWindowOpenHandler</span>(<span class="hljs-function">(<span class="hljs-params">{ url }</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> { protocol, hostname } = <span class="hljs-keyword">new</span> <span class="hljs-title function_">URL</span>(url);
   <span class="hljs-keyword">if</span> (protocol === <span class="hljs-string">&#x27;https:&#x27;</span> &amp;&amp; hostname === <span class="hljs-string">&#x27;docs.example.com&#x27;</span>) {
@@ -86,19 +83,22 @@ ipcMain.<span class="hljs-title function_">handle</span>(<span class="hljs-strin
   <span class="hljs-keyword">return</span> { <span class="hljs-attr">action</span>: <span class="hljs-string">&#x27;deny&#x27;</span> };
 });
 </code></pre></div>
-<p><code>shell.openExternal</code> 遇到不受信任的地址（如 <code>file:</code> 或自定义协议）可能被用来执行命令，所以只放行明确允许的地址。同样要监听 <code>will-navigate</code>，阻止主窗口被导航到外部页面。</p>
-<h2>其他要点</h2>
-<ul>
-<li>尽量不加载远程内容；必须加载时，用独立的 <code>BrowserWindow</code> 或 <code>WebContentsView</code>，不给它 preload 能力。</li>
-<li>为本地页面设置 CSP，限制脚本来源。</li>
-<li>使用 <code>@electron/fuses</code> 在打包时关闭 <code>runAsNode</code>、<code>nodeCliInspect</code> 等，防止应用被当作 Node.js 解释器执行任意脚本。</li>
-<li>及时升级 Electron，它内置的 Chromium 会持续修复安全漏洞。</li>
-</ul>
+<p>所有新窗口一律拒绝，只有明确允许的地址交给系统浏览器打开。为什么要这么严？因为 <code>shell.openExternal</code> 遇到不受信任的地址，比如 <code>file:</code> 或者自定义协议，可能被利用来执行命令。</p>
+<p>同样要监听 <code>will-navigate</code>，阻止主窗口被导航到外部页面。</p>
+<h2>其他还要注意什么</h2>
+<p>尽量不加载远程内容。必须加载时，放在独立的 <code>BrowserWindow</code> 或 <code>WebContentsView</code> 里，不给它 preload 能力。</p>
+<p>给本地页面设置 CSP，限制脚本从哪里加载。</p>
+<p>打包时用 <code>@electron/fuses</code> 关闭 <code>runAsNode</code>、<code>nodeCliInspect</code> 等能力，防止应用被当成 Node.js 解释器去执行任意脚本。</p>
+<p>及时升级 Electron，它内置的 Chromium 会持续修复安全漏洞。</p>
 <h2>常见追问</h2>
-<ul>
-<li>打开 <code>nodeIntegration</code> 有多危险？它会让该渲染进程不再运行在沙箱中，页面脚本可以直接使用 Node.js API，渲染进程中的任何 XSS 都能执行系统命令。</li>
-<li>preload 里能用 Node API 吗？开启沙箱后 preload 只能使用一部分 Electron 和 Node 模块，文件读写等操作应放到主进程。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.electronjs.org/docs/latest/tutorial/security" target="_blank" rel="noreferrer">Electron · Security<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Electron+%E5%BA%94%E7%94%A8%E7%9A%84%E4%B8%BB%E8%BF%9B%E7%A8%8B%E3%80%81%E6%B8%B2%E6%9F%93%E8%BF%9B%E7%A8%8B%E5%92%8C+IPC+%E6%9C%89%E5%93%AA%E4%BA%9B%E5%AE%89%E5%85%A8%E8%BE%B9%E7%95%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AElectron+%E5%BA%94%E7%94%A8%E7%9A%84%E4%B8%BB%E8%BF%9B%E7%A8%8B%E3%80%81%E6%B8%B2%E6%9F%93%E8%BF%9B%E7%A8%8B%E5%92%8C+IPC+%E6%9C%89%E5%93%AA%E4%BA%9B%E5%AE%89%E5%85%A8%E8%BE%B9%E7%95%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Amobile-electron-security%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%8C%E9%9D%A2%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fmobile-electron-security%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/desktop-electron-ipc/">Electron 的 IPC 和 contextBridge 怎样设计？</a></li><li><a href="/questions/desktop-electron-process/">Electron 的主进程、渲染进程、preload 和 utility 进程分别负责什么？</a></li><li><a href="/questions/desktop-electron-release/">Electron 应用如何打包发布？代码签名、macOS 公证和自动更新要注意什么？</a></li><li><a href="/questions/desktop-electron-tauri/">Electron 和 Tauri 有什么区别？桌面应用怎么选型？</a></li></ul></nav></main></div></div>
+<p><strong>打开 <code>nodeIntegration</code> 有多危险？</strong></p>
+<blockquote>
+<p>它会让这个渲染进程不再运行在沙箱里，页面脚本可以直接使用 Node.js API，渲染进程里任何一个 XSS 都能执行系统命令。</p>
+</blockquote>
+<p><strong>preload 里能用 Node API 吗？</strong></p>
+<blockquote>
+<p>开启沙箱后，preload 只能使用一部分 Electron 和 Node 模块，文件读写这类操作应该放到主进程。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.electronjs.org/docs/latest/tutorial/security" target="_blank" rel="noreferrer">Electron · Security<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Electron+%E5%BA%94%E7%94%A8%E7%9A%84%E4%B8%BB%E8%BF%9B%E7%A8%8B%E3%80%81%E6%B8%B2%E6%9F%93%E8%BF%9B%E7%A8%8B%E5%92%8C+IPC+%E6%9C%89%E5%93%AA%E4%BA%9B%E5%AE%89%E5%85%A8%E8%BE%B9%E7%95%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AElectron+%E5%BA%94%E7%94%A8%E7%9A%84%E4%B8%BB%E8%BF%9B%E7%A8%8B%E3%80%81%E6%B8%B2%E6%9F%93%E8%BF%9B%E7%A8%8B%E5%92%8C+IPC+%E6%9C%89%E5%93%AA%E4%BA%9B%E5%AE%89%E5%85%A8%E8%BE%B9%E7%95%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Amobile-electron-security%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%8C%E9%9D%A2%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fmobile-electron-security%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Electron 应用的主进程、渲染进程和 IPC 有哪些安全边界？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/desktop-electron-ipc/">Electron 的 IPC 和 contextBridge 怎样设计？</a></li><li><a href="/questions/desktop-electron-process/">Electron 的主进程、渲染进程、preload 和 utility 进程分别负责什么？</a></li><li><a href="/questions/desktop-electron-release/">Electron 应用如何打包发布？代码签名、macOS 公证和自动更新要注意什么？</a></li><li><a href="/questions/desktop-electron-tauri/">Electron 和 Tauri 有什么区别？桌面应用怎么选型？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="性能优化面试题：实验室测试（Lighthouse、WebPageTest、DevTools）在固定条件下运行，适合复现和定位原因、在发布前拦截退化…" />
+    <meta name="description" content="性能优化面试题：实验室测试（Lighthouse、WebPageTest、DevTools）条件固定，适合复现、找原因和发布前拦截退化…" />
     <title>真实用户监测与实验室性能测试为什么要结合？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/perf-rum/" />
     <meta name="robots" content="index,follow" />
@@ -19,24 +19,26 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="真实用户监测与实验室性能测试为什么要结合？ · 前端知库" />
-    <meta property="og:description" content="性能优化面试题：实验室测试（Lighthouse、WebPageTest、DevTools）在固定条件下运行，适合复现和定位原因、在发布前拦截退化…" />
+    <meta property="og:description" content="性能优化面试题：实验室测试（Lighthouse、WebPageTest、DevTools）条件固定，适合复现、找原因和发布前拦截退化…" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/perf-rum/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-rum/#webpage","url":"https://fe.hushifa.top/questions/perf-rum/","name":"真实用户监测与实验室性能测试为什么要结合？ · 前端知库","description":"性能优化面试题：实验室测试（Lighthouse、WebPageTest、DevTools）在固定条件下运行，适合复现和定位原因、在发布前拦截退化…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-rum/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-rum/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"真实用户监测与实验室性能测试为什么要结合？","item":"https://fe.hushifa.top/questions/perf-rum/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/perf-rum/#webpage","url":"https://fe.hushifa.top/questions/perf-rum/","name":"真实用户监测与实验室性能测试为什么要结合？ · 前端知库","description":"性能优化面试题：实验室测试（Lighthouse、WebPageTest、DevTools）条件固定，适合复现、找原因和发布前拦截退化…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/perf-rum/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/perf-rum/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"性能优化面试题","item":"https://fe.hushifa.top/topics/performance/"},{"@type":"ListItem","position":3,"name":"真实用户监测与实验室性能测试为什么要结合？","item":"https://fe.hushifa.top/questions/perf-rum/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">真实用户监测与实验室性能测试为什么要结合？</span></nav><h1 tabindex="-1">真实用户监测与实验室性能测试为什么要结合？</h1><p class="reading-summary">实验室测试（Lighthouse、WebPageTest、DevTools）在固定条件下运行，适合复现和定位原因、在发布前拦截退化；RUM 采集真实用户在各种设备、网络和交互下的数据，反映体验分布。INP 等交互指标只能靠 RUM 获得真实值。两者回答不同问题，不能互相替代。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>实验室：条件可控、结果可重复，有完整的瀑布图和调用栈，适合定位原因和在 CI 中拦截退化；但设备、网络、缓存状态和用户行为都是假设的。</li>
-<li>RUM：数据来自真实用户，覆盖低端设备、弱网和真实交互，能发现实验室想不到的问题；但只有指标和有限的归因，难以直接定位原因。</li>
-<li>Core Web Vitals 按真实用户的 75 分位评估；Chrome 的 CrUX 数据集就是 RUM 数据。</li>
-<li>实验室工具不模拟用户交互，测不到真实 INP，通常用 Total Blocking Time 作为参考。</li>
-<li>看分布：p75、p95 和样本量，不看平均值。</li>
-</ul>
-<h2>对比</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/performance/">性能优化面试题</a><span aria-hidden="true">/</span><span aria-current="page">真实用户监测与实验室性能测试为什么要结合？</span></nav><h1 tabindex="-1">真实用户监测与实验室性能测试为什么要结合？</h1><p class="reading-summary">实验室测试（Lighthouse、WebPageTest、DevTools）条件固定，适合复现、找原因和发布前拦截退化；RUM 采集真实用户在各种设备、网络和交互下的数据，反映体验分布。INP 这类交互指标只能靠 RUM 拿到真实值，两者回答不同问题，不能互相替代。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>实验室测试就是用 Lighthouse、WebPageTest、DevTools 这些工具，在固定的设备和网络下跑页面。条件可控、结果能重复，还有完整的瀑布图和调用栈，适合找原因，也适合放进 CI 里拦截退化。缺点是设备、网络、缓存状态和用户行为都是假设的。</p>
+<p>真实用户监测，简称 RUM，是在用户浏览器里采集数据。它覆盖低端手机、弱网和真实的交互，能发现实验室想不到的问题。可它只有指标和有限的归因，很难直接看出原因。</p>
+<p>所以两者回答的是不同的问题：RUM 告诉你谁慢、有多普遍，实验室告诉你为什么慢。Core Web Vitals 按真实用户的 75 分位评估，Chrome 的 CrUX 数据集就是 RUM 数据。</p>
+<p>要注意，实验室工具不会模拟用户点击，测不到真实的 INP，一般用总阻塞时间 TBT 作为参考。看数据时也要看 p75、p95 和样本量，不要看平均值。</p>
+</blockquote>
+<h2>两者各自擅长什么</h2>
+<p>把两者放在一起比较：</p>
 <table><thead><tr><th></th><th>实验室</th><th>RUM</th></tr></thead><tbody><tr><td>回答的问题</td><td>为什么慢</td><td>谁慢、多慢、多普遍</td></tr><tr><td>条件</td><td>固定</td><td>真实且多样</td></tr><tr><td>详细程度</td><td>瀑布图、调用栈、截图</td><td>指标加有限的归因</td></tr><tr><td>时机</td><td>开发、CI、发布前</td><td>发布后持续</td></tr><tr><td>交互指标</td><td>只有模拟值</td><td>真实 INP</td></tr></tbody></table>
-<h2>采集 RUM</h2>
+<p>为什么不能只要一个？只有实验室，你测的是自己假设的场景，真实用户的低端手机和弱网你看不到。只有 RUM，你知道某个版本变慢了，却没有调用栈和瀑布图告诉你为什么。</p>
+<h2>怎样采集 RUM</h2>
+<p>下面用 <code>web-vitals</code> 采集几个核心指标，先放进队列，页面隐藏时一次发出去：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { onCLS, onINP, onLCP, onTTFB } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;web-vitals&#x27;</span>;
 
 <span class="hljs-keyword">const</span> queue = [];
@@ -62,24 +64,27 @@
   }
 });
 </code></pre></div>
-<ul>
-<li>在页面隐藏时批量发送，<code>sendBeacon</code> 不阻塞页面卸载。</li>
-<li>带上版本号、页面路由、设备类型，才能按维度拆分。</li>
-<li>按比例采样，不上报用户输入、完整 URL 查询参数等个人信息。</li>
-<li>SPA 路由切换不会产生新的导航，需要另外定义并测量&quot;路由切换完成&quot;。</li>
-</ul>
-<h2>怎样配合</h2>
+<p>为什么 CLS 要乘 1000？因为 CLS 是 0.1 这种小数，直接 <code>Math.round</code> 就变成 0 了，乘 1000 再取整能保留精度，服务端再除回去。</p>
+<p>为什么在页面隐藏时发？因为 INP 和 CLS 要到最后才有最终值，而且 <code>sendBeacon</code> 不会阻塞页面卸载。</p>
+<p>带上版本号和页面路由，才能按维度拆开看，设备类型也最好一起带上。另外要按比例采样，不要上报用户输入、完整 URL 查询参数这类个人信息。</p>
+<p>还有一点，SPA 切换路由不会产生新的导航，所以“路由切换完成”要自己定义、自己测。</p>
+<h2>两者怎样配合</h2>
+<p>一个典型的流程是这样的：</p>
 <ol>
-<li>RUM 发现某个版本后低端设备的 LCP 变差。</li>
-<li>实验室按低端设备条件复现，用瀑布图找到原因。</li>
-<li>修复后实验室验证，再看 RUM 是否恢复。</li>
-<li>把这个场景加入 CI 的实验室检查，防止再次退化。</li>
+<li>RUM 发现某个版本以后，低端设备的 LCP 变差了。</li>
+<li>实验室按低端设备的条件复现，用瀑布图找到原因。</li>
+<li>修复后先在实验室验证，再看 RUM 有没有恢复。</li>
+<li>把这个场景加进 CI 的实验室检查，防止再次退化。</li>
 </ol>
 <h2>常见追问</h2>
-<ul>
-<li>Lighthouse 分数高但 CrUX 数据差？Lighthouse 只测一次、用固定的模拟条件；真实用户的设备更慢、网络更差，还会有交互。</li>
-<li>样本量多少才可信？没有固定数字，分组后样本太少时分位数波动很大，要同时展示样本量。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/Rum-vs-Synthetic" target="_blank" rel="noreferrer">MDN · Performance monitoring: RUM vs. synthetic monitoring<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E7%9C%9F%E5%AE%9E%E7%94%A8%E6%88%B7%E7%9B%91%E6%B5%8B%E4%B8%8E%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%BB%93%E5%90%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E7%9C%9F%E5%AE%9E%E7%94%A8%E6%88%B7%E7%9B%91%E6%B5%8B%E4%B8%8E%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%BB%93%E5%90%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aperf-rum%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fperf-rum%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：真实用户监测与实验室性能测试为什么要结合？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/perf-diagnostics-case/">一个线上页面变慢后应该怎样完成性能诊断闭环？</a></li><li><a href="/questions/perf-inp-diagnosis/">INP 很高时，如何定位到底是哪一段交互变慢？</a></li><li><a href="/questions/engineering-vitals/">LCP、INP、CLS 分别衡量什么？</a></li><li><a href="/questions/perf-longtasks/">什么是长任务，为什么会影响交互响应？怎样观测和拆分？</a></li></ul></nav></main></div></div>
+<p><strong>Lighthouse 分数很高，CrUX 数据却很差，为什么？</strong></p>
+<blockquote>
+<p>Lighthouse 只测一次，用的是固定的模拟条件。真实用户的设备更慢、网络更差，还会有交互，所以两边差得远是正常的，应以真实用户数据为准。</p>
+</blockquote>
+<p><strong>样本量多少才可信？</strong></p>
+<blockquote>
+<p>没有固定数字。分组以后样本太少，分位数会波动得很厉害，所以展示分位数时要同时展示样本量。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/Rum-vs-Synthetic" target="_blank" rel="noreferrer">MDN · Performance monitoring: RUM vs. synthetic monitoring<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E7%9C%9F%E5%AE%9E%E7%94%A8%E6%88%B7%E7%9B%91%E6%B5%8B%E4%B8%8E%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%BB%93%E5%90%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E7%9C%9F%E5%AE%9E%E7%94%A8%E6%88%B7%E7%9B%91%E6%B5%8B%E4%B8%8E%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%BB%93%E5%90%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aperf-rum%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fperf-rum%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：真实用户监测与实验室性能测试为什么要结合？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/perf-diagnostics-case/">一个线上页面变慢后应该怎样完成性能诊断闭环？</a></li><li><a href="/questions/perf-inp-diagnosis/">INP 很高时，如何定位到底是哪一段交互变慢？</a></li><li><a href="/questions/engineering-vitals/">LCP、INP、CLS 分别衡量什么？</a></li><li><a href="/questions/perf-longtasks/">什么是长任务，为什么会影响交互响应？怎样观测和拆分？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

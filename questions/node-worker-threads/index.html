@@ -27,14 +27,15 @@
   </head>
   <body>
     <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/node/">Node.js面试题</a><span aria-hidden="true">/</span><span aria-current="page">Node.js Worker Threads 适合解决什么问题？</span></nav><h1 tabindex="-1">Node.js Worker Threads 适合解决什么问题？</h1><p class="reading-summary">Worker Threads 让 CPU 密集计算在独立线程中运行，避免阻塞主线程的事件循环。每个 Worker 有自己的 V8 实例和事件循环，通过消息通信；数据默认结构化克隆，可以转移 ArrayBuffer 的所有权，也可以用 SharedArrayBuffer 共享内存。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>Worker Threads 用于 CPU 密集任务，例如图片处理、压缩、解析大 JSON、加密计算；这些任务放在主线程会让所有请求都排队等待。</li>
-<li>普通的网络和文件 I/O 已经由 libuv 异步处理，放进 Worker 通常得不到收益。</li>
-<li>每个 Worker 有独立的 V8 实例、堆和事件循环，启动有几十毫秒级的成本，频繁使用时应复用，做成任务池。</li>
-<li><code>postMessage</code> 默认结构化克隆数据；把 ArrayBuffer 放进 transferList 可以转移所有权而不复制；SharedArrayBuffer 配合 Atomics 可以共享内存。</li>
-</ul>
+<blockquote>
+<p>Node.js 的 JavaScript 跑在一个主线程上。一个请求里要做 200 毫秒的图片处理或加密计算，这 200 毫秒里别的请求全都得排队等着。Worker Threads 就是把这类 CPU 密集的计算挪到另一个线程去做，主线程只管收发消息。</p>
+<p>反过来，普通的网络和文件 I/O 本来就由 libuv 异步处理，不占主线程，放进 Worker 通常没有收益。</p>
+<p>每个 Worker 有独立的 V8 实例、堆和事件循环，启动有几十毫秒级的成本，所以用得频繁时要复用，做成任务池。</p>
+<p>线程之间传数据有三种方式：<code>postMessage</code> 默认结构化克隆，也就是复制一份；把 ArrayBuffer 放进 transferList 可以直接转移所有权，不复制；SharedArrayBuffer 配合 Atomics 可以让两边共享同一块内存。</p>
+</blockquote>
 <h2>为什么需要 Worker</h2>
-<p>Node.js 的 JavaScript 运行在一个主线程上。一个请求里执行 200 毫秒的同步计算，这 200 毫秒里其他请求的回调都无法执行，延迟会整体上升。把计算移到 Worker 后，主线程只负责收发消息。</p>
+<p>主线程同一时间只能执行一段 JavaScript。一段同步计算占着它的时候，其他请求的回调都执行不了，整体延迟就上去了。把计算放进 Worker，主线程可以继续处理别的请求。</p>
+<p>下面这个函数在 Worker 里算 SHA-256，主线程通过 Promise 拿结果：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Worker</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:worker_threads&#x27;</span>;
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">hashInWorker</span>(<span class="hljs-params">input</span>) {
@@ -56,9 +57,11 @@
 
 parentPort.<span class="hljs-title function_">postMessage</span>(<span class="hljs-title function_">createHash</span>(<span class="hljs-string">&#x27;sha256&#x27;</span>).<span class="hljs-title function_">update</span>(workerData).<span class="hljs-title function_">digest</span>(<span class="hljs-string">&#x27;hex&#x27;</span>));
 </code></pre></div>
-<p>这个示例每次调用都创建一个新 Worker，只适合低频任务。高频调用的做法见<a href="/questions/node-worker-pool/">《Node.js 为什么要用 Worker Threads 任务池？》</a>。</p>
-<h2>数据怎样在线程间传递</h2>
+<p><code>workerData</code> 是创建时传给 Worker 的初始数据，Worker 算完用 <code>parentPort.postMessage</code> 把结果发回来。除了 <code>message</code>，还要监听 <code>error</code> 和 <code>exit</code>，否则 Worker 出错时这个 Promise 永远不会结束。</p>
+<p>这个示例每次调用都新建一个 Worker，只适合低频任务。高频调用的做法见<a href="/questions/node-worker-pool/">《Node.js 为什么要用 Worker Threads 任务池？》</a>。</p>
+<h2>数据怎样在线程之间传递</h2>
 <table><thead><tr><th>方式</th><th>特点</th></tr></thead><tbody><tr><td>结构化克隆（默认）</td><td>复制一份数据，支持对象、Map、Date、TypedArray 等；函数和类实例的原型不会保留</td></tr><tr><td>转移（transferList）</td><td>ArrayBuffer、MessagePort 等可转移对象移交给另一方，原线程中的变为不可用</td></tr><tr><td>SharedArrayBuffer</td><td>两个线程读写同一块内存，需要用 Atomics 协调读写顺序</td></tr></tbody></table>
+<p>转移是什么效果，看下面这个例子：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> buffer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayBuffer</span>(<span class="hljs-number">8</span>);
 <span class="hljs-keyword">const</span> { port1, port2 } = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MessageChannel</span>();
 port2.<span class="hljs-property">onmessage</span> = <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
@@ -68,15 +71,22 @@ port2.<span class="hljs-property">onmessage</span> = <span class="hljs-function"
 port1.<span class="hljs-title function_">postMessage</span>(buffer, [buffer]);
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(buffer.<span class="hljs-property">byteLength</span>); <span class="hljs-comment">// 0</span>
 </code></pre></div>
-<p>转移之后，原线程中的 <code>buffer</code> 长度变为 0。大块二进制数据用转移可以省掉复制成本。</p>
-<h2>取消与终止</h2>
-<p>Worker 正在执行同步循环时不会处理收到的消息，所以&quot;发一条取消消息&quot;只在任务会分段让出线程时才有效。需要立即停止时调用 <code>worker.terminate()</code>，它会结束整个线程，正在执行的任务没有机会清理资源。</p>
+<p>发送之后，原来的 <code>buffer</code> 长度变成了 0，接收方拿到的是完整的 8 字节。因为第二个参数把它放进了 transferList，这块内存的所有权直接交给了对方，自己这边就不能再用了。大块二进制数据用转移，可以省掉复制的成本。</p>
+<h2>能不能中途取消一个 Worker 任务</h2>
+<p>Worker 正在跑同步循环时，它没空处理收到的消息。所以“发一条取消消息”只在任务会分段让出线程时才有效。需要立刻停下时，调用 <code>worker.terminate()</code>，它会结束整个线程，正在执行的任务没有机会清理资源。</p>
 <h2>常见追问</h2>
-<ul>
-<li><strong>Worker 和 child_process、cluster 怎么选？</strong> 见<a href="/questions/node-process-model/">《Node.js 的子进程、Worker 和集群应该怎样选择？》</a>。</li>
-<li><strong>Worker 是安全沙箱吗？</strong> 不是。Worker 和主线程在同一个进程里，拥有相同的文件系统和网络权限，不能用来运行不可信代码。</li>
-<li><strong>Worker 里能用 AsyncLocalStorage 吗？</strong> Worker 有自己的上下文，主线程的 store 不会自动传过去，需要通过消息显式传递请求 ID 等信息。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://nodejs.org/api/worker_threads.html" target="_blank" rel="noreferrer">Node.js · Worker threads<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Node.js+Worker+Threads+%E9%80%82%E5%90%88%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ANode.js+Worker+Threads+%E9%80%82%E5%90%88%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anode-worker-threads%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ANode.js%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnode-worker-threads%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Node.js Worker Threads 适合解决什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/node-process-model/">Node.js 的子进程、Worker 和集群应该怎样选择？</a></li><li><a href="/questions/node-worker-pool/">Node.js 为什么要用 Worker Threads 任务池？</a></li><li><a href="/questions/node-eventloop/">Node.js 事件循环和浏览器有什么不同？nextTick 一定先于 Promise 吗？</a></li><li><a href="/questions/node-bff/">前端工程师编写 Node 服务时需要守住哪些安全边界？</a></li></ul></nav></main></div></div>
+<p><strong>Worker 和 child_process、cluster 怎么选？</strong></p>
+<blockquote>
+<p>见<a href="/questions/node-process-model/">《Node.js 的子进程、Worker 和集群应该怎样选择？》</a>。</p>
+</blockquote>
+<p><strong>Worker 是安全沙箱吗？</strong></p>
+<blockquote>
+<p>不是。Worker 和主线程在同一个进程里，文件系统和网络权限都一样，不能用来运行不可信的代码。</p>
+</blockquote>
+<p><strong>Worker 里能用 AsyncLocalStorage 吗？</strong></p>
+<blockquote>
+<p>Worker 有自己的上下文，主线程的 store 不会自动传过去，需要通过消息显式传递请求 ID 等信息。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://nodejs.org/api/worker_threads.html" target="_blank" rel="noreferrer">Node.js · Worker threads<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Node.js+Worker+Threads+%E9%80%82%E5%90%88%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ANode.js+Worker+Threads+%E9%80%82%E5%90%88%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anode-worker-threads%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ANode.js%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnode-worker-threads%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Node.js Worker Threads 适合解决什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/node-process-model/">Node.js 的子进程、Worker 和集群应该怎样选择？</a></li><li><a href="/questions/node-worker-pool/">Node.js 为什么要用 Worker Threads 任务池？</a></li><li><a href="/questions/node-eventloop/">Node.js 事件循环和浏览器有什么不同？nextTick 一定先于 Promise 吗？</a></li><li><a href="/questions/node-bff/">前端工程师编写 Node 服务时需要守住哪些安全边界？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

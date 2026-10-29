@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="前端安全面试题：先用 Content-Security-Policy-Report-Only 下发新策略，只收集违规不拦截；按页面、指令和资源聚合报告…" />
+    <meta name="description" content="前端安全面试题：新策略先用 Report-Only 下发，只收集违规、不拦截；把报告按页面、指令和资源归类，改完代码再切换成强制执行。" />
     <title>CSP Report-Only 和违规报告怎样用于安全治理？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/security-csp-reporting/" />
     <meta name="robots" content="index,follow" />
@@ -19,54 +19,53 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="CSP Report-Only 和违规报告怎样用于安全治理？" />
-    <meta property="og:description" content="前端安全面试题：先用 Content-Security-Policy-Report-Only 下发新策略，只收集违规不拦截；按页面、指令和资源聚合报告…" />
+    <meta property="og:description" content="前端安全面试题：新策略先用 Report-Only 下发，只收集违规、不拦截；把报告按页面、指令和资源归类，改完代码再切换成强制执行。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/security-csp-reporting/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/security-csp-reporting/#webpage","url":"https://fe.hushifa.top/questions/security-csp-reporting/","name":"CSP Report-Only 和违规报告怎样用于安全治理？","description":"前端安全面试题：先用 Content-Security-Policy-Report-Only 下发新策略，只收集违规不拦截；按页面、指令和资源聚合报告…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/security-csp-reporting/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/security-csp-reporting/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"前端安全面试题","item":"https://fe.hushifa.top/topics/security/"},{"@type":"ListItem","position":3,"name":"CSP Report-Only 和违规报告怎样用于安全治理？","item":"https://fe.hushifa.top/questions/security-csp-reporting/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/security-csp-reporting/#webpage","url":"https://fe.hushifa.top/questions/security-csp-reporting/","name":"CSP Report-Only 和违规报告怎样用于安全治理？","description":"前端安全面试题：新策略先用 Report-Only 下发，只收集违规、不拦截；把报告按页面、指令和资源归类，改完代码再切换成强制执行。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/security-csp-reporting/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/security-csp-reporting/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"前端安全面试题","item":"https://fe.hushifa.top/topics/security/"},{"@type":"ListItem","position":3,"name":"CSP Report-Only 和违规报告怎样用于安全治理？","item":"https://fe.hushifa.top/questions/security-csp-reporting/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/security/">前端安全面试题</a><span aria-hidden="true">/</span><span aria-current="page">CSP Report-Only 和违规报告怎样用于安全治理？</span></nav><h1 tabindex="-1">CSP Report-Only 和违规报告怎样用于安全治理？</h1><p class="reading-summary">先用 Content-Security-Policy-Report-Only 下发新策略，只收集违规不拦截；按页面、指令和资源聚合报告，修正依赖后再切换为强制执行。正式策略和下一版的 Report-Only 策略可以同时存在。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>Report-Only 策略不拦截任何资源，只在违规时报告，可以在不影响业务的情况下验证严格策略。</li>
-<li>用 <code>Reporting-Endpoints</code> 定义端点，策略里用 <code>report-to</code> 引用；旧的 <code>report-uri</code> 已废弃，过渡期可同时写，支持 <code>report-to</code> 的浏览器会忽略 <code>report-uri</code>。</li>
-<li>报告按页面版本、<code>effectiveDirective</code>、被阻止的资源聚合，扩展和旧缓存会产生大量噪声。</li>
-<li>没有报告不代表策略安全：低频页面可能没人访问，报告链路本身也可能没工作。</li>
-<li>Report-Only 只能通过响应头下发，<code>&lt;meta&gt;</code> 中无效。</li>
-</ul>
-<h2>配置</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/security/">前端安全面试题</a><span aria-hidden="true">/</span><span aria-current="page">CSP Report-Only 和违规报告怎样用于安全治理？</span></nav><h1 tabindex="-1">CSP Report-Only 和违规报告怎样用于安全治理？</h1><p class="reading-summary">新策略先用 Report-Only 下发，只收集违规、不拦截；把报告按页面、指令和资源归类，改完代码再切换成强制执行。正式策略和下一版的 Report-Only 策略可以同时存在。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>直接上线一条严格的 CSP，很可能把某个页面的脚本拦掉，业务就挂了。所以先用 <code>Content-Security-Policy-Report-Only</code> 下发，它不拦截任何资源，只在违规时报告，可以在不影响业务的情况下验证策略。</p>
+<p>报告发到哪里，用 <code>Reporting-Endpoints</code> 响应头定义端点，策略里用 <code>report-to</code> 引用。旧的 <code>report-uri</code> 已经废弃，过渡期可以两个都写，支持 <code>report-to</code> 的浏览器会忽略 <code>report-uri</code>。</p>
+<p>收到报告后，按页面版本、<code>effectiveDirective</code> 和被阻止的资源归类。浏览器扩展和旧缓存会产生大量噪声，要筛掉。一个一个修完，再切换为强制执行。</p>
+<p>要注意，没收到报告不代表策略没问题，可能是低频页面没人访问，也可能是报告链路本身没工作。另外 Report-Only 只能通过响应头下发，写在 <code>&lt;meta&gt;</code> 里无效。</p>
+</blockquote>
+<h2>怎么配置</h2>
 <div class="not-prose code-block"><div class="code-language">http</div><pre><code class="hljs language-http">Reporting-Endpoints: csp=&quot;https://reports.example.com/csp&quot;
 Content-Security-Policy-Report-Only: script-src &#x27;nonce-R4nd0m&#x27; &#x27;strict-dynamic&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; report-to csp
 </code></pre></div>
-<p>正式策略和观察中的下一版可以并存：</p>
+<p>第一行给端点起名叫 <code>csp</code>，第二行的 <code>report-to csp</code> 就是引用这个名字。</p>
+<p>已经有正式策略的网站，可以让正式策略和观察中的下一版同时存在：</p>
 <div class="not-prose code-block"><div class="code-language">http</div><pre><code class="hljs language-http">Content-Security-Policy: script-src &#x27;self&#x27;; report-to csp
 Content-Security-Policy-Report-Only: script-src &#x27;nonce-R4nd0m&#x27; &#x27;strict-dynamic&#x27;; report-to csp
 </code></pre></div>
-<h2>读报告</h2>
-<p>Reporting API 发送的报告体包含：</p>
-<ul>
-<li><code>documentURL</code>：发生违规的页面。</li>
-<li><code>effectiveDirective</code>：被违反的指令，例如 <code>script-src-elem</code>、<code>connect-src</code>。</li>
-<li><code>blockedURL</code>：被阻止的资源；内联脚本为 <code>inline</code>，<code>eval</code> 为 <code>eval</code>。</li>
-<li><code>sourceFile</code>、<code>lineNumber</code>：触发位置。</li>
-<li><code>disposition</code>：<code>report</code> 表示来自 Report-Only，<code>enforce</code> 表示已实际拦截。</li>
-</ul>
-<p>旧 <code>report-uri</code> 的格式不同（<code>csp-report</code> 对象，字段名如 <code>violated-directive</code>），接收端要分别解析。</p>
-<h2>处理流程</h2>
+<p>浏览器按第一行实际拦截，同时按第二行检查并报告。这样新策略可以在线上观察，不会影响现有的保护。</p>
+<h2>报告里有什么</h2>
+<p>Reporting API 发来的报告体里，有几个字段最常用。<code>documentURL</code> 是发生违规的页面。<code>effectiveDirective</code> 是被违反的指令，比如 <code>script-src-elem</code>、<code>connect-src</code>。<code>blockedURL</code> 是被阻止的资源，内联脚本显示为 <code>inline</code>，<code>eval</code> 显示为 <code>eval</code>。<code>sourceFile</code> 和 <code>lineNumber</code> 是触发的位置。<code>disposition</code> 区分来源，<code>report</code> 表示来自 Report-Only，<code>enforce</code> 表示已经实际拦截了。</p>
+<p>旧的 <code>report-uri</code> 发来的格式不一样，是一个 <code>csp-report</code> 对象，字段名也不同，比如 <code>violated-directive</code>。所以过渡期接收端要两种都能解析。</p>
+<h2>从观察到强制执行的流程</h2>
 <ol>
 <li>部署 Report-Only，收集一到两周。</li>
-<li>按指令和资源聚合，区分业务资源、第三方脚本、浏览器扩展（常见 <code>chrome-extension:</code> 来源）。</li>
-<li>修正代码：内联脚本加 nonce，内联事件改 <code>addEventListener</code>，补上缺失的合法来源。</li>
-<li>主动走一遍登录、支付、错误页等关键路径，并制造一个受控违规确认报告能到达。</li>
+<li>按指令和资源归类，区分业务资源、第三方脚本和浏览器扩展（常见 <code>chrome-extension:</code> 来源）。</li>
+<li>修改代码：内联脚本加 nonce，内联事件改成 <code>addEventListener</code>，补上缺失的合法来源。</li>
+<li>主动走一遍登录、支付、错误页等关键路径，并制造一个受控的违规，确认报告能到达。</li>
 <li>切换为强制执行，保留报告继续监控。</li>
 </ol>
-<h2>接收端的安全</h2>
-<p>报告由客户端发送，可以伪造。接收端要限制请求体大小和频率，展示时编码报告内容。<code>documentURL</code> 可能包含查询参数里的个人信息，存储前脱敏。</p>
+<p>第 4 步为什么要故意制造违规？因为前面说过，没有报告可能是链路坏了。自己触发一次、确认收到，才能相信“没报告”真的是没问题。</p>
+<h2>接收端本身也要防</h2>
+<p>报告是客户端发来的，任何人都可以伪造。所以接收端要限制请求体大小和频率，在后台展示时要对报告内容编码，否则报告系统自己就可能被 XSS。<code>documentURL</code> 可能带着查询参数里的个人信息，存储前要脱敏。</p>
 <h2>常见追问</h2>
-<ul>
-<li>违规太多怎么办？不要为了清零报告放开 <code>*</code> 或 <code>&#x27;unsafe-inline&#x27;</code>，先按影响面排序处理。</li>
-<li>报告是实时的吗？浏览器可能批量、延迟发送，也可能因网络失败丢失。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy-Report-Only" target="_blank" rel="noreferrer">MDN · Content-Security-Policy-Report-Only<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+CSP+Report-Only+%E5%92%8C%E8%BF%9D%E8%A7%84%E6%8A%A5%E5%91%8A%E6%80%8E%E6%A0%B7%E7%94%A8%E4%BA%8E%E5%AE%89%E5%85%A8%E6%B2%BB%E7%90%86%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ACSP+Report-Only+%E5%92%8C%E8%BF%9D%E8%A7%84%E6%8A%A5%E5%91%8A%E6%80%8E%E6%A0%B7%E7%94%A8%E4%BA%8E%E5%AE%89%E5%85%A8%E6%B2%BB%E7%90%86%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Asecurity-csp-reporting%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fsecurity-csp-reporting%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：CSP Report-Only 和违规报告怎样用于安全治理？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/http-xss/">XSS 和 CSRF 有什么区别？分别如何防范？</a></li><li><a href="/questions/sec-csp/">CSP 的 nonce、hash 与 Report-Only 如何使用？</a></li><li><a href="/questions/sec-trusted-types/">Trusted Types 会自动过滤所有危险 HTML 吗？</a></li><li><a href="/questions/sec-clickjacking/">怎样用 frame-ancestors 限制页面被嵌入？</a></li></ul></nav></main></div></div>
+<p><strong>违规报告太多怎么办？</strong></p>
+<blockquote>
+<p>不要为了让报告清零就放开 <code>*</code> 或 <code>&#x27;unsafe-inline&#x27;</code>，那样策略就没意义了。先按影响面排序，从影响最大的开始处理。</p>
+</blockquote>
+<p><strong>报告是实时发送的吗？</strong></p>
+<blockquote>
+<p>不是。浏览器可能攒一批再发，也可能延迟发，网络失败时还可能丢失。所以报告适合看趋势，不能当成完整的记录。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy-Report-Only" target="_blank" rel="noreferrer">MDN · Content-Security-Policy-Report-Only<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+CSP+Report-Only+%E5%92%8C%E8%BF%9D%E8%A7%84%E6%8A%A5%E5%91%8A%E6%80%8E%E6%A0%B7%E7%94%A8%E4%BA%8E%E5%AE%89%E5%85%A8%E6%B2%BB%E7%90%86%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ACSP+Report-Only+%E5%92%8C%E8%BF%9D%E8%A7%84%E6%8A%A5%E5%91%8A%E6%80%8E%E6%A0%B7%E7%94%A8%E4%BA%8E%E5%AE%89%E5%85%A8%E6%B2%BB%E7%90%86%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Asecurity-csp-reporting%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fsecurity-csp-reporting%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：CSP Report-Only 和违规报告怎样用于安全治理？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/http-xss/">XSS 和 CSRF 有什么区别？分别如何防范？</a></li><li><a href="/questions/sec-csp/">CSP 的 nonce、hash 与 Report-Only 如何使用？</a></li><li><a href="/questions/sec-trusted-types/">Trusted Types 会自动过滤所有危险 HTML 吗？</a></li><li><a href="/questions/sec-clickjacking/">怎样用 frame-ancestors 限制页面被嵌入？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

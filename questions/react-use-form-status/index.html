@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="React面试题：useFormStatus 让 form 内部的子组件读取父级 form 的提交状态（pending、data、method、action）…" />
+    <meta name="description" content="React面试题：useFormStatus 让表单里面的子组件知道外层表单是不是正在提交、提交了什么，适合做通用的提交按钮。" />
     <title>React useFormStatus 适合管理什么表单状态？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/react-use-form-status/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="React useFormStatus 适合管理什么表单状态？" />
-    <meta property="og:description" content="React面试题：useFormStatus 让 form 内部的子组件读取父级 form 的提交状态（pending、data、method、action）…" />
+    <meta property="og:description" content="React面试题：useFormStatus 让表单里面的子组件知道外层表单是不是正在提交、提交了什么，适合做通用的提交按钮。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/react-use-form-status/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-use-form-status/#webpage","url":"https://fe.hushifa.top/questions/react-use-form-status/","name":"React useFormStatus 适合管理什么表单状态？","description":"React面试题：useFormStatus 让 form 内部的子组件读取父级 form 的提交状态（pending、data、method、action）…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-use-form-status/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-use-form-status/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"React useFormStatus 适合管理什么表单状态？","item":"https://fe.hushifa.top/questions/react-use-form-status/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-use-form-status/#webpage","url":"https://fe.hushifa.top/questions/react-use-form-status/","name":"React useFormStatus 适合管理什么表单状态？","description":"React面试题：useFormStatus 让表单里面的子组件知道外层表单是不是正在提交、提交了什么，适合做通用的提交按钮。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-use-form-status/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-use-form-status/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"React useFormStatus 适合管理什么表单状态？","item":"https://fe.hushifa.top/questions/react-use-form-status/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">React useFormStatus 适合管理什么表单状态？</span></nav><h1 tabindex="-1">React useFormStatus 适合管理什么表单状态？</h1><p class="reading-summary">useFormStatus 让 form 内部的子组件读取父级 form 的提交状态（pending、data、method、action），适合做通用的提交按钮和提交提示。它只能在 form 的子组件中调用，不提供提交结果和错误信息。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>从 <code>react-dom</code> 导入，返回 <code>{ pending, data, method, action }</code>，描述最近一个父级 <code>&lt;form&gt;</code> 的当前提交。</li>
-<li>必须在 <code>&lt;form&gt;</code> 内部渲染的组件中调用；在渲染 <code>&lt;form&gt;</code> 的同一个组件里调用，读不到这个表单的状态。</li>
-<li>只对使用 <code>action</code> 属性提交的表单生效，即 <code>&lt;form action={fn}&gt;</code>。</li>
-<li>只告诉你&quot;是否正在提交、提交了什么&quot;；提交结果、校验错误要用 <code>useActionState</code> 管理。</li>
-<li>典型用途：可复用的提交按钮，自动在提交期间禁用并显示加载文字。</li>
-</ul>
-<h2>通用提交按钮</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">React useFormStatus 适合管理什么表单状态？</span></nav><h1 tabindex="-1">React useFormStatus 适合管理什么表单状态？</h1><p class="reading-summary">useFormStatus 让表单里面的子组件知道外层表单是不是正在提交、提交了什么，适合做通用的提交按钮。它只能在表单的子组件里用，拿不到提交结果和错误信息。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>很多表单都要一个“提交中就禁用”的按钮。以前得把 <code>isPending</code> 从表单组件一层层传给按钮。<code>useFormStatus</code> 让按钮自己去问：“我所在的那个表单，现在是不是在提交？”</p>
+<p>它从 <code>react-dom</code> 导入，返回 <code>{ pending, data, method, action }</code>，描述的是最近一个父级 <code>&lt;form&gt;</code> 的当前提交。<code>pending</code> 表示是否在提交，<code>data</code> 是这次提交的 <code>FormData</code>。</p>
+<p>它最适合做可复用的提交按钮和提交提示，放进哪个表单就自动跟哪个表单走，不用传任何 props。</p>
+<p>要注意，它必须在 <code>&lt;form&gt;</code> 里面渲染的组件中调用，在渲染 <code>&lt;form&gt;</code> 的那个组件里调用读不到。它只对用 <code>action</code> 属性提交的表单生效。它也只告诉你“是不是在提交、提交了什么”，提交结果和校验错误要用 <code>useActionState</code> 管理。</p>
+</blockquote>
+<h2>写一个通用提交按钮</h2>
+<p>按钮自己读表单状态，提交期间禁用并换文字：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { useFormStatus } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom&#x27;</span>;
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">SubmitButton</span>(<span class="hljs-params">{ children, pendingText = <span class="hljs-string">&#x27;提交中…&#x27;</span> }</span>) {
@@ -46,6 +46,7 @@
   );
 }
 </code></pre></div>
+<p>用的时候直接放进表单就行：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">CommentForm</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">addComment</span>(<span class="hljs-params">formData</span>) {
     <span class="hljs-keyword">await</span> <span class="hljs-title function_">postComment</span>(formData.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;text&#x27;</span>));
@@ -59,30 +60,36 @@
   );
 }
 </code></pre></div>
-<p><code>SubmitButton</code> 不需要任何 props 就知道表单状态，可以放进任意表单。</p>
-<h2>常见错误：在表单组件自身调用</h2>
+<p><code>CommentForm</code> 没给 <code>SubmitButton</code> 传任何状态。用户提交时，<code>addComment</code> 还没执行完，按钮读到 <code>pending</code> 为 <code>true</code>，就显示“提交中…”并禁用。换一个表单用它，它读的就是新表单的状态。</p>
+<h2>为什么在表单组件里调用永远是 false</h2>
+<p>很多人第一次会这样写：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">CommentForm</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">const</span> { pending } = <span class="hljs-title function_">useFormStatus</span>(); <span class="hljs-comment">// 永远是 false</span>
   <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">{addComment}</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></span>;
 }
 </code></pre></div>
-<p><code>useFormStatus</code> 只查找父级的 <code>&lt;form&gt;</code>，这里的 <code>&lt;form&gt;</code> 是当前组件渲染出来的子元素。需要在同一层读取，改用 <code>useActionState</code> 返回的 <code>isPending</code>。</p>
-<h2>读取正在提交的数据</h2>
-<p><code>data</code> 是本次提交的 <code>FormData</code>，可以用来显示&quot;正在保存《标题》…&quot;：</p>
+<p><code>useFormStatus</code> 是往上找父级的 <code>&lt;form&gt;</code>。可这里的 <code>&lt;form&gt;</code> 是 <code>CommentForm</code> 自己渲染出来的，在它下面，不在它上面，所以它什么也找不到。</p>
+<p>所以要么把读状态的部分拆成子组件放进表单里，要么在同一层改用 <code>useActionState</code> 返回的 <code>isPending</code>。</p>
+<h2>显示正在提交的内容</h2>
+<p><code>data</code> 就是这次提交的 <code>FormData</code>，可以拿来做更具体的提示：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">SavingHint</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">const</span> { pending, data } = <span class="hljs-title function_">useFormStatus</span>();
   <span class="hljs-keyword">if</span> (!pending) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
   <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">role</span>=<span class="hljs-string">&quot;status&quot;</span>&gt;</span>正在保存《{data.get(&#x27;title&#x27;)}》…<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>;
 }
 </code></pre></div>
-<h2>和 useActionState 的分工</h2>
-<table><thead><tr><th></th><th>useFormStatus</th><th>useActionState</th></tr></thead><tbody><tr><td>调用位置</td><td>form 的子组件</td><td>渲染 form 的组件</td></tr><tr><td>提供</td><td>提交中、提交的数据</td><td>Action 返回的状态、isPending</td></tr><tr><td>适合</td><td>通用按钮、提示组件</td><td>显示结果和错误</td></tr></tbody></table>
-<p>两者经常一起使用，见<a href="/questions/react-action-state/">《useActionState 如何把异步 Action 的结果变成组件状态？》</a>。</p>
+<h2>和 useActionState 怎么分工</h2>
+<p><code>useFormStatus</code> 在表单的子组件里调用，提供“是否在提交”和“提交了什么数据”，适合通用按钮和提示组件。<code>useActionState</code> 在渲染表单的组件里调用，提供 Action 返回的状态和 <code>isPending</code>，适合显示提交结果和错误。</p>
+<p>两者经常一起用：外层用 <code>useActionState</code> 显示结果，里面的按钮用 <code>useFormStatus</code> 控制禁用。详见<a href="/questions/react-action-state/">《useActionState 如何把异步 Action 的结果变成组件状态？》</a>。</p>
 <h2>常见追问</h2>
-<ul>
-<li>支持普通 <code>onSubmit</code> 吗？不支持，只追踪通过 <code>action</code> 发起的提交。</li>
-<li>页面上有多个表单怎么办？每个子组件只读取自己所在的那个表单，互不影响。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/reference/react-dom/hooks/useFormStatus" target="_blank" rel="noreferrer">React · useFormStatus<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+useFormStatus+%E9%80%82%E5%90%88%E7%AE%A1%E7%90%86%E4%BB%80%E4%B9%88%E8%A1%A8%E5%8D%95%E7%8A%B6%E6%80%81%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+useFormStatus+%E9%80%82%E5%90%88%E7%AE%A1%E7%90%86%E4%BB%80%E4%B9%88%E8%A1%A8%E5%8D%95%E7%8A%B6%E6%80%81%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-use-form-status%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-use-form-status%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React useFormStatus 适合管理什么表单状态？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-controlled-forms/">受控组件与非受控组件应该如何选择？</a></li><li><a href="/questions/react-server-cache/">React 的 cache API 解决什么问题？</a></li><li><a href="/questions/react-use-effect-event/">React useEffectEvent 适合解决什么依赖问题？</a></li><li><a href="/questions/react-use-hook/">React use API 可以读取哪些值？</a></li></ul></nav></main></div></div>
+<p><strong>普通的 <code>onSubmit</code> 提交也能用吗？</strong></p>
+<blockquote>
+<p>不能。它只追踪通过 <code>action</code> 属性发起的提交。</p>
+</blockquote>
+<p><strong>页面上有好几个表单，会不会串？</strong></p>
+<blockquote>
+<p>不会。每个子组件只读它自己所在的那个表单，互不影响。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/reference/react-dom/hooks/useFormStatus" target="_blank" rel="noreferrer">React · useFormStatus<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+useFormStatus+%E9%80%82%E5%90%88%E7%AE%A1%E7%90%86%E4%BB%80%E4%B9%88%E8%A1%A8%E5%8D%95%E7%8A%B6%E6%80%81%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+useFormStatus+%E9%80%82%E5%90%88%E7%AE%A1%E7%90%86%E4%BB%80%E4%B9%88%E8%A1%A8%E5%8D%95%E7%8A%B6%E6%80%81%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-use-form-status%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-use-form-status%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React useFormStatus 适合管理什么表单状态？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-controlled-forms/">受控组件与非受控组件应该如何选择？</a></li><li><a href="/questions/react-server-cache/">React 的 cache API 解决什么问题？</a></li><li><a href="/questions/react-use-effect-event/">React useEffectEvent 适合解决什么依赖问题？</a></li><li><a href="/questions/react-use-hook/">React use API 可以读取哪些值？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="工程化面试题：从按需模块处理、依赖优化和 HMR 解释开发体验，再说明生产打包的网络与缓存目标，并区分 Vite 8 的工具链与旧版本实现。" />
+    <meta name="description" content="工程化面试题：开发时 Vite 靠原生 ESM 按需处理模块，加上依赖优化和 HMR，所以启动快；生产仍要打包，是为了减少请求、缩小体积、利用缓存。" />
     <title>Vite 开发模式为什么启动快，生产环境为什么仍需要构建？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/eng-vite/" />
     <meta name="robots" content="index,follow" />
@@ -19,48 +19,50 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Vite 开发模式为什么启动快，生产环境为什么仍需要构建？" />
-    <meta property="og:description" content="工程化面试题：从按需模块处理、依赖优化和 HMR 解释开发体验，再说明生产打包的网络与缓存目标，并区分 Vite 8 的工具链与旧版本实现。" />
+    <meta property="og:description" content="工程化面试题：开发时 Vite 靠原生 ESM 按需处理模块，加上依赖优化和 HMR，所以启动快；生产仍要打包，是为了减少请求、缩小体积、利用缓存。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/eng-vite/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/eng-vite/#webpage","url":"https://fe.hushifa.top/questions/eng-vite/","name":"Vite 开发模式为什么启动快，生产环境为什么仍需要构建？","description":"工程化面试题：从按需模块处理、依赖优化和 HMR 解释开发体验，再说明生产打包的网络与缓存目标，并区分 Vite 8 的工具链与旧版本实现。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/eng-vite/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/eng-vite/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"工程化面试题","item":"https://fe.hushifa.top/topics/engineering/"},{"@type":"ListItem","position":3,"name":"Vite 开发模式为什么启动快，生产环境为什么仍需要构建？","item":"https://fe.hushifa.top/questions/eng-vite/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/eng-vite/#webpage","url":"https://fe.hushifa.top/questions/eng-vite/","name":"Vite 开发模式为什么启动快，生产环境为什么仍需要构建？","description":"工程化面试题：开发时 Vite 靠原生 ESM 按需处理模块，加上依赖优化和 HMR，所以启动快；生产仍要打包，是为了减少请求、缩小体积、利用缓存。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/eng-vite/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/eng-vite/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"工程化面试题","item":"https://fe.hushifa.top/topics/engineering/"},{"@type":"ListItem","position":3,"name":"Vite 开发模式为什么启动快，生产环境为什么仍需要构建？","item":"https://fe.hushifa.top/questions/eng-vite/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/engineering/">工程化面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vite 开发模式为什么启动快，生产环境为什么仍需要构建？</span></nav><h1 tabindex="-1">Vite 开发模式为什么启动快，生产环境为什么仍需要构建？</h1><p class="reading-summary">从按需模块处理、依赖优化和 HMR 解释开发体验，再说明生产打包的网络与缓存目标，并区分 Vite 8 的工具链与旧版本实现。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>开发时 Vite 不先打包整个应用，而是让浏览器通过原生 ES 模块按需请求文件，服务器只转换被请求到的模块。</li>
-<li>第三方依赖会预先打包成少量 ESM 文件并缓存，避免浏览器请求成百上千个小文件。</li>
-<li>热更新只替换改动的模块及其边界，速度不随应用规模明显变慢。</li>
-<li>生产环境仍要打包：合并请求、tree shaking、压缩、代码分割和带哈希的缓存文件名都需要构建完成。</li>
-<li>Vite 8 的生产构建使用 Rolldown；Vite 7 及之前开发时用 esbuild、生产构建用 Rollup。当前版本要求 Node.js 20.19+ 或 22.12+。</li>
-</ul>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/engineering/">工程化面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vite 开发模式为什么启动快，生产环境为什么仍需要构建？</span></nav><h1 tabindex="-1">Vite 开发模式为什么启动快，生产环境为什么仍需要构建？</h1><p class="reading-summary">开发时 Vite 靠原生 ESM 按需处理模块，加上依赖优化和 HMR，所以启动快；生产仍要打包，是为了减少请求、缩小体积、利用缓存。文中也区分了 Vite 8 和旧版本的工具链。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>传统打包工具启动时要先把整个应用打包好，项目越大越慢。Vite 开发时不先打包，而是让浏览器通过原生 ES 模块自己按需请求文件，服务器只转换被请求到的那些模块。</p>
+<p>第三方依赖是例外，Vite 会预先把它们打包成少量 ESM 文件并缓存，免得浏览器请求成百上千个小文件。改了代码以后，热更新只替换改动的模块，所以速度不会随项目变大而明显变慢。</p>
+<p>可是生产环境还要打包。合并请求、tree shaking、压缩、代码分割、带哈希的缓存文件名，都要构建完才能做到。</p>
+<p>版本上要注意，Vite 8 的生产构建用的是 Rolldown；Vite 7 及之前，开发时用 esbuild，生产构建用 Rollup。</p>
+</blockquote>
 <h2>开发服务器做了什么</h2>
-<p>传统打包工具启动时要先分析和打包所有模块，应用越大启动越慢。Vite 启动时几乎不处理业务代码：</p>
-<ol>
-<li>浏览器加载 <code>index.html</code>，遇到 <code>&lt;script type=&quot;module&quot; src=&quot;/src/main.ts&quot;&gt;</code>。</li>
-<li>浏览器请求 <code>/src/main.ts</code>，Vite 把 TypeScript 去掉类型、改写导入路径后返回。</li>
-<li>浏览器根据其中的 <code>import</code> 继续请求下一批模块。</li>
-</ol>
-<p>没访问到的路由，代码根本不会被转换。</p>
-<h2>依赖预构建</h2>
-<p><code>node_modules</code> 里的包存在两个问题：很多仍是 CommonJS，浏览器无法直接执行；一个包可能拆成几百个内部模块，逐个请求很慢。Vite 首次启动时扫描依赖，把它们转换并合并成少量 ESM 文件，放到 <code>node_modules/.vite</code> 中缓存。依赖或锁文件变化时会重新预构建。</p>
-<h2>热更新</h2>
-<p>修改一个文件后，Vite 沿导入关系向上找到接受热更新的边界（例如一个 React 或 Vue 组件），只让浏览器重新请求这部分模块，同时保留页面状态。找不到边界时才整页刷新。</p>
+<p>Vite 启动时几乎不处理业务代码，真正的工作发生在浏览器请求的时候。</p>
+<p>浏览器先加载 <code>index.html</code>，看到 <code>&lt;script type=&quot;module&quot; src=&quot;/src/main.ts&quot;&gt;</code>，就去请求 <code>/src/main.ts</code>。Vite 收到请求，把 TypeScript 的类型去掉、把导入路径改写好，再返回给浏览器。浏览器读到里面的 <code>import</code>，接着请求下一批模块。</p>
+<p>所以没访问到的路由，它的代码根本不会被转换。这就是启动快的原因。</p>
+<h2>为什么要预构建依赖</h2>
+<p><code>node_modules</code> 里的包有两个问题。第一，很多包还是 CommonJS 格式，浏览器没法直接执行。第二，一个包可能拆成几百个内部模块，浏览器逐个请求会很慢。</p>
+<p>所以 Vite 首次启动时会扫描依赖，把它们转换并合并成少量 ESM 文件，缓存在 <code>node_modules/.vite</code> 里，这一步叫依赖预构建。依赖或锁文件变了，它会重新预构建。</p>
+<h2>热更新为什么快</h2>
+<p>热更新，也就是 HMR，指改了代码以后页面不刷新，只替换改动的部分。</p>
+<p>改了一个文件后，Vite 沿着导入关系往上找，找到一个能接受热更新的边界，比如一个 React 或 Vue 组件。然后只让浏览器重新请求这部分模块，页面状态保留不变。找不到这样的边界，才整页刷新。</p>
+<p>所以热更新的工作量只跟改动范围有关，跟项目总大小关系不大。</p>
 <h2>为什么生产还要打包</h2>
-<ul>
-<li><strong>请求数量</strong>：未打包的应用首屏可能要发起几百个模块请求，导入链越深，往返次数越多，即使用 HTTP/2 也明显变慢。</li>
-<li><strong>体积</strong>：tree shaking 去掉未使用的代码，压缩器减小文件，开发模式都不做这些。</li>
-<li><strong>缓存</strong>：文件名带内容哈希，未改动的块可以长期缓存。</li>
-<li><strong>兼容性</strong>：按 <code>build.target</code> 降级语法，处理 CSS 和静态资源。默认值 <code>&#x27;baseline-widely-available&#x27;</code> 对应每个大版本固定日期时的 Baseline 广泛可用浏览器，Vite 8 以 2026-01-01 为准（Chrome 111、Firefox 114、Safari 16.4 等）。</li>
-</ul>
-<p>Vite 8 的生产构建由 Rolldown 完成；Vite 7 及之前开发时用 esbuild、生产构建用 Rollup。Vite 8 要求 Node.js 20.19+ 或 22.12+。</p>
-<h2>开发和生产的差异</h2>
-<p>开发与生产走的是不同的处理路径，个别问题只在一种模式下出现，例如 CommonJS 互操作、CSS 顺序、动态导入路径。提交前运行 <code>vite build</code> 并用 <code>vite preview</code> 在本地检查产物。</p>
+<p>开发时按需请求很舒服，可是放到线上，用户的网络就成了瓶颈。</p>
+<p>首先是请求数量。不打包的应用首屏可能要发几百个模块请求，导入链越深，来回的次数越多，就算用了 HTTP/2 也会明显变慢。</p>
+<p>其次是体积。tree shaking 会去掉没用到的代码，压缩器会缩小文件，开发模式都不做这些。</p>
+<p>然后是缓存。打包后的文件名带内容哈希，没改动的块可以让浏览器长期缓存。</p>
+<p>最后是兼容性。构建会按 <code>build.target</code> 降级语法，处理 CSS 和静态资源。默认值 <code>&#x27;baseline-widely-available&#x27;</code> 指每个大版本固定一个日期时 Baseline 广泛可用的浏览器，Vite 8 以 2026-01-01 为准，对应 Chrome 111、Firefox 114、Safari 16.4 等。</p>
+<p>Vite 8 的生产构建由 Rolldown 完成；Vite 7 及之前，开发时用 esbuild，生产构建用 Rollup。Vite 8 要求 Node.js 20.19+ 或 22.12+。</p>
+<h2>开发和生产不一样会带来什么</h2>
+<p>开发和生产走的是两条不同的处理路径，所以个别问题只会在其中一种模式下出现，比如 CommonJS 互操作、CSS 顺序、动态导入路径。</p>
+<p>改法是提交前跑一次 <code>vite build</code>，再用 <code>vite preview</code> 在本地检查构建产物。</p>
 <h2>常见追问</h2>
-<ul>
-<li>为什么首次启动或依赖变化后会慢一些？需要重新预构建依赖，之后命中缓存就快了。</li>
-<li>Vite 能用于非浏览器场景吗？可以用 SSR 模式和库模式构建，但开发服务器的&quot;按需请求&quot;优势主要体现在浏览器应用上。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://vite.dev/guide/why.html" target="_blank" rel="noreferrer">Vite · 为什么选择 Vite<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vite+%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F%E4%B8%BA%E4%BB%80%E4%B9%88%E5%90%AF%E5%8A%A8%E5%BF%AB%EF%BC%8C%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BB%8D%E9%9C%80%E8%A6%81%E6%9E%84%E5%BB%BA%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVite+%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F%E4%B8%BA%E4%BB%80%E4%B9%88%E5%90%AF%E5%8A%A8%E5%BF%AB%EF%BC%8C%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BB%8D%E9%9C%80%E8%A6%81%E6%9E%84%E5%BB%BA%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aeng-vite%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Feng-vite%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vite 开发模式为什么启动快，生产环境为什么仍需要构建？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/eng-env/">为什么前端环境变量不能存放秘密？</a></li><li><a href="/questions/engineering-vite-plugin/">Vite 插件的 resolveId、load 和 transform 分别做什么？</a></li><li><a href="/questions/engineering-treeshaking/">Tree shaking 如何工作？为什么有些代码无法移除？</a></li><li><a href="/questions/engineering-lazy/">代码分割与懒加载适合哪些场景？</a></li></ul></nav></main></div></div>
+<p><strong>为什么首次启动或者依赖变化后会慢一些？</strong></p>
+<blockquote>
+<p>因为要重新做依赖预构建。做完以后命中缓存，之后启动就快了。</p>
+</blockquote>
+<p><strong>Vite 能用于非浏览器场景吗？</strong></p>
+<blockquote>
+<p>可以，它有 SSR 模式和库模式。但开发服务器“按需请求”的优势，主要体现在浏览器应用上。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://vite.dev/guide/why.html" target="_blank" rel="noreferrer">Vite · 为什么选择 Vite<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vite+%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F%E4%B8%BA%E4%BB%80%E4%B9%88%E5%90%AF%E5%8A%A8%E5%BF%AB%EF%BC%8C%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BB%8D%E9%9C%80%E8%A6%81%E6%9E%84%E5%BB%BA%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVite+%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F%E4%B8%BA%E4%BB%80%E4%B9%88%E5%90%AF%E5%8A%A8%E5%BF%AB%EF%BC%8C%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BB%8D%E9%9C%80%E8%A6%81%E6%9E%84%E5%BB%BA%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aeng-vite%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Feng-vite%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vite 开发模式为什么启动快，生产环境为什么仍需要构建？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/eng-env/">为什么前端环境变量不能存放秘密？</a></li><li><a href="/questions/engineering-vite-plugin/">Vite 插件的 resolveId、load 和 transform 分别做什么？</a></li><li><a href="/questions/engineering-treeshaking/">Tree shaking 如何工作？为什么有些代码无法移除？</a></li><li><a href="/questions/engineering-lazy/">代码分割与懒加载适合哪些场景？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

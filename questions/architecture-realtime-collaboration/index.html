@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="架构设计面试题：从共享文档和在线光标场景区分传输、操作、权威状态与临时 presence，比较版本检查、OT 和 CRDT，并说明离线、权限、顺序与资源成本。" />
+    <meta name="description" content="架构设计面试题：实时协同要分清传输、操作、权威状态和临时的 presence（光标、在线成员）。" />
     <title>实时协同编辑应该怎样设计状态和冲突解决？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/architecture-realtime-collaboration/" />
     <meta name="robots" content="index,follow" />
@@ -19,25 +19,29 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="实时协同编辑应该怎样设计状态和冲突解决？ · 前端知库" />
-    <meta property="og:description" content="架构设计面试题：从共享文档和在线光标场景区分传输、操作、权威状态与临时 presence，比较版本检查、OT 和 CRDT，并说明离线、权限、顺序与资源成本。" />
+    <meta property="og:description" content="架构设计面试题：实时协同要分清传输、操作、权威状态和临时的 presence（光标、在线成员）。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/architecture-realtime-collaboration/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/architecture-realtime-collaboration/#webpage","url":"https://fe.hushifa.top/questions/architecture-realtime-collaboration/","name":"实时协同编辑应该怎样设计状态和冲突解决？ · 前端知库","description":"架构设计面试题：从共享文档和在线光标场景区分传输、操作、权威状态与临时 presence，比较版本检查、OT 和 CRDT，并说明离线、权限、顺序与资源成本。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/architecture-realtime-collaboration/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/architecture-realtime-collaboration/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"架构设计面试题","item":"https://fe.hushifa.top/topics/architecture/"},{"@type":"ListItem","position":3,"name":"实时协同编辑应该怎样设计状态和冲突解决？","item":"https://fe.hushifa.top/questions/architecture-realtime-collaboration/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/architecture-realtime-collaboration/#webpage","url":"https://fe.hushifa.top/questions/architecture-realtime-collaboration/","name":"实时协同编辑应该怎样设计状态和冲突解决？ · 前端知库","description":"架构设计面试题：实时协同要分清传输、操作、权威状态和临时的 presence（光标、在线成员）。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/architecture-realtime-collaboration/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/architecture-realtime-collaboration/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"架构设计面试题","item":"https://fe.hushifa.top/topics/architecture/"},{"@type":"ListItem","position":3,"name":"实时协同编辑应该怎样设计状态和冲突解决？","item":"https://fe.hushifa.top/questions/architecture-realtime-collaboration/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/architecture/">架构设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">实时协同编辑应该怎样设计状态和冲突解决？</span></nav><h1 tabindex="-1">实时协同编辑应该怎样设计状态和冲突解决？</h1><p class="reading-summary">从共享文档和在线光标场景区分传输、操作、权威状态与临时 presence，比较版本检查、OT 和 CRDT，并说明离线、权限、顺序与资源成本。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>协同编辑要分清四层：传输（WebSocket 等）、操作（插入、删除）、文档状态和临时状态（光标、在线成员）。</li>
-<li>冲突解决有三种思路：乐观锁版本检查（冲突时拒绝并让用户合并）、OT（服务端变换并发操作）和 CRDT（数据结构保证各端最终一致）。</li>
-<li>本地编辑立即生效再同步给他人，网络延迟不能影响输入体验。</li>
-<li>光标、选区等临时状态不需要持久化，丢失可以重新同步，不应和文档内容走同一套冲突解决。</li>
-<li>权限仍由服务端校验每个操作，断线重连后要能补齐缺失的操作。</li>
-</ul>
-<h2>三种冲突处理方式</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/architecture/">架构设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">实时协同编辑应该怎样设计状态和冲突解决？</span></nav><h1 tabindex="-1">实时协同编辑应该怎样设计状态和冲突解决？</h1><p class="reading-summary">实时协同要分清传输、操作、权威状态和临时的 presence（光标、在线成员）。冲突解决可以用版本检查、OT 或 CRDT，还要处理离线、权限、操作顺序和资源成本。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>实时协同编辑，就是几个人同时改同一份文档，每个人都能马上看到别人的修改。设计时要先分清四层：传输层，比如 WebSocket；操作，比如插入、删除；文档状态；还有光标、在线成员这类临时状态。</p>
+<p>冲突怎么解决，有三种思路。第一种是版本检查，提交时带上版本号，冲突了就拒绝，让用户自己合并。第二种是 OT，服务端按顺序接收操作，把并发的操作调整位置后再广播。第三种是 CRDT，用特殊的数据结构，保证各端不管按什么顺序合并，最后都一致。</p>
+<p>体验上，本地编辑要立刻生效，再同步给别人，不能让网络延迟影响打字。光标、选区这些临时状态不用持久化，丢了重新同步就行，不要和文档内容走同一套冲突解决。</p>
+<p>还要注意，权限仍然要由服务端校验每一个操作，断线重连以后也要能把漏掉的操作补齐。</p>
+</blockquote>
+<h2>并发编辑为什么会冲突</h2>
+<p>看一个最简单的例子。文档内容是 <code>ab</code>，A 在位置 1 插入 <code>x</code>，B 同时在位置 2 插入 <code>y</code>。</p>
+<p>如果双方直接按位置应用对方的操作，A 这边先得到 <code>axb</code>，再应用“位置 2 插入 y”，得到 <code>axyb</code>。B 那边先得到 <code>aby</code>，再应用“位置 1 插入 x”，得到 <code>axby</code>。两边的结果不一样了。</p>
+<p>问题出在位置上。A 插入 <code>x</code> 以后，B 原来说的“位置 2”在 A 这边已经变成了位置 3。</p>
+<p>OT 的做法是在应用对方操作之前，把位置 2 调整成 3。CRDT 的做法是不用数字位置，而是给每个字符一个唯一 ID，插入时说“插在某个 ID 后面”，这样无论先后，定位都不会错。</p>
+<h2>三种方式怎么选</h2>
 <table><thead><tr><th>方式</th><th>原理</th><th>适用场景</th></tr></thead><tbody><tr><td>版本检查</td><td>提交时带上基础版本号，不一致则拒绝</td><td>表单、配置这类低频编辑</td></tr><tr><td>OT</td><td>服务端按顺序接收操作，变换并发操作的位置再广播</td><td>Google Docs 等中心化文本编辑</td></tr><tr><td>CRDT</td><td>每个字符有唯一 ID 和顺序信息，任意顺序合并都得到相同结果</td><td>去中心化、离线优先、点对点</td></tr></tbody></table>
-<p><strong>并发插入示例</strong>：文档是 <code>ab</code>，A 在位置 1 插入 <code>x</code>，B 同时在位置 2 插入 <code>y</code>。直接按位置应用时，A 端先得到 <code>axb</code>，再应用&quot;位置 2 插入 y&quot;得到 <code>axyb</code>；B 端先得到 <code>aby</code>，再应用&quot;位置 1 插入 x&quot;得到 <code>axby</code>。两端结果不一致。OT 在应用对方操作前把位置 2 调整为 3；CRDT 用元素 ID 而不是数字位置定位插入点。</p>
-<h2>用 CRDT 库实现</h2>
+<h2>用现成的 CRDT 库</h2>
+<p>自己实现 OT 或 CRDT，正确性很难保证，一般直接用 Yjs、Automerge 这类成熟的库。下面是 Yjs 的用法：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> Y <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;yjs&#x27;</span>;
 <span class="hljs-keyword">import</span> { <span class="hljs-title class_">WebsocketProvider</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;y-websocket&#x27;</span>;
 
@@ -50,28 +54,25 @@ text.<span class="hljs-title function_">insert</span>(<span class="hljs-number">
 
 provider.<span class="hljs-property">awareness</span>.<span class="hljs-title function_">setLocalStateField</span>(<span class="hljs-string">&#x27;cursor&#x27;</span>, { <span class="hljs-attr">index</span>: <span class="hljs-number">2</span> });
 </code></pre></div>
-<ul>
-<li><code>Y.Doc</code> 维护本地副本，修改立即生效，并把增量更新发给服务器和其他客户端。</li>
-<li><code>awareness</code> 单独传输光标和在线状态，超时未更新的成员自动移除。</li>
-<li>自己实现 OT 或 CRDT 的正确性很难保证，通常使用 Yjs、Automerge 等成熟库。</li>
-</ul>
-<h2>离线与重连</h2>
-<ul>
-<li>CRDT 可以在离线时继续编辑，重连后交换缺失的更新自动合并。</li>
-<li>本地把未确认的更新存入 IndexedDB，防止页面关闭后丢失。</li>
-<li>长时间离线后合并结果可能在语义上不合理（两人改写了同一段），需要提供历史版本和恢复能力。</li>
-</ul>
-<h2>服务端的职责</h2>
-<ul>
-<li>鉴权：连接时验证用户是否能访问该文档，每个更新也要检查是否有写权限，只读用户的更新直接拒绝。</li>
-<li>持久化：定期保存文档快照，并保留更新日志用于恢复。</li>
-<li>资源：CRDT 会保留删除的元信息，文档体积随编辑历史增长，需要定期压缩或做垃圾回收。</li>
-</ul>
+<p><code>Y.Doc</code> 在本地维护一份文档副本。<code>text.insert</code> 的修改立刻生效，同时把增量更新发给服务器和其他客户端。别人的修改到了，<code>observe</code> 回调触发，重新渲染。</p>
+<p>光标用的是 <code>awareness</code>，它和文档内容分开传输。成员长时间没有更新，就会被自动移除。这正是前面说的：临时状态和文档内容分开处理。</p>
+<h2>离线和重连怎么办</h2>
+<p>CRDT 的一个好处是离线时可以继续编辑，重连以后交换彼此缺的更新，自动合并。</p>
+<p>本地还没被确认的更新，要存进 IndexedDB，防止页面关掉以后丢失。</p>
+<p>不过要注意，长时间离线后自动合并的结果，在数据上是一致的，语义上却可能不合理，比如两个人改写了同一段话。所以还要提供历史版本和恢复能力。</p>
+<h2>服务端负责什么</h2>
+<p>鉴权方面，连接时验证用户能不能访问这份文档，每个更新也要检查有没有写权限，只读用户发来的更新直接拒绝。</p>
+<p>持久化方面，定期保存文档快照，同时保留更新日志，用来恢复。</p>
+<p>资源方面，CRDT 会保留已删除内容的元信息，文档体积会随着编辑历史一直增长，需要定期压缩或做垃圾回收。</p>
 <h2>常见追问</h2>
-<ul>
-<li>用 WebSocket 还是 WebRTC？WebSocket 经过服务器，便于鉴权和持久化；WebRTC 点对点延迟低，但仍需要信令服务器，权限控制更难。</li>
-<li>撤销怎么处理？协同场景下只撤销自己的操作，Yjs 的 <code>UndoManager</code> 按来源记录操作，不会撤销别人的修改。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSocket" target="_blank" rel="noreferrer">MDN · WebSocket API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%AE%9E%E6%97%B6%E5%8D%8F%E5%90%8C%E7%BC%96%E8%BE%91%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E7%8A%B6%E6%80%81%E5%92%8C%E5%86%B2%E7%AA%81%E8%A7%A3%E5%86%B3%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%AE%9E%E6%97%B6%E5%8D%8F%E5%90%8C%E7%BC%96%E8%BE%91%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E7%8A%B6%E6%80%81%E5%92%8C%E5%86%B2%E7%AA%81%E8%A7%A3%E5%86%B3%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aarchitecture-realtime-collaboration%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Farchitecture-realtime-collaboration%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：实时协同编辑应该怎样设计状态和冲突解决？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/arch-design-system/">设计系统为什么不能只有一套视觉样式？</a></li><li><a href="/questions/arch-state-machine/">怎样避免加载、成功和失败状态互相矛盾？</a></li><li><a href="/questions/arch-progressive/">渐进增强和优雅降级怎样影响前端方案选择？</a></li><li><a href="/questions/architecture-feature-boundaries/">前端大型项目怎样划分功能边界？</a></li></ul></nav></main></div></div>
+<p><strong>用 WebSocket 还是 WebRTC？</strong></p>
+<blockquote>
+<p>WebSocket 经过服务器，方便鉴权和持久化。WebRTC 是点对点的，延迟低，但仍然需要信令服务器来建立连接，权限也更难控制。</p>
+</blockquote>
+<p><strong>撤销怎么处理？</strong></p>
+<blockquote>
+<p>协同场景下，撤销只撤销自己的操作。Yjs 的 <code>UndoManager</code> 会按来源记录操作，不会把别人的修改撤掉。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSocket" target="_blank" rel="noreferrer">MDN · WebSocket API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%AE%9E%E6%97%B6%E5%8D%8F%E5%90%8C%E7%BC%96%E8%BE%91%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E7%8A%B6%E6%80%81%E5%92%8C%E5%86%B2%E7%AA%81%E8%A7%A3%E5%86%B3%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%AE%9E%E6%97%B6%E5%8D%8F%E5%90%8C%E7%BC%96%E8%BE%91%E5%BA%94%E8%AF%A5%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E7%8A%B6%E6%80%81%E5%92%8C%E5%86%B2%E7%AA%81%E8%A7%A3%E5%86%B3%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aarchitecture-realtime-collaboration%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Farchitecture-realtime-collaboration%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：实时协同编辑应该怎样设计状态和冲突解决？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/arch-design-system/">设计系统为什么不能只有一套视觉样式？</a></li><li><a href="/questions/arch-state-machine/">怎样避免加载、成功和失败状态互相矛盾？</a></li><li><a href="/questions/arch-progressive/">渐进增强和优雅降级怎样影响前端方案选择？</a></li><li><a href="/questions/architecture-feature-boundaries/">前端大型项目怎样划分功能边界？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

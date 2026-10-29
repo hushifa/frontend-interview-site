@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="移动端与 PWA面试题：React Native 复用 React 的组件、状态和 Hooks，但渲染目标是平台原生视图，用 View…" />
+    <meta name="description" content="移动端与 PWA面试题：React Native 写法和 React 一样，组件、状态和 Hooks 都能用，但画出来的是平台原生视图。" />
     <title>React Native 与浏览器里的 React 有哪些共同点和差异？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/mobile-rn/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="React Native 与浏览器里的 React 有哪些共同点和差异？" />
-    <meta property="og:description" content="移动端与 PWA面试题：React Native 复用 React 的组件、状态和 Hooks，但渲染目标是平台原生视图，用 View…" />
+    <meta property="og:description" content="移动端与 PWA面试题：React Native 写法和 React 一样，组件、状态和 Hooks 都能用，但画出来的是平台原生视图。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/mobile-rn/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/mobile-rn/#webpage","url":"https://fe.hushifa.top/questions/mobile-rn/","name":"React Native 与浏览器里的 React 有哪些共同点和差异？","description":"移动端与 PWA面试题：React Native 复用 React 的组件、状态和 Hooks，但渲染目标是平台原生视图，用 View…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/mobile-rn/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/mobile-rn/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"移动端与 PWA面试题","item":"https://fe.hushifa.top/topics/mobile/"},{"@type":"ListItem","position":3,"name":"React Native 与浏览器里的 React 有哪些共同点和差异？","item":"https://fe.hushifa.top/questions/mobile-rn/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/mobile-rn/#webpage","url":"https://fe.hushifa.top/questions/mobile-rn/","name":"React Native 与浏览器里的 React 有哪些共同点和差异？","description":"移动端与 PWA面试题：React Native 写法和 React 一样，组件、状态和 Hooks 都能用，但画出来的是平台原生视图。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/mobile-rn/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/mobile-rn/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"移动端与 PWA面试题","item":"https://fe.hushifa.top/topics/mobile/"},{"@type":"ListItem","position":3,"name":"React Native 与浏览器里的 React 有哪些共同点和差异？","item":"https://fe.hushifa.top/questions/mobile-rn/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/mobile/">移动端与 PWA面试题</a><span aria-hidden="true">/</span><span aria-current="page">React Native 与浏览器里的 React 有哪些共同点和差异？</span></nav><h1 tabindex="-1">React Native 与浏览器里的 React 有哪些共同点和差异？</h1><p class="reading-summary">React Native 复用 React 的组件、状态和 Hooks，但渲染目标是平台原生视图，用 View、Text 等组件和 JS 样式对象，没有 DOM 和 CSS 层叠。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>共同点：组件、props、state、Hooks、Context 等 React 概念完全一样，状态管理和数据请求库大多可以复用。</li>
-<li>差异在渲染层：React Native 把组件渲染成 iOS、Android 的原生视图，没有 DOM，不能用 <code>div</code>、<code>span</code> 和浏览器 API。</li>
-<li>基础组件是 <code>View</code>、<code>Text</code>、<code>Image</code>、<code>ScrollView</code>、<code>TextInput</code> 等，文字必须放在 <code>Text</code> 里。</li>
-<li>样式用 JS 对象，布局默认 Flexbox 且 <code>flexDirection</code> 默认是 <code>column</code>，没有选择器和样式继承（<code>Text</code> 嵌套除外）。</li>
-<li>列表用 <code>FlatList</code> 按需渲染，导航、手势、动画通常依赖 React Navigation、Reanimated 等社区库。</li>
-</ul>
-<h2>同一个组件的两种写法</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/mobile/">移动端与 PWA面试题</a><span aria-hidden="true">/</span><span aria-current="page">React Native 与浏览器里的 React 有哪些共同点和差异？</span></nav><h1 tabindex="-1">React Native 与浏览器里的 React 有哪些共同点和差异？</h1><p class="reading-summary">React Native 写法和 React 一样，组件、状态和 Hooks 都能用，但画出来的是平台原生视图。要用 View、Text 等组件和 JS 样式对象，没有 DOM 和 CSS 层叠。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>React Native 就是用写 React 的方式做手机 App。组件、props、state、Hooks、Context 这些概念完全一样，状态管理和数据请求的库大多也能直接用。</p>
+<p>不同的地方在渲染。浏览器里的 React 渲染成 DOM，React Native 渲染成 iOS、Android 的原生视图。所以没有 <code>div</code>、<code>span</code>，也没有浏览器 API，要用 <code>View</code>、<code>Text</code>、<code>Image</code> 这些组件，文字必须放在 <code>Text</code> 里。</p>
+<p>样式也不一样。它用 JS 对象写样式，没有选择器，也没有样式继承，<code>Text</code> 嵌套是例外。布局默认是 Flexbox，而且 <code>flexDirection</code> 默认是 <code>column</code>，也就是纵向排列。</p>
+<p>另外，长列表要用 <code>FlatList</code> 按需渲染；导航、手势、动画通常要靠 React Navigation、Reanimated 这类社区库。</p>
+</blockquote>
+<h2>同一个组件两边怎么写</h2>
+<p>下面是同一张卡片，先看 Web 版：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-comment">// Web</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">Card</span>(<span class="hljs-params">{ title, onPress }</span>) {
   <span class="hljs-keyword">return</span> (
@@ -44,6 +44,7 @@
   );
 }
 </code></pre></div>
+<p>再看 React Native 版：</p>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-comment">// React Native</span>
 <span class="hljs-keyword">import</span> { <span class="hljs-title class_">Pressable</span>, <span class="hljs-title class_">Text</span>, <span class="hljs-title class_">StyleSheet</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-native&#x27;</span>;
 
@@ -60,30 +61,33 @@
   <span class="hljs-attr">title</span>: { <span class="hljs-attr">fontSize</span>: <span class="hljs-number">18</span>, <span class="hljs-attr">fontWeight</span>: <span class="hljs-string">&#x27;600&#x27;</span> },
 });
 </code></pre></div>
-<p>组件逻辑一样，标签、事件名、样式写法和无障碍属性都不同。</p>
-<h2>主要差异</h2>
+<p>组件的逻辑没变，接收 <code>title</code> 和点击回调。可是标签换成了 <code>Pressable</code> 和 <code>Text</code>，事件从 <code>onClick</code> 变成 <code>onPress</code>，样式从 class 变成 JS 对象，按钮语义要用 <code>accessibilityRole</code> 自己声明。</p>
+<h2>两边具体差在哪里</h2>
 <table><thead><tr><th></th><th>React DOM</th><th>React Native</th></tr></thead><tbody><tr><td>渲染目标</td><td>浏览器 DOM</td><td>原生视图（UIView、android.view.View）</td></tr><tr><td>基础元素</td><td><code>div</code>、<code>span</code>、<code>img</code></td><td><code>View</code>、<code>Text</code>、<code>Image</code></td></tr><tr><td>样式</td><td>CSS，选择器和层叠</td><td>JS 对象，无选择器，无层叠</td></tr><tr><td>布局默认</td><td>块级流式布局</td><td>Flexbox，纵向排列</td></tr><tr><td>尺寸单位</td><td>px、rem、% 等</td><td>无单位数字（密度无关像素）和 %</td></tr><tr><td>事件</td><td><code>onClick</code>、DOM 事件</td><td><code>onPress</code>、手势响应系统</td></tr><tr><td>平台 API</td><td>Web API</td><td>原生模块</td></tr><tr><td>发布</td><td>部署即更新</td><td>应用商店审核；JS 部分可借助 OTA 方案更新</td></tr></tbody></table>
-<h2>列表性能</h2>
+<p>表里最后一行容易被忽略。网页部署完用户刷新就是新版本，App 却要过应用商店审核。所以有了 OTA 方案，意思是不发新包，只把 JS 部分从网络上更新下来。</p>
+<h2>长列表为什么要用 FlatList</h2>
 <div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx">&lt;<span class="hljs-title class_">FlatList</span>
   data={items}
   keyExtractor={<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> item.<span class="hljs-property">id</span>}
   renderItem={<span class="hljs-function">(<span class="hljs-params">{ item }</span>) =&gt;</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Card</span> <span class="hljs-attr">title</span>=<span class="hljs-string">{item.title}</span> /&gt;</span></span>}
 /&gt;
 </code></pre></div>
-<p><code>FlatList</code> 只渲染可见区域附近的条目，<code>ScrollView</code> 会一次渲染全部子元素，长列表用后者会占用大量内存。</p>
-<h2>平台差异</h2>
-<p>同一组件在 iOS 和 Android 上外观或行为可能不同，例如阴影属性、键盘遮挡、返回按钮。可以用 <code>Platform.OS</code> 或 <code>.ios.js</code> / <code>.android.js</code> 文件后缀分别实现。</p>
-<h2>和 Web 共享代码</h2>
-<ul>
-<li>业务逻辑、请求层、状态管理可以放在共享包中供两端使用。</li>
-<li>React Native for Web 可以把 RN 组件渲染到浏览器，适合同时面向移动和 Web 的产品，但 Web 端的 SEO 和语义化需要额外关注。</li>
-<li>新架构的原理（JSI、Fabric、TurboModules）见<a href="/questions/mobile-rn-bridge/">《React Native 原生桥接和新架构应该怎样理解？》</a>。</li>
-</ul>
+<p><code>FlatList</code> 只渲染屏幕可见区域附近的条目。<code>ScrollView</code> 会把所有子元素一次性渲染出来。所以长列表如果用 <code>ScrollView</code>，内存占用会很大，应该改用 <code>FlatList</code>。</p>
+<h2>iOS 和 Android 不一样怎么办</h2>
+<p>同一个组件在两个平台上，外观或行为可能不同，比如阴影属性、键盘遮挡、返回按钮。这时可以用 <code>Platform.OS</code> 判断平台，或者用 <code>.ios.js</code> / <code>.android.js</code> 文件后缀分别写两份实现。</p>
+<h2>能和 Web 共享代码吗</h2>
+<p>业务逻辑、请求层、状态管理可以放进一个共享包，两端一起用。</p>
+<p>React Native for Web 还能把 RN 组件渲染到浏览器里，适合同时做移动端和 Web 的产品。不过 Web 端的 SEO 和语义化要额外操心。</p>
+<p>新架构的原理，比如 JSI、Fabric、TurboModules，见<a href="/questions/mobile-rn-bridge/">《React Native 原生桥接和新架构应该怎样理解？》</a>。</p>
 <h2>常见追问</h2>
-<ul>
-<li>RN 是 WebView 吗？不是，界面由原生视图组成，JS 只负责描述界面和处理逻辑。</li>
-<li>用 Expo 还是裸 RN？Expo 提供开箱即用的原生模块、构建和更新服务，React Native 官方文档也推荐用框架（如 Expo）开始新项目。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://reactnative.dev/docs/intro-react-native-components" target="_blank" rel="noreferrer">React Native · Core Components and Native Components<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+Native+%E4%B8%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E9%87%8C%E7%9A%84+React+%E6%9C%89%E5%93%AA%E4%BA%9B%E5%85%B1%E5%90%8C%E7%82%B9%E5%92%8C%E5%B7%AE%E5%BC%82%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+Native+%E4%B8%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E9%87%8C%E7%9A%84+React+%E6%9C%89%E5%93%AA%E4%BA%9B%E5%85%B1%E5%90%8C%E7%82%B9%E5%92%8C%E5%B7%AE%E5%BC%82%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Amobile-rn%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E4%B8%8E+PWA%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fmobile-rn%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React Native 与浏览器里的 React 有哪些共同点和差异？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/mobile-rn-bridge/">React Native 原生桥接和新架构应该怎样理解？</a></li><li><a href="/questions/mobile-pwa/">PWA 由哪些能力组成，是否所有浏览器体验都一致？</a></li><li><a href="/questions/mobile-serviceworker/">Service Worker 的安装、激活与缓存更新有哪些坑？</a></li><li><a href="/questions/mobile-pointer-events/">Pointer Events 为什么适合统一鼠标、触摸和触控笔交互？</a></li></ul></nav></main></div></div>
+<p><strong>React Native 是 WebView 吗？</strong></p>
+<blockquote>
+<p>不是。界面是由原生视图组成的，JS 只负责描述界面长什么样和处理业务逻辑。</p>
+</blockquote>
+<p><strong>用 Expo 还是裸 React Native？</strong></p>
+<blockquote>
+<p>Expo 提供开箱即用的原生模块、构建和更新服务。React Native 官方文档也推荐用框架，比如 Expo，来开始新项目。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://reactnative.dev/docs/intro-react-native-components" target="_blank" rel="noreferrer">React Native · Core Components and Native Components<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+Native+%E4%B8%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E9%87%8C%E7%9A%84+React+%E6%9C%89%E5%93%AA%E4%BA%9B%E5%85%B1%E5%90%8C%E7%82%B9%E5%92%8C%E5%B7%AE%E5%BC%82%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+Native+%E4%B8%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E9%87%8C%E7%9A%84+React+%E6%9C%89%E5%93%AA%E4%BA%9B%E5%85%B1%E5%90%8C%E7%82%B9%E5%92%8C%E5%B7%AE%E5%BC%82%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Amobile-rn%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E4%B8%8E+PWA%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fmobile-rn%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React Native 与浏览器里的 React 有哪些共同点和差异？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/mobile-rn-bridge/">React Native 原生桥接和新架构应该怎样理解？</a></li><li><a href="/questions/mobile-pwa/">PWA 由哪些能力组成，是否所有浏览器体验都一致？</a></li><li><a href="/questions/mobile-serviceworker/">Service Worker 的安装、激活与缓存更新有哪些坑？</a></li><li><a href="/questions/mobile-pointer-events/">Pointer Events 为什么适合统一鼠标、触摸和触控笔交互？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

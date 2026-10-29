@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="AI 应用前端面试题：Prompt Caching 复用请求中相同前缀的处理结果，降低重复输入的成本和延迟。" />
+    <meta name="description" content="AI 应用前端面试题：Prompt Caching 是把请求里开头那段相同内容的处理结果存起来，下次直接用，省钱也更快。所以请求里不变的内容要放前面。" />
     <title>AI Prompt Caching 对前端请求设计有什么影响？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/ai-prompt-caching/" />
     <meta name="robots" content="index,follow" />
@@ -19,30 +19,26 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="AI Prompt Caching 对前端请求设计有什么影响？" />
-    <meta property="og:description" content="AI 应用前端面试题：Prompt Caching 复用请求中相同前缀的处理结果，降低重复输入的成本和延迟。" />
+    <meta property="og:description" content="AI 应用前端面试题：Prompt Caching 是把请求里开头那段相同内容的处理结果存起来，下次直接用，省钱也更快。所以请求里不变的内容要放前面。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/ai-prompt-caching/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ai-prompt-caching/#webpage","url":"https://fe.hushifa.top/questions/ai-prompt-caching/","name":"AI Prompt Caching 对前端请求设计有什么影响？","description":"AI 应用前端面试题：Prompt Caching 复用请求中相同前缀的处理结果，降低重复输入的成本和延迟。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ai-prompt-caching/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ai-prompt-caching/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"AI 应用前端面试题","item":"https://fe.hushifa.top/topics/ai-frontend/"},{"@type":"ListItem","position":3,"name":"AI Prompt Caching 对前端请求设计有什么影响？","item":"https://fe.hushifa.top/questions/ai-prompt-caching/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ai-prompt-caching/#webpage","url":"https://fe.hushifa.top/questions/ai-prompt-caching/","name":"AI Prompt Caching 对前端请求设计有什么影响？","description":"AI 应用前端面试题：Prompt Caching 是把请求里开头那段相同内容的处理结果存起来，下次直接用，省钱也更快。所以请求里不变的内容要放前面。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ai-prompt-caching/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ai-prompt-caching/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"AI 应用前端面试题","item":"https://fe.hushifa.top/topics/ai-frontend/"},{"@type":"ListItem","position":3,"name":"AI Prompt Caching 对前端请求设计有什么影响？","item":"https://fe.hushifa.top/questions/ai-prompt-caching/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/ai-frontend/">AI 应用前端面试题</a><span aria-hidden="true">/</span><span aria-current="page">AI Prompt Caching 对前端请求设计有什么影响？</span></nav><h1 tabindex="-1">AI Prompt Caching 对前端请求设计有什么影响？</h1><p class="reading-summary">Prompt Caching 复用请求中相同前缀的处理结果，降低重复输入的成本和延迟。请求结构要把稳定内容放前面；以 Anthropic Messages API 为例说明自动缓存、显式断点、有效期和 usage 字段。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>缓存的是输入前缀的处理结果，模型每次仍重新生成回答。</li>
-<li>只有逐字节相同的前缀才能命中，所以工具定义、系统规则等稳定内容放前面，时间戳、检索结果和新问题放后面。</li>
-<li>Anthropic API 可以在请求顶层写一个 <code>cache_control</code>，系统自动把断点放在最后一个可缓存块上，并随对话增长向后移动；也可以在具体内容块上手动打断点，最多 4 个。</li>
-<li>默认有效期 5 分钟，每次命中刷新；<code>ttl: &#x27;1h&#x27;</code> 写入价格更高。命中情况看 <code>usage</code> 里的 <code>cache_read_input_tokens</code> 和 <code>cache_creation_input_tokens</code>。</li>
-<li>缓存只影响成本和延迟。对话历史要自己持久化，租户隔离要在构造请求前完成。</li>
-</ul>
-<h2>前缀顺序决定能否命中</h2>
-<p>Anthropic 按 <code>tools</code> → <code>system</code> → <code>messages</code> 的顺序计算前缀。某一层变化，这一层和之后的缓存都会失效。所以：</p>
-<ul>
-<li>工具列表保持固定顺序，不要每次请求随机排列或按用户动态增减。</li>
-<li>系统提示词里不要放当前时间、请求 ID 这类每次都变的值。</li>
-<li>本轮检索到的文档和用户问题放在最后一条消息里。</li>
-</ul>
-<h2>多轮对话：自动缓存历史</h2>
-<p>多轮对话的历史消息每轮都在增长。用顶层 <code>cache_control</code>，断点会自动落在最新的可缓存块上，前几轮的内容在下一轮请求中被读取：</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/ai-frontend/">AI 应用前端面试题</a><span aria-hidden="true">/</span><span aria-current="page">AI Prompt Caching 对前端请求设计有什么影响？</span></nav><h1 tabindex="-1">AI Prompt Caching 对前端请求设计有什么影响？</h1><p class="reading-summary">Prompt Caching 是把请求里开头那段相同内容的处理结果存起来，下次直接用，省钱也更快。所以请求里不变的内容要放前面。本题以 Anthropic Messages API 为例讲自动缓存、手动断点、有效期和 usage 字段。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>每次请求模型，工具定义、系统规则、历史对话往往都是一样的，模型每次都要重新处理一遍。Prompt Caching 就是把这段相同开头的处理结果存起来，下次请求直接复用，输入更便宜，第一个字也来得更快。缓存的只是输入，回答每次还是重新生成的。</p>
+<p>它有个前提：开头部分必须逐字节相同才能命中。所以工具定义、系统规则这些稳定内容放前面，时间戳、检索结果、用户新问题放后面。</p>
+<p>以 Anthropic API 为例，可以在请求最外层写一个 <code>cache_control</code>，系统会自动把缓存断点放在最后一个可缓存的块上，对话变长时断点跟着往后移；也可以在具体内容块上手动打断点，最多 4 个。默认有效期 5 分钟，每次命中会刷新；设成 <code>ttl: &#x27;1h&#x27;</code> 写入价格更高。命中没有，看返回的 <code>usage</code> 里的 <code>cache_read_input_tokens</code> 和 <code>cache_creation_input_tokens</code>。</p>
+<p>要注意，缓存只影响成本和速度，不是存储。对话历史还是要自己存，不同租户的数据要在构造请求之前就隔离好。</p>
+</blockquote>
+<h2>为什么顺序决定能不能命中</h2>
+<p>缓存匹配的是“前缀”，也就是从请求开头算起的那一段。Anthropic 按 <code>tools</code> → <code>system</code> → <code>messages</code> 的顺序计算前缀。哪一层变了，这一层和它后面的缓存就都失效了。</p>
+<p>举个例子。如果你在系统提示词里写了“当前时间：10:31:05”，每次请求时间都不一样，那系统提示词这一层每次都变，它后面的所有对话历史就永远命中不了。</p>
+<p>所以要做到这几点：工具列表保持固定顺序，不要每次随机排，也不要按用户动态增减；系统提示词里不放当前时间、请求 ID 这类每次都变的值；本轮检索到的文档和用户的问题，放在最后一条消息里。</p>
+<h2>多轮对话怎么自动缓存历史</h2>
+<p>多轮对话的历史每一轮都在变长。下面的写法在请求最外层加了 <code>cache_control</code>，断点会自动落在最新的可缓存块上：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">buildRequest</span>(<span class="hljs-params">{ systemRules, tools, history, question }</span>) {
   <span class="hljs-keyword">return</span> {
     <span class="hljs-attr">model</span>: <span class="hljs-string">&#x27;claude-opus-5-5&#x27;</span>,
@@ -55,27 +51,25 @@
   };
 }
 </code></pre></div>
-<p>系统规则很长、而且希望单独保留更久时，可以再在 system 块上手动加一个断点。手动断点和自动缓存共用 4 个名额。</p>
-<h2>用 usage 验证效果</h2>
-<p>响应的 <code>usage</code> 字段：</p>
-<ul>
-<li><code>cache_creation_input_tokens</code>：本次写入缓存的输入量。</li>
-<li><code>cache_read_input_tokens</code>：本次从缓存读取的输入量。</li>
-<li><code>input_tokens</code>：最后一个断点之后、没有走缓存的输入量。</li>
-</ul>
-<p>总输入量等于三者之和。两项缓存字段都是 0，常见原因是前缀短于模型的最小可缓存长度（不同模型从 512 到 4096 tokens 不等），这时请求照常处理，不会报错。</p>
-<p>其他服务商的机制不同：有的完全自动按前缀缓存，不需要标记，字段名和计费方式也不一样。换服务商时要按对方文档重新确认。</p>
-<h2>缓存与权限、持久化</h2>
-<ul>
-<li>用户 A 的私有资料不要放进可能和用户 B 共用的前缀。先按租户过滤检索结果，再构造请求。</li>
-<li>缓存几分钟就过期。刷新页面或跨设备继续对话时，历史从自己的数据库读取。</li>
-<li>缓存未命中时请求仍然正确，只是更贵、更慢。应用逻辑不依赖命中。</li>
-</ul>
+<p>这一轮请求结束后，到断点为止的内容被写进缓存。下一轮请求时，前面几轮的内容原封不动，就能从缓存里读，只有新增的部分要重新处理。</p>
+<p>如果系统规则很长，而且希望它单独保留更久，可以在 system 块上再手动加一个断点。手动断点和自动缓存共用 4 个名额。</p>
+<h2>怎么确认缓存真的生效了</h2>
+<p>看响应里的 <code>usage</code> 字段，有三个数要关心：<code>cache_creation_input_tokens</code> 是这次写进缓存的输入量；<code>cache_read_input_tokens</code> 是这次从缓存读出来的输入量；<code>input_tokens</code> 是最后一个断点之后、没走缓存的输入量。总输入量等于这三个加起来。</p>
+<p>如果两项缓存字段都是 0，常见原因是前缀太短，没达到模型的最小可缓存长度，不同模型从 512 到 4096 tokens 不等。这时请求照常处理，不会报错，只是没缓存，所以很容易没发现。</p>
+<p>别的服务商机制不一样。有的完全自动按前缀缓存，不用打标记，字段名和计费方式也不同。换服务商时要按对方文档重新确认。</p>
+<h2>缓存和权限、持久化的关系</h2>
+<p>用户 A 的私有资料，不要放进可能和用户 B 共用的前缀里。正确顺序是先按租户过滤检索结果，再构造请求。</p>
+<p>缓存几分钟就过期了，它不是数据库。用户刷新页面、换设备继续聊，历史要从自己的数据库读。</p>
+<p>没命中缓存时，请求结果照样正确，只是更贵、更慢。所以应用逻辑不能依赖“一定会命中”。</p>
 <h2>常见追问</h2>
-<ul>
-<li><strong>写缓存要额外付费吗？</strong> 5 分钟缓存的写入按基础输入价的 1.25 倍计费，1 小时缓存为 2 倍，读取远低于基础价。只请求一次的前缀开启缓存反而更贵。</li>
-<li><strong>前端能做什么？</strong> 前端通常不直接调用模型 API，但会决定消息结构。保持历史顺序稳定、不在每轮插入临时字段，就能提高后端的命中率。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noreferrer">Anthropic · Prompt caching<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+AI+Prompt+Caching+%E5%AF%B9%E5%89%8D%E7%AB%AF%E8%AF%B7%E6%B1%82%E8%AE%BE%E8%AE%A1%E6%9C%89%E4%BB%80%E4%B9%88%E5%BD%B1%E5%93%8D%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAI+Prompt+Caching+%E5%AF%B9%E5%89%8D%E7%AB%AF%E8%AF%B7%E6%B1%82%E8%AE%BE%E8%AE%A1%E6%9C%89%E4%BB%80%E4%B9%88%E5%BD%B1%E5%93%8D%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aai-prompt-caching%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AAI+%E5%BA%94%E7%94%A8%E5%89%8D%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fai-prompt-caching%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：AI Prompt Caching 对前端请求设计有什么影响？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ai-evaluation-observability/">AI 前端应用为什么需要评测和可观测性？</a></li><li><a href="/questions/ai-multimodal-ui/">多模态 AI 前端界面需要怎样管理附件状态？</a></li><li><a href="/questions/ai-realtime-voice/">AI 实时语音界面需要关注哪些前端状态？</a></li><li><a href="/questions/ai-structured-output/">AI 结构化输出为什么仍需要 Schema 校验？</a></li></ul></nav></main></div></div>
+<p><strong>写缓存要额外付费吗？</strong></p>
+<blockquote>
+<p>要。5 分钟缓存的写入按基础输入价的 1.25 倍算，1 小时缓存是 2 倍，读取比基础价便宜很多。所以一个前缀如果只会请求一次，开缓存反而更贵。</p>
+</blockquote>
+<p><strong>前端能做什么？</strong></p>
+<blockquote>
+<p>前端一般不直接调模型 API，但消息的结构往往是前端决定的。保持历史消息的顺序稳定，不要每一轮往里插临时字段，后端的命中率就会高。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noreferrer">Anthropic · Prompt caching<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+AI+Prompt+Caching+%E5%AF%B9%E5%89%8D%E7%AB%AF%E8%AF%B7%E6%B1%82%E8%AE%BE%E8%AE%A1%E6%9C%89%E4%BB%80%E4%B9%88%E5%BD%B1%E5%93%8D%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAI+Prompt+Caching+%E5%AF%B9%E5%89%8D%E7%AB%AF%E8%AF%B7%E6%B1%82%E8%AE%BE%E8%AE%A1%E6%9C%89%E4%BB%80%E4%B9%88%E5%BD%B1%E5%93%8D%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aai-prompt-caching%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AAI+%E5%BA%94%E7%94%A8%E5%89%8D%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fai-prompt-caching%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：AI Prompt Caching 对前端请求设计有什么影响？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ai-evaluation-observability/">AI 前端应用为什么需要评测和可观测性？</a></li><li><a href="/questions/ai-multimodal-ui/">多模态 AI 前端界面需要怎样管理附件状态？</a></li><li><a href="/questions/ai-realtime-voice/">AI 实时语音界面需要关注哪些前端状态？</a></li><li><a href="/questions/ai-structured-output/">AI 结构化输出为什么仍需要 Schema 校验？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

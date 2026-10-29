@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="HTML / CSS面试题：absolute 相对最近的定位祖先；fixed 通常相对视口，但祖先有 transform…" />
+    <meta name="description" content="HTML / CSS面试题：absolute 找最近的定位祖先当参照；fixed 一般相对视口，但祖先有 transform…" />
     <title>absolute、fixed 和 sticky 的定位参照是什么？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/css-position-containing-block/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,21 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="absolute、fixed 和 sticky 的定位参照是什么？" />
-    <meta property="og:description" content="HTML / CSS面试题：absolute 相对最近的定位祖先；fixed 通常相对视口，但祖先有 transform…" />
+    <meta property="og:description" content="HTML / CSS面试题：absolute 找最近的定位祖先当参照；fixed 一般相对视口，但祖先有 transform…" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/css-position-containing-block/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-position-containing-block/#webpage","url":"https://fe.hushifa.top/questions/css-position-containing-block/","name":"absolute、fixed 和 sticky 的定位参照是什么？","description":"HTML / CSS面试题：absolute 相对最近的定位祖先；fixed 通常相对视口，但祖先有 transform…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-position-containing-block/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-position-containing-block/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"absolute、fixed 和 sticky 的定位参照是什么？","item":"https://fe.hushifa.top/questions/css-position-containing-block/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-position-containing-block/#webpage","url":"https://fe.hushifa.top/questions/css-position-containing-block/","name":"absolute、fixed 和 sticky 的定位参照是什么？","description":"HTML / CSS面试题：absolute 找最近的定位祖先当参照；fixed 一般相对视口，但祖先有 transform…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-position-containing-block/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-position-containing-block/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"absolute、fixed 和 sticky 的定位参照是什么？","item":"https://fe.hushifa.top/questions/css-position-containing-block/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">absolute、fixed 和 sticky 的定位参照是什么？</span></nav><h1 tabindex="-1">absolute、fixed 和 sticky 的定位参照是什么？</h1><p class="reading-summary">absolute 相对最近的定位祖先；fixed 通常相对视口，但祖先有 transform、filter 等属性时会改为相对该祖先；sticky 在最近的滚动容器里吸附，且不会超出自己的父元素。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li><code>absolute</code> 的包含块是最近的 <code>position</code> 非 <code>static</code> 的祖先的内边距盒；找不到时是初始包含块。</li>
-<li><code>fixed</code> 默认相对视口，但祖先设置了 <code>transform</code>、<code>perspective</code>、<code>filter</code>、<code>contain: paint</code> 或对应的 <code>will-change</code> 时，会相对该祖先定位。</li>
-<li><code>sticky</code> 在最近的滚动祖先里按 <code>top</code> 等阈值吸附，吸附范围不超过自己的父元素。</li>
-<li>百分比的 <code>top</code>、<code>width</code> 也按包含块计算。</li>
-<li>浮层被裁剪或位置不对时，先在开发者工具里找到它的包含块。</li>
-</ul>
-<h2>absolute</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">absolute、fixed 和 sticky 的定位参照是什么？</span></nav><h1 tabindex="-1">absolute、fixed 和 sticky 的定位参照是什么？</h1><p class="reading-summary">absolute 找最近的定位祖先当参照；fixed 一般相对视口，但祖先有 transform、filter 这类属性时会改为相对这个祖先；sticky 在最近的滚动容器里吸住，而且跑不出自己的父元素。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>定位元素写 <code>top: 0</code>，这个 0 是从哪里算起的？这个“参照框”叫包含块。<code>absolute</code> 的包含块是最近一个 <code>position</code> 不是 <code>static</code> 的祖先，取它的内边距盒；一个都找不到，就用初始包含块。</p>
+<p><code>fixed</code> 默认相对视口。但只要祖先设置了 <code>transform</code>、<code>perspective</code>、<code>filter</code>、<code>contain: paint</code>，或者对应的 <code>will-change</code>，它就改为相对这个祖先定位，这是全屏遮罩只盖住一小块的常见原因。</p>
+<p><code>sticky</code> 是在最近的滚动祖先里，滚到 <code>top</code> 这类阈值时吸住，但吸附范围不会超出自己的父元素。</p>
+<p>百分比的 <code>top</code>、<code>width</code> 也是按包含块算的。浮层被裁或者位置不对时，先在开发者工具里找到它的包含块是谁。</p>
+</blockquote>
+<h2>absolute：为什么父元素要写 relative</h2>
 <div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.card</span> {
   <span class="hljs-attribute">position</span>: relative;
 }
@@ -45,8 +44,9 @@
   <span class="hljs-attribute">inset-inline-end</span>: <span class="hljs-number">8px</span>;
 }
 </code></pre></div>
-<p><code>.card</code> 设置 <code>position: relative</code> 只是为了成为包含块，本身不移动。</p>
-<h2>fixed 失效</h2>
+<p>角标要放在卡片右上角。如果 <code>.card</code> 没写 <code>position: relative</code>，角标会一直往上找定位祖先，可能找到页面最外层，跑到整个页面的右上角去。</p>
+<p><code>.card</code> 写 <code>position: relative</code> 但不写偏移，它自己不会动。这么写只是为了让它成为角标的包含块。</p>
+<h2>fixed：全屏遮罩为什么只盖住了一块</h2>
 <div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.modal-wrapper</span> {
   <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translateZ</span>(<span class="hljs-number">0</span>);
 }
@@ -56,23 +56,25 @@
   <span class="hljs-attribute">inset</span>: <span class="hljs-number">0</span>;
 }
 </code></pre></div>
-<p><code>.overlay</code> 只盖住 <code>.modal-wrapper</code>，而不是整个视口。常见原因是动画库在祖先上加了 <code>transform</code>。解决办法是把浮层渲染到 <code>body</code> 下（React 的 Portal），或使用 <code>&lt;dialog&gt;</code> 和 popover，它们进入顶层，不受祖先影响。</p>
-<h2>sticky 不生效的原因</h2>
+<p><code>.overlay</code> 本来要盖住整个视口，结果只盖住了 <code>.modal-wrapper</code> 那一块。</p>
+<p>原因是祖先有 <code>transform</code>。祖先一旦设置了 <code>transform</code>，它就成了里面 <code>fixed</code> 元素的包含块，<code>inset: 0</code> 是相对它算的。这种 <code>transform</code> 往往不是自己写的，而是动画库加上去的。</p>
+<p>改法是把浮层渲染到 <code>body</code> 下面，React 里用 Portal 就是做这个。或者直接用 <code>&lt;dialog&gt;</code> 和 popover，它们会进入顶层，不受祖先样式影响。</p>
+<h2>sticky 为什么不生效</h2>
 <div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.table-head</span> {
   <span class="hljs-attribute">position</span>: sticky;
   <span class="hljs-attribute">top</span>: <span class="hljs-number">0</span>;
 }
 </code></pre></div>
-<ul>
-<li>没有设置 <code>top</code>、<code>bottom</code> 等阈值。</li>
-<li>某个祖先设置了 <code>overflow: hidden</code> 或 <code>auto</code>，sticky 改为相对这个祖先吸附，而它可能并不滚动。</li>
-<li>父元素和 sticky 元素一样高，没有可吸附的距离。</li>
-<li>在 flex 或 grid 中被拉伸成和父元素一样高，可以加 <code>align-self: start</code>。</li>
-</ul>
+<p>写了这几行，表头却不吸顶，通常是下面几个原因。</p>
+<p>第一，没有写 <code>top</code>、<code>bottom</code> 这类阈值，浏览器不知道什么时候该吸住。</p>
+<p>第二，某个祖先设置了 <code>overflow: hidden</code> 或 <code>auto</code>。这个祖先就成了滚动容器，sticky 改为相对它吸附。可是它自己可能根本不滚动，真正在滚的是外面的页面，于是看起来就没效果。</p>
+<p>第三，父元素和 sticky 元素一样高。sticky 不能跑出父元素，父元素没有多余的高度，就没有可以吸附的距离。</p>
+<p>第四，在 flex 或 grid 里，sticky 元素被拉伸得和父元素一样高，跟第三种是一回事。加上 <code>align-self: start</code> 就好。</p>
 <h2>常见追问</h2>
-<ul>
-<li><code>overflow: clip</code> 和 <code>hidden</code> 对 sticky 有区别吗？有。<code>clip</code> 不会创建滚动容器，sticky 仍然相对外层真正滚动的祖先吸附。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Display/Containing_block" target="_blank" rel="noreferrer">MDN · Layout and the containing block<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+absolute%E3%80%81fixed+%E5%92%8C+sticky+%E7%9A%84%E5%AE%9A%E4%BD%8D%E5%8F%82%E7%85%A7%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Aabsolute%E3%80%81fixed+%E5%92%8C+sticky+%E7%9A%84%E5%AE%9A%E4%BD%8D%E5%8F%82%E7%85%A7%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-position-containing-block%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-position-containing-block%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：absolute、fixed 和 sticky 的定位参照是什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-box/">标准盒模型和 border-box 有什么区别？</a></li><li><a href="/questions/css-flex-grid/">Flexbox 和 Grid 应该如何选择？</a></li><li><a href="/questions/html-accessibility/">触发操作为什么应优先使用 button，而不是可点击的 div？</a></li><li><a href="/questions/css-stacking/">为什么 z-index 设置很大，元素还是被遮挡？</a></li></ul></nav></main></div></div>
+<p><strong><code>overflow: clip</code> 和 <code>hidden</code> 对 sticky 有区别吗？</strong></p>
+<blockquote>
+<p>有。<code>hidden</code> 会创建滚动容器，sticky 会改为相对它吸附。<code>clip</code> 只裁剪，不创建滚动容器，所以 sticky 还是相对外层真正在滚动的祖先吸附。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Display/Containing_block" target="_blank" rel="noreferrer">MDN · Layout and the containing block<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+absolute%E3%80%81fixed+%E5%92%8C+sticky+%E7%9A%84%E5%AE%9A%E4%BD%8D%E5%8F%82%E7%85%A7%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Aabsolute%E3%80%81fixed+%E5%92%8C+sticky+%E7%9A%84%E5%AE%9A%E4%BD%8D%E5%8F%82%E7%85%A7%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-position-containing-block%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-position-containing-block%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：absolute、fixed 和 sticky 的定位参照是什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-box/">标准盒模型和 border-box 有什么区别？</a></li><li><a href="/questions/css-flex-grid/">Flexbox 和 Grid 应该如何选择？</a></li><li><a href="/questions/html-accessibility/">触发操作为什么应优先使用 button，而不是可点击的 div？</a></li><li><a href="/questions/css-stacking/">为什么 z-index 设置很大，元素还是被遮挡？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

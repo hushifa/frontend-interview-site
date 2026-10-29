@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="网络面试题：业务服务器负责鉴权、创建上传会话、为每个分片签发短期预签名 URL 并在最后合并；浏览器直接把分片 PUT 到对象存储。" />
+    <meta name="description" content="网络面试题：业务服务器负责鉴权、创建上传会话、给每个分片签发短期上传地址，最后负责合并；浏览器直接把分片传到对象存储。" />
     <title>浏览器直传对象存储时，如何设计安全的分片上传？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/network-object-storage-multipart/" />
     <meta name="robots" content="index,follow" />
@@ -19,23 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="浏览器直传对象存储时，如何设计安全的分片上传？ · 前端知库" />
-    <meta property="og:description" content="网络面试题：业务服务器负责鉴权、创建上传会话、为每个分片签发短期预签名 URL 并在最后合并；浏览器直接把分片 PUT 到对象存储。" />
+    <meta property="og:description" content="网络面试题：业务服务器负责鉴权、创建上传会话、给每个分片签发短期上传地址，最后负责合并；浏览器直接把分片传到对象存储。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/network-object-storage-multipart/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/network-object-storage-multipart/#webpage","url":"https://fe.hushifa.top/questions/network-object-storage-multipart/","name":"浏览器直传对象存储时，如何设计安全的分片上传？ · 前端知库","description":"网络面试题：业务服务器负责鉴权、创建上传会话、为每个分片签发短期预签名 URL 并在最后合并；浏览器直接把分片 PUT 到对象存储。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/network-object-storage-multipart/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/network-object-storage-multipart/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"网络面试题","item":"https://fe.hushifa.top/topics/network/"},{"@type":"ListItem","position":3,"name":"浏览器直传对象存储时，如何设计安全的分片上传？","item":"https://fe.hushifa.top/questions/network-object-storage-multipart/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/network-object-storage-multipart/#webpage","url":"https://fe.hushifa.top/questions/network-object-storage-multipart/","name":"浏览器直传对象存储时，如何设计安全的分片上传？ · 前端知库","description":"网络面试题：业务服务器负责鉴权、创建上传会话、给每个分片签发短期上传地址，最后负责合并；浏览器直接把分片传到对象存储。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/network-object-storage-multipart/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/network-object-storage-multipart/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"网络面试题","item":"https://fe.hushifa.top/topics/network/"},{"@type":"ListItem","position":3,"name":"浏览器直传对象存储时，如何设计安全的分片上传？","item":"https://fe.hushifa.top/questions/network-object-storage-multipart/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/network/">网络面试题</a><span aria-hidden="true">/</span><span aria-current="page">浏览器直传对象存储时，如何设计安全的分片上传？</span></nav><h1 tabindex="-1">浏览器直传对象存储时，如何设计安全的分片上传？</h1><p class="reading-summary">业务服务器负责鉴权、创建上传会话、为每个分片签发短期预签名 URL 并在最后合并；浏览器直接把分片 PUT 到对象存储。安全边界在签名范围、过期时间、对象键由服务端决定，以及合并前的校验和未完成上传的清理。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>文件不经过业务服务器，节省带宽；但签名和凭据只在服务端生成，浏览器拿不到长期密钥。</li>
-<li>流程：创建上传会话 → 每个分片申请预签名 URL → 浏览器 PUT 分片并记录返回的 <code>ETag</code> → 服务端按分片编号和 ETag 合并。</li>
-<li>对象键、大小上限、内容类型由服务端决定并写进签名，浏览器不能自己指定路径。</li>
-<li>存储桶要配置 CORS，允许页面来源的 <code>PUT</code>，并用 <code>ExposeHeaders</code> 暴露 <code>ETag</code>，否则脚本读不到它。</li>
-<li>未完成的上传会一直占用存储，要设置生命周期规则自动清理。</li>
-</ul>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/network/">网络面试题</a><span aria-hidden="true">/</span><span aria-current="page">浏览器直传对象存储时，如何设计安全的分片上传？</span></nav><h1 tabindex="-1">浏览器直传对象存储时，如何设计安全的分片上传？</h1><p class="reading-summary">业务服务器负责鉴权、创建上传会话、给每个分片签发短期上传地址，最后负责合并；浏览器直接把分片传到对象存储。安全的关键是签名范围、过期时间、存储路径由服务端决定，以及合并前校验、清理没传完的上传。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>直传的意思是文件不经过业务服务器，浏览器直接传到对象存储，省下业务服务器的带宽。但存储的密钥不能给浏览器，所以签名只在服务端生成。服务端给浏览器一个临时的、带签名的上传地址，这叫预签名 URL。</p>
+<p>流程是四步：服务端创建上传会话；浏览器为每个分片申请预签名 URL；浏览器把分片 PUT 上去，记下返回的 <code>ETag</code>；最后服务端按分片编号和 ETag 合并。</p>
+<p>安全上最重要的一条：文件存在哪个路径（对象键）、多大、什么类型，都由服务端决定并写进签名，浏览器不能自己指定。</p>
+<p>还有两个容易漏的配置。存储桶要配 CORS，允许页面来源发 <code>PUT</code>，并且用 <code>ExposeHeaders</code> 把 <code>ETag</code> 暴露出来，否则脚本读不到它。没传完的上传会一直占着存储，要设生命周期规则自动清理。</p>
+</blockquote>
 <p>下文以 S3 的接口为例，其他云厂商的分片大小、编号规则和接口名称不同。</p>
-<h2>流程</h2>
+<h2>整个流程</h2>
 <div class="not-prose code-block"><div class="code-language">text</div><pre><code class="hljs language-text">浏览器 ──POST /uploads──────────────▶ 业务服务器 ──CreateMultipartUpload──▶ 对象存储
         ◀─ uploadId, key ───────────
 浏览器 ──POST /uploads/:id/parts/3─▶ 业务服务器（校验身份与配额，签发短期 URL）
@@ -44,7 +43,8 @@
         ◀─ ETag ────────────────────────────────────────────────────────
 浏览器 ──POST /uploads/:id/complete（编号与 ETag 列表）▶ 业务服务器 ──Complete──▶
 </code></pre></div>
-<h2>浏览器上传一个分片</h2>
+<p>可以看到，大块数据只在浏览器和对象存储之间走。业务服务器每一步只处理很小的请求，但每一步都会校验身份，权限始终在它手里。</p>
+<h2>浏览器怎么上传一个分片</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">uploadPart</span>(<span class="hljs-params">file, partNumber, partSize, url, signal</span>) {
   <span class="hljs-keyword">const</span> start = (partNumber - <span class="hljs-number">1</span>) * partSize; <span class="hljs-comment">// S3 分片编号从 1 开始</span>
   <span class="hljs-keyword">const</span> body = file.<span class="hljs-title function_">slice</span>(start, start + partSize);
@@ -57,20 +57,22 @@
   <span class="hljs-keyword">return</span> { partNumber, etag };
 }
 </code></pre></div>
-<p>同一编号的分片重新上传会覆盖之前的内容，所以分片 PUT 可以安全重试。并发数按网络情况取一个小值并可调，不要一次发出全部分片。</p>
-<h2>安全要点</h2>
-<ul>
-<li>预签名 URL 有效期尽量短，只授权单个对象的单个分片。</li>
-<li>合并时服务端校验分片总数、总大小和调用者身份，不信任浏览器传来的文件大小。</li>
-<li>需要内容完整性时，让分片请求携带校验和（S3 支持 CRC64NVME、SHA-256 等算法），存储端校验不一致会拒绝。</li>
-<li>合并完成后再做类型检测和病毒扫描，通过后才对外可见。</li>
-<li>文件上传的通用安全边界见<a href="/questions/security-file-upload/">《前端文件上传有哪些安全边界？》</a>。</li>
-</ul>
+<p>S3 的分片编号从 1 开始，所以起始位置要先减 1。拿不到 <code>ETag</code> 时代码单独报错，因为这几乎总是 CORS 没暴露这个头，而不是上传失败了。</p>
+<p>同一编号的分片重新上传，会覆盖之前的内容，所以分片 PUT 可以放心重试。并发数取一个小值，并且可调，不要一次把所有分片都发出去。</p>
+<h2>安全上要守住哪些点</h2>
+<p>预签名 URL 的有效期尽量短，并且只授权一个对象的一个分片。这样就算被别人拿到，能做的事也很有限。</p>
+<p>合并时服务端要校验分片总数、总大小和调用者身份。浏览器传来的文件大小不能信。</p>
+<p>需要保证内容完整时，让分片请求带上校验和。S3 支持 CRC64NVME、SHA-256 等算法，存储端算出来不一致就会拒绝。</p>
+<p>合并完成以后，再做文件类型检测和病毒扫描，通过了才对外可见。文件上传通用的安全边界见<a href="/questions/security-file-upload/">《前端文件上传有哪些安全边界？》</a>。</p>
 <h2>常见追问</h2>
-<ul>
-<li>怎么支持断点续传？服务端保存 uploadId 和已完成的分片，见<a href="/questions/network-resumable-upload/">《浏览器分片上传如何实现可靠的暂停与续传？》</a>。</li>
-<li>分片编号有什么限制？S3 的编号范围是 1 到 10000，可以不连续；启用校验和时必须从 1 开始连续编号。分片大小下限等限制见 S3 的 multipart upload limits 页面，其他厂商规则不同。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html" target="_blank" rel="noreferrer">AWS S3 · Uploading and copying objects using multipart upload（以 S3 为例）<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9B%B4%E4%BC%A0%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8%E6%97%B6%EF%BC%8C%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E5%AE%89%E5%85%A8%E7%9A%84%E5%88%86%E7%89%87%E4%B8%8A%E4%BC%A0%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9B%B4%E4%BC%A0%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8%E6%97%B6%EF%BC%8C%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E5%AE%89%E5%85%A8%E7%9A%84%E5%88%86%E7%89%87%E4%B8%8A%E4%BC%A0%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anetwork-object-storage-multipart%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%BD%91%E7%BB%9C%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnetwork-object-storage-multipart%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：浏览器直传对象存储时，如何设计安全的分片上传？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/http-cors/">什么是跨域？CORS 为什么需要服务端配合？</a></li><li><a href="/questions/network-protocol-debugging/">前端网络问题应该怎样按协议层排查？</a></li><li><a href="/questions/http-cache/">强缓存与协商缓存如何配合？</a></li><li><a href="/questions/http-https/">HTTPS 相比 HTTP 提供了哪些保障？</a></li></ul></nav></main></div></div>
+<p><strong>怎么支持断点续传？</strong></p>
+<blockquote>
+<p>服务端保存 uploadId 和已经完成的分片，续传时只补缺的部分，见<a href="/questions/network-resumable-upload/">《浏览器分片上传如何实现可靠的暂停与续传？》</a>。</p>
+</blockquote>
+<p><strong>分片编号有什么限制？</strong></p>
+<blockquote>
+<p>S3 的编号范围是 1 到 10000，可以不连续；但启用了校验和时，必须从 1 开始连续编号。分片大小的下限等限制，看 S3 的 multipart upload limits 页面。其他厂商规则不一样。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html" target="_blank" rel="noreferrer">AWS S3 · Uploading and copying objects using multipart upload（以 S3 为例）<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9B%B4%E4%BC%A0%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8%E6%97%B6%EF%BC%8C%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E5%AE%89%E5%85%A8%E7%9A%84%E5%88%86%E7%89%87%E4%B8%8A%E4%BC%A0%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9B%B4%E4%BC%A0%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8%E6%97%B6%EF%BC%8C%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E5%AE%89%E5%85%A8%E7%9A%84%E5%88%86%E7%89%87%E4%B8%8A%E4%BC%A0%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anetwork-object-storage-multipart%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%BD%91%E7%BB%9C%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnetwork-object-storage-multipart%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：浏览器直传对象存储时，如何设计安全的分片上传？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/http-cors/">什么是跨域？CORS 为什么需要服务端配合？</a></li><li><a href="/questions/network-protocol-debugging/">前端网络问题应该怎样按协议层排查？</a></li><li><a href="/questions/http-cache/">强缓存与协商缓存如何配合？</a></li><li><a href="/questions/http-https/">HTTPS 相比 HTTP 提供了哪些保障？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

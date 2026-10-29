@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="手写与算法面试题：尾沿防抖在最后一次调用之后等待一段时间，期间没有新调用才执行。" />
+    <meta name="description" content="手写与算法面试题：防抖就是&quot;等你停下来再执行&quot;：最后一次调用之后等一段时间，这段时间里没有新调用才真正执行。" />
     <title>怎样实现只在停止调用后执行的防抖函数？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/alg-debounce/" />
     <meta name="robots" content="index,follow" />
@@ -19,25 +19,25 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="怎样实现只在停止调用后执行的防抖函数？ · 前端知库" />
-    <meta property="og:description" content="手写与算法面试题：尾沿防抖在最后一次调用之后等待一段时间，期间没有新调用才执行。" />
+    <meta property="og:description" content="手写与算法面试题：防抖就是&quot;等你停下来再执行&quot;：最后一次调用之后等一段时间，这段时间里没有新调用才真正执行。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/alg-debounce/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-debounce/#webpage","url":"https://fe.hushifa.top/questions/alg-debounce/","name":"怎样实现只在停止调用后执行的防抖函数？ · 前端知库","description":"手写与算法面试题：尾沿防抖在最后一次调用之后等待一段时间，期间没有新调用才执行。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-debounce/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-debounce/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"怎样实现只在停止调用后执行的防抖函数？","item":"https://fe.hushifa.top/questions/alg-debounce/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-debounce/#webpage","url":"https://fe.hushifa.top/questions/alg-debounce/","name":"怎样实现只在停止调用后执行的防抖函数？ · 前端知库","description":"手写与算法面试题：防抖就是\"等你停下来再执行\"：最后一次调用之后等一段时间，这段时间里没有新调用才真正执行。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-debounce/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-debounce/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"怎样实现只在停止调用后执行的防抖函数？","item":"https://fe.hushifa.top/questions/alg-debounce/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样实现只在停止调用后执行的防抖函数？</span></nav><h1 tabindex="-1">怎样实现只在停止调用后执行的防抖函数？</h1><p class="reading-summary">尾沿防抖在最后一次调用之后等待一段时间，期间没有新调用才执行。每次调用都清除旧计时器重新计时，执行时使用最后一次调用的参数和 this，并提供 cancel 取消待执行的调用。防抖只减少尚未开始的工作，已经发出的请求还要用 AbortController 或请求序号处理。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>每次调用先 <code>clearTimeout</code> 旧计时器再重新设置，只有最后一次调用的计时器能走完，执行时使用这次的参数和 <code>this</code>。</li>
-<li>包装函数用普通函数定义，才能拿到调用方传入的 <code>this</code> 并用 <code>fn.apply(this, args)</code> 转发。</li>
-<li>计时器回调里先把 <code>timer</code> 置空再调用 <code>fn</code>，<code>fn</code> 内部再次调用包装函数时，新计时器不会被误清。</li>
-<li>包装函数在 <code>fn</code> 执行前就已返回，所以返回 <code>undefined</code>；<code>fn</code> 抛出的错误也不会传回调用处。</li>
-<li>搜索框适合防抖；旧请求可能比新请求更晚返回，需要用 <code>AbortController</code> 取消，或比较请求序号丢弃过期结果。</li>
-</ul>
-<h2>时间线</h2>
-<p>等待 100 毫秒，调用发生在 0、60、120 毫秒：</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样实现只在停止调用后执行的防抖函数？</span></nav><h1 tabindex="-1">怎样实现只在停止调用后执行的防抖函数？</h1><p class="reading-summary">防抖就是&quot;等你停下来再执行&quot;：最后一次调用之后等一段时间，这段时间里没有新调用才真正执行。每次调用都清掉旧定时器重新计时，执行时用最后一次的参数和 this，还要提供 cancel。防抖只能少发还没开始的请求，已经发出去的请求要用 AbortController 或请求序号处理。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>防抖就是“等用户停下来再执行”。比如搜索框，用户一直在打字就先不搜，停下来 300 毫秒没再输入，才发请求。</p>
+<p>实现的关键是每次调用都先 <code>clearTimeout</code> 掉旧的定时器，再重新设一个。这样只有最后一次调用的定时器能走完，执行时用的也是这次的参数和 <code>this</code>。包装函数要用普通函数写，才能拿到调用方的 <code>this</code>，再用 <code>fn.apply(this, args)</code> 转给原函数。</p>
+<p>有两个细节。定时器回调里要先把 <code>timer</code> 清空再调用 <code>fn</code>，这样 <code>fn</code> 内部如果又调用了包装函数，新设的定时器不会被误清掉。另外，包装函数在 <code>fn</code> 执行之前就已经返回了，所以它的返回值是 <code>undefined</code>，<code>fn</code> 抛的错也传不回调用的地方。</p>
+<p>防抖只能减少还没开始的工作。已经发出去的请求，旧的可能比新的回来得还晚，要用 <code>AbortController</code> 取消，或者比较请求序号把过期结果丢掉。</p>
+</blockquote>
+<h2>先看时间线</h2>
+<p>假设等待时间是 100 毫秒，调用分别发生在 0、60、120 毫秒：</p>
 <table><thead><tr><th>调用时刻</th><th>参数</th><th>结果</th></tr></thead><tbody><tr><td>0 毫秒</td><td>A</td><td>计划在 100 毫秒执行</td></tr><tr><td>60 毫秒</td><td>B</td><td>取消 A，改为 160 毫秒执行</td></tr><tr><td>120 毫秒</td><td>C</td><td>取消 B，改为 220 毫秒执行</td></tr></tbody></table>
-<p>之后没有新调用，大约 220 毫秒执行 C。持续不断地调用时，这个版本会一直不执行；需要&quot;最长等待一段时间也要执行一次&quot;时，要加 <code>maxWait</code> 选项，或改用节流。</p>
+<p>每次新调用都把执行时间往后推。之后没有新调用了，大约在 220 毫秒执行 C。</p>
+<p>这也意味着，如果调用一直不停，这个版本就永远不会执行。如果需要“最多等这么久，也要执行一次”，就要加一个 <code>maxWait</code> 选项，或者改用节流。</p>
 <h2>实现</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">debounce</span>(<span class="hljs-params">fn, wait</span>) {
   <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> fn !== <span class="hljs-string">&#x27;function&#x27;</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;需要传入函数&#x27;</span>);
@@ -63,7 +63,10 @@
   <span class="hljs-keyword">return</span> wrapped;
 }
 </code></pre></div>
-<p>参数校验在创建计时器之前完成：等待时间超过 2147483647 毫秒时，计时器会被当作 1 毫秒处理，所以直接拒绝。</p>
+<p><code>timer</code> 保存在闭包里，所以每次调用 <code>wrapped</code> 操作的都是同一个定时器，这才能做到“清掉上一个”。</p>
+<p>定时器回调用的是箭头函数，它没有自己的 <code>this</code>，用的是外层 <code>wrapped</code> 的 <code>this</code>。所以 <code>fn.apply(this, args)</code> 里的 <code>this</code>，就是调用 <code>wrapped</code> 时的那个对象。</p>
+<p>为什么要校验等待时间不超过 2147483647？因为超过这个数，浏览器和 Node 会把定时器当成 1 毫秒处理，等于马上执行，完全违背了本意，所以直接拒绝。</p>
+<h2>验证 this 和参数</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> receiver = {
   <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;最终输入&#x27;</span>,
   <span class="hljs-attr">print</span>: <span class="hljs-title function_">debounce</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">text</span>) {
@@ -74,8 +77,10 @@
 receiver.<span class="hljs-title function_">print</span>(<span class="hljs-string">&#x27;A&#x27;</span>);
 receiver.<span class="hljs-title function_">print</span>(<span class="hljs-string">&#x27;B&#x27;</span>);
 </code></pre></div>
-<p>等待结束后只输出 <code>最终输入：B</code>。同一个包装函数被多个对象共享时，它们共用一个计时器，调用会相互合并；每个输入框应该各自创建实例。</p>
-<h2>搜索框中的完整处理</h2>
+<p>等待结束后只输出一次 <code>最终输入：B</code>。A 那次被取消了，<code>this</code> 也正确地指向了 <code>receiver</code>。</p>
+<p>要注意，同一个包装函数被多个对象共用时，它们也共用一个定时器，调用会互相合并。所以每个输入框要各自创建一个防抖实例。</p>
+<h2>搜索框里的完整写法</h2>
+<p>防抖只是少发请求，可是发出去的请求返回顺序不确定。用户先搜“a”再搜“ab”，“a”的结果可能后回来，把“ab”的结果盖掉。下面的写法把这个问题也处理了：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">let</span> controller;
 
 <span class="hljs-keyword">const</span> search = <span class="hljs-title function_">debounce</span>(<span class="hljs-title function_">async</span> (keyword) =&gt; {
@@ -94,18 +99,23 @@ receiver.<span class="hljs-title function_">print</span>(<span class="hljs-strin
 
 input.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;input&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> <span class="hljs-title function_">search</span>(event.<span class="hljs-property">target</span>.<span class="hljs-property">value</span>));
 </code></pre></div>
-<ul>
-<li>传给防抖函数的是当时的字符串，不是事件对象。延迟执行时 <code>event.currentTarget</code> 已经变成 <code>null</code>。</li>
-<li>新请求开始前取消上一次请求，旧响应不会覆盖新结果。</li>
-<li>异步函数里自己捕获错误，否则会产生未处理的 Promise 拒绝。</li>
-</ul>
-<p>在 React、Vue 组件里使用时，防抖实例要在组件生命周期内保持不变（例如放进 <code>useRef</code> 或 <code>setup</code> 中只创建一次），组件卸载时调用 <code>cancel</code>。</p>
+<p>每次发新请求前，先取消上一次的请求，旧的响应就不会覆盖新的结果。</p>
+<p>为什么传给 <code>search</code> 的是 <code>event.target.value</code>，而不是整个 <code>event</code>？因为执行是延迟的，等到真正执行时，<code>event.currentTarget</code> 已经变成 <code>null</code> 了。所以要在触发的那一刻就把需要的字符串取出来。</p>
+<p>异步函数里的错误要自己捕获。被取消的请求会抛 <code>AbortError</code>，这是正常的，不用提示；其他错误才显示出来。不捕获的话，会产生未处理的 Promise 拒绝。</p>
+<p>在 React、Vue 组件里用时，防抖实例要在组件的整个生命周期里保持不变，比如放进 <code>useRef</code>，或者在 <code>setup</code> 里只创建一次。不然每次渲染都创建一个新的，定时器就不是同一个了。组件卸载时记得调用 <code>cancel</code>。</p>
 <h2>常见追问</h2>
-<ul>
-<li><strong>防抖和节流怎么选？</strong> 只关心最终结果用防抖，例如搜索、窗口大小变化后重新计算布局；需要持续反馈用节流，例如滚动加载、拖拽。两者对比见<a href="/questions/alg-throttle/">《怎样实现首沿节流？它与尾沿节流、防抖有什么区别？》</a>。</li>
-<li><strong>能让防抖函数返回 Promise 吗？</strong> 可以，但要先定义被合并掉的那些调用怎么办：一起等待最后一次的结果，还是直接拒绝。这已经是另一种接口设计。</li>
-<li><strong>首沿防抖是什么？</strong> 第一次调用立即执行，之后在安静期结束前的调用都被忽略，适合防止按钮重复提交。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Debounce" target="_blank" rel="noreferrer">MDN · Debounce<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E5%8F%AA%E5%9C%A8%E5%81%9C%E6%AD%A2%E8%B0%83%E7%94%A8%E5%90%8E%E6%89%A7%E8%A1%8C%E7%9A%84%E9%98%B2%E6%8A%96%E5%87%BD%E6%95%B0%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E5%8F%AA%E5%9C%A8%E5%81%9C%E6%AD%A2%E8%B0%83%E7%94%A8%E5%90%8E%E6%89%A7%E8%A1%8C%E7%9A%84%E9%98%B2%E6%8A%96%E5%87%BD%E6%95%B0%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-debounce%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-debounce%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样实现只在停止调用后执行的防抖函数？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-throttle/">怎样实现首沿节流？它与尾沿节流、防抖有什么区别？</a></li><li><a href="/questions/alg-promise-aplus/">怎样手写一个符合 Promises/A+ 规范的 Promise？</a></li><li><a href="/questions/alg-deep-clone/">怎样手写深拷贝？和 structuredClone 有什么区别？</a></li><li><a href="/questions/alg-call-apply-bind/">怎样手写 call、apply 和 bind？用 new 调用 bind 返回的函数会怎样？</a></li></ul></nav></main></div></div>
+<p><strong>防抖和节流怎么选？</strong></p>
+<blockquote>
+<p>只关心最后的结果，就用防抖，比如搜索、窗口大小变了以后重新算布局。需要过程中持续有反馈，就用节流，比如滚动加载、拖拽。两者的对比见<a href="/questions/alg-throttle/">《怎样实现首沿节流？它与尾沿节流、防抖有什么区别？》</a>。</p>
+</blockquote>
+<p><strong>能让防抖函数返回 Promise 吗？</strong></p>
+<blockquote>
+<p>可以，但要先想清楚被合并掉的那些调用怎么办：是一起等最后一次的结果，还是直接拒绝。这已经是另一种接口设计了。</p>
+</blockquote>
+<p><strong>首沿防抖是什么？</strong></p>
+<blockquote>
+<p>第一次调用马上执行，之后在安静期结束前的调用都被忽略。适合防止按钮被重复点击提交。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Debounce" target="_blank" rel="noreferrer">MDN · Debounce<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E5%8F%AA%E5%9C%A8%E5%81%9C%E6%AD%A2%E8%B0%83%E7%94%A8%E5%90%8E%E6%89%A7%E8%A1%8C%E7%9A%84%E9%98%B2%E6%8A%96%E5%87%BD%E6%95%B0%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E5%8F%AA%E5%9C%A8%E5%81%9C%E6%AD%A2%E8%B0%83%E7%94%A8%E5%90%8E%E6%89%A7%E8%A1%8C%E7%9A%84%E9%98%B2%E6%8A%96%E5%87%BD%E6%95%B0%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-debounce%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-debounce%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样实现只在停止调用后执行的防抖函数？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-throttle/">怎样实现首沿节流？它与尾沿节流、防抖有什么区别？</a></li><li><a href="/questions/alg-promise-aplus/">怎样手写一个符合 Promises/A+ 规范的 Promise？</a></li><li><a href="/questions/alg-deep-clone/">怎样手写深拷贝？和 structuredClone 有什么区别？</a></li><li><a href="/questions/alg-call-apply-bind/">怎样手写 call、apply 和 bind？用 new 调用 bind 返回的函数会怎样？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

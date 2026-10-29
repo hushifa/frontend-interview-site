@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Vue面试题：复杂表单要把编辑中的草稿、已保存的基线和提交过程分开管理。" />
+    <meta name="description" content="Vue面试题：把正在编辑的草稿、上次保存的基线和提交过程分开管。" />
     <title>Vue 复杂表单怎样组织状态、校验和提交？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/vue-complex-form/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Vue 复杂表单怎样组织状态、校验和提交？ · 前端知库" />
-    <meta property="og:description" content="Vue面试题：复杂表单要把编辑中的草稿、已保存的基线和提交过程分开管理。" />
+    <meta property="og:description" content="Vue面试题：把正在编辑的草稿、上次保存的基线和提交过程分开管。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/vue-complex-form/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-complex-form/#webpage","url":"https://fe.hushifa.top/questions/vue-complex-form/","name":"Vue 复杂表单怎样组织状态、校验和提交？ · 前端知库","description":"Vue面试题：复杂表单要把编辑中的草稿、已保存的基线和提交过程分开管理。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-complex-form/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-complex-form/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"Vue 复杂表单怎样组织状态、校验和提交？","item":"https://fe.hushifa.top/questions/vue-complex-form/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-complex-form/#webpage","url":"https://fe.hushifa.top/questions/vue-complex-form/","name":"Vue 复杂表单怎样组织状态、校验和提交？ · 前端知库","description":"Vue面试题：把正在编辑的草稿、上次保存的基线和提交过程分开管。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-complex-form/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-complex-form/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"Vue 复杂表单怎样组织状态、校验和提交？","item":"https://fe.hushifa.top/questions/vue-complex-form/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue 复杂表单怎样组织状态、校验和提交？</span></nav><h1 tabindex="-1">Vue 复杂表单怎样组织状态、校验和提交？</h1><p class="reading-summary">复杂表单要把编辑中的草稿、已保存的基线和提交过程分开管理。错误在失焦或提交后才显示，提交期间防止重复提交，失败保留草稿，成功后以服务端返回的数据作为新基线。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>分开三类状态：<code>draft</code>（正在编辑）、<code>baseline</code>（上次保存的值，用于判断是否修改、支持重置）、提交状态（<code>pending</code>、服务端错误）。</li>
-<li>校验结果用 <code>computed</code> 从草稿推导，不单独存储；错误在字段失焦或尝试提交后才显示。</li>
-<li>提交期间禁用按钮并在函数入口检查 <code>pending</code>，防止重复提交。</li>
-<li>提交失败时保留草稿，把服务端返回的字段错误显示在对应字段旁边。</li>
-<li>提交成功后用服务端返回的记录更新草稿和基线，因为服务端可能做了规范化。</li>
-</ul>
-<h2>示例</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue 复杂表单怎样组织状态、校验和提交？</span></nav><h1 tabindex="-1">Vue 复杂表单怎样组织状态、校验和提交？</h1><p class="reading-summary">把正在编辑的草稿、上次保存的基线和提交过程分开管。错误等用户离开字段或点了提交再显示，提交中防重复，失败留着草稿，成功后用服务端返回的数据当新基线。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>复杂表单我会把状态分成三份：用户正在改的草稿 <code>draft</code>，上次保存成功的基线 <code>baseline</code>，以及提交过程本身，比如是否正在提交、服务端返回了什么错误。</p>
+<p>分开的原因是它们各管一件事。有基线才能判断“改过没有”，也才能一键重置；校验结果用 <code>computed</code> 从草稿推出来，不单独存一份，就不会出现两份数据对不上。</p>
+<p>体验上有几个约定：错误等用户离开这个字段，或者点了提交以后才显示；提交期间禁用按钮，函数入口也检查一次，防止重复提交；失败了保留草稿，把服务端的字段错误放在对应输入框旁边。</p>
+<p>提交成功后，要用服务端返回的记录去更新草稿和基线，而不是直接用自己提交的值，因为服务端可能做了规范化，比如去掉了空格。</p>
+</blockquote>
+<h2>先看一个完整的例子</h2>
+<p>下面是一个两个字段的表单。重点看三份状态是怎么分开的，以及 <code>submit</code> 里每一步在防什么。</p>
 <div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;script setup&gt;
 import { computed, reactive, ref } from &#x27;vue&#x27;;
 
@@ -99,14 +99,12 @@ function reset() {
   &lt;/form&gt;
 &lt;/template&gt;
 </code></pre></div>
-<p>要点：</p>
-<ul>
-<li>人数在草稿中保持字符串，提交时才转成数字，避免用户删空输入框时变成 <code>0</code>。</li>
-<li>字段级的服务端错误（如&quot;姓名已被占用&quot;）放在对应字段下，用户修改姓名时清除；与字段无关的错误放在表单级提示里。</li>
-<li>重置回到基线，而不是清空。</li>
-</ul>
-<h2>异步校验</h2>
-<p>检查用户名是否可用这类异步校验，要丢弃过期的结果：</p>
+<p><code>errors</code> 一直在根据草稿重新计算，可是页面一打开并不会满屏红字。这是因为 <code>visibleError</code> 多加了一道条件：这个字段被碰过（<code>touched</code>），或者用户已经点过提交（<code>attempted</code>），才把错误显示出来。</p>
+<p>人数明明是数字，为什么草稿里存的是字符串 <code>&#x27;1&#x27;</code>？因为用户会把输入框删空。如果一输入就转成数字，删空就变成了 <code>0</code>，校验和显示都会乱。所以草稿保持字符串，提交时才 <code>Number()</code> 转换。</p>
+<p>服务端错误分了两种。像“姓名已被占用”这种跟某个字段有关的，放在那个字段下面，用户一改姓名就清掉；跟字段无关的，比如“网络异常”，放在表单级的提示里。</p>
+<p>最后，“重置”是回到基线，不是清空。用户编辑一条已有记录时，重置应该回到它原来的样子。</p>
+<h2>异步校验怎样避免旧结果覆盖新输入</h2>
+<p>检查用户名是否可用这类校验要发请求。问题在于用户一直在打字，先发的请求可能后返回，把新输入的结果盖掉。所以每次发新请求前，要把上一次的取消：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { watch, onWatcherCleanup } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
 
 <span class="hljs-title function_">watch</span>(<span class="hljs-function">() =&gt;</span> draft.<span class="hljs-property">name</span>, <span class="hljs-title function_">async</span> (name) =&gt; {
@@ -121,14 +119,18 @@ function reset() {
   }
 });
 </code></pre></div>
-<p>用户继续输入时，上一次请求被取消，不会用旧结果覆盖新输入。实际使用时再加上防抖。</p>
-<h2>何时用表单库</h2>
-<p>字段多、动态增删字段、跨字段校验复杂时，可以用 VeeValidate、FormKit 等库，配合 Zod 这类 schema 统一前后端校验规则。上面的状态划分仍然适用，库只是帮你实现了它。</p>
+<p><code>onWatcherCleanup</code> 注册的函数会在侦听器下一次执行前调用，所以用户继续输入时，上一次请求就被中止了，旧结果不会写进来。实际使用时再加上防抖，别每敲一个字就发一次请求。</p>
+<h2>什么时候该用表单库</h2>
+<p>字段很多、要动态增删字段、跨字段校验又复杂时，可以用 VeeValidate、FormKit 这类库，再配合 Zod 这样的 schema 统一前后端的校验规则。不过上面“草稿、基线、提交状态分开”的思路仍然适用，库只是帮你把它实现了。</p>
 <h2>常见追问</h2>
-<ul>
-<li>离开页面时提醒未保存？用 <code>dirty</code> 判断，在路由守卫或 <code>beforeunload</code> 中提示。</li>
-<li>为什么不在 <code>watch</code> 里同步草稿和基线？两份数据相互复制容易产生循环和覆盖，基线只在保存成功时更新。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://vuejs.org/guide/essentials/forms.html" target="_blank" rel="noreferrer">Vue · Form Input Bindings<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vue+%E5%A4%8D%E6%9D%82%E8%A1%A8%E5%8D%95%E6%80%8E%E6%A0%B7%E7%BB%84%E7%BB%87%E7%8A%B6%E6%80%81%E3%80%81%E6%A0%A1%E9%AA%8C%E5%92%8C%E6%8F%90%E4%BA%A4%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVue+%E5%A4%8D%E6%9D%82%E8%A1%A8%E5%8D%95%E6%80%8E%E6%A0%B7%E7%BB%84%E7%BB%87%E7%8A%B6%E6%80%81%E3%80%81%E6%A0%A1%E9%AA%8C%E5%92%8C%E6%8F%90%E4%BA%A4%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-complex-form%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-complex-form%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vue 复杂表单怎样组织状态、校验和提交？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-performance/">Vue 大型页面应从哪些方面优化更新开销？</a></li><li><a href="/questions/vue-custom-directives/">Vue 自定义指令适合什么场景？</a></li><li><a href="/questions/vue-plugins/">Vue 插件如何向应用提供可复用能力？</a></li><li><a href="/questions/vue-suspense/">Vue Suspense 适合处理什么异步组件边界？</a></li></ul></nav></main></div></div>
+<p><strong>离开页面时怎么提醒用户还有没保存的修改？</strong></p>
+<blockquote>
+<p>用 <code>dirty</code> 判断有没有改过，有的话在路由守卫或者 <code>beforeunload</code> 事件里提示。</p>
+</blockquote>
+<p><strong>为什么不用 <code>watch</code> 让草稿和基线互相同步？</strong></p>
+<blockquote>
+<p>两份数据互相复制，很容易出现循环触发或者互相覆盖。基线只应该在保存成功这一个时刻更新，其他时候都不动它，数据流向就很清楚。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://vuejs.org/guide/essentials/forms.html" target="_blank" rel="noreferrer">Vue · Form Input Bindings<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vue+%E5%A4%8D%E6%9D%82%E8%A1%A8%E5%8D%95%E6%80%8E%E6%A0%B7%E7%BB%84%E7%BB%87%E7%8A%B6%E6%80%81%E3%80%81%E6%A0%A1%E9%AA%8C%E5%92%8C%E6%8F%90%E4%BA%A4%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVue+%E5%A4%8D%E6%9D%82%E8%A1%A8%E5%8D%95%E6%80%8E%E6%A0%B7%E7%BB%84%E7%BB%87%E7%8A%B6%E6%80%81%E3%80%81%E6%A0%A1%E9%AA%8C%E5%92%8C%E6%8F%90%E4%BA%A4%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-complex-form%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-complex-form%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vue 复杂表单怎样组织状态、校验和提交？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-performance/">Vue 大型页面应从哪些方面优化更新开销？</a></li><li><a href="/questions/vue-custom-directives/">Vue 自定义指令适合什么场景？</a></li><li><a href="/questions/vue-plugins/">Vue 插件如何向应用提供可复用能力？</a></li><li><a href="/questions/vue-suspense/">Vue Suspense 适合处理什么异步组件边界？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

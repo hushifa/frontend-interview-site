@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="工程化面试题：通过可运行的配置说明匹配对象、顺序覆盖、插件与预设导入，澄清现代 extends 和全局忽略的行为，并解释迁移时怎样检查最终生效配置。" />
+    <meta name="description" content="工程化面试题：Flat Config 用一个配置对象数组，按 files 匹配、按顺序覆盖。" />
     <title>ESLint Flat Config 和旧配置方式有什么区别？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/engineering-eslint-flat-config/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="ESLint Flat Config 和旧配置方式有什么区别？" />
-    <meta property="og:description" content="工程化面试题：通过可运行的配置说明匹配对象、顺序覆盖、插件与预设导入，澄清现代 extends 和全局忽略的行为，并解释迁移时怎样检查最终生效配置。" />
+    <meta property="og:description" content="工程化面试题：Flat Config 用一个配置对象数组，按 files 匹配、按顺序覆盖。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/engineering-eslint-flat-config/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/engineering-eslint-flat-config/#webpage","url":"https://fe.hushifa.top/questions/engineering-eslint-flat-config/","name":"ESLint Flat Config 和旧配置方式有什么区别？","description":"工程化面试题：通过可运行的配置说明匹配对象、顺序覆盖、插件与预设导入，澄清现代 extends 和全局忽略的行为，并解释迁移时怎样检查最终生效配置。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/engineering-eslint-flat-config/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/engineering-eslint-flat-config/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"工程化面试题","item":"https://fe.hushifa.top/topics/engineering/"},{"@type":"ListItem","position":3,"name":"ESLint Flat Config 和旧配置方式有什么区别？","item":"https://fe.hushifa.top/questions/engineering-eslint-flat-config/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/engineering-eslint-flat-config/#webpage","url":"https://fe.hushifa.top/questions/engineering-eslint-flat-config/","name":"ESLint Flat Config 和旧配置方式有什么区别？","description":"工程化面试题：Flat Config 用一个配置对象数组，按 files 匹配、按顺序覆盖。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/engineering-eslint-flat-config/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/engineering-eslint-flat-config/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"工程化面试题","item":"https://fe.hushifa.top/topics/engineering/"},{"@type":"ListItem","position":3,"name":"ESLint Flat Config 和旧配置方式有什么区别？","item":"https://fe.hushifa.top/questions/engineering-eslint-flat-config/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/engineering/">工程化面试题</a><span aria-hidden="true">/</span><span aria-current="page">ESLint Flat Config 和旧配置方式有什么区别？</span></nav><h1 tabindex="-1">ESLint Flat Config 和旧配置方式有什么区别？</h1><p class="reading-summary">通过可运行的配置说明匹配对象、顺序覆盖、插件与预设导入，澄清现代 extends 和全局忽略的行为，并解释迁移时怎样检查最终生效配置。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>Flat Config 用一个 <code>eslint.config.js</code> 导出配置对象数组，按 <code>files</code> 匹配文件，后面的对象覆盖前面的。</li>
-<li>插件和共享配置通过 <code>import</code> 引入真实的 JS 对象，不再按字符串名称查找，依赖关系一目了然。</li>
-<li>ESLint 10 已删除旧的 <code>.eslintrc</code> 格式；配置文件改为从每个被检查文件所在目录向上查找。</li>
-<li><code>globalIgnores()</code> 声明全局忽略，<code>extends</code> 可以在单个配置对象里复用预设（ESLint 9.22+）。</li>
-<li>迁移后用 <code>--print-config</code> 查看某个文件的最终配置，确认规则真正生效。</li>
-</ul>
-<h2>一个完整配置</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/engineering/">工程化面试题</a><span aria-hidden="true">/</span><span aria-current="page">ESLint Flat Config 和旧配置方式有什么区别？</span></nav><h1 tabindex="-1">ESLint Flat Config 和旧配置方式有什么区别？</h1><p class="reading-summary">Flat Config 用一个配置对象数组，按 files 匹配、按顺序覆盖。文中用一个完整配置讲插件与预设导入、现代 extends 和全局忽略的行为，以及迁移时怎样检查最终生效配置。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>旧的 <code>.eslintrc</code> 可以在每个目录放一份，沿着目录层层合并，很难看清最终用了什么。Flat Config 只有一个 <code>eslint.config.js</code>，导出一个配置对象的数组，每个对象用 <code>files</code> 说明自己管哪些文件，后面的对象覆盖前面的。</p>
+<p>插件和共享配置也改成用 <code>import</code> 引进来的真实 JS 对象，不再按字符串名字去查找，所以依赖关系一眼就能看清。</p>
+<p>版本上，ESLint 10 已经删除了旧的 <code>.eslintrc</code> 格式，查找配置文件也改成从每个被检查文件的目录往上找。<code>globalIgnores()</code> 用来声明全局忽略，<code>extends</code> 从 ESLint 9.22 起可以在单个配置对象里复用预设。</p>
+<p>迁移以后要用 <code>--print-config</code> 看某个文件最终生效的配置，确认规则真的生效了。</p>
+</blockquote>
+<h2>先看一个完整配置</h2>
+<p>下面这份配置对所有 JS 和 TS 文件用推荐规则，再给 <code>scripts</code> 目录单独放宽。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// eslint.config.js</span>
 <span class="hljs-keyword">import</span> { defineConfig, globalIgnores } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;eslint/config&#x27;</span>;
 <span class="hljs-keyword">import</span> js <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@eslint/js&#x27;</span>;
@@ -56,31 +56,35 @@
   },
 ]);
 </code></pre></div>
-<ul>
-<li><code>files</code> 决定对象作用于哪些文件；没写 <code>files</code> 的对象作用于所有被检查的文件。</li>
-<li>两个对象都匹配 <code>scripts/build.js</code> 时，后一个的 <code>no-console: &#x27;off&#x27;</code> 覆盖前一个。</li>
-<li>只含 <code>ignores</code> 的对象（或 <code>globalIgnores()</code>）是全局忽略；和其他键写在一起的 <code>ignores</code> 只是把文件排除出这个对象。</li>
-</ul>
-<h2>和 eslintrc 的主要区别</h2>
-<table><thead><tr><th>eslintrc</th><th>Flat Config</th></tr></thead><tbody><tr><td>多个 <code>.eslintrc</code> 沿目录层层合并</td><td>一份配置文件，数组顺序决定优先级</td></tr><tr><td><code>extends: &#x27;plugin:react/recommended&#x27;</code> 按名称解析</td><td><code>import</code> 进来直接放进数组或 <code>extends</code></td></tr><tr><td><code>env: { browser: true }</code></td><td><code>languageOptions.globals</code></td></tr><tr><td><code>parser</code>、<code>parserOptions</code> 在顶层</td><td>放在 <code>languageOptions</code> 下</td></tr><tr><td><code>.eslintignore</code> 文件</td><td>配置中的 <code>ignores</code> / <code>globalIgnores()</code></td></tr></tbody></table>
-<h2>ESLint 10 的变化</h2>
-<ul>
-<li>不再支持 <code>.eslintrc*</code>，设置 <code>ESLINT_USE_FLAT_CONFIG=false</code> 也无法恢复。</li>
-<li>查找 <code>eslint.config.*</code> 时，从每个被检查文件的目录开始向上查找，而不是只看当前工作目录。依赖旧行为的仓库可以用 <code>--config</code> 显式指定。</li>
-<li><code>/* eslint-env */</code> 注释会被报告为错误，应删除并改用 <code>languageOptions.globals</code>。</li>
-<li>需要 Node.js 20.19.0+、22.13.0+ 或 24+。</li>
-</ul>
-<p>官方提供 <code>npx @eslint/migrate-config .eslintrc.json</code> 把旧配置转换成 Flat Config，转换结果仍需人工检查。</p>
+<p><code>files</code> 决定这个对象作用于哪些文件。没写 <code>files</code> 的对象，作用于所有被检查的文件。</p>
+<p><code>scripts/build.js</code> 同时被第二个和第三个对象匹配到。数组里后面的优先，所以第三个对象的 <code>no-console: &#x27;off&#x27;</code> 覆盖了前面的 <code>&#x27;warn&#x27;</code>。</p>
+<h2>ignores 写在哪里，效果不一样</h2>
+<p>这里有个容易混的地方。一个对象如果只有 <code>ignores</code> 这一个键，或者用 <code>globalIgnores()</code>，它就是全局忽略，这些文件完全不检查。</p>
+<p>可是 <code>ignores</code> 和 <code>files</code>、<code>rules</code> 等其他键写在一起时，它只是把某些文件排除出这个对象，别的对象照样会检查它们。</p>
+<h2>和 eslintrc 有哪些区别</h2>
+<p>最根本的区别是合并方式。eslintrc 由多个 <code>.eslintrc</code> 沿目录层层合并；Flat Config 只有一份配置文件，数组顺序决定优先级。</p>
+<p>引用预设的方式也变了。以前写 <code>extends: &#x27;plugin:react/recommended&#x27;</code>，ESLint 按名字去解析；现在用 <code>import</code> 引进来，直接放进数组或 <code>extends</code>。</p>
+<p>几个常用配置项挪了位置。以前的 <code>env: { browser: true }</code> 改成 <code>languageOptions.globals</code>；顶层的 <code>parser</code>、<code>parserOptions</code> 放到了 <code>languageOptions</code> 下面；<code>.eslintignore</code> 文件改成配置里的 <code>ignores</code> 或 <code>globalIgnores()</code>。</p>
+<h2>ESLint 10 带来了什么变化</h2>
+<p>ESLint 10 不再支持 <code>.eslintrc*</code>，设置 <code>ESLINT_USE_FLAT_CONFIG=false</code> 也恢复不了。</p>
+<p>查找 <code>eslint.config.*</code> 时，它从每个被检查文件所在的目录开始往上找，而不是只看当前工作目录。依赖旧行为的仓库，可以用 <code>--config</code> 显式指定配置文件。</p>
+<p><code>/* eslint-env */</code> 注释会被报告为错误，要删掉，改用 <code>languageOptions.globals</code>。运行环境需要 Node.js 20.19.0+、22.13.0+ 或 24+。</p>
+<p>官方提供 <code>npx @eslint/migrate-config .eslintrc.json</code>，可以把旧配置转换成 Flat Config，但转换结果仍然要人工检查。</p>
 <h2>迁移时怎样验证</h2>
 <div class="not-prose code-block"><div class="code-language">bash</div><pre><code class="hljs language-bash">npx eslint --print-config src/main.ts
 npx eslint --inspect-config
 </code></pre></div>
-<p>第一条输出某个文件最终生效的完整配置，第二条打开可视化的配置查看器。迁移前后各跑一次全量检查，对比报告数量的变化，避免某条规则因为 <code>files</code> 没匹配上而悄悄失效。</p>
+<p>第一条命令输出某个文件最终生效的完整配置，第二条打开一个可视化的配置查看器。</p>
+<p>为什么要专门验证？因为 <code>files</code> 没匹配上时 ESLint 不会报错，某条规则可能就悄悄失效了。所以迁移前后各跑一次全量检查，对比报告数量的变化。</p>
 <h2>常见追问</h2>
-<ul>
-<li>monorepo 里每个包要不要单独配置？ESLint 10 会为每个文件找最近的 <code>eslint.config.*</code>，可以在包内放配置；也可以在根配置里用 <code>files</code> 区分。</li>
-<li>为什么 TypeScript 文件没被检查？Flat Config 默认只匹配 <code>.js</code>、<code>.mjs</code>、<code>.cjs</code>，其他扩展名要在 <code>files</code> 中声明。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://eslint.org/docs/latest/use/configure/configuration-files" target="_blank" rel="noreferrer">ESLint · 配置文件<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+ESLint+Flat+Config+%E5%92%8C%E6%97%A7%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AESLint+Flat+Config+%E5%92%8C%E6%97%A7%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aengineering-eslint-flat-config%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fengineering-eslint-flat-config%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：ESLint Flat Config 和旧配置方式有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/eng-feature-flags/">前端功能开关和灰度发布应该怎样设计？</a></li><li><a href="/questions/engineering-treeshaking/">Tree shaking 如何工作？为什么有些代码无法移除？</a></li><li><a href="/questions/engineering-lazy/">代码分割与懒加载适合哪些场景？</a></li><li><a href="/questions/engineering-lockfile/">为什么需要提交 lockfile？npm ci 和 npm install 有何区别？</a></li></ul></nav></main></div></div>
+<p><strong>monorepo 里每个包要不要单独配置？</strong></p>
+<blockquote>
+<p>ESLint 10 会为每个文件找离它最近的 <code>eslint.config.*</code>，所以可以在包里放自己的配置。也可以只用根配置，靠 <code>files</code> 区分不同的包。</p>
+</blockquote>
+<p><strong>为什么 TypeScript 文件没被检查？</strong></p>
+<blockquote>
+<p>Flat Config 默认只匹配 <code>.js</code>、<code>.mjs</code>、<code>.cjs</code>。其他扩展名要在 <code>files</code> 里声明，比如 <code>**/*.ts</code>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://eslint.org/docs/latest/use/configure/configuration-files" target="_blank" rel="noreferrer">ESLint · 配置文件<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+ESLint+Flat+Config+%E5%92%8C%E6%97%A7%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AESLint+Flat+Config+%E5%92%8C%E6%97%A7%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aengineering-eslint-flat-config%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fengineering-eslint-flat-config%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：ESLint Flat Config 和旧配置方式有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/eng-feature-flags/">前端功能开关和灰度发布应该怎样设计？</a></li><li><a href="/questions/engineering-treeshaking/">Tree shaking 如何工作？为什么有些代码无法移除？</a></li><li><a href="/questions/engineering-lazy/">代码分割与懒加载适合哪些场景？</a></li><li><a href="/questions/engineering-lockfile/">为什么需要提交 lockfile？npm ci 和 npm install 有何区别？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

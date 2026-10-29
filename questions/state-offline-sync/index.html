@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="状态与路由面试题：离线同步先把修改写入本地（IndexedDB），并把待同步的操作记录在持久队列中；联网后按顺序发送。" />
+    <meta name="description" content="状态与路由面试题：离线同步先把修改写进本地（IndexedDB），待同步的操作放进持久队列，联网后按顺序发送。" />
     <title>前端离线同步怎样处理重试和数据冲突？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/state-offline-sync/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,21 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="前端离线同步怎样处理重试和数据冲突？ · 前端知库" />
-    <meta property="og:description" content="状态与路由面试题：离线同步先把修改写入本地（IndexedDB），并把待同步的操作记录在持久队列中；联网后按顺序发送。" />
+    <meta property="og:description" content="状态与路由面试题：离线同步先把修改写进本地（IndexedDB），待同步的操作放进持久队列，联网后按顺序发送。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/state-offline-sync/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/state-offline-sync/#webpage","url":"https://fe.hushifa.top/questions/state-offline-sync/","name":"前端离线同步怎样处理重试和数据冲突？ · 前端知库","description":"状态与路由面试题：离线同步先把修改写入本地（IndexedDB），并把待同步的操作记录在持久队列中；联网后按顺序发送。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/state-offline-sync/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/state-offline-sync/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"状态与路由面试题","item":"https://fe.hushifa.top/topics/state-routing/"},{"@type":"ListItem","position":3,"name":"前端离线同步怎样处理重试和数据冲突？","item":"https://fe.hushifa.top/questions/state-offline-sync/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/state-offline-sync/#webpage","url":"https://fe.hushifa.top/questions/state-offline-sync/","name":"前端离线同步怎样处理重试和数据冲突？ · 前端知库","description":"状态与路由面试题：离线同步先把修改写进本地（IndexedDB），待同步的操作放进持久队列，联网后按顺序发送。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/state-offline-sync/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/state-offline-sync/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"状态与路由面试题","item":"https://fe.hushifa.top/topics/state-routing/"},{"@type":"ListItem","position":3,"name":"前端离线同步怎样处理重试和数据冲突？","item":"https://fe.hushifa.top/questions/state-offline-sync/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/state-routing/">状态与路由面试题</a><span aria-hidden="true">/</span><span aria-current="page">前端离线同步怎样处理重试和数据冲突？</span></nav><h1 tabindex="-1">前端离线同步怎样处理重试和数据冲突？</h1><p class="reading-summary">离线同步先把修改写入本地（IndexedDB），并把待同步的操作记录在持久队列中；联网后按顺序发送。每个操作带唯一 ID，服务端据此保证幂等；网络错误和 5xx 退避重试，版本冲突不能盲目重试，需要合并或让用户选择。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>本地优先：用户编辑后先写入 IndexedDB，界面立即更新，不等网络。</li>
-<li>待同步队列也存在 IndexedDB 中，标签页关闭或页面被回收后不会丢失。</li>
-<li>每个操作带 <code>id</code>（客户端生成的 UUID）和 <code>baseVersion</code>（基于的服务端版本）；服务端按 <code>id</code> 去重，重复发送不会重复写入。</li>
-<li>网络错误、超时、5xx、429 按指数退避重试；400 这类请求错误重试也不会成功，要标记失败；409 版本冲突进入冲突处理。</li>
-<li>冲突处理：字段级合并、后写覆盖、或保留两份让用户选择，按业务决定；同步成功后才从队列删除操作。</li>
-</ul>
-<h2>队列中的一条记录</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/state-routing/">状态与路由面试题</a><span aria-hidden="true">/</span><span aria-current="page">前端离线同步怎样处理重试和数据冲突？</span></nav><h1 tabindex="-1">前端离线同步怎样处理重试和数据冲突？</h1><p class="reading-summary">离线同步先把修改写进本地（IndexedDB），待同步的操作放进持久队列，联网后按顺序发送。每个操作带唯一 ID，服务端据此保证幂等；网络错误和 5xx 退避重试，版本冲突不能盲目重试，要合并或让用户选择。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>离线同步的思路是本地优先：用户改了东西，先写进浏览器里的 IndexedDB，界面立刻更新，不用等网络。还没发出去的修改放进一个待同步队列，这个队列也存在 IndexedDB 里，所以标签页关了、页面被回收了，也不会丢。</p>
+<p>每个操作带两样东西：一个客户端生成的唯一 <code>id</code>，和它基于的服务端版本 <code>baseVersion</code>。服务端按 <code>id</code> 去重，同一个操作发了两次也只写一次，这叫幂等。</p>
+<p>失败了要分情况。网络错误、超时、5xx、429 这类是暂时的，按指数退避重试；400 这类是请求本身有问题，重试多少次都不会成功，要标记失败；409 是版本冲突，进入冲突处理。</p>
+<p>冲突怎么处理要看业务：可以按字段合并，可以后写覆盖，也可以保留两份让用户选。要注意，只有同步成功了，才能把操作从队列里删掉。</p>
+</blockquote>
+<h2>队列里的一条记录长什么样</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> change = {
   <span class="hljs-attr">id</span>: crypto.<span class="hljs-title function_">randomUUID</span>(),
   <span class="hljs-attr">docId</span>: <span class="hljs-string">&#x27;note-42&#x27;</span>,
@@ -44,7 +43,8 @@
   <span class="hljs-attr">lastError</span>: <span class="hljs-literal">null</span>,
 };
 </code></pre></div>
-<h2>同步循环</h2>
+<p><code>id</code> 用来让服务端去重，<code>baseVersion</code> 表示“我是在第 7 版的基础上改的”，服务端靠它发现冲突。<code>attempts</code> 和 <code>lastError</code> 记录重试了几次、上次为什么失败。</p>
+<h2>同步循环怎么写</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">flush</span>(<span class="hljs-params">queue</span>) {
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> change <span class="hljs-keyword">of</span> <span class="hljs-keyword">await</span> queue.<span class="hljs-title function_">list</span>()) {
     <span class="hljs-keyword">let</span> res;
@@ -78,31 +78,28 @@
 
 <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;online&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">flush</span>(queue));
 </code></pre></div>
-<ul>
-<li>同一文档的操作按顺序发送，遇到错误就停下，避免后面的操作基于错误的版本。</li>
-<li>退避间隔逐次加倍并加随机抖动，避免大量客户端同时重试。</li>
-</ul>
-<h2>冲突处理</h2>
-<p>服务端发现 <code>baseVersion</code> 与当前版本不同时返回 409，并带上服务端最新内容。客户端可以：</p>
-<ul>
-<li>修改的字段不重叠时自动合并。</li>
-<li>重叠时展示两个版本，让用户选择保留哪一个。</li>
-<li>对计数器、集合这类数据，使用 CRDT（如 Yjs、Automerge）自动合并。</li>
-</ul>
-<p>&quot;最后写入覆盖&quot;实现最简单，但会静默丢失其他设备上的修改，只适合不重要的数据。</p>
-<h2>后台同步</h2>
-<p>Background Sync API 可以在页面关闭后、网络恢复时由 Service Worker 触发同步，但目前只有 Chromium 系浏览器支持。不支持的浏览器在页面打开时、<code>online</code> 事件和定时检查中同步。</p>
-<h2>注意点</h2>
-<ul>
-<li>显示同步状态：已保存到本地、同步中、同步失败、存在冲突。</li>
-<li>不同用户共用设备时，本地数据库按用户隔离，登出时清理。</li>
-<li>存储可能被浏览器清除，重要数据可以调用 <code>navigator.storage.persist()</code> 申请持久化。</li>
-</ul>
+<p>注意每个失败分支后面都有 <code>return</code>。为什么一出错就整个停下，而不是跳过这条、接着发下一条？因为同一文档的操作是有先后的，后一条是在前一条的基础上改的。前一条没成功就发后一条，它依据的版本就是错的。</p>
+<p>成功的时候，服务端会返回新版本号。<code>rebase</code> 把队列里同一文档后续操作的 <code>baseVersion</code> 更新成这个新版本，下一条才能正确提交。</p>
+<p>重试的间隔要逐次加倍，再加一点随机抖动。不加抖动的话，网络一恢复，大量客户端会在同一时刻一起重试，把服务器打垮。</p>
+<h2>版本冲突怎么处理</h2>
+<p>服务端发现 <code>baseVersion</code> 和当前版本对不上，说明别人在这期间改过了。这时返回 409，并带上服务端最新的内容。</p>
+<p>客户端有几种处理方式。双方改的字段不重叠，就自动合并。改到同一个字段了，就把两个版本都展示出来，让用户选保留哪个。计数器、集合这类数据，可以用 CRDT 库，比如 Yjs、Automerge，自动合并。</p>
+<p>“最后写入覆盖”实现起来最简单，可它会悄悄丢掉其他设备上的修改，只适合不重要的数据。</p>
+<h2>页面关了还能同步吗</h2>
+<p>Background Sync API 可以在页面关掉以后、网络恢复时，由 Service Worker 触发同步。但它目前只有 Chromium 系的浏览器支持。不支持的浏览器，就在页面打开时、<code>online</code> 事件触发时，以及定时检查时去同步。</p>
+<h2>还要注意什么</h2>
+<p>同步状态要让用户看得到：已保存到本地、同步中、同步失败、存在冲突。</p>
+<p>几个人共用一台设备时，本地数据库要按用户隔离，登出时清理干净。</p>
+<p>浏览器在存储空间紧张时可能会清掉本地数据。重要数据可以调用 <code>navigator.storage.persist()</code> 申请持久化。</p>
 <h2>常见追问</h2>
-<ul>
-<li>为什么不能只用一个 <code>isSynced</code> 标记？它无法表达&quot;本地有新编辑，同时上一次请求正在重试&quot;这类状态，也无法保留待发送的内容。</li>
-<li>服务端怎么实现幂等？保存已处理的操作 ID 及其结果，收到重复 ID 时直接返回之前的结果。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API" target="_blank" rel="noreferrer">MDN · IndexedDB API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E7%A6%BB%E7%BA%BF%E5%90%8C%E6%AD%A5%E6%80%8E%E6%A0%B7%E5%A4%84%E7%90%86%E9%87%8D%E8%AF%95%E5%92%8C%E6%95%B0%E6%8D%AE%E5%86%B2%E7%AA%81%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E7%A6%BB%E7%BA%BF%E5%90%8C%E6%AD%A5%E6%80%8E%E6%A0%B7%E5%A4%84%E7%90%86%E9%87%8D%E8%AF%95%E5%92%8C%E6%95%B0%E6%8D%AE%E5%86%B2%E7%AA%81%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Astate-offline-sync%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%8A%B6%E6%80%81%E4%B8%8E%E8%B7%AF%E7%94%B1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fstate-offline-sync%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端离线同步怎样处理重试和数据冲突？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/state-router/">前端路由除切换组件外还需要管理什么？</a></li><li><a href="/questions/state-pinia/">Pinia 中 state、getter 和 action 应如何分工？</a></li><li><a href="/questions/state-redux/">Redux 的单向数据流为什么强调 reducer 的纯粹性？</a></li><li><a href="/questions/state-route-concurrency/">路由并发导航和权限变化应该怎样处理？</a></li></ul></nav></main></div></div>
+<p><strong>为什么不能只用一个 <code>isSynced</code> 标记？</strong></p>
+<blockquote>
+<p>它表达不了“本地又有新编辑，同时上一次请求还在重试”这种状态，也存不下待发送的内容是什么。</p>
+</blockquote>
+<p><strong>服务端怎么实现幂等？</strong></p>
+<blockquote>
+<p>把处理过的操作 ID 和处理结果存下来。收到重复的 ID，直接返回之前的结果，不再执行一遍。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API" target="_blank" rel="noreferrer">MDN · IndexedDB API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E7%A6%BB%E7%BA%BF%E5%90%8C%E6%AD%A5%E6%80%8E%E6%A0%B7%E5%A4%84%E7%90%86%E9%87%8D%E8%AF%95%E5%92%8C%E6%95%B0%E6%8D%AE%E5%86%B2%E7%AA%81%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E7%A6%BB%E7%BA%BF%E5%90%8C%E6%AD%A5%E6%80%8E%E6%A0%B7%E5%A4%84%E7%90%86%E9%87%8D%E8%AF%95%E5%92%8C%E6%95%B0%E6%8D%AE%E5%86%B2%E7%AA%81%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Astate-offline-sync%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%8A%B6%E6%80%81%E4%B8%8E%E8%B7%AF%E7%94%B1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fstate-offline-sync%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端离线同步怎样处理重试和数据冲突？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/state-router/">前端路由除切换组件外还需要管理什么？</a></li><li><a href="/questions/state-pinia/">Pinia 中 state、getter 和 action 应如何分工？</a></li><li><a href="/questions/state-redux/">Redux 的单向数据流为什么强调 reducer 的纯粹性？</a></li><li><a href="/questions/state-route-concurrency/">路由并发导航和权限变化应该怎样处理？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

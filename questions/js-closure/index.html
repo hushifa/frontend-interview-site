@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="JavaScript面试题：闭包是函数与其创建时词法环境的组合，外层函数返回后内层函数仍能读写这些绑定。" />
+    <meta name="description" content="JavaScript面试题：闭包就是函数记住了它定义时能访问的变量，外层函数执行完以后，内层函数还能继续用这些变量。常用来做私有状态和工厂函数。" />
     <title>什么是闭包？它有哪些实际应用？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/js-closure/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="什么是闭包？它有哪些实际应用？ · 前端知库" />
-    <meta property="og:description" content="JavaScript面试题：闭包是函数与其创建时词法环境的组合，外层函数返回后内层函数仍能读写这些绑定。" />
+    <meta property="og:description" content="JavaScript面试题：闭包就是函数记住了它定义时能访问的变量，外层函数执行完以后，内层函数还能继续用这些变量。常用来做私有状态和工厂函数。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/js-closure/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-closure/#webpage","url":"https://fe.hushifa.top/questions/js-closure/","name":"什么是闭包？它有哪些实际应用？ · 前端知库","description":"JavaScript面试题：闭包是函数与其创建时词法环境的组合，外层函数返回后内层函数仍能读写这些绑定。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-closure/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-closure/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"什么是闭包？它有哪些实际应用？","item":"https://fe.hushifa.top/questions/js-closure/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-closure/#webpage","url":"https://fe.hushifa.top/questions/js-closure/","name":"什么是闭包？它有哪些实际应用？ · 前端知库","description":"JavaScript面试题：闭包就是函数记住了它定义时能访问的变量，外层函数执行完以后，内层函数还能继续用这些变量。常用来做私有状态和工厂函数。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-closure/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-closure/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"什么是闭包？它有哪些实际应用？","item":"https://fe.hushifa.top/questions/js-closure/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">什么是闭包？它有哪些实际应用？</span></nav><h1 tabindex="-1">什么是闭包？它有哪些实际应用？</h1><p class="reading-summary">闭包是函数与其创建时词法环境的组合，外层函数返回后内层函数仍能读写这些绑定。常用于私有状态、工厂函数和回调；陈旧值与内存占用都源于旧环境仍被引用。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>闭包是函数加上它创建时所在的词法环境；外层函数返回后，内层函数仍能访问这些绑定。</li>
-<li>变量查找按函数定义位置进行，与在哪里调用无关。</li>
-<li>闭包捕获的是绑定本身，读到的是绑定的当前值，不是创建时的快照。</li>
-<li>常见用途：私有状态、工厂函数、事件回调和偏函数。</li>
-<li>闭包只让被引用的环境保持可达；监听器或定时器不清理时，它们引用的数据才会一直留在内存里。</li>
-</ul>
-<h2>函数返回后状态为什么还在</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">什么是闭包？它有哪些实际应用？</span></nav><h1 tabindex="-1">什么是闭包？它有哪些实际应用？</h1><p class="reading-summary">闭包就是函数记住了它定义时能访问的变量，外层函数执行完以后，内层函数还能继续用这些变量。常用来做私有状态和工厂函数。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>一个函数在另一个函数里面定义，并且用到了外层函数的变量，这就形成了闭包。</p>
+<p>一般来说，函数执行完，它的局部变量就用不到了。但如果外层函数把内层函数返回出去，内层函数又用到了外层的变量，这些变量就会一直保留，内层函数之后还能读、还能改。</p>
+<p>最典型的用途是做私有变量。比如写一个计数器，<code>count</code> 放在外层函数里，外面没法直接改，只能通过返回的 <code>increment</code> 方法去加。另外工厂函数、事件回调、防抖节流，里面都用到了闭包。</p>
+<p>有两点要注意。第一，闭包保存的是变量本身，不是当时的值，变量后来改了，闭包读到的就是新值。第二，闭包本身不等于内存泄漏，只有当闭包一直被定时器、事件监听这类东西引用着、没有清理时，它用到的数据才会一直留在内存里。</p>
+</blockquote>
+<h2>先看一个例子</h2>
+<p>下面写一个计数器。<code>count</code> 定义在 <code>createCounter</code> 里面，返回的两个方法都用到了它。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">createCounter</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">let</span> count = <span class="hljs-number">0</span>;
 
@@ -57,29 +57,63 @@
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(first.<span class="hljs-title function_">read</span>());      <span class="hljs-comment">// 2</span>
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(second.<span class="hljs-title function_">increment</span>()); <span class="hljs-comment">// 1</span>
 </code></pre></div>
-<p>每次调用 <code>createCounter</code> 都会创建新的词法环境。<code>increment</code> 和 <code>read</code> 共享同一个 <code>count</code>，<code>first</code> 与 <code>second</code> 之间互不影响。外部只能通过返回的方法操作 <code>count</code>，这就是用闭包实现私有状态。</p>
-<h2>捕获的是绑定，不是值</h2>
+<p><code>createCounter()</code> 执行完以后，按理说 <code>count</code> 就该没了。可是调用 <code>first.increment()</code>，它还能接着往上加，这就是闭包在起作用。</p>
+<p><code>first</code> 里的 <code>increment</code> 和 <code>read</code> 是同一次调用创建的，所以它们操作的是同一个 <code>count</code>，加完以后 <code>read</code> 读到的是 2。<code>second</code> 是另一次调用，有自己的一份 <code>count</code>，所以它从 1 开始，跟 <code>first</code> 互不影响。</p>
+<p>外面的代码没办法直接改 <code>count</code>，只能通过这两个方法。很多地方说“用闭包实现私有变量”，指的就是这种写法。</p>
+<h2>为什么内层函数能找到外层的变量</h2>
+<p>函数里用到一个变量，JavaScript 会先在函数自己里面找，找不到就去定义它的那个外层函数里找，再找不到就继续往外，一直找到全局。</p>
+<p>这条查找路线是按函数<strong>写在哪里</strong>定下来的，跟它后来在哪里被调用没有关系，这叫词法作用域。所以 <code>increment</code> 不管被拿到哪里去调用，它找 <code>count</code> 时走的都是同一条路，最后都能找到 <code>createCounter</code> 里的那个 <code>count</code>。</p>
+<h2>闭包记住的是变量，不是当时的值</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">let</span> label = <span class="hljs-string">&#x27;旧值&#x27;</span>;
 <span class="hljs-keyword">const</span> <span class="hljs-title function_">read</span> = (<span class="hljs-params"></span>) =&gt; label;
 label = <span class="hljs-string">&#x27;新值&#x27;</span>;
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">read</span>()); <span class="hljs-comment">// 新值</span>
 </code></pre></div>
-<p>React 等框架里的&quot;陈旧闭包&quot;是另一种情况：每次渲染都会创建新的函数和新的 <code>state</code> 常量，旧回调引用的是旧渲染的绑定，所以读到旧值。解决方法是让回调随依赖重新创建，或改用函数式更新、ref 读取最新值。</p>
-<p>循环中的闭包问题本质是 <code>var</code> 只有一个函数级绑定，详见<a href="/questions/js-scope-hoisting/">《var、let、const 和暂时性死区有什么关系？》</a>。</p>
-<h2>常见用途</h2>
-<ul>
-<li>私有状态：计数器、缓存、一次性初始化（<code>once</code>）。</li>
-<li>工厂与配置：<code>createLogger(prefix)</code> 返回带前缀的日志函数。</li>
-<li>回调保留上下文：事件处理函数访问创建时的参数。</li>
-<li>偏函数与柯里化：<code>const add5 = (x) =&gt; add(5, x)</code>。</li>
-</ul>
-<h2>闭包与内存</h2>
-<p>闭包本身不是内存泄漏。引擎只需保留仍被内层函数引用的环境；只要持有闭包的对象（监听器、定时器、全局缓存）被移除，整个环境就可以被回收。排查泄漏时看的是&quot;谁还引用着这个函数&quot;，而不是&quot;有没有闭包&quot;。</p>
+<p><code>read</code> 创建的时候 <code>label</code> 还是“旧值”，但它记住的是 <code>label</code> 这个变量本身。后来变量被改成“新值”，再调用 <code>read</code>，读到的自然就是新值。</p>
+<h2>React 里为什么会读到旧值</h2>
+<p>既然闭包记住的是变量，那 React 里为什么经常读到旧的 <code>state</code>？先看一个例子：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">Counter</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [count, setCount] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> id = <span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-title function_">setCount</span>(count + <span class="hljs-number">1</span>);
+    }, <span class="hljs-number">1000</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">clearInterval</span>(id);
+  }, []);
+
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>{count}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>;
+}
+</code></pre></div>
+<p>本来想让数字每秒加 1，结果页面上的数字变成 1 之后就再也不动了。</p>
+<p>原因在于，React 每渲染一次，就会把 <code>Counter</code> 这个函数重新执行一遍。每执行一遍，都会得到一个新的 <code>count</code>。第一次渲染时 <code>count</code> 是 0，第二次渲染时是另一个值为 1 的 <code>count</code>。它们是两个不同的变量，不是同一个变量被改了。</p>
+<p>定时器回调是第一次渲染时创建的，它记住的是第一次渲染的那个 <code>count</code>，值一直是 0。依赖数组写的是 <code>[]</code>，这个回调后来也没有被换掉，所以每秒执行的都是 <code>setCount(0 + 1)</code>，数字就停在了 1。</p>
+<p>最简单的改法是用函数式更新，不去读外面的 <code>count</code>，让 React 把最新的值传进来：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-title function_">setCount</span>(<span class="hljs-function">(<span class="hljs-params">current</span>) =&gt;</span> current + <span class="hljs-number">1</span>);
+</code></pre></div>
+<p>另外两种办法是：把 <code>count</code> 写进依赖数组，让 effect 跟着重新创建回调；或者用 <code>useRef</code> 保存最新值，在回调里读 <code>ref.current</code>。</p>
+<h2>for 循环里的闭包</h2>
+<p>还有一道经典题：<code>for</code> 循环里用 <code>var</code> 声明变量，每个定时器回调最后都输出同一个数。原因是 <code>var</code> 在整个函数里只有一个变量，所有回调共用它，详见<a href="/questions/js-scope-hoisting/">《var、let、const 和暂时性死区有什么关系？》</a>。</p>
+<h2>闭包在实际开发中用在哪里</h2>
+<p>最常见的是做私有状态，比如上面的计数器，还有缓存、只执行一次的 <code>once</code> 函数，都是把数据藏在闭包里，外面只能通过返回的函数访问。</p>
+<p>工厂函数也离不开闭包。比如 <code>createLogger(&#x27;[订单]&#x27;)</code> 返回一个打印日志的函数，每次打印都自动带上“[订单]”这个前缀，因为前缀被闭包记住了。</p>
+<p>防抖和节流同样如此。定时器的 ID 保存在闭包里，函数被连续调用时，每次操作的都是同一个定时器，所以才能做到“等用户停下来再执行”。</p>
+<h2>闭包会导致内存泄漏吗</h2>
+<p>闭包本身不会。只要闭包这个函数不再被用到，它记住的变量就会和它一起被回收。</p>
+<p>真正出问题的情况是，闭包被一个一直存在的东西拿着不放。比如给 <code>window</code> 加了事件监听却没有移除，或者开了 <code>setInterval</code> 却没有清除，那这个回调函数就一直活着，它用到的数据也就一直释放不掉。所以排查内存问题时，要找的是“谁还在引用这个函数”，而不是“这里有没有用闭包”。</p>
 <h2>常见追问</h2>
-<ul>
-<li>闭包里修改外层变量会影响其他闭包吗？会，共享同一个环境的闭包读写同一个绑定。</li>
-<li>模块作用域和闭包是什么关系？ES 模块的顶层绑定也是一个词法环境，导出的函数同样闭包了模块内的私有变量。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures" target="_blank" rel="noreferrer">MDN · Closures<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%BB%80%E4%B9%88%E6%98%AF%E9%97%AD%E5%8C%85%EF%BC%9F%E5%AE%83%E6%9C%89%E5%93%AA%E4%BA%9B%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E9%97%AD%E5%8C%85%EF%BC%9F%E5%AE%83%E6%9C%89%E5%93%AA%E4%BA%9B%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-closure%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-closure%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：什么是闭包？它有哪些实际应用？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-scope-hoisting/">var、let、const 和暂时性死区有什么关系？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-this/">普通函数和箭头函数的 this 有什么区别？</a></li><li><a href="/questions/js-promise-combinators/">Promise.all、allSettled、race 和 any 如何选择？</a></li></ul></nav></main></div></div>
+<p><strong>同一个外层函数返回的多个闭包，会互相影响吗？</strong></p>
+<blockquote>
+<p>如果是同一次调用返回的，会。就像例子里的 <code>increment</code> 和 <code>read</code>，它们用的是同一个 <code>count</code>，一个改了另一个就能读到。如果是外层函数调用了两次，就是两份独立的变量，互不影响。</p>
+</blockquote>
+<p><strong>ES 模块和闭包有什么关系？</strong></p>
+<blockquote>
+<p>模块的最外层也是一个作用域。模块里没有导出的变量，外面拿不到，但模块导出的函数可以用它们。所以导出的函数其实就是闭包，它记住了模块里的私有变量。</p>
+</blockquote>
+<p><strong>怎样避免闭包带来的内存问题？</strong></p>
+<blockquote>
+<p>关键是用完就断开引用。组件卸载时移除事件监听、清掉定时器；缓存要设置上限或者过期时间；不要让长期存在的闭包引用用不到的大对象。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures" target="_blank" rel="noreferrer">MDN · Closures<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%BB%80%E4%B9%88%E6%98%AF%E9%97%AD%E5%8C%85%EF%BC%9F%E5%AE%83%E6%9C%89%E5%93%AA%E4%BA%9B%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E9%97%AD%E5%8C%85%EF%BC%9F%E5%AE%83%E6%9C%89%E5%93%AA%E4%BA%9B%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-closure%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-closure%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：什么是闭包？它有哪些实际应用？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-scope-hoisting/">var、let、const 和暂时性死区有什么关系？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-this/">普通函数和箭头函数的 this 有什么区别？</a></li><li><a href="/questions/js-promise-combinators/">Promise.all、allSettled、race 和 any 如何选择？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

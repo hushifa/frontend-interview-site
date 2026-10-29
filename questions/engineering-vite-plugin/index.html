@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="工程化面试题：用可运行的虚拟版本模块区分解析、加载与转换，说明内部 ID、返回值、开发/构建钩子和 Source Map，并解释插件为什么仍需按环境验证。" />
+    <meta name="description" content="工程化面试题：resolveId 负责解析导入路径，load 负责提供源码，transform 负责改写源码。" />
     <title>Vite 插件的 resolveId、load 和 transform 分别做什么？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/engineering-vite-plugin/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="Vite 插件的 resolveId、load 和 transform 分别做什么？" />
-    <meta property="og:description" content="工程化面试题：用可运行的虚拟版本模块区分解析、加载与转换，说明内部 ID、返回值、开发/构建钩子和 Source Map，并解释插件为什么仍需按环境验证。" />
+    <meta property="og:description" content="工程化面试题：resolveId 负责解析导入路径，load 负责提供源码，transform 负责改写源码。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/engineering-vite-plugin/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/engineering-vite-plugin/#webpage","url":"https://fe.hushifa.top/questions/engineering-vite-plugin/","name":"Vite 插件的 resolveId、load 和 transform 分别做什么？","description":"工程化面试题：用可运行的虚拟版本模块区分解析、加载与转换，说明内部 ID、返回值、开发/构建钩子和 Source Map，并解释插件为什么仍需按环境验证。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/engineering-vite-plugin/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/engineering-vite-plugin/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"工程化面试题","item":"https://fe.hushifa.top/topics/engineering/"},{"@type":"ListItem","position":3,"name":"Vite 插件的 resolveId、load 和 transform 分别做什么？","item":"https://fe.hushifa.top/questions/engineering-vite-plugin/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/engineering-vite-plugin/#webpage","url":"https://fe.hushifa.top/questions/engineering-vite-plugin/","name":"Vite 插件的 resolveId、load 和 transform 分别做什么？","description":"工程化面试题：resolveId 负责解析导入路径，load 负责提供源码，transform 负责改写源码。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/engineering-vite-plugin/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/engineering-vite-plugin/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"工程化面试题","item":"https://fe.hushifa.top/topics/engineering/"},{"@type":"ListItem","position":3,"name":"Vite 插件的 resolveId、load 和 transform 分别做什么？","item":"https://fe.hushifa.top/questions/engineering-vite-plugin/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/engineering/">工程化面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vite 插件的 resolveId、load 和 transform 分别做什么？</span></nav><h1 tabindex="-1">Vite 插件的 resolveId、load 和 transform 分别做什么？</h1><p class="reading-summary">用可运行的虚拟版本模块区分解析、加载与转换，说明内部 ID、返回值、开发/构建钩子和 Source Map，并解释插件为什么仍需按环境验证。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li><code>resolveId</code> 决定一个导入路径对应哪个模块 ID，返回 <code>null</code> 交给下一个插件处理。</li>
-<li><code>load</code> 根据模块 ID 提供源码，常用于虚拟模块或从非文件来源读取内容。</li>
-<li><code>transform</code> 拿到已加载的源码并改写，例如编译语法或注入代码，改动较大时应返回 Source Map。</li>
-<li>三个钩子按 解析 → 加载 → 转换 的顺序对每个模块执行，开发服务器和生产构建都会调用。</li>
-<li>虚拟模块的内部 ID 通常加 <code>\0</code> 前缀，避免其他插件把它当成真实文件处理。</li>
-</ul>
-<h2>虚拟模块示例</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/engineering/">工程化面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vite 插件的 resolveId、load 和 transform 分别做什么？</span></nav><h1 tabindex="-1">Vite 插件的 resolveId、load 和 transform 分别做什么？</h1><p class="reading-summary">resolveId 负责解析导入路径，load 负责提供源码，transform 负责改写源码。文中用一个虚拟版本模块讲内部 ID、返回值、开发和构建钩子、Source Map，以及插件为什么要按环境验证。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>代码里写了一个 <code>import</code>，Vite 要做三件事：先弄清楚它指的是哪个模块，再拿到这个模块的源码，最后对源码做加工。这三步分别对应 <code>resolveId</code>、<code>load</code> 和 <code>transform</code> 三个钩子。</p>
+<p><code>resolveId</code> 把导入路径变成一个模块 ID，不归它管就返回 <code>null</code>，交给下一个插件。<code>load</code> 根据 ID 返回源码，常用来做虚拟模块，也就是磁盘上不存在、由插件生成的模块。<code>transform</code> 拿到源码后改写，比如编译语法、注入代码。</p>
+<p>这三个钩子对每个模块按解析、加载、转换的顺序执行，开发服务器和生产构建都会调用。</p>
+<p>要注意两点。虚拟模块的内部 ID 一般加 <code>\0</code> 前缀，免得别的插件把它当成真实文件；<code>transform</code> 改动比较大时，要返回 Source Map，不然报错位置会错乱。</p>
+</blockquote>
+<h2>用一个虚拟模块看前两个钩子</h2>
+<p>下面的插件提供一个虚拟模块 <code>virtual:build-info</code>，业务代码导入它就能拿到构建时间。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// vite.config.js</span>
 <span class="hljs-keyword">import</span> { defineConfig } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vite&#x27;</span>;
 
@@ -61,12 +61,10 @@
 <span class="hljs-keyword">import</span> { builtAt } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;virtual:build-info&#x27;</span>;
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(builtAt);
 </code></pre></div>
-<ol>
-<li>遇到 <code>import &#x27;virtual:build-info&#x27;</code>，Vite 依次调用各插件的 <code>resolveId</code>，本插件返回内部 ID。</li>
-<li>对这个 ID 调用 <code>load</code>，本插件返回一段 ES 模块源码。</li>
-<li>源码再经过所有插件的 <code>transform</code>，最后被浏览器或打包器使用。</li>
-</ol>
-<h2>transform 示例</h2>
+<p>磁盘上并没有这个文件，那它是怎样被导入的？</p>
+<p>遇到 <code>import &#x27;virtual:build-info&#x27;</code> 时，Vite 依次调用各个插件的 <code>resolveId</code>，这个插件认出了它，返回内部 ID。接着 Vite 对这个 ID 调用 <code>load</code>，插件直接返回一段 ES 模块源码。这段源码再经过所有插件的 <code>transform</code>，最后交给浏览器或打包器。</p>
+<h2>transform 怎样改写代码</h2>
+<p>下面的插件只在构建时生效，把代码里的 <code>__DEBUG__</code> 换成 <code>false</code>。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">stripDebug</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">return</span> {
     <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;strip-debug&#x27;</span>,
@@ -78,23 +76,23 @@
   };
 }
 </code></pre></div>
-<ul>
-<li>先用 <code>id</code> 过滤，只处理需要的文件，避免拖慢所有模块。</li>
-<li>返回 <code>null</code> 表示不处理；返回字符串或 <code>{ code, map }</code> 表示替换源码。</li>
-<li>这里的替换不改变行列结构，<code>map: null</code> 可以接受；会增删行的改写应借助 <code>magic-string</code> 等工具生成 Source Map，否则报错位置会错乱。</li>
-</ul>
-<h2>其他要注意的地方</h2>
-<ul>
-<li><strong>执行时机</strong>：<code>apply: &#x27;serve&#x27;</code> 或 <code>&#x27;build&#x27;</code> 限制插件只在开发或构建时生效；<code>enforce: &#x27;pre&#x27;</code> / <code>&#x27;post&#x27;</code> 调整它相对于 Vite 核心插件的顺序。</li>
-<li><strong>Vite 特有钩子</strong>：<code>config</code>、<code>configResolved</code> 读取或修改配置，<code>configureServer</code> 给开发服务器加中间件，<code>transformIndexHtml</code> 改写 HTML，<code>handleHotUpdate</code> 自定义热更新。</li>
-<li><strong>兼容 Rollup 插件</strong>：<code>resolveId</code>、<code>load</code>、<code>transform</code> 是 Rollup 的通用钩子，Vite 在开发和构建中都按相同语义调用它们，所以很多 Rollup 插件可以直接使用。</li>
-<li><strong>验证</strong>：开发时模块逐个按需转换，构建时整体打包，同一插件在两种模式下看到的模块顺序和路径格式可能不同，两种模式都要测试。</li>
-</ul>
+<p>开头先用 <code>id</code> 和内容过滤，只处理需要的文件。因为 <code>transform</code> 会对每个模块调用，不过滤就会拖慢所有模块。</p>
+<p>返回 <code>null</code> 表示不处理。返回字符串，或者 <code>{ code, map }</code>，表示用新代码替换源码。</p>
+<p>为什么这里 <code>map</code> 可以写 <code>null</code>？因为这次替换不增删行，代码的行列结构基本没变。如果改写会增删行，就要借助 <code>magic-string</code> 这类工具生成 Source Map，否则报错位置会对不上。</p>
+<h2>还要注意哪些地方</h2>
+<p>插件的执行时机可以调。<code>apply: &#x27;serve&#x27;</code> 或 <code>&#x27;build&#x27;</code> 让插件只在开发或构建时生效；<code>enforce: &#x27;pre&#x27;</code> 或 <code>&#x27;post&#x27;</code> 调整它相对于 Vite 核心插件的顺序。</p>
+<p>Vite 还有自己特有的钩子。<code>config</code>、<code>configResolved</code> 用来读取或修改配置，<code>configureServer</code> 给开发服务器加中间件，<code>transformIndexHtml</code> 改写 HTML，<code>handleHotUpdate</code> 自定义热更新。</p>
+<p><code>resolveId</code>、<code>load</code>、<code>transform</code> 本身是 Rollup 的通用钩子，Vite 在开发和构建中都按相同的语义调用它们，所以很多 Rollup 插件可以直接用。</p>
+<p>可是开发和构建的过程并不一样。开发时模块是一个个按需转换的，构建时是整体打包，同一个插件在两种模式下看到的模块顺序和路径格式可能不同。所以两种模式都要测试。</p>
 <h2>常见追问</h2>
-<ul>
-<li><code>resolveId</code> 返回的 ID 一定是文件路径吗？不一定，可以是任意字符串，只要后续 <code>load</code> 能识别。</li>
-<li>为什么 <code>\0</code> 前缀很重要？其他插件和 Vite 内部约定跳过以 <code>\0</code> 开头的 ID，不会尝试从磁盘读取或再次转换路径。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://vite.dev/guide/api-plugin" target="_blank" rel="noreferrer">Vite · Plugin API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vite+%E6%8F%92%E4%BB%B6%E7%9A%84+resolveId%E3%80%81load+%E5%92%8C+transform+%E5%88%86%E5%88%AB%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVite+%E6%8F%92%E4%BB%B6%E7%9A%84+resolveId%E3%80%81load+%E5%92%8C+transform+%E5%88%86%E5%88%AB%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aengineering-vite-plugin%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fengineering-vite-plugin%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vite 插件的 resolveId、load 和 transform 分别做什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/eng-vite/">Vite 开发模式为什么启动快，生产环境为什么仍需要构建？</a></li><li><a href="/questions/eng-env/">为什么前端环境变量不能存放秘密？</a></li><li><a href="/questions/engineering-treeshaking/">Tree shaking 如何工作？为什么有些代码无法移除？</a></li><li><a href="/questions/engineering-lazy/">代码分割与懒加载适合哪些场景？</a></li></ul></nav></main></div></div>
+<p><strong><code>resolveId</code> 返回的 ID 一定是文件路径吗？</strong></p>
+<blockquote>
+<p>不一定。它可以是任意字符串，只要后面的 <code>load</code> 能认出来就行，虚拟模块就是这样做的。</p>
+</blockquote>
+<p><strong>为什么 <code>\0</code> 前缀很重要？</strong></p>
+<blockquote>
+<p>这是一个约定。其他插件和 Vite 内部看到以 <code>\0</code> 开头的 ID，就会跳过，不会尝试从磁盘读取它，也不会再去转换这个路径。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://vite.dev/guide/api-plugin" target="_blank" rel="noreferrer">Vite · Plugin API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vite+%E6%8F%92%E4%BB%B6%E7%9A%84+resolveId%E3%80%81load+%E5%92%8C+transform+%E5%88%86%E5%88%AB%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVite+%E6%8F%92%E4%BB%B6%E7%9A%84+resolveId%E3%80%81load+%E5%92%8C+transform+%E5%88%86%E5%88%AB%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aengineering-vite-plugin%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fengineering-vite-plugin%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vite 插件的 resolveId、load 和 transform 分别做什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/eng-vite/">Vite 开发模式为什么启动快，生产环境为什么仍需要构建？</a></li><li><a href="/questions/eng-env/">为什么前端环境变量不能存放秘密？</a></li><li><a href="/questions/engineering-treeshaking/">Tree shaking 如何工作？为什么有些代码无法移除？</a></li><li><a href="/questions/engineering-lazy/">代码分割与懒加载适合哪些场景？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

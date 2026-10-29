@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="小程序与跨端面试题：从 Shadow 树规模、更新数据量、调用频率和后台页面四个方面说明 setData 的性能影响因素与官方优化建议。" />
+    <meta name="description" content="小程序与跨端面试题：每次 setData 都要把数据传到视图层再重新渲染，传得多、调得勤就会卡。" />
     <title>setData 为什么会慢？如何优化小程序的数据更新？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/mini-setdata/" />
     <meta name="robots" content="index,follow" />
@@ -19,28 +19,30 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="setData 为什么会慢？如何优化小程序的数据更新？" />
-    <meta property="og:description" content="小程序与跨端面试题：从 Shadow 树规模、更新数据量、调用频率和后台页面四个方面说明 setData 的性能影响因素与官方优化建议。" />
+    <meta property="og:description" content="小程序与跨端面试题：每次 setData 都要把数据传到视图层再重新渲染，传得多、调得勤就会卡。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/mini-setdata/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/mini-setdata/#webpage","url":"https://fe.hushifa.top/questions/mini-setdata/","name":"setData 为什么会慢？如何优化小程序的数据更新？","description":"小程序与跨端面试题：从 Shadow 树规模、更新数据量、调用频率和后台页面四个方面说明 setData 的性能影响因素与官方优化建议。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/mini-setdata/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/mini-setdata/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"小程序与跨端面试题","item":"https://fe.hushifa.top/topics/mini-program/"},{"@type":"ListItem","position":3,"name":"setData 为什么会慢？如何优化小程序的数据更新？","item":"https://fe.hushifa.top/questions/mini-setdata/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/mini-setdata/#webpage","url":"https://fe.hushifa.top/questions/mini-setdata/","name":"setData 为什么会慢？如何优化小程序的数据更新？","description":"小程序与跨端面试题：每次 setData 都要把数据传到视图层再重新渲染，传得多、调得勤就会卡。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/mini-setdata/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/mini-setdata/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"小程序与跨端面试题","item":"https://fe.hushifa.top/topics/mini-program/"},{"@type":"ListItem","position":3,"name":"setData 为什么会慢？如何优化小程序的数据更新？","item":"https://fe.hushifa.top/questions/mini-setdata/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/mini-program/">小程序与跨端面试题</a><span aria-hidden="true">/</span><span aria-current="page">setData 为什么会慢？如何优化小程序的数据更新？</span></nav><h1 tabindex="-1">setData 为什么会慢？如何优化小程序的数据更新？</h1><p class="reading-summary">从 Shadow 树规模、更新数据量、调用频率和后台页面四个方面说明 setData 的性能影响因素与官方优化建议。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>官方列出的两个主要因素是：调用 <code>setData</code> 的组件 Shadow 树节点总量，以及更新的数据量，前者影响更大。</li>
-<li>合理拆分组件、控制单个 Shadow 树的大小，是最有效的优化手段。</li>
-<li>只传变化的字段，可以用数据路径（如 <code>&#x27;list[3].done&#x27;</code>）更新局部，不要 <code>this.setData(this.data)</code>。</li>
-<li><code>data</code> 只放渲染用到的数据，渲染无关的数据挂在实例的其他字段上。</li>
-<li>合并连续调用、避免高频调用，页面进入后台后停止更新。</li>
-</ul>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/mini-program/">小程序与跨端面试题</a><span aria-hidden="true">/</span><span aria-current="page">setData 为什么会慢？如何优化小程序的数据更新？</span></nav><h1 tabindex="-1">setData 为什么会慢？如何优化小程序的数据更新？</h1><p class="reading-summary">每次 setData 都要把数据传到视图层再重新渲染，传得多、调得勤就会卡。从 Shadow 树规模、更新数据量、调用频率和后台页面四个方面讲 setData 的性能影响因素与官方优化建议。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>小程序里改界面只能调 <code>setData</code>。它要把逻辑层的数据序列化后发给视图层，视图层再算出哪些节点要变、重新渲染。所以它慢不慢，主要看两件事：调用它的组件 Shadow 树有多少节点，以及这次传了多少数据。官方说前者影响更大。</p>
+<p>所以最有效的办法是拆组件，让每棵 Shadow 树都小一点，频繁更新的部分在小组件里自己 <code>setData</code>。</p>
+<p>其次是少传数据。只传变了的字段，可以用 <code>&#x27;list[3].done&#x27;</code> 这样的数据路径更新局部，不要 <code>this.setData(this.data)</code>。<code>data</code> 里只放渲染要用的东西，别的挂到实例的其他字段上。</p>
+<p>最后是控制频率：连续的调用合并成一次，不要高频调用，页面进了后台就停止更新。</p>
+</blockquote>
 <h2>为什么会慢</h2>
-<p><code>setData</code> 把逻辑层的数据序列化后发送给视图层，视图层再运行数据更新算法、重新渲染。官方文档指出，这个算法的耗时和 Shadow 树中的节点总量、节点复杂程度显著正相关；更新的数据量则影响数据拷贝和通信耗时。</p>
-<p>调用过于频繁（毫秒级）时，逻辑层 JS 线程一直忙碌，无法及时响应用户事件和页面切换；视图层也忙于处理更新，滑动卡顿、操作反馈延迟。</p>
-<h2>拆分组件，缩小 Shadow 树</h2>
-<p>页面节点很多时，把频繁更新的部分封装成独立的自定义组件，在组件内部调用 <code>setData</code>。这样每次更新只在小组件的 Shadow 树上运行算法。秒杀倒计时就是典型场景：倒计时放进单独组件，不要在整个页面上每秒更新。</p>
-<p>官方还建议对这类区域使用 CSS <code>contain</code> 属性，限制布局、样式和绘制的计算范围。</p>
-<h2>只传变化的数据</h2>
+<p>先解释一个词。小程序的自定义组件内部有一棵自己的节点树，叫 Shadow 树，<code>setData</code> 的更新就是在这棵树上算的。</p>
+<p><code>setData</code> 把逻辑层的数据序列化，发到视图层，视图层跑一遍数据更新算法，再重新渲染。官方文档指出，这个算法的耗时和 Shadow 树里的节点总数、节点复杂程度明显正相关。更新的数据量，则影响数据拷贝和通信的耗时。</p>
+<p>调用太频繁，比如毫秒级地调，逻辑层的 JS 线程就一直在忙，来不及响应用户的操作和页面切换。视图层也忙着处理更新，结果就是滑动卡顿、点了半天没反应。</p>
+<h2>为什么拆组件最有效</h2>
+<p>页面节点很多时，把经常更新的那部分封装成一个独立的自定义组件，在组件里面调用 <code>setData</code>。这样每次更新只在这个小组件的 Shadow 树上跑算法，而不是整个页面。</p>
+<p>秒杀倒计时就是典型例子。倒计时每秒都变，要是在页面上直接更新，每秒都要在整页的大树上算一遍。把它放进单独的组件，每秒只算这一小块。</p>
+<p>官方还建议给这类区域加上 CSS 的 <code>contain</code> 属性，限制布局、样式和绘制的计算范围。</p>
+<h2>怎样只传变化的数据</h2>
+<p>下面的代码切换列表里某一项的完成状态，只传这一项的这一个字段：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-title class_">Page</span>({
   <span class="hljs-attr">data</span>: { <span class="hljs-attr">list</span>: [] },
   <span class="hljs-title function_">toggle</span>(<span class="hljs-params">e</span>) {
@@ -50,27 +52,27 @@
   },
 });
 </code></pre></div>
-<p>长列表应分页加载，加载更多时只追加新的条目路径。</p>
-<h2>data 只放渲染数据</h2>
-<p><code>data</code> 中的字段每次更新都会触发渲染流程和跨层通信，因此：</p>
-<ul>
-<li>WXML 中用到的数据放在 <code>data</code>；</li>
-<li>与渲染间接相关的数据可以设为纯数据字段，用 <code>observers</code> 监听变化；</li>
-<li>用户 ID、计时器句柄等与渲染无关的数据挂到 <code>this.userData</code> 之类的普通字段上，不要用 <code>data</code> 在方法之间共享状态。</li>
-</ul>
-<h2>控制频率和后台更新</h2>
-<ul>
-<li>只在界面需要变化时调用，把同一轮里的多次 <code>setData</code> 合并为一次。</li>
-<li>不要在每次页面滚动回调里调用 <code>setData</code>，可以节流或改用 WXS、IntersectionObserver 等方式。</li>
-<li>小程序逻辑层是单线程，后台页面的更新会抢占前台页面的资源，用户也看不到。页面隐藏后应暂停倒计时等更新，<code>onShow</code> 时再恢复。</li>
-</ul>
-<h2>如何定位</h2>
-<p>组件的 <code>setUpdatePerformanceListener</code> 接口可以获取每次更新的耗时统计，用来找到更新慢的组件。再结合开发者工具的性能面板和真机测试确认结果。</p>
+<p>如果写成把整个 <code>list</code> 重新传一遍，列表越长传得越多。用数据路径 <code>list[3].done</code> 这种写法，传的只有一个布尔值。</p>
+<p>长列表还应该分页加载，加载更多时也只追加新条目的路径。</p>
+<h2>data 里该放什么</h2>
+<p><code>data</code> 里的字段每次更新，都会触发渲染流程和跨层通信。所以 WXML 里用到的数据才放进 <code>data</code>。</p>
+<p>和渲染间接相关的数据，可以设成纯数据字段，再用 <code>observers</code> 监听它的变化。纯数据字段的意思是它在 <code>data</code> 里，但不参与渲染、不传到视图层。</p>
+<p>用户 ID、定时器句柄这类跟渲染完全无关的东西，挂到 <code>this.userData</code> 之类的普通字段上，不要拿 <code>data</code> 在方法之间共享状态。</p>
+<h2>怎样控制调用频率</h2>
+<p>只在界面确实需要变的时候才调用，同一轮里的多次 <code>setData</code> 合并成一次。</p>
+<p>页面滚动的回调触发得非常频繁，不要在里面每次都调 <code>setData</code>。可以节流，或者改用 WXS、IntersectionObserver 这类方式。</p>
+<p>后台页面也要注意。小程序的逻辑层是单线程的，后台页面的更新会抢前台页面的资源，而用户根本看不到。所以页面隐藏以后，要暂停倒计时这类更新，<code>onShow</code> 时再恢复。</p>
+<h2>怎样找到慢的地方</h2>
+<p>组件的 <code>setUpdatePerformanceListener</code> 接口能拿到每次更新的耗时统计，用它找出更新慢的组件。然后再结合开发者工具的性能面板和真机测试确认结果。</p>
 <h2>常见追问</h2>
-<ul>
-<li><code>setData</code> 是同步还是异步？逻辑层的 <code>this.data</code> 会同步更新，视图层渲染是异步的，需要在渲染完成后执行的逻辑放进 <code>setData</code> 的回调。</li>
-<li>Taro、uni-app 还需要关注 setData 吗？需要。框架最终仍通过 setData 更新视图，组件拆分和数据量由业务代码决定，原理见<a href="/questions/mini-cross-compile/">《Taro 和 uni-app 如何把代码转换成小程序？编译时和运行时有什么区别？》</a>。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developers.weixin.qq.com/miniprogram/dev/framework/performance/tips/runtime_setData.html" target="_blank" rel="noreferrer">微信开放文档 · 合理使用 setData<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+setData+%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%85%A2%EF%BC%9F%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%95%B0%E6%8D%AE%E6%9B%B4%E6%96%B0%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AsetData+%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%85%A2%EF%BC%9F%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%95%B0%E6%8D%AE%E6%9B%B4%E6%96%B0%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Amini-setdata%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B0%8F%E7%A8%8B%E5%BA%8F%E4%B8%8E%E8%B7%A8%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fmini-setdata%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：setData 为什么会慢？如何优化小程序的数据更新？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/mobile-mini-program-platform-differences/">Web、微信小程序和跨端框架的运行边界有什么不同？</a></li><li><a href="/questions/mini-dual-thread/">小程序的双线程模型是什么？逻辑层和渲染层如何协作？</a></li><li><a href="/questions/mini-subpackage/">小程序的分包、独立分包和分包预下载分别解决什么问题？</a></li><li><a href="/questions/mini-cross-compile/">Taro 和 uni-app 如何把代码转换成小程序？编译时和运行时有什么区别？</a></li></ul></nav></main></div></div>
+<p><strong>setData 是同步还是异步？</strong></p>
+<blockquote>
+<p>两半不一样。逻辑层的 <code>this.data</code> 会同步更新，调完马上就能读到新值；视图层的渲染是异步的。所以要等渲染完成再做的事，放进 <code>setData</code> 的回调里。</p>
+</blockquote>
+<p><strong>用 Taro、uni-app 还需要关注 setData 吗？</strong></p>
+<blockquote>
+<p>需要。框架最后还是通过 setData 去更新视图，组件怎么拆、一次传多少数据，仍然由业务代码决定。原理见<a href="/questions/mini-cross-compile/">《Taro 和 uni-app 如何把代码转换成小程序？编译时和运行时有什么区别？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developers.weixin.qq.com/miniprogram/dev/framework/performance/tips/runtime_setData.html" target="_blank" rel="noreferrer">微信开放文档 · 合理使用 setData<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+setData+%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%85%A2%EF%BC%9F%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%95%B0%E6%8D%AE%E6%9B%B4%E6%96%B0%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AsetData+%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%85%A2%EF%BC%9F%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%95%B0%E6%8D%AE%E6%9B%B4%E6%96%B0%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Amini-setdata%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B0%8F%E7%A8%8B%E5%BA%8F%E4%B8%8E%E8%B7%A8%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fmini-setdata%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：setData 为什么会慢？如何优化小程序的数据更新？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/mobile-mini-program-platform-differences/">Web、微信小程序和跨端框架的运行边界有什么不同？</a></li><li><a href="/questions/mini-dual-thread/">小程序的双线程模型是什么？逻辑层和渲染层如何协作？</a></li><li><a href="/questions/mini-subpackage/">小程序的分包、独立分包和分包预下载分别解决什么问题？</a></li><li><a href="/questions/mini-cross-compile/">Taro 和 uni-app 如何把代码转换成小程序？编译时和运行时有什么区别？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

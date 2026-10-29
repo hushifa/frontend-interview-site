@@ -1,0 +1,158 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>先分清哪些失败值得重试。429、502、503、504 和网络中断，过一会儿可能自己就好了，可以重试。400、401、403、404 和业务校验失败，原样再发一遍也不会成功，不要重试。</p>
+<p>次数要有上限，<code>maxAttempts</code> 包括第一次请求。等待时间用指数退避加随机抖动：上限每轮翻倍并封顶，实际等待在 0 到上限之间随机取，这样大量客户端不会在同一时刻一起重试。服务端返回了 <code>Retry-After</code>，等待就不能比它短；它要求的时间超过我们能接受的上限，就不再重试，把错误交给界面。</p>
+<p>重试要能取消。每次请求前后都检查取消信号，等待的时候也监听它，用户离开页面以后就不会再发下一轮。</p>
+<p>最要小心的是写操作。超时不代表服务端没执行，创建订单这类请求要带一个幂等键，每次重试都用同一个键，由服务端去重。</p>
+</blockquote>
+<h2>先分清是什么失败</h2>
+<p><code>fetch</code> 有个容易误会的地方：收到 404 或 503，它不会抛错，照样正常返回一个 Response。所以要自己检查 <code>response.ok</code> 和状态码。</p>
+<p>反过来，网络断开、被 CORS 拒绝、URL 写错，都会抛出 <code>TypeError</code>。光看错误类型，分不出是“网络抖了一下”还是“地址根本不对”。所以哪些错误能重试，要由调用方按接口的约定告诉重试函数，重试函数自己猜不出来。</p>
+<h2>一个通用的重试函数</h2>
+<p>函数的参数约定是这样的：<code>request</code> 接收这是第几次尝试和取消信号；<code>shouldRetry</code> 同步返回要不要重试，默认不重试；<code>getRetryAfter</code> 返回服务端要求等多少毫秒，没有要求就返回 <code>null</code>。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">waitForRetry</span>(<span class="hljs-params">ms, signal</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (signal?.<span class="hljs-property">aborted</span>) {
+      <span class="hljs-title function_">reject</span>(signal.<span class="hljs-property">reason</span>);
+      <span class="hljs-keyword">return</span>;
+    }
+
+    <span class="hljs-keyword">const</span> timer = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+      signal?.<span class="hljs-title function_">removeEventListener</span>(<span class="hljs-string">&#x27;abort&#x27;</span>, onAbort);
+      <span class="hljs-title function_">resolve</span>();
+    }, ms);
+
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">onAbort</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-built_in">clearTimeout</span>(timer);
+      <span class="hljs-title function_">reject</span>(signal.<span class="hljs-property">reason</span>);
+    }
+
+    signal?.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;abort&#x27;</span>, onAbort, { <span class="hljs-attr">once</span>: <span class="hljs-literal">true</span> });
+  });
+}
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">requestWithRetry</span>(<span class="hljs-params">request, {
+  maxAttempts = <span class="hljs-number">3</span>,
+  baseDelayMs = <span class="hljs-number">200</span>,
+  maxDelayMs = <span class="hljs-number">5000</span>,
+  shouldRetry = () =&gt; <span class="hljs-literal">false</span>,
+  getRetryAfter = () =&gt; <span class="hljs-literal">null</span>,
+  signal,
+} = {}</span>) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> request !== <span class="hljs-string">&#x27;function&#x27;</span> || <span class="hljs-keyword">typeof</span> shouldRetry !== <span class="hljs-string">&#x27;function&#x27;</span> || <span class="hljs-keyword">typeof</span> getRetryAfter !== <span class="hljs-string">&#x27;function&#x27;</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;请求和重试策略必须是函数&#x27;</span>);
+  }
+  <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Number</span>.<span class="hljs-title function_">isSafeInteger</span>(maxAttempts) || maxAttempts &lt; <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RangeError</span>(<span class="hljs-string">&#x27;尝试次数必须为正整数&#x27;</span>);
+  }
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> delay <span class="hljs-keyword">of</span> [baseDelayMs, maxDelayMs]) {
+    <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Number</span>.<span class="hljs-title function_">isInteger</span>(delay) || delay &lt; <span class="hljs-number">0</span> || delay &gt; <span class="hljs-number">2_147_483_647</span>) {
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RangeError</span>(<span class="hljs-string">&#x27;等待参数必须是计时器范围内的非负整数&#x27;</span>);
+    }
+  }
+
+  <span class="hljs-keyword">let</span> delayCap = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(baseDelayMs, maxDelayMs);
+
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> attempt = <span class="hljs-number">1</span>; attempt &lt;= maxAttempts; attempt += <span class="hljs-number">1</span>) {
+    signal?.<span class="hljs-title function_">throwIfAborted</span>();
+    <span class="hljs-keyword">try</span> {
+      <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> <span class="hljs-title function_">request</span>({ attempt, signal });
+      signal?.<span class="hljs-title function_">throwIfAborted</span>();
+      <span class="hljs-keyword">return</span> result;
+    } <span class="hljs-keyword">catch</span> (error) {
+      signal?.<span class="hljs-title function_">throwIfAborted</span>();
+      <span class="hljs-keyword">if</span> (attempt === maxAttempts) <span class="hljs-keyword">throw</span> error;
+
+      <span class="hljs-keyword">const</span> retryable = <span class="hljs-title function_">shouldRetry</span>(error, attempt);
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> retryable !== <span class="hljs-string">&#x27;boolean&#x27;</span>) {
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;shouldRetry 必须同步返回布尔值&#x27;</span>);
+      }
+      <span class="hljs-keyword">if</span> (!retryable) <span class="hljs-keyword">throw</span> error;
+
+      <span class="hljs-keyword">const</span> retryAfterMs = <span class="hljs-title function_">getRetryAfter</span>(error, attempt);
+      <span class="hljs-keyword">if</span> (retryAfterMs !== <span class="hljs-literal">null</span> &amp;&amp; (<span class="hljs-keyword">typeof</span> retryAfterMs !== <span class="hljs-string">&#x27;number&#x27;</span> || <span class="hljs-title class_">Number</span>.<span class="hljs-built_in">isNaN</span>(retryAfterMs) || retryAfterMs &lt; <span class="hljs-number">0</span>)) {
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;服务端等待时间必须为非负毫秒或 null&#x27;</span>);
+      }
+      <span class="hljs-keyword">if</span> (retryAfterMs !== <span class="hljs-literal">null</span> &amp;&amp; retryAfterMs &gt; maxDelayMs) <span class="hljs-keyword">throw</span> error;
+
+      <span class="hljs-keyword">const</span> jitter = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * (delayCap + <span class="hljs-number">1</span>));
+      <span class="hljs-keyword">await</span> <span class="hljs-title function_">waitForRetry</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(jitter, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">ceil</span>(retryAfterMs ?? <span class="hljs-number">0</span>)), signal);
+      delayCap = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(maxDelayMs, delayCap * <span class="hljs-number">2</span>);
+    }
+  }
+}
+</code></pre></div>
+<p>代码有点长，我们按读者会问的问题一个个看。</p>
+<p><strong>为什么等待时间要随机？</strong> 设想服务挂了一分钟，几千个客户端同时失败。如果大家都等固定的 200 毫秒再试，服务刚恢复，就会在同一瞬间被几千个请求再打趴下。所以这里的 <code>delayCap</code> 依次是 200、400、800 毫秒……一直涨到 <code>maxDelayMs</code> 封顶，这叫指数退避；每次实际等待的时间在 <code>[0, delayCap]</code> 里随机取，这叫抖动。大家的重试时间就被分散开了。</p>
+<p><strong><code>Retry-After</code> 和随机等待怎么配合？</strong> 取两者中较大的那个，服务端要求的时间是下限。如果服务端要求等的时间比 <code>maxDelayMs</code> 还长，函数直接抛出错误，不自作主张地缩短等待。</p>
+<p><strong>取消是怎么做到的？</strong> <code>waitForRetry</code> 在等待期间监听取消信号。一旦取消，就清掉定时器、移除监听器，用 <code>signal.reason</code> 拒绝。另外，有的请求函数本身不理会取消信号，所以请求结束后还会再检查一次，防止用户已经离开了，却把过期的结果当成成功返回。</p>
+<p><strong>次数用完了抛什么？</strong> 抛最后一次的真实错误。这样调用方还能看到状态码，而不是一个笼统的“重试失败”。</p>
+<h2>解析 Retry-After</h2>
+<p><code>Retry-After</code> 有两种写法，可以是秒数，比如 <code>120</code>，也可以是一个 HTTP 日期。下面的函数把它统一换成毫秒：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">retryAfterMilliseconds</span>(<span class="hljs-params">value, now = <span class="hljs-built_in">Date</span>.now()</span>) {
+  <span class="hljs-keyword">if</span> (value === <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">const</span> text = value.<span class="hljs-title function_">trim</span>();
+  <span class="hljs-comment">// 空头视为服务端没有提出等待要求，交给常规退避</span>
+  <span class="hljs-keyword">if</span> (text === <span class="hljs-string">&#x27;&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">if</span> (<span class="hljs-regexp">/^\\d+$/</span>.<span class="hljs-title function_">test</span>(text)) <span class="hljs-keyword">return</span> <span class="hljs-title class_">Number</span>(text) * <span class="hljs-number">1000</span>;
+
+  <span class="hljs-keyword">const</span> timestamp = <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">parse</span>(text);
+  <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Number</span>.<span class="hljs-built_in">isFinite</span>(timestamp) || <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(timestamp).<span class="hljs-title function_">toUTCString</span>() !== text) {
+    <span class="hljs-keyword">return</span> <span class="hljs-title class_">Infinity</span>;
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(<span class="hljs-number">0</span>, timestamp - now);
+}
+</code></pre></div>
+<p>没有这个头，或者它是空字符串，都说明服务端没提要求，返回 <code>null</code>，交给常规的退避。</p>
+<p>那为什么看不懂的值要返回 <code>Infinity</code>，而不是也返回 <code>null</code>？因为服务端明明给了一个等待要求，只是我们解析不了。如果当作没有要求，就可能在服务端让我们等的时候提前发请求。返回 <code>Infinity</code> 以后，它一定超过 <code>maxDelayMs</code>，上面的函数就会停止重试，这样更保守。</p>
+<h2>用在一个只读接口上</h2>
+<p>下面把前面两个函数组合起来，加载一个商品目录：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">HttpResponseError</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Error</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">status, retryAfter</span>) {
+    <span class="hljs-variable language_">super</span>(<span class="hljs-string">\`HTTP <span class="hljs-subst">\${status}</span>\`</span>);
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = <span class="hljs-string">&#x27;HttpResponseError&#x27;</span>;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">status</span> = status;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">retryAfter</span> = retryAfter;
+  }
+}
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">loadCatalog</span>(<span class="hljs-params">signal</span>) {
+  <span class="hljs-keyword">const</span> timeout = <span class="hljs-title class_">AbortSignal</span>.<span class="hljs-title function_">timeout</span>(<span class="hljs-number">10_000</span>);
+  <span class="hljs-keyword">const</span> combined = signal ? <span class="hljs-title class_">AbortSignal</span>.<span class="hljs-title function_">any</span>([signal, timeout]) : timeout;
+
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">requestWithRetry</span>(<span class="hljs-title function_">async</span> ({ signal }) =&gt; {
+    <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;/api/catalog&#x27;</span>, { signal });
+    <span class="hljs-keyword">if</span> (!response.<span class="hljs-property">ok</span>) {
+      <span class="hljs-keyword">const</span> error = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HttpResponseError</span>(response.<span class="hljs-property">status</span>, response.<span class="hljs-property">headers</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;Retry-After&#x27;</span>));
+      <span class="hljs-keyword">await</span> response.<span class="hljs-property">body</span>?.<span class="hljs-title function_">cancel</span>();
+      <span class="hljs-keyword">throw</span> error;
+    }
+    <span class="hljs-keyword">return</span> response.<span class="hljs-title function_">json</span>();
+  }, {
+    <span class="hljs-attr">signal</span>: combined,
+    <span class="hljs-attr">maxAttempts</span>: <span class="hljs-number">3</span>,
+    <span class="hljs-attr">shouldRetry</span>: <span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> error <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">HttpResponseError</span> &amp;&amp; [<span class="hljs-number">429</span>, <span class="hljs-number">502</span>, <span class="hljs-number">503</span>, <span class="hljs-number">504</span>].<span class="hljs-title function_">includes</span>(error.<span class="hljs-property">status</span>),
+    <span class="hljs-attr">getRetryAfter</span>: <span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> <span class="hljs-title function_">retryAfterMilliseconds</span>(error.<span class="hljs-property">retryAfter</span>),
+  });
+}
+</code></pre></div>
+<p>每次重试都会重新调用一次 <code>fetch</code>。如果请求带了请求体，要保证每次都能重新生成，因为一个流读过一次就不能再发了。</p>
+<p>失败的响应调用了 <code>body.cancel()</code>，这是为了把连接释放掉，不然没读完的响应体会一直占着连接。</p>
+<p><code>AbortSignal.timeout</code> 限制的是整个加载过程的总时长，包括所有重试和等待。<code>AbortSignal.any</code> 把它和调用方传进来的取消信号合成一个，哪个先触发都会取消。</p>
+<h2>写操作为什么不能随便重试</h2>
+<p>客户端等超时了，可是订单可能已经在服务端创建好了，只是响应在路上丢了。这时直接重试，用户就会下两单。</p>
+<p>安全的做法是用幂等键，也就是“同一个键只处理一次”的标记。用户点提交时生成一个键，比如 <code>crypto.randomUUID()</code>；每次重试都在请求头里带上同一个键；服务端记下处理过的键，重复的请求直接返回第一次的结果。</p>
+<p>如果服务端不支持幂等键，就不要自动重试写操作。超时以后先去查订单状态，再决定要不要重新提交。</p>
+<h2>常见追问</h2>
+<p><strong>前端、网关、SDK 都做了重试会怎样？</strong></p>
+<blockquote>
+<p>次数会相乘。每层重试 3 次，一个用户操作最多会变成 27 次请求。所以要约定好，只让一层负责重试。</p>
+</blockquote>
+<p><strong>浏览器离线时还要重试吗？</strong></p>
+<blockquote>
+<p>不用按退避循环白白消耗次数。可以监听 <code>online</code> 事件，等恢复联网以后再发起请求。</p>
+</blockquote>
+<p><strong>重试和防抖、节流有什么关系？</strong></p>
+<blockquote>
+<p>防抖和节流控制的是用户触发得有多频繁，重试处理的是请求失败以后怎么恢复。它们管的是两件事，经常一起用在搜索框上。</p>
+</blockquote>`};export{e as default};

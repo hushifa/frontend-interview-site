@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="JavaScript面试题：普通函数的 this 由调用方式决定：方法调用、直接调用、call/apply/bind、new 各不相同。" />
+    <meta name="description" content="JavaScript面试题：普通函数的 this 看它是怎么被调用的，谁调用它，this 一般就是谁。" />
     <title>普通函数和箭头函数的 this 有什么区别？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/js-this/" />
     <meta name="robots" content="index,follow" />
@@ -19,21 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="普通函数和箭头函数的 this 有什么区别？ · 前端知库" />
-    <meta property="og:description" content="JavaScript面试题：普通函数的 this 由调用方式决定：方法调用、直接调用、call/apply/bind、new 各不相同。" />
+    <meta property="og:description" content="JavaScript面试题：普通函数的 this 看它是怎么被调用的，谁调用它，this 一般就是谁。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/js-this/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-this/#webpage","url":"https://fe.hushifa.top/questions/js-this/","name":"普通函数和箭头函数的 this 有什么区别？ · 前端知库","description":"JavaScript面试题：普通函数的 this 由调用方式决定：方法调用、直接调用、call/apply/bind、new 各不相同。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-this/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-this/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"普通函数和箭头函数的 this 有什么区别？","item":"https://fe.hushifa.top/questions/js-this/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-this/#webpage","url":"https://fe.hushifa.top/questions/js-this/","name":"普通函数和箭头函数的 this 有什么区别？ · 前端知库","description":"JavaScript面试题：普通函数的 this 看它是怎么被调用的，谁调用它，this 一般就是谁。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-this/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-this/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"普通函数和箭头函数的 this 有什么区别？","item":"https://fe.hushifa.top/questions/js-this/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">普通函数和箭头函数的 this 有什么区别？</span></nav><h1 tabindex="-1">普通函数和箭头函数的 this 有什么区别？</h1><p class="reading-summary">普通函数的 this 由调用方式决定：方法调用、直接调用、call/apply/bind、new 各不相同。箭头函数没有自己的 this，沿用定义时外层作用域的 this，call 和 bind 也改不了它。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>普通函数的 <code>this</code> 在调用时确定：<code>obj.fn()</code> 是 <code>obj</code>，直接调用 <code>fn()</code> 在严格模式下是 <code>undefined</code>，<code>new</code> 调用是新实例。</li>
-<li><code>call</code>、<code>apply</code> 临时指定 <code>this</code>，<code>bind</code> 返回固定了 <code>this</code> 的新函数；优先级为 <code>new</code> &gt; <code>bind</code> &gt; <code>call/apply</code> &gt; 方法调用 &gt; 直接调用。</li>
-<li>箭头函数没有自己的 <code>this</code>，按词法作用域读取定义位置外层的 <code>this</code>，<code>call</code>、<code>bind</code> 都改不了；箭头函数也不能用 <code>new</code> 调用。</li>
-<li>方法被单独取出后直接调用会丢失接收者，常见于回调和解构。</li>
-</ul>
-<h2>示例</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">普通函数和箭头函数的 this 有什么区别？</span></nav><h1 tabindex="-1">普通函数和箭头函数的 this 有什么区别？</h1><p class="reading-summary">普通函数的 this 看它是怎么被调用的，谁调用它，this 一般就是谁。箭头函数没有自己的 this，用的是定义它的地方外层的 this，call 和 bind 也改不了。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>普通函数的 <code>this</code> 不是写代码时定的，而是调用的时候才定。写成 <code>obj.fn()</code>，<code>this</code> 就是 <code>obj</code>；直接写 <code>fn()</code>，严格模式下 <code>this</code> 是 <code>undefined</code>；用 <code>new</code> 调用，<code>this</code> 是新创建的实例。</p>
+<p>想手动指定也可以。<code>call</code>、<code>apply</code> 是这一次调用临时指定 <code>this</code>，<code>bind</code> 是返回一个把 <code>this</code> 固定住的新函数。几种情况同时出现时，优先级是 <code>new</code> 最高，然后是 <code>bind</code>，然后是 <code>call</code>、<code>apply</code>，再是 <code>obj.fn()</code> 这种方法调用，最后是直接调用。</p>
+<p>箭头函数不一样，它自己没有 <code>this</code>。在箭头函数里写 <code>this</code>，就像读一个外层变量，读的是定义它的位置外层的 <code>this</code>。所以 <code>call</code>、<code>bind</code> 都改不了它，它也不能用 <code>new</code> 调用。</p>
+<p>最常踩的坑是把方法单独拿出来用，比如当成回调传给 <code>setInterval</code>，或者从对象里解构出来。这时候调用的地方没有 <code>obj.</code> 了，<code>this</code> 就丢了。</p>
+</blockquote>
+<h2>先看一个例子</h2>
+<p>下面这个例子把几种调用方式放在一起。注意看同一个 <code>read</code> 方法，换一种调用方式，结果就不一样。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-meta">&#x27;use strict&#x27;</span>;
 
 <span class="hljs-keyword">const</span> obj = {
@@ -62,14 +63,57 @@
 obj.<span class="hljs-property">value</span> = <span class="hljs-number">99</span>;
 <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">later</span>()); <span class="hljs-comment">// 99</span>
 </code></pre></div>
-<ul>
-<li><code>read()</code> 直接调用，严格模式下 <code>this</code> 是 <code>undefined</code>，读取属性抛 <code>TypeError</code>。非严格模式下 <code>this</code> 是全局对象，结果是 <code>undefined</code> 而不是报错。ES 模块和 class 内部默认是严格模式。</li>
-<li><code>later()</code> 返回的箭头函数在 <code>later</code> 执行时定义，<code>this</code> 固定为 <code>obj</code>。<code>call</code> 传入的对象被忽略；之后修改 <code>obj.value</code>，箭头函数读到的是新值。</li>
-</ul>
-<h2>判定规则</h2>
+<p><code>obj.read()</code> 返回 42，这很好理解，前面有 <code>obj.</code>，<code>this</code> 就是 <code>obj</code>。</p>
+<p>可是把它赋给 <code>read</code> 再调用，就报了 <code>TypeError</code>。函数还是同一个函数，变的只是调用方式。<code>read()</code> 前面什么都没有，严格模式下 <code>this</code> 就是 <code>undefined</code>，读 <code>undefined.value</code> 当然报错。如果不是严格模式，<code>this</code> 会变成全局对象，结果是返回 <code>undefined</code>，不会报错。要注意 ES 模块和 class 里面默认就是严格模式。</p>
+<p>再用 <code>read.call({ value: 7 })</code>，<code>this</code> 被临时指定成了传进去的对象，所以得到 7。</p>
+<p>最后看箭头函数。<code>later</code> 返回的箭头函数，是在 <code>obj.later()</code> 执行的时候定义的，那时外层 <code>later</code> 的 <code>this</code> 是 <code>obj</code>，所以箭头函数里的 <code>this</code> 也是 <code>obj</code>。用 <code>call</code> 传别的对象进去，它直接忽略，还是返回 42。之后把 <code>obj.value</code> 改成 99，再调用就读到 99，因为它拿到的是 <code>obj</code> 这个对象，读的是对象上当前的值。</p>
+<h2>普通函数的 this 怎么判断</h2>
+<p>判断普通函数的 <code>this</code>，只看调用的那一行怎么写的，跟函数定义在哪里没有关系。按优先级从高到低排一下：</p>
 <table><thead><tr><th>调用方式</th><th><code>this</code></th></tr></thead><tbody><tr><td><code>new Fn()</code></td><td>新创建的实例</td></tr><tr><td><code>fn.bind(o)()</code></td><td><code>o</code>（再次 bind 无效）</td></tr><tr><td><code>fn.call(o)</code> / <code>fn.apply(o)</code></td><td><code>o</code></td></tr><tr><td><code>obj.fn()</code></td><td><code>obj</code></td></tr><tr><td><code>fn()</code></td><td>严格模式 <code>undefined</code>，否则全局对象</td></tr><tr><td>箭头函数</td><td>外层作用域的 <code>this</code></td></tr></tbody></table>
-<p>DOM 事件监听器用普通函数时，<code>this</code> 是 <code>currentTarget</code>；用箭头函数时是外层的 <code>this</code>。</p>
-<h2>回调中丢失 this</h2>
+<p>表里有两处值得用代码确认一下：<code>bind</code> 过的函数再 <code>bind</code> 一次没用，而 <code>new</code> 能盖过 <code>bind</code>。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">Person</span>(<span class="hljs-params">name</span>) {
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = name;
+}
+
+<span class="hljs-keyword">const</span> bound = <span class="hljs-title class_">Person</span>.<span class="hljs-title function_">bind</span>({ <span class="hljs-attr">tag</span>: <span class="hljs-string">&#x27;绑定的对象&#x27;</span> });
+<span class="hljs-keyword">const</span> p = <span class="hljs-keyword">new</span> <span class="hljs-title function_">bound</span>(<span class="hljs-string">&#x27;Tom&#x27;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(p.<span class="hljs-property">name</span>); <span class="hljs-comment">// Tom</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(p <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Person</span>); <span class="hljs-comment">// true</span>
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">readTag</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">tag</span>;
+}
+
+<span class="hljs-keyword">const</span> once = readTag.<span class="hljs-title function_">bind</span>({ <span class="hljs-attr">tag</span>: <span class="hljs-string">&#x27;第一次&#x27;</span> });
+<span class="hljs-keyword">const</span> again = once.<span class="hljs-title function_">bind</span>({ <span class="hljs-attr">tag</span>: <span class="hljs-string">&#x27;第二次&#x27;</span> });
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">again</span>()); <span class="hljs-comment">// 第一次</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(once.<span class="hljs-title function_">call</span>({ <span class="hljs-attr">tag</span>: <span class="hljs-string">&#x27;call&#x27;</span> })); <span class="hljs-comment">// 第一次</span>
+</code></pre></div>
+<p><code>new bound(&#x27;Tom&#x27;)</code> 还是创建了一个新的 <code>Person</code> 实例，<code>bind</code> 时传的对象被忽略了，这说明 <code>new</code> 的优先级更高。<code>once</code> 已经绑定了第一个对象，之后再 <code>bind</code>、再 <code>call</code>，<code>this</code> 都改不动，读到的还是“第一次”。</p>
+<p>DOM 事件监听也遵守这套规则。监听函数用普通函数写，浏览器调用它时会把 <code>this</code> 设成 <code>currentTarget</code>，也就是绑定监听的那个元素；用箭头函数写，<code>this</code> 就是外层的 <code>this</code>，跟元素无关。</p>
+<h2>箭头函数的 this 为什么改不了</h2>
+<p>箭头函数没有自己的 <code>this</code>。它里面写的 <code>this</code>，跟普通的外层变量一样，是顺着代码写的位置往外找的，这就是词法作用域。找到哪个函数的 <code>this</code>，就用哪个。</p>
+<p>所以箭头函数的 <code>this</code> 在它定义的时候就跟外层绑在一起了，调用时用 <code>call</code>、<code>apply</code>、<code>bind</code> 传什么都没用。它也没有能给 <code>new</code> 用的构造行为，<code>new</code> 一个箭头函数会直接报 <code>TypeError</code>。</p>
+<h2>对象里的箭头函数方法不指向对象</h2>
+<p>这是一个常见误解。看下面的例子：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-meta">&#x27;use strict&#x27;</span>;
+
+<span class="hljs-keyword">const</span> user = {
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;小明&#x27;</span>,
+  <span class="hljs-attr">arrow</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">this</span> === user,
+  <span class="hljs-title function_">normal</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span>;
+  },
+};
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user.<span class="hljs-title function_">arrow</span>()); <span class="hljs-comment">// false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(user.<span class="hljs-title function_">normal</span>()); <span class="hljs-comment">// 小明</span>
+</code></pre></div>
+<p>很多人以为 <code>arrow</code> 写在 <code>user</code> 里，<code>this</code> 就是 <code>user</code>。可它返回的是 <code>false</code>，<code>this</code> 根本不是 <code>user</code>。</p>
+<p>原因是对象字面量的大括号不是函数，不会产生自己的 <code>this</code>。箭头函数往外找，找到的是对象外面那一层的 <code>this</code>。这个例子放在 Node 的 CommonJS 文件里运行，外层 <code>this</code> 是 <code>module.exports</code>；放在 ES 模块顶层，外层 <code>this</code> 是 <code>undefined</code>。不管哪种，都不是 <code>user</code>。</p>
+<p>改法很简单：对象的方法用普通的方法写法 <code>normal() {}</code>，需要 <code>this</code> 指向对象时不要用箭头函数。</p>
+<h2>回调里 this 丢了怎么办</h2>
+<p>把方法当回调传出去，是丢 <code>this</code> 最常见的场景。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Timer</span> {
   count = <span class="hljs-number">0</span>;
   <span class="hljs-title function_">start</span>(<span class="hljs-params"></span>) {
@@ -80,17 +124,22 @@ obj.<span class="hljs-property">value</span> = <span class="hljs-number">99</spa
   }
 }
 </code></pre></div>
-<p>修复方式：</p>
+<p><code>setInterval(this.tick, 1000)</code> 传进去的只是函数本身，没有带上 <code>this</code>。一秒后定时器调用它，相当于直接调用 <code>tick()</code>，class 里又是严格模式，所以 <code>this</code> 是 <code>undefined</code>，<code>this.count</code> 就报错了。</p>
+<p>有三种常见改法：</p>
 <ul>
-<li>传入箭头函数：<code>setInterval(() =&gt; this.tick(), 1000)</code>。</li>
-<li>构造时绑定：<code>this.tick = this.tick.bind(this)</code>。</li>
-<li>把方法写成类字段箭头函数：<code>tick = () =&gt; { this.count += 1; }</code>。代价是每个实例都有一份函数，且不在原型上，子类无法通过 <code>super.tick()</code> 调用。</li>
+<li>传一个箭头函数进去：<code>setInterval(() =&gt; this.tick(), 1000)</code>。箭头函数的 <code>this</code> 是 <code>start</code> 的 <code>this</code>，也就是实例，里面再用 <code>this.tick()</code> 正常调用。</li>
+<li>在构造函数里绑定：<code>this.tick = this.tick.bind(this)</code>，之后传 <code>this.tick</code> 就不会丢了。</li>
+<li>把方法写成类字段箭头函数：<code>tick = () =&gt; { this.count += 1; }</code>。代价是每个实例都会有一份自己的函数，而且它不在原型上，子类没法用 <code>super.tick()</code> 调用它。</li>
 </ul>
 <h2>常见追问</h2>
-<ul>
-<li>对象字面量里的箭头函数方法 <code>{ fn: () =&gt; this }</code> 的 <code>this</code> 是什么？是对象字面量外层的 <code>this</code>，不是这个对象。</li>
-<li>为什么箭头函数不适合作为原型方法？它拿不到调用者，也不能被 <code>new</code> 调用。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this" target="_blank" rel="noreferrer">MDN · this<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B0%E5%92%8C%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E7%9A%84+this+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B0%E5%92%8C%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E7%9A%84+this+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-this%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-this%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：普通函数和箭头函数的 this 有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-promise-combinators/">Promise.all、allSettled、race 和 any 如何选择？</a></li><li><a href="/questions/js-values-equality/">JavaScript 的值类型与相等比较应该怎样理解？</a></li></ul></nav></main></div></div>
+<p><strong>对象字面量里写 <code>{ fn: () =&gt; this }</code>，这个 <code>this</code> 是什么？</strong></p>
+<blockquote>
+<p>是这个对象字面量外层的 <code>this</code>，不是这个对象本身。因为对象的大括号不会产生新的 <code>this</code>，箭头函数会继续往外找。</p>
+</blockquote>
+<p><strong>为什么箭头函数不适合做原型方法？</strong></p>
+<blockquote>
+<p>原型方法要靠 <code>this</code> 拿到是哪个实例在调用它，可箭头函数的 <code>this</code> 在定义时就定死了，拿不到调用者。而且箭头函数不能用 <code>new</code> 调用，也不能当构造函数用。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this" target="_blank" rel="noreferrer">MDN · this<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B0%E5%92%8C%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E7%9A%84+this+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B0%E5%92%8C%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E7%9A%84+this+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-this%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-this%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：普通函数和箭头函数的 this 有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-promise-combinators/">Promise.all、allSettled、race 和 any 如何选择？</a></li><li><a href="/questions/js-values-equality/">JavaScript 的值类型与相等比较应该怎样理解？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

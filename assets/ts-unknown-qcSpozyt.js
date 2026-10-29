@@ -1,0 +1,61 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p><code>any</code> 相当于对这个值关掉类型检查，干什么都不报错。更麻烦的是它会扩散，读它的属性得到的还是 <code>any</code>，错误会被带到别的地方。一般只在迁移旧代码这种场景局部用一下。</p>
+<p><code>unknown</code> 也能接收任何值，但不能直接读属性或调用，必须先用 <code>typeof</code>、<code>in</code>、类型守卫证明它是什么。所以外部输入、<code>catch</code> 里的错误都应该按 <code>unknown</code> 处理。</p>
+<p><code>never</code> 表示不可能出现的值，没有任何值属于它。总是抛错的函数返回 <code>never</code>；联合类型的所有分支都处理完以后，剩下的就是 <code>never</code>，可以用来做穷尽检查。它和 <code>void</code> 不同，<code>void</code> 表示函数正常结束了，只是没有有意义的返回值。</p>
+<p>赋值方向也要记住：<code>any</code> 能赋给任何类型；<code>unknown</code> 只能赋给 <code>unknown</code> 和 <code>any</code>；<code>never</code> 能赋给任何类型。</p>
+</blockquote>
+<h2>any 为什么危险</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">unsafeName</span>(<span class="hljs-params"><span class="hljs-attr">value</span>: <span class="hljs-built_in">any</span></span>) {
+  <span class="hljs-keyword">return</span> value.<span class="hljs-property">profile</span>.<span class="hljs-property">name</span>.<span class="hljs-title function_">toUpperCase</span>(); <span class="hljs-comment">// 不报错，返回 any</span>
+}
+<span class="hljs-keyword">const</span> <span class="hljs-attr">name</span>: <span class="hljs-built_in">number</span> = <span class="hljs-title function_">unsafeName</span>({}); <span class="hljs-comment">// 也不报错</span>
+</code></pre></div>
+<p>传一个空对象进去，<code>value.profile</code> 是 <code>undefined</code>，运行时肯定会出错，可编译器一声不吭。更糟的是返回值也是 <code>any</code>，把它赋给 <code>number</code> 也不报错，错误就这样扩散出去了。</p>
+<p>开启 <code>noImplicitAny</code>（属于 <code>strict</code>）可以禁止参数被隐式推断成 <code>any</code>。typescript-eslint 的 <code>no-unsafe-*</code> 系列规则可以追踪 <code>any</code> 往哪里传播。</p>
+<h2>unknown 要先证明再使用</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">readName</span>(<span class="hljs-params"><span class="hljs-attr">value</span>: <span class="hljs-built_in">unknown</span></span>): <span class="hljs-built_in">string</span> {
+  <span class="hljs-keyword">if</span> (
+    <span class="hljs-keyword">typeof</span> value !== <span class="hljs-string">&#x27;object&#x27;</span> || value === <span class="hljs-literal">null</span> ||
+    !(<span class="hljs-string">&#x27;name&#x27;</span> <span class="hljs-keyword">in</span> value) || <span class="hljs-keyword">typeof</span> value.<span class="hljs-property">name</span> !== <span class="hljs-string">&#x27;string&#x27;</span>
+  ) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;输入必须包含字符串 name&#x27;</span>);
+  }
+  <span class="hljs-keyword">return</span> value.<span class="hljs-property">name</span>.<span class="hljs-title function_">trim</span>();
+}
+</code></pre></div>
+<p>同样是读 <code>name</code>，参数换成 <code>unknown</code>，就必须一步步证明：是对象、不是 <code>null</code>、有 <code>name</code>、<code>name</code> 是字符串。证明完了，最后一行才能调用 <code>trim()</code>。漏掉任何一步，编译器都会报错，这正是 <code>unknown</code> 比 <code>any</code> 安全的地方。</p>
+<p>有两个相关的细节。<code>useUnknownInCatchVariables</code>（属于 <code>strict</code>）让 <code>catch (e)</code> 里的 <code>e</code> 是 <code>unknown</code>，所以读 <code>e.message</code> 前要先判断 <code>e instanceof Error</code>。<code>JSON.parse</code> 的返回类型是 <code>any</code>，建议立刻赋给一个 <code>unknown</code> 变量，再去校验。</p>
+<p><code>value as User</code> 跳过了证明的过程，这不是 <code>unknown</code> 该有的用法，见<a href="/questions/ts-runtime-schema/">《为什么 TypeScript 不能替代接口数据校验？》</a>。</p>
+<h2>never 用在哪里</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">fail</span>(<span class="hljs-params"><span class="hljs-attr">message</span>: <span class="hljs-built_in">string</span></span>): <span class="hljs-built_in">never</span> {
+  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(message);
+}
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Shape</span> = { <span class="hljs-attr">kind</span>: <span class="hljs-string">&#x27;circle&#x27;</span> } | { <span class="hljs-attr">kind</span>: <span class="hljs-string">&#x27;square&#x27;</span> };
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">area</span>(<span class="hljs-params"><span class="hljs-attr">shape</span>: <span class="hljs-title class_">Shape</span></span>) {
+  <span class="hljs-keyword">switch</span> (shape.<span class="hljs-property">kind</span>) {
+    <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;circle&#x27;</span>: <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;square&#x27;</span>: <span class="hljs-keyword">return</span> <span class="hljs-number">2</span>;
+    <span class="hljs-attr">default</span>: {
+      <span class="hljs-keyword">const</span> <span class="hljs-attr">unreachable</span>: <span class="hljs-built_in">never</span> = shape; <span class="hljs-comment">// 新增分支未处理时这里报错</span>
+      <span class="hljs-keyword">return</span> unreachable;
+    }
+  }
+}
+</code></pre></div>
+<p><code>fail</code> 总是抛错，永远不会正常返回，所以返回类型是 <code>never</code>。</p>
+<p><code>area</code> 里的 <code>default</code> 正常情况下走不到，因为两个分支都处理了，这时 <code>shape</code> 的类型是 <code>never</code>，能赋给 <code>never</code> 变量。要是以后给 <code>Shape</code> 加了 <code>triangle</code> 却忘了写 <code>case</code>，走到 <code>default</code> 的 <code>shape</code> 就是 triangle 那个分支，赋不给 <code>never</code>，编译直接报错。这就是穷尽检查。</p>
+<p>另外，<code>string &amp; number</code> 这种不可能同时满足的交叉，结果也是 <code>never</code>。条件类型里，<code>never</code> 作为裸类型参数传入时结果还是 <code>never</code>，见<a href="/questions/ts-conditional-infer/">《条件类型、infer 和分布式条件类型如何理解？》</a>。</p>
+<h2>void 和 never 的区别</h2>
+<table><thead><tr><th></th><th><code>void</code></th><th><code>never</code></th></tr></thead><tbody><tr><td>函数能否正常返回</td><td>能</td><td>不能</td></tr><tr><td>典型例子</td><td>事件回调、<code>console.log</code></td><td>抛错函数、<code>process.exit</code></td></tr><tr><td>async 版本</td><td><code>Promise&lt;void&gt;</code></td><td><code>Promise&lt;never&gt;</code></td></tr></tbody></table>
+<p>还有一点：类型是 <code>() =&gt; void</code> 的回调，可以传入有返回值的函数，返回值会被忽略。所以 <code>arr.forEach(x =&gt; list.push(x))</code> 不报错，虽然 <code>push</code> 返回的是数字。</p>
+<h2>常见追问</h2>
+<p><strong><code>{}</code> 和 <code>object</code> 是什么类型？</strong></p>
+<blockquote>
+<p><code>{}</code> 接受除了 <code>null</code>、<code>undefined</code> 以外的所有值，包括字符串、数字。<code>object</code> 只接受非原始值，也就是对象、数组、函数这些。</p>
+</blockquote>
+<p><strong>为什么不能用 <code>any</code> 消除报错？</strong></p>
+<blockquote>
+<p>报错往往说明代码确实有没处理的情况。用 <code>any</code> 盖住它，问题并没有消失，只是推迟到了运行时才暴露。</p>
+</blockquote>`};export{e as default};

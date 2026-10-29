@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="Vue面试题：Vue 修改响应式数据后，数据立即改变，但 DOM 更新被放进队列，在下一个微任务中批量执行。" />
+    <meta name="description" content="Vue面试题：改了响应式数据，数据本身马上变了，可页面要等 Vue 批量更新才变。" />
     <title>修改状态后，为什么有时需要 await nextTick()？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/vue-nexttick/" />
     <meta name="robots" content="index,follow" />
@@ -19,22 +19,22 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="修改状态后，为什么有时需要 await nextTick()？" />
-    <meta property="og:description" content="Vue面试题：Vue 修改响应式数据后，数据立即改变，但 DOM 更新被放进队列，在下一个微任务中批量执行。" />
+    <meta property="og:description" content="Vue面试题：改了响应式数据，数据本身马上变了，可页面要等 Vue 批量更新才变。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/vue-nexttick/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-nexttick/#webpage","url":"https://fe.hushifa.top/questions/vue-nexttick/","name":"修改状态后，为什么有时需要 await nextTick()？","description":"Vue面试题：Vue 修改响应式数据后，数据立即改变，但 DOM 更新被放进队列，在下一个微任务中批量执行。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-nexttick/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-nexttick/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"修改状态后，为什么有时需要 await nextTick()？","item":"https://fe.hushifa.top/questions/vue-nexttick/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-nexttick/#webpage","url":"https://fe.hushifa.top/questions/vue-nexttick/","name":"修改状态后，为什么有时需要 await nextTick()？","description":"Vue面试题：改了响应式数据，数据本身马上变了，可页面要等 Vue 批量更新才变。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-nexttick/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-nexttick/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"修改状态后，为什么有时需要 await nextTick()？","item":"https://fe.hushifa.top/questions/vue-nexttick/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">修改状态后，为什么有时需要 await nextTick()？</span></nav><h1 tabindex="-1">修改状态后，为什么有时需要 await nextTick()？</h1><p class="reading-summary">Vue 修改响应式数据后，数据立即改变，但 DOM 更新被放进队列，在下一个微任务中批量执行。需要读取更新后的 DOM（测量尺寸、聚焦新元素、滚动到底部）时，await nextTick() 等待这次刷新完成。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>修改响应式状态后，JS 中读到的已经是新值；但组件的 DOM 更新被推迟到队列中，在同一轮的微任务中统一执行。</li>
-<li>这样同一个事件里多次修改只渲染一次。</li>
-<li><code>nextTick()</code> 返回一个 Promise，在当前这轮 DOM 更新完成后 resolve。</li>
-<li>典型场景：渲染新元素后立刻聚焦、列表追加后滚动到底部、内容变化后测量高度。</li>
-<li>它只等待 Vue 的 DOM 更新，不等待图片加载、动画结束或网络请求。</li>
-</ul>
-<h2>示例：追加消息后滚动到底部</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">修改状态后，为什么有时需要 await nextTick()？</span></nav><h1 tabindex="-1">修改状态后，为什么有时需要 await nextTick()？</h1><p class="reading-summary">改了响应式数据，数据本身马上变了，可页面要等 Vue 批量更新才变。想读更新后的 DOM，比如滚到底部、聚焦新出现的输入框，就先 await nextTick()。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>在 Vue 里给响应式数据赋值，JavaScript 里马上就能读到新值。可是页面上的 DOM 不会立刻变，Vue 会把更新放进一个队列，等当前代码执行完，在同一轮的微任务里统一更新。</p>
+<p>这样做是为了合并。一个点击事件里改了十次数据，页面只需要重新渲染一次。</p>
+<p>代价是改完数据立刻去读 DOM，读到的还是旧的。<code>nextTick()</code> 返回一个 Promise，在这一轮 DOM 更新完成后 resolve，所以 <code>await nextTick()</code> 以后再读就是新的了。典型场景有三个：新渲染出来的输入框要聚焦、列表追加后滚到底部、内容变化后测量高度。</p>
+<p>要注意，它只等 Vue 的 DOM 更新，不等图片加载、动画结束或者网络请求。</p>
+</blockquote>
+<h2>现象：改完数据，DOM 还是旧的</h2>
+<p>下面是一个聊天列表，追加一条消息后要滚到底部：</p>
 <div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;script setup&gt;
 import { nextTick, ref } from &#x27;vue&#x27;;
 
@@ -56,7 +56,8 @@ async function add(text) {
   &lt;/ul&gt;
 &lt;/template&gt;
 </code></pre></div>
-<h2>示例：点击编辑后聚焦输入框</h2>
+<p><code>push</code> 之后 <code>messages</code> 已经多了一项，可是第一行打印出来的 <code>li</code> 数量还是旧的。原因就是 DOM 更新还在队列里排着。如果这时直接设 <code>scrollTop</code>，滚到的是旧内容的底部，新消息露不出来。等 <code>nextTick()</code> 之后，新的 <code>li</code> 已经渲染出来，<code>scrollHeight</code> 才包括它。</p>
+<h2>另一个常见场景：点编辑后聚焦</h2>
 <div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;script setup&gt;
 import { nextTick, ref } from &#x27;vue&#x27;;
 
@@ -75,18 +76,20 @@ async function startEdit() {
   &lt;button v-else @click=&quot;startEdit&quot;&gt;编辑&lt;/button&gt;
 &lt;/template&gt;
 </code></pre></div>
-<h2>替代方式</h2>
-<ul>
-<li>每次 DOM 更新后都要执行的逻辑，用 <code>onUpdated</code> 或 <code>watch(..., { flush: &#x27;post&#x27; })</code>。</li>
-<li>只需要在挂载后访问 DOM，用 <code>onMounted</code>。</li>
-</ul>
-<h2>实现原理</h2>
-<p>Vue 用 <code>Promise.resolve().then(flushJobs)</code> 安排队列刷新；<code>nextTick(fn)</code> 把回调排在这次刷新之后。由于基于微任务，它会在浏览器绘制之前执行，所以此时读取的布局信息已经更新，但用户还没看到画面。</p>
+<p><code>editing</code> 设成 <code>true</code> 的那一刻，<code>input</code> 还没被 <code>v-if</code> 渲染出来，<code>input.value</code> 是 <code>null</code>，调用 <code>focus()</code> 会报错。所以要等一下再聚焦。</p>
+<h2>有没有别的写法</h2>
+<p>如果是每次 DOM 更新后都要执行的逻辑，用 <code>onUpdated</code>，或者 <code>watch(..., { flush: &#x27;post&#x27; })</code>，就不用在每个改数据的地方都写一遍 <code>nextTick</code>。如果只是挂载后访问一次 DOM，用 <code>onMounted</code> 就够了。</p>
+<h2>它是怎么实现的</h2>
+<p>Vue 用 <code>Promise.resolve().then(flushJobs)</code> 安排队列刷新，<code>nextTick(fn)</code> 则把回调排在这次刷新之后。因为用的是微任务，它会在浏览器绘制之前执行。所以在 <code>nextTick</code> 里读到的布局信息已经是更新后的，但用户这时还没看到新画面。</p>
 <h2>常见追问</h2>
-<ul>
-<li>在 <code>nextTick</code> 中能读到 CSS 过渡结束后的尺寸吗？不能，过渡要监听 <code>transitionend</code> 事件。</li>
-<li>Vue 2 的 <code>this.$nextTick</code> 和 Vue 3 的区别？用法相同，Vue 3 改为从 <code>vue</code> 导入函数，并统一返回 Promise。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://vuejs.org/api/general.html#nexttick" target="_blank" rel="noreferrer">Vue · nextTick<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%BF%AE%E6%94%B9%E7%8A%B6%E6%80%81%E5%90%8E%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E6%97%B6%E9%9C%80%E8%A6%81+await+nextTick%28%29%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%BF%AE%E6%94%B9%E7%8A%B6%E6%80%81%E5%90%8E%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E6%97%B6%E9%9C%80%E8%A6%81+await+nextTick%28%29%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-nexttick%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-nexttick%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：修改状态后，为什么有时需要 await nextTick()？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue2-nexttick/">Vue 2 的异步更新队列和 nextTick 降级策略是怎样实现的？</a></li><li><a href="/questions/vue-ref-reactive/">Vue 3 中 ref 和 reactive 有什么区别？</a></li><li><a href="/questions/vue-computed-watch/">computed、watch 和 watchEffect 应该如何选择？</a></li><li><a href="/questions/vue-props/">为什么 Vue 提倡 props 单向数据流？</a></li></ul></nav></main></div></div>
+<p><strong>在 nextTick 里能读到 CSS 过渡结束后的尺寸吗？</strong></p>
+<blockquote>
+<p>不能。<code>nextTick</code> 只等 DOM 更新，过渡动画还没开始播。要拿过渡结束后的尺寸，得监听 <code>transitionend</code> 事件。</p>
+</blockquote>
+<p><strong>Vue 2 的 <code>this.$nextTick</code> 和 Vue 3 有什么区别？</strong></p>
+<blockquote>
+<p>用法相同。Vue 3 改成从 <code>vue</code> 里导入 <code>nextTick</code> 函数，并且统一返回 Promise。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://vuejs.org/api/general.html#nexttick" target="_blank" rel="noreferrer">Vue · nextTick<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%BF%AE%E6%94%B9%E7%8A%B6%E6%80%81%E5%90%8E%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E6%97%B6%E9%9C%80%E8%A6%81+await+nextTick%28%29%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%BF%AE%E6%94%B9%E7%8A%B6%E6%80%81%E5%90%8E%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E6%97%B6%E9%9C%80%E8%A6%81+await+nextTick%28%29%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-nexttick%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-nexttick%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：修改状态后，为什么有时需要 await nextTick()？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue2-nexttick/">Vue 2 的异步更新队列和 nextTick 降级策略是怎样实现的？</a></li><li><a href="/questions/vue-ref-reactive/">Vue 3 中 ref 和 reactive 有什么区别？</a></li><li><a href="/questions/vue-computed-watch/">computed、watch 和 watchEffect 应该如何选择？</a></li><li><a href="/questions/vue-props/">为什么 Vue 提倡 props 单向数据流？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

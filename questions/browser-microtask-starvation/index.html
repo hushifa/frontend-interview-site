@@ -11,7 +11,7 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="浏览器原理面试题：浏览器每执行完一个任务都会清空整个微任务队列，清空期间新加入的微任务也会继续执行；如果微任务不断产生新的微任务…" />
+    <meta name="description" content="浏览器原理面试题：浏览器每跑完一个任务，都要把微任务队列清空才继续，清空时新加的微任务也算在内。微任务不停地生出新微任务，渲染和点击处理就永远轮不到。" />
     <title>为什么不断追加微任务会阻塞页面响应？ · 前端知库</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/browser-microtask-starvation/" />
     <meta name="robots" content="index,follow" />
@@ -19,41 +19,53 @@
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
     <meta property="og:title" content="为什么不断追加微任务会阻塞页面响应？ · 前端知库" />
-    <meta property="og:description" content="浏览器原理面试题：浏览器每执行完一个任务都会清空整个微任务队列，清空期间新加入的微任务也会继续执行；如果微任务不断产生新的微任务…" />
+    <meta property="og:description" content="浏览器原理面试题：浏览器每跑完一个任务，都要把微任务队列清空才继续，清空时新加的微任务也算在内。微任务不停地生出新微任务，渲染和点击处理就永远轮不到。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/browser-microtask-starvation/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/browser-microtask-starvation/#webpage","url":"https://fe.hushifa.top/questions/browser-microtask-starvation/","name":"为什么不断追加微任务会阻塞页面响应？ · 前端知库","description":"浏览器原理面试题：浏览器每执行完一个任务都会清空整个微任务队列，清空期间新加入的微任务也会继续执行；如果微任务不断产生新的微任务…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/browser-microtask-starvation/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/browser-microtask-starvation/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"浏览器原理面试题","item":"https://fe.hushifa.top/topics/browser/"},{"@type":"ListItem","position":3,"name":"为什么不断追加微任务会阻塞页面响应？","item":"https://fe.hushifa.top/questions/browser-microtask-starvation/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/browser-microtask-starvation/#webpage","url":"https://fe.hushifa.top/questions/browser-microtask-starvation/","name":"为什么不断追加微任务会阻塞页面响应？ · 前端知库","description":"浏览器原理面试题：浏览器每跑完一个任务，都要把微任务队列清空才继续，清空时新加的微任务也算在内。微任务不停地生出新微任务，渲染和点击处理就永远轮不到。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/browser-microtask-starvation/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/browser-microtask-starvation/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"浏览器原理面试题","item":"https://fe.hushifa.top/topics/browser/"},{"@type":"ListItem","position":3,"name":"为什么不断追加微任务会阻塞页面响应？","item":"https://fe.hushifa.top/questions/browser-microtask-starvation/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/browser/">浏览器原理面试题</a><span aria-hidden="true">/</span><span aria-current="page">为什么不断追加微任务会阻塞页面响应？</span></nav><h1 tabindex="-1">为什么不断追加微任务会阻塞页面响应？</h1><p class="reading-summary">浏览器每执行完一个任务都会清空整个微任务队列，清空期间新加入的微任务也会继续执行；如果微任务不断产生新的微任务，渲染和输入处理就一直等不到执行机会。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
-<ul>
-<li>一个任务执行完后，浏览器会执行微任务检查点，一直执行到微任务队列为空。</li>
-<li>清空过程中新加入的微任务也在这一轮执行，不会留到下一轮。</li>
-<li>微任务持续产生新微任务时，事件循环无法进入渲染和下一个任务，页面卡死，效果和死循环一样。</li>
-<li>要让出主线程，应使用 <code>setTimeout</code>、<code>MessageChannel</code> 或 <code>scheduler.yield()</code> 这类任务级调度。</li>
-</ul>
-<h2>示例</h2>
-<p>会卡死页面：</p>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/browser/">浏览器原理面试题</a><span aria-hidden="true">/</span><span aria-current="page">为什么不断追加微任务会阻塞页面响应？</span></nav><h1 tabindex="-1">为什么不断追加微任务会阻塞页面响应？</h1><p class="reading-summary">浏览器每跑完一个任务，都要把微任务队列清空才继续，清空时新加的微任务也算在内。微任务不停地生出新微任务，渲染和点击处理就永远轮不到。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>浏览器每执行完一个任务，就会把微任务队列一口气清空，这一步叫微任务检查点。</p>
+<p>关键在于，清空过程中新加进来的微任务也在这一轮执行，不会留到下一轮。所以如果一个微任务又产生新的微任务，新的再产生新的，这一轮就永远结束不了。</p>
+<p>事件循环卡在这一步，没法去渲染页面，也没法处理下一个任务，比如用户的点击。页面看起来就卡死了，效果和写了个死循环一样。</p>
+<p>要真正让出主线程，得用任务级的调度，比如 <code>setTimeout</code>、<code>MessageChannel</code> 或者 <code>scheduler.yield()</code>。</p>
+</blockquote>
+<h2>先看现象</h2>
+<p>下面这段会让页面卡死：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">loop</span>(<span class="hljs-params"></span>) {
   <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(loop);
 }
 <span class="hljs-title function_">loop</span>();
 </code></pre></div>
-<p>不会卡死，但会持续占用 CPU：</p>
+<p>把 <code>Promise</code> 换成 <code>setTimeout</code>，页面就不会卡死，只是会一直占着 CPU：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">loop</span>(<span class="hljs-params"></span>) {
   <span class="hljs-built_in">setTimeout</span>(loop, <span class="hljs-number">0</span>);
 }
 <span class="hljs-title function_">loop</span>();
 </code></pre></div>
-<p>第二种写法每次回调都是新任务，任务之间浏览器可以处理输入和渲染。</p>
-<h2>实际场景</h2>
-<ul>
-<li>用 <code>await</code> 循环处理大数组，每一步都 <code>await</code> 一个已完成的 Promise，整个循环仍然在一次微任务检查点内跑完，没有让出主线程。</li>
-<li>递归的 Promise 链没有终止条件。</li>
-<li><code>MutationObserver</code> 回调里修改被观察的 DOM，触发新的回调。</li>
-</ul>
-<p>分片处理大量数据的写法：</p>
+<p>两段代码都是“无限循环”，为什么一个卡死、一个不卡？</p>
+<h2>原因：微任务要清空才算完</h2>
+<p>第一段里，每个 <code>then</code> 回调都是微任务，它在执行时又加了一个新微任务。按规则，新加的也要在这一轮清掉，于是这一轮永远清不完，浏览器一直到不了渲染那一步。</p>
+<p>第二段里，每个回调都是一个新任务。任务和任务之间，浏览器有机会去处理输入、渲染页面，所以页面还能响应。</p>
+<p>可以在 Node 里验证这一点。下面让微任务链跑 10 万次，再看定时器什么时候执行：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">let</span> count = <span class="hljs-number">0</span>;
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;定时器执行时，微任务已跑了&#x27;</span>, count, <span class="hljs-string">&#x27;次&#x27;</span>), <span class="hljs-number">0</span>);
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">loop</span>(<span class="hljs-params"></span>) {
+  count += <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">if</span> (count &lt; <span class="hljs-number">100000</span>) <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(loop);
+}
+<span class="hljs-title function_">loop</span>();
+<span class="hljs-comment">// 定时器执行时，微任务已跑了 100000 次</span>
+</code></pre></div>
+<p>定时器明明是 0 毫秒，可它要等 10 万个微任务全部跑完才轮到。换成浏览器，渲染和点击处理也是在后面等着的。</p>
+<h2>实际开发中哪些写法会踩到</h2>
+<p>最隐蔽的是用 <code>await</code> 循环处理大数组。每一步都 <code>await</code> 一个已经完成的 Promise，看起来“异步”了，其实整个循环还是在同一次微任务检查点里跑完的，没有让出主线程。</p>
+<p>另外两种情况是没有终止条件的递归 Promise 链，以及在 <code>MutationObserver</code> 回调里修改被观察的 DOM，又触发新的回调。</p>
+<h2>改法：用任务把工作切开</h2>
+<p>大量数据要分片处理时，每处理一批就用 <code>setTimeout</code> 让出一次：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">processInChunks</span>(<span class="hljs-params">items, handle</span>) {
   <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; items.<span class="hljs-property">length</span>; i++) {
     <span class="hljs-title function_">handle</span>(items[i]);
@@ -63,11 +75,16 @@
   }
 }
 </code></pre></div>
+<p>每 500 项 <code>await</code> 一个定时器。后面的代码要等定时器这个任务来恢复，中间浏览器就能渲染、响应点击。</p>
 <h2>常见追问</h2>
-<ul>
-<li>为什么 <code>await Promise.resolve()</code> 不能让出：它恢复执行的位置在微任务里，不会经过渲染。</li>
-<li>微任务适合什么：在当前任务结束前、渲染前完成的收尾工作，例如批量合并状态更新。</li>
-</ul></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide" target="_blank" rel="noreferrer">MDN · 使用 queueMicrotask() 的微任务指南<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E6%96%AD%E8%BF%BD%E5%8A%A0%E5%BE%AE%E4%BB%BB%E5%8A%A1%E4%BC%9A%E9%98%BB%E5%A1%9E%E9%A1%B5%E9%9D%A2%E5%93%8D%E5%BA%94%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E6%96%AD%E8%BF%BD%E5%8A%A0%E5%BE%AE%E4%BB%BB%E5%8A%A1%E4%BC%9A%E9%98%BB%E5%A1%9E%E9%A1%B5%E9%9D%A2%E5%93%8D%E5%BA%94%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Abrowser-microtask-starvation%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%90%86%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fbrowser-microtask-starvation%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：为什么不断追加微任务会阻塞页面响应？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/browser-request-idle-callback/">requestIdleCallback 适合做什么？为什么不能用它保证任务一定执行？</a></li><li><a href="/questions/browser-render/">浏览器从 HTML 到页面显示，经历哪些主要步骤？</a></li><li><a href="/questions/browser-delegation/">事件委托是什么？target 和 currentTarget 有何区别？</a></li><li><a href="/questions/browser-storage/">Cookie、localStorage 和 sessionStorage 如何选择？</a></li></ul></nav></main></div></div>
+<p><strong>为什么 <code>await Promise.resolve()</code> 不能让出主线程？</strong></p>
+<blockquote>
+<p>因为 <code>await</code> 后面的代码是在微任务里恢复的，还在同一个微任务检查点里，不会经过渲染。要让出，得等一个任务，比如 <code>setTimeout</code>。</p>
+</blockquote>
+<p><strong>那微任务适合做什么？</strong></p>
+<blockquote>
+<p>适合在当前任务结束前、渲染前做的收尾工作，比如把几次状态更新合并成一次。它的特点是“马上做、不让出”，所以不适合做大量计算。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide" target="_blank" rel="noreferrer">MDN · 使用 queueMicrotask() 的微任务指南<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E6%96%AD%E8%BF%BD%E5%8A%A0%E5%BE%AE%E4%BB%BB%E5%8A%A1%E4%BC%9A%E9%98%BB%E5%A1%9E%E9%A1%B5%E9%9D%A2%E5%93%8D%E5%BA%94%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E6%96%AD%E8%BF%BD%E5%8A%A0%E5%BE%AE%E4%BB%BB%E5%8A%A1%E4%BC%9A%E9%98%BB%E5%A1%9E%E9%A1%B5%E9%9D%A2%E5%93%8D%E5%BA%94%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Abrowser-microtask-starvation%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%90%86%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fbrowser-microtask-starvation%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：为什么不断追加微任务会阻塞页面响应？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/browser-request-idle-callback/">requestIdleCallback 适合做什么？为什么不能用它保证任务一定执行？</a></li><li><a href="/questions/browser-render/">浏览器从 HTML 到页面显示，经历哪些主要步骤？</a></li><li><a href="/questions/browser-delegation/">事件委托是什么？target 和 currentTarget 有何区别？</a></li><li><a href="/questions/browser-storage/">Cookie、localStorage 和 sessionStorage 如何选择？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>
