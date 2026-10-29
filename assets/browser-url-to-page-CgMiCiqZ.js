@@ -1,0 +1,60 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>我按时间顺序讲。用户在地址栏敲完回车，浏览器先判断这是搜索词还是网址，是搜索词就拼成搜索引擎的地址，是网址就补全协议。然后开始导航：如果这个站点注册了 Service Worker，请求先交给它处理；没有被它接住，再看 HTTP 缓存，强缓存新鲜就直接用，过期了就带 ETag 去协商，服务器回 304 就继续用本地副本。</p>
+<p>缓存没命中，就要走网络。先 DNS 把域名查成 IP，再 TCP 三次握手、TLS 握手，HTTPS 新连接在发请求前至少要等 2 个往返；HTTP/3 走 QUIC，传输和加密握手合成 1 个往返。请求发出去后，服务器可能先回 301、302 让浏览器跳转，每跳一次都可能再来一轮建连。拿到 200 的 HTML 后，浏览器进程把数据交给渲染进程。</p>
+<p>渲染进程边下载边解析 HTML，生成 DOM。CSS 会阻塞渲染，同步脚本会阻塞 HTML 解析，所以 CSS 放头部、脚本加 <code>defer</code>。DOM 和 CSSOM 都有了，就做样式计算、布局、绘制，最后合成到屏幕上。HTML 解析完、<code>defer</code> 脚本也执行完，触发 <code>DOMContentLoaded</code>；图片这些子资源都加载完，才触发 <code>load</code>。</p>
+<p>优化就是对着每一步减少等待：静态资源长期缓存，<code>preconnect</code> 提前建连，避免多余的重定向，压缩关键 CSS，脚本用 <code>defer</code>，动画尽量只改 <code>transform</code> 和 <code>opacity</code>。</p>
+</blockquote>
+<h2>地址栏里的输入怎么变成一个请求</h2>
+<p>Chrome 的地址栏同时也是搜索框，所以浏览器拿到输入后，第一件事是判断它是搜索词还是网址。像 <code>example.com</code> 这样的输入会被当成网址并补上协议，像“闭包是什么”这样的输入会被拼成默认搜索引擎的搜索地址。补成 <code>http://</code> 还是 <code>https://</code> 跟浏览器版本、设置和站点有没有 HSTS 有关，不同浏览器的规则不完全一样，面试时说“补全协议”就够了。</p>
+<p>按 Chrome 官方的说法，这一步由浏览器进程里的 UI 线程负责。回车以后，UI 线程把请求交给网络线程，导航就开始了。这个阶段本身很快，基本没有优化空间。</p>
+<h2>先看能不能不走网络</h2>
+<p>请求真正发出去之前，浏览器会先看有没有现成的结果可用。</p>
+<p>第一层是 Service Worker。Service Worker 是一个站点自己注册的脚本，它能拦截这个站点的请求，自己决定是从缓存里取还是去网络拿。所以注册过 Service Worker 的站点，即使断网也可能打开页面。可是它也带来新问题：它要先启动才能处理请求，启动本身要花时间，Chrome 为此提供了 Navigation Preload，让网络请求和 Service Worker 启动同时进行。它的缓存更新问题见<a href="/questions/network-service-worker-cache/">《Service Worker 缓存更新为什么容易出现旧版本？》</a>。</p>
+<p>第二层是 HTTP 缓存。副本还新鲜就直接用，连请求都不发，这是强缓存；过期了就带上 <code>If-None-Match</code> 去问服务器，没变回 304，这是协商缓存。要注意 304 仍然是一次完整的往返，省的只是响应正文。HTML 一般设置成每次验证，带哈希的 JS、CSS 长期强缓存，两者怎么配合见<a href="/questions/http-cache/">《强缓存与协商缓存如何配合？》</a>。</p>
+<h2>建立连接：DNS、TCP 和 TLS</h2>
+<p>缓存没命中，浏览器就要和服务器建连，这里有三段等待。</p>
+<p>DNS 把域名查成 IP，浏览器或系统有缓存时几乎不花时间，没有就要去问递归解析器。TCP 三次握手要 1 个往返。TLS 握手在 TLS 1.3 下再加 1 个往返，TLS 1.2 是 2 个。所以一个 HTTPS 新连接，在发出第一个请求之前至少要等 2 个往返。网络延迟越高，这部分越慢，手机网络下尤其明显。</p>
+<p>HTTP/3 换成了基于 UDP 的 QUIC，把传输握手和 TLS 1.3 握手合在一起，新连接只要 1 个往返。不过浏览器第一次访问时一般还不知道服务器支持 HTTP/3，要靠 <code>Alt-Svc</code> 响应头或 DNS 的 HTTPS 记录才能发现。</p>
+<p>能做的优化是让这些等待少发生、早发生：复用已有连接，对关键的第三方域名用 <code>preconnect</code> 提前建连，用 CDN 让用户就近接入。每一段的细节和测量方法见<a href="/questions/network-dns-tcp-tls/">《DNS、TCP 和 TLS 握手分别会给页面增加哪些等待？》</a>，版本区别见<a href="/questions/http-versions/">《HTTP/1.1、HTTP/2 和 HTTP/3 的主要区别是什么？》</a>，HTTPS 提供了哪些保障见<a href="/questions/http-https/">《HTTPS 相比 HTTP 提供了哪些保障？》</a>。</p>
+<h2>请求发出去以后，服务器怎么回</h2>
+<p>连接建好后，浏览器发出 GET 请求，带上 Cookie 等请求头。服务器处理请求需要时间，从请求发出到收到响应第一个字节这段，常被叫作 TTFB。服务端渲染慢、查数据库慢，都会体现在这里。</p>
+<p>响应回来，浏览器先看状态码。如果是 301、302、307、308 这类重定向，浏览器就按 <code>Location</code> 头去请求新地址。新地址如果换了域名，前面的 DNS、TCP、TLS 可能要再来一轮。所以从 <code>http://</code> 跳到 <code>https://</code>、再从裸域跳到 <code>www</code>，这种连续跳转会直接拖慢首屏，能在链接里直接写最终地址就不要依赖跳转。HSTS 可以让浏览器在本地直接把 <code>http://</code> 改成 <code>https://</code>，省掉第一跳。各种状态码的含义见<a href="/questions/http-status/">《常见 HTTP 状态码应该怎样在前端区分处理？》</a>。</p>
+<p>如果是 200，浏览器会看 <code>Content-Type</code>。是 HTML 就继续渲染；是下载类型就交给下载管理器。Chrome 还会在这一步做 Safe Browsing 检查，判断这个站点是不是已知的恶意站点。</p>
+<h2>浏览器进程和渲染进程怎么分工</h2>
+<p>以 Chrome 为例，地址栏、网络请求这些由浏览器进程负责，网页的解析、执行 JavaScript、渲染由渲染进程负责。网络线程拿到 HTML 后，浏览器进程通过进程间通信把数据交给一个渲染进程，这一步叫提交导航。提交完成后，地址栏和历史记录才会更新成新页面。</p>
+<p>为了少等，Chrome 在发网络请求的同时就会预先找好或启动一个渲染进程。如果最后跳到了别的站点，就可能换一个渲染进程。为什么要分这么多进程见<a href="/questions/browser-process-model/">《浏览器为什么要拆分进程？前端如何理解故障隔离边界？》</a>。</p>
+<h2>解析 HTML：CSS 和脚本怎么挡路</h2>
+<p>渲染进程不用等 HTML 全部下载完，它边收边解析，DOM 一点点长出来。</p>
+<p>遇到外链样式表，浏览器去下载并解析成 CSSOM。CSS 不会挡住 HTML 解析，但会阻塞渲染，因为样式没到齐就不知道页面长什么样，强行画出来会先闪一下无样式的内容。所以样式表放在 <code>&lt;head&gt;</code> 里，让它尽早开始下载。</p>
+<p>遇到没有 <code>async</code>、<code>defer</code> 或 <code>type=&quot;module&quot;</code> 的普通 <code>&lt;script&gt;</code>，解析器会停下来，等脚本下载并执行完再继续。原因是脚本可能用 <code>document.write</code> 改 HTML，也可能读样式；又因为它可能读样式，它前面的样式表也得先加载完。为了减少这段等待，浏览器有预加载扫描器，主解析器被卡住时，它会继续往后扫，提前请求后面的图片、脚本和样式。</p>
+<p>所以脚本要么放在 <code>&lt;body&gt;</code> 末尾，要么加 <code>defer</code>。<code>defer</code> 脚本边解析边下载，HTML 解析完后按顺序执行，三种写法的区别见<a href="/questions/html-script-loading/">《script 的 async、defer 和 module 有什么区别？》</a>。</p>
+<h2>从 DOM 到屏幕上的像素</h2>
+<p>DOM 和 CSSOM 都有了，浏览器先做样式计算，算出每个元素最终的样式，并组成渲染树。渲染树只包含要显示的内容，<code>display: none</code> 的元素不在里面。</p>
+<p>接着是布局，算出每个元素在页面上的位置和大小。然后是绘制，把文字、颜色、边框、图片变成绘制指令。最后是合成，页面可能被分成多个图层，合成线程把它们按顺序叠起来显示到屏幕上。</p>
+<p>这几步的成本是逐级降低的。改了宽高、位置这类属性，要从布局开始重来；只改颜色这类属性，可以跳过布局，只重新绘制；只改 <code>transform</code> 或 <code>opacity</code> 的元素，如果它在单独的图层上，通常只需要重新合成，还能不占用主线程。每一步的详细内容见<a href="/questions/browser-render/">《浏览器从 HTML 到页面显示，经历哪些主要步骤？》</a>，连续读写布局属性引起的问题见<a href="/questions/browser-reflow/">《什么是强制同步布局？如何避免布局抖动？》</a>。</p>
+<h2>首次显示以后还在发生什么</h2>
+<p>页面第一次显示出来，不代表加载结束了。图片、字体、异步脚本还在下载，JavaScript 还在执行，这些都会占用主线程，影响用户能不能马上点得动。</p>
+<p>这里有两个事件。HTML 全部解析完、<code>defer</code> 脚本和模块脚本也执行完，触发 <code>DOMContentLoaded</code>，它不等图片和样式表下载完。页面上所有子资源，包括图片、样式表、iframe 都加载完，才触发 <code>load</code>。所以要操作 DOM 的初始化代码，等 <code>DOMContentLoaded</code> 就够了，不必等 <code>load</code>。</p>
+<p>每一段到底花了多少时间，可以用 Navigation Timing 量出来，见<a href="/questions/browser-navigation-timing/">《页面导航的关键阶段怎样用 Navigation Timing 分析？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>哪一步最耗时？</strong></p>
+<blockquote>
+<p>没有固定答案，要看具体页面，得用 Navigation Timing 或者 DevTools 的 Performance 面板实际量。一般来说，网络延迟高的时候，DNS、建连、重定向这些往返最明显；服务端慢就体现在 TTFB；前端脚本大，就是下载和执行 JavaScript 占用主线程的时间长。我会先量出来再说优化哪一段。</p>
+</blockquote>
+<p><strong>为什么 CSS 放头部、JS 放底部或者加 defer？</strong></p>
+<blockquote>
+<p>CSS 会阻塞渲染，放在头部能尽早开始下载，样式到了页面才能显示，也避免先出现一下无样式的内容。普通脚本会阻塞 HTML 解析，放在头部的话，脚本下载执行完之前，后面的内容都出不来。放到 body 底部或者加 <code>defer</code>，下载就不挡解析了，<code>defer</code> 还能保证按顺序、在 DOM 解析完之后执行。</p>
+</blockquote>
+<p><strong>重排、重绘和合成有什么区别？</strong></p>
+<blockquote>
+<p>重排就是重新布局，改了宽高、位置、字号这些会影响几何形状的属性，浏览器要重新算位置大小，之后还得重新绘制，成本最高。重绘是只改了颜色、背景这类外观，不用重新布局，只重新画。合成是最便宜的，只改 <code>transform</code>、<code>opacity</code> 的元素，在单独图层上时只需把图层重新叠一遍，通常不用重新布局和绘制。所以动画优先用 <code>transform</code> 和 <code>opacity</code>。</p>
+</blockquote>
+<p><strong>DOMContentLoaded 和 load 有什么区别？</strong></p>
+<blockquote>
+<p><code>DOMContentLoaded</code> 是 HTML 解析完、<code>defer</code> 脚本执行完就触发，不等图片。<code>load</code> 要等页面上图片、样式表这些子资源全部加载完。所以初始化 DOM 的代码监听 <code>DOMContentLoaded</code> 就够了。</p>
+</blockquote>
+<p><strong>第二次打开同一个网页，哪些步骤会变快？</strong></p>
+<blockquote>
+<p>DNS 结果可能有缓存，不用再查。连接如果还没关，可以直接复用，省掉握手。HTTP 缓存里新鲜的静态资源直接用，不发请求；HTML 如果设置了每次验证，会回 304，省掉正文下载。不过解析、布局、绘制这些渲染步骤还是要重新做一遍。</p>
+</blockquote>`};export{e as default};
