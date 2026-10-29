@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="测试面试题：单元测试挑一个纯函数或小模块，按“准备输入 → 调用 → 断言结果”写，覆盖正常值、边界值和异常。" />
+    <title>前端单元测试怎么写？Jest 和 Vitest 有什么区别？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/testing-unit-jest-vitest/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="前端单元测试怎么写？Jest 和 Vitest 有什么区别？" />
+    <meta property="og:description" content="测试面试题：单元测试挑一个纯函数或小模块，按“准备输入 → 调用 → 断言结果”写，覆盖正常值、边界值和异常。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/testing-unit-jest-vitest/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/testing-unit-jest-vitest/#webpage","url":"https://fe.hushifa.top/questions/testing-unit-jest-vitest/","name":"前端单元测试怎么写？Jest 和 Vitest 有什么区别？","description":"测试面试题：单元测试挑一个纯函数或小模块，按“准备输入 → 调用 → 断言结果”写，覆盖正常值、边界值和异常。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/testing-unit-jest-vitest/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/testing-unit-jest-vitest/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"测试面试题","item":"https://fe.hushifa.top/topics/testing/"},{"@type":"ListItem","position":3,"name":"前端单元测试怎么写？Jest 和 Vitest 有什么区别？","item":"https://fe.hushifa.top/questions/testing-unit-jest-vitest/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DSAVeeDz.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/testing/">测试面试题</a><span aria-hidden="true">/</span><span aria-current="page">前端单元测试怎么写？Jest 和 Vitest 有什么区别？</span></nav><h1 tabindex="-1">前端单元测试怎么写？Jest 和 Vitest 有什么区别？</h1><p class="reading-summary">单元测试挑一个纯函数或小模块，按“准备输入 → 调用 → 断言结果”写，覆盖正常值、边界值和异常。Jest 和 Vitest 的 describe/it/expect 写法几乎一样；主要差别在于 Vitest 复用 Vite 的配置和插件，默认不注入全局 API，并原生支持 ESM，Jest 对 ESM 的支持仍是实验性的，TypeScript 要经 Babel、ts-jest 或 Node 类型擦除处理。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>商品价格接口返回的是“分”，页面要显示成 <code>¥19.99</code>。这个转换函数就是最适合写单元测试的对象：给定输入，结果是确定的，不依赖网络和 DOM。测试就三步：准备输入、调用函数、断言输出，再补上 0、负数、非整数这类边界情况。</p>
+<p>单元测试的价值是快和准。它一秒能跑几百个，出错时能直接定位到哪个函数的哪种输入。所以要把业务计算从组件里抽成纯函数，组件只负责展示，测试才好写。</p>
+<p>Jest 和 Vitest 的写法几乎一样，都是 <code>describe</code>、<code>it</code>、<code>expect</code>，Vitest 官方说它兼容大部分 Jest API。区别主要在配置：Vitest 直接复用项目的 <code>vite.config</code>，原生支持 ESM 和 TypeScript；Jest 要通过 Babel 或 ts-jest 转 TypeScript，ESM 支持官方仍标为实验性。用 Vite 的项目选 Vitest 更省事。</p>
+<p>迁移时要注意几个细节：Jest 默认注入全局的 <code>describe</code>、<code>expect</code>，Vitest 默认不注入，要么显式导入，要么开 <code>globals</code>；<code>jest.mock</code> 的工厂函数返回值直接当默认导出，而 <code>vi.mock</code> 的工厂要返回包含每个导出的对象。</p>
+</blockquote>
+<h2>被测函数长什么样</h2>
+<p>下面这个函数把“分”格式化成带货币符号的字符串，不合法的金额直接抛错。它可以直接在 node 里运行：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">formatPrice</span>(<span class="hljs-params">cents, currency = <span class="hljs-string">&#x27;CNY&#x27;</span></span>) {
+  <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Number</span>.<span class="hljs-title function_">isInteger</span>(cents) || cents &lt; <span class="hljs-number">0</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RangeError</span>(<span class="hljs-string">&#x27;金额必须是非负整数（单位：分）&#x27;</span>);
+  }
+  <span class="hljs-keyword">const</span> symbol = currency === <span class="hljs-string">&#x27;USD&#x27;</span> ? <span class="hljs-string">&#x27;$&#x27;</span> : <span class="hljs-string">&#x27;¥&#x27;</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${symbol}</span><span class="hljs-subst">${(cents / <span class="hljs-number">100</span>).toFixed(<span class="hljs-number">2</span>)}</span>`</span>;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">formatPrice</span>(<span class="hljs-number">1999</span>));        <span class="hljs-comment">// ¥19.99</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">formatPrice</span>(<span class="hljs-number">5</span>, <span class="hljs-string">&#x27;USD&#x27;</span>));     <span class="hljs-comment">// $0.05</span>
+<span class="hljs-keyword">try</span> {
+  <span class="hljs-title function_">formatPrice</span>(-<span class="hljs-number">1</span>);
+} <span class="hljs-keyword">catch</span> (error) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(error.<span class="hljs-property">name</span>, error.<span class="hljs-property">message</span>); <span class="hljs-comment">// RangeError 金额必须是非负整数（单位：分）</span>
+}
+</code></pre></div>
+<p>为什么金额用整数“分”而不是小数“元”？因为 <code>0.1 + 0.2</code> 在 JavaScript 里不等于 <code>0.3</code>，用整数传、只在展示时除以 100，能避开大部分浮点误差。测试要守住的正是这些约定。</p>
+<h2>测试怎样写</h2>
+<p>用 Vitest 写，显式从 <code>vitest</code> 导入 API：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { describe, it, expect } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vitest&#x27;</span>;
+<span class="hljs-keyword">import</span> { formatPrice } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./formatPrice&#x27;</span>;
+
+<span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;formatPrice&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;把分转换成两位小数的元&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">expect</span>(<span class="hljs-title function_">formatPrice</span>(<span class="hljs-number">1999</span>)).<span class="hljs-title function_">toBe</span>(<span class="hljs-string">&#x27;¥19.99&#x27;</span>);
+  });
+
+  <span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;不足一元时补零&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">expect</span>(<span class="hljs-title function_">formatPrice</span>(<span class="hljs-number">5</span>, <span class="hljs-string">&#x27;USD&#x27;</span>)).<span class="hljs-title function_">toBe</span>(<span class="hljs-string">&#x27;$0.05&#x27;</span>);
+  });
+
+  <span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;0 元也能正常显示&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-title function_">expect</span>(<span class="hljs-title function_">formatPrice</span>(<span class="hljs-number">0</span>)).<span class="hljs-title function_">toBe</span>(<span class="hljs-string">&#x27;¥0.00&#x27;</span>);
+  });
+
+  it.<span class="hljs-title function_">each</span>([-<span class="hljs-number">1</span>, <span class="hljs-number">1.5</span>, <span class="hljs-title class_">Number</span>.<span class="hljs-property">NaN</span>])(<span class="hljs-string">&#x27;拒绝不合法的金额 %s&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> {
+    <span class="hljs-title function_">expect</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">formatPrice</span>(value)).<span class="hljs-title function_">toThrow</span>(<span class="hljs-title class_">RangeError</span>);
+  });
+});
+</code></pre></div>
+<p>每个 <code>it</code> 只验证一件事，名字写成“在什么情况下得到什么结果”，失败时一眼就能看出坏在哪里。边界值用 <code>it.each</code> 批量覆盖。断言抛错时要把调用包进箭头函数，写成 <code>expect(formatPrice(-1)).toThrow()</code> 的话，错误在 <code>expect</code> 执行之前就抛出来了，测试会直接失败。</p>
+<p>换成 Jest，只要把第一行导入去掉（或者改从 <code>@jest/globals</code> 导入），其余代码基本不用动。</p>
+<h2>单元测试应该测什么</h2>
+<p>优先测有分支和计算的纯逻辑：格式化、校验、价格计算、状态转换、数据整理。测的是输入和输出的关系，不测函数内部用了哪个变量，这样重构实现时测试不用跟着改。</p>
+<p>依赖网络、时间、随机数的代码，要么把这些依赖作为参数传进来，要么在测试里替换掉。什么时候该替换、替换多了有什么问题，见<a href="/questions/test-mocks/">《什么时候应该 mock，mock 太多有什么问题？》</a>；定时器相关的见<a href="/questions/testing-time-and-fake-timers/">《前端怎样测试定时器、重试和超时，避免 Fake Timers 造成假通过？》</a>。和用户交互有关的组件，按用户行为写，见<a href="/questions/testing-component/">《前端组件测试应该围绕哪些用户行为？》</a>。</p>
+<h2>Jest 和 Vitest 具体差在哪里</h2>
+<table><thead><tr><th>方面</th><th>Jest</th><th>Vitest</th></tr></thead><tbody><tr><td>配置</td><td>独立的 Jest 配置</td><td>复用 <code>vite.config</code>，共享插件和别名</td></tr><tr><td>TypeScript</td><td>经 Babel（只转译不做类型检查）、ts-jest，或 Node 类型擦除</td><td>由 Vite 管线处理</td></tr><tr><td>ESM</td><td>官方标为实验性，需要 <code>--experimental-vm-modules</code></td><td>原生支持</td></tr><tr><td>全局 API</td><td>默认注入</td><td>默认不注入，可开 <code>globals</code></td></tr><tr><td>默认测试环境</td><td><code>node</code></td><td><code>node</code></td></tr><tr><td>模块 mock</td><td><code>jest.mock</code>，<code>__mocks__</code> 目录自动生效</td><td><code>vi.mock</code>，<code>__mocks__</code> 只在调用 <code>vi.mock()</code> 时加载</td></tr></tbody></table>
+<p>Vitest 官方的比较文档说得很直接：如果应用基于 Vite，再维护一套 Jest 的转换管线是重复的复杂度；即使不用 Vite，Vitest 默认的监听模式和更快的运行也值得考虑。反过来，Jest 生态更早、资料更多，老项目已经稳定运行在 Jest 上时，没有必要为了换而换。</p>
+<p>Jest 文档还提醒，通过 Babel 支持 TypeScript 只是转译，运行测试时不会做类型检查，需要类型检查就用 ts-jest 或单独跑 <code>tsc</code>。Vitest 则另外提供了类型测试：<code>*.test-d.ts</code> 文件里可以用 <code>expectTypeOf</code> 断言类型，官方说明这类文件不会被执行，而是在底层调用 <code>tsc</code> 或 <code>vue-tsc</code> 做静态分析。普通测试照常运行，项目仍然应该单独跑一次 <code>tsc</code>。</p>
+<h2>常见追问</h2>
+<p><strong>测试环境要用 jsdom 吗？</strong></p>
+<blockquote>
+<p>两者默认都是 <code>node</code> 环境。只有测试里要访问 <code>document</code>、<code>window</code> 时，才把对应文件或配置切换成 <code>jsdom</code> 或 <code>happy-dom</code>。纯函数测试留在 <code>node</code> 环境更快。</p>
+</blockquote>
+<p><strong>从 Jest 迁移到 Vitest，最容易踩什么坑？</strong></p>
+<blockquote>
+<p>官方迁移指南列的几条最常见：全局 API 默认关闭，不开 <code>globals</code> 时 Testing Library 不会自动清理 DOM；<code>vi.mock</code> 的工厂要返回包含所有导出的对象；<code>requireActual</code> 要换成 <code>vi.importActual</code>；<code>mockReset</code> 在 Vitest 里会恢复成 <code>vi.fn(impl)</code> 里传入的原始实现，而不是空函数。</p>
+</blockquote>
+<p><strong>覆盖率达到多少才够？</strong></p>
+<blockquote>
+<p>覆盖率只能说明代码被执行过，不能说明断言有没有验证对结果。详见<a href="/questions/test-coverage-limits/">《为什么 100% 代码覆盖率也可能漏掉严重问题？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://vitest.dev/guide/comparisons.html" target="_blank" rel="noreferrer">Vitest · Comparisons with Other Test Runners<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://vitest.dev/guide/migration.html#jest" target="_blank" rel="noreferrer">Vitest · Migrating from Jest<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://jestjs.io/docs/getting-started" target="_blank" rel="noreferrer">Jest · Getting Started<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://jestjs.io/docs/ecmascript-modules" target="_blank" rel="noreferrer">Jest · ECMAScript Modules<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E6%80%8E%E4%B9%88%E5%86%99%EF%BC%9FJest+%E5%92%8C+Vitest+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E6%80%8E%E4%B9%88%E5%86%99%EF%BC%9FJest+%E5%92%8C+Vitest+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Atesting-unit-jest-vitest%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%B5%8B%E8%AF%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Ftesting-unit-jest-vitest%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端单元测试怎么写？Jest 和 Vitest 有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/test-mocks/">什么时候应该 mock，mock 太多有什么问题？</a></li><li><a href="/questions/test-coverage-limits/">为什么 100% 代码覆盖率也可能漏掉严重问题？</a></li><li><a href="/questions/testing-time-and-fake-timers/">前端怎样测试定时器、重试和超时，避免 Fake Timers 造成假通过？</a></li><li><a href="/questions/testing-component/">前端组件测试应该围绕哪些用户行为？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

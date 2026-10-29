@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="场景设计面试题：通用表格用列配置描述“显示什么”，用数据数组描述“显示哪些行”，单元格内容通过 render 函数交给调用方。" />
+    <title>怎样设计一个通用的表格组件？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/design-table-component/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="怎样设计一个通用的表格组件？ · 前端知库" />
+    <meta property="og:description" content="场景设计面试题：通用表格用列配置描述“显示什么”，用数据数组描述“显示哪些行”，单元格内容通过 render 函数交给调用方。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/design-table-component/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/design-table-component/#webpage","url":"https://fe.hushifa.top/questions/design-table-component/","name":"怎样设计一个通用的表格组件？ · 前端知库","description":"场景设计面试题：通用表格用列配置描述“显示什么”，用数据数组描述“显示哪些行”，单元格内容通过 render 函数交给调用方。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/design-table-component/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/design-table-component/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"场景设计面试题","item":"https://fe.hushifa.top/topics/system-design/"},{"@type":"ListItem","position":3,"name":"怎样设计一个通用的表格组件？","item":"https://fe.hushifa.top/questions/design-table-component/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DSAVeeDz.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/system-design/">场景设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样设计一个通用的表格组件？</span></nav><h1 tabindex="-1">怎样设计一个通用的表格组件？</h1><p class="reading-summary">通用表格用列配置描述“显示什么”，用数据数组描述“显示哪些行”，单元格内容通过 render 函数交给调用方。排序、筛选、分页的状态可以由组件内部管理，也可以受控交给外部，服务端分页时必须受控。行要有稳定的 rowKey；语义上用原生 table、th 和 scope，排序列用 aria-sort 标出；数据量大时再加虚拟滚动和固定表头。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>后台系统里到处是表格：订单列表、用户列表、日志列表，都有表头、排序、分页、勾选，只是列不一样。通用表格组件要让每个页面只写“有哪些列、数据从哪来”，其余交给组件。</p>
+<p>核心接口是两样东西：<code>columns</code> 列配置，每列写标题、取哪个字段、怎么渲染、能不能排序；<code>dataSource</code> 数据数组，每行一个对象。单元格内容通过列上的 <code>render</code> 函数交给调用方，这样状态标签、操作按钮都能自定义，组件不用为每种需求加参数。</p>
+<p>排序、筛选、分页、勾选这些状态，组件可以自己管（非受控），也可以由外部传入、变化时通过回调通知（受控）。数据在服务端分页和排序时必须受控，因为组件手里只有当前一页，排不了全部数据。每行还要有稳定的 <code>rowKey</code>，勾选和展开状态才能对上行。</p>
+<p>要注意，表格首先是表格：用原生 <code>&lt;table&gt;</code>、<code>&lt;th&gt;</code> 和 <code>scope</code> 保留语义，排序列用 <code>aria-sort</code> 告诉读屏用户；数据上万行时再加虚拟滚动，但虚拟滚动会让读屏用户和浏览器搜索找不到没渲染的行，要权衡。</p>
+</blockquote>
+<h2>列配置应该长什么样</h2>
+<p>先看调用方怎么用。下面是一个订单表格：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">const</span> columns = [
+  { <span class="hljs-attr">key</span>: <span class="hljs-string">&#x27;id&#x27;</span>, <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;订单号&#x27;</span>, <span class="hljs-attr">dataIndex</span>: <span class="hljs-string">&#x27;id&#x27;</span> },
+  { <span class="hljs-attr">key</span>: <span class="hljs-string">&#x27;amount&#x27;</span>, <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;金额&#x27;</span>, <span class="hljs-attr">dataIndex</span>: <span class="hljs-string">&#x27;amount&#x27;</span>, <span class="hljs-attr">sorter</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">align</span>: <span class="hljs-string">&#x27;right&#x27;</span> },
+  {
+    <span class="hljs-attr">key</span>: <span class="hljs-string">&#x27;status&#x27;</span>,
+    <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;状态&#x27;</span>,
+    <span class="hljs-attr">dataIndex</span>: <span class="hljs-string">&#x27;status&#x27;</span>,
+    <span class="hljs-attr">render</span>: <span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">StatusTag</span> <span class="hljs-attr">status</span>=<span class="hljs-string">{value}</span> /&gt;</span></span>,
+  },
+  {
+    <span class="hljs-attr">key</span>: <span class="hljs-string">&#x27;action&#x27;</span>,
+    <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;操作&#x27;</span>,
+    <span class="hljs-attr">render</span>: <span class="hljs-function">(<span class="hljs-params">_, row</span>) =&gt;</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> openDetail(row.id)}&gt;查看<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>,
+  },
+];
+
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Table</span> <span class="hljs-attr">columns</span>=<span class="hljs-string">{columns}</span> <span class="hljs-attr">dataSource</span>=<span class="hljs-string">{orders}</span> <span class="hljs-attr">rowKey</span>=<span class="hljs-string">&quot;id&quot;</span> /&gt;</span></span>;
+</code></pre></div>
+<p>每列的 <code>dataIndex</code> 说明从行数据的哪个字段取值，<code>render</code> 接收这个值和整行数据，返回要显示的内容。没有 <code>render</code> 的列直接显示值。<code>key</code> 是列的标识，排序、隐藏列、调整列宽都靠它找到对应的列。</p>
+<p>为什么用 <code>render</code> 函数，而不是给组件加 <code>statusType</code>、<code>showButton</code> 这类参数？因为单元格的需求是无穷的，参数永远加不完。把渲染权交给调用方，组件只负责布局和通用功能，这叫控制反转。</p>
+<h2>排序和分页的状态由谁管</h2>
+<p>数据都在前端、量也不大时，组件可以自己管排序和分页：用户点表头，组件内部记下排序列和方向，对 <code>dataSource</code> 排序后再切出当前页。调用方什么都不用写。</p>
+<p>数据在服务端时就不行了。组件手里只有当前这一页，在前端排序只能排这一页，结果是错的。这时要把状态交给外部：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx">&lt;<span class="hljs-title class_">Table</span>
+  columns={columns}
+  dataSource={page.<span class="hljs-property">items</span>}
+  rowKey=<span class="hljs-string">&quot;id&quot;</span>
+  sort={sort}                 <span class="hljs-comment">// { key: &#x27;amount&#x27;, order: &#x27;descend&#x27; }</span>
+  pagination={{ current, pageSize, <span class="hljs-attr">total</span>: page.<span class="hljs-property">total</span> }}
+  onChange={<span class="hljs-function">(<span class="hljs-params">{ sort, pagination }</span>) =&gt;</span> <span class="hljs-title function_">fetchOrders</span>({ sort, ...pagination })}
+/&gt;
+</code></pre></div>
+<p>组件只负责显示传进来的状态，用户操作时通过 <code>onChange</code> 告诉外部“想按金额降序”“想看第 3 页”，外部请求新数据再传回来。这和表单输入框的受控、非受控是同一个思路。</p>
+<p>受控的另一个好处是能把状态同步到地址栏，刷新或分享链接后还是同样的排序和页码，见<a href="/questions/api-url-search-params/">《URLSearchParams 怎样处理筛选状态、重复参数和编码？》</a>。</p>
+<h2>rowKey 为什么必须稳定</h2>
+<p>勾选、展开、行内编辑这些状态，都要记住“是哪一行”。如果用数组下标当标识，排序或翻页后下标对应的是另一行，勾选状态就跑到别的行上了。所以要求调用方传 <code>rowKey</code>，指定用哪个字段当唯一标识，通常是数据库 ID。在 React 里它也直接用作行的 <code>key</code>，原因见<a href="/questions/react-key/">《列表中的 key 为什么不能随意使用数组下标？》</a>。</p>
+<p>跨页勾选时，组件内部要用 <code>rowKey</code> 的集合记录已选的行，而不是记录当前页的行对象，翻页回来才能恢复勾选。</p>
+<h2>语义和无障碍要做什么</h2>
+<p>尽量渲染成原生的 <code>&lt;table&gt;</code>。MDN 说明 <code>&lt;table&gt;</code> 表示表格数据，也就是由行和列组成的二维信息；<code>&lt;th&gt;</code> 定义表头单元格，它是哪组单元格的表头，由 <code>scope</code> 和 <code>headers</code> 属性决定。列表头写 <code>scope=&quot;col&quot;</code>，行表头写 <code>scope=&quot;row&quot;</code>，读屏软件读到某个单元格时，就能同时念出它属于哪一列。</p>
+<p>用 <code>div</code> 加 CSS 拼出来的表格，看起来一样，读屏用户却只听到一串没有关系的文字。</p>
+<p>排序列要加 <code>aria-sort</code>。MDN 说明，表格支持排序时，在当前排序列的表头上设 <code>aria-sort=&quot;ascending&quot;</code> 或 <code>&quot;descending&quot;</code>；它应该只出现在一个表头上，换了排序列就移到新的表头；它只告诉辅助技术哪一列已排序，不会改变实际的排列顺序。排序触发器要放在表头里的 <code>&lt;button&gt;</code> 上，键盘才能操作。</p>
+<p>还有一点：只是展示数据的表格，不要随手加 <code>role=&quot;grid&quot;</code>。MDN 说明 grid 角色是一种复合控件，单元格可以用方向键在二维方向上移动焦点，需要自己实现整套键盘交互。只有像电子表格那样需要在单元格之间导航编辑时才用。表格无障碍的细节见<a href="/questions/a11y-table/">《数据表格怎样设计才方便键盘和读屏用户理解？》</a>。</p>
+<h2>数据量大时怎样保证流畅</h2>
+<p>几百行直接渲染没问题。上千行以后，同时存在的 DOM 节点太多，滚动和更新都会卡，这时可以用虚拟滚动，只渲染可视区附近的行，原理见<a href="/questions/perf-virtual-list/">《虚拟列表通过什么方式减少渲染成本？》</a>。</p>
+<p>表格做虚拟滚动比普通列表麻烦：行高可能不一样，要测量；固定表头和固定列要和滚动区域同步；列宽要在表头和表体之间保持一致，常用 <code>table-layout: fixed</code> 或者自己计算列宽。</p>
+<p>虚拟滚动也有代价。没渲染的行不在 DOM 里，浏览器的页内搜索找不到，读屏软件也读不到，总行数要用 <code>aria-rowcount</code> 等属性另外告诉辅助技术。所以能分页的场景，分页往往比虚拟滚动更简单、更易用。</p>
+<h2>常见追问</h2>
+<p><strong>表格组件要不要内置请求数据的逻辑？</strong></p>
+<blockquote>
+<p>一般不内置。组件只负责展示和交互，请求放在外部或者一个单独的 Hook 里，比如 <code>useTable(fetcher)</code> 返回 <code>dataSource</code>、<code>pagination</code>、<code>onChange</code> 直接传给表格。这样表格能用在任何数据来源上，请求逻辑也能单独测试。</p>
+</blockquote>
+<p><strong>列很多时怎样让用户自定义显示哪些列？</strong></p>
+<blockquote>
+<p>列配置里每列有唯一的 <code>key</code>，组件维护一个“可见列 key 列表”，渲染时过滤 <code>columns</code>。用户的选择可以按页面存到 <code>localStorage</code>。列的顺序和宽度也是同样的做法。</p>
+</blockquote>
+<p><strong>单元格里的内容太长怎么办？</strong></p>
+<blockquote>
+<p>常见做法是单行省略，配合悬浮提示显示全文。但悬浮提示对键盘和触屏用户不友好，重要信息最好允许换行，或者在详情页里完整显示。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/table" target="_blank" rel="noreferrer">MDN · &lt;table&gt;<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/th" target="_blank" rel="noreferrer">MDN · &lt;th&gt;<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-sort" target="_blank" rel="noreferrer">MDN · aria-sort<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/grid_role" target="_blank" rel="noreferrer">MDN · ARIA grid role<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E9%80%9A%E7%94%A8%E7%9A%84%E8%A1%A8%E6%A0%BC%E7%BB%84%E4%BB%B6%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E9%80%9A%E7%94%A8%E7%9A%84%E8%A1%A8%E6%A0%BC%E7%BB%84%E4%BB%B6%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Adesign-table-component%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9C%BA%E6%99%AF%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fdesign-table-component%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样设计一个通用的表格组件？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/design-modal-component/">弹窗组件怎样设计？</a></li><li><a href="/questions/design-permission/">前端权限控制怎样设计路由、按钮和接口三层？</a></li><li><a href="/questions/design-qr-login/">扫码登录是怎样实现的？</a></li><li><a href="/questions/design-dark-mode/">怎样实现网站的暗黑模式和主题切换？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

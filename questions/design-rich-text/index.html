@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="场景设计面试题：浏览器富文本编辑的基础是 contenteditable，元素加上它就能直接输入和选中。" />
+    <title>富文本编辑器的原理是什么？contenteditable 有什么问题？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/design-rich-text/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="富文本编辑器的原理是什么？contenteditable 有什么问题？" />
+    <meta property="og:description" content="场景设计面试题：浏览器富文本编辑的基础是 contenteditable，元素加上它就能直接输入和选中。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/design-rich-text/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/design-rich-text/#webpage","url":"https://fe.hushifa.top/questions/design-rich-text/","name":"富文本编辑器的原理是什么？contenteditable 有什么问题？","description":"场景设计面试题：浏览器富文本编辑的基础是 contenteditable，元素加上它就能直接输入和选中。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/design-rich-text/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/design-rich-text/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"场景设计面试题","item":"https://fe.hushifa.top/topics/system-design/"},{"@type":"ListItem","position":3,"name":"富文本编辑器的原理是什么？contenteditable 有什么问题？","item":"https://fe.hushifa.top/questions/design-rich-text/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DSAVeeDz.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/system-design/">场景设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">富文本编辑器的原理是什么？contenteditable 有什么问题？</span></nav><h1 tabindex="-1">富文本编辑器的原理是什么？contenteditable 有什么问题？</h1><p class="reading-summary">浏览器富文本编辑的基础是 contenteditable，元素加上它就能直接输入和选中。早期编辑器靠 execCommand 加粗、插入列表，但 MDN 已把它标为弃用且不标准，不同浏览器生成的 HTML 不一致。现代编辑器通常维护自己的文档模型，用 Selection 记录光标，拦截 beforeinput 等事件，由模型重新渲染 DOM；粘贴内容要清洗，输出 HTML 要防 XSS。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>在后台写文章，可以选中一段文字点“加粗”，插入图片、列表、链接，所见即所得。这类编辑器就是富文本编辑器。</p>
+<p>它的基础是 HTML 的 <code>contenteditable</code> 属性。元素加上它，用户就能在里面输入、删除、选中文字，光标、输入法、拼写检查都由浏览器提供。早期的编辑器再配合 <code>document.execCommand(&#x27;bold&#x27;)</code> 这类命令做格式化，浏览器直接改 DOM。</p>
+<p>问题在于，<code>execCommand</code> 现在被 MDN 标为弃用、不标准，不同浏览器执行同一个命令生成的 HTML 不一样，粘贴进来的内容也会带上各种格式。所以现代编辑器一般自己维护一份文档数据，拦截 <code>beforeinput</code> 等输入事件，先改数据，再按数据重新渲染 DOM，<code>contenteditable</code> 只负责提供光标和输入能力。</p>
+<p>要注意两件事：粘贴和输出的 HTML 必须清洗，否则就是 XSS 漏洞；中文输入法输入时，组合过程中的事件不一定能取消，编辑器要等组合结束再同步数据。</p>
+</blockquote>
+<h2>contenteditable 提供了什么</h2>
+<p><code>contenteditable</code> 是一个全局属性。MDN 说明它可以取 <code>true</code>（或空字符串）、<code>false</code>、<code>plaintext-only</code>；属性缺失或取值无效时，从父元素继承，所以父元素可编辑，子元素也可编辑。</p>
+<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">contenteditable</span>=<span class="hljs-string">&quot;true&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>在这里输入<span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span>正文<span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre></div>
+<p>加上以后，浏览器把它变成一个可编辑区域：能聚焦，能用 Tab 进入，用户可以直接打字、选中、删除，光标移动和输入法都由浏览器处理。这些能力自己实现成本极高，所以几乎所有网页富文本编辑器都建立在它之上。</p>
+<p>MDN 还提到粘贴的区别：内容粘贴进 <code>contenteditable=&quot;true&quot;</code> 的元素时，格式全部保留；粘贴进 <code>plaintext-only</code> 时，格式全部去掉。只需要纯文本的场景，比如评论框，用 <code>plaintext-only</code> 省事很多。</p>
+<h2>execCommand 为什么不推荐用了</h2>
+<p>早期做加粗，只要一行：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">execCommand</span>(<span class="hljs-string">&#x27;bold&#x27;</span>);
+</code></pre></div>
+<p>浏览器会把当前选区包上加粗标签。插入列表、链接、图片也都有对应命令。</p>
+<p>MDN 现在把这个方法标为弃用（Deprecated）和不标准（Non-standard），不建议在生产环境用。MDN 同时承认，它还有一些暂时没有替代品的用法：和直接操作 DOM 不同，<code>execCommand</code> 的修改会进入浏览器的撤销栈，用户按 Ctrl+Z 能撤回。如果非用不可，要测试跨浏览器兼容性。复制粘贴相关的命令，MDN 建议改用 Clipboard API。</p>
+<p>它的问题在于结果不可控。MDN 介绍的 <code>styleWithCSS</code> 命令就能切换输出方式：设为 <code>true</code> 时生成 <code>style</code> 属性，设为 <code>false</code> 时生成 <code>&lt;b&gt;</code> 这类表现型标签，各浏览器的默认行为和细节也不完全一样；连续操作后 DOM 里会堆积大量嵌套标签。MDN 还提到，它的修改是否触发 <code>beforeinput</code> 和 <code>input</code> 事件，取决于浏览器和配置。编辑器的数据如果直接取 <code>innerHTML</code>，就很难保持干净和一致。</p>
+<h2>现代编辑器是怎样工作的</h2>
+<p>主流方案的思路是把“数据”和“显示”分开。</p>
+<p>编辑器内部用一份结构化的数据描述文档，比如“一个段落，里面有一段普通文字和一段加粗文字”。界面上的 DOM 只是这份数据渲染出来的结果。</p>
+<p>用户输入时，编辑器监听 <code>beforeinput</code> 事件。MDN 介绍，这个事件在可编辑内容即将被修改前触发，适用于 <code>contenteditable</code> 元素，能让应用在浏览器改 DOM 之前接管编辑行为。事件对象的 <code>inputType</code> 说明这是什么操作（插入文字、删除、换行、加粗等），编辑器取消默认行为，自己去改数据，再重新渲染。</p>
+<p>光标位置用 Selection API 读取和设置。MDN 说明 <code>Selection</code> 对象表示用户选中的文字范围或当前光标位置，通过 <code>window.getSelection()</code> 获取。编辑器把 DOM 里的选区换算成数据里的位置；重新渲染后，再把数据里的位置换算回 DOM，设置回去，否则光标会跳。</p>
+<p>这样做以后，格式化、撤销重做、协同编辑都基于数据进行，输出的 HTML 也由编辑器统一生成，结构可控。代价是实现复杂，所以通常直接用成熟的开源编辑器框架。</p>
+<h2>beforeinput 能拦住所有输入吗</h2>
+<p>拦不住。MDN 明确写了：并不是每次修改都会触发 <code>beforeinput</code>，有时它触发了但不能取消。自动完成、拼写纠正、密码管理器填充、输入法输入等情况都可能这样，具体因浏览器和操作系统而异。MDN 的建议是同时处理 <code>input</code> 事件，必要时撤销 <code>beforeinput</code> 没处理到的修改。</p>
+<p>中文输入法是最常见的情况。用户打拼音时，候选字还没确定，DOM 里已经出现了临时文字。编辑器在这期间不能重新渲染那块 DOM，否则会打断输入法。通常的做法是在 <code>compositionstart</code> 到 <code>compositionend</code> 之间暂停同步，组合结束后读出最终文字再更新数据。</p>
+<h2>粘贴和保存时为什么要清洗 HTML</h2>
+<p>粘贴从网页或 Word 复制的内容，剪贴板里的 HTML 会带着各种样式、类名、注释，甚至脚本和事件属性。直接插进编辑区，既会污染格式，也有安全风险。编辑器应该读出剪贴板的 HTML，按白名单只保留允许的标签和属性，转换成自己的数据结构。</p>
+<p>保存后展示文章时也一样。富文本最终以 HTML 输出，展示页如果直接用 <code>innerHTML</code> 插入，别人提交的 <code>&lt;img src=x onerror=...&gt;</code> 就会执行。所以服务端保存前和展示前都要用成熟的清洗库过滤，XSS 的原理和防范见<a href="/questions/http-xss/">《XSS 和 CSRF 有什么区别？分别如何防范？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>只需要支持加粗和链接，也要自己做文档模型吗？</strong></p>
+<blockquote>
+<p>不一定。需求很简单时，用 <code>contenteditable</code> 加少量命令，保存前清洗 HTML 就能用。但要接受跨浏览器的标签不一致。功能一多、需要协同或者对输出格式有要求，就该换成基于数据模型的编辑器框架。</p>
+</blockquote>
+<p><strong>为什么有的编辑器不用 contenteditable，而是自己画光标？</strong></p>
+<blockquote>
+<p>在线文档、表格这类对排版控制要求极高的产品，会用隐藏的输入框接收键盘和输入法，自己用 DOM 或 Canvas 画文字和光标。这样排版完全可控，但光标、选区、输入法候选框位置、无障碍都要自己实现，成本非常高。</p>
+</blockquote>
+<p><strong>contenteditable 里嵌套 contenteditable 有什么要注意的？</strong></p>
+<blockquote>
+<p>MDN 提到，嵌套在另一个 <code>contenteditable</code> 元素里的 <code>contenteditable</code> 元素，默认不会加入 Tab 键的顺序，需要的话要加 <code>tabindex=&quot;0&quot;</code>。另外属性会继承，想让编辑区里某一块不可编辑，要显式写 <code>contenteditable=&quot;false&quot;</code>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/contenteditable" target="_blank" rel="noreferrer">MDN · contenteditable<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand" target="_blank" rel="noreferrer">MDN · Document.execCommand()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/beforeinput_event" target="_blank" rel="noreferrer">MDN · beforeinput event<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/Selection" target="_blank" rel="noreferrer">MDN · Selection<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%AF%8C%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8%E7%9A%84%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9Fcontenteditable+%E6%9C%89%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%AF%8C%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8%E7%9A%84%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9Fcontenteditable+%E6%9C%89%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Adesign-rich-text%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9C%BA%E6%99%AF%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fdesign-rich-text%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：富文本编辑器的原理是什么？contenteditable 有什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/design-permission/">前端权限控制怎样设计路由、按钮和接口三层？</a></li><li><a href="/questions/design-qr-login/">扫码登录是怎样实现的？</a></li><li><a href="/questions/design-dark-mode/">怎样实现网站的暗黑模式和主题切换？</a></li><li><a href="/questions/design-skeleton/">骨架屏怎样实现？和 loading 有什么区别？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

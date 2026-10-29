@@ -1,0 +1,64 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>搜索页地址是 <code>/s?q=hello+world&amp;tag=js&amp;tag=css</code>，要拿到 <code>{ q: &#x27;hello world&#x27;, tag: [&#x27;js&#x27;, &#x27;css&#x27;] }</code>。做法是取出 <code>?</code> 后面、<code>#</code> 前面的部分，按 <code>&amp;</code> 拆开，每段再按第一个 <code>=</code> 分成键和值。</p>
+<p>键和值都要解码：先把 <code>+</code> 换成空格，因为表单格式里 <code>+</code> 表示空格，再用 <code>decodeURIComponent</code> 还原 <code>%E5%BC%A0</code> 这类百分号编码。同名参数出现多次时合成数组，只有键没有 <code>=</code> 的参数，值记为空字符串。</p>
+<p>要注意两个坑。<code>decodeURIComponent</code> 遇到不完整的 <code>%</code> 序列会抛 <code>URIError</code>，要 <code>try...catch</code> 兜底；键名是 <code>__proto__</code> 时，直接给普通对象赋值会改它的原型而不是加属性，用 <code>Map</code> 收集再 <code>Object.fromEntries</code> 可以避开。</p>
+<p>实际项目里用 <code>URLSearchParams</code> 就够了，它按表单格式解码，<code>getAll</code> 能拿到重复参数，手写版主要用来说明背后的规则。</p>
+</blockquote>
+<h2>手写解析函数</h2>
+<p>下面的 <code>parseQuery</code> 接受完整网址或只有查询的部分，重点看三处：怎样截取查询部分、怎样解码、重复的键怎样处理。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">decode</span>(<span class="hljs-params">s</span>) {
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">decodeURIComponent</span>(s.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/\\+/g</span>, <span class="hljs-string">&#x27; &#x27;</span>));
+  } <span class="hljs-keyword">catch</span> {
+    <span class="hljs-keyword">return</span> s;
+  }
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">parseQuery</span>(<span class="hljs-params">input</span>) {
+  <span class="hljs-keyword">const</span> start = input.<span class="hljs-title function_">indexOf</span>(<span class="hljs-string">&#x27;?&#x27;</span>);
+  <span class="hljs-keyword">const</span> query = (start === -<span class="hljs-number">1</span> ? input : input.<span class="hljs-title function_">slice</span>(start + <span class="hljs-number">1</span>)).<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;#&#x27;</span>)[<span class="hljs-number">0</span>];
+  <span class="hljs-keyword">const</span> map = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> part <span class="hljs-keyword">of</span> query.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;&amp;&#x27;</span>)) {
+    <span class="hljs-keyword">if</span> (!part) <span class="hljs-keyword">continue</span>;
+    <span class="hljs-keyword">const</span> eq = part.<span class="hljs-title function_">indexOf</span>(<span class="hljs-string">&#x27;=&#x27;</span>);
+    <span class="hljs-keyword">const</span> key = <span class="hljs-title function_">decode</span>(eq === -<span class="hljs-number">1</span> ? part : part.<span class="hljs-title function_">slice</span>(<span class="hljs-number">0</span>, eq));
+    <span class="hljs-keyword">const</span> value = <span class="hljs-title function_">decode</span>(eq === -<span class="hljs-number">1</span> ? <span class="hljs-string">&#x27;&#x27;</span> : part.<span class="hljs-title function_">slice</span>(eq + <span class="hljs-number">1</span>));
+    <span class="hljs-keyword">if</span> (map.<span class="hljs-title function_">has</span>(key)) {
+      map.<span class="hljs-title function_">set</span>(key, [].<span class="hljs-title function_">concat</span>(map.<span class="hljs-title function_">get</span>(key), value));
+    } <span class="hljs-keyword">else</span> {
+      map.<span class="hljs-title function_">set</span>(key, value);
+    }
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">fromEntries</span>(map);
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">parseQuery</span>(<span class="hljs-string">&#x27;https://a.com/s?q=hello+world&amp;tag=js&amp;tag=css&amp;empty&amp;name=%E5%BC%A0#top&#x27;</span>));
+<span class="hljs-comment">// { q: &#x27;hello world&#x27;, tag: [ &#x27;js&#x27;, &#x27;css&#x27; ], empty: &#x27;&#x27;, name: &#x27;张&#x27; }</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">parseQuery</span>(<span class="hljs-string">&#x27;?bad=%E0%A4%A&#x27;</span>)); <span class="hljs-comment">// { bad: &#x27;%E0%A4%A&#x27; }</span>
+
+<span class="hljs-keyword">const</span> evil = <span class="hljs-title function_">parseQuery</span>(<span class="hljs-string">&#x27;__proto__=x&#x27;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">hasOwn</span>(evil, <span class="hljs-string">&#x27;__proto__&#x27;</span>), <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">getPrototypeOf</span>(evil) === <span class="hljs-title class_">Object</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>); <span class="hljs-comment">// true true</span>
+<span class="hljs-keyword">const</span> plain = {};
+plain[<span class="hljs-string">&#x27;__proto__&#x27;</span>] = <span class="hljs-string">&#x27;x&#x27;</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(plain).<span class="hljs-property">length</span>); <span class="hljs-comment">// 0</span>
+</code></pre></div>
+<p>为什么按“第一个” <code>=</code> 拆？因为值里也可能有 <code>=</code>，比如 <code>token=a=b</code>，按第一个拆才能得到完整的值 <code>a=b</code>。为什么先换 <code>+</code> 再解码？<code>decodeURIComponent</code> 本身不会把 <code>+</code> 变成空格，而表单提交和很多网址里空格写成 <code>+</code>；顺序反过来的话，<code>%2B</code> 解码出的真加号也会被错误地换成空格。</p>
+<p><code>%E0%A4%A</code> 少了一位，<code>decodeURIComponent</code> 会抛 <code>URIError</code>。MDN 写明，<code>%</code> 后面不是两位十六进制数字，或者编码出的不是合法 UTF-8 时都会抛这个错。网址来自用户，不能让一个坏参数让整个页面报错，所以这里退回原文。</p>
+<p>最后几行对比了 <code>__proto__</code> 键。普通对象上 <code>obj[&#x27;__proto__&#x27;] = &#x27;x&#x27;</code> 走的是原型的 setter，字符串不是对象，赋值被忽略，<code>plain</code> 一个自有属性都没有，参数就丢了；如果值是对象，还会改掉原型。<code>Object.fromEntries</code> 是定义属性而不是赋值，所以 <code>evil</code> 上确实有一个叫 <code>__proto__</code> 的自有属性，原型也没变。</p>
+<h2>直接用 URLSearchParams</h2>
+<p>浏览器和 Node 都内置了 <code>URLSearchParams</code>。MDN 写明，传字符串时按 <code>application/x-www-form-urlencoded</code> 格式解析，开头的 <code>?</code> 会被忽略；这种格式会解码百分号编码，并把 <code>+</code> 解码成空格。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> params = <span class="hljs-keyword">new</span> <span class="hljs-title class_">URLSearchParams</span>(<span class="hljs-string">&#x27;q=hello+world&amp;tag=js&amp;tag=css&amp;empty&#x27;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(params.<span class="hljs-title function_">getAll</span>(<span class="hljs-string">&#x27;tag&#x27;</span>), params.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;q&#x27;</span>), params.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;empty&#x27;</span>)); <span class="hljs-comment">// [ &#x27;js&#x27;, &#x27;css&#x27; ] hello world</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">fromEntries</span>(params)); <span class="hljs-comment">// { q: &#x27;hello world&#x27;, tag: &#x27;css&#x27;, empty: &#x27;&#x27; }</span>
+</code></pre></div>
+<p><code>get(&#x27;empty&#x27;)</code> 返回空字符串，所以第一行最后打印的是空的。第二行要注意，<code>Object.fromEntries</code> 遇到同名键时后面的覆盖前面的，<code>tag</code> 只剩 <code>&#x27;css&#x27;</code>，需要多个值时要用 <code>getAll</code>。更多用法见<a href="/questions/api-url-search-params/">《URLSearchParams 怎样处理筛选状态、重复参数和编码？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>为什么不用 <code>decodeURI</code> 解码参数？</strong></p>
+<blockquote>
+<p>MDN 写明 <code>decodeURI</code> 把输入当作完整网址，不解码属于网址语法的字符，比如 <code>decodeURI(&#x27;%26%3D&#x27;)</code> 还是 <code>%26%3D</code>，参数值里本来编码过的 <code>%26</code> 就还原不出 <code>&amp;</code>。解析单个参数的键和值，要用 <code>decodeURIComponent</code>。</p>
+</blockquote>
+<p><strong>解析结果能直接拿来改原型链上的东西吗？</strong></p>
+<blockquote>
+<p>用普通对象逐个赋值时，<code>__proto__</code> 这样的键可能改掉对象的原型；后续再把结果深合并到别的对象里，还可能污染 <code>Object.prototype</code>。所以解析用户输入要么用 <code>Map</code>、<code>Object.create(null)</code>，要么用 <code>Object.fromEntries</code> 这种定义属性的方式，合并时也要跳过 <code>__proto__</code>、<code>constructor</code>、<code>prototype</code> 这类键。</p>
+</blockquote>`};export{e as default};

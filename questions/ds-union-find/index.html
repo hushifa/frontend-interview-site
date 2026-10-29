@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="数据结构与算法面试题：并查集用一个 parent 数组把元素组织成若干棵树，每棵树代表一个集合，树根就是集合的代表。" />
+    <title>并查集怎样实现？适合解决什么问题？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/ds-union-find/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="并查集怎样实现？适合解决什么问题？ · 前端知库" />
+    <meta property="og:description" content="数据结构与算法面试题：并查集用一个 parent 数组把元素组织成若干棵树，每棵树代表一个集合，树根就是集合的代表。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/ds-union-find/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ds-union-find/#webpage","url":"https://fe.hushifa.top/questions/ds-union-find/","name":"并查集怎样实现？适合解决什么问题？ · 前端知库","description":"数据结构与算法面试题：并查集用一个 parent 数组把元素组织成若干棵树，每棵树代表一个集合，树根就是集合的代表。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ds-union-find/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ds-union-find/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"数据结构与算法面试题","item":"https://fe.hushifa.top/topics/data-structures/"},{"@type":"ListItem","position":3,"name":"并查集怎样实现？适合解决什么问题？","item":"https://fe.hushifa.top/questions/ds-union-find/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DSAVeeDz.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/data-structures/">数据结构与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">并查集怎样实现？适合解决什么问题？</span></nav><h1 tabindex="-1">并查集怎样实现？适合解决什么问题？</h1><p class="reading-summary">并查集用一个 parent 数组把元素组织成若干棵树，每棵树代表一个集合，树根就是集合的代表。find 沿着 parent 找到根，union 把一棵树的根挂到另一棵的根下。加上路径压缩和按大小合并后，每次操作的均摊时间接近常数。适合动态判断“两个元素是否连通”，比如朋友圈数量、岛屿数量、检测无向图里的环。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>有 5 个人，告诉你“0 和 1 是朋友”“1 和 2 是朋友”“3 和 4 是朋友”，朋友的朋友也算一个圈子，问一共有几个圈子、0 和 2 是不是一个圈子。并查集就是专门回答这类“谁和谁属于同一组”问题的结构，名字来自它的两个操作：查找（find）和合并（union）。</p>
+<p>实现只要一个 <code>parent</code> 数组。一开始每个人的 <code>parent</code> 指向自己，各自是一组。每组组织成一棵树，树根当作这一组的代表；<code>find(x)</code> 顺着 <code>parent</code> 一路往上找到根，两个元素的根相同就在同一组；<code>union(a, b)</code> 找到两边的根，把一个根挂到另一个根下面，两组就合成一组。</p>
+<p>只这样写，树可能退化成一条长链，<code>find</code> 变成 O(n)。两个优化：路径压缩，<code>find</code> 时把路过的节点直接挂到根上，下次一步就到；按大小合并，总是把小树挂到大树下，让树保持矮。两个一起用，每次操作的均摊时间是 O(α(n))，α 是反阿克曼函数，增长极慢，实际可以当成常数。</p>
+<p>适合的场景是连通关系只增不减、需要反复查询的问题：朋友圈或岛屿数量、无向图里有没有环、Kruskal 最小生成树。要注意它不支持“拆开”一组，也不能直接回答两点之间的路径是什么，需要路径时还是要用 BFS 或 DFS。</p>
+</blockquote>
+<h2>实现和用法</h2>
+<p>先看 <code>find</code> 里的路径压缩：递归找到根以后，回来的路上把每个节点的 <code>parent</code> 都改成根。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">UnionFind</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">n</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span> = <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">from</span>({ <span class="hljs-attr">length</span>: n }, <span class="hljs-function">(<span class="hljs-params">_, i</span>) =&gt;</span> i);
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(n).<span class="hljs-title function_">fill</span>(<span class="hljs-number">1</span>);
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">count</span> = n; <span class="hljs-comment">// 当前有几个集合</span>
+  }
+  <span class="hljs-title function_">find</span>(<span class="hljs-params">x</span>) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span>[x] !== x) {
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span>[x] = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">find</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span>[x]); <span class="hljs-comment">// 路径压缩</span>
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span>[x];
+  }
+  <span class="hljs-title function_">union</span>(<span class="hljs-params">a, b</span>) {
+    <span class="hljs-keyword">let</span> rootA = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">find</span>(a);
+    <span class="hljs-keyword">let</span> rootB = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">find</span>(b);
+    <span class="hljs-keyword">if</span> (rootA === rootB) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; <span class="hljs-comment">// 本来就在一组，没有合并</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span>[rootA] &lt; <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span>[rootB]) [rootA, rootB] = [rootB, rootA];
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span>[rootB] = rootA; <span class="hljs-comment">// 小树挂到大树下</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span>[rootA] += <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span>[rootB];
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">count</span>--;
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+  }
+  <span class="hljs-title function_">connected</span>(<span class="hljs-params">a, b</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">find</span>(a) === <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">find</span>(b);
+  }
+}
+
+<span class="hljs-keyword">const</span> uf = <span class="hljs-keyword">new</span> <span class="hljs-title class_">UnionFind</span>(<span class="hljs-number">5</span>);
+uf.<span class="hljs-title function_">union</span>(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>);
+uf.<span class="hljs-title function_">union</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>);
+uf.<span class="hljs-title function_">union</span>(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(uf.<span class="hljs-property">count</span>); <span class="hljs-comment">// 2</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(uf.<span class="hljs-title function_">connected</span>(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>), uf.<span class="hljs-title function_">connected</span>(<span class="hljs-number">0</span>, <span class="hljs-number">3</span>)); <span class="hljs-comment">// true false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(uf.<span class="hljs-title function_">union</span>(<span class="hljs-number">2</span>, <span class="hljs-number">0</span>)); <span class="hljs-comment">// false</span>
+uf.<span class="hljs-title function_">union</span>(<span class="hljs-number">2</span>, <span class="hljs-number">4</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(uf.<span class="hljs-property">count</span>, uf.<span class="hljs-title function_">connected</span>(<span class="hljs-number">0</span>, <span class="hljs-number">4</span>)); <span class="hljs-comment">// 1 true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">UnionFind</span>(<span class="hljs-number">0</span>).<span class="hljs-property">count</span>); <span class="hljs-comment">// 0</span>
+</code></pre></div>
+<p><code>union(2, 0)</code> 为什么返回 false？0、1、2 已经通过前两次合并成为一组，两边的根相同，没有发生合并，<code>count</code> 也不减。这个返回值很有用：在无向图里逐条加边时，如果某条边两端已经连通，再加这条边就形成了环。</p>
+<p><code>count</code> 为什么只在真正合并时减 1？一开始 n 个元素是 n 组，每次成功合并两组变一组，所以合并成功的次数就是减少的组数。查询“有几个朋友圈”直接读 <code>count</code>，不用再遍历。</p>
+<p><code>find</code> 用了递归，链很长时会不会爆栈？加了按大小合并以后，树高最多是 log₂n，即使 n 是一百万也只有 20 层左右，不会爆栈。只做路径压缩、不做按大小合并时，第一次 <code>find</code> 之前的链可能很长，这时可以改成循环写法。</p>
+<h2>用并查集检测环、数岛屿</h2>
+<p>下面这段用上面的 <code>union</code> 返回值找出无向图中第一条造成环的边。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">UnionFind</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">n</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span> = <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">from</span>({ <span class="hljs-attr">length</span>: n }, <span class="hljs-function">(<span class="hljs-params">_, i</span>) =&gt;</span> i);
+  }
+  <span class="hljs-title function_">find</span>(<span class="hljs-params">x</span>) {
+    <span class="hljs-keyword">while</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span>[x] !== x) {
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span>[x] = <span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span>[<span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span>[x]]; <span class="hljs-comment">// 隔一层压缩，循环写法不怕深链</span>
+      x = <span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span>[x];
+    }
+    <span class="hljs-keyword">return</span> x;
+  }
+  <span class="hljs-title function_">union</span>(<span class="hljs-params">a, b</span>) {
+    <span class="hljs-keyword">const</span> rootA = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">find</span>(a);
+    <span class="hljs-keyword">const</span> rootB = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">find</span>(b);
+    <span class="hljs-keyword">if</span> (rootA === rootB) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">parent</span>[rootB] = rootA;
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+  }
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">findRedundantEdge</span>(<span class="hljs-params">n, edges</span>) {
+  <span class="hljs-keyword">const</span> uf = <span class="hljs-keyword">new</span> <span class="hljs-title class_">UnionFind</span>(n);
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> [a, b] <span class="hljs-keyword">of</span> edges) {
+    <span class="hljs-keyword">if</span> (!uf.<span class="hljs-title function_">union</span>(a, b)) <span class="hljs-keyword">return</span> [a, b];
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(<span class="hljs-title function_">findRedundantEdge</span>(<span class="hljs-number">3</span>, [[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">0</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]]))); <span class="hljs-comment">// [1,2]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(<span class="hljs-title function_">findRedundantEdge</span>(<span class="hljs-number">4</span>, [[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">2</span>, <span class="hljs-number">3</span>]]))); <span class="hljs-comment">// null</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(<span class="hljs-title function_">findRedundantEdge</span>(<span class="hljs-number">2</span>, [[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>]]))); <span class="hljs-comment">// [1,0]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(<span class="hljs-title function_">findRedundantEdge</span>(<span class="hljs-number">1</span>, []))); <span class="hljs-comment">// null</span>
+</code></pre></div>
+<p><code>[[0, 1], [0, 2], [1, 2]]</code> 为什么是 <code>[1, 2]</code>？前两条边把 0、1、2 连成一组。第三条边的两端 1 和 2 已经连通，再加就绕成一个圈，<code>union</code> 返回 false。</p>
+<p>循环版的 <code>find</code> 叫路径减半：每走一步，把当前节点的 <code>parent</code> 改成祖父节点，效果和递归的完全压缩接近，不需要递归栈。</p>
+<p>岛屿数量也是同样的套路：把网格里每个格子编号为 <code>行 × 列数 + 列</code>，每块陆地先算一组，再和右边、下边相邻的陆地合并，最后陆地组数就是岛屿数。这题用 DFS 也能做，并查集的优势在于陆地是一块块动态加进来、每加一块都要回答当前岛屿数的场景。</p>
+<h2>常见追问</h2>
+<p><strong>路径压缩和按大小合并只用一个行不行？</strong></p>
+<blockquote>
+<p>行，只是保证不同。只用按大小合并，树高不超过 log n，每次 O(log n)；只用路径压缩，均摊也是对数级别。两个一起用才能达到 O(α(n))。面试里写路径压缩通常就够了，被问到时再补上按大小或按秩合并。</p>
+</blockquote>
+<p><strong>并查集能删除元素或拆分集合吗？</strong></p>
+<blockquote>
+<p>标准并查集不支持。合并以后树的结构已经被压缩改写，无法知道原来是哪些边连起来的。需要拆分时，常见做法是把操作反过来：先把最终状态建好，倒着处理“删除”，就变成了“添加”。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from" target="_blank" rel="noreferrer">MDN · Array.from()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/fill" target="_blank" rel="noreferrer">MDN · Array.prototype.fill()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%B9%B6%E6%9F%A5%E9%9B%86%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%EF%BC%9F%E9%80%82%E5%90%88%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%B9%B6%E6%9F%A5%E9%9B%86%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%EF%BC%9F%E9%80%82%E5%90%88%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ads-union-find%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fds-union-find%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：并查集怎样实现？适合解决什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ds-stack-problems/">有效括号、最小栈这类栈题怎样做？</a></li><li><a href="/questions/ds-dijkstra/">图的最短路径怎样求？BFS 和 Dijkstra 有什么区别？</a></li><li><a href="/questions/ds-sorting/">快速排序和归并排序怎样实现？时间复杂度和稳定性有什么区别？</a></li><li><a href="/questions/ds-linked-list/">怎样反转链表、判断链表有环？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

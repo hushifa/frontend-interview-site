@@ -1,0 +1,172 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>把表单数据存进 <code>localStorage</code> 前要先转成字符串，读出来再还原，这就是 <code>JSON.stringify</code> 和 <code>JSON.parse</code>。手写 <code>stringify</code> 的核心是按类型递归：字符串加双引号并转义，数字原样输出，对象和数组逐个处理子元素再拼起来。</p>
+<p>难点在边界规则。有 <code>toJSON</code> 方法的值先调用它，<code>Date</code> 就是这样变成 ISO 字符串的；<code>NaN</code>、<code>Infinity</code> 输出 <code>null</code>；<code>undefined</code>、函数、Symbol 在对象里被整个跳过，在数组里变成 <code>null</code>；BigInt 和循环引用会抛 <code>TypeError</code>。</p>
+<p>手写 <code>parse</code> 是写一个小解析器：用一个下标从左往右读，看到 <code>{</code> 读对象，<code>[</code> 读数组，<code>&quot;</code> 读字符串，数字或负号读数字，其余只能是 <code>true</code>、<code>false</code>、<code>null</code>。JSON 比 JS 字面量严格，键必须是双引号字符串，不能有尾随逗号，数字不能有前导零，遇到这些都要抛 <code>SyntaxError</code>。</p>
+<p>简化版省略了 <code>replacer</code>、<code>space</code> 缩进、<code>reviver</code> 等参数，面试时说清楚省略了什么即可。</p>
+</blockquote>
+<h2>stringify：按类型递归拼字符串</h2>
+<p>先看整体结构：<code>walk</code> 处理一个值，返回它的 JSON 文本，返回 <code>undefined</code> 表示“这个值不该出现”，由调用方决定跳过还是写 <code>null</code>。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">ESCAPES</span> = { <span class="hljs-string">&#x27;&quot;&#x27;</span>: <span class="hljs-string">&#x27;\\\\&quot;&#x27;</span>, <span class="hljs-string">&#x27;\\\\&#x27;</span>: <span class="hljs-string">&#x27;\\\\\\\\&#x27;</span>, <span class="hljs-string">&#x27;\\b&#x27;</span>: <span class="hljs-string">&#x27;\\\\b&#x27;</span>, <span class="hljs-string">&#x27;\\f&#x27;</span>: <span class="hljs-string">&#x27;\\\\f&#x27;</span>, <span class="hljs-string">&#x27;\\n&#x27;</span>: <span class="hljs-string">&#x27;\\\\n&#x27;</span>, <span class="hljs-string">&#x27;\\r&#x27;</span>: <span class="hljs-string">&#x27;\\\\r&#x27;</span>, <span class="hljs-string">&#x27;\\t&#x27;</span>: <span class="hljs-string">&#x27;\\\\t&#x27;</span> };
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">quote</span>(<span class="hljs-params">str</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;&quot;&#x27;</span> + str.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/[&quot;\\\\\\u0000-\\u001f]/g</span>, <span class="hljs-function">(<span class="hljs-params">c</span>) =&gt;</span> <span class="hljs-variable constant_">ESCAPES</span>[c] ?? <span class="hljs-string">&#x27;\\\\u&#x27;</span> + c.<span class="hljs-title function_">charCodeAt</span>(<span class="hljs-number">0</span>).<span class="hljs-title function_">toString</span>(<span class="hljs-number">16</span>).<span class="hljs-title function_">padStart</span>(<span class="hljs-number">4</span>, <span class="hljs-string">&#x27;0&#x27;</span>)) + <span class="hljs-string">&#x27;&quot;&#x27;</span>;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">stringify</span>(<span class="hljs-params">value</span>) {
+  <span class="hljs-keyword">const</span> stack = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>();
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">walk</span>(<span class="hljs-params">val, key</span>) {
+    <span class="hljs-keyword">if</span> (val !== <span class="hljs-literal">null</span> &amp;&amp; (<span class="hljs-keyword">typeof</span> val === <span class="hljs-string">&#x27;object&#x27;</span> || <span class="hljs-keyword">typeof</span> val === <span class="hljs-string">&#x27;bigint&#x27;</span>) &amp;&amp; <span class="hljs-keyword">typeof</span> val.<span class="hljs-property">toJSON</span> === <span class="hljs-string">&#x27;function&#x27;</span>) {
+      val = val.<span class="hljs-title function_">toJSON</span>(key);
+    }
+    <span class="hljs-keyword">if</span> (val <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Number</span> || val <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">String</span> || val <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Boolean</span>) val = val.<span class="hljs-title function_">valueOf</span>();
+    <span class="hljs-keyword">if</span> (val === <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;null&#x27;</span>;
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> val === <span class="hljs-string">&#x27;string&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-title function_">quote</span>(val);
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> val === <span class="hljs-string">&#x27;number&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-title class_">Number</span>.<span class="hljs-built_in">isFinite</span>(val) ? <span class="hljs-title class_">String</span>(val) : <span class="hljs-string">&#x27;null&#x27;</span>;
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> val === <span class="hljs-string">&#x27;boolean&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-title class_">String</span>(val);
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> val === <span class="hljs-string">&#x27;bigint&#x27;</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;BigInt 不能序列化&#x27;</span>);
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> val !== <span class="hljs-string">&#x27;object&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>; <span class="hljs-comment">// undefined、函数、Symbol</span>
+    <span class="hljs-keyword">if</span> (stack.<span class="hljs-title function_">has</span>(val)) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;存在循环引用&#x27;</span>);
+    stack.<span class="hljs-title function_">add</span>(val);
+    <span class="hljs-keyword">let</span> out;
+    <span class="hljs-keyword">if</span> (<span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(val)) {
+      out = <span class="hljs-string">&#x27;[&#x27;</span> + val.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">item, i</span>) =&gt;</span> <span class="hljs-title function_">walk</span>(item, <span class="hljs-title class_">String</span>(i)) ?? <span class="hljs-string">&#x27;null&#x27;</span>).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>) + <span class="hljs-string">&#x27;]&#x27;</span>;
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">const</span> parts = [];
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> k <span class="hljs-keyword">of</span> <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(val)) {
+        <span class="hljs-keyword">const</span> s = <span class="hljs-title function_">walk</span>(val[k], k);
+        <span class="hljs-keyword">if</span> (s !== <span class="hljs-literal">undefined</span>) parts.<span class="hljs-title function_">push</span>(<span class="hljs-title function_">quote</span>(k) + <span class="hljs-string">&#x27;:&#x27;</span> + s);
+      }
+      out = <span class="hljs-string">&#x27;{&#x27;</span> + parts.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>) + <span class="hljs-string">&#x27;}&#x27;</span>;
+    }
+    stack.<span class="hljs-title function_">delete</span>(val);
+    <span class="hljs-keyword">return</span> out;
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">walk</span>(value, <span class="hljs-string">&#x27;&#x27;</span>);
+}
+
+<span class="hljs-keyword">const</span> data = { <span class="hljs-attr">a</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">b</span>: [<span class="hljs-literal">undefined</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-number">1</span>, <span class="hljs-title class_">NaN</span>], <span class="hljs-attr">c</span>: <span class="hljs-literal">undefined</span>, <span class="hljs-attr">d</span>: <span class="hljs-string">&#x27;x&quot;\\n&#x27;</span>, <span class="hljs-attr">e</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>(<span class="hljs-number">0</span>), <span class="hljs-attr">f</span>: { <span class="hljs-attr">g</span>: <span class="hljs-literal">null</span> } };
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">stringify</span>(data)); <span class="hljs-comment">// {&quot;a&quot;:1,&quot;b&quot;:[null,null,null],&quot;d&quot;:&quot;x\\&quot;\\n&quot;,&quot;e&quot;:&quot;1970-01-01T00:00:00.000Z&quot;,&quot;f&quot;:{&quot;g&quot;:null}}</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">stringify</span>(data) === <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(data)); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">stringify</span>(<span class="hljs-literal">undefined</span>), <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(<span class="hljs-literal">undefined</span>)); <span class="hljs-comment">// undefined undefined</span>
+<span class="hljs-keyword">const</span> loop = {};
+loop.<span class="hljs-property">self</span> = loop;
+<span class="hljs-keyword">try</span> {
+  <span class="hljs-title function_">stringify</span>(loop);
+} <span class="hljs-keyword">catch</span> (e) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(e.<span class="hljs-property">message</span>); <span class="hljs-comment">// 存在循环引用</span>
+}
+<span class="hljs-keyword">const</span> shared = { <span class="hljs-attr">x</span>: <span class="hljs-number">1</span> };
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">stringify</span>([shared, shared])); <span class="hljs-comment">// [{&quot;x&quot;:1},{&quot;x&quot;:1}]</span>
+</code></pre></div>
+<p>为什么 <code>b</code> 里三个值都成了 <code>null</code>，而 <code>c</code> 整个消失了？MDN 写明 <code>undefined</code>、函数和 Symbol 不是合法的 JSON 值：出现在对象里时属性被省略，出现在数组里时换成 <code>null</code>。数组不能随便删元素，否则后面元素的下标全错了，所以只能占位。<code>NaN</code> 和 <code>Infinity</code> 也按 MDN 的规则输出 <code>null</code>。</p>
+<p><code>e</code> 变成了字符串，是因为 <code>Date</code> 实现了 <code>toJSON</code>，返回值和 <code>toISOString()</code> 相同。<code>stringify</code> 在处理每个值前都会检查 <code>toJSON</code>，这也是自定义序列化结果的标准方式。</p>
+<p>循环检测用的是“当前递归路径上的对象”，处理完一个对象就把它从 <code>stack</code> 删掉。所以最后一行里 <code>shared</code> 出现两次不会被误判为循环，它只是被引用了两次，按 JSON 的规则会输出两份。MDN 写明 JSON 格式不支持对象引用，遇到循环引用会抛 <code>TypeError</code>。</p>
+<p>转义只处理了双引号、反斜杠和 0x00 到 0x1F 的控制字符，这是 JSON 字符串必须转义的部分。规范还要求把单独出现的代理项（U+D800 到 U+DFFF）写成 <code>\\u</code> 转义，简化版没有处理。</p>
+<h2>parse：从左到右的递归下降解析</h2>
+<p>“递归下降”是说每种结构写一个读取函数，读对象时遇到值就调用读值的函数，值又可能是对象或数组，于是函数之间互相递归。下标 <code>i</code> 记录读到哪里，每个函数读完自己那部分就把 <code>i</code> 往后挪。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">parse</span>(<span class="hljs-params">text</span>) {
+  <span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">fail</span> = (<span class="hljs-params">msg</span>) =&gt; {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SyntaxError</span>(<span class="hljs-string">\`<span class="hljs-subst">\${msg}</span>，位置 <span class="hljs-subst">\${i}</span>\`</span>);
+  };
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">skip</span> = (<span class="hljs-params"></span>) =&gt; {
+    <span class="hljs-keyword">while</span> (<span class="hljs-string">&#x27; \\t\\n\\r&#x27;</span>.<span class="hljs-title function_">includes</span>(text[i]) &amp;&amp; i &lt; text.<span class="hljs-property">length</span>) i++;
+  };
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">value</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-title function_">skip</span>();
+    <span class="hljs-keyword">const</span> c = text[i];
+    <span class="hljs-keyword">if</span> (c === <span class="hljs-string">&#x27;{&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-title function_">object</span>();
+    <span class="hljs-keyword">if</span> (c === <span class="hljs-string">&#x27;[&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-title function_">array</span>();
+    <span class="hljs-keyword">if</span> (c === <span class="hljs-string">&#x27;&quot;&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-title function_">string</span>();
+    <span class="hljs-keyword">if</span> (c === <span class="hljs-string">&#x27;-&#x27;</span> || (c &gt;= <span class="hljs-string">&#x27;0&#x27;</span> &amp;&amp; c &lt;= <span class="hljs-string">&#x27;9&#x27;</span>)) <span class="hljs-keyword">return</span> <span class="hljs-title function_">number</span>();
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> [word, v] <span class="hljs-keyword">of</span> [[<span class="hljs-string">&#x27;true&#x27;</span>, <span class="hljs-literal">true</span>], [<span class="hljs-string">&#x27;false&#x27;</span>, <span class="hljs-literal">false</span>], [<span class="hljs-string">&#x27;null&#x27;</span>, <span class="hljs-literal">null</span>]]) {
+      <span class="hljs-keyword">if</span> (text.<span class="hljs-title function_">startsWith</span>(word, i)) {
+        i += word.<span class="hljs-property">length</span>;
+        <span class="hljs-keyword">return</span> v;
+      }
+    }
+    <span class="hljs-title function_">fail</span>(<span class="hljs-string">&#x27;意外的字符&#x27;</span>);
+  }
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">object</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> obj = {};
+    i++;
+    <span class="hljs-title function_">skip</span>();
+    <span class="hljs-keyword">if</span> (text[i] === <span class="hljs-string">&#x27;}&#x27;</span>) <span class="hljs-keyword">return</span> i++, obj;
+    <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+      <span class="hljs-title function_">skip</span>();
+      <span class="hljs-keyword">if</span> (text[i] !== <span class="hljs-string">&#x27;&quot;&#x27;</span>) <span class="hljs-title function_">fail</span>(<span class="hljs-string">&#x27;键必须是双引号字符串&#x27;</span>);
+      <span class="hljs-keyword">const</span> key = <span class="hljs-title function_">string</span>();
+      <span class="hljs-title function_">skip</span>();
+      <span class="hljs-keyword">if</span> (text[i++] !== <span class="hljs-string">&#x27;:&#x27;</span>) <span class="hljs-title function_">fail</span>(<span class="hljs-string">&#x27;缺少冒号&#x27;</span>);
+      <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(obj, key, { <span class="hljs-attr">value</span>: <span class="hljs-title function_">value</span>(), <span class="hljs-attr">writable</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">enumerable</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">configurable</span>: <span class="hljs-literal">true</span> });
+      <span class="hljs-title function_">skip</span>();
+      <span class="hljs-keyword">if</span> (text[i] === <span class="hljs-string">&#x27;,&#x27;</span>) i++;
+      <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (text[i] === <span class="hljs-string">&#x27;}&#x27;</span>) <span class="hljs-keyword">return</span> i++, obj;
+      <span class="hljs-keyword">else</span> <span class="hljs-title function_">fail</span>(<span class="hljs-string">&#x27;缺少逗号或 }&#x27;</span>);
+    }
+  }
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">array</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> arr = [];
+    i++;
+    <span class="hljs-title function_">skip</span>();
+    <span class="hljs-keyword">if</span> (text[i] === <span class="hljs-string">&#x27;]&#x27;</span>) <span class="hljs-keyword">return</span> i++, arr;
+    <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+      arr.<span class="hljs-title function_">push</span>(<span class="hljs-title function_">value</span>());
+      <span class="hljs-title function_">skip</span>();
+      <span class="hljs-keyword">if</span> (text[i] === <span class="hljs-string">&#x27;,&#x27;</span>) i++;
+      <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (text[i] === <span class="hljs-string">&#x27;]&#x27;</span>) <span class="hljs-keyword">return</span> i++, arr;
+      <span class="hljs-keyword">else</span> <span class="hljs-title function_">fail</span>(<span class="hljs-string">&#x27;缺少逗号或 ]&#x27;</span>);
+    }
+  }
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">string</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> m = <span class="hljs-regexp">/^&quot;(?:[^&quot;\\\\\\u0000-\\u001f]|\\\\(?:[&quot;\\\\/bfnrt]|u[0-9a-fA-F]{4}))*&quot;/</span>.<span class="hljs-title function_">exec</span>(text.<span class="hljs-title function_">slice</span>(i));
+    <span class="hljs-keyword">if</span> (!m) <span class="hljs-title function_">fail</span>(<span class="hljs-string">&#x27;字符串不合法&#x27;</span>);
+    i += m[<span class="hljs-number">0</span>].<span class="hljs-property">length</span>;
+    <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">ESC</span> = { <span class="hljs-attr">b</span>: <span class="hljs-string">&#x27;\\b&#x27;</span>, <span class="hljs-attr">f</span>: <span class="hljs-string">&#x27;\\f&#x27;</span>, <span class="hljs-attr">n</span>: <span class="hljs-string">&#x27;\\n&#x27;</span>, <span class="hljs-attr">r</span>: <span class="hljs-string">&#x27;\\r&#x27;</span>, <span class="hljs-attr">t</span>: <span class="hljs-string">&#x27;\\t&#x27;</span> };
+    <span class="hljs-keyword">return</span> m[<span class="hljs-number">0</span>].<span class="hljs-title function_">slice</span>(<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>).<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/\\\\(u[0-9a-fA-F]{4}|.)/g</span>, <span class="hljs-function">(<span class="hljs-params">_, e</span>) =&gt;</span>
+      e[<span class="hljs-number">0</span>] === <span class="hljs-string">&#x27;u&#x27;</span> ? <span class="hljs-title class_">String</span>.<span class="hljs-title function_">fromCharCode</span>(<span class="hljs-built_in">parseInt</span>(e.<span class="hljs-title function_">slice</span>(<span class="hljs-number">1</span>), <span class="hljs-number">16</span>)) : <span class="hljs-variable constant_">ESC</span>[e] ?? e,
+    );
+  }
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">number</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> m = <span class="hljs-regexp">/^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?/</span>.<span class="hljs-title function_">exec</span>(text.<span class="hljs-title function_">slice</span>(i));
+    <span class="hljs-keyword">if</span> (!m) <span class="hljs-title function_">fail</span>(<span class="hljs-string">&#x27;数字不合法&#x27;</span>);
+    i += m[<span class="hljs-number">0</span>].<span class="hljs-property">length</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-title class_">Number</span>(m[<span class="hljs-number">0</span>]);
+  }
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">value</span>();
+  <span class="hljs-title function_">skip</span>();
+  <span class="hljs-keyword">if</span> (i &lt; text.<span class="hljs-property">length</span>) <span class="hljs-title function_">fail</span>(<span class="hljs-string">&#x27;多余的内容&#x27;</span>);
+  <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-keyword">const</span> text = <span class="hljs-string">&#x27;{&quot;name&quot;:&quot;\\\\u5f20\\\\n&quot;,&quot;list&quot;:[1,-2.5e1,true,null],&quot;nested&quot;:{&quot;ok&quot;:false}}&#x27;</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">parse</span>(text)); <span class="hljs-comment">// { name: &#x27;张\\n&#x27;, list: [ 1, -25, true, null ], nested: { ok: false } }</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(<span class="hljs-title function_">parse</span>(text)) === <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(text))); <span class="hljs-comment">// true</span>
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> bad <span class="hljs-keyword">of</span> [<span class="hljs-string">&quot;{&#x27;a&#x27;:1}&quot;</span>, <span class="hljs-string">&#x27;[1,]&#x27;</span>, <span class="hljs-string">&#x27;01&#x27;</span>, <span class="hljs-string">&#x27;{&quot;a&quot;:1} x&#x27;</span>]) {
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-title function_">parse</span>(bad);
+  } <span class="hljs-keyword">catch</span> (e) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(e.<span class="hljs-property">name</span>, e.<span class="hljs-property">message</span>);
+  }
+}
+<span class="hljs-comment">// SyntaxError 键必须是双引号字符串，位置 1</span>
+<span class="hljs-comment">// SyntaxError 意外的字符，位置 3</span>
+<span class="hljs-comment">// SyntaxError 多余的内容，位置 1</span>
+<span class="hljs-comment">// SyntaxError 多余的内容，位置 8</span>
+<span class="hljs-keyword">const</span> evil = <span class="hljs-title function_">parse</span>(<span class="hljs-string">&#x27;{&quot;__proto__&quot;:{&quot;admin&quot;:true}}&#x27;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">hasOwn</span>(evil, <span class="hljs-string">&#x27;__proto__&#x27;</span>), evil.<span class="hljs-property">admin</span>); <span class="hljs-comment">// true undefined</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(<span class="hljs-string">&#x27;{&quot;__proto__&quot;:{&quot;admin&quot;:true}}&#x27;</span>).<span class="hljs-property">admin</span>); <span class="hljs-comment">// undefined</span>
+</code></pre></div>
+<p>四个错误输入对应 JSON 和 JS 字面量的几处差别，MDN 列出了这些规则：属性名必须是双引号字符串，不允许尾随逗号，数字不能有前导零。<code>&#x27;01&#x27;</code> 报的是“多余的内容”，因为数字的正则只认 <code>0</code>，读完 <code>0</code> 后还剩个 <code>1</code>，这样同一条规则就挡住了前导零。最后一个是合法的 JSON 后面跟了别的东西，解析完必须确认已经读到结尾。</p>
+<p>为什么给对象加属性用 <code>Object.defineProperty</code> 而不是 <code>obj[key] = ...</code>？因为键可能是 <code>__proto__</code>。赋值会触发原型的 setter，把整个对象的原型换掉，<code>evil.admin</code> 就能读到 <code>true</code>。MDN 说明 <code>JSON.parse</code> 把 <code>&quot;__proto__&quot;</code> 当作普通的属性名，这是 JSON 文本和同样写法的 JS 字面量唯一的区别。最后两行显示，手写版和原生版都没有改原型。</p>
+<p>字符串用一个正则一次匹配完：引号内要么是普通字符，要么是合法的转义序列，未转义的控制字符和不认识的转义都会让匹配失败。<code>\\u</code> 转义用 <code>String.fromCharCode</code> 还原，代理对会被拆成两个码元分别还原，拼起来仍是原来的字符。</p>
+<h2>常见追问</h2>
+<p><strong>为什么 <code>JSON.parse(JSON.stringify(obj))</code> 不适合做深拷贝？</strong></p>
+<blockquote>
+<p>它会丢掉 <code>undefined</code>、函数和 Symbol，把 <code>Date</code> 变成字符串，<code>NaN</code> 变成 <code>null</code>，<code>Map</code>、<code>Set</code> 变成空对象，遇到循环引用直接报错。MDN 建议深拷贝改用 <code>structuredClone()</code>，它支持循环引用，详见<a href="/questions/alg-deep-clone/">《怎样手写深拷贝？和 structuredClone 有什么区别？》</a>。</p>
+</blockquote>
+<p><strong>数字太大时 JSON 怎样保证精度？</strong></p>
+<blockquote>
+<p><code>JSON.parse</code> 把数字转成 JS 的 <code>number</code>，超过安全整数范围就会丢精度，而 <code>stringify</code> 遇到 BigInt 直接抛错。MDN 给出的做法是把大数序列化成字符串，解析时再用 <code>reviver</code> 还原成 BigInt。</p>
+</blockquote>`};export{e as default};

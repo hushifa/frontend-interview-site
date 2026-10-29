@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="场景设计面试题：骨架屏是在数据回来之前，先按真实内容的布局画出灰色占位块，数据到了再替换成内容。" />
+    <title>骨架屏怎样实现？和 loading 有什么区别？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/design-skeleton/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="骨架屏怎样实现？和 loading 有什么区别？ · 前端知库" />
+    <meta property="og:description" content="场景设计面试题：骨架屏是在数据回来之前，先按真实内容的布局画出灰色占位块，数据到了再替换成内容。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/design-skeleton/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/design-skeleton/#webpage","url":"https://fe.hushifa.top/questions/design-skeleton/","name":"骨架屏怎样实现？和 loading 有什么区别？ · 前端知库","description":"场景设计面试题：骨架屏是在数据回来之前，先按真实内容的布局画出灰色占位块，数据到了再替换成内容。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/design-skeleton/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/design-skeleton/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"场景设计面试题","item":"https://fe.hushifa.top/topics/system-design/"},{"@type":"ListItem","position":3,"name":"骨架屏怎样实现？和 loading 有什么区别？","item":"https://fe.hushifa.top/questions/design-skeleton/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DSAVeeDz.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/system-design/">场景设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">骨架屏怎样实现？和 loading 有什么区别？</span></nav><h1 tabindex="-1">骨架屏怎样实现？和 loading 有什么区别？</h1><p class="reading-summary">骨架屏是在数据回来之前，先按真实内容的布局画出灰色占位块，数据到了再替换成内容。和转圈的 loading 相比，它让用户提前看到页面结构，也因为占位尺寸和真实内容一致而减少布局跳动；但它不会让数据更快到达。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>打开一个新闻列表，内容还没加载出来，先看到一排排灰色的长条和方块，位置和真实的标题、图片一模一样，过一会儿灰块被真实内容替换。这些灰块就是骨架屏。</p>
+<p>它和转圈的 loading 都是在等数据，区别在于告诉用户的信息不同。loading 只说“在加载”，骨架屏还提前展示了页面长什么样，用户会觉得已经快好了。而且占位块的尺寸和真实内容一致，内容出来时页面不会突然往下挤。</p>
+<p>实现上，组件在加载状态下渲染一套结构相同的灰色块，加一个从左到右扫过的渐变动画；数据回来后换成真实内容。也可以在构建时为首屏生成静态骨架，直接写进 HTML，让 JS 还没执行时就能显示。</p>
+<p>要注意，骨架屏改善的是等待时的感受，不会让数据更快回来。加载很快的接口直接显示内容就好，否则骨架一闪而过反而晃眼。还要给读屏用户一个“正在加载”的提示，并在用户要求减少动画时关掉闪光效果。</p>
+</blockquote>
+<h2>骨架屏和 loading 怎么选</h2>
+<p>转圈的 loading 适合操作类的等待，比如点击“提交”后等结果，用户关心的是“成功了没有”，不需要知道接下来的页面长什么样。</p>
+<p>骨架屏适合内容类的页面，比如列表、详情、卡片流。用户在等的是内容本身，提前看到结构能更快找到要看的位置。</p>
+<p>两者的另一个差别在布局稳定性。loading 图标通常很小，内容回来时页面从一个小图标变成一整屏内容，下方元素会被突然推开。MDN 对 CLS 的解释是：它衡量页面元素在非用户操作的情况下发生意外移动的程度，并举例说没写宽高的图片在加载完之前，浏览器不知道它要占多少空间。内容异步回来时把已有元素挤开，也是同一类意外移动。骨架屏的占位尺寸和真实内容一致，替换时位置不变，就不会产生这种偏移。前提是占位尺寸真的和内容一致，如果骨架画得比内容矮，照样会跳。</p>
+<h2>组件里怎样写一个骨架屏</h2>
+<p>下面是一个卡片的骨架。占位块用和真实卡片相同的外层结构和尺寸：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">ArticleCard</span>(<span class="hljs-params">{ article }</span>) {
+  <span class="hljs-keyword">if</span> (!article) {
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;card&quot;</span> <span class="hljs-attr">aria-hidden</span>=<span class="hljs-string">&quot;true&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;skeleton&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">height:</span> <span class="hljs-attr">160</span> }} /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;skeleton&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">width:</span> &#x27;<span class="hljs-attr">80</span>%&#x27;, <span class="hljs-attr">height:</span> <span class="hljs-attr">20</span>, <span class="hljs-attr">marginTop:</span> <span class="hljs-attr">12</span> }} /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;skeleton&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">width:</span> &#x27;<span class="hljs-attr">50</span>%&#x27;, <span class="hljs-attr">height:</span> <span class="hljs-attr">16</span>, <span class="hljs-attr">marginTop:</span> <span class="hljs-attr">8</span> }} /&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+    );
+  }
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">article</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;card&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">{article.cover}</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;320&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;160&quot;</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h3</span>&gt;</span>{article.title}<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>{article.author}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">article</span>&gt;</span></span>
+  );
+}
+</code></pre></div>
+<p>为什么骨架上加 <code>aria-hidden</code>？因为一堆空的灰块对读屏用户没有意义，读出来只会是噪音。加载状态要在外层容器上告诉他们，下一节讲。</p>
+<p>闪光效果用 CSS 渐变加动画实现：</p>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.skeleton</span> {
+  <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">4px</span>;
+  <span class="hljs-attribute">background</span>: <span class="hljs-built_in">linear-gradient</span>(<span class="hljs-number">90deg</span>, <span class="hljs-number">#eee</span> <span class="hljs-number">25%</span>, <span class="hljs-number">#f5f5f5</span> <span class="hljs-number">37%</span>, <span class="hljs-number">#eee</span> <span class="hljs-number">63%</span>);
+  <span class="hljs-attribute">background-size</span>: <span class="hljs-number">400%</span> <span class="hljs-number">100%</span>;
+  <span class="hljs-attribute">animation</span>: shimmer <span class="hljs-number">1.4s</span> ease infinite;
+}
+
+<span class="hljs-keyword">@keyframes</span> shimmer {
+  <span class="hljs-selector-tag">from</span> { <span class="hljs-attribute">background-position</span>: <span class="hljs-number">100%</span> <span class="hljs-number">50%</span>; }
+  <span class="hljs-selector-tag">to</span> { <span class="hljs-attribute">background-position</span>: <span class="hljs-number">0</span> <span class="hljs-number">50%</span>; }
+}
+
+<span class="hljs-keyword">@media</span> (<span class="hljs-attribute">prefers-reduced-motion</span>: reduce) {
+  <span class="hljs-selector-class">.skeleton</span> { <span class="hljs-attribute">animation</span>: none; }
+}
+</code></pre></div>
+<p>MDN 说明 <code>prefers-reduced-motion</code> 用来检测用户是否开启了减少非必要动画的系统设置。闪光是装饰性动画，用户开了这个设置就停掉，只保留灰块。</p>
+<h2>读屏用户怎样知道正在加载</h2>
+<p>骨架本身隐藏了，就要在列表容器上表达“正在更新”。MDN 介绍 <code>aria-busy=&quot;true&quot;</code> 表示元素正在被修改，辅助技术可以等修改完成再通知用户，加载完成后设为 <code>false</code>。</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx">&lt;section aria-busy={loading} aria-label=<span class="hljs-string">&quot;文章列表&quot;</span>&gt;
+  {loading ? <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">SkeletonList</span> /&gt;</span></span> : <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">ArticleList</span> <span class="hljs-attr">items</span>=<span class="hljs-string">{items}</span> /&gt;</span></span>}
+&lt;/section&gt;
+</code></pre></div>
+<p>如果希望读屏明确念出“正在加载”，可以另外放一个视觉上隐藏的状态文本。这里用 <code>aria-busy</code> 只是告诉辅助技术内容还没准备好。</p>
+<h2>骨架屏一闪而过怎么办</h2>
+<p>接口如果 100 毫秒就回来，骨架刚出现就被替换，用户看到的是一次闪烁，比直接等 100 毫秒更难受。常见的做法是延迟显示：加载开始后等一小段时间（比如 200 到 300 毫秒，数值按产品体验调整），数据还没回来才显示骨架；一旦显示，至少保持一小段时间再替换，避免刚出现就消失。</p>
+<p>React 里如果用 Suspense，骨架屏就是 <code>fallback</code>。并排的 Suspense 会各自显示 fallback，想让几块内容一起出现，就把它们包在同一个 Suspense 里，见<a href="/questions/react-error-suspense/">《Error Boundary 和 Suspense 分别处理什么？》</a>。</p>
+<h2>首屏骨架怎样在 JS 执行前就显示</h2>
+<p>单页应用的首屏，HTML 里只有一个空的 <code>&lt;div id=&quot;root&quot;&gt;</code>，要等 JS 下载执行完才渲染骨架，这段时间仍然是白屏。可以在构建时把首屏骨架的 HTML 和内联样式直接写进 <code>index.html</code> 的根节点里，浏览器解析 HTML 就能画出来，应用挂载后再替换掉。</p>
+<p>这样做能让用户更早看到东西。但要清楚它改善的是首次绘制，真正的主要内容（大图、标题）什么时候到，还是取决于数据和资源加载，见<a href="/questions/perf-first-screen/">《首屏加载慢应该怎样优化？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>骨架屏要做得和真实页面一模一样吗？</strong></p>
+<blockquote>
+<p>不用。只要保持大致布局和每块的尺寸，让替换时不跳动就行。做得过细，维护成本高，页面一改骨架就得跟着改。很多团队只为首屏和几个核心列表做骨架，其他地方用简单的 loading。</p>
+</blockquote>
+<p><strong>白屏检测会把骨架屏当成正常内容吗？</strong></p>
+<blockquote>
+<p>会有这个问题。骨架屏让根节点有了内容，但用户还没看到真东西。所以白屏检测通常把骨架屏的选择器列入“仍在加载”的名单，发现骨架就过一会儿再查，见<a href="/questions/monitoring-white-screen/">《怎样检测页面白屏？常见方案有哪些误报？》</a>。</p>
+</blockquote>
+<p><strong>骨架屏能改善 LCP 吗？</strong></p>
+<blockquote>
+<p>一般不能。骨架屏让页面更早画出东西，但 LCP 量的是最大的那块内容什么时候画出来，真正的大图或标题晚到，LCP 照样晚。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-busy" target="_blank" rel="noreferrer">MDN · aria-busy<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/prefers-reduced-motion" target="_blank" rel="noreferrer">MDN · prefers-reduced-motion<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Glossary/CLS" target="_blank" rel="noreferrer">MDN · CLS<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E9%AA%A8%E6%9E%B6%E5%B1%8F%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%EF%BC%9F%E5%92%8C+loading+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E9%AA%A8%E6%9E%B6%E5%B1%8F%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%EF%BC%9F%E5%92%8C+loading+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Adesign-skeleton%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9C%BA%E6%99%AF%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fdesign-skeleton%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：骨架屏怎样实现？和 loading 有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/design-permission/">前端权限控制怎样设计路由、按钮和接口三层？</a></li><li><a href="/questions/design-qr-login/">扫码登录是怎样实现的？</a></li><li><a href="/questions/design-dark-mode/">怎样实现网站的暗黑模式和主题切换？</a></li><li><a href="/questions/design-prevent-duplicate/">前端怎样防止重复提交和接口重复请求？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

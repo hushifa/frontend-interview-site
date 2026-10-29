@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="数据结构与算法面试题：判断回文用两个指针从两头往中间走，逐个比较，O(n)。忽略大小写和标点时，跳过非字母数字字符再比较。" />
+    <title>回文字符串和最长回文子串怎样判断？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/ds-palindrome/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="回文字符串和最长回文子串怎样判断？ · 前端知库" />
+    <meta property="og:description" content="数据结构与算法面试题：判断回文用两个指针从两头往中间走，逐个比较，O(n)。忽略大小写和标点时，跳过非字母数字字符再比较。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/ds-palindrome/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ds-palindrome/#webpage","url":"https://fe.hushifa.top/questions/ds-palindrome/","name":"回文字符串和最长回文子串怎样判断？ · 前端知库","description":"数据结构与算法面试题：判断回文用两个指针从两头往中间走，逐个比较，O(n)。忽略大小写和标点时，跳过非字母数字字符再比较。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ds-palindrome/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ds-palindrome/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"数据结构与算法面试题","item":"https://fe.hushifa.top/topics/data-structures/"},{"@type":"ListItem","position":3,"name":"回文字符串和最长回文子串怎样判断？","item":"https://fe.hushifa.top/questions/ds-palindrome/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DSAVeeDz.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/data-structures/">数据结构与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">回文字符串和最长回文子串怎样判断？</span></nav><h1 tabindex="-1">回文字符串和最长回文子串怎样判断？</h1><p class="reading-summary">判断回文用两个指针从两头往中间走，逐个比较，O(n)。忽略大小写和标点时，跳过非字母数字字符再比较。求最长回文子串用中心扩展：每个位置和每两个相邻位置之间都可能是回文中心，从中心向两边扩，共 2n-1 个中心，时间 O(n²)、空间 O(1)。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>回文就是正着读和倒着读一样的字符串，比如 <code>level</code>、<code>abba</code>。最直接的判断是 <code>s === s.split(&#x27;&#x27;).reverse().join(&#x27;&#x27;)</code>，但它要额外建数组和新字符串。更省的做法是两个指针，一个从头、一个从尾往中间走，每一步比较两个字符，有一处不同就不是回文，O(n) 时间、O(1) 空间。</p>
+<p>面试常见的变体是忽略大小写和标点，比如 <code>A man, a plan, a canal: Panama</code> 算回文。做法是指针遇到非字母数字字符就跳过，比较时都转成小写。</p>
+<p>最长回文子串要找出字符串里最长的回文片段。思路是中心扩展：回文一定关于中心对称，所以枚举每个可能的中心，向两边扩到不相等为止。中心有两种，奇数长度的回文中心是一个字符，比如 <code>aba</code> 的 <code>b</code>；偶数长度的中心在两个字符之间，比如 <code>abba</code> 的两个 <code>b</code> 中间。长度为 n 的字符串共有 2n-1 个中心，每个最多扩 O(n)，总共 O(n²)。</p>
+<p>要注意两点：只枚举单字符中心会漏掉所有偶数长度的回文；按下标比较的是 UTF-16 编码单元，emoji 这类字符会被拆成两半，要按用户看到的字符处理时先用 <code>Array.from</code> 拆分。</p>
+</blockquote>
+<h2>判断回文</h2>
+<p>先看基础版本，再看忽略标点的版本里指针怎样跳过不相干的字符。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">isPalindrome</span>(<span class="hljs-params">s</span>) {
+  <span class="hljs-keyword">let</span> left = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> right = s.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">while</span> (left &lt; right) {
+    <span class="hljs-keyword">if</span> (s[left] !== s[right]) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    left++;
+    right--;
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">isAlphanumeric</span> = (<span class="hljs-params">char</span>) =&gt; <span class="hljs-regexp">/[a-z0-9]/i</span>.<span class="hljs-title function_">test</span>(char);
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">isPalindromeLoose</span>(<span class="hljs-params">s</span>) {
+  <span class="hljs-keyword">let</span> left = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> right = s.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">while</span> (left &lt; right) {
+    <span class="hljs-keyword">if</span> (!<span class="hljs-title function_">isAlphanumeric</span>(s[left])) {
+      left++;
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!<span class="hljs-title function_">isAlphanumeric</span>(s[right])) {
+      right--;
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (s[left].<span class="hljs-title function_">toLowerCase</span>() !== s[right].<span class="hljs-title function_">toLowerCase</span>()) {
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    } <span class="hljs-keyword">else</span> {
+      left++;
+      right--;
+    }
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">isPalindrome</span>(<span class="hljs-string">&#x27;level&#x27;</span>)); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">isPalindrome</span>(<span class="hljs-string">&#x27;abba&#x27;</span>)); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">isPalindrome</span>(<span class="hljs-string">&#x27;abc&#x27;</span>)); <span class="hljs-comment">// false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">isPalindrome</span>(<span class="hljs-string">&#x27;&#x27;</span>)); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">isPalindrome</span>(<span class="hljs-string">&#x27;a&#x27;</span>)); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">isPalindromeLoose</span>(<span class="hljs-string">&#x27;A man, a plan, a canal: Panama&#x27;</span>)); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">isPalindromeLoose</span>(<span class="hljs-string">&#x27;race a car&#x27;</span>)); <span class="hljs-comment">// false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">isPalindromeLoose</span>(<span class="hljs-string">&#x27;,.&#x27;</span>)); <span class="hljs-comment">// true</span>
+</code></pre></div>
+<p>循环条件为什么是 <code>left &lt; right</code> 而不是 <code>&lt;=</code>？两个指针相遇时指向同一个字符，自己和自己一定相等，不用比。奇数长度时它们停在正中间，偶数长度时交错而过，两种情况都正好比完所有对称位置。空字符串和单个字符一次都不比较，直接返回 true。</p>
+<p><code>,.</code> 为什么是 true？两个字符都不是字母数字，全部被跳过，剩下的是空串，按约定算回文。这里用的正则 <code>/[a-z0-9]/i</code> 只认 ASCII 字母和数字；题目要支持中文等其他文字时，可以改成带 <code>u</code> 标志的 Unicode 属性类 <code>/[\p{L}\p{N}]/u</code>。</p>
+<h2>最长回文子串</h2>
+<p><code>expand</code> 从给定的左右下标出发往外扩，返回扩到的回文长度。主循环对每个 <code>i</code> 调用两次，分别对应奇数中心和偶数中心。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">longestPalindrome</span>(<span class="hljs-params">s</span>) {
+  <span class="hljs-keyword">if</span> (s.<span class="hljs-property">length</span> &lt; <span class="hljs-number">2</span>) <span class="hljs-keyword">return</span> s;
+  <span class="hljs-keyword">let</span> start = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> maxLength = <span class="hljs-number">1</span>;
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">expand</span>(<span class="hljs-params">left, right</span>) {
+    <span class="hljs-keyword">while</span> (left &gt;= <span class="hljs-number">0</span> &amp;&amp; right &lt; s.<span class="hljs-property">length</span> &amp;&amp; s[left] === s[right]) {
+      left--;
+      right++;
+    }
+    <span class="hljs-comment">// 循环停下时两端已经多走了一步，真正的回文是 left+1 到 right-1</span>
+    <span class="hljs-keyword">return</span> right - left - <span class="hljs-number">1</span>;
+  }
+
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; s.<span class="hljs-property">length</span>; i++) {
+    <span class="hljs-keyword">const</span> length = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(<span class="hljs-title function_">expand</span>(i, i), <span class="hljs-title function_">expand</span>(i, i + <span class="hljs-number">1</span>));
+    <span class="hljs-keyword">if</span> (length &gt; maxLength) {
+      maxLength = length;
+      start = i - <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>((length - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>);
+    }
+  }
+  <span class="hljs-keyword">return</span> s.<span class="hljs-title function_">slice</span>(start, start + maxLength);
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">longestPalindrome</span>(<span class="hljs-string">&#x27;babad&#x27;</span>)); <span class="hljs-comment">// bab</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">longestPalindrome</span>(<span class="hljs-string">&#x27;cbbd&#x27;</span>)); <span class="hljs-comment">// bb</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">longestPalindrome</span>(<span class="hljs-string">&#x27;forgeeksskeegfor&#x27;</span>)); <span class="hljs-comment">// geeksskeeg</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">longestPalindrome</span>(<span class="hljs-string">&#x27;a&#x27;</span>)); <span class="hljs-comment">// a</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">longestPalindrome</span>(<span class="hljs-string">&#x27;ac&#x27;</span>)); <span class="hljs-comment">// a</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">longestPalindrome</span>(<span class="hljs-string">&#x27;aaaa&#x27;</span>)); <span class="hljs-comment">// aaaa</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(<span class="hljs-title function_">longestPalindrome</span>(<span class="hljs-string">&#x27;&#x27;</span>))); <span class="hljs-comment">// &quot;&quot;</span>
+</code></pre></div>
+<p><code>babad</code> 为什么返回 <code>bab</code> 而不是 <code>aba</code>？两个都是长度 3 的回文。代码只在长度严格变大时更新，<code>bab</code> 以下标 1 为中心，先被找到，后来的 <code>aba</code> 长度相同，不会覆盖。题目一般接受任意一个。</p>
+<p>起点 <code>i - Math.floor((length - 1) / 2)</code> 怎么来的？回文的中心在 <code>i</code>（奇数）或 <code>i</code> 与 <code>i + 1</code> 之间（偶数），左半边的长度是 <code>(length - 1) / 2</code> 向下取整。比如 <code>cbbd</code> 里 <code>bb</code> 的中心在下标 1 和 2 之间，<code>length</code> 是 2，起点是 <code>1 - 0 = 1</code>；<code>aaaa</code> 在 <code>i = 1</code> 时偶数中心扩出长度 4，起点是 <code>1 - 1 = 0</code>。</p>
+<p>为什么要两种中心？<code>cbbd</code> 的答案 <code>bb</code> 是偶数长度，只用 <code>expand(i, i)</code> 的话，每个中心都只能扩出长度 1，结果会错成 <code>c</code>。</p>
+<h2>复杂度和更快的做法</h2>
+<p>中心扩展有 2n-1 个中心，每次扩展最多走 O(n) 步，最坏情况是 <code>aaaa…</code> 这种全相同的字符串，总时间 O(n²)，只用几个变量，空间 O(1)。</p>
+<p>另一种常见写法是动态规划：<code>dp[i][j]</code> 表示 <code>s[i..j]</code> 是不是回文，它成立当且仅当两端字符相等且 <code>dp[i+1][j-1]</code> 成立。时间同样 O(n²)，但要 O(n²) 的表格，所以面试里中心扩展更常用。存在 O(n) 的 Manacher 算法，它利用已经找到的回文的对称性跳过重复扩展，实现细节多，一般知道名字和思路就够了。</p>
+<h2>常见追问</h2>
+<p><strong>最多删除一个字符后能不能成为回文？</strong></p>
+<blockquote>
+<p>还是两个指针从两头比。遇到第一处不相等时，有两种删法：删左边字符，检查 <code>left + 1</code> 到 <code>right</code> 是不是回文；或者删右边，检查 <code>left</code> 到 <code>right - 1</code>。两种有一种成立就返回 true。整体仍是 O(n)。</p>
+</blockquote>
+<p><strong>为什么 <code>split(&#x27;&#x27;).reverse().join(&#x27;&#x27;)</code> 处理 emoji 会出错？</strong></p>
+<blockquote>
+<p><code>split(&#x27;&#x27;)</code> 按 UTF-16 编码单元拆分，一个 emoji 通常占两个编码单元，反转后两半的顺序颠倒，得到的就不是原来的字符了。改成 <code>Array.from(s)</code> 或展开 <code>[...s]</code>，会按码点拆分，常见 emoji 就不会被拆开；带肤色或组合的 emoji 由多个码点组成，还需要 <code>Intl.Segmenter</code> 按字素拆分，见<a href="/questions/intl-unicode/">《为什么字符串 length 不一定等于用户看到的字符数？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toLowerCase" target="_blank" rel="noreferrer">MDN · String.prototype.toLowerCase()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Character_classes" target="_blank" rel="noreferrer">MDN · Regular expressions · Character classes<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/slice" target="_blank" rel="noreferrer">MDN · String.prototype.slice()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%9B%9E%E6%96%87%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E6%80%8E%E6%A0%B7%E5%88%A4%E6%96%AD%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%9B%9E%E6%96%87%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%92%8C%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2%E6%80%8E%E6%A0%B7%E5%88%A4%E6%96%AD%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ads-palindrome%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fds-palindrome%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：回文字符串和最长回文子串怎样判断？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ds-sliding-window/">滑动窗口怎样求无重复字符的最长子串？</a></li><li><a href="/questions/ds-linked-list/">怎样反转链表、判断链表有环？</a></li><li><a href="/questions/ds-stack-problems/">有效括号、最小栈这类栈题怎样做？</a></li><li><a href="/questions/ds-kmp/">KMP 字符串匹配的思路是什么？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

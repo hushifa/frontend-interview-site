@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="手写与算法面试题：Object.create 新建一个以指定对象为原型的空对象，可以用临时构造函数模拟…" />
+    <title>怎样手写 Object.create、Object.assign 和 Array.from？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/alg-object-create-assign/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="怎样手写 Object.create、Object.assign 和 Array.from？" />
+    <meta property="og:description" content="手写与算法面试题：Object.create 新建一个以指定对象为原型的空对象，可以用临时构造函数模拟…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/alg-object-create-assign/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-object-create-assign/#webpage","url":"https://fe.hushifa.top/questions/alg-object-create-assign/","name":"怎样手写 Object.create、Object.assign 和 Array.from？","description":"手写与算法面试题：Object.create 新建一个以指定对象为原型的空对象，可以用临时构造函数模拟…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-object-create-assign/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-object-create-assign/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"怎样手写 Object.create、Object.assign 和 Array.from？","item":"https://fe.hushifa.top/questions/alg-object-create-assign/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DSAVeeDz.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样手写 Object.create、Object.assign 和 Array.from？</span></nav><h1 tabindex="-1">怎样手写 Object.create、Object.assign 和 Array.from？</h1><p class="reading-summary">Object.create 新建一个以指定对象为原型的空对象，可以用临时构造函数模拟；Object.assign 把源对象自己的可枚举属性（含 Symbol 键）用赋值的方式拷到目标上，是浅拷贝，会触发 getter 和 setter；Array.from 先看参数能不能迭代，能就逐个取值，否则按 length 当类数组处理，空位会变成 undefined。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>想让 <code>dog</code> 直接用上 <code>animal</code> 的方法，又不想写 class，可以用 <code>Object.create(animal)</code> 造一个原型是 <code>animal</code> 的空对象。手写时借一个空的构造函数，把它的 <code>prototype</code> 设成 <code>animal</code>，再 <code>new</code> 一次就行；参数不是对象也不是 <code>null</code> 时要抛 <code>TypeError</code>。</p>
+<p><code>Object.assign(target, ...sources)</code> 把每个源对象自己的、可枚举的属性拷到目标上，字符串键和 Symbol 键都拷。它用的是读取和赋值，所以会触发源对象的 getter 和目标对象的 setter；拷的只是第一层，嵌套对象还是同一个引用。目标是 <code>null</code> 或 <code>undefined</code> 会报错，源是 <code>null</code> 或 <code>undefined</code> 会被跳过。</p>
+<p><code>Array.from</code> 先判断参数能不能被 <code>for...of</code> 遍历，比如字符串、Set、Map，能就按迭代顺序取值；不能就当成类数组，读 <code>length</code>，从 0 到 <code>length - 1</code> 逐个取，缺的下标得到 <code>undefined</code>。第二个参数 <code>mapFn</code> 会拿到值和下标。</p>
+<p>手写版只覆盖常见行为，真实实现还处理了描述符细节、子类构造等边界，面试时讲清这些差别比代码长短更重要。</p>
+</blockquote>
+<h2>Object.create：借一个空构造函数</h2>
+<p><code>new F()</code> 生成的对象，原型就是 <code>F.prototype</code>。所以只要把 <code>F.prototype</code> 换成想要的原型，就能得到一个“继承”它的空对象。第二个参数是属性描述符，直接交给 <code>Object.defineProperties</code>。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">myCreate</span>(<span class="hljs-params">proto, props</span>) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> proto !== <span class="hljs-string">&#x27;object&#x27;</span> &amp;&amp; <span class="hljs-keyword">typeof</span> proto !== <span class="hljs-string">&#x27;function&#x27;</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;Object prototype may only be an Object or null&#x27;</span>);
+  }
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">F</span>(<span class="hljs-params"></span>) {}
+  F.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span> = proto;
+  <span class="hljs-keyword">const</span> obj = <span class="hljs-keyword">new</span> <span class="hljs-title function_">F</span>();
+  <span class="hljs-keyword">if</span> (proto === <span class="hljs-literal">null</span>) <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">setPrototypeOf</span>(obj, <span class="hljs-literal">null</span>);
+  <span class="hljs-keyword">if</span> (props !== <span class="hljs-literal">undefined</span>) <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperties</span>(obj, props);
+  <span class="hljs-keyword">return</span> obj;
+}
+
+<span class="hljs-keyword">const</span> animal = { <span class="hljs-title function_">speak</span>(<span class="hljs-params"></span>) { <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;hi from &#x27;</span> + <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span>; } };
+<span class="hljs-keyword">const</span> dog = <span class="hljs-title function_">myCreate</span>(animal, { <span class="hljs-attr">name</span>: { <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;Dog&#x27;</span>, <span class="hljs-attr">enumerable</span>: <span class="hljs-literal">true</span> } });
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(dog.<span class="hljs-title function_">speak</span>()); <span class="hljs-comment">// hi from Dog</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">getPrototypeOf</span>(dog) === animal); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">getPrototypeOf</span>(<span class="hljs-title function_">myCreate</span>(<span class="hljs-literal">null</span>))); <span class="hljs-comment">// null</span>
+<span class="hljs-keyword">try</span> { <span class="hljs-title function_">myCreate</span>(<span class="hljs-number">1</span>); } <span class="hljs-keyword">catch</span> (e) { <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(e <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">TypeError</span>); } <span class="hljs-comment">// true</span>
+</code></pre></div>
+<p>为什么 <code>null</code> 要单独处理？因为 <code>F.prototype</code> 不是对象时，<code>new F()</code> 会退回用 <code>Object.prototype</code> 做原型，得不到“没有原型”的对象，所以这里再用 <code>Object.setPrototypeOf</code> 改成 <code>null</code>。<code>typeof null</code> 是 <code>&#x27;object&#x27;</code>，正好能通过前面的检查；MDN 写明 <code>proto</code> 既不是 <code>null</code> 也不是对象时抛 <code>TypeError</code>。</p>
+<p>第二个参数里的属性，没写 <code>writable</code>、<code>enumerable</code>、<code>configurable</code> 时默认都是 <code>false</code>。上面给 <code>name</code> 写了 <code>enumerable: true</code>，但它仍然不能被改写。</p>
+<h2>Object.assign：逐个源对象赋值</h2>
+<p>MDN 对 <code>Object.assign</code> 的描述是：只拷贝源对象自己的可枚举属性，在源上用 <code>[[Get]]</code> 读、在目标上用 <code>[[Set]]</code> 写，所以会调用 getter 和 setter。手写时用 <code>Reflect.ownKeys</code> 拿到字符串键和 Symbol 键，再筛掉不可枚举的。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">myAssign</span>(<span class="hljs-params">target, ...sources</span>) {
+  <span class="hljs-keyword">if</span> (target == <span class="hljs-literal">null</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;Cannot convert undefined or null to object&#x27;</span>);
+  <span class="hljs-keyword">const</span> to = <span class="hljs-title class_">Object</span>(target);
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> source <span class="hljs-keyword">of</span> sources) {
+    <span class="hljs-keyword">if</span> (source == <span class="hljs-literal">null</span>) <span class="hljs-keyword">continue</span>;
+    <span class="hljs-keyword">const</span> <span class="hljs-keyword">from</span> = <span class="hljs-title class_">Object</span>(source);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> key <span class="hljs-keyword">of</span> <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">ownKeys</span>(<span class="hljs-keyword">from</span>)) {
+      <span class="hljs-keyword">const</span> desc = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">getOwnPropertyDescriptor</span>(<span class="hljs-keyword">from</span>, key);
+      <span class="hljs-keyword">if</span> (desc &amp;&amp; desc.<span class="hljs-property">enumerable</span>) to[key] = <span class="hljs-keyword">from</span>[key];
+    }
+  }
+  <span class="hljs-keyword">return</span> to;
+}
+
+<span class="hljs-keyword">const</span> s = <span class="hljs-title class_">Symbol</span>(<span class="hljs-string">&#x27;id&#x27;</span>);
+<span class="hljs-keyword">const</span> src = { <span class="hljs-attr">a</span>: <span class="hljs-number">1</span>, [s]: <span class="hljs-number">2</span> };
+<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(src, <span class="hljs-string">&#x27;hidden&#x27;</span>, { <span class="hljs-attr">value</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">enumerable</span>: <span class="hljs-literal">false</span> });
+<span class="hljs-keyword">const</span> out = <span class="hljs-title function_">myAssign</span>({ <span class="hljs-attr">a</span>: <span class="hljs-number">0</span> }, src, <span class="hljs-literal">null</span>, { <span class="hljs-attr">b</span>: { <span class="hljs-attr">deep</span>: <span class="hljs-literal">true</span> } });
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(out.<span class="hljs-property">a</span>, out[s], <span class="hljs-string">&#x27;hidden&#x27;</span> <span class="hljs-keyword">in</span> out); <span class="hljs-comment">// 1 2 false</span>
+
+<span class="hljs-keyword">const</span> nested = { <span class="hljs-attr">b</span>: { <span class="hljs-attr">deep</span>: <span class="hljs-literal">true</span> } };
+<span class="hljs-keyword">const</span> copy = <span class="hljs-title function_">myAssign</span>({}, nested);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(copy.<span class="hljs-property">b</span> === nested.<span class="hljs-property">b</span>); <span class="hljs-comment">// true</span>
+
+<span class="hljs-keyword">const</span> withSetter = { <span class="hljs-keyword">set</span> <span class="hljs-title function_">x</span>(<span class="hljs-params">v</span>) { <span class="hljs-variable language_">this</span>.<span class="hljs-property">log</span> = <span class="hljs-string">&#x27;set &#x27;</span> + v; } };
+<span class="hljs-title function_">myAssign</span>(withSetter, { <span class="hljs-attr">x</span>: <span class="hljs-number">1</span> });
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(withSetter.<span class="hljs-property">log</span>); <span class="hljs-comment">// set 1</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">myAssign</span>(<span class="hljs-string">&#x27;ab&#x27;</span>, { <span class="hljs-attr">c</span>: <span class="hljs-number">1</span> }) <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">String</span>); <span class="hljs-comment">// true</span>
+</code></pre></div>
+<p><code>copy.b === nested.b</code> 是 <code>true</code>，说明 <code>assign</code> 只拷第一层，要独立的嵌套数据得用深拷贝，见<a href="/questions/alg-deep-clone/">《怎样手写深拷贝？和 structuredClone 有什么区别？》</a>。<code>withSetter</code> 那一行说明它是“赋值”而不是“定义属性”：目标上的 setter 被调用了，<code>x</code> 并没有变成普通数据属性。想原样复制 getter 和 setter，要改用 <code>Object.defineProperties(target, Object.getOwnPropertyDescriptors(source))</code>。</p>
+<p>目标是原始值时会先被包装成对象，所以字符串 <code>&#x27;ab&#x27;</code> 返回的是 <code>String</code> 包装对象。源是 <code>null</code> 或 <code>undefined</code> 时直接跳过，MDN 写明 <code>assign</code> 不会因为这种源报错。</p>
+<h2>Array.from：先看可迭代，再看类数组</h2>
+<p>“可迭代”指对象有 <code>Symbol.iterator</code> 方法，<code>for...of</code> 能遍历它；“类数组”指有 <code>length</code> 和数字下标、但不是真数组的对象，比如 <code>arguments</code>、<code>{ length: 3 }</code>。<code>Array.from</code> 优先按可迭代处理。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">myFrom</span>(<span class="hljs-params">items, mapFn, thisArg</span>) {
+  <span class="hljs-keyword">if</span> (mapFn !== <span class="hljs-literal">undefined</span> &amp;&amp; <span class="hljs-keyword">typeof</span> mapFn !== <span class="hljs-string">&#x27;function&#x27;</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;mapFn is not a function&#x27;</span>);
+  }
+  <span class="hljs-keyword">const</span> result = [];
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">map</span> = (<span class="hljs-params">v, i</span>) =&gt; (mapFn ? mapFn.<span class="hljs-title function_">call</span>(thisArg, v, i) : v);
+  <span class="hljs-keyword">if</span> (items != <span class="hljs-literal">null</span> &amp;&amp; <span class="hljs-keyword">typeof</span> items[<span class="hljs-title class_">Symbol</span>.<span class="hljs-property">iterator</span>] === <span class="hljs-string">&#x27;function&#x27;</span>) {
+    <span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> v <span class="hljs-keyword">of</span> items) { result.<span class="hljs-title function_">push</span>(<span class="hljs-title function_">map</span>(v, i)); i++; }
+    <span class="hljs-keyword">return</span> result;
+  }
+  <span class="hljs-keyword">const</span> obj = <span class="hljs-title class_">Object</span>(items);
+  <span class="hljs-keyword">const</span> len = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">trunc</span>(<span class="hljs-title class_">Number</span>(obj.<span class="hljs-property">length</span>)) || <span class="hljs-number">0</span>, <span class="hljs-number">0</span>), <span class="hljs-title class_">Number</span>.<span class="hljs-property">MAX_SAFE_INTEGER</span>);
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; len; i++) result.<span class="hljs-title function_">push</span>(<span class="hljs-title function_">map</span>(obj[i], i));
+  <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">myFrom</span>(<span class="hljs-string">&#x27;ab&#x27;</span>)); <span class="hljs-comment">// [ &#x27;a&#x27;, &#x27;b&#x27; ]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">myFrom</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>([<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]))); <span class="hljs-comment">// [ 1, 2 ]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">myFrom</span>({ <span class="hljs-attr">length</span>: <span class="hljs-number">3</span> }, <span class="hljs-function">(<span class="hljs-params">_, i</span>) =&gt;</span> i * <span class="hljs-number">2</span>)); <span class="hljs-comment">// [ 0, 2, 4 ]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">myFrom</span>({ <span class="hljs-number">0</span>: <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-number">2</span>: <span class="hljs-string">&#x27;z&#x27;</span>, <span class="hljs-attr">length</span>: <span class="hljs-number">3</span> })); <span class="hljs-comment">// [ &#x27;x&#x27;, undefined, &#x27;z&#x27; ]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Array</span>.<span class="hljs-title function_">from</span>({ <span class="hljs-number">0</span>: <span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-number">2</span>: <span class="hljs-string">&#x27;z&#x27;</span>, <span class="hljs-attr">length</span>: <span class="hljs-number">3</span> })); <span class="hljs-comment">// [ &#x27;x&#x27;, undefined, &#x27;z&#x27; ]</span>
+</code></pre></div>
+<p>最后两行对比了手写版和原生版：下标 1 不存在，结果是真正的 <code>undefined</code>，不是空位，所以之后 <code>map</code>、<code>forEach</code> 都会访问到它。<code>{ length: 3 }</code> 配合 <code>mapFn</code> 是生成序列的常用写法。</p>
+<p><code>length</code> 那一行做的是“转成整数、不小于 0、不超过最大安全整数”，对应规范里的 <code>ToLength</code>。MDN 写明 <code>Array.from</code> 返回浅拷贝的新数组，元素是对象时仍是原来的引用。真实实现还支持被子类调用（<code>this</code> 是构造函数时用它创建结果），手写版省略了这一点。</p>
+<h2>常见追问</h2>
+<p><strong><code>Object.assign</code> 和对象展开 <code>{ ...obj }</code> 有什么区别？</strong></p>
+<blockquote>
+<p>两者都只拷自己的可枚举属性。区别在写入方式：<code>assign</code> 对目标做赋值，会触发目标上的 setter；展开语法是在新对象上定义属性，不会触发 setter。另外 <code>assign</code> 会修改并返回第一个参数，展开语法总是生成新对象。</p>
+</blockquote>
+<p><strong><code>Object.create(null)</code> 有什么用？</strong></p>
+<blockquote>
+<p>它造出的对象没有原型，不会从 <code>Object.prototype</code> 继承 <code>toString</code>、<code>hasOwnProperty</code> 等属性，适合当纯粹的字典，键名就算叫 <code>toString</code> 也不会和继承来的方法混淆。代价是不能直接调用 <code>obj.hasOwnProperty</code>，要用 <code>Object.hasOwn(obj, key)</code>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create" target="_blank" rel="noreferrer">MDN · Object.create()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign" target="_blank" rel="noreferrer">MDN · Object.assign()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from" target="_blank" rel="noreferrer">MDN · Array.from()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E6%89%8B%E5%86%99+Object.create%E3%80%81Object.assign+%E5%92%8C+Array.from%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E6%89%8B%E5%86%99+Object.create%E3%80%81Object.assign+%E5%92%8C+Array.from%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-object-create-assign%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-object-create-assign%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样手写 Object.create、Object.assign 和 Array.from？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-deep-equal/">怎样手写深比较 isEqual？</a></li><li><a href="/questions/alg-debounce/">怎样实现只在停止调用后执行的防抖函数？</a></li><li><a href="/questions/alg-throttle/">怎样实现首沿节流？它与尾沿节流、防抖有什么区别？</a></li><li><a href="/questions/alg-array-unique-flat/">怎样实现数组去重和数组扁平化？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

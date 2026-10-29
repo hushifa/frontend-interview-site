@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="场景设计面试题：PC 端向服务端申请一个带有效期的一次性二维码 ID，用轮询、长轮询或 WebSocket 等待状态变化…" />
+    <title>扫码登录是怎样实现的？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/design-qr-login/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="扫码登录是怎样实现的？ · 前端知库" />
+    <meta property="og:description" content="场景设计面试题：PC 端向服务端申请一个带有效期的一次性二维码 ID，用轮询、长轮询或 WebSocket 等待状态变化…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/design-qr-login/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/design-qr-login/#webpage","url":"https://fe.hushifa.top/questions/design-qr-login/","name":"扫码登录是怎样实现的？ · 前端知库","description":"场景设计面试题：PC 端向服务端申请一个带有效期的一次性二维码 ID，用轮询、长轮询或 WebSocket 等待状态变化…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/design-qr-login/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/design-qr-login/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"场景设计面试题","item":"https://fe.hushifa.top/topics/system-design/"},{"@type":"ListItem","position":3,"name":"扫码登录是怎样实现的？","item":"https://fe.hushifa.top/questions/design-qr-login/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DSAVeeDz.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/system-design/">场景设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">扫码登录是怎样实现的？</span></nav><h1 tabindex="-1">扫码登录是怎样实现的？</h1><p class="reading-summary">PC 端向服务端申请一个带有效期的一次性二维码 ID，用轮询、长轮询或 WebSocket 等待状态变化；已登录的手机 App 扫码后带着自己的登录凭证确认，服务端把这个 ID 标记为已确认并给 PC 端签发新的会话。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>打开网页版聊天软件，页面上出现一个二维码，用已经登录的手机 App 一扫、点“确认登录”，电脑上就进去了。这就是扫码登录。</p>
+<p>背后是三方协作：PC 页面先向服务端要一个一次性的二维码 ID，有效期很短，把它画成二维码；手机 App 扫到 ID 后，带着手机自己的登录凭证告诉服务端“我要登录这个 ID”；服务端把这个 ID 的状态从“待扫码”改成“已扫码”，用户点确认后改成“已确认”，同时为 PC 端生成一份新的会话。</p>
+<p>PC 页面怎么知道状态变了？可以定时轮询，也可以用长轮询或 WebSocket 让服务端主动推。状态通常有待扫码、已扫码待确认、已确认、已取消、已过期这几种，页面按状态切换提示。</p>
+<p>安全上要注意三点：二维码 ID 要随机、短期有效、只能用一次；手机端确认页要显示登录设备和地点，防止别人把自己的二维码发给你扫；PC 端拿到的是服务端新签发的会话，不能直接复用手机的令牌。</p>
+</blockquote>
+<h2>整个流程是怎样走的</h2>
+<p>扫码登录没有统一的官方规范，各家产品实现细节不同。下面是常见的设计，思路和 OAuth 的设备授权流程（RFC 8628）很接近：一台不方便输密码的设备显示一个码，用户在另一台已登录的设备上确认。</p>
+<ol>
+<li>PC 页面请求“创建二维码”接口，服务端生成一个随机的 <code>qrId</code>，记录状态为“待扫码”，设好过期时间，返回给页面。</li>
+<li>页面把 <code>qrId</code>（通常拼成一个 App 能识别的链接）画成二维码，然后开始等待状态。</li>
+<li>手机 App 扫码，解析出 <code>qrId</code>，带着手机的登录凭证调用“扫码”接口。服务端校验凭证，把状态改成“已扫码”，并记下是哪个用户扫的。</li>
+<li>App 展示确认页，用户点“确认登录”，App 调用“确认”接口。服务端把状态改成“已确认”，为 PC 端生成新的会话。</li>
+<li>PC 页面得知“已确认”，拿到会话（比如服务端在这次响应里种下 Cookie），跳转进入。</li>
+</ol>
+<h2>PC 页面怎样知道状态变了</h2>
+<p>最简单的是轮询，每隔一两秒问一次状态。实现容易，代价是请求多、有最多一个间隔的延迟。</p>
+<p>长轮询是服务端收到请求后先不回，等状态变了或者超时再回，页面收到响应马上发下一次。请求数少很多，延迟也低。</p>
+<p>WebSocket 建一条长连接，服务端状态一变就推过来。实时性最好，但要维护连接和断线重连。扫码登录这种只等几十秒的场景，轮询或长轮询通常就够用。</p>
+<p>不管用哪种，页面都要处理过期：服务端返回“已过期”时，页面显示“二维码已失效，点击刷新”，重新申请一个 ID。</p>
+<p>RFC 8628 对设备授权流程的轮询规定可以借鉴：服务端返回 <code>interval</code> 表示两次轮询之间至少等多少秒，不返回时客户端默认等 5 秒；服务端可以回 <code>slow_down</code> 要求客户端把间隔再加 5 秒；<code>expires_in</code> 表示这个码多少秒后失效。</p>
+<h2>安全上要注意什么</h2>
+<p>先说二维码 ID 本身。它必须是不可猜测的随机值，不能用自增序号；有效期要短；确认一次以后立刻作废。否则别人猜到或截获 ID，就能抢先拿到会话。</p>
+<p>再说“扫码钓鱼”。攻击者在自己电脑上打开登录页，把二维码截图发给你，说“扫一下领奖”。你一扫一确认，攻击者的电脑就登进了你的账号。RFC 8628 第 5.4 节专门讨论了这类远程钓鱼，建议在用户确认时告诉他“你正在授权一台设备”，并展示设备信息让他核对。所以确认页要写清“将在 Windows · Chrome · 北京 登录”，异地或陌生设备额外提醒。</p>
+<p>最后说会话。PC 端的会话由服务端在确认时单独签发，和手机的凭证分开。这样用户可以在手机上单独踢掉某台 PC，手机的令牌也不会通过二维码流程暴露给 PC。</p>
+<h2>常见追问</h2>
+<p><strong>为什么要分“已扫码”和“已确认”两步？</strong></p>
+<blockquote>
+<p>扫码只表示手机拿到了 ID，用户还没同意。分成两步，PC 页面能先显示“已扫码，请在手机上确认”，用户也有机会在确认页看到设备信息后拒绝。如果扫完直接登录，误扫或钓鱼就没有拦截的机会。</p>
+</blockquote>
+<p><strong>二维码里直接放登录令牌行不行？</strong></p>
+<blockquote>
+<p>不行。二维码会被截图、转发、被摄像头拍到，里面的内容要当成公开的。放进去的只能是一个短期、一次性、本身没有权限的 ID，真正的权限由服务端在用户确认后签发。</p>
+</blockquote>
+<p><strong>PC 页面放在后台很久，回来二维码过期了怎么办？</strong></p>
+<blockquote>
+<p>以服务端返回的状态为准。页面重新可见时立即查一次状态，过期了就提示刷新。不要只靠前端倒计时判断，因为后台标签页的定时器可能被浏览器限制，时间会不准。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.rfc-editor.org/rfc/rfc8628" target="_blank" rel="noreferrer">RFC 8628 · OAuth 2.0 Device Authorization Grant<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSocket" target="_blank" rel="noreferrer">MDN · WebSocket<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%89%AB%E7%A0%81%E7%99%BB%E5%BD%95%E6%98%AF%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E7%9A%84%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%89%AB%E7%A0%81%E7%99%BB%E5%BD%95%E6%98%AF%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E7%9A%84%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Adesign-qr-login%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9C%BA%E6%99%AF%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fdesign-qr-login%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：扫码登录是怎样实现的？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/design-permission/">前端权限控制怎样设计路由、按钮和接口三层？</a></li><li><a href="/questions/design-dark-mode/">怎样实现网站的暗黑模式和主题切换？</a></li><li><a href="/questions/design-skeleton/">骨架屏怎样实现？和 loading 有什么区别？</a></li><li><a href="/questions/design-prevent-duplicate/">前端怎样防止重复提交和接口重复请求？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

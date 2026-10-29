@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="前端安全面试题：中间人可以截获连接，却拿不到网站证书对应的私钥。" />
+    <title>HTTPS 握手中，中间人攻击是怎样被防住的？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/security-https-mitm/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="HTTPS 握手中，中间人攻击是怎样被防住的？ · 前端知库" />
+    <meta property="og:description" content="前端安全面试题：中间人可以截获连接，却拿不到网站证书对应的私钥。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/security-https-mitm/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/security-https-mitm/#webpage","url":"https://fe.hushifa.top/questions/security-https-mitm/","name":"HTTPS 握手中，中间人攻击是怎样被防住的？ · 前端知库","description":"前端安全面试题：中间人可以截获连接，却拿不到网站证书对应的私钥。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/security-https-mitm/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/security-https-mitm/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"前端安全面试题","item":"https://fe.hushifa.top/topics/security/"},{"@type":"ListItem","position":3,"name":"HTTPS 握手中，中间人攻击是怎样被防住的？","item":"https://fe.hushifa.top/questions/security-https-mitm/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DSAVeeDz.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/security/">前端安全面试题</a><span aria-hidden="true">/</span><span aria-current="page">HTTPS 握手中，中间人攻击是怎样被防住的？</span></nav><h1 tabindex="-1">HTTPS 握手中，中间人攻击是怎样被防住的？</h1><p class="reading-summary">中间人可以截获连接，却拿不到网站证书对应的私钥。浏览器校验证书链能追到受信任的根 CA、证书上的域名与访问的域名一致，再验证服务器用私钥对握手内容做的签名，冒充者就会在握手时失败。证书防不住的是用户一开始就走 HTTP 被降级，这要靠 HSTS 和预加载列表。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>你在咖啡馆连了攻击者开的 Wi-Fi，访问 <code>https://bank.example</code>。攻击者能截住你发出的每个包，于是他假装自己是银行服务器，和你握手；同时再以你的身份和真正的银行握手，在中间转发并偷看数据。这就是中间人攻击。</p>
+<p>HTTPS 靠证书和签名防住它。服务器在握手里发出证书，再用证书对应的私钥给整段握手内容签名（<code>CertificateVerify</code>）。浏览器检查三件事：证书链能一级级追到系统或浏览器信任的根 CA；证书上的域名和地址栏里的域名一致；签名能用证书里的公钥验证通过。攻击者拿不到银行的私钥，自己签的证书又追不到受信任的根，或者域名对不上，浏览器就会报证书错误、终止连接。</p>
+<p>剩下的漏洞在“还没开始 HTTPS”的时候。用户输入 <code>bank.example</code> 时浏览器可能先发 HTTP 请求，攻击者可以拦下这一跳，一直用 HTTP 跟用户通信，这叫 SSL 剥离。HSTS 让浏览器记住“这个域名只用 HTTPS”，之后连 HTTP 请求都不发；首次访问的空档再用 HSTS 预加载列表补上。</p>
+<p>要注意，这套防护的前提是信任的根 CA 没出问题。公司电脑或抓包工具装了自己的根证书，它签出的证书浏览器也会接受，这时中间人就能看到内容。</p>
+</blockquote>
+<h2>中间人想做什么，卡在哪一步</h2>
+<p>先看攻击者的位置。他能看到、修改、丢弃你和服务器之间的所有包，所以加密本身挡不住他。如果没有身份验证，他和你协商一把密钥、再和服务器协商另一把，两头都“加密”了，他在中间解开再加密，双方都发现不了。</p>
+<p>所以关键是浏览器要确认：跟我协商密钥的这个人，真的是 <code>bank.example</code> 的持有者。TLS 1.3 的做法是，服务器发出 <code>Certificate</code> 以后，紧跟着发 <code>CertificateVerify</code>。RFC 8446 说，它是“用 Certificate 消息里公钥对应的私钥，对整个握手做的签名”。接着发 <code>Finished</code>，它是对整个握手计算的 MAC，用来确认双方看到的握手内容一致、密钥一致。</p>
+<p>攻击者这时有两条路，都走不通。第一条，把银行的真证书原样转发给你。可是他没有银行的私钥，签不出能用这张证书的公钥验证通过的 <code>CertificateVerify</code>。第二条，换成自己的证书。他有自己的私钥，签名能过，可是这张证书要么不是受信任的 CA 签发的，要么上面的域名不是 <code>bank.example</code>，正规 CA 不会给他签别人的域名。</p>
+<h2>浏览器怎样校验证书</h2>
+<p>证书链校验是在问“这张证书是谁担保的”。网站证书由中间 CA 签名，中间 CA 的证书再由根 CA 签名，根证书预装在操作系统或浏览器里。浏览器用上一级的公钥验证下一级的签名，一直验到一个自己信任的根，同时检查有效期和吊销状态。</p>
+<p>主机名校验是在问“这张证书是给谁的”。证书里的 SAN（主题备用名称）列出它适用的域名，浏览器拿你访问的域名去比。RFC 9525 规定按标签逐段、不区分大小写比较；通配符只能占最左边一整段，并且只匹配一段，所以 <code>*.example.com</code> 能匹配 <code>www.example.com</code>，匹配不了 <code>a.b.example.com</code>，也匹配不了 <code>example.com</code>。</p>
+<p>两步缺一不可。只验证书链不验域名，攻击者用自己合法申请的 <code>evil.example</code> 证书就能冒充任何网站。</p>
+<h2>证书错误为什么不能点“继续访问”</h2>
+<p>浏览器报证书错误时，很多用户会点“仍然继续”。这一下就把前面的防护全部作废了。</p>
+<p>RFC 6797 把这叫做“点击通过的不安全”。启用 HSTS 以后，规范要求浏览器遇到任何安全传输错误或警告都直接终止连接，并且不给用户绕过的选项。MDN 也写明，之后连接这个主机时，浏览器不会让用户绕过证书无效这类错误。</p>
+<h2>SSL 剥离和 HSTS</h2>
+<p>证书校验只在 HTTPS 连接里起作用。MDN 给出过一个典型场景：用户第一次访问 <code>http://example.com/</code>，浏览器还不知道它要 HTTPS，于是先走明文 HTTP，服务器回 301 跳转到 HTTPS。攻击者如果拦下这次 HTTP 请求，不让跳转发生，自己去和服务器走 HTTPS，再用 HTTP 把内容转给用户，用户的浏览器就根本不会做证书校验。</p>
+<p>服务器在 HTTPS 响应里加上这个头：</p>
+<div class="not-prose code-block"><div class="code-language">http</div><pre><code class="hljs language-http">Strict-Transport-Security: max-age=31536000; includeSubDomains
+</code></pre></div>
+<p>浏览器记住以后，在 <code>max-age</code> 秒内，所有指向这个域名的 <code>http://</code> 地址都会在本地改写成 <code>https://</code> 再发出，攻击者就没有明文请求可拦了。<code>includeSubDomains</code> 把规则扩展到所有子域名。这个头只有通过 HTTPS 收到才算数，RFC 6797 要求浏览器忽略 HTTP 响应里的 HSTS 头，否则攻击者也能伪造或删掉它。</p>
+<p>第一次访问之前浏览器还没收到这个头，仍然有空档。解决办法是 HSTS 预加载：把域名提交到浏览器内置的列表里，浏览器出厂就知道它只能用 HTTPS。按 MDN 的说明，用 <code>preload</code> 时 <code>max-age</code> 至少一年，并且必须带 <code>includeSubDomains</code>。HTTPS 本身提供的保障和部署要点，见<a href="/questions/http-https/">《HTTPS 相比 HTTP 提供了哪些保障？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>Charles、Fiddler 这类抓包工具为什么能解开 HTTPS？</strong></p>
+<blockquote>
+<p>它们就是一个中间人，只不过事先让你在电脑或手机上安装并信任了它的根证书。它给每个网站现场签一张证书，证书链能追到这个“受信任”的根，浏览器就放行了。所以安装根证书等于把查看全部 HTTPS 流量的权限交了出去。</p>
+</blockquote>
+<p><strong>攻击者从 CA 那里骗到了一张别人域名的证书怎么办？</strong></p>
+<blockquote>
+<p>这是证书体系本身的风险。按 MDN 的说明，Chrome 要求公开信任的证书附带证书透明度（CT）日志的记录，域名所有者可以监控有没有人给自己的域名签了证书，发现后要求吊销。另外可以用 DNS 的 CAA 记录（RFC 8659）声明哪些 CA 可以给自己的域名签发证书，这条记录由 CA 在签发前检查。</p>
+</blockquote>
+<p><strong>TLS 怎样防止攻击者把版本降级到更旧、更弱的协议？</strong></p>
+<blockquote>
+<p>TLS 1.3 的 <code>Finished</code> 消息覆盖了整个握手，中间被改过的协商内容会让校验失败。RFC 8446 还专门设计了降级保护：支持 TLS 1.3 的服务器如果协商出了更低的版本，会在 <code>ServerHello</code> 的随机数末尾放入固定标记，支持 1.3 的客户端看到就会中止握手。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.rfc-editor.org/rfc/rfc8446.html" target="_blank" rel="noreferrer">RFC 8446 · TLS 1.3<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://www.rfc-editor.org/rfc/rfc9525.html" target="_blank" rel="noreferrer">RFC 9525 · Service Identity in TLS<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://www.rfc-editor.org/rfc/rfc6797.html" target="_blank" rel="noreferrer">RFC 6797 · HTTP Strict Transport Security<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Strict-Transport-Security" target="_blank" rel="noreferrer">MDN · Strict-Transport-Security<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+HTTPS+%E6%8F%A1%E6%89%8B%E4%B8%AD%EF%BC%8C%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB%E6%98%AF%E6%80%8E%E6%A0%B7%E8%A2%AB%E9%98%B2%E4%BD%8F%E7%9A%84%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AHTTPS+%E6%8F%A1%E6%89%8B%E4%B8%AD%EF%BC%8C%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB%E6%98%AF%E6%80%8E%E6%A0%B7%E8%A2%AB%E9%98%B2%E4%BD%8F%E7%9A%84%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Asecurity-https-mitm%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fsecurity-https-mitm%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：HTTPS 握手中，中间人攻击是怎样被防住的？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/http-xss/">XSS 和 CSRF 有什么区别？分别如何防范？</a></li><li><a href="/questions/sec-cookies/">HttpOnly、Secure 和 SameSite 分别保护什么？</a></li><li><a href="/questions/security-session-jwt/">Cookie-Session 和 JWT 登录有什么区别？前端的 Token 应该存在哪里？</a></li><li><a href="/questions/security-token-refresh/">Access Token 过期后，前端怎样做无感刷新？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="手写与算法面试题：once 用闭包里的一个标记记住是否调用过，第一次执行并保存结果，之后直接返回这个结果；memoize 用 Map 按参数算出的键缓存结果…" />
+    <title>怎样实现函数只执行一次（once）和带缓存的 memoize？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/alg-once-memoize/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="怎样实现函数只执行一次（once）和带缓存的 memoize？" />
+    <meta property="og:description" content="手写与算法面试题：once 用闭包里的一个标记记住是否调用过，第一次执行并保存结果，之后直接返回这个结果；memoize 用 Map 按参数算出的键缓存结果…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/alg-once-memoize/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-once-memoize/#webpage","url":"https://fe.hushifa.top/questions/alg-once-memoize/","name":"怎样实现函数只执行一次（once）和带缓存的 memoize？","description":"手写与算法面试题：once 用闭包里的一个标记记住是否调用过，第一次执行并保存结果，之后直接返回这个结果；memoize 用 Map 按参数算出的键缓存结果…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-once-memoize/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-once-memoize/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"怎样实现函数只执行一次（once）和带缓存的 memoize？","item":"https://fe.hushifa.top/questions/alg-once-memoize/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DSAVeeDz.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样实现函数只执行一次（once）和带缓存的 memoize？</span></nav><h1 tabindex="-1">怎样实现函数只执行一次（once）和带缓存的 memoize？</h1><p class="reading-summary">once 用闭包里的一个标记记住是否调用过，第一次执行并保存结果，之后直接返回这个结果；memoize 用 Map 按参数算出的键缓存结果，默认只拿第一个参数当键，多参数要传自定义的键函数。缓存 Promise 时失败结果也会被缓存，需要在拒绝时删掉。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>页面上的初始化函数可能被好几个地方调用，但只该真正执行一次，这就是 <code>once</code>。它返回一个包装函数，闭包里存一个“是否调用过”的标记和第一次的结果，之后再调用直接返回那个结果。</p>
+<p><code>memoize</code> 是把“同样的参数得到同样的结果”缓存起来，比如计算很慢的纯函数，或者递归求斐波那契数。它在闭包里放一个 <code>Map</code>，用参数算出一个键，命中就直接返回，没命中再调用原函数并存起来。</p>
+<p>关键在键怎么算。常见实现默认只用第一个参数当键，多参数函数不传自定义键函数就会算错；对象参数按引用比较，内容相同的两个对象也算不同的键。包装时要用 <code>fn.apply(this, args)</code> 保留调用时的 <code>this</code>。</p>
+<p>要注意，缓存只适合结果只取决于参数的函数。缓存 Promise 时，失败的 Promise 也会被存下来，之后每次都直接拿到失败，需要在拒绝时把它从缓存里删掉；缓存会一直增长，长期运行的页面要考虑上限。</p>
+</blockquote>
+<h2>once：用闭包记住是否调用过</h2>
+<p>先看 <code>once</code>，注意第一次调用的结果是怎样保存下来的。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">once</span>(<span class="hljs-params">fn</span>) {
+  <span class="hljs-keyword">let</span> called = <span class="hljs-literal">false</span>;
+  <span class="hljs-keyword">let</span> result;
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> (<span class="hljs-params">...args</span>) {
+    <span class="hljs-keyword">if</span> (!called) {
+      called = <span class="hljs-literal">true</span>;
+      result = fn.<span class="hljs-title function_">apply</span>(<span class="hljs-variable language_">this</span>, args);
+      fn = <span class="hljs-literal">null</span>; <span class="hljs-comment">// 执行后释放原函数，避免一直持有它引用的变量</span>
+    }
+    <span class="hljs-keyword">return</span> result;
+  };
+}
+
+<span class="hljs-keyword">let</span> count = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">const</span> init = <span class="hljs-title function_">once</span>(<span class="hljs-function">(<span class="hljs-params">x</span>) =&gt;</span> ++count + x);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">init</span>(<span class="hljs-number">10</span>), <span class="hljs-title function_">init</span>(<span class="hljs-number">20</span>), count); <span class="hljs-comment">// 11 11 1</span>
+</code></pre></div>
+<p>第二次调用传了 <code>20</code>，结果仍是第一次的 <code>11</code>，<code>count</code> 也只加了一次。为什么 <code>called = true</code> 写在调用 <code>fn</code> 之前？如果 <code>fn</code> 内部又调用了包装函数，或者 <code>fn</code> 抛了错，先置标记能保证它不会被执行第二次。代价是第一次抛错后，之后的调用都返回 <code>undefined</code>，需要“失败可重试”的话就把置标记挪到调用成功之后。</p>
+<p><code>called</code>、<code>result</code>、<code>fn</code> 都是闭包变量，每次调用 <code>once</code> 生成一套独立的状态，原理见<a href="/questions/js-closure/">《什么是闭包？它有哪些实际应用？》</a>。</p>
+<h2>memoize：用 Map 按键缓存结果</h2>
+<p>下面的 <code>memoize</code> 第二个参数是计算键的函数，默认取第一个参数。示例对比了默认键和自定义键的差别。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">memoize</span>(<span class="hljs-params">fn, resolver = (...args) =&gt; args[<span class="hljs-number">0</span>]</span>) {
+  <span class="hljs-keyword">const</span> cache = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">memoized</span>(<span class="hljs-params">...args</span>) {
+    <span class="hljs-keyword">const</span> key = resolver.<span class="hljs-title function_">apply</span>(<span class="hljs-variable language_">this</span>, args);
+    <span class="hljs-keyword">if</span> (cache.<span class="hljs-title function_">has</span>(key)) <span class="hljs-keyword">return</span> cache.<span class="hljs-title function_">get</span>(key);
+    <span class="hljs-keyword">const</span> result = fn.<span class="hljs-title function_">apply</span>(<span class="hljs-variable language_">this</span>, args);
+    cache.<span class="hljs-title function_">set</span>(key, result);
+    <span class="hljs-keyword">return</span> result;
+  }
+  memoized.<span class="hljs-property">cache</span> = cache;
+  <span class="hljs-keyword">return</span> memoized;
+}
+
+<span class="hljs-keyword">let</span> calls = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">const</span> slowSquare = <span class="hljs-title function_">memoize</span>(<span class="hljs-function">(<span class="hljs-params">n</span>) =&gt;</span> {
+  calls++;
+  <span class="hljs-keyword">return</span> n * n;
+});
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">slowSquare</span>(<span class="hljs-number">4</span>), <span class="hljs-title function_">slowSquare</span>(<span class="hljs-number">4</span>), calls); <span class="hljs-comment">// 16 16 1</span>
+
+<span class="hljs-keyword">const</span> add = <span class="hljs-title function_">memoize</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a + b);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">add</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>), <span class="hljs-title function_">add</span>(<span class="hljs-number">1</span>, <span class="hljs-number">100</span>)); <span class="hljs-comment">// 3 3</span>
+<span class="hljs-keyword">const</span> add2 = <span class="hljs-title function_">memoize</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a + b, <span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> <span class="hljs-string">`<span class="hljs-subst">${a}</span>,<span class="hljs-subst">${b}</span>`</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">add2</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>), <span class="hljs-title function_">add2</span>(<span class="hljs-number">1</span>, <span class="hljs-number">100</span>)); <span class="hljs-comment">// 3 101</span>
+
+<span class="hljs-keyword">const</span> fib = <span class="hljs-title function_">memoize</span>(<span class="hljs-function">(<span class="hljs-params">n</span>) =&gt;</span> (n &lt; <span class="hljs-number">2</span> ? n : <span class="hljs-title function_">fib</span>(n - <span class="hljs-number">1</span>) + <span class="hljs-title function_">fib</span>(n - <span class="hljs-number">2</span>)));
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">fib</span>(<span class="hljs-number">50</span>)); <span class="hljs-comment">// 12586269025</span>
+</code></pre></div>
+<p><code>add(1, 100)</code> 返回了 <code>3</code>，这是错误结果。默认键只看第一个参数，两次调用的键都是 <code>1</code>，第二次直接命中了第一次的缓存。传入把所有参数拼起来的键函数后，<code>add2</code> 才算对。</p>
+<p>为什么用 <code>cache.has</code> 判断而不是 <code>cache.get(key) !== undefined</code>？因为原函数可能本来就返回 <code>undefined</code>，用 <code>get</code> 判断会把这种结果当成没缓存，每次都重新算。为什么用 <code>Map</code> 不用普通对象？<code>Map</code> 的键可以是任何值，数字 <code>1</code> 和字符串 <code>&#x27;1&#x27;</code> 是不同的键，对象也能当键，而且不会碰到 <code>__proto__</code> 这类继承属性名。</p>
+<p><code>fib(50)</code> 能瞬间算出来，因为递归里调用的 <code>fib</code> 就是缓存过的版本，每个 <code>n</code> 只真正计算一次，总共是 O(n) 次计算。不加缓存的递归是指数级的。</p>
+<h2>缓存 Promise 时要处理失败</h2>
+<p>异步函数的返回值是 Promise，<code>memoize</code> 存的是 Promise 本身。这对成功的请求很好，同时发起的重复请求会共用同一个 Promise。可是失败的 Promise 也会被存下来。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">memoize</span>(<span class="hljs-params">fn, resolver = (...args) =&gt; args[<span class="hljs-number">0</span>]</span>) {
+  <span class="hljs-keyword">const</span> cache = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">memoized</span>(<span class="hljs-params">...args</span>) {
+    <span class="hljs-keyword">const</span> key = resolver.<span class="hljs-title function_">apply</span>(<span class="hljs-variable language_">this</span>, args);
+    <span class="hljs-keyword">if</span> (cache.<span class="hljs-title function_">has</span>(key)) <span class="hljs-keyword">return</span> cache.<span class="hljs-title function_">get</span>(key);
+    <span class="hljs-keyword">const</span> result = fn.<span class="hljs-title function_">apply</span>(<span class="hljs-variable language_">this</span>, args);
+    cache.<span class="hljs-title function_">set</span>(key, result);
+    <span class="hljs-keyword">return</span> result;
+  }
+  memoized.<span class="hljs-property">cache</span> = cache;
+  <span class="hljs-keyword">return</span> memoized;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">memoizeAsync</span>(<span class="hljs-params">fn</span>) {
+  <span class="hljs-keyword">const</span> cache = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> (<span class="hljs-params">key</span>) {
+    <span class="hljs-keyword">if</span> (cache.<span class="hljs-title function_">has</span>(key)) <span class="hljs-keyword">return</span> cache.<span class="hljs-title function_">get</span>(key);
+    <span class="hljs-keyword">const</span> p = <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>(fn.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">this</span>, key)).<span class="hljs-title function_">catch</span>(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> {
+      cache.<span class="hljs-title function_">delete</span>(key); <span class="hljs-comment">// 失败后删除，下次调用会重新请求</span>
+      <span class="hljs-keyword">throw</span> err;
+    });
+    cache.<span class="hljs-title function_">set</span>(key, p);
+    <span class="hljs-keyword">return</span> p;
+  };
+}
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">main</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">let</span> requests = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">failing</span> = (<span class="hljs-params"></span>) =&gt; {
+    requests++;
+    <span class="hljs-keyword">return</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">reject</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;网络错误&#x27;</span>));
+  };
+
+  <span class="hljs-keyword">const</span> naive = <span class="hljs-title function_">memoize</span>(failing);
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">naive</span>(<span class="hljs-number">1</span>).<span class="hljs-title function_">catch</span>(<span class="hljs-function">() =&gt;</span> {});
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">naive</span>(<span class="hljs-number">1</span>).<span class="hljs-title function_">catch</span>(<span class="hljs-function">() =&gt;</span> {});
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(requests); <span class="hljs-comment">// 1</span>
+
+  requests = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">const</span> safe = <span class="hljs-title function_">memoizeAsync</span>(failing);
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">safe</span>(<span class="hljs-number">1</span>).<span class="hljs-title function_">catch</span>(<span class="hljs-function">() =&gt;</span> {});
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">safe</span>(<span class="hljs-number">1</span>).<span class="hljs-title function_">catch</span>(<span class="hljs-function">() =&gt;</span> {});
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(requests); <span class="hljs-comment">// 2</span>
+}
+<span class="hljs-title function_">main</span>();
+</code></pre></div>
+<p>第一段里请求只发了一次，第二次调用直接拿到了缓存里那个已经失败的 Promise，网络恢复后也不会重试。<code>memoizeAsync</code> 在 Promise 拒绝时把它从缓存里删掉，所以第二次调用重新发了请求。成功的结果仍然会被缓存，同时发起的相同请求也只发一次。</p>
+<h2>常见追问</h2>
+<p><strong>参数是对象时怎样生成缓存键？</strong></p>
+<blockquote>
+<p><code>Map</code> 按引用比较对象，同一个对象能命中，内容相同的新对象不能。可以在键函数里用 <code>JSON.stringify</code> 把参数转成字符串，但它对属性顺序敏感，也处理不了函数、循环引用等值。更稳妥的做法是挑出决定结果的几个字段拼成键。</p>
+</blockquote>
+<p><strong>缓存一直增长怎么办？</strong></p>
+<blockquote>
+<p>给缓存设上限，超出时淘汰最久没用的，也就是 LRU 策略，见<a href="/questions/alg-map-lru/">《如何利用 Map 实现固定容量的 LRU 缓存？》</a>。如果键是对象、并且希望对象不再使用后缓存能被回收，可以把 <code>Map</code> 换成 <code>WeakMap</code>，但 <code>WeakMap</code> 的键只能是对象或非注册的 Symbol。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures" target="_blank" rel="noreferrer">MDN · Closures<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map" target="_blank" rel="noreferrer">MDN · Map<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply" target="_blank" rel="noreferrer">MDN · Function.prototype.apply()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E5%87%BD%E6%95%B0%E5%8F%AA%E6%89%A7%E8%A1%8C%E4%B8%80%E6%AC%A1%EF%BC%88once%EF%BC%89%E5%92%8C%E5%B8%A6%E7%BC%93%E5%AD%98%E7%9A%84+memoize%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E5%87%BD%E6%95%B0%E5%8F%AA%E6%89%A7%E8%A1%8C%E4%B8%80%E6%AC%A1%EF%BC%88once%EF%BC%89%E5%92%8C%E5%B8%A6%E7%BC%93%E5%AD%98%E7%9A%84+memoize%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-once-memoize%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-once-memoize%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样实现函数只执行一次（once）和带缓存的 memoize？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-curry-compose/">怎样手写函数柯里化和 compose？</a></li><li><a href="/questions/alg-debounce/">怎样实现只在停止调用后执行的防抖函数？</a></li><li><a href="/questions/alg-throttle/">怎样实现首沿节流？它与尾沿节流、防抖有什么区别？</a></li><li><a href="/questions/alg-array-unique-flat/">怎样实现数组去重和数组扁平化？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>
