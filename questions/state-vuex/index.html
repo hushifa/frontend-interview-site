@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="状态与路由面试题：Vuex 把共享状态放进一个 store。" />
+    <title>Vuex 的 state、getter、mutation、action 和 module 分别做什么？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/state-vuex/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="Vuex 的 state、getter、mutation、action 和 module 分别做什么？" />
+    <meta property="og:description" content="状态与路由面试题：Vuex 把共享状态放进一个 store。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/state-vuex/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/state-vuex/#webpage","url":"https://fe.hushifa.top/questions/state-vuex/","name":"Vuex 的 state、getter、mutation、action 和 module 分别做什么？","description":"状态与路由面试题：Vuex 把共享状态放进一个 store。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/state-vuex/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/state-vuex/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"状态与路由面试题","item":"https://fe.hushifa.top/topics/state-routing/"},{"@type":"ListItem","position":3,"name":"Vuex 的 state、getter、mutation、action 和 module 分别做什么？","item":"https://fe.hushifa.top/questions/state-vuex/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/state-routing/">状态与路由面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vuex 的 state、getter、mutation、action 和 module 分别做什么？</span></nav><h1 tabindex="-1">Vuex 的 state、getter、mutation、action 和 module 分别做什么？</h1><p class="reading-summary">Vuex 把共享状态放进一个 store。state 存数据，getter 是派生数据，mutation 是唯一修改 state 的地方且必须同步，action 处理异步再提交 mutation，module 把大 store 按业务拆开。新项目官方推荐 Pinia。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>购物车数量要同时显示在顶栏、商品页和结算页，几个互不相干的组件都要读、都要改，靠 props 和事件一层层传很麻烦。Vuex 的做法是把这类共享状态集中放进一个 store，所有组件都从这里读，也都按同一套规则改。</p>
+<p>store 有五个部分。<code>state</code> 存原始数据；<code>getter</code> 是从 state 算出来的派生数据，相当于 store 的 computed；<code>mutation</code> 是唯一能修改 state 的地方，组件用 <code>commit</code> 调用它；<code>action</code> 用来处理异步，比如先请求接口，拿到结果后再 <code>commit</code> 一个 mutation，组件用 <code>dispatch</code> 调用它；<code>module</code> 把一个大 store 按业务拆成多个小模块，开启 <code>namespaced</code> 后各自的名字互不冲突。</p>
+<p>为什么要把改数据和异步分开？Vuex 文档要求 mutation 必须是同步函数。因为调试工具要在每次 mutation 前后记录状态快照，如果 mutation 里有异步回调，回调里改的数据就记录不到，状态变化没法追踪。所以异步都放在 action 里，action 本身不改 state，只在合适的时机提交 mutation。</p>
+<p>要注意，Vue 官方的状态管理库已经换成了 Pinia。Vuex 3 和 4 仍然维护，但基本不会再加新功能，新项目推荐直接用 Pinia。</p>
+</blockquote>
+<h2>一个完整的 store</h2>
+<p>下面用一个购物车模块把五个部分串起来：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> cart = {
+  <span class="hljs-attr">namespaced</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">state</span>: <span class="hljs-function">() =&gt;</span> ({ <span class="hljs-attr">items</span>: [] }),
+  <span class="hljs-attr">getters</span>: {
+    <span class="hljs-attr">count</span>: <span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">items</span>.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">sum, item</span>) =&gt;</span> sum + item.<span class="hljs-property">quantity</span>, <span class="hljs-number">0</span>),
+  },
+  <span class="hljs-attr">mutations</span>: {
+    <span class="hljs-title function_">setItems</span>(<span class="hljs-params">state, items</span>) {
+      state.<span class="hljs-property">items</span> = items;
+    },
+  },
+  <span class="hljs-attr">actions</span>: {
+    <span class="hljs-keyword">async</span> <span class="hljs-title function_">loadCart</span>(<span class="hljs-params">{ commit }</span>) {
+      <span class="hljs-keyword">const</span> items = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;/api/cart&#x27;</span>).<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">res</span>) =&gt;</span> res.<span class="hljs-title function_">json</span>());
+      <span class="hljs-title function_">commit</span>(<span class="hljs-string">&#x27;setItems&#x27;</span>, items);
+    },
+  },
+};
+
+<span class="hljs-keyword">const</span> store = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Vuex</span>.<span class="hljs-title class_">Store</span>({ <span class="hljs-attr">modules</span>: { cart } });
+</code></pre></div>
+<p>组件里读数量用 <code>store.getters[&#x27;cart/count&#x27;]</code>，加载购物车用 <code>store.dispatch(&#x27;cart/loadCart&#x27;)</code>。因为模块开了 <code>namespaced: true</code>，名字前面都要带上 <code>cart/</code>，别的模块也有 <code>loadCart</code> 也不会冲突。</p>
+<p><code>loadCart</code> 为什么不直接写 <code>state.items = items</code>？action 拿到的是一个上下文对象，按规则只通过 <code>commit</code> 修改数据。这样每一次数据变化都对应一条 mutation 记录，在调试工具里能看到是哪个 mutation、带了什么参数、改之前和改之后的 state。</p>
+<p>模块的 <code>state</code> 写成函数，是为了同一个模块被注册多次时，每次都拿到一份新对象，不会共用同一份数据，和组件的 <code>data</code> 必须是函数是同一个道理。</p>
+<h2>刷新页面数据为什么没了</h2>
+<p>Vuex 的数据存在内存里，刷新页面后 store 会重新创建，state 回到初始值。需要保留的数据，比如登录信息、购物车，要自己存到 <code>localStorage</code> 或交给服务端，页面加载时再读回来。常见做法是写一个 Vuex 插件，订阅 mutation，每次变化后把需要的部分写进存储。</p>
+<h2>常见追问</h2>
+<p><strong>Vuex 和 Pinia 有什么区别？</strong></p>
+<blockquote>
+<p>Pinia 去掉了 mutation，直接在 action 里改 state，同步异步都写在 action 里；没有嵌套模块，每个 store 是独立的，按需引入；对 TypeScript 的类型推导也更好。Vuex 的 README 里说可以把 Pinia 看作换了名字的 Vuex 5。Pinia 的用法见<a href="/questions/state-pinia/">《Pinia 中 state、getter 和 action 应如何分工？》</a>。</p>
+</blockquote>
+<p><strong>为什么不直接在组件里改 store.state？</strong></p>
+<blockquote>
+<p>能改，数据也会变，但绕过了 mutation，调试工具记录不到，出问题很难查是谁改的。开启 <code>strict: true</code> 后，在 mutation 之外修改 state 会抛错，开发环境可以用它检查，生产环境不要开，因为它要深度侦听整个状态树，开销很大。</p>
+</blockquote>
+<p><strong>mapState、mapGetters 这些辅助函数做了什么？</strong></p>
+<blockquote>
+<p>它们帮你生成组件的 computed 或 methods，比如 <code>...mapGetters(&#x27;cart&#x27;, [&#x27;count&#x27;])</code> 等于在组件里写了一个返回 <code>this.$store.getters[&#x27;cart/count&#x27;]</code> 的计算属性，省去重复代码。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://vuex.vuejs.org/guide/mutations.html" target="_blank" rel="noreferrer">Vuex · Mutations<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://vuex.vuejs.org/guide/actions.html" target="_blank" rel="noreferrer">Vuex · Actions<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://github.com/vuejs/vuex" target="_blank" rel="noreferrer">vuejs/vuex · README<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vuex+%E7%9A%84+state%E3%80%81getter%E3%80%81mutation%E3%80%81action+%E5%92%8C+module+%E5%88%86%E5%88%AB%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVuex+%E7%9A%84+state%E3%80%81getter%E3%80%81mutation%E3%80%81action+%E5%92%8C+module+%E5%88%86%E5%88%AB%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Astate-vuex%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%8A%B6%E6%80%81%E4%B8%8E%E8%B7%AF%E7%94%B1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fstate-vuex%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vuex 的 state、getter、mutation、action 和 module 分别做什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/state-redux/">Redux 的单向数据流为什么强调 reducer 的纯粹性？</a></li><li><a href="/questions/state-pinia/">Pinia 中 state、getter 和 action 应如何分工？</a></li><li><a href="/questions/state-store-choice/">Zustand、Jotai 和 Redux Toolkit 应该怎样选择？</a></li><li><a href="/questions/state-server-cache/">为什么要用 TanStack Query 或 SWR 管理服务端状态？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

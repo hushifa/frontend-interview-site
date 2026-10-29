@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="Vue面试题：Vue 2 里同一个元素上 v-for 优先级更高，每一项都会先渲染再判断；Vue 3 改成 v-if 优先…" />
+    <title>v-if 和 v-for 为什么不建议写在同一个元素上？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/vue-vif-vfor/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="v-if 和 v-for 为什么不建议写在同一个元素上？" />
+    <meta property="og:description" content="Vue面试题：Vue 2 里同一个元素上 v-for 优先级更高，每一项都会先渲染再判断；Vue 3 改成 v-if 优先…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/vue-vif-vfor/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-vif-vfor/#webpage","url":"https://fe.hushifa.top/questions/vue-vif-vfor/","name":"v-if 和 v-for 为什么不建议写在同一个元素上？","description":"Vue面试题：Vue 2 里同一个元素上 v-for 优先级更高，每一项都会先渲染再判断；Vue 3 改成 v-if 优先…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-vif-vfor/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-vif-vfor/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"v-if 和 v-for 为什么不建议写在同一个元素上？","item":"https://fe.hushifa.top/questions/vue-vif-vfor/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">v-if 和 v-for 为什么不建议写在同一个元素上？</span></nav><h1 tabindex="-1">v-if 和 v-for 为什么不建议写在同一个元素上？</h1><p class="reading-summary">Vue 2 里同一个元素上 v-for 优先级更高，每一项都会先渲染再判断；Vue 3 改成 v-if 优先，v-if 拿不到 v-for 的循环变量，直接报错。两个版本都建议过滤列表用 computed，整体显示隐藏把 v-if 放到外层或 template 上。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>列表里只想显示已完成的待办，很多人会写 <code>&lt;li v-for=&quot;todo in todos&quot; v-if=&quot;todo.done&quot;&gt;</code>。这种写法在 Vue 2 和 Vue 3 里表现不一样，官方都建议不要这么写。</p>
+<p>区别在优先级。Vue 2 里同一个元素上 <code>v-for</code> 先执行，相当于先循环，再对每一项判断 <code>v-if</code>，能跑起来，但每次渲染都要遍历整个列表。Vue 3 改成了 <code>v-if</code> 先执行，这时循环还没开始，<code>todo</code> 还不存在，访问 <code>todo.done</code> 就会报错。</p>
+<p>正确写法分两种情况。要过滤列表，就用 <code>computed</code> 先算出过滤后的数组，再 <code>v-for</code> 这个数组，结果有缓存，列表不变时不会重复过滤。要根据条件决定整个列表显不显示，就把 <code>v-if</code> 放到外层元素上，或者用 <code>&lt;template v-for&gt;</code> 包一层，把 <code>v-if</code> 写在里面的元素上。</p>
+<p>要注意，Vue 2 升级到 Vue 3 时，这种写法不一定会在编译期暴露，常常是页面运行时报 <code>todo</code> 未定义，迁移时要专门搜一遍。</p>
+</blockquote>
+<h2>为什么 Vue 3 会报错</h2>
+<p>下面这段模板在 Vue 2 里能正常过滤，在 Vue 3 里会出错：</p>
+<div class="not-prose code-block"><div class="code-language">vue-html</div><pre><code class="hljs language-vue-html">&lt;li v-for=&quot;todo in todos&quot; v-if=&quot;!todo.done&quot;&gt;
+  {{ todo.name }}
+&lt;/li&gt;
+</code></pre></div>
+<p>Vue 3 文档的说法是：两个指令在同一个节点上时，<code>v-if</code> 的优先级更高，所以 <code>v-if</code> 的条件访问不到 <code>v-for</code> 作用域里的变量。可以理解成 Vue 3 把它编译成了“先判断条件，条件成立再循环”。判断条件时 <code>todo</code> 还没定义，表达式就出错了。</p>
+<p>Vue 2 正好反过来，<code>v-for</code> 优先。它相当于“循环每一项，每一项再判断”，所以能拿到 <code>todo</code>。可是哪怕最后只显示一两项，每次重新渲染时整个列表都要遍历一遍。</p>
+<h2>过滤列表用 computed</h2>
+<p>把过滤逻辑挪到 <code>computed</code> 里：</p>
+<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;script setup&gt;
+import { computed, ref } from &#x27;vue&#x27;;
+
+const todos = ref([
+  { id: 1, name: &#x27;写周报&#x27;, done: false },
+  { id: 2, name: &#x27;交房租&#x27;, done: true },
+]);
+const activeTodos = computed(() =&gt; todos.value.filter((todo) =&gt; !todo.done));
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;ul&gt;
+    &lt;li v-for=&quot;todo in activeTodos&quot; :key=&quot;todo.id&quot;&gt;{{ todo.name }}&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/template&gt;
+</code></pre></div>
+<p>这样模板里只剩一个 <code>v-for</code>，没有优先级问题。<code>computed</code> 会缓存结果，只有 <code>todos</code> 变了才重新过滤；页面上其他数据变化引起重新渲染时，直接用上次的结果。</p>
+<h2>只想整体显示或隐藏时怎么写</h2>
+<p>如果条件跟每一项无关，比如“列表为空时不显示”，就把 <code>v-if</code> 放到外层：</p>
+<div class="not-prose code-block"><div class="code-language">vue-html</div><pre><code class="hljs language-vue-html">&lt;ul v-if=&quot;todos.length &gt; 0&quot;&gt;
+  &lt;li v-for=&quot;todo in todos&quot; :key=&quot;todo.id&quot;&gt;{{ todo.name }}&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre></div>
+<p>如果确实要在循环里逐项判断，又不想多一层 DOM，可以用 <code>&lt;template&gt;</code> 承载 <code>v-for</code>：</p>
+<div class="not-prose code-block"><div class="code-language">vue-html</div><pre><code class="hljs language-vue-html">&lt;template v-for=&quot;todo in todos&quot; :key=&quot;todo.id&quot;&gt;
+  &lt;li v-if=&quot;!todo.done&quot;&gt;{{ todo.name }}&lt;/li&gt;
+&lt;/template&gt;
+</code></pre></div>
+<p><code>&lt;template&gt;</code> 不会渲染成真实元素，<code>v-for</code> 在外面、<code>v-if</code> 在里面，先后关系一目了然，两个版本行为一致。</p>
+<h2>常见追问</h2>
+<p><strong>v-for 为什么要写 key？</strong></p>
+<blockquote>
+<p>key 让 Vue 在列表更新时认出哪一项是哪一项，从而复用对应的 DOM 和组件状态。不写或用下标时，插入、删除、排序会让状态错位，原理见<a href="/questions/vue2-diff/">《Vue 2 的 diff 算法是怎样比较子节点的？》</a>。</p>
+</blockquote>
+<p><strong>v-if 和 v-show 怎么选？</strong></p>
+<blockquote>
+<p><code>v-if</code> 条件为假时元素不渲染，切换时会创建和销毁；<code>v-show</code> 始终渲染，只切换 <code>display</code>。频繁切换用 <code>v-show</code>，很少改变的条件用 <code>v-if</code>。详见<a href="/questions/vue-vif-vshow/">《v-if 和 v-show 应该怎样选择？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://vuejs.org/guide/essentials/list.html" target="_blank" rel="noreferrer">Vue · List Rendering<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://v3-migration.vuejs.org/breaking-changes/v-if-v-for.html" target="_blank" rel="noreferrer">Vue 3 Migration Guide · v-if vs. v-for Precedence<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+v-if+%E5%92%8C+v-for+%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E5%BB%BA%E8%AE%AE%E5%86%99%E5%9C%A8%E5%90%8C%E4%B8%80%E4%B8%AA%E5%85%83%E7%B4%A0%E4%B8%8A%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Av-if+%E5%92%8C+v-for+%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E5%BB%BA%E8%AE%AE%E5%86%99%E5%9C%A8%E5%90%8C%E4%B8%80%E4%B8%AA%E5%85%83%E7%B4%A0%E4%B8%8A%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-vif-vfor%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-vif-vfor%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：v-if 和 v-for 为什么不建议写在同一个元素上？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-performance/">Vue 大型页面应从哪些方面优化更新开销？</a></li><li><a href="/questions/vue-custom-directives/">Vue 自定义指令适合什么场景？</a></li><li><a href="/questions/vue-plugins/">Vue 插件如何向应用提供可复用能力？</a></li><li><a href="/questions/vue-complex-form/">Vue 复杂表单怎样组织状态、校验和提交？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>
