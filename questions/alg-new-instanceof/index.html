@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="手写与算法面试题：new 先创建一个原型指向 Fn.prototype 的空对象，再把它当作 this 调用构造函数，构造函数返回对象就用返回值，否则用新对象。" />
+    <title>怎样手写 new 和 instanceof？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/alg-new-instanceof/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="怎样手写 new 和 instanceof？ · 前端知库" />
+    <meta property="og:description" content="手写与算法面试题：new 先创建一个原型指向 Fn.prototype 的空对象，再把它当作 this 调用构造函数，构造函数返回对象就用返回值，否则用新对象。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/alg-new-instanceof/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-new-instanceof/#webpage","url":"https://fe.hushifa.top/questions/alg-new-instanceof/","name":"怎样手写 new 和 instanceof？ · 前端知库","description":"手写与算法面试题：new 先创建一个原型指向 Fn.prototype 的空对象，再把它当作 this 调用构造函数，构造函数返回对象就用返回值，否则用新对象。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-new-instanceof/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-new-instanceof/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"怎样手写 new 和 instanceof？","item":"https://fe.hushifa.top/questions/alg-new-instanceof/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样手写 new 和 instanceof？</span></nav><h1 tabindex="-1">怎样手写 new 和 instanceof？</h1><p class="reading-summary">new 先创建一个原型指向 Fn.prototype 的空对象，再把它当作 this 调用构造函数，构造函数返回对象就用返回值，否则用新对象。instanceof 沿着左边对象的原型链往上找，看能不能遇到右边的 prototype。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>写 <code>new Person(&#x27;小明&#x27;)</code> 时，引擎做了四件事：创建一个空对象；把这个对象的原型指向 <code>Person.prototype</code>；把它当作 <code>this</code> 调用 <code>Person</code>；如果 <code>Person</code> 返回了一个对象，就用这个返回值，否则返回刚才创建的对象。手写时用 <code>Object.create(Fn.prototype)</code> 一步完成前两件事，再用 <code>apply</code> 调用构造函数。</p>
+<p><code>a instanceof B</code> 判断的是 <code>B.prototype</code> 在不在 <code>a</code> 的原型链上。手写就是一个循环：从 <code>Object.getPrototypeOf(a)</code> 开始往上走，遇到 <code>B.prototype</code> 返回 <code>true</code>，走到 <code>null</code> 还没遇到就返回 <code>false</code>。</p>
+<p>这两个手写版本都是教学用的。真正的 <code>new</code> 还会检查目标能不能被构造，比如箭头函数和 class 有不同的规则；真正的 <code>instanceof</code> 会先看右边有没有 <code>Symbol.hasInstance</code>。</p>
+<p>要注意，<code>instanceof</code> 依赖原型链，所以跨 iframe 的数组会判断失败，原型也能被手动改掉。判断数组用 <code>Array.isArray</code> 更可靠。</p>
+</blockquote>
+<h2>手写 new</h2>
+<p>先看 <code>new</code> 的完整过程，再对照代码。下面的 <code>myNew</code> 接收一个构造函数和参数，返回和 <code>new</code> 一样的结果。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">myNew</span>(<span class="hljs-params">Fn, ...args</span>) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-title class_">Fn</span> !== <span class="hljs-string">&#x27;function&#x27;</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;Fn 必须是函数&#x27;</span>);
+  <span class="hljs-comment">// prototype 不是对象时，新对象的原型退回 Object.prototype，和原生 new 一致</span>
+  <span class="hljs-keyword">const</span> proto = <span class="hljs-title class_">Fn</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span> !== <span class="hljs-literal">null</span> &amp;&amp; <span class="hljs-keyword">typeof</span> <span class="hljs-title class_">Fn</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span> === <span class="hljs-string">&#x27;object&#x27;</span>
+    ? <span class="hljs-title class_">Fn</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>
+    : <span class="hljs-title class_">Object</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>;
+  <span class="hljs-keyword">const</span> instance = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">create</span>(proto);
+  <span class="hljs-keyword">const</span> result = <span class="hljs-title class_">Fn</span>.<span class="hljs-title function_">apply</span>(instance, args);
+  <span class="hljs-keyword">const</span> isObject = result !== <span class="hljs-literal">null</span> &amp;&amp; (<span class="hljs-keyword">typeof</span> result === <span class="hljs-string">&#x27;object&#x27;</span> || <span class="hljs-keyword">typeof</span> result === <span class="hljs-string">&#x27;function&#x27;</span>);
+  <span class="hljs-keyword">return</span> isObject ? result : instance;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Person</span>(<span class="hljs-params">name</span>) {
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span> = name;
+}
+<span class="hljs-title class_">Person</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">greet</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`你好，我是<span class="hljs-subst">${<span class="hljs-variable language_">this</span>.name}</span>`</span>;
+};
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Box</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">value</span> = <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">return</span> { <span class="hljs-attr">value</span>: <span class="hljs-number">2</span> };
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Num</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">value</span> = <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-number">42</span>;
+}
+
+<span class="hljs-keyword">const</span> p = <span class="hljs-title function_">myNew</span>(<span class="hljs-title class_">Person</span>, <span class="hljs-string">&#x27;小明&#x27;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(p.<span class="hljs-title function_">greet</span>()); <span class="hljs-comment">// 你好，我是小明</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(p <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Person</span>); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">myNew</span>(<span class="hljs-title class_">Box</span>).<span class="hljs-property">value</span>); <span class="hljs-comment">// 2</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">myNew</span>(<span class="hljs-title class_">Num</span>).<span class="hljs-property">value</span>); <span class="hljs-comment">// 1</span>
+</code></pre></div>
+<p><code>p.greet()</code> 能调用，是因为 <code>Object.create(proto)</code> 创建的对象，原型就是 <code>Person.prototype</code>，<code>greet</code> 定义在那里。<code>Fn.apply(instance, args)</code> 让构造函数里的 <code>this</code> 指向这个新对象，所以 <code>this.name = name</code> 写进的是 <code>p</code> 自己。</p>
+<p>为什么 <code>Box</code> 得到的是 2，<code>Num</code> 得到的是 1？因为构造函数返回值的规则只认对象。<code>Box</code> 返回了一个对象，这个对象就替代了新创建的实例；<code>Num</code> 返回的是数字 42，原始值会被忽略，结果还是新创建的那个实例。判断时函数也算对象，所以 <code>typeof result === &#x27;function&#x27;</code> 也要算进去。</p>
+<h2>手写 instanceof</h2>
+<p><code>instanceof</code> 不关心对象是怎么创建的，只顺着原型链往上找。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">myInstanceof</span>(<span class="hljs-params">value, Ctor</span>) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-title class_">Ctor</span> !== <span class="hljs-string">&#x27;function&#x27;</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;右侧必须是函数&#x27;</span>);
+  <span class="hljs-comment">// 原始值没有原型链，原生 instanceof 对它们直接返回 false</span>
+  <span class="hljs-keyword">if</span> (value === <span class="hljs-literal">null</span> || (<span class="hljs-keyword">typeof</span> value !== <span class="hljs-string">&#x27;object&#x27;</span> &amp;&amp; <span class="hljs-keyword">typeof</span> value !== <span class="hljs-string">&#x27;function&#x27;</span>)) {
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+  }
+  <span class="hljs-keyword">const</span> target = <span class="hljs-title class_">Ctor</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>;
+  <span class="hljs-keyword">let</span> proto = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">getPrototypeOf</span>(value);
+  <span class="hljs-keyword">while</span> (proto !== <span class="hljs-literal">null</span>) {
+    <span class="hljs-keyword">if</span> (proto === target) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    proto = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">getPrototypeOf</span>(proto);
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Animal</span> {}
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Dog</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Animal</span> {}
+<span class="hljs-keyword">const</span> dog = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Dog</span>();
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">myInstanceof</span>(dog, <span class="hljs-title class_">Dog</span>)); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">myInstanceof</span>(dog, <span class="hljs-title class_">Animal</span>)); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">myInstanceof</span>(dog, <span class="hljs-title class_">Array</span>)); <span class="hljs-comment">// false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">myInstanceof</span>(<span class="hljs-number">1</span>, <span class="hljs-title class_">Number</span>)); <span class="hljs-comment">// false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">myInstanceof</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">create</span>(<span class="hljs-literal">null</span>), <span class="hljs-title class_">Object</span>)); <span class="hljs-comment">// false</span>
+</code></pre></div>
+<p><code>dog</code> 的原型链是 <code>Dog.prototype → Animal.prototype → Object.prototype → null</code>。找 <code>Animal</code> 时，第一步遇到 <code>Dog.prototype</code> 不是，第二步遇到 <code>Animal.prototype</code>，返回 <code>true</code>。</p>
+<p><code>myInstanceof(1, Number)</code> 为什么是 <code>false</code>？数字 1 是原始值，原生的 <code>1 instanceof Number</code> 也是 <code>false</code>，它不会先把 1 包装成对象。<code>Object.create(null)</code> 创建的对象没有原型，循环一开始就走到 <code>null</code>，所以连 <code>Object</code> 都不是。</p>
+<h2>手写版本和原生有哪些差距</h2>
+<p>手写的 <code>myNew</code> 只检查了参数是不是函数。原生 <code>new</code> 检查的是函数能不能被构造：箭头函数、对象方法简写都不能 <code>new</code>，会抛 <code>TypeError</code>，<code>myNew</code> 却会照常调用它们。反过来，class 必须用 <code>new</code> 调用，<code>Fn.apply</code> 调用 class 会直接抛错，所以 <code>myNew</code> 不能处理 class。要完整模拟，可以改用 <code>Reflect.construct(Fn, args)</code>，但那样就等于直接调用了原生的构造流程。</p>
+<p>手写的 <code>myInstanceof</code> 没有处理 <code>Symbol.hasInstance</code>。原生 <code>instanceof</code> 会先看右边有没有这个方法，有就调用它决定结果，所以类可以自定义 <code>instanceof</code> 的判断逻辑。</p>
+<h2>常见追问</h2>
+<p><strong>为什么跨 iframe 的数组 instanceof Array 是 false？</strong></p>
+<blockquote>
+<p>每个 iframe 有自己的一套全局对象，也就有自己的 <code>Array.prototype</code>。从别的 iframe 传过来的数组，原型链上是那个 iframe 的 <code>Array.prototype</code>，跟当前页面的不是同一个对象，所以找不到。判断数组用 <code>Array.isArray</code>，它不依赖原型链。</p>
+</blockquote>
+<p><strong>构造函数里 return 一个原始值会怎样？</strong></p>
+<blockquote>
+<p>会被忽略，<code>new</code> 还是返回新创建的实例。只有返回对象（包括函数）时，才会替代新实例。</p>
+</blockquote>
+<p><strong>Object.create 和 new 有什么区别？</strong></p>
+<blockquote>
+<p><code>Object.create(proto)</code> 只创建一个原型是 <code>proto</code> 的空对象，不调用任何构造函数。<code>new Fn()</code> 除了设置原型，还会调用 <code>Fn</code> 初始化这个对象。所以手写 <code>new</code> 时用 <code>Object.create</code> 处理原型，再自己调用构造函数。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new" target="_blank" rel="noreferrer">MDN · new<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof" target="_blank" rel="noreferrer">MDN · instanceof<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E6%89%8B%E5%86%99+new+%E5%92%8C+instanceof%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E6%89%8B%E5%86%99+new+%E5%92%8C+instanceof%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-new-instanceof%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-new-instanceof%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样手写 new 和 instanceof？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-debounce/">怎样实现只在停止调用后执行的防抖函数？</a></li><li><a href="/questions/alg-throttle/">怎样实现首沿节流？它与尾沿节流、防抖有什么区别？</a></li><li><a href="/questions/alg-call-apply-bind/">怎样手写 call、apply 和 bind？用 new 调用 bind 返回的函数会怎样？</a></li><li><a href="/questions/alg-curry-compose/">怎样手写函数柯里化和 compose？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>
