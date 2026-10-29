@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="JavaScript面试题：async 函数可以理解为 Generator 加一个自动执行器：遇到 await 就暂停…" />
+    <title>async/await 的原理是什么？怎样用 Generator 实现自动执行？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/js-async-generator-runner/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="async/await 的原理是什么？怎样用 Generator 实现自动执行？" />
+    <meta property="og:description" content="JavaScript面试题：async 函数可以理解为 Generator 加一个自动执行器：遇到 await 就暂停…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/js-async-generator-runner/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-async-generator-runner/#webpage","url":"https://fe.hushifa.top/questions/js-async-generator-runner/","name":"async/await 的原理是什么？怎样用 Generator 实现自动执行？","description":"JavaScript面试题：async 函数可以理解为 Generator 加一个自动执行器：遇到 await 就暂停…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-async-generator-runner/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-async-generator-runner/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"async/await 的原理是什么？怎样用 Generator 实现自动执行？","item":"https://fe.hushifa.top/questions/js-async-generator-runner/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">async/await 的原理是什么？怎样用 Generator 实现自动执行？</span></nav><h1 tabindex="-1">async/await 的原理是什么？怎样用 Generator 实现自动执行？</h1><p class="reading-summary">async 函数可以理解为 Generator 加一个自动执行器：遇到 await 就暂停，等 Promise 完成后带着结果恢复执行，失败就在暂停处抛出错误。手写时用 Generator 的 yield 代替 await，执行器反复调用 next，把每次 yield 出来的值包成 Promise，完成后再把结果传回去。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p><code>const user = await getUser()</code> 读起来像同步代码，实际上函数在这里暂停了，等 <code>getUser()</code> 返回的 Promise 完成，再带着结果继续往下走。MDN 的说法是，<code>await</code> 会暂停函数的执行，直到 Promise 完成或失败，完成的值就成了 <code>await</code> 表达式的结果。</p>
+<p>能“暂停再恢复”的函数，JavaScript 里早就有了，就是 Generator。Generator 函数执行到 <code>yield</code> 会停下来，外面调用 <code>next(value)</code> 才继续，而且传进去的 <code>value</code> 会成为 <code>yield</code> 表达式的结果。所以只要写一个执行器：每次 Generator 吐出一个 Promise，就等它完成，再用 <code>next(结果)</code> 把结果送回去，失败就用 <code>throw(错误)</code> 在暂停的地方抛出，Generator 就能像 async 函数一样运行。</p>
+<p>早期没有 async/await 时，co 这类库就是这样做的。可以把 async 函数理解为“Generator 加自动执行器”的语法糖，<code>yield</code> 换成了 <code>await</code>，执行器由引擎内置，返回值包装成 Promise。</p>
+<p>要注意，这是理解原理的模型，不是规范里的实现方式。async 函数不需要 Generator 也能运行，引擎有自己的实现，而且 async 函数的错误和栈信息比手写执行器更友好。</p>
+</blockquote>
+<h2>手写自动执行器</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">run</span>(<span class="hljs-params">generatorFn, ...args</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> iterator = <span class="hljs-title function_">generatorFn</span>(...args);
+
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">step</span>(<span class="hljs-params">method, value</span>) {
+      <span class="hljs-keyword">let</span> result;
+      <span class="hljs-keyword">try</span> {
+        result = iterator[method](value);
+      } <span class="hljs-keyword">catch</span> (error) {
+        <span class="hljs-title function_">reject</span>(error);
+        <span class="hljs-keyword">return</span>;
+      }
+      <span class="hljs-keyword">if</span> (result.<span class="hljs-property">done</span>) {
+        <span class="hljs-title function_">resolve</span>(result.<span class="hljs-property">value</span>);
+        <span class="hljs-keyword">return</span>;
+      }
+      <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>(result.<span class="hljs-property">value</span>).<span class="hljs-title function_">then</span>(
+        <span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> <span class="hljs-title function_">step</span>(<span class="hljs-string">&#x27;next&#x27;</span>, data),
+        <span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> <span class="hljs-title function_">step</span>(<span class="hljs-string">&#x27;throw&#x27;</span>, error),
+      );
+    }
+
+    <span class="hljs-title function_">step</span>(<span class="hljs-string">&#x27;next&#x27;</span>, <span class="hljs-literal">undefined</span>);
+  });
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">delay</span> = (<span class="hljs-params">value, ms</span>) =&gt; <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">resolve</span>(value), ms));
+
+<span class="hljs-keyword">const</span> result = <span class="hljs-title function_">run</span>(<span class="hljs-keyword">function</span>* () {
+  <span class="hljs-keyword">const</span> a = <span class="hljs-keyword">yield</span> <span class="hljs-title function_">delay</span>(<span class="hljs-number">1</span>, <span class="hljs-number">10</span>);
+  <span class="hljs-keyword">const</span> b = <span class="hljs-keyword">yield</span> <span class="hljs-title function_">delay</span>(<span class="hljs-number">2</span>, <span class="hljs-number">10</span>);
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">yield</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">reject</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;失败&#x27;</span>));
+  } <span class="hljs-keyword">catch</span> (error) {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${a + b}</span>，捕获到<span class="hljs-subst">${error.message}</span>`</span>;
+  }
+});
+
+result.<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(value)); <span class="hljs-comment">// 3，捕获到失败</span>
+</code></pre></div>
+<p>第一次调用 <code>step(&#x27;next&#x27;, undefined)</code>，Generator 开始执行，到第一个 <code>yield</code> 停下，吐出 <code>delay(1, 10)</code> 这个 Promise。执行器等它完成，拿到 1，调用 <code>iterator.next(1)</code>，于是 <code>a</code> 就是 1。这正是 <code>const a = await delay(1, 10)</code> 的效果。</p>
+<p><code>yield Promise.reject(...)</code> 那一步，Promise 失败了，执行器调用 <code>iterator.throw(error)</code>。错误在 Generator 暂停的那一行抛出，被里面的 <code>try...catch</code> 捕获，和 async 函数里 <code>try...catch</code> 包住 <code>await</code> 的效果一样。</p>
+<p>为什么要用 <code>Promise.resolve(result.value)</code> 包一层？因为 <code>yield</code> 后面不一定是 Promise，也可能是普通值。包一层以后，普通值会马上完成，处理方式就统一了，这和 <code>await 普通值</code> 的行为一致。</p>
+<p><code>iterator[method](value)</code> 外面为什么要 <code>try...catch</code>？如果 Generator 里的错误没被捕获，<code>next</code> 或 <code>throw</code> 调用本身会抛出，这时整个任务失败，要 <code>reject</code> 外层 Promise，相当于 async 函数返回的 Promise 失败了。</p>
+<h2>await 之后的代码什么时候执行</h2>
+<p><code>await</code> 后面的代码总是在微任务里继续执行，哪怕等的是一个已经完成的值。所以：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">f</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-number">1</span>);
+  <span class="hljs-keyword">await</span> <span class="hljs-literal">null</span>;
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-number">3</span>);
+}
+<span class="hljs-title function_">f</span>();
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-number">2</span>);
+</code></pre></div>
+<p>输出顺序是 1、2、3。<code>f()</code> 同步执行到 <code>await</code> 前打印 1，然后暂停，把后续代码安排为微任务；外面继续执行，打印 2；当前同步代码执行完后，微任务执行，打印 3。事件循环的完整顺序见<a href="/questions/js-event-loop/">《事件循环中，任务和微任务按什么顺序执行？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>async 函数一定返回 Promise 吗？</strong></p>
+<blockquote>
+<p>一定。<code>return 1</code> 得到的是一个以 1 完成的 Promise，函数里抛出的错误会变成 Promise 失败。所以调用 async 函数时，同步的 <code>try...catch</code> 捕获不到它的错误，必须 <code>await</code> 它或者用 <code>.catch</code>。</p>
+</blockquote>
+<p><strong>多个 await 写在一起会不会变慢？</strong></p>
+<blockquote>
+<p>如果几个请求互不依赖，写成连续的 <code>await</code> 会一个等一个，总时间是相加的。应该先同时发起，再用 <code>await Promise.all([...])</code> 一起等，见<a href="/questions/js-async-await-errors/">《async/await 如何处理异常和并发？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function" target="_blank" rel="noreferrer">MDN · async function<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator" target="_blank" rel="noreferrer">MDN · Generator<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+async%2Fawait+%E7%9A%84%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E6%80%8E%E6%A0%B7%E7%94%A8+Generator+%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E6%89%A7%E8%A1%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Aasync%2Fawait+%E7%9A%84%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E6%80%8E%E6%A0%B7%E7%94%A8+Generator+%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E6%89%A7%E8%A1%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-async-generator-runner%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-async-generator-runner%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：async/await 的原理是什么？怎样用 Generator 实现自动执行？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-inheritance-patterns/">ES5 有哪些继承方式？为什么寄生组合继承最好？</a></li><li><a href="/questions/js-iterators-generators/">迭代器、可迭代对象和 Generator 有什么关系？</a></li><li><a href="/questions/js-iterator-closing/">JavaScript 迭代器关闭和 return 方法有什么作用？</a></li><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

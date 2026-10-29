@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="Vue面试题：Vue 3 新增了 Composition API 和 script setup，响应式从 defineProperty 改为 Proxy…" />
+    <title>Vue 3 相比 Vue 2 有哪些主要变化？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/vue3-new-features/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="Vue 3 相比 Vue 2 有哪些主要变化？ · 前端知库" />
+    <meta property="og:description" content="Vue面试题：Vue 3 新增了 Composition API 和 script setup，响应式从 defineProperty 改为 Proxy…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/vue3-new-features/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue3-new-features/#webpage","url":"https://fe.hushifa.top/questions/vue3-new-features/","name":"Vue 3 相比 Vue 2 有哪些主要变化？ · 前端知库","description":"Vue面试题：Vue 3 新增了 Composition API 和 script setup，响应式从 defineProperty 改为 Proxy…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue3-new-features/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue3-new-features/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"Vue 3 相比 Vue 2 有哪些主要变化？","item":"https://fe.hushifa.top/questions/vue3-new-features/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue 3 相比 Vue 2 有哪些主要变化？</span></nav><h1 tabindex="-1">Vue 3 相比 Vue 2 有哪些主要变化？</h1><p class="reading-summary">Vue 3 新增了 Composition API 和 script setup，响应式从 defineProperty 改为 Proxy，编译器给模板打上标记让更新只比较动态部分；组件支持多个根节点，新增 Teleport 和实验性的 Suspense；源码用 TypeScript 重写，全局 API 改成 createApp 并支持 tree-shaking。同时移除了 filters、$on/$off/$once、v-on 的 .native 修饰符等写法。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><blockquote>
+<p>本题讲两个版本“有什么不同、为什么这样改”。项目具体怎么一步步升级，见<a href="/questions/vue2-migration/">《Vue 2 项目如何迁移到 Vue 3？》</a>。</p>
+</blockquote>
+<h2>简答</h2>
+<blockquote>
+<p>拿同一个搜索页对比：Vue 2 里关键词写在 <code>data</code>、搜索函数写在 <code>methods</code>，模板只能有一个根元素，弹窗要挂到 <code>body</code> 下得自己写 DOM 操作；Vue 3 可以用 <code>&lt;script setup&gt;</code> 和 <code>ref</code>、<code>computed</code> 把搜索逻辑写在一起，模板可以有多个根节点，弹窗用 <code>&lt;Teleport to=&quot;body&quot;&gt;</code> 一行解决。这些就是写法层面最直观的变化。</p>
+<p>底层有两处大改。响应式从 <code>Object.defineProperty</code> 换成了 <code>Proxy</code>，新增属性、按下标改数组、<code>Map</code> 和 <code>Set</code> 都能被检测到。编译器在编译模板时就标出哪些节点是动态的、哪些是静态的，更新时只比较动态的部分。</p>
+<p>工程上，Vue 3 用 TypeScript 重写，类型推导更好；全局 API 从 <code>new Vue()</code> 改成 <code>createApp()</code> 创建应用实例，<code>nextTick</code> 这类全局 API 改成具名导出，没用到的会被打包工具摇掉。</p>
+<p>要注意一些写法被移除了：filters 改用方法或计算属性，<code>$on</code>、<code>$off</code>、<code>$once</code> 没有了，事件总线要换成第三方库，<code>v-on</code> 的 <code>.native</code> 修饰符也去掉了，靠 <code>emits</code> 选项区分组件事件和原生事件。Vue 3 不支持 IE11，Vue 2 已于 2023 年 12 月 31 日停止维护。</p>
+</blockquote>
+<h2>写组件的方式：Composition API</h2>
+<p>迁移指南列出的新特性里排第一的是 Composition API 和 <code>&lt;script setup&gt;</code>。Vue 文档的定义是，它允许用导入的函数来编写组件，而不是声明一个个选项。主要好处是能把逻辑抽成组合式函数复用，解决了 mixin 来源不清、命名冲突等问题。</p>
+<p>Options API 并没有被移除，Vue 3 里仍然可以用，两者底层是同一套系统。迁移指南还注明，Composition API 和 <code>&lt;script setup&gt;</code> 也被移植到了 Vue 2.7。两者的对比见<a href="/questions/vue-options-composition/">《Options API 和 Composition API 有什么区别？Vue 组件的 data 为什么必须是函数？》</a>。</p>
+<h2>响应式：从 defineProperty 到 Proxy</h2>
+<p>Vue 文档在讲响应式原理时说，Vue 2 受浏览器支持的限制，只能使用 getter/setter；Vue 3 对 <code>reactive</code> 对象使用 <code>Proxy</code>，对 <code>ref</code> 使用 getter/setter。</p>
+<p>为什么要换？<code>defineProperty</code> 只能给已经存在的属性装上拦截，所以 Vue 2 里直接给对象加属性、用下标改数组都检测不到，要用 <code>Vue.set</code>；初始化时还要把整个 <code>data</code> 递归走一遍。<code>Proxy</code> 代理的是整个对象，属性的增删、<code>in</code> 判断、集合类型的操作都能拦截，Vue 2 里那些“改了视图不更新”的限制大多不存在了。两种实现的细节见<a href="/questions/vue2-vs-vue3-reactivity/">《defineProperty 和 Proxy 实现的响应式有什么区别？》</a>。</p>
+<p>代价是放弃旧浏览器。Vue 官方 FAQ 说 Vue 3 使用了旧浏览器里无法 polyfill 的 ES2016 特性，不支持 IE11。</p>
+<h2>渲染：编译器帮虚拟 DOM 省事</h2>
+<p>纯运行时的虚拟 DOM 不知道新旧两棵树哪里会变，只能整棵遍历、逐个比较属性。Vue 3 的文档把自己的做法称为“编译器指导的虚拟 DOM”：Vue 同时控制编译器和运行时，编译模板时就能做静态分析，把结果写进渲染函数。</p>
+<p>文档列出了几项具体手段。完全静态的节点会被缓存，更新时直接跳过。动态节点带上补丁标记，比如只有 <code>class</code> 是动态的，就只比较 <code>class</code>。模板里结构稳定的一块叫作 block，它把内部所有动态节点收集成一个扁平数组，更新时只遍历这个数组，文档称之为树结构打平。这些优化怎样在生成代码里体现，见<a href="/questions/vue-compiler-optimizations/">《Vue 模板编译如何减少运行时更新工作？》</a>。</p>
+<h2>新的内置能力：Fragment、Teleport、Suspense</h2>
+<p>Vue 2 的组件模板只能有一个根元素，多写一个会发警告，经常要多包一层 <code>div</code>。Vue 3 正式支持多根节点组件，迁移指南称为 Fragments。多根节点时，没有声明为 props 的属性不知道该落到哪个根节点上，需要用 <code>v-bind=&quot;$attrs&quot;</code> 明确指定。</p>
+<p><code>&lt;Teleport&gt;</code> 可以把组件模板的一部分“传送”到组件 DOM 层级之外的节点上，<code>to</code> 接收一个选择器或 DOM 节点。模态框、全局提示就是典型场景：逻辑上属于当前组件，DOM 上要挂到 <code>body</code> 下，才不受父元素的 <code>overflow</code>、<code>z-index</code> 影响。</p>
+<p><code>&lt;Suspense&gt;</code> 用来协调组件树里的异步依赖，在多个嵌套的异步组件都加载完之前显示加载状态。要注意，Vue 文档目前仍把它标为实验性功能，API 可能变化。两者的使用边界见<a href="/questions/vue-keepalive-teleport/">《KeepAlive 与 Teleport 有哪些使用边界？》</a>和<a href="/questions/vue-suspense/">《Vue Suspense 适合处理什么异步组件边界？》</a>。</p>
+<h2>工程层面：TypeScript 与全局 API</h2>
+<p>Vue 文档说 Vue 3 本身就是用 TypeScript 编写的，提供一等的 TypeScript 支持。Composition API 基于普通的变量和函数，类型可以自然推导；而 Options API 设计于 2013 年，当时没有考虑类型推导，要靠复杂的类型体操才能让 <code>this</code> 有正确的类型。</p>
+<p>全局 API 也改了。Vue 2 里 <code>Vue.use</code>、<code>Vue.component</code>、<code>Vue.mixin</code> 都直接改全局的 <code>Vue</code>，同一页面上的多个应用、多个测试用例会互相污染。Vue 3 用 <code>createApp()</code> 返回一个应用实例，插件、组件、指令都注册在这个实例上：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// Vue 2</span>
+<span class="hljs-keyword">import</span> <span class="hljs-title class_">Vue</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+<span class="hljs-title class_">Vue</span>.<span class="hljs-title function_">use</span>(router);
+<span class="hljs-keyword">new</span> <span class="hljs-title class_">Vue</span>({ <span class="hljs-attr">render</span>: <span class="hljs-function">(<span class="hljs-params">h</span>) =&gt;</span> <span class="hljs-title function_">h</span>(<span class="hljs-title class_">App</span>) }).$mount(<span class="hljs-string">&#x27;#app&#x27;</span>);
+
+<span class="hljs-comment">// Vue 3</span>
+<span class="hljs-keyword">import</span> { createApp, nextTick } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+<span class="hljs-title function_">createApp</span>(<span class="hljs-title class_">App</span>).<span class="hljs-title function_">use</span>(router).<span class="hljs-title function_">mount</span>(<span class="hljs-string">&#x27;#app&#x27;</span>);
+</code></pre></div>
+<p>另一处变化是 <code>nextTick</code> 这类全局 API 改成了具名导出。Vue 2 里它们都挂在 <code>Vue</code> 对象上，打包工具无法判断用没用到，只能全部打包进去。Vue 3 改成按需导入，打包工具支持 tree-shaking 时，没用到的 API 会从最终产物里去掉。</p>
+<h2>被移除的写法</h2>
+<p>迁移指南的破坏性变更列表很长，面试中常被问到的是下面这几项：</p>
+<ul>
+<li><strong>filters</strong>：模板里的 <code>{{ price | currency }}</code> 不再支持。迁移指南的理由是它要求一套自定义语法，打破了“花括号里就是 JavaScript”的约定，建议改用方法调用或计算属性。</li>
+<li><strong><code>$on</code>、<code>$off</code>、<code>$once</code></strong>：组件实例不再实现事件发射器接口，所以 <code>new Vue()</code> 当事件总线的写法失效了。需要事件总线时，迁移指南推荐 mitt 这类第三方库，同时也说明，大多数情况下不鼓励用全局事件总线做组件通信，更适合用 props、emit、provide/inject 或状态管理。</li>
+<li><strong><code>.native</code> 修饰符</strong>：Vue 3 新增了 <code>emits</code> 选项，子组件声明自己会触发哪些事件；没有声明的监听器会被当作原生事件绑到子组件的根元素上（除非设置了 <code>inheritAttrs: false</code>），所以不再需要 <code>.native</code>。</li>
+<li><strong>组件 <code>v-model</code> 重做</strong>：默认的 prop 和事件名变成 <code>modelValue</code> 和 <code>update:modelValue</code>，支持多个 <code>v-model</code>，替代了 <code>.sync</code>。</li>
+</ul>
+<p>此外还有 <code>$listeners</code> 合并进 <code>$attrs</code>、<code>$children</code> 移除、<code>beforeDestroy</code>/<code>destroyed</code> 改名为 <code>beforeUnmount</code>/<code>unmounted</code> 等。组件通信相关的改动，见<a href="/questions/vue2-communication/">《Vue 2 有哪些组件通信方式？哪些写法在 Vue 3 中被移除或改变？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>Vue 3 一定比 Vue 2 快吗？</strong></p>
+<blockquote>
+<p>一般场景下更新更省事，因为编译器标出了动态节点，运行时不用整棵比较；没用到的全局 API 也能被摇掉，包更小。但这不等于每个页面都会变快，瓶颈在数据量、请求或业务逻辑时，换版本解决不了，要具体测量。</p>
+</blockquote>
+<p><strong>Vue 3 里还能用 Options API 吗？</strong></p>
+<blockquote>
+<p>能。Options API 没有被废弃，Vue 文档说它是在 Composition API 之上实现的，两者可以在同一个项目里混用。只是复杂逻辑的复用、TypeScript 支持这两方面，Composition API 更有优势。</p>
+</blockquote>
+<p><strong>为什么 Vue 3 不支持 IE11？</strong></p>
+<blockquote>
+<p>Vue 官方 FAQ 的说法是，Vue 3 用到了旧浏览器里无法 polyfill 的现代 JavaScript 特性，基于 <code>Proxy</code> 的响应式就是其中最核心的一项。必须支持 IE11 的项目只能留在 Vue 2；迁移指南提到，在 Vue 2 停止维护前来不及升级的项目，可以了解 Extended LTS。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://v3-migration.vuejs.org/" target="_blank" rel="noreferrer">Vue 3 迁移指南 · Overview（Notable New Features）<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://v3-migration.vuejs.org/breaking-changes/" target="_blank" rel="noreferrer">Vue 3 迁移指南 · Breaking Changes<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://v3-migration.vuejs.org/breaking-changes/global-api-treeshaking.html" target="_blank" rel="noreferrer">Vue 3 迁移指南 · Global API Treeshaking<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://v3-migration.vuejs.org/new/fragments.html" target="_blank" rel="noreferrer">Vue 3 迁移指南 · Fragments<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://vuejs.org/guide/extras/reactivity-in-depth.html" target="_blank" rel="noreferrer">Vue · 深入响应式系统<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://vuejs.org/guide/extras/rendering-mechanism.html" target="_blank" rel="noreferrer">Vue · 渲染机制（Compiler-Informed Virtual DOM）<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://vuejs.org/about/faq.html" target="_blank" rel="noreferrer">Vue · FAQ<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://vuejs.org/guide/typescript/overview.html" target="_blank" rel="noreferrer">Vue · 搭配 TypeScript 使用<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vue+3+%E7%9B%B8%E6%AF%94+Vue+2+%E6%9C%89%E5%93%AA%E4%BA%9B%E4%B8%BB%E8%A6%81%E5%8F%98%E5%8C%96%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVue+3+%E7%9B%B8%E6%AF%94+Vue+2+%E6%9C%89%E5%93%AA%E4%BA%9B%E4%B8%BB%E8%A6%81%E5%8F%98%E5%8C%96%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue3-new-features%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue3-new-features%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vue 3 相比 Vue 2 有哪些主要变化？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-options-composition/">Options API 和 Composition API 有什么区别？Vue 组件的 data 为什么必须是函数？</a></li><li><a href="/questions/vue-ref-reactive/">Vue 3 中 ref 和 reactive 有什么区别？</a></li><li><a href="/questions/vue-reactivity-tracking/">Vue 3 响应式依赖是怎样收集和触发的？</a></li><li><a href="/questions/vue2-vs-vue3-reactivity/">defineProperty 和 Proxy 实现的响应式有什么区别？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

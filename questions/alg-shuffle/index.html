@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="手写与算法面试题：正确做法是 Fisher-Yates 洗牌：从最后一个位置往前，每次在剩下没处理的元素里随机选一个和当前位置交换，每种排列出现的概率相同…" />
+    <title>怎样手写数组乱序（洗牌）？为什么 sort(() =&gt; Math.random() - 0.5) 不对？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/alg-shuffle/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="怎样手写数组乱序（洗牌）？为什么 sort(() =&gt; Math.random() - 0.5) 不对？" />
+    <meta property="og:description" content="手写与算法面试题：正确做法是 Fisher-Yates 洗牌：从最后一个位置往前，每次在剩下没处理的元素里随机选一个和当前位置交换，每种排列出现的概率相同…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/alg-shuffle/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-shuffle/#webpage","url":"https://fe.hushifa.top/questions/alg-shuffle/","name":"怎样手写数组乱序（洗牌）？为什么 sort(() => Math.random() - 0.5) 不对？","description":"手写与算法面试题：正确做法是 Fisher-Yates 洗牌：从最后一个位置往前，每次在剩下没处理的元素里随机选一个和当前位置交换，每种排列出现的概率相同…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-shuffle/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-shuffle/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"怎样手写数组乱序（洗牌）？为什么 sort(() => Math.random() - 0.5) 不对？","item":"https://fe.hushifa.top/questions/alg-shuffle/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样手写数组乱序（洗牌）？为什么 sort(() =&gt; Math.random() - 0.5) 不对？</span></nav><h1 tabindex="-1">怎样手写数组乱序（洗牌）？为什么 sort(() =&gt; Math.random() - 0.5) 不对？</h1><p class="reading-summary">正确做法是 Fisher-Yates 洗牌：从最后一个位置往前，每次在剩下没处理的元素里随机选一个和当前位置交换，每种排列出现的概率相同，时间 O(n)。用随机比较函数调 sort 违反了比较函数的一致性要求，结果分布不均匀，还依赖引擎的排序实现。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>抽奖页要把候选人顺序打乱，很多人会写 <code>arr.sort(() =&gt; Math.random() - 0.5)</code>，看起来每次都不一样，但这样打乱并不均匀，有的顺序出现得多，有的出现得少。</p>
+<p>原因是 <code>sort</code> 要求比较函数是一致的：同样两个元素，每次比较结果要相同，<code>a</code> 小于 <code>b</code> 时 <code>b</code> 就要大于 <code>a</code>。随机的比较函数每次都给出不同答案，违反了这个要求，MDN 说这种比较函数没法可靠地排序。排序算法拿到前后矛盾的比较结果，最后的排列会偏向某些顺序，而且具体怎么偏，取决于引擎用的是哪种排序算法。</p>
+<p>正确的做法是 Fisher-Yates 洗牌。从数组最后一位开始往前走，每到一个位置 <code>i</code>，就在 <code>0</code> 到 <code>i</code> 之间随机选一个下标 <code>j</code>，交换 <code>i</code> 和 <code>j</code> 两个位置。这样每个元素落到每个位置的机会都一样，所有排列出现的概率相同，而且只遍历一遍，是 O(n)。</p>
+<p>要注意，<code>Math.random()</code> 生成的随机数不能用于安全相关的场景。真正涉及奖金、安全的抽奖，应该在服务端做，或者在浏览器里用 <code>crypto.getRandomValues()</code>。</p>
+</blockquote>
+<h2>Fisher-Yates 洗牌</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">shuffle</span>(<span class="hljs-params">items</span>) {
+  <span class="hljs-keyword">const</span> result = [...items];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = result.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>; i &gt; <span class="hljs-number">0</span>; i--) {
+    <span class="hljs-keyword">const</span> j = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * (i + <span class="hljs-number">1</span>));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">countOrders</span>(<span class="hljs-params">shuffleFn, times</span>) {
+  <span class="hljs-keyword">const</span> counts = {};
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> k = <span class="hljs-number">0</span>; k &lt; times; k++) {
+    <span class="hljs-keyword">const</span> key = <span class="hljs-title function_">shuffleFn</span>([<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-string">&#x27;c&#x27;</span>]).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+    counts[key] = (counts[key] ?? <span class="hljs-number">0</span>) + <span class="hljs-number">1</span>;
+  }
+  <span class="hljs-keyword">return</span> counts;
+}
+
+<span class="hljs-keyword">const</span> fair = <span class="hljs-title function_">countOrders</span>(shuffle, <span class="hljs-number">60000</span>);
+<span class="hljs-keyword">const</span> biased = <span class="hljs-title function_">countOrders</span>(<span class="hljs-function">(<span class="hljs-params">arr</span>) =&gt;</span> [...arr].<span class="hljs-title function_">sort</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() - <span class="hljs-number">0.5</span>), <span class="hljs-number">60000</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(fair).<span class="hljs-property">length</span>); <span class="hljs-comment">// 6</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">values</span>(fair).<span class="hljs-title function_">every</span>(<span class="hljs-function">(<span class="hljs-params">n</span>) =&gt;</span> n &gt; <span class="hljs-number">9000</span> &amp;&amp; n &lt; <span class="hljs-number">11000</span>)); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">values</span>(biased).<span class="hljs-title function_">every</span>(<span class="hljs-function">(<span class="hljs-params">n</span>) =&gt;</span> n &gt; <span class="hljs-number">9000</span> &amp;&amp; n &lt; <span class="hljs-number">11000</span>)); <span class="hljs-comment">// false</span>
+</code></pre></div>
+<p><code>a、b、c</code> 三个元素一共有 6 种排列，打乱 60000 次，理想情况下每种大约出现 10000 次。<code>shuffle</code> 的结果每种都落在 9000 到 11000 之间。随机比较的 <code>sort</code> 却不是：在 Node 22 里实测，<code>abc</code> 约 22500 次、<code>cba</code> 约 18800 次、<code>bac</code> 约 7500 次，<code>acb</code>、<code>bca</code>、<code>cab</code> 各只有约 3700 次，最多和最少差了 6 倍，原本的顺序 <code>abc</code> 出现得最多。</p>
+<p>为什么 <code>j</code> 的范围是 <code>0</code> 到 <code>i</code>，包含 <code>i</code> 自己？因为当前元素也可能留在原地，不包含的话，每个元素都被迫离开原位，有些排列就永远不会出现。为什么从后往前？每一轮确定位置 <code>i</code> 上的元素，<code>i</code> 后面的位置都已经定好了，只在前面没处理过的元素里选，每个元素被选中的机会才相等。</p>
+<p>这里先复制了一份 <code>result</code>，不修改传入的数组。需要原地打乱时，直接在原数组上交换即可。</p>
+<h2>为什么随机比较函数会偏</h2>
+<p><code>sort</code> 的结果依赖比较函数，规范对比较函数的要求包括：相同的输入总是返回相同的结果；<code>compare(a, b)</code> 和 <code>compare(b, a)</code> 的符号相反。MDN 举例说，只返回 <code>1</code> 和 <code>0</code>、或只返回 <code>0</code> 和 <code>-1</code> 的比较函数破坏了反对称性，没法可靠地排序。随机比较函数连“同样输入同样结果”都做不到。</p>
+<p>排序算法会假设比较结果可信，比如“已经确认 a 在 b 前面，就不用再比了”。有了矛盾的结果，有的元素被比较的次数多，有的少，留在原位或被交换的概率就不一样。不同引擎、不同数组长度用的排序策略不同，偏差的方向也不同，没法通过调参修正。</p>
+<h2>常见追问</h2>
+<p><strong>怎样随机抽取 k 个不重复的元素？</strong></p>
+<blockquote>
+<p>只做 Fisher-Yates 的前 k 轮，然后取最后 k 个位置的元素，不需要把整个数组都打乱，时间是 O(k)。</p>
+</blockquote>
+<p><strong>需要安全的随机数时怎样生成 0 到 n-1 的整数？</strong></p>
+<blockquote>
+<p>用 <code>crypto.getRandomValues(new Uint32Array(1))[0]</code> 拿到一个随机整数。直接对 n 取余会有轻微偏差，因为 2^32 不一定能被 n 整除；严格的做法是丢弃落在最后不完整区间里的值重新取。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort" target="_blank" rel="noreferrer">MDN · Array.prototype.sort()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random" target="_blank" rel="noreferrer">MDN · Math.random()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E6%89%8B%E5%86%99%E6%95%B0%E7%BB%84%E4%B9%B1%E5%BA%8F%EF%BC%88%E6%B4%97%E7%89%8C%EF%BC%89%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88+sort%28%28%29+%3D%3E+Math.random%28%29+-+0.5%29+%E4%B8%8D%E5%AF%B9%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E6%89%8B%E5%86%99%E6%95%B0%E7%BB%84%E4%B9%B1%E5%BA%8F%EF%BC%88%E6%B4%97%E7%89%8C%EF%BC%89%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88+sort%28%28%29+%3D%3E+Math.random%28%29+-+0.5%29+%E4%B8%8D%E5%AF%B9%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-shuffle%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-shuffle%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样手写数组乱序（洗牌）？为什么 sort(() =&gt; Math.random() - 0.5) 不对？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-array-unique-flat/">怎样实现数组去重和数组扁平化？</a></li><li><a href="/questions/alg-array-methods-polyfill/">怎样手写数组的 map、filter 和 reduce？</a></li><li><a href="/questions/alg-debounce/">怎样实现只在停止调用后执行的防抖函数？</a></li><li><a href="/questions/alg-throttle/">怎样实现首沿节流？它与尾沿节流、防抖有什么区别？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

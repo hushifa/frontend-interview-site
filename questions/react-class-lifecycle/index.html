@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="React面试题：挂载时依次调用 constructor、getDerivedStateFromProps、render、componentDidMount…" />
+    <title>React 类组件有哪些生命周期？在函数组件里怎样对应？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/react-class-lifecycle/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="React 类组件有哪些生命周期？在函数组件里怎样对应？" />
+    <meta property="og:description" content="React面试题：挂载时依次调用 constructor、getDerivedStateFromProps、render、componentDidMount…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/react-class-lifecycle/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-class-lifecycle/#webpage","url":"https://fe.hushifa.top/questions/react-class-lifecycle/","name":"React 类组件有哪些生命周期？在函数组件里怎样对应？","description":"React面试题：挂载时依次调用 constructor、getDerivedStateFromProps、render、componentDidMount…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-class-lifecycle/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-class-lifecycle/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"React 类组件有哪些生命周期？在函数组件里怎样对应？","item":"https://fe.hushifa.top/questions/react-class-lifecycle/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">React 类组件有哪些生命周期？在函数组件里怎样对应？</span></nav><h1 tabindex="-1">React 类组件有哪些生命周期？在函数组件里怎样对应？</h1><p class="reading-summary">挂载时依次调用 constructor、getDerivedStateFromProps、render、componentDidMount；更新时调用 getDerivedStateFromProps、shouldComponentUpdate、render、getSnapshotBeforeUpdate、componentDidUpdate；卸载时调用 componentWillUnmount。函数组件里，componentDidMount、componentDidUpdate 和 componentWillUnmount 组合起来大致对应 useEffect，shouldComponentUpdate 对应 memo，错误边界目前仍只能用类组件写。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>类组件从出现到消失分三个阶段。挂载阶段，React 先调用 <code>constructor</code> 初始化 state，再调用静态方法 <code>getDerivedStateFromProps</code>，然后 <code>render</code> 算出界面，DOM 插入页面后调用 <code>componentDidMount</code>，这里适合发请求、订阅事件、操作 DOM。</p>
+<p>更新阶段，props 或 state 变化时，先调用 <code>getDerivedStateFromProps</code>，再问 <code>shouldComponentUpdate</code> 要不要重新渲染，返回 <code>false</code> 就跳过。需要渲染就调用 <code>render</code>，在 DOM 真正更新之前调用 <code>getSnapshotBeforeUpdate</code>，可以读取更新前的 DOM 信息，比如滚动位置，它的返回值会传给接下来的 <code>componentDidUpdate</code>。卸载阶段只有 <code>componentWillUnmount</code>，在这里取消订阅、清除定时器。</p>
+<p>函数组件没有这些方法。React 文档的说法是，多数情况下 <code>componentDidMount</code>、<code>componentDidUpdate</code>、<code>componentWillUnmount</code> 三者组合起来，等价于在函数组件里调用 <code>useEffect</code>，需要在浏览器绘制前执行时用 <code>useLayoutEffect</code>。<code>shouldComponentUpdate</code> 的作用对应 <code>memo</code>。</p>
+<p>要注意两点。<code>componentWillMount</code>、<code>componentWillReceiveProps</code>、<code>componentWillUpdate</code> 已被改名为带 <code>UNSAFE_</code> 前缀的版本，旧名字已废弃，新代码不要用。另外，捕获子组件渲染错误的 <code>getDerivedStateFromError</code> 和 <code>componentDidCatch</code> 在函数组件里还没有对应的写法，错误边界目前仍然要写成类组件。</p>
+</blockquote>
+<h2>一个完整的类组件</h2>
+<p>下面的聊天室组件展示挂载、更新、卸载三个阶段该做的事：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ChatRoom</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Component</span> {
+  state = { <span class="hljs-attr">messages</span>: [] };
+
+  <span class="hljs-title function_">componentDidMount</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">connection</span> = <span class="hljs-title function_">connect</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">props</span>.<span class="hljs-property">roomId</span>);
+  }
+
+  <span class="hljs-title function_">componentDidUpdate</span>(<span class="hljs-params">prevProps</span>) {
+    <span class="hljs-keyword">if</span> (prevProps.<span class="hljs-property">roomId</span> !== <span class="hljs-variable language_">this</span>.<span class="hljs-property">props</span>.<span class="hljs-property">roomId</span>) {
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">connection</span>.<span class="hljs-title function_">disconnect</span>();
+      <span class="hljs-variable language_">this</span>.<span class="hljs-property">connection</span> = <span class="hljs-title function_">connect</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">props</span>.<span class="hljs-property">roomId</span>);
+    }
+  }
+
+  <span class="hljs-title function_">componentWillUnmount</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">connection</span>.<span class="hljs-title function_">disconnect</span>();
+  }
+
+  <span class="hljs-title function_">render</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">MessageList</span> <span class="hljs-attr">messages</span>=<span class="hljs-string">{this.state.messages}</span> /&gt;</span></span>;
+  }
+}
+</code></pre></div>
+<p>为什么三个方法都要写？<code>componentDidMount</code> 建立了连接，如果 <code>roomId</code> 后来变了，不在 <code>componentDidUpdate</code> 里重新连接，组件就一直连着旧房间；组件卸载时不在 <code>componentWillUnmount</code> 里断开，连接就会泄漏。React 文档特别提醒，实现了 <code>componentDidMount</code>，通常也要实现另外两个。</p>
+<p>开发环境的严格模式下，React 会先调用 <code>componentDidMount</code>，立刻调用 <code>componentWillUnmount</code>，再调用一次 <code>componentDidMount</code>，专门检查清理逻辑有没有写全。</p>
+<h2>换成函数组件</h2>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">ChatRoom</span>(<span class="hljs-params">{ roomId }</span>) {
+  <span class="hljs-keyword">const</span> [messages, setMessages] = <span class="hljs-title function_">useState</span>([]);
+
+  <span class="hljs-title function_">useEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> connection = <span class="hljs-title function_">connect</span>(roomId);
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> connection.<span class="hljs-title function_">disconnect</span>();
+  }, [roomId]);
+
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">MessageList</span> <span class="hljs-attr">messages</span>=<span class="hljs-string">{messages}</span> /&gt;</span></span>;
+}
+</code></pre></div>
+<p>三个生命周期方法被一个 <code>useEffect</code> 代替了。Effect 第一次执行相当于 <code>componentDidMount</code>；<code>roomId</code> 变化时，React 先执行上一次返回的清理函数，再用新的 <code>roomId</code> 执行一次，相当于 <code>componentDidUpdate</code> 里先断开再重连；组件卸载时执行清理函数，相当于 <code>componentWillUnmount</code>。</p>
+<p>两种写法的思路不同。类组件按“什么时候”组织代码，函数组件按“要同步什么”组织代码，连接房间的逻辑都放在一个 Effect 里，不容易漏掉某个阶段。依赖数组怎样写，见<a href="/questions/react-effect/">《useEffect 的依赖数组和清理函数应该怎么写？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>在 componentDidMount 里调用 setState 会怎样？</strong></p>
+<blockquote>
+<p>会多触发一次渲染，但这次渲染发生在浏览器更新屏幕之前，用户看不到中间状态。React 文档建议尽量避免，初始 state 应该在 <code>constructor</code> 里设置；只有像弹窗、提示框这种要先测量 DOM 尺寸再决定位置的情况才需要这样做。</p>
+</blockquote>
+<p><strong>getDerivedStateFromProps 适合什么时候用？</strong></p>
+<blockquote>
+<p>很少需要。它在每次渲染前都会调用，用来在 props 变化时更新 state，比如 <code>userID</code> 变了就重置表单。多数场景有更简单的做法，比如给组件换一个 <code>key</code> 让它整体重置。</p>
+</blockquote>
+<p><strong>错误边界为什么只能用类组件写？</strong></p>
+<blockquote>
+<p>因为 <code>getDerivedStateFromError</code> 和 <code>componentDidCatch</code> 还没有对应的 Hook。不想写类组件时，可以写一个通用的 <code>ErrorBoundary</code> 类组件全局复用，或者用 react-error-boundary 这个库，见<a href="/questions/react-error-suspense/">《Error Boundary 和 Suspense 分别处理什么？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/reference/react/Component" target="_blank" rel="noreferrer">React · Component<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+%E7%B1%BB%E7%BB%84%E4%BB%B6%E6%9C%89%E5%93%AA%E4%BA%9B%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%EF%BC%9F%E5%9C%A8%E5%87%BD%E6%95%B0%E7%BB%84%E4%BB%B6%E9%87%8C%E6%80%8E%E6%A0%B7%E5%AF%B9%E5%BA%94%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+%E7%B1%BB%E7%BB%84%E4%BB%B6%E6%9C%89%E5%93%AA%E4%BA%9B%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%EF%BC%9F%E5%9C%A8%E5%87%BD%E6%95%B0%E7%BB%84%E4%BB%B6%E9%87%8C%E6%80%8E%E6%A0%B7%E5%AF%B9%E5%BA%94%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-class-lifecycle%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-class-lifecycle%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React 类组件有哪些生命周期？在函数组件里怎样对应？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-batching/">React 的批量更新是什么？React 18 的自动批处理改变了什么？</a></li><li><a href="/questions/react-hooks-internals/">Hooks 在 React 内部是怎样保存状态的？为什么靠调用顺序区分？</a></li><li><a href="/questions/react-performance-overview/">React 应用有哪些常见的性能优化手段？</a></li><li><a href="/questions/react-synthetic-events/">React 的合成事件是什么？和原生事件有什么区别？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

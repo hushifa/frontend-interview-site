@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="网络面试题：首选服务端配置 CORS；开发环境用开发服务器代理，生产环境用 Nginx 这类反向代理，让浏览器只请求同源地址…" />
+    <title>跨域有哪些解决方案？JSONP 和代理是怎样工作的？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/http-cross-origin-solutions/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="跨域有哪些解决方案？JSONP 和代理是怎样工作的？" />
+    <meta property="og:description" content="网络面试题：首选服务端配置 CORS；开发环境用开发服务器代理，生产环境用 Nginx 这类反向代理，让浏览器只请求同源地址…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/http-cross-origin-solutions/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/http-cross-origin-solutions/#webpage","url":"https://fe.hushifa.top/questions/http-cross-origin-solutions/","name":"跨域有哪些解决方案？JSONP 和代理是怎样工作的？","description":"网络面试题：首选服务端配置 CORS；开发环境用开发服务器代理，生产环境用 Nginx 这类反向代理，让浏览器只请求同源地址…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/http-cross-origin-solutions/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/http-cross-origin-solutions/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"网络面试题","item":"https://fe.hushifa.top/topics/network/"},{"@type":"ListItem","position":3,"name":"跨域有哪些解决方案？JSONP 和代理是怎样工作的？","item":"https://fe.hushifa.top/questions/http-cross-origin-solutions/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/network/">网络面试题</a><span aria-hidden="true">/</span><span aria-current="page">跨域有哪些解决方案？JSONP 和代理是怎样工作的？</span></nav><h1 tabindex="-1">跨域有哪些解决方案？JSONP 和代理是怎样工作的？</h1><p class="reading-summary">首选服务端配置 CORS；开发环境用开发服务器代理，生产环境用 Nginx 这类反向代理，让浏览器只请求同源地址；JSONP 利用 script 标签不受同源策略限制来拿数据，只支持 GET，而且等于执行对方返回的脚本，现在基本不用；跨窗口通信用 postMessage。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>页面在 <code>https://shop.example.com</code>，接口在 <code>https://api.example.com</code>，两者域名不同，浏览器的同源策略默认不让页面脚本读取这个接口的响应，这就是跨域问题。解决办法可以按“谁来放行”分成几类。</p>
+<p>最标准的做法是 CORS：服务器在响应里加上 <code>Access-Control-Allow-Origin</code> 等响应头，告诉浏览器“这个来源可以读我的响应”。浏览器看到允许就把响应交给脚本。复杂请求还会先发一个 <code>OPTIONS</code> 预检。它要后端配合，但最规范。</p>
+<p>第二类是代理。同源策略只管浏览器，服务器之间互相请求不受限制。所以让浏览器请求同源的地址，比如 <code>/api/user</code>，再由同源的服务器把请求转发给真正的接口。开发时用 Vite、webpack dev server 的 <code>proxy</code> 配置，上线后用 Nginx 反向代理，或者把页面和接口部署在同一个域名下。</p>
+<p>第三类是老办法 JSONP。<code>&lt;script&gt;</code> 标签加载别的域名的脚本不受同源策略限制，于是让接口返回一段调用函数的脚本，比如 <code>handleData({...})</code>，页面事先定义好 <code>handleData</code>，脚本一执行，数据就作为参数传进来了。要注意，它只能发 GET，出错很难捕获，最大的问题是等于无条件执行对方返回的代码，接口被篡改就能在你的页面上为所欲为，现在应该用 CORS 代替。</p>
+</blockquote>
+<h2>代理为什么能解决跨域</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// vite.config.js</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-attr">server</span>: {
+    <span class="hljs-attr">proxy</span>: {
+      <span class="hljs-string">&#x27;/api&#x27;</span>: {
+        <span class="hljs-attr">target</span>: <span class="hljs-string">&#x27;https://api.example.com&#x27;</span>,
+        <span class="hljs-attr">changeOrigin</span>: <span class="hljs-literal">true</span>,
+        <span class="hljs-attr">rewrite</span>: <span class="hljs-function">(<span class="hljs-params">path</span>) =&gt;</span> path.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/^\/api/</span>, <span class="hljs-string">&#x27;&#x27;</span>),
+      },
+    },
+  },
+};
+</code></pre></div>
+<p>页面里请求 <code>/api/user</code>，浏览器发给的是开发服务器自己，和页面同源，不存在跨域。Vite 文档的说法是，路径以 <code>/api</code> 开头的请求，会被代理转发到配置的 <code>target</code>。开发服务器收到后，去掉 <code>/api</code> 前缀，向 <code>https://api.example.com/user</code> 发请求，再把结果原样返回给浏览器。</p>
+<p><code>changeOrigin: true</code> 有什么用？它会把转发请求的 <code>Host</code> 头改成目标服务器的地址。有些服务器按 <code>Host</code> 区分站点，不改的话会收到 <code>localhost</code>，可能返回 404 或拒绝请求。</p>
+<p>要注意，Vite 的 <code>server.proxy</code> 只在开发服务器上生效，打包出来的静态文件里没有这个代理。上线后要由 Nginx 或网关做同样的转发，不然请求 <code>/api</code> 会直接 404。</p>
+<h2>JSONP 是怎样拿到数据的</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">jsonp</span>(<span class="hljs-params">url, callbackName</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> script = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;script&#x27;</span>);
+    <span class="hljs-variable language_">window</span>[callbackName] = <span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
+      <span class="hljs-title function_">resolve</span>(data);
+      script.<span class="hljs-title function_">remove</span>();
+      <span class="hljs-keyword">delete</span> <span class="hljs-variable language_">window</span>[callbackName];
+    };
+    script.<span class="hljs-property">onerror</span> = <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">reject</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;JSONP 请求失败&#x27;</span>));
+    script.<span class="hljs-property">src</span> = <span class="hljs-string">`<span class="hljs-subst">${url}</span>?callback=<span class="hljs-subst">${callbackName}</span>`</span>;
+    <span class="hljs-variable language_">document</span>.<span class="hljs-property">head</span>.<span class="hljs-title function_">append</span>(script);
+  });
+}
+</code></pre></div>
+<p>页面先在全局定义一个函数，再插入一个 <code>&lt;script&gt;</code>，把函数名通过 <code>callback</code> 参数告诉服务器。服务器返回的不是 JSON，而是一行脚本 <code>handleData({&quot;name&quot;:&quot;小明&quot;})</code>。浏览器加载并执行这段脚本，就调用了页面事先定义的函数，数据作为参数传了进来。</p>
+<p>为什么只能发 GET？因为 <code>&lt;script&gt;</code> 加载资源只会发 GET 请求，也没法设置请求头。为什么不安全？返回的内容是直接执行的脚本，接口要是返回了别的代码，页面也会照样执行。开启了 CSP 的页面，还要把接口域名加进 <code>script-src</code> 才能加载。</p>
+<h2>常见追问</h2>
+<p><strong>CORS 报错了，请求到底发出去没有？</strong></p>
+<blockquote>
+<p>简单请求已经发出去了，服务器也可能已经执行了，只是浏览器不让脚本读响应。需要预检的请求，预检没通过时真正的请求不会发出。具体规则见<a href="/questions/http-cors/">《什么是跨域？CORS 为什么需要服务端配合？》</a>。</p>
+</blockquote>
+<p><strong>页面和 iframe、新窗口之间跨域怎么通信？</strong></p>
+<blockquote>
+<p>用 <code>postMessage</code>。发送时指定目标来源，接收时检查 <code>event.origin</code>，见<a href="/questions/sec-postmessage/">《跨窗口 postMessage 怎样避免把消息发给错误对象？》</a>。<code>document.domain</code> 以前也能让同一主域下的页面互相访问，现在浏览器正在逐步禁用它，不要再用。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy" target="_blank" rel="noreferrer">MDN · Same-origin policy<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS" target="_blank" rel="noreferrer">MDN · Cross-Origin Resource Sharing (CORS)<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://vite.dev/config/server-options#server-proxy" target="_blank" rel="noreferrer">Vite · server.proxy<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E8%B7%A8%E5%9F%9F%E6%9C%89%E5%93%AA%E4%BA%9B%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%9FJSONP+%E5%92%8C%E4%BB%A3%E7%90%86%E6%98%AF%E6%80%8E%E6%A0%B7%E5%B7%A5%E4%BD%9C%E7%9A%84%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E8%B7%A8%E5%9F%9F%E6%9C%89%E5%93%AA%E4%BA%9B%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%9FJSONP+%E5%92%8C%E4%BB%A3%E7%90%86%E6%98%AF%E6%80%8E%E6%A0%B7%E5%B7%A5%E4%BD%9C%E7%9A%84%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ahttp-cross-origin-solutions%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%BD%91%E7%BB%9C%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fhttp-cross-origin-solutions%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：跨域有哪些解决方案？JSONP 和代理是怎样工作的？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/http-cors/">什么是跨域？CORS 为什么需要服务端配合？</a></li><li><a href="/questions/network-protocol-debugging/">前端网络问题应该怎样按协议层排查？</a></li><li><a href="/questions/network-object-storage-multipart/">浏览器直传对象存储时，如何设计安全的分片上传？</a></li><li><a href="/questions/http-cache/">强缓存与协商缓存如何配合？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

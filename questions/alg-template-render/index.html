@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="手写与算法面试题：用正则 /\{\{\s*([\w.]+)\s*\}\}/g 找出模板里的 {{ name }} 这样的占位符…" />
+    <title>怎样手写一个简单的模板字符串渲染函数？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/alg-template-render/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="怎样手写一个简单的模板字符串渲染函数？ · 前端知库" />
+    <meta property="og:description" content="手写与算法面试题：用正则 /\{\{\s*([\w.]+)\s*\}\}/g 找出模板里的 {{ name }} 这样的占位符…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/alg-template-render/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-template-render/#webpage","url":"https://fe.hushifa.top/questions/alg-template-render/","name":"怎样手写一个简单的模板字符串渲染函数？ · 前端知库","description":"手写与算法面试题：用正则 /\\{\\{\\s*([\\w.]+)\\s*\\}\\}/g 找出模板里的 {{ name }} 这样的占位符…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-template-render/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-template-render/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"怎样手写一个简单的模板字符串渲染函数？","item":"https://fe.hushifa.top/questions/alg-template-render/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样手写一个简单的模板字符串渲染函数？</span></nav><h1 tabindex="-1">怎样手写一个简单的模板字符串渲染函数？</h1><p class="reading-summary">用正则 /\{\{\s*([\w.]+)\s*\}\}/g 找出模板里的 {{ name }} 这样的占位符，在 replace 的回调里按点号路径从数据对象取值替换。要处理取不到的值、防止原型链上的属性被读出，插到 HTML 里时还要转义，否则用户输入会变成 XSS。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>题目是：实现 <code>render(&#x27;你好，{{ user.name }}，你有 {{ count }} 条消息&#x27;, data)</code>，把双大括号里的变量换成数据里的值。思路是用一个正则找出所有 <code>{{ ... }}</code>，把里面的变量名取出来，再去数据对象里查值替换上去。</p>
+<p><code>String.prototype.replace</code> 的第二个参数可以是函数，每找到一处匹配就调用一次，函数的返回值就是替换后的内容，参数里能拿到正则的捕获组，也就是括号里的变量名。变量名可能带点号，比如 <code>user.name</code>，就按点号拆开，从数据对象一层层往下取。</p>
+<p>有三处要处理。取不到值时，返回空字符串还是保留原样，要事先约定，不能把 <code>undefined</code> 直接拼进去；取值时只读对象自己的属性，否则 <code>{{ constructor }}</code> 这类写法会读出原型上的函数；结果要插进 HTML 时，必须把 <code>&lt;</code>、<code>&gt;</code>、<code>&amp;</code>、引号转义，不然用户名里写了 <code>&lt;img src=x onerror=...&gt;</code> 就会执行脚本。</p>
+<p>要注意，这只是一个面试级别的简单实现，不支持循环、条件这些语法。真实项目里用框架自带的模板，它们默认会转义插值内容。</p>
+</blockquote>
+<h2>代码实现</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">render</span>(<span class="hljs-params">template, data, { <span class="hljs-built_in">escape</span> = <span class="hljs-literal">true</span> } = {}</span>) {
+  <span class="hljs-keyword">return</span> template.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/\{\{\s*([\w.]+)\s*\}\}/g</span>, <span class="hljs-function">(<span class="hljs-params">match, path</span>) =&gt;</span> {
+    <span class="hljs-keyword">let</span> value = data;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> key <span class="hljs-keyword">of</span> path.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;.&#x27;</span>)) {
+      <span class="hljs-keyword">if</span> (value == <span class="hljs-literal">null</span> || !<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">hasOwn</span>(<span class="hljs-title class_">Object</span>(value), key)) <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;&#x27;</span>;
+      value = value[key];
+    }
+    <span class="hljs-keyword">const</span> text = <span class="hljs-title class_">String</span>(value ?? <span class="hljs-string">&#x27;&#x27;</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">escape</span> ? <span class="hljs-title function_">escapeHtml</span>(text) : text;
+  });
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">escapeHtml</span>(<span class="hljs-params">text</span>) {
+  <span class="hljs-keyword">return</span> text.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/[&amp;&lt;&gt;&quot;&#x27;]/g</span>, <span class="hljs-function">(<span class="hljs-params">char</span>) =&gt;</span> ({
+    <span class="hljs-string">&#x27;&amp;&#x27;</span>: <span class="hljs-string">&#x27;&amp;amp;&#x27;</span>,
+    <span class="hljs-string">&#x27;&lt;&#x27;</span>: <span class="hljs-string">&#x27;&amp;lt;&#x27;</span>,
+    <span class="hljs-string">&#x27;&gt;&#x27;</span>: <span class="hljs-string">&#x27;&amp;gt;&#x27;</span>,
+    <span class="hljs-string">&#x27;&quot;&#x27;</span>: <span class="hljs-string">&#x27;&amp;quot;&#x27;</span>,
+    <span class="hljs-string">&quot;&#x27;&quot;</span>: <span class="hljs-string">&#x27;&amp;#39;&#x27;</span>,
+  })[char]);
+}
+
+<span class="hljs-keyword">const</span> data = { <span class="hljs-attr">user</span>: { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;小明&#x27;</span> }, <span class="hljs-attr">count</span>: <span class="hljs-number">3</span> };
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">render</span>(<span class="hljs-string">&#x27;你好，{{ user.name }}，你有 {{count}} 条消息&#x27;</span>, data)); <span class="hljs-comment">// 你好，小明，你有 3 条消息</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">render</span>(<span class="hljs-string">&#x27;{{ user.age }}|{{ missing.x }}&#x27;</span>, data)); <span class="hljs-comment">// |</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">render</span>(<span class="hljs-string">&#x27;{{ constructor }}&#x27;</span>, data)); <span class="hljs-comment">//</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">render</span>(<span class="hljs-string">&#x27;{{ name }}&#x27;</span>, { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;&lt;b&gt;小明&lt;/b&gt;&#x27;</span> })); <span class="hljs-comment">// &amp;lt;b&amp;gt;小明&amp;lt;/b&amp;gt;</span>
+</code></pre></div>
+<p>正则 <code>\{\{\s*([\w.]+)\s*\}\}</code> 怎么读？大括号在正则里有特殊含义，要用 <code>\{</code> 转义。<code>\s*</code> 允许变量名两边有空格，所以 <code>{{count}}</code> 和 <code>{{ count }}</code> 都能匹配。<code>([\w.]+)</code> 是捕获组，匹配由字母、数字、下划线和点号组成的变量名，它的内容会作为回调的第二个参数 <code>path</code> 传进来。末尾的 <code>g</code> 表示替换所有匹配，没有它只会替换第一处。</p>
+<p><code>{{ user.age }}</code> 和 <code>{{ missing.x }}</code> 都输出了空字符串。前者是 <code>user</code> 上没有 <code>age</code>，后者是 <code>missing</code> 本身就不存在，循环里 <code>value == null</code> 时直接返回空，避免读 <code>undefined.x</code> 报错。</p>
+<p><code>{{ constructor }}</code> 为什么也是空？<code>data.constructor</code> 其实能读到值，就是原型上的 <code>Object</code> 函数。用 <code>Object.hasOwn</code> 只认对象自己的属性，原型上的就被挡住了。这和原型污染是同一类问题，见<a href="/questions/sec-prototype-pollution/">《原型污染为什么常出现在动态属性赋值和深合并中？》</a>。</p>
+<p>最后一个例子里，<code>&lt;b&gt;</code> 被转义成了 <code>&amp;lt;b&amp;gt;</code>，插进页面后显示的是文字，不会被当成标签。<code>escape</code> 选项默认开启，只有确定输出不进 HTML、比如生成纯文本时才关掉。</p>
+<h2>常见追问</h2>
+<p><strong>为什么不用 <code>new Function</code> 或 <code>eval</code> 直接执行表达式？</strong></p>
+<blockquote>
+<p>那样能支持 <code>{{ a + b }}</code> 这种表达式，可是模板内容一旦来自用户，就等于让用户执行任意代码。只允许变量路径，是在功能和安全之间的取舍。</p>
+</blockquote>
+<p><strong>Vue 的模板编译也是这样替换字符串的吗？</strong></p>
+<blockquote>
+<p>不是。Vue 把模板解析成 AST，再生成渲染函数，插值变成对数据的读取，最后生成虚拟 DOM，而不是拼字符串。插值的文本会作为文本节点插入，所以默认不会被当成 HTML 执行，见<a href="/questions/vue-compiler-optimizations/">《Vue 模板编译如何减少运行时更新工作？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace" target="_blank" rel="noreferrer">MDN · String.prototype.replace()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html" target="_blank" rel="noreferrer">OWASP · Cross Site Scripting Prevention Cheat Sheet<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E6%89%8B%E5%86%99%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%A8%A1%E6%9D%BF%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%B8%B2%E6%9F%93%E5%87%BD%E6%95%B0%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E6%89%8B%E5%86%99%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%A8%A1%E6%9D%BF%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%B8%B2%E6%9F%93%E5%87%BD%E6%95%B0%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-template-render%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-template-render%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样手写一个简单的模板字符串渲染函数？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-thousands-separator/">怎样给数字加千分位分隔符？</a></li><li><a href="/questions/alg-debounce/">怎样实现只在停止调用后执行的防抖函数？</a></li><li><a href="/questions/alg-throttle/">怎样实现首沿节流？它与尾沿节流、防抖有什么区别？</a></li><li><a href="/questions/alg-array-unique-flat/">怎样实现数组去重和数组扁平化？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

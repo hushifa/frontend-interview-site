@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="HTML / CSS面试题：三栏布局是左右两栏固定宽度、中间自适应，而且中间内容要先在 HTML 里出现、先渲染。" />
+    <title>怎样实现三栏布局？圣杯布局和双飞翼布局是什么？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/css-three-column/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="怎样实现三栏布局？圣杯布局和双飞翼布局是什么？ · 前端知库" />
+    <meta property="og:description" content="HTML / CSS面试题：三栏布局是左右两栏固定宽度、中间自适应，而且中间内容要先在 HTML 里出现、先渲染。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/css-three-column/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-three-column/#webpage","url":"https://fe.hushifa.top/questions/css-three-column/","name":"怎样实现三栏布局？圣杯布局和双飞翼布局是什么？ · 前端知库","description":"HTML / CSS面试题：三栏布局是左右两栏固定宽度、中间自适应，而且中间内容要先在 HTML 里出现、先渲染。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-three-column/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-three-column/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"怎样实现三栏布局？圣杯布局和双飞翼布局是什么？","item":"https://fe.hushifa.top/questions/css-three-column/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样实现三栏布局？圣杯布局和双飞翼布局是什么？</span></nav><h1 tabindex="-1">怎样实现三栏布局？圣杯布局和双飞翼布局是什么？</h1><p class="reading-summary">三栏布局是左右两栏固定宽度、中间自适应，而且中间内容要先在 HTML 里出现、先渲染。现在用 Flex 或 Grid 几行就能写；圣杯布局和双飞翼布局是 Flex 普及前的浮动方案，都靠负 margin 把左右栏拉回中间栏两边，区别在于圣杯用父元素的 padding 留出位置，双飞翼在中间栏里套一层用 margin 留出位置。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>后台页面常见这样的结构：左边是 200px 的菜单，右边是 150px 的辅助栏，中间放主要内容，宽度随窗口变化。这就是三栏布局。面试里通常还会加一个要求：中间栏在 HTML 里写在最前面，让主要内容最先加载和渲染。</p>
+<p>现在最简单的写法是 Flex：父元素 <code>display: flex</code>，左右栏设固定宽度并加上 <code>flex-shrink: 0</code> 防止被压缩，中间栏写 <code>flex: 1</code> 占满剩余空间。中间栏写在 HTML 最前面也没关系，给左栏设 <code>order: -1</code> 就能把它显示在前面。Grid 更直接，<code>grid-template-columns: 200px 1fr 150px</code>，再用 <code>grid-area</code> 或 <code>order</code> 摆放位置。</p>
+<p>圣杯布局和双飞翼布局是 Flex 还不能用时的方案，三栏都用浮动。它们的共同点是：中间栏写在最前面并设宽度 100%，左右栏用负的 <code>margin-left</code> 把自己拉回到中间栏所在的那一行。区别在于怎样不让中间内容被左右栏盖住：圣杯布局给父元素加左右 <code>padding</code>，再用相对定位把左右栏挪进 padding 里；双飞翼布局在中间栏里再套一层，给这层加左右 <code>margin</code>。</p>
+<p>要注意，新项目直接用 Flex 或 Grid。面试问圣杯和双飞翼，主要是考负 margin 和浮动的理解，能讲清楚原理就够了。</p>
+</blockquote>
+<h2>Flex 和 Grid 的写法</h2>
+<p>HTML 里中间栏写在最前面：</p>
+<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;layout&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">main</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;center&quot;</span>&gt;</span>主要内容<span class="hljs-tag">&lt;/<span class="hljs-name">main</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">aside</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;left&quot;</span>&gt;</span>左栏<span class="hljs-tag">&lt;/<span class="hljs-name">aside</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">aside</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;right&quot;</span>&gt;</span>右栏<span class="hljs-tag">&lt;/<span class="hljs-name">aside</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre></div>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.layout</span> {
+  <span class="hljs-attribute">display</span>: flex;
+}
+<span class="hljs-selector-class">.center</span> {
+  <span class="hljs-attribute">flex</span>: <span class="hljs-number">1</span>;
+  <span class="hljs-attribute">min-width</span>: <span class="hljs-number">0</span>;
+}
+<span class="hljs-selector-class">.left</span> {
+  <span class="hljs-attribute">order</span>: -<span class="hljs-number">1</span>;
+  <span class="hljs-attribute">flex</span>: <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">200px</span>;
+}
+<span class="hljs-selector-class">.right</span> {
+  <span class="hljs-attribute">flex</span>: <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">150px</span>;
+}
+
+<span class="hljs-comment">/* Grid 写法 */</span>
+<span class="hljs-selector-class">.layout-grid</span> {
+  <span class="hljs-attribute">display</span>: grid;
+  <span class="hljs-attribute">grid-template-columns</span>: <span class="hljs-number">200px</span> <span class="hljs-number">1</span>fr <span class="hljs-number">150px</span>;
+}
+<span class="hljs-selector-class">.layout-grid</span> <span class="hljs-selector-class">.left</span> { <span class="hljs-attribute">grid-column</span>: <span class="hljs-number">1</span>; <span class="hljs-attribute">grid-row</span>: <span class="hljs-number">1</span>; }
+<span class="hljs-selector-class">.layout-grid</span> <span class="hljs-selector-class">.center</span> { <span class="hljs-attribute">grid-column</span>: <span class="hljs-number">2</span>; <span class="hljs-attribute">grid-row</span>: <span class="hljs-number">1</span>; }
+<span class="hljs-selector-class">.layout-grid</span> <span class="hljs-selector-class">.right</span> { <span class="hljs-attribute">grid-column</span>: <span class="hljs-number">3</span>; }
+</code></pre></div>
+<p>中间栏为什么要加 <code>min-width: 0</code>？Flex 子项默认的最小宽度是内容的宽度，中间如果有很长的不换行文字或宽表格，它会撑开中间栏，把右栏挤出去。设成 0 以后，中间栏才能真正缩小，里面的内容自己滚动或换行。</p>
+<p><code>order: -1</code> 只改变显示顺序，不改变 HTML 顺序，读屏器和 Tab 键还是按 HTML 顺序走。这里中间内容在前，正好是希望的阅读顺序。</p>
+<h2>圣杯布局怎样用负 margin</h2>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.holy-grail</span> {
+  <span class="hljs-attribute">padding</span>: <span class="hljs-number">0</span> <span class="hljs-number">150px</span> <span class="hljs-number">0</span> <span class="hljs-number">200px</span>;
+}
+<span class="hljs-selector-class">.holy-grail</span> &gt; * {
+  <span class="hljs-attribute">float</span>: left;
+  <span class="hljs-attribute">position</span>: relative;
+}
+<span class="hljs-selector-class">.holy-grail</span> <span class="hljs-selector-class">.center</span> { <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>; }
+<span class="hljs-selector-class">.holy-grail</span> <span class="hljs-selector-class">.left</span> {
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">200px</span>;
+  <span class="hljs-attribute">margin-left</span>: -<span class="hljs-number">100%</span>;
+  <span class="hljs-attribute">left</span>: -<span class="hljs-number">200px</span>;
+}
+<span class="hljs-selector-class">.holy-grail</span> <span class="hljs-selector-class">.right</span> {
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">150px</span>;
+  <span class="hljs-attribute">margin-right</span>: -<span class="hljs-number">150px</span>;
+}
+</code></pre></div>
+<p>三栏都浮动后，中间栏宽度 100%，占满一整行，左右栏被挤到了第二行。左栏的 <code>margin-left: -100%</code>，这里的百分比相对父元素内容区宽度，相当于往左挪了一整行的宽度，回到第一行的最左边，和中间栏的开头重叠。再用 <code>left: -200px</code> 把它移到父元素左侧的 padding 里。右栏的 <code>margin-right: -150px</code> 让它不再占据宽度，于是浮到中间栏右边，正好落在右侧 padding 里。</p>
+<p>双飞翼把父元素的 <code>padding</code> 去掉，改成在中间栏里套一个 <code>&lt;div class=&quot;inner&quot;&gt;</code>，给它 <code>margin: 0 150px 0 200px</code>。左栏 <code>margin-left: -100%</code>，右栏 <code>margin-left: -150px</code>，不需要相对定位。它比圣杯少一步定位，但多一层 DOM。</p>
+<h2>常见追问</h2>
+<p><strong>为什么要让中间栏写在 HTML 最前面？</strong></p>
+<blockquote>
+<p>浏览器按 HTML 顺序解析和渲染，主要内容在前，网络慢时用户能最先看到它。现在页面普遍很快，这个理由没有以前那么重要，但对读屏器和搜索引擎来说，主要内容在前仍然是好的结构。</p>
+</blockquote>
+<p><strong>两栏布局，左边固定、右边自适应有几种写法？</strong></p>
+<blockquote>
+<p>Flex 写法是右边 <code>flex: 1</code>；Grid 写法是 <code>grid-template-columns: 200px 1fr</code>；老写法是左边浮动，右边 <code>margin-left: 200px</code>，或者右边触发 BFC，比如 <code>overflow: hidden</code>，它就不会和浮动元素重叠，见<a href="/questions/css-bfc/">《BFC 解决哪些布局问题，什么时候用 flow-root？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Flexbox" target="_blank" rel="noreferrer">MDN · Flexbox<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Grids" target="_blank" rel="noreferrer">MDN · Grid layout<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E4%B8%89%E6%A0%8F%E5%B8%83%E5%B1%80%EF%BC%9F%E5%9C%A3%E6%9D%AF%E5%B8%83%E5%B1%80%E5%92%8C%E5%8F%8C%E9%A3%9E%E7%BF%BC%E5%B8%83%E5%B1%80%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E4%B8%89%E6%A0%8F%E5%B8%83%E5%B1%80%EF%BC%9F%E5%9C%A3%E6%9D%AF%E5%B8%83%E5%B1%80%E5%92%8C%E5%8F%8C%E9%A3%9E%E7%BF%BC%E5%B8%83%E5%B1%80%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-three-column%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-three-column%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样实现三栏布局？圣杯布局和双飞翼布局是什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-centering/">怎样让一个元素水平垂直居中？</a></li><li><a href="/questions/css-flex-grid/">Flexbox 和 Grid 应该如何选择？</a></li><li><a href="/questions/css-cascade-specificity/">层叠、优先级、继承和 !important 谁先决定样式？</a></li><li><a href="/questions/css-hide-elements/">display:none、visibility:hidden 和 opacity:0 有什么区别？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

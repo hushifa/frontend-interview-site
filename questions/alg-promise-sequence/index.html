@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="手写与算法面试题：这类题考的是把“等一段时间再做下一件事”串起来。" />
+    <title>怎样用 Promise 实现红绿灯循环和 LazyMan 这类按顺序延时执行的题？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/alg-promise-sequence/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="怎样用 Promise 实现红绿灯循环和 LazyMan 这类按顺序延时执行的题？" />
+    <meta property="og:description" content="手写与算法面试题：这类题考的是把“等一段时间再做下一件事”串起来。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/alg-promise-sequence/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-promise-sequence/#webpage","url":"https://fe.hushifa.top/questions/alg-promise-sequence/","name":"怎样用 Promise 实现红绿灯循环和 LazyMan 这类按顺序延时执行的题？","description":"手写与算法面试题：这类题考的是把“等一段时间再做下一件事”串起来。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-promise-sequence/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-promise-sequence/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"怎样用 Promise 实现红绿灯循环和 LazyMan 这类按顺序延时执行的题？","item":"https://fe.hushifa.top/questions/alg-promise-sequence/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样用 Promise 实现红绿灯循环和 LazyMan 这类按顺序延时执行的题？</span></nav><h1 tabindex="-1">怎样用 Promise 实现红绿灯循环和 LazyMan 这类按顺序延时执行的题？</h1><p class="reading-summary">这类题考的是把“等一段时间再做下一件事”串起来。先把 setTimeout 包成返回 Promise 的 sleep，再用 async/await 在循环里依次等待；LazyMan 这种链式调用，则先把每个方法要做的事放进任务队列，等同步代码跑完后再按顺序执行，sleepFirst 就是把任务插到队头。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>红绿灯题是：红灯亮 3 秒，绿灯亮 2 秒，黄灯亮 1 秒，然后一直循环。直接嵌套 <code>setTimeout</code> 能写出来，但层层回调很难读，也没法无限循环。更好的做法是先写一个 <code>sleep(ms)</code>，它返回一个在 <code>ms</code> 毫秒后完成的 Promise，然后在 <code>async</code> 函数里用 <code>while (true)</code> 循环，依次 <code>await sleep(3000)</code>、<code>await sleep(2000)</code>、<code>await sleep(1000)</code>。</p>
+<p>LazyMan 题要求支持 <code>LazyMan(&#x27;Tom&#x27;).eat(&#x27;午饭&#x27;).sleep(1000).eat(&#x27;晚饭&#x27;)</code> 这样的链式调用，而且 <code>sleep</code> 要真的让后面的输出等一会儿。难点在于链式调用是同步执行完的，每个方法只能返回 <code>this</code>，不能自己等。所以每个方法只负责把要做的事包成一个任务函数，放进队列；构造时安排一个异步的“开始”，等整条链都调用完，再从队头逐个取出任务执行。</p>
+<p><code>sleepFirst</code> 要求不管写在哪，都最先执行，它只需要把任务插到队列开头而不是末尾。这就是为什么要等同步代码全部执行完再开始：只有那时，队列里的任务才是完整的。</p>
+<p>要注意，开始执行的时机要用 <code>setTimeout</code> 或 <code>queueMicrotask</code> 放到当前同步代码之后。如果在构造函数里立刻开始执行，后面链式调用加进来的任务就可能错过。</p>
+</blockquote>
+<h2>红绿灯</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> <span class="hljs-title function_">sleep</span> = (<span class="hljs-params">ms</span>) =&gt; <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> <span class="hljs-built_in">setTimeout</span>(resolve, ms));
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">trafficLight</span>(<span class="hljs-params">log, rounds = <span class="hljs-literal">Infinity</span></span>) {
+  <span class="hljs-keyword">const</span> lights = [
+    [<span class="hljs-string">&#x27;红&#x27;</span>, <span class="hljs-number">3000</span>],
+    [<span class="hljs-string">&#x27;绿&#x27;</span>, <span class="hljs-number">2000</span>],
+    [<span class="hljs-string">&#x27;黄&#x27;</span>, <span class="hljs-number">1000</span>],
+  ];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> round = <span class="hljs-number">0</span>; round &lt; rounds; round++) {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> [color, ms] <span class="hljs-keyword">of</span> lights) {
+      <span class="hljs-title function_">log</span>(color);
+      <span class="hljs-keyword">await</span> <span class="hljs-title function_">sleep</span>(ms);
+    }
+  }
+}
+</code></pre></div>
+<p><code>await sleep(ms)</code> 做了什么？<code>sleep</code> 返回的 Promise 在 <code>ms</code> 毫秒后才完成，<code>await</code> 让 <code>async</code> 函数暂停在这里，把控制权还给事件循环，时间到了再从下一行继续。所以这段代码虽然写成了普通的循环，实际是一个灯亮完再亮下一个。</p>
+<p><code>rounds</code> 参数是为了测试和演示方便，默认无限循环。真正的页面里，组件卸载时要能停下来，可以在循环条件里检查一个停止标记，或者用 <code>AbortController</code> 取消。</p>
+<h2>LazyMan</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">LazyMan</span> {
+  #tasks = [];
+
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">name, log</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">log</span> = log;
+    <span class="hljs-variable language_">this</span>.#tasks.<span class="hljs-title function_">push</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`我是 <span class="hljs-subst">${name}</span>`</span>));
+    <span class="hljs-comment">// 等整条链式调用同步执行完，再开始按队列执行</span>
+    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">this</span>.#<span class="hljs-title function_">run</span>(), <span class="hljs-number">0</span>);
+  }
+
+  <span class="hljs-keyword">async</span> #<span class="hljs-title function_">run</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> task <span class="hljs-keyword">of</span> <span class="hljs-variable language_">this</span>.#tasks) <span class="hljs-keyword">await</span> <span class="hljs-title function_">task</span>();
+  }
+
+  <span class="hljs-title function_">eat</span>(<span class="hljs-params">food</span>) {
+    <span class="hljs-variable language_">this</span>.#tasks.<span class="hljs-title function_">push</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`吃 <span class="hljs-subst">${food}</span>`</span>));
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>;
+  }
+
+  <span class="hljs-title function_">sleep</span>(<span class="hljs-params">ms</span>) {
+    <span class="hljs-variable language_">this</span>.#tasks.<span class="hljs-title function_">push</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> <span class="hljs-built_in">setTimeout</span>(resolve, ms)));
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>;
+  }
+
+  <span class="hljs-title function_">sleepFirst</span>(<span class="hljs-params">ms</span>) {
+    <span class="hljs-variable language_">this</span>.#tasks.<span class="hljs-title function_">unshift</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> <span class="hljs-built_in">setTimeout</span>(resolve, ms)));
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>;
+  }
+}
+
+<span class="hljs-keyword">const</span> logs = [];
+<span class="hljs-keyword">new</span> <span class="hljs-title class_">LazyMan</span>(<span class="hljs-string">&#x27;Tom&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">text</span>) =&gt;</span> logs.<span class="hljs-title function_">push</span>(text)).<span class="hljs-title function_">eat</span>(<span class="hljs-string">&#x27;午饭&#x27;</span>).<span class="hljs-title function_">sleep</span>(<span class="hljs-number">1000</span>).<span class="hljs-title function_">eat</span>(<span class="hljs-string">&#x27;晚饭&#x27;</span>).<span class="hljs-title function_">sleepFirst</span>(<span class="hljs-number">500</span>);
+</code></pre></div>
+<p>执行顺序是：等 500 毫秒，输出“我是 Tom”“吃 午饭”，再等 1000 毫秒，输出“吃 晚饭”。</p>
+<p>为什么 <code>sleepFirst</code> 写在最后，却最先执行？链式调用是同步代码，<code>new LazyMan(...)</code> 到 <code>.sleepFirst(500)</code> 一口气执行完，这期间只是往 <code>#tasks</code> 里放任务：先是“我是 Tom”，然后“吃 午饭”、等 1000、“吃 晚饭”，最后 <code>sleepFirst</code> 用 <code>unshift</code> 把等待 500 放到了最前面。直到这时，构造函数里的 <code>setTimeout</code> 回调才执行 <code>#run</code>，按队列顺序跑。</p>
+<p><code>#run</code> 里的 <code>await task()</code> 为什么对普通任务也能用？<code>log</code> 返回 <code>undefined</code>，<code>await undefined</code> 会立即继续；<code>sleep</code> 任务返回 Promise，<code>await</code> 就会等它完成。所以同一个循环能同时处理同步任务和异步任务。</p>
+<h2>常见追问</h2>
+<p><strong>不用 async/await 怎么写？</strong></p>
+<blockquote>
+<p>用 <code>reduce</code> 把任务串成一条 Promise 链：<code>tasks.reduce((chain, task) =&gt; chain.then(task), Promise.resolve())</code>。每个 <code>then</code> 等上一个任务完成，返回 Promise 的任务会让链等待它。</p>
+</blockquote>
+<p><strong>怎样限制同时执行的异步任务数？</strong></p>
+<blockquote>
+<p>这是并发控制，和按顺序执行不同，要维护一个“正在执行”的计数，完成一个再补一个，见<a href="/questions/alg-concurrency-pool/">《怎样实现有明确失败语义的异步并发池？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises" target="_blank" rel="noreferrer">MDN · Using promises<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/queueMicrotask" target="_blank" rel="noreferrer">MDN · queueMicrotask()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E7%94%A8+Promise+%E5%AE%9E%E7%8E%B0%E7%BA%A2%E7%BB%BF%E7%81%AF%E5%BE%AA%E7%8E%AF%E5%92%8C+LazyMan+%E8%BF%99%E7%B1%BB%E6%8C%89%E9%A1%BA%E5%BA%8F%E5%BB%B6%E6%97%B6%E6%89%A7%E8%A1%8C%E7%9A%84%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E7%94%A8+Promise+%E5%AE%9E%E7%8E%B0%E7%BA%A2%E7%BB%BF%E7%81%AF%E5%BE%AA%E7%8E%AF%E5%92%8C+LazyMan+%E8%BF%99%E7%B1%BB%E6%8C%89%E9%A1%BA%E5%BA%8F%E5%BB%B6%E6%97%B6%E6%89%A7%E8%A1%8C%E7%9A%84%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-promise-sequence%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-promise-sequence%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样用 Promise 实现红绿灯循环和 LazyMan 这类按顺序延时执行的题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-promise-race-allsettled/">怎样手写 Promise.race、Promise.allSettled 和 Promise.any？</a></li><li><a href="/questions/alg-promise-aplus/">怎样手写一个符合 Promises/A+ 规范的 Promise？</a></li><li><a href="/questions/alg-debounce/">怎样实现只在停止调用后执行的防抖函数？</a></li><li><a href="/questions/alg-throttle/">怎样实现首沿节流？它与尾沿节流、防抖有什么区别？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

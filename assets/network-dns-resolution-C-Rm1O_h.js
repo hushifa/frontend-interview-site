@@ -1,0 +1,72 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>在地址栏输入 <code>www.example.com</code>，浏览器要先知道它的 IP 才能建立连接，把域名查成 IP 的过程就是 DNS 解析。</p>
+<p>查找是一层层往外走的。先查浏览器自己的缓存，没有就交给操作系统，系统查自己的缓存和 hosts 文件；还没有，就发给配置好的递归解析器，通常是运营商或公共 DNS。递归解析器没有缓存时，从根服务器问起：根告诉它 <code>.com</code> 归哪些服务器管，<code>.com</code> 的服务器告诉它 <code>example.com</code> 的权威服务器，权威服务器给出最终的 IP。</p>
+<p>这里有两种查询方式。浏览器和系统对递归解析器发的是递归查询，意思是“你替我查到底，只给我答案”；递归解析器问根和顶级域时是迭代查询，对方只回一句“去问某某”，由它自己接着问。每条结果带一个 TTL，表示能缓存多少秒，各层缓存靠它决定什么时候重新查。</p>
+<p>前端能做的是减少要解析的域名数量，对确定要用的第三方域名用 <code>dns-prefetch</code> 或 <code>preconnect</code> 提前解析。还要知道改了 DNS 记录不会马上全网生效，旧结果要等 TTL 过期。</p>
+</blockquote>
+<h2>一次完整的解析经过哪些地方</h2>
+<p>假设所有缓存都是空的，浏览器要访问 <code>www.example.com</code>，大致会经过这几步：</p>
+<ol>
+<li>浏览器查自己的 DNS 缓存，没有。</li>
+<li>浏览器调用操作系统的解析接口。系统查自己的缓存和 hosts 文件，hosts 文件把主机名直接对应到 IP，常见配置下写在里面的名字不会再去问网络。</li>
+<li>系统把查询发给配置的递归解析器，并要求它“替我查到底”。</li>
+<li>递归解析器问根服务器，根服务器不知道最终答案，但知道 <code>.com</code> 由哪些服务器负责，返回这些服务器的名字和地址。</li>
+<li>递归解析器问 <code>.com</code> 的服务器，得到 <code>example.com</code> 的权威服务器。</li>
+<li>递归解析器问权威服务器，拿到 <code>www.example.com</code> 的 A 记录（IPv4）或 AAAA 记录（IPv6）。</li>
+<li>递归解析器把结果交回系统，各层按 TTL 缓存下来。</li>
+</ol>
+<p>为什么递归解析器知道根服务器在哪？因为根服务器的地址是预先配置在解析器里的。RFC 1034 说，解析器不知道该问谁时，要用配置文件里列出的服务器起步，通常是两个根服务器和两个本域服务器，从根出发最终能查到整个域名空间。</p>
+<p>实际上大多数查询走不完这七步。递归解析器服务大量用户，<code>.com</code> 的服务器地址、热门网站的记录几乎总在它的缓存里，所以常见的情况是第 3 步就直接拿到答案。</p>
+<p>第 2 步具体先查缓存还是先查 hosts，取决于操作系统和配置。比如 Linux 上由 <code>/etc/nsswitch.conf</code> 的 <code>hosts:</code> 一行决定先查 <code>files</code>（hosts 文件）还是 <code>dns</code>。面试时说“系统会查本地缓存和 hosts 文件”就够了。</p>
+<h2>递归查询和迭代查询有什么区别</h2>
+<p>这两个词描述的是“谁负责把查询走完”。RFC 1034 说，一个服务器遇到自己答不了的查询有两种做法：递归，就是它替客户端去别的服务器继续查；迭代，就是它把客户端指到另一个服务器，让客户端自己去查。</p>
+<p>所以浏览器所在的机器只发一次请求，就能等到最终结果，因为它对递归解析器用的是递归方式。递归解析器对根、顶级域、权威服务器用的是迭代方式，每次只得到“去问谁”的指引，叫作引荐（referral），然后自己发下一次查询。</p>
+<p>为什么不让根服务器也递归？RFC 1034 写明，DNS 必须实现迭代方式，递归只是可选项；所有名字服务器都必须支持非递归查询，提供递归的服务器还可以限制谁能用。所以根和顶级域服务器只需要回答自己知道的那一层，查到底的工作交给递归解析器。</p>
+<h2>TTL 怎样影响缓存</h2>
+<p>每条 DNS 记录都带一个 TTL，单位是秒，表示这条记录最多能在缓存里留多久，由管理这个域名的人设置。下面用一个小例子模拟“过期就重新查”：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> cache = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">remember</span>(<span class="hljs-params">name, ip, ttlSeconds, now</span>) {
+  cache.<span class="hljs-title function_">set</span>(name, { ip, <span class="hljs-attr">expiresAt</span>: now + ttlSeconds * <span class="hljs-number">1000</span> });
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">lookup</span>(<span class="hljs-params">name, now</span>) {
+  <span class="hljs-keyword">const</span> hit = cache.<span class="hljs-title function_">get</span>(name);
+  <span class="hljs-keyword">if</span> (hit &amp;&amp; now &lt; hit.<span class="hljs-property">expiresAt</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">\`<span class="hljs-subst">\${hit.ip}</span>（缓存）\`</span>;
+  cache.<span class="hljs-title function_">delete</span>(name);
+  <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;缓存没有或已过期，去问递归解析器&#x27;</span>;
+}
+
+<span class="hljs-title function_">remember</span>(<span class="hljs-string">&#x27;www.example.com&#x27;</span>, <span class="hljs-string">&#x27;192.0.2.10&#x27;</span>, <span class="hljs-number">300</span>, <span class="hljs-number">0</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">lookup</span>(<span class="hljs-string">&#x27;www.example.com&#x27;</span>, <span class="hljs-number">60_000</span>));
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">lookup</span>(<span class="hljs-string">&#x27;www.example.com&#x27;</span>, <span class="hljs-number">299_000</span>));
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">lookup</span>(<span class="hljs-string">&#x27;www.example.com&#x27;</span>, <span class="hljs-number">300_000</span>));
+<span class="hljs-comment">// 192.0.2.10（缓存）</span>
+<span class="hljs-comment">// 192.0.2.10（缓存）</span>
+<span class="hljs-comment">// 缓存没有或已过期，去问递归解析器</span>
+</code></pre></div>
+<p>TTL 是 300 秒，所以第 60 秒和第 299 秒都直接用缓存，到第 300 秒才重新查。这就是为什么改了 DNS 记录，有的用户还会访问到旧 IP：他们那一路的缓存里还存着旧记录，要等 TTL 到期。</p>
+<p>RFC 1034 给出的做法是：预计要换 IP 时，提前把 TTL 调小，换完再调回去。TTL 设成 0 表示不允许缓存。</p>
+<p>查不到的结果也会被缓存。域名不存在时，权威服务器的回复里带着这个区域的 SOA 记录，RFC 2308 规定按它来决定这个“否定结果”能缓存多久。所以刚上线一个新子域，如果之前有人查过并得到“不存在”，也可能要等一会儿才能解析到。</p>
+<h2>前端能做什么</h2>
+<p>DNS 只在和新域名建连时发生，前端能做的是让它少发生、早发生。</p>
+<p>页面依赖的域名越多，要解析的次数越多，所以静态资源不要散在太多域名上。对确定要用的第三方域名，可以在 HTML 里提前声明：</p>
+<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;dns-prefetch&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://analytics.example&quot;</span> /&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;preconnect&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://cdn.example&quot;</span> <span class="hljs-attr">crossorigin</span> /&gt;</span>
+</code></pre></div>
+<p><code>dns-prefetch</code> 只提前解析，<code>preconnect</code> 连 TCP 和 TLS 握手都提前做，怎么选见<a href="/questions/network-dns-prefetch-preconnect/">《dns-prefetch、preconnect 和 preload 应该怎样选择？》</a>。DNS 在页面加载中具体花了多久，可以用 Navigation Timing 的 <code>domainLookupStart</code> 和 <code>domainLookupEnd</code> 量出来，见<a href="/questions/network-dns-tcp-tls/">《DNS、TCP 和 TLS 握手分别会给页面增加哪些等待？》</a>。</p>
+<p>CDN 也常常借助 DNS 工作：网站把域名用 CNAME 指向 CDN 提供的域名，CDN 再决定把用户导向哪个节点，见<a href="/questions/network-cdn/">《CDN 的原理是什么？前端怎样用好 CDN？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>DNS 用 UDP 还是 TCP？</strong></p>
+<blockquote>
+<p>RFC 1035 推荐普通查询用 UDP，一问一答不用建连。UDP 回复超出长度限制会被截断并打上 TC 标记，客户端再改用 TCP 查；区域传送必须用 TCP。现在还有基于 HTTPS 的 DoH（RFC 8484）和基于 TLS 的 DoT（RFC 7858），用来加密查询内容。</p>
+</blockquote>
+<p><strong>hosts 文件有什么用？</strong></p>
+<blockquote>
+<p>它把主机名直接对应到 IP，系统解析时会按配置查它，常见配置下命中了就不再问网络。开发时常用来把线上域名指到本机或测试服务器，但改完要注意浏览器和系统可能还缓存着旧结果。</p>
+</blockquote>
+<p><strong>为什么说 DNS 是分布式的？</strong></p>
+<blockquote>
+<p>没有一台服务器保存所有域名。根只知道顶级域归谁管，顶级域只知道下一级归谁管，每个域名的记录由它自己的权威服务器维护。这样每一层只管自己那一段，加上缓存，系统才能扛住全世界的查询。</p>
+</blockquote>`};export{e as default};

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="工程化面试题：早期靠 script 标签和全局变量，后来用 IIFE 包一层隔离作用域；Node.js 采用同步 require 的 CommonJS…" />
+    <title>前端模块化经历了哪些阶段？IIFE、CommonJS、AMD、UMD 和 ES Modules 有什么区别？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/eng-module-history/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="前端模块化经历了哪些阶段？IIFE、CommonJS、AMD、UMD 和 ES Modules 有什么区别？" />
+    <meta property="og:description" content="工程化面试题：早期靠 script 标签和全局变量，后来用 IIFE 包一层隔离作用域；Node.js 采用同步 require 的 CommonJS…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/eng-module-history/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/eng-module-history/#webpage","url":"https://fe.hushifa.top/questions/eng-module-history/","name":"前端模块化经历了哪些阶段？IIFE、CommonJS、AMD、UMD 和 ES Modules 有什么区别？","description":"工程化面试题：早期靠 script 标签和全局变量，后来用 IIFE 包一层隔离作用域；Node.js 采用同步 require 的 CommonJS…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/eng-module-history/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/eng-module-history/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"工程化面试题","item":"https://fe.hushifa.top/topics/engineering/"},{"@type":"ListItem","position":3,"name":"前端模块化经历了哪些阶段？IIFE、CommonJS、AMD、UMD 和 ES Modules 有什么区别？","item":"https://fe.hushifa.top/questions/eng-module-history/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/engineering/">工程化面试题</a><span aria-hidden="true">/</span><span aria-current="page">前端模块化经历了哪些阶段？IIFE、CommonJS、AMD、UMD 和 ES Modules 有什么区别？</span></nav><h1 tabindex="-1">前端模块化经历了哪些阶段？IIFE、CommonJS、AMD、UMD 和 ES Modules 有什么区别？</h1><p class="reading-summary">早期靠 script 标签和全局变量，后来用 IIFE 包一层隔离作用域；Node.js 采用同步 require 的 CommonJS，浏览器端出现异步加载的 AMD；UMD 用一段判断同时兼容 AMD、CommonJS 和全局变量；最后语言标准给出了 ES Modules。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>最早的页面里，一个功能写在 <code>a.js</code>，另一个写在 <code>b.js</code>，用几个 <code>&lt;script&gt;</code> 标签按顺序引入。所有顶层变量都挂在全局，两个文件都声明了 <code>utils</code> 就会互相覆盖，依赖顺序也只能靠人记。于是大家先用 IIFE，也就是立即执行的函数，把代码包起来，只往全局暴露一个命名空间对象。</p>
+<p>后来出现了真正的模块规范。CommonJS 用 <code>require</code> 和 <code>module.exports</code>，<code>require</code> 是同步的，适合从本地磁盘读文件的 Node.js。浏览器要从网络下载文件，同步加载会卡住页面，所以有了 AMD，用 <code>define(依赖数组, 工厂函数)</code> 声明依赖、异步加载，代表实现是 RequireJS。</p>
+<p>一个库想同时给这几种环境用，就套一层 UMD：先看有没有带 <code>amd</code> 标记的 <code>define</code>，有就按 AMD 注册；再看有没有 <code>module.exports</code>，有就按 CommonJS 导出；都没有就挂到全局对象上。</p>
+<p>最后 ES2015 在语言层面定义了 ES Modules，用 <code>import</code> 和 <code>export</code> 静态声明依赖，浏览器用 <code>&lt;script type=&quot;module&quot;&gt;</code> 原生支持，Node.js 也支持，现在新代码一般都写 ESM。要注意 UMD 和 AMD 现在多见于老库和用 <code>&lt;script&gt;</code> 直接引入的场景。</p>
+</blockquote>
+<h2>没有模块时遇到了什么问题</h2>
+<p>浏览器最初只有 <code>&lt;script&gt;</code> 标签。几个脚本的顶层变量共享同一个全局作用域，所以后加载的文件可以悄悄覆盖前面的同名变量。依赖关系也没有地方声明，<code>b.js</code> 用到了 <code>a.js</code> 里的函数，就只能保证 <code>a.js</code> 的标签写在前面。</p>
+<p>IIFE 是第一步改进。它把整个文件包进一个函数并马上执行，函数里的变量就成了局部变量，只把需要公开的部分挂到一个全局对象上：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">var</span> <span class="hljs-title class_">MyApp</span> = <span class="hljs-title class_">MyApp</span> || {};
+<span class="hljs-title class_">MyApp</span>.<span class="hljs-property">utils</span> = (<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">var</span> cache = {}; <span class="hljs-comment">// 外面访问不到</span>
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">get</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params">key</span>) { <span class="hljs-keyword">return</span> cache[key]; },
+  };
+})();
+</code></pre></div>
+<p>这样全局只多了一个 <code>MyApp</code>，私有变量靠闭包藏了起来。可是它没有解决依赖管理，加载顺序还是靠人排。</p>
+<h2>CommonJS 和 AMD 为什么会分成两套</h2>
+<p>CommonJS 社区设计模块格式时，目标是浏览器之外的 JavaScript 环境。RequireJS 的《Why AMD?》里写到，CommonJS 没有完全照顾浏览器“天生异步”的特点，在浏览器里用要么靠服务端转换，要么用 XHR 下载文本再解析。</p>
+<p>Node.js 采用了 CommonJS。Node.js 文档说明，每个模块在执行前会被包进一个函数 <code>(function(exports, require, module, __filename, __dirname) { ... })</code>，所以模块里的顶层变量是局部的，<code>require</code> 读到哪一行就同步加载哪个文件。读本地磁盘很快，同步没有问题。</p>
+<p>浏览器端走了另一条路。AMD 要求先把依赖写成数组，加载器异步下载这些文件，全部就绪后再调用工厂函数：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-title function_">define</span>([<span class="hljs-string">&#x27;jquery&#x27;</span>, <span class="hljs-string">&#x27;./api&#x27;</span>], <span class="hljs-keyword">function</span> (<span class="hljs-params">$, api</span>) {
+  <span class="hljs-keyword">return</span> { <span class="hljs-attr">render</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) { <span class="hljs-comment">/* ... */</span> } };
+});
+</code></pre></div>
+<p>依赖提前声明，加载器就能并行下载、按依赖顺序执行，不会阻塞页面。代价是写法比 CommonJS 啰嗦。</p>
+<h2>UMD 是怎样判断当前环境的</h2>
+<p>UMD 不是新的模块系统，它是一段包装代码，让同一个文件在 AMD、CommonJS 和普通 <code>&lt;script&gt;</code> 里都能用。umdjs 仓库的 <code>returnExports.js</code> 模板按这个顺序判断：<code>typeof define === &#x27;function&#x27; &amp;&amp; define.amd</code> 成立就调用 <code>define</code>；否则 <code>typeof module === &#x27;object&#x27; &amp;&amp; module.exports</code> 成立就赋值给 <code>module.exports</code>；否则挂到 <code>root</code> 上，<code>root</code> 在浏览器里取 <code>self</code>，取不到再用 <code>this</code>。</p>
+<p>下面把这段判断写成函数，传入不同的“环境”对象，看三条分支分别走到哪里：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 把 UMD 的判断写成函数，传入不同的“环境”来模拟三种情况</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">umd</span>(<span class="hljs-params">env, factory</span>) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> env.<span class="hljs-property">define</span> === <span class="hljs-string">&#x27;function&#x27;</span> &amp;&amp; env.<span class="hljs-property">define</span>.<span class="hljs-property">amd</span>) {
+    env.<span class="hljs-title function_">define</span>([], factory);
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;AMD&#x27;</span>;
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> env.<span class="hljs-property">module</span> === <span class="hljs-string">&#x27;object&#x27;</span> &amp;&amp; env.<span class="hljs-property">module</span>.<span class="hljs-property">exports</span>) {
+    env.<span class="hljs-property">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-title function_">factory</span>();
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;CommonJS&#x27;</span>;
+  } <span class="hljs-keyword">else</span> {
+    env.<span class="hljs-property">root</span>.<span class="hljs-property">myLib</span> = <span class="hljs-title function_">factory</span>();
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;全局变量&#x27;</span>;
+  }
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">factory</span> = (<span class="hljs-params"></span>) =&gt; ({ <span class="hljs-attr">version</span>: <span class="hljs-string">&#x27;1.0.0&#x27;</span> });
+
+<span class="hljs-comment">// 1. AMD 环境：存在带 amd 标记的 define</span>
+<span class="hljs-keyword">const</span> registered = [];
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">define</span> = (<span class="hljs-params">deps, f</span>) =&gt; registered.<span class="hljs-title function_">push</span>(<span class="hljs-title function_">f</span>());
+define.<span class="hljs-property">amd</span> = {};
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">umd</span>({ define }, factory), registered[<span class="hljs-number">0</span>].<span class="hljs-property">version</span>); <span class="hljs-comment">// AMD 1.0.0</span>
+
+<span class="hljs-comment">// 2. CommonJS 环境：存在 module.exports</span>
+<span class="hljs-keyword">const</span> fakeModule = { <span class="hljs-attr">exports</span>: {} };
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">umd</span>({ <span class="hljs-attr">module</span>: fakeModule }, factory), fakeModule.<span class="hljs-property">exports</span>.<span class="hljs-property">version</span>); <span class="hljs-comment">// CommonJS 1.0.0</span>
+
+<span class="hljs-comment">// 3. 浏览器 script 标签：两者都没有，挂到全局对象上</span>
+<span class="hljs-keyword">const</span> fakeWindow = {};
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">umd</span>({ <span class="hljs-attr">root</span>: fakeWindow }, factory), fakeWindow.<span class="hljs-property">myLib</span>.<span class="hljs-property">version</span>); <span class="hljs-comment">// 全局变量 1.0.0</span>
+</code></pre></div>
+<p>为什么不只判断 <code>define</code> 是不是函数？因为页面上别的脚本也可能定义一个叫 <code>define</code> 的全局函数，多检查一个 <code>define.amd</code> 标记，才能确认它真的是 AMD 加载器。还要注意，模板注释说明 CommonJS 分支依赖 <code>module.exports</code>，只适用于像 Node.js 这样支持它的环境，不适用于严格只有 <code>exports</code> 的 CommonJS 实现。</p>
+<h2>ES Modules 解决了什么</h2>
+<p>前面几种方案都是社区约定，靠函数调用在运行时拼出模块关系。ES Modules 是语言本身的语法，<code>import</code> 和 <code>export</code> 只能写在模块顶层，引擎在执行前就能分析出完整的依赖图。打包工具因此能做 Tree shaking，删掉没被用到的导出。</p>
+<p>浏览器里用 <code>&lt;script type=&quot;module&quot;&gt;</code> 加载 ESM，Node.js 里用 <code>.mjs</code> 或 <code>package.json</code> 的 <code>&quot;type&quot;: &quot;module&quot;</code>。ESM 和 CommonJS 在加载时机、导出绑定上的具体区别，见<a href="/questions/js-esm-cjs/">《ES Modules 和 CommonJS 有哪些关键区别？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>现在还需要关心 AMD 和 UMD 吗？</strong></p>
+<blockquote>
+<p>写新代码一般不用。可是有些老库只发布了 UMD 包，或者需要通过 CDN 用 <code>&lt;script&gt;</code> 直接引入，这时会遇到。</p>
+</blockquote>
+<p><strong>IIFE 现在还有用吗？</strong></p>
+<blockquote>
+<p>有。不经过模块系统、直接用 <code>&lt;script&gt;</code> 引入的脚本，仍然可以用 IIFE 包住整段代码，避免变量泄漏到全局。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules" target="_blank" rel="noreferrer">MDN · JavaScript modules<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://nodejs.org/api/modules.html" target="_blank" rel="noreferrer">Node.js · Modules (CommonJS)<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://requirejs.org/docs/whyamd.html" target="_blank" rel="noreferrer">RequireJS · Why AMD?<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://github.com/umdjs/umd/blob/master/templates/returnExports.js" target="_blank" rel="noreferrer">umdjs/umd · returnExports.js<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96%E7%BB%8F%E5%8E%86%E4%BA%86%E5%93%AA%E4%BA%9B%E9%98%B6%E6%AE%B5%EF%BC%9FIIFE%E3%80%81CommonJS%E3%80%81AMD%E3%80%81UMD+%E5%92%8C+ES+Modules+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%AB%AF%E6%A8%A1%E5%9D%97%E5%8C%96%E7%BB%8F%E5%8E%86%E4%BA%86%E5%93%AA%E4%BA%9B%E9%98%B6%E6%AE%B5%EF%BC%9FIIFE%E3%80%81CommonJS%E3%80%81AMD%E3%80%81UMD+%E5%92%8C+ES+Modules+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aeng-module-history%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Feng-module-history%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前端模块化经历了哪些阶段？IIFE、CommonJS、AMD、UMD 和 ES Modules 有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/eng-babel/">Babel 是怎样把新语法转成旧语法的？语法转换和 polyfill 有什么区别？</a></li><li><a href="/questions/eng-package-managers/">npm、yarn 和 pnpm 有什么区别？幽灵依赖是什么？</a></li><li><a href="/questions/engineering-treeshaking/">Tree shaking 如何工作？为什么有些代码无法移除？</a></li><li><a href="/questions/eng-code-quality-tooling/">ESLint、Prettier、husky 和 lint-staged 分别做什么？怎样配合？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="React面试题：React 为每个组件保存一组 Hook 的数据，渲染前把位置归零，每调用一次 Hook 就取下一格。" />
+    <title>Hooks 在 React 内部是怎样保存状态的？为什么靠调用顺序区分？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/react-hooks-internals/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="Hooks 在 React 内部是怎样保存状态的？为什么靠调用顺序区分？" />
+    <meta property="og:description" content="React面试题：React 为每个组件保存一组 Hook 的数据，渲染前把位置归零，每调用一次 Hook 就取下一格。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/react-hooks-internals/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-hooks-internals/#webpage","url":"https://fe.hushifa.top/questions/react-hooks-internals/","name":"Hooks 在 React 内部是怎样保存状态的？为什么靠调用顺序区分？","description":"React面试题：React 为每个组件保存一组 Hook 的数据，渲染前把位置归零，每调用一次 Hook 就取下一格。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-hooks-internals/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-hooks-internals/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"Hooks 在 React 内部是怎样保存状态的？为什么靠调用顺序区分？","item":"https://fe.hushifa.top/questions/react-hooks-internals/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">Hooks 在 React 内部是怎样保存状态的？为什么靠调用顺序区分？</span></nav><h1 tabindex="-1">Hooks 在 React 内部是怎样保存状态的？为什么靠调用顺序区分？</h1><p class="reading-summary">React 为每个组件保存一组 Hook 的数据，渲染前把位置归零，每调用一次 Hook 就取下一格。useState 调用时不传名字，所以 React 只能按调用顺序把数据对上，条件里调用 Hook 会让后面的数据全部错位。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>一个组件里先写 <code>useState(18)</code> 存年龄，再写 <code>useState(&#x27;北京&#x27;)</code> 存城市，两次调用都没有告诉 React“我是年龄”还是“我是城市”。React 的做法是给每个组件保存一组 Hook 数据，渲染前把位置归零，每调用一次 Hook 就取下一格，所以第 1 次调用永远对应年龄，第 2 次永远对应城市。</p>
+<p>正因为只认位置，每次渲染的 Hook 调用顺序必须一样。把 Hook 写进 <code>if</code> 里，某次渲染多调或少调一次，后面的 Hook 就会拿到别人那一格的数据。</p>
+<p>这些数据挂在组件在界面树里的那个位置上，不在组件函数里。所以组件函数每次重新执行，局部变量都是新的，状态却能保留；组件从这个位置被移除，状态也跟着丢掉。</p>
+<p>要注意，React 文档用“数组加下标”来讲这个机制，那是简化后的模型。实际实现的数据结构更复杂，面试时讲清“按顺序对应、挂在树中位置上”就够了，不要把教学模型说成源码。</p>
+</blockquote>
+<h2>用几行代码模拟 useState</h2>
+<p>React 文档在讲 <code>useState</code> 时说明了思路：React 为每个组件保存一组状态，渲染前把当前下标设为 0，每调用一次 <code>useState</code> 就返回下一格并把下标加 1。下面按这个思路写一个极简版本，它只模拟一个组件，不涉及调度和 DOM，是教学模型而不是 React 源码。重点看最后一次渲染后 <code>city</code> 的值。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 教学模型：只模拟一个组件，不是 React 源码</span>
+<span class="hljs-keyword">let</span> hooks = [];
+<span class="hljs-keyword">let</span> index = <span class="hljs-number">0</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">useState</span>(<span class="hljs-params">initial</span>) {
+  <span class="hljs-keyword">const</span> i = index; <span class="hljs-comment">// 记住这个 Hook 占的是第几格</span>
+  <span class="hljs-keyword">if</span> (i &gt;= hooks.<span class="hljs-property">length</span>) hooks.<span class="hljs-title function_">push</span>(initial); <span class="hljs-comment">// 第一次走到这一格才用初始值</span>
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">setState</span> = (<span class="hljs-params">next</span>) =&gt; {
+    hooks[i] = next;
+  };
+  index += <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">return</span> [hooks[i], setState];
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">render</span>(<span class="hljs-params">Component, props</span>) {
+  index = <span class="hljs-number">0</span>; <span class="hljs-comment">// 每次渲染前把下标归零</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">Component</span>(props);
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Profile</span>(<span class="hljs-params">{ showName }</span>) {
+  <span class="hljs-keyword">const</span> [age, setAge] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">18</span>);
+  <span class="hljs-keyword">let</span> name = <span class="hljs-string">&#x27;（未显示）&#x27;</span>;
+  <span class="hljs-keyword">if</span> (showName) {
+    [name] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;张三&#x27;</span>); <span class="hljs-comment">// 错误示范：条件里调用 Hook</span>
+  }
+  <span class="hljs-keyword">const</span> [city, setCity] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;北京&#x27;</span>);
+  <span class="hljs-keyword">return</span> { age, name, city, setAge, setCity };
+}
+
+<span class="hljs-keyword">let</span> ui = <span class="hljs-title function_">render</span>(<span class="hljs-title class_">Profile</span>, { <span class="hljs-attr">showName</span>: <span class="hljs-literal">false</span> });
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(ui.<span class="hljs-property">age</span>, ui.<span class="hljs-property">name</span>, ui.<span class="hljs-property">city</span>); <span class="hljs-comment">// 18 （未显示） 北京</span>
+
+ui.<span class="hljs-title function_">setAge</span>(<span class="hljs-number">20</span>);
+ui = <span class="hljs-title function_">render</span>(<span class="hljs-title class_">Profile</span>, { <span class="hljs-attr">showName</span>: <span class="hljs-literal">false</span> });
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(ui.<span class="hljs-property">age</span>, ui.<span class="hljs-property">name</span>, ui.<span class="hljs-property">city</span>); <span class="hljs-comment">// 20 （未显示） 北京</span>
+
+ui = <span class="hljs-title function_">render</span>(<span class="hljs-title class_">Profile</span>, { <span class="hljs-attr">showName</span>: <span class="hljs-literal">true</span> });
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(ui.<span class="hljs-property">age</span>, ui.<span class="hljs-property">name</span>, ui.<span class="hljs-property">city</span>); <span class="hljs-comment">// 20 北京 北京</span>
+
+ui.<span class="hljs-title function_">setCity</span>(<span class="hljs-string">&#x27;上海&#x27;</span>);
+ui = <span class="hljs-title function_">render</span>(<span class="hljs-title class_">Profile</span>, { <span class="hljs-attr">showName</span>: <span class="hljs-literal">false</span> });
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(ui.<span class="hljs-property">age</span>, ui.<span class="hljs-property">name</span>, ui.<span class="hljs-property">city</span>); <span class="hljs-comment">// 20 （未显示） 北京</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(hooks); <span class="hljs-comment">// [ 20, &#x27;北京&#x27;, &#x27;上海&#x27; ]</span>
+</code></pre></div>
+<p>前两次渲染都正常，<code>setAge(20)</code> 改的是第 0 格，再渲染时第 0 格读出 20。为什么 <code>useState(18)</code> 第二次调用没有把年龄重置回 18？因为初始值只在这一格第一次被创建时用到，之后每次都直接返回已经存的值。</p>
+<p>第三次渲染把 <code>showName</code> 设为 <code>true</code>，问题出现了。<code>name</code> 的 Hook 排在第 1 格，可第 1 格存的是城市，于是 <code>name</code> 读到了“北京”。城市的 Hook 被挤到第 2 格，这一格从没创建过，就用初始值“北京”新建了一格。</p>
+<p>最后一次渲染又不显示名字，<code>city</code> 回到第 1 格。前一次调用 <code>setCity(&#x27;上海&#x27;)</code> 改的却是第 2 格，所以城市还是“北京”，用户刚做的修改看起来“丢了”。这就是条件调用 Hook 的后果：数据本身没坏，只是对错了位置。真实的 React 遇到前后渲染 Hook 数量不一致时会报错，具体写法和报错见<a href="/questions/react-hooks-rules/">《为什么 Hook 通常必须在组件顶层调用？》</a>。</p>
+<h2>为什么不给每个 Hook 起个名字</h2>
+<p>React 文档对这个问题的回答是，<code>useState</code> 调用时没有任何“标识”，React 也不会去解析函数代码，它靠的是同一个组件每次渲染时稳定的调用顺序，这样 Hook 的写法才能这么简洁。</p>
+<p>按名字存也不是不行，但名字要由使用者保证不重复。自定义 Hook 内部也会调用 <code>useState</code>，两个自定义 Hook 恰好用了同一个名字就会互相覆盖。按顺序存就没有这个问题，自定义 Hook 只是把几次 Hook 调用打包，展开后依然是一串按顺序排好的调用。React 文档也说明，每次调用 Hook 都与其他调用完全独立，自定义 Hook 共享的是有状态的逻辑，不是状态本身。</p>
+<h2>状态挂在哪里</h2>
+<p>模拟代码把 <code>hooks</code> 放在全局，真实的 React 会把每个组件的 Hook 数据和它在界面树中的位置关联起来。React 文档讲保留和重置状态时说，只要在树的同一位置渲染同一个组件，React 就会保留它的状态；组件被移除，或者同一位置换成了不同的组件，状态就会被丢弃。</p>
+<p>这解释了两个常见现象。同一个组件渲染两次，比如两个 <code>&lt;Counter /&gt;</code>，各有一份独立的状态，因为它们在树中位置不同。条件渲染把组件从 <code>&lt;A /&gt;</code> 换成 <code>&lt;B /&gt;</code>，<code>A</code> 的状态不会留给 <code>B</code>。想要在同一位置强制重置状态，可以换一个 <code>key</code>，React 会把它当作另一个组件。</p>
+<h2>常见追问</h2>
+<p><strong>setState 是怎么知道要改哪一格的？</strong></p>
+<blockquote>
+<p>在教学模型里，<code>setState</code> 是在创建那一格时生成的函数，通过闭包记住了自己的下标，所以不管在哪里被调用，改的都是同一格。真实的 React 里，<code>set</code> 函数同样绑定到它所属组件的那个 Hook 上，React 文档也说明 <code>set</code> 函数具有稳定的标识，多次渲染拿到的是同一个函数。</p>
+</blockquote>
+<p><strong>为什么 <code>useState</code> 的初始值只生效一次？</strong></p>
+<blockquote>
+<p>初始值只在这一格第一次被创建时使用，之后的渲染直接返回已存的值。所以传入 props 当初始值后，props 再变也不会自动同步到 state。初始值计算很贵时，可以传一个函数 <code>useState(() =&gt; compute())</code>，React 只在初始化组件时调用它（严格模式的开发环境下会调用两次，用来发现不纯的写法）。</p>
+</blockquote>
+<p><strong>useEffect、useRef 也是按顺序存的吗？</strong></p>
+<blockquote>
+<p>是的。React 文档说明 Hook 都依赖同一个组件每次渲染时稳定的调用顺序，Hook 规则对所有 Hook 都适用，所以 Effect、ref、memo 的数据同样按调用位置对应。<code>use</code> 是例外，它读的是传进去的 Promise 或 Context，可以条件调用。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/learn/state-a-components-memory" target="_blank" rel="noreferrer">React · State：组件的记忆（How does React know which state to return?）<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://react.dev/reference/react/useState" target="_blank" rel="noreferrer">React · useState<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://react.dev/learn/preserving-and-resetting-state" target="_blank" rel="noreferrer">React · 对 state 进行保留和重置<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://react.dev/learn/reusing-logic-with-custom-hooks" target="_blank" rel="noreferrer">React · 使用自定义 Hook 复用逻辑<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Hooks+%E5%9C%A8+React+%E5%86%85%E9%83%A8%E6%98%AF%E6%80%8E%E6%A0%B7%E4%BF%9D%E5%AD%98%E7%8A%B6%E6%80%81%E7%9A%84%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9D%A0%E8%B0%83%E7%94%A8%E9%A1%BA%E5%BA%8F%E5%8C%BA%E5%88%86%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AHooks+%E5%9C%A8+React+%E5%86%85%E9%83%A8%E6%98%AF%E6%80%8E%E6%A0%B7%E4%BF%9D%E5%AD%98%E7%8A%B6%E6%80%81%E7%9A%84%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9D%A0%E8%B0%83%E7%94%A8%E9%A1%BA%E5%BA%8F%E5%8C%BA%E5%88%86%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-hooks-internals%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-hooks-internals%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Hooks 在 React 内部是怎样保存状态的？为什么靠调用顺序区分？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-state/">为什么调用 setState 后，当前变量还是旧值？</a></li><li><a href="/questions/react-batching/">React 的批量更新是什么？React 18 的自动批处理改变了什么？</a></li><li><a href="/questions/react-hooks-rules/">为什么 Hook 通常必须在组件顶层调用？</a></li><li><a href="/questions/react-performance-overview/">React 应用有哪些常见的性能优化手段？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

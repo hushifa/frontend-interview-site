@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="网络面试题：按 HTTP 规范，GET 是安全且幂等的方法，用来读取资源，参数通常放在 URL 里，响应默认可以缓存；POST 不安全也不幂等，用来提交数据…" />
+    <title>GET 和 POST 有什么区别？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/http-get-post/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="GET 和 POST 有什么区别？ · 前端知库" />
+    <meta property="og:description" content="网络面试题：按 HTTP 规范，GET 是安全且幂等的方法，用来读取资源，参数通常放在 URL 里，响应默认可以缓存；POST 不安全也不幂等，用来提交数据…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/http-get-post/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/http-get-post/#webpage","url":"https://fe.hushifa.top/questions/http-get-post/","name":"GET 和 POST 有什么区别？ · 前端知库","description":"网络面试题：按 HTTP 规范，GET 是安全且幂等的方法，用来读取资源，参数通常放在 URL 里，响应默认可以缓存；POST 不安全也不幂等，用来提交数据…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/http-get-post/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/http-get-post/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"网络面试题","item":"https://fe.hushifa.top/topics/network/"},{"@type":"ListItem","position":3,"name":"GET 和 POST 有什么区别？","item":"https://fe.hushifa.top/questions/http-get-post/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-B-VqfClW.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/network/">网络面试题</a><span aria-hidden="true">/</span><span aria-current="page">GET 和 POST 有什么区别？</span></nav><h1 tabindex="-1">GET 和 POST 有什么区别？</h1><p class="reading-summary">按 HTTP 规范，GET 是安全且幂等的方法，用来读取资源，参数通常放在 URL 里，响应默认可以缓存；POST 不安全也不幂等，用来提交数据，数据放在请求体里，响应一般不缓存。“GET 有长度限制”来自浏览器和服务器对 URL 的限制，“POST 更安全”只是参数不出现在地址栏，不加密，安全要靠 HTTPS。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal"><h2>简答</h2>
+<blockquote>
+<p>打开商品详情页是 GET，提交订单是 POST，这已经说出了两者最根本的区别：GET 用来读取，POST 用来提交。HTTP 规范 RFC 9110 把 GET 定义为安全方法，意思是它不应该改变服务器上的数据；还是幂等的，同一个请求发一次和发十次效果一样。POST 两样都不是，提交两次订单可能就下了两单。</p>
+<p>从这个语义出发，才有了那些常见区别。GET 的参数一般放在 URL 的查询字符串里，没有请求体；POST 的数据放在请求体里，可以是表单、JSON 或文件。GET 的响应默认可以被浏览器和 CDN 缓存，也能被收藏、分享、出现在历史记录里；POST 的响应一般不缓存，刷新页面时浏览器还会提示是否重新提交。</p>
+<p>常听到的“GET 有长度限制”，限制其实来自浏览器和服务器对 URL 长度的限制，规范只建议至少支持 8000 字节的 URI。“POST 比 GET 安全”也不准确，POST 只是参数不出现在地址栏和服务器访问日志的 URL 里，抓包照样能看到，真正的保护要靠 HTTPS。</p>
+<p>要注意，规范不禁止 GET 带请求体，但它没有约定的含义，有的服务器和代理会直接拒绝，所以不要这么用。用 GET 做删除这类修改操作也是错的，浏览器预取、爬虫访问链接都可能在用户不知情时触发它。</p>
+</blockquote>
+<h2>安全和幂等为什么重要</h2>
+<p>浏览器和中间设备会根据方法的语义做决定。因为 GET 是安全的，浏览器可以放心地预取链接，爬虫可以随便访问页面，网络出错时客户端可以自动重试。如果把“删除文章”做成 <code>GET /delete?id=1</code>，一次预取或爬虫访问就可能把文章删掉，CSRF 攻击也更容易，一张图片的 <code>src</code> 就能发出这个请求。</p>
+<p>POST 不幂等，所以浏览器不会自动重发它。表单提交后刷新页面，浏览器会弹窗确认，就是怕重复提交。业务上要防止重复下单，常见做法是前端提交后禁用按钮，后端用一个唯一的请求 ID 去重。</p>
+<p>各方法的安全性和幂等性见<a href="/questions/http-methods/">《HTTP 方法的安全性和幂等性是什么意思？》</a>。</p>
+<h2>缓存上的区别</h2>
+<p>GET 的响应可以按 <code>Cache-Control</code> 等响应头缓存，同一个 URL 下次可能直接从缓存读取，见<a href="/questions/http-cache/">《强缓存与协商缓存如何配合？》</a>。</p>
+<p>POST 的响应在规范上也能缓存，但条件很苛刻：要带明确的过期信息，还要有和请求地址相同的 <code>Content-Location</code>。实际上浏览器和 CDN 几乎都不缓存 POST，所以需要缓存的查询接口应该用 GET。</p>
+<h2>常见追问</h2>
+<p><strong>GET 请求会发两个 TCP 包，POST 会先发头再发体吗？</strong></p>
+<blockquote>
+<p>这不是 HTTP 规范规定的，而是某些客户端或服务器的实现细节，不能作为两者的区别。HTTP/2 和 HTTP/3 下请求本来就被拆成多个帧传输。</p>
+</blockquote>
+<p><strong>查询条件特别复杂，URL 放不下怎么办？</strong></p>
+<blockquote>
+<p>可以用 POST 发查询，但要知道代价：响应不能用普通的 HTTP 缓存，也没法分享链接。另一种做法是把查询条件保存到服务端，生成一个短 ID，再用 GET 带上这个 ID 查询。</p>
+</blockquote>
+<p><strong>PUT 和 POST 有什么区别？</strong></p>
+<blockquote>
+<p>PUT 是幂等的，表示“把这个资源设成我给的内容”，发多次结果一样，常用于整体更新；POST 表示“请处理这些数据”，常用于新建，发多次可能新建多条。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.rfc-editor.org/rfc/rfc9110.html" target="_blank" rel="noreferrer">RFC 9110 · HTTP Semantics<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods" target="_blank" rel="noreferrer">MDN · HTTP request methods<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+GET+%E5%92%8C+POST+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AGET+%E5%92%8C+POST+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ahttp-get-post%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%BD%91%E7%BB%9C%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fhttp-get-post%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：GET 和 POST 有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/http-cache/">强缓存与协商缓存如何配合？</a></li><li><a href="/questions/network-tcp-handshake/">TCP 三次握手和四次挥手是怎样进行的？为什么握手要三次？</a></li><li><a href="/questions/network-dns-resolution/">DNS 解析的过程是怎样的？</a></li><li><a href="/questions/network-resumable-upload/">浏览器分片上传如何实现可靠的暂停与续传？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>
