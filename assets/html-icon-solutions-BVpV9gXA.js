@@ -28,7 +28,7 @@ var e={answerHtml:`<h2>简答</h2>
 <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
 </code></pre></div>
 <p><code>stroke=&quot;currentColor&quot;</code> 让线条颜色取当前元素的 <code>color</code>，所以改按钮的文字颜色，图标颜色也跟着变。为什么颜色写在 <code>&lt;symbol&gt;</code> 里而不是 <code>&lt;use&gt;</code> 上？MDN 说明，被引用的元素上已经定义的属性，<code>&lt;use&gt;</code> 上的同名属性大多会被忽略；<code>&lt;use&gt;</code> 克隆出来的内容也不暴露在 DOM 里，CSS 属性不保证能继承进去。所以想从外面控制颜色，最稳妥的写法是在图形里用 <code>currentColor</code>。</p>
-<p><code>&lt;use&gt;</code> 也能引用外部文件里的 symbol，比如 <code>href=&quot;/icons.svg#icon-close&quot;</code>，这样图标文件能被浏览器缓存。要注意 MDN 提到的限制：浏览器可能对 <code>&lt;use&gt;</code> 应用同源策略，拒绝加载跨域的地址，目前也没有办法为 <code>&lt;use&gt;</code> 设置跨域策略，所以图标文件要和页面同源，放在 CDN 的其他域名下可能加载不出来。</p>
+<p><code>&lt;use&gt;</code> 也能引用外部文件里的 symbol，比如 <code>href=&quot;/icons.svg#icon-close&quot;</code>，这样图标文件能被浏览器缓存。要注意 MDN 提到的限制：浏览器可能对 <code>&lt;use&gt;</code> 应用同源策略，拒绝加载跨域的地址，目前也没有办法为 <code>&lt;use&gt;</code> 设置跨域策略，所以图标文件要和页面同源，放在 CDN 的其他域名下可能加载不出来。从雪碧图到 SVG Sprite 的演进，以及 HTTP/2 下图标还要不要合并成一个文件，见<a href="/questions/css-sprite-icons/">《雪碧图怎样演进到 SVG Sprite？HTTP/2 下还要不要合并图标？》</a>。</p>
 <h2>图标组件解决了什么</h2>
 <p>在 React、Vue 项目里，常见做法是把每个 SVG 文件转成组件，比如 <code>&lt;CloseIcon size={16} /&gt;</code>。每个图标是一个独立的模块，打包工具可以只打进实际用到的图标，不用一次加载整套图标。组件也方便统一处理默认尺寸、<code>currentColor</code> 和无障碍属性。</p>
 <p>代价是图标的 SVG 代码会进入 JavaScript 包。图标数量很多、同一个图标在页面里重复上百次时，每处都是一份完整的 SVG 节点，这时 Sprite 只定义一次的方式更省。</p>

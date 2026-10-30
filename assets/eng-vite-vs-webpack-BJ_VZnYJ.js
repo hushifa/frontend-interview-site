@@ -1,14 +1,10 @@
 var e={answerHtml:`<h2>简答</h2>
 <blockquote>
-<p>一个几千个模块的老项目，用 webpack 跑 <code>npm run dev</code> 要先等它把整个应用打包一遍，页面才能打开；换成 Vite，开发服务器几乎马上就起来了。这就是两者最直观的区别，差别出在开发阶段怎么处理模块。</p>
-<p>webpack 在开发时也是打包器，先从入口找出所有依赖、构建成 bundle，再交给浏览器。Vite 在开发时不打包业务代码，浏览器请求哪个模块，它就转换哪个模块返回，靠的是浏览器原生支持 ES 模块；第三方依赖则预先打包一次并缓存。所以 Vite 的启动时间基本不随项目变大而增加，改一个文件也只替换那一个模块。</p>
-<p>到了生产环境，两者都要打包。Vite 8 用 Rolldown 打包，旧版本用 Rollup；webpack 用自己的打包流程。配置上，webpack 把转换交给 loader、把扩展交给 plugin，几乎什么都要显式配置；Vite 对 TypeScript、CSS、静态资源有默认处理，配置少很多。</p>
-<p>选型时要注意，Vite 开发和生产走的是不同流程，偶尔会出现“开发正常、打包后出问题”，上线前要用生产构建验证。已有的大型 webpack 项目，如果依赖了特殊的 loader、Module Federation 这类能力，迁移成本要先评估清楚，不必为了快而强行迁移。</p>
+<p>一个几千个模块的老项目，用 webpack 跑 <code>npm run dev</code> 要先等它把整个应用打包一遍；换成 Vite，开发服务器几乎马上就起来了。Vite 为什么启动快，原生 ESM 按需转换和依赖预构建怎样工作，见<a href="/questions/eng-vite/">《Vite 开发模式为什么启动快，生产环境为什么仍需要构建？》</a>。这道题讲的是项目里怎样选。</p>
+<p>配置上，webpack 把转换交给 loader、把扩展交给 plugin，几乎什么都要显式配置；Vite 对 TypeScript、CSS、静态资源有默认处理，<code>index.html</code> 就是入口，配置少很多。生态上，webpack 历史更久，有大量现成的 loader 和 plugin，还有 Module Federation 这类内置能力。</p>
+<p>迁移成本主要来自三处：项目里自定义的 loader 和 plugin 要找替代或重写；开发和生产在 Vite 里走不同流程，要用生产构建验证；Vite 只转译 TypeScript、不做类型检查，CI 要补上 <code>tsc --noEmit</code>。</p>
+<p>所以新的常规 React、Vue 应用多数可以直接用 Vite。已有的大型 webpack 项目，如果依赖了特殊的 loader、Module Federation 这类能力，先测一下开发服务器的启动和热更新时间，确认它真是瓶颈，再决定要不要迁移。</p>
 </blockquote>
-<h2>开发服务器的启动方式为什么不同</h2>
-<p>webpack 的开发服务器启动时，要先从 <code>entry</code> 出发找出所有模块，每个模块都经过 loader 转换，然后打包好放在内存里。项目越大，这一步越慢。改了一个文件，webpack 也要重新构建受影响的部分，再把更新推给浏览器。</p>
-<p>Vite 把这件事交给了浏览器。页面里写的是 <code>&lt;script type=&quot;module&quot;&gt;</code>，浏览器读到 <code>import</code> 就会自己发请求。Vite 只在收到请求时才转换那一个文件，比如去掉 TypeScript 类型，所以启动时几乎不用处理业务代码。Vite 文档的说法是，模块在浏览器请求时按需提供，启动因此几乎是瞬间完成，和应用大小关系不大。</p>
-<p>那第三方依赖为什么要预构建？因为很多包还是 CommonJS 格式，浏览器不能直接当 ES 模块加载；还有的包内部拆成了大量小文件，Vite 文档举的例子是 <code>lodash-es</code> 有 600 多个内部模块，引入一个函数就可能让浏览器同时发出几百个请求。所以 Vite 会提前把依赖打包成少量 ESM 文件，缓存在 <code>node_modules/.vite</code> 里。详细过程见<a href="/questions/eng-vite/">《Vite 开发模式为什么启动快，生产环境为什么仍需要构建？》</a>。</p>
 <h2>生产构建有什么不同</h2>
 <p>生产环境不能也让浏览器一个个请求模块，因为嵌套的 <code>import</code> 会带来很多轮网络往返。所以两者都会打包，做 tree shaking、压缩、代码分割和带 hash 的文件名。</p>
 <p>区别在于用的工具。webpack 开发和生产用的是同一套打包流程，只是 <code>mode</code> 不同。Vite 早期开发时用 esbuild 预构建依赖、生产用 Rollup 打包；Vite 8 换成了 Rolldown，开发的依赖预构建和生产打包都由它完成。不管哪个版本，Vite 开发时的“按需转换”和生产时的“打包”仍然是两条不同的路径。</p>

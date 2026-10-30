@@ -21,7 +21,7 @@ link.<span class="hljs-title function_">click</span>();
 </code></pre></div>
 <p>MDN 说明，<code>response.blob()</code> 会把响应流读到结束，才返回一个 <code>Blob</code>。所以整个文件下完以前，用户看不到浏览器的下载提示，文件内容也要先完整地读进来。小文件没问题，几个 GB 的文件就容易出问题。用完的 object URL 要调用 <code>revokeObjectURL</code>，MDN 的说法是让浏览器不再保留对这个文件的引用。object URL 的更多细节见<a href="/questions/api-files/">《File、Blob 和 object URL 是什么关系？object URL 什么时候释放？》</a>。</p>
 <h2>断点续传怎样判断能不能接着写</h2>
-<p>断点续传的思路和<a href="/questions/design-large-upload/">《大文件上传怎样设计分片、断点续传、秒传和并发控制？》</a>方向相反：上传是客户端记住传了多少，下载是客户端记住收了多少，再向服务器要剩下的部分。</p>
+<p>断点续传的思路和<a href="/questions/design-large-upload/">《大文件上传系统怎样设计秒传、服务端合并、存储和限流？》</a>方向相反：上传是客户端记住传了多少，下载是客户端记住收了多少，再向服务器要剩下的部分。</p>
 <p>MDN 的 Range 指南给出了判断依据：响应带 <code>Accept-Ranges</code> 且值不是 <code>none</code>，说明服务器支持范围请求；请求时带上 <code>If-Range</code>，条件满足就返回 <code>206 Partial Content</code> 和对应的那一段，不满足就返回 <code>200 OK</code> 和完整内容。<code>Content-Range</code> 告诉你这一段在整个文件里的位置。下面把这几条判断写成函数：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 根据已下载的字节数生成续传请求头。</span>
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">resumeHeaders</span>(<span class="hljs-params">received, etag</span>) {

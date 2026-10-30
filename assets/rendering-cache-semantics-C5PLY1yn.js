@@ -1,7 +1,7 @@
 var e={answerHtml:`<h2>简答</h2>
 <blockquote>
 <p>说“SSR 有缓存”，其实可能指四个不同的地方。第一层是 HTTP 缓存：浏览器和 CDN 按 <code>Cache-Control</code>、<code>ETag</code>、<code>Vary</code> 复用整个响应。<code>public</code> 表示 CDN 可以共享，<code>private</code> 表示只能存在用户自己的浏览器里。</p>
-<p>第二层是请求内去重，比如 React 的 <code>cache</code>、Next.js 对 <code>fetch</code> 的记忆，只在一次渲染里有效。第三层是框架的数据缓存，比如 Next.js 的 <code>&#x27;use cache&#x27;</code>、Nuxt 的 <code>cachedEventHandler</code>，跨请求保存，要按时间或标签失效。第四层是客户端状态缓存，比如 TanStack Query、Pinia 里的数据，存在浏览器内存里，用户登出时要清空。</p>
+<p>第二层是请求内去重，比如 React 的 <code>cache</code>，只在一次渲染里有效。第三层是服务端的跨请求数据缓存，可以是框架提供的，也可以是自己接的 Redis，要按时间或标签失效。第四层是客户端状态缓存，比如 TanStack Query、Pinia 里的数据，存在浏览器内存里，用户登出时要清空。</p>
 <p>每层的范围和失效方式都不一样，所以出问题时要先搞清楚是哪一层。</p>
 <p>最要紧的一条：带用户名、权限、订单这些个性化内容的响应，不能用 <code>public</code> 缓存。缓存键要包含用户、语言、权限等所有会影响结果的因素，否则一个人的页面可能发给另一个人。</p>
 </blockquote>
@@ -16,7 +16,7 @@ var e={answerHtml:`<h2>简答</h2>
 <h2>个性化页面怎么设</h2>
 <div class="not-prose code-block"><div class="code-language">http</div><pre><code class="hljs language-http">Cache-Control: private, no-store
 </code></pre></div>
-<p>如果一个页面大部分是公共内容，只有头像、购物车数量是个人的，整页都不缓存就太浪费了。可以把页面当公共内容缓存，个性化的部分在客户端单独请求；或者用框架的部分预渲染，让个性化部分在请求时生成。</p>
+<p>如果一个页面大部分是公共内容，只有头像、购物车数量是个人的，整页都不缓存就太浪费了。可以把页面当公共内容缓存，个性化的部分在客户端单独请求；或者用框架的流式渲染，让个性化部分在请求时生成。Next.js 里各层缓存的具体写法见<a href="/questions/render-next-cache/">《Next.js App Router 中的几层缓存怎样区分？》</a>。</p>
 <p>有人会想用 <code>Vary: Cookie</code> 让 CDN 按用户区分缓存，这不可靠。Cookie 里通常有各种和页面无关的字段，每个人都不一样，缓存几乎命中不了。更危险的是，一旦 CDN 配置忽略了 <code>Vary</code>，就会把一个人的页面发给其他人。</p>
 <h2>静态资源怎么设</h2>
 <p>打包出来的 JS、CSS 文件名里带了内容哈希，比如 <code>app.3f9a1c.js</code>，内容一变名字就变。所以同一个名字的文件永远不会变，可以放心长期缓存：</p>

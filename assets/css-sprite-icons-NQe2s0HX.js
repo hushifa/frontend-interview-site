@@ -1,8 +1,8 @@
 var e={answerHtml:`<h2>简答</h2>
 <blockquote>
-<p>比如导航栏有十几个小图标。早期的做法是把它们拼成一张大图，叫雪碧图（CSS Sprite），每个元素用 <code>background-position</code> 只露出其中一块。后来出现了 icon font，把图标做成字体文件；再后来是 SVG Sprite，把每个图标写成 <code>&lt;symbol&gt;</code>，用 <code>&lt;use&gt;</code> 引用。</p>
-<p>雪碧图要解决的是请求数。MDN 的说法是，把多张图合成一张发送更省内存和带宽，HTTP 请求也少了。可是它是位图，放大会糊，改一个图标要重新拼图，坐标也可能全变。icon font 解决了缩放和换色，因为图标就是文字，<code>color</code>、<code>font-size</code> 直接生效，但只能单色，而且 CSS 生成的内容不在无障碍树里，部分读屏软件读不出来。</p>
-<p>SVG Sprite 是矢量，可以多色，图形里写 <code>currentColor</code> 就能跟随文字颜色，<code>&lt;symbol&gt;</code> 只定义一次，在多处引用。所以现在新项目多用 SVG Sprite，或者在 React、Vue 里把每个 SVG 做成组件按需打包。</p>
+<p>比如导航栏有十几个小图标。早期的做法是把它们拼成一张大图，叫雪碧图（CSS Sprite），每个元素用 <code>background-position</code> 只露出其中一块。后来的 SVG Sprite 沿用了合并的思路，把每个图标写成 <code>&lt;symbol&gt;</code>，用 <code>&lt;use&gt;</code> 引用。</p>
+<p>雪碧图要解决的是请求数。MDN 的说法是，把多张图合成一张发送更省内存和带宽，HTTP 请求也少了。可是它是位图，放大会糊，改一个图标要重新拼图，坐标也可能全变。</p>
+<p>SVG Sprite 同样把整套图标放进一个文件，但它是矢量，按 <code>id</code> 引用，新增图标不影响别的图标。<code>&lt;symbol&gt;</code> 只定义一次，在多处引用。</p>
 <p>要注意，合并文件的前提变了。MDN 在雪碧图的文档里提醒，用 HTTP/2 时，多个小请求可能反而更省带宽，因为 HTTP/2 能在同一个连接上并行请求。另外 <code>&lt;use&gt;</code> 引用外部文件时，浏览器可能拒绝跨域地址，图标文件要和页面同源。</p>
 </blockquote>
 <h2>雪碧图解决了什么问题</h2>
@@ -38,10 +38,9 @@ icons.<span class="hljs-title function_">splice</span>(<span class="hljs-number"
 <h2>HTTP/2 下还要不要合并</h2>
 <p>MDN 在雪碧图文档里专门加了一句提醒：用 HTTP/2 时，多个小请求实际上可能更省带宽。原因在 HTTP/2 的设计上，MDN 介绍 HTTP 演进时说，HTTP/2 是多路复用的协议，可以在同一个连接上并行发出多个请求，去掉了 HTTP/1.x 的限制，还压缩了请求头。</p>
 <p>所以合并文件的收益变小了。可是合并也有代价：改一个图标，整张图的缓存都失效，用户要重新下载全部。拆开以后，每个图标单独缓存，页面也只下载它用到的那几个。具体怎么做还是要用实际页面测，HTTP 各版本的差别见<a href="/questions/http-versions/">《HTTP/1.1、HTTP/2 和 HTTP/3 的主要区别是什么？》</a>。</p>
-<h2>icon font 和 SVG Sprite 各自补上了什么</h2>
-<p>icon font 补上的是缩放和换色。图标画成字体里的字形，矢量缩放不糊，<code>color</code> 和 <code>font-size</code> 直接生效，一份字体文件包含整套图标，和雪碧图一样只需一次请求。它留下的问题也来自“是文字”：一个字形只能填一种颜色；字体没下载完时图标显示不出来；CSS 生成的内容不在无障碍树中，部分读屏软件读不出来。</p>
-<p>SVG Sprite 把“合并成一个文件”的思路换成了矢量。MDN 介绍 <code>&lt;symbol&gt;</code> 时说，它定义图形模板，本身不渲染，只有被 <code>&lt;use&gt;</code> 引用的实例才会显示。和雪碧图相比，它按 <code>id</code> 引用，新增图标不会影响其他图标的坐标；和 icon font 相比，它是真正的图形，可以多色，也可以用 <code>currentColor</code> 跟随文字颜色。</p>
-<p>外部文件 <code>&lt;use href=&quot;/icons.svg#icon-close&quot;&gt;</code> 能让整套图标被单独缓存，这和雪碧图的合并思路一致，但 MDN 说明浏览器可能拒绝 <code>&lt;use&gt;</code> 加载跨域地址，图标文件要和页面同源。三种方案在今天怎样选、无障碍怎样处理，见<a href="/questions/html-icon-solutions/">《图标方案怎样选？iconfont、SVG Sprite 和图标组件各有什么优缺点？》</a>。</p>
+<h2>SVG Sprite 怎样接过合并的思路</h2>
+<p>SVG Sprite 把“合并成一个文件”的思路换成了矢量。MDN 介绍 <code>&lt;symbol&gt;</code> 时说，它定义图形模板，本身不渲染，只有被 <code>&lt;use&gt;</code> 引用的实例才会显示。和雪碧图相比，它按 <code>id</code> 引用，新增图标不会影响其他图标的坐标，也不用为高分屏另拼一张 2 倍图。</p>
+<p>外部文件 <code>&lt;use href=&quot;/icons.svg#icon-close&quot;&gt;</code> 能让整套图标被单独缓存，这和雪碧图的合并思路一致，但 MDN 说明浏览器可能拒绝 <code>&lt;use&gt;</code> 加载跨域地址，图标文件要和页面同源。中间还流行过 icon font，它和 SVG Sprite、图标组件在今天怎样选，以及无障碍怎样处理，见<a href="/questions/html-icon-solutions/">《图标方案怎样选？iconfont、SVG Sprite 和图标组件各有什么优缺点？》</a>。</p>
 <h2>常见追问</h2>
 <p><strong>雪碧图在高分屏上发虚怎么办？</strong></p>
 <blockquote>

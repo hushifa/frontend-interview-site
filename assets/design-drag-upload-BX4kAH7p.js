@@ -119,7 +119,7 @@ dropZone.<span class="hljs-title function_">addEventListener</span>(<span class=
 </code></pre></div>
 <p>没有文件时直接返回，不调用 <code>preventDefault()</code>，这样在输入框里粘贴文字仍然正常。拿到的文件交给同一个 <code>handleFiles</code>，所以校验、预览、上传都不用再写一遍。</p>
 <h2>和上传流程怎样衔接</h2>
-<p><code>handleFiles</code> 校验通过以后，给每个文件生成本地预览，放进上传队列，限制同时上传的个数，并显示每个文件的进度和失败重试。预览的写法见<a href="/questions/alg-image-upload-preview/">《图片上传前怎样本地预览？FileReader 和 URL.createObjectURL 有什么区别？》</a>；单个文件很大时要分片上传，见<a href="/questions/design-large-upload/">《大文件上传怎样设计分片、断点续传、秒传和并发控制？》</a>。</p>
+<p><code>handleFiles</code> 校验通过以后，给每个文件生成本地预览，放进上传队列，限制同时上传的个数，并显示每个文件的进度和失败重试。预览的写法见<a href="/questions/alg-image-upload-preview/">《图片上传前怎样本地预览？FileReader 和 URL.createObjectURL 有什么区别？》</a>；单个文件很大时要分片上传，见<a href="/questions/design-large-upload/">《大文件上传系统怎样设计秒传、服务端合并、存储和限流？》</a>。</p>
 <p>拖拽区域也要保留一个 <code>&lt;input type=&quot;file&quot; multiple&gt;</code>，点击区域就能打开文件选择框。只靠拖拽，键盘用户和触屏用户就没法上传。在页面里拖动元素排序是另一回事，见<a href="/questions/design-drag-sort/">《怎样实现拖拽排序？HTML5 拖放 API 和 Pointer 事件怎么选？》</a>。</p>
 <h2>常见追问</h2>
 <p><strong>为什么我的 drop 事件不触发？</strong></p>

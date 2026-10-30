@@ -8,7 +8,7 @@ var e={answerHtml:`<h2>简答</h2>
 <h2>require 怎样找到文件</h2>
 <p><code>require</code> 的参数分三种情况。以 <code>/</code>、<code>./</code>、<code>../</code> 开头的是文件路径，相对路径按当前模块所在的目录来算。找不到精确的文件名时，Node.js 会依次补上 <code>.js</code>、<code>.json</code>、<code>.node</code> 再试；<code>.json</code> 当 JSON 解析，<code>.node</code> 当编译好的原生插件加载。其他扩展名（比如 <code>.cjs</code>）要写全。</p>
 <p>不带路径前缀的，要么是内置模块，要么去 <code>node_modules</code> 里找。查找从当前模块所在目录开始，拼上 <code>/node_modules</code>，找不到就往上一级目录，一直找到文件系统根目录。比如 <code>/home/ry/projects/foo.js</code> 里写 <code>require(&#x27;bar.js&#x27;)</code>，会依次找 <code>/home/ry/projects/node_modules/bar.js</code>、<code>/home/ry/node_modules/bar.js</code>、<code>/home/node_modules/bar.js</code>、<code>/node_modules/bar.js</code>。</p>
-<p>找到包以后，包里 <code>package.json</code> 的 <code>exports</code> 字段会决定实际加载哪个文件，这部分规则见<a href="/questions/node-module-resolution/">《Node.js 的 package exports 会怎样影响模块解析？》</a>。全都找不到，<code>require</code> 会抛出 <code>MODULE_NOT_FOUND</code> 错误。</p>
+<p>找到包以后，包里 <code>package.json</code> 的 <code>exports</code> 字段会决定实际加载哪个文件，这部分规则见<a href="/questions/node-module-resolution/">《Node.js 怎样解析一个包的导入路径？require(esm) 有什么限制？》</a>。全都找不到，<code>require</code> 会抛出 <code>MODULE_NOT_FOUND</code> 错误。</p>
 <h2>模块代码为什么被包进一个函数</h2>
 <p>Node.js 文档给出的包装器长这样：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">(<span class="hljs-keyword">function</span> (<span class="hljs-params"><span class="hljs-built_in">exports</span>, <span class="hljs-built_in">require</span>, <span class="hljs-variable language_">module</span>, __filename, __dirname</span>) {
@@ -73,5 +73,5 @@ var e={answerHtml:`<h2>简答</h2>
 </blockquote>
 <p><strong>require 能加载 ES 模块吗？</strong></p>
 <blockquote>
-<p>Node.js 22.12、20.19 起去掉了 <code>--experimental-require-module</code> 标志，可以 <code>require()</code> 同步的 ES 模块；25.4 起文档把它标为不再是实验特性。模块里有顶层 <code>await</code> 时不能这样加载。两种模块格式怎样判定，见<a href="/questions/node-module-resolution/">《Node.js 的 package exports 会怎样影响模块解析？》</a>。</p>
+<p>Node.js 22.12、20.19 起去掉了 <code>--experimental-require-module</code> 标志，可以 <code>require()</code> 同步的 ES 模块；25.4 起文档把它标为不再是实验特性。模块里有顶层 <code>await</code> 时不能这样加载。两种模块格式怎样判定，见<a href="/questions/node-module-resolution/">《Node.js 怎样解析一个包的导入路径？require(esm) 有什么限制？》</a>。</p>
 </blockquote>`};export{e as default};

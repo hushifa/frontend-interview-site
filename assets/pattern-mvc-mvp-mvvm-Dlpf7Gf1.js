@@ -73,7 +73,7 @@ viewModel.<span class="hljs-title function_">increment</span>();
 <p>两段代码做的事情一样，区别在于谁去更新界面。MVP 里，Presenter 改完数据以后亲自调用 <code>view.render()</code>，所以测试 Presenter 时要传一个假的 View 进去，像这里的 <code>fakeView</code>。</p>
 <p>MVVM 里，<code>createViewModel</code> 根本没有 View 参数。它只改数据，再通知“<code>count</code> 变了”；是外面的绑定代码（这里用 <code>onPropertyChanged</code> 模拟）订阅通知、更新 <code>boundText</code>。测试 ViewModel 时直接调用 <code>increment()</code>、读 <code>count</code> 就行，不需要任何界面。真实的 MVVM 框架里，这段绑定代码由框架提供，开发者在模板里声明“这里显示 <code>count</code>”。</p>
 <h2>前端框架更接近哪一种</h2>
-<p>先说 Vue。Vue 2 官方文档写的是：Vue 虽然没有严格遵循 MVVM 模式，但设计上部分受到了它的启发，并且习惯用变量 <code>vm</code>（ViewModel 的缩写）指代 Vue 实例。也就是说，组件实例大致扮演 ViewModel，模板是 View，模板里的绑定由框架负责。具体怎样对应，以及 Vue 3 文档为什么不再用 MVVM 来介绍，见<a href="/questions/vue-mvvm/">《MVVM 是什么？Vue 是怎样体现 MVVM 的？》</a>。</p>
+<p>先说 Vue。Vue 2 官方文档写的是：Vue 虽然没有严格遵循 MVVM 模式，但设计上部分受到了它的启发，并且习惯用变量 <code>vm</code>（ViewModel 的缩写）指代 Vue 实例。也就是说，组件实例大致扮演 ViewModel，模板是 View，模板里的绑定由框架负责。绑定具体靠响应式系统、模板编译和 v-model 实现，见<a href="/questions/vue-mvvm/">《Vue 是怎样实现 MVVM 里的数据绑定的？》</a>。</p>
 <p>再说 React。React 官方文档没有说自己属于哪种模式。Thinking in React 一文讲的是单向数据流：数据从顶层组件经 props 一层层传到下面；子组件想改数据，要调用父组件传下来的回调。文档还说，这种写法让数据流向更清楚，但比双向数据绑定多写一点代码。所以 React 不提供 MVVM 那种 View 和 ViewModel 之间的双向绑定，不适合直接套用 MVVM 的说法。</p>
 <p>因此比较稳妥的回答是：Vue 官方承认受 MVVM 启发；React 官方用单向数据流描述自己；至于“React 是 MVC 里的 V”这类说法，React 官方文档里没有，不要当成定论去讲。</p>
 <h2>常见追问</h2>

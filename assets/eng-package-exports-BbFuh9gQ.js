@@ -41,7 +41,7 @@ var e={answerHtml:`<h2>简答</h2>
 <p><code>main</code> 是旧的单入口字段。有 <code>exports</code> 时它会被忽略，保留它只是为了兼容不支持 <code>exports</code> 的旧工具。</p>
 <h2>同时发布两个版本有什么风险</h2>
 <p>同一个包的 ESM 版本和 CommonJS 版本，可能在一个应用里同时被加载。这时它们各自有一份模块状态，比如单例、缓存、<code>instanceof</code> 用到的类，就会出现两份，互相不认识。</p>
-<p>如果包有模块级的状态，可以让两个入口共用同一份实现，或者干脆只提供 ESM。Node.js 22.12+ 和 20.19+ 已经支持用 <code>require()</code> 加载同步的 ESM 模块，所以新包只发布 ESM 的成本比以前低了。</p>
+<p>如果包有模块级的状态，可以让两个入口共用同一份实现，或者干脆只提供 ESM。新版 Node.js 已经能用 <code>require()</code> 加载同步的 ESM，Node.js 拿到导入路径后怎样一步步选中文件、<code>require(esm)</code> 有什么限制，见<a href="/questions/node-module-resolution/">《Node.js 怎样解析一个包的导入路径？require(esm) 有什么限制？》</a>。</p>
 <h2>常见追问</h2>
 <p><strong>为什么加了 <code>exports</code> 以后，别人的代码报错了？</strong></p>
 <blockquote>

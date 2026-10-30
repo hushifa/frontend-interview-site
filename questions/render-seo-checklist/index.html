@@ -34,7 +34,7 @@
 <p>要注意，robots.txt 是管抓取流量的，不是藏页面的。被它屏蔽的网址仍可能出现在搜索结果里，想不被索引要用 <code>noindex</code> 或密码保护。</p>
 </blockquote>
 <h2>先分清这道题和渲染方式的关系</h2>
-<p>CSR、SSR、SSG 各自对 SEO 有什么影响，SPA 刷新为什么 404，见<a href="/questions/render-seo-deploy/">《前端渲染方式怎样影响 SEO 和部署？》</a>。这道题不再重复原理，而是按 Google 搜索中心的文档，列出前端能做的具体检查项。</p>
+<p>CSR、SSR、SSG、预渲染各自对 SEO 有什么影响，SPA 部署时的路径回退和 404 怎样处理，见<a href="/questions/render-seo-deploy/">《前端渲染方式怎样影响 SEO 和部署？》</a>。这道题不再重复原理，而是按 Google 搜索中心的文档，列出前端能做的具体检查项。</p>
 <p>Google 处理 JavaScript 页面分三个阶段：抓取、渲染、编入索引。下面的清单也按“找得到、看得懂、展示得好”来排。</p>
 <h2>让搜索引擎找得到</h2>
 <p><strong>链接要用 <code>&lt;a href&gt;</code>。</strong> Google 文档写明，一般来说只有链接是带 <code>href</code> 属性的 <code>&lt;a&gt;</code> 元素时，Google 才能抓取它；没有 <code>href</code> 的 <code>&lt;a&gt;</code>，或者靠脚本事件充当链接的其他标签，Google 无法可靠地提取网址。所以 <code>&lt;span onClick={() =&gt; navigate(&#x27;/item/1&#x27;)}&gt;</code> 这种写法要改成路由库提供的 <code>&lt;Link&gt;</code>，它最终会渲染成 <code>&lt;a href&gt;</code>。</p>
@@ -46,7 +46,7 @@
 <p><strong>写 <code>meta description</code>。</strong> 摘要文档说，Google 会根据正文和 meta description 生成搜索结果中的摘要。描述要针对每页单独写，包含作者、价格这类有用信息，不要写成关键词列表；页面很多时可以按模板用程序生成。</p>
 <p><strong>设置 <code>canonical</code>。</strong> 同一个商品可能有 <code>?from=ad</code>、<code>?sort=price</code> 等多个网址。用 <code>&lt;link rel=&quot;canonical&quot; href=&quot;...&quot;&gt;</code> 告诉 Google 哪个是规范网址。规范化文档列出的方法还有 HTTP 头里的 <code>rel=&quot;canonical&quot;</code>、sitemap 和重定向，并建议优先选择 HTTPS 网址。单页应用里 canonical 要随路由切换正确更新。</p>
 <p><strong>状态码要真实。</strong> JavaScript SEO 文档要求使用有意义的 HTTP 状态码。单页应用找不到数据时，如果仍然返回 200 加一个“未找到”的页面，就成了 soft 404。文档给的办法是重定向到服务器真正返回 404 的网址，或者在页面上加 <code>&lt;meta name=&quot;robots&quot; content=&quot;noindex&quot;&gt;</code>。</p>
-<p><strong>正文要能被看到。</strong> Google 能渲染 JavaScript，但文档也指出服务端渲染或预渲染能让用户和爬虫都更快拿到内容。用 Web Components 时，要确保内容出现在渲染后的 HTML 里。动态渲染（只给爬虫返回服务端渲染版本）被 Google 标为临时解决方法，并说明有比它更好的方案。</p>
+<p><strong>正文要能被看到。</strong> 正文要出现在初始 HTML 或渲染后的 DOM 里，选哪种渲染方式见<a href="/questions/render-seo-deploy/">《前端渲染方式怎样影响 SEO 和部署？》</a>。用 Web Components 时，要确保内容出现在渲染后的 HTML 里。动态渲染（只给爬虫返回服务端渲染版本）被 Google 标为临时解决方法，并说明有比它更好的方案。</p>
 <p><strong>加结构化数据。</strong> 结构化数据用 JSON-LD、Microdata 或 RDFa 描述页面是什么，比如商品的名称、价格和评分，有机会获得富媒体搜索结果。Google 文档在大多数情况下推荐 JSON-LD，可以用 Rich Results Test 验证。</p>
 <div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;application/ld+json&quot;</span>&gt;</span><span class="javascript">
 {

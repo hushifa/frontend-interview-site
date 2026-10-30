@@ -65,7 +65,7 @@ var e={answerHtml:`<h2>简答</h2>
 </code></pre></div>
 <p>不是 <code>fetch</code> 的数据源，比如直接查数据库，用 <code>unstable_cache</code> 包一层。要特别注意的是，Next 14 里 <code>fetch</code> 默认是缓存的，从 14 升到 15 时这个默认值反过来了。</p>
 <h2>个性化数据不能缓存成共享结果</h2>
-<p>读 cookie 或用户身份的组件，不要用普通的 <code>&#x27;use cache&#x27;</code> 缓存，否则一个人的结果可能被别人拿到。可以把用户 ID 作为参数传给缓存函数，这样它会成为缓存键的一部分；或者用 <code>&#x27;use cache: private&#x27;</code>。CDN 层的个性化缓存问题，详见<a href="/questions/rendering-cache-semantics/">《SSR 和 SSG 中的缓存层应该怎样区分？》</a>。</p>
+<p>读 cookie 或用户身份的组件，不要用普通的 <code>&#x27;use cache&#x27;</code> 缓存，否则一个人的结果可能被别人拿到。可以把用户 ID 作为参数传给缓存函数，这样它会成为缓存键的一部分；或者用 <code>&#x27;use cache: private&#x27;</code>。CDN 上 <code>Cache-Control</code>、<code>Vary</code> 怎样设，和框架无关的部分见<a href="/questions/rendering-cache-semantics/">《SSR 和 SSG 中的缓存层应该怎样区分？》</a>。</p>
 <h2>常见追问</h2>
 <p><strong><code>&#x27;use cache&#x27;</code> 和 React 的 <code>cache</code> 有什么区别？</strong></p>
 <blockquote>
