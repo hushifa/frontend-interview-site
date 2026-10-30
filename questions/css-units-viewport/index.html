@@ -11,64 +11,61 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="HTML / CSS面试题：字号和间距用 rem，用户调大浏览器字号时会跟着变；跟着组件字号走的局部尺寸用 em；细边框用 px。百分比参照什么要看属性。" />
-    <title>px、rem、em、百分比和动态视口单位怎么选？ · 前端知库</title>
+    <meta name="description" content="HTML / CSS面试题：视口单位按视口尺寸的百分比计算，1vw 是视口宽度的 1%。" />
+    <title>vw、vh、svh、lvh、dvh 有什么区别？移动端整屏高度怎么写？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/css-units-viewport/" />
     <meta name="robots" content="index,follow" />
     <meta property="og:type" content="article" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
-    <meta property="og:title" content="px、rem、em、百分比和动态视口单位怎么选？ · 前端知库" />
-    <meta property="og:description" content="HTML / CSS面试题：字号和间距用 rem，用户调大浏览器字号时会跟着变；跟着组件字号走的局部尺寸用 em；细边框用 px。百分比参照什么要看属性。" />
+    <meta property="og:title" content="vw、vh、svh、lvh、dvh 有什么区别？移动端整屏高度怎么写？" />
+    <meta property="og:description" content="HTML / CSS面试题：视口单位按视口尺寸的百分比计算，1vw 是视口宽度的 1%。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/css-units-viewport/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-units-viewport/#webpage","url":"https://fe.hushifa.top/questions/css-units-viewport/","name":"px、rem、em、百分比和动态视口单位怎么选？ · 前端知库","description":"HTML / CSS面试题：字号和间距用 rem，用户调大浏览器字号时会跟着变；跟着组件字号走的局部尺寸用 em；细边框用 px。百分比参照什么要看属性。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-units-viewport/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-units-viewport/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"px、rem、em、百分比和动态视口单位怎么选？","item":"https://fe.hushifa.top/questions/css-units-viewport/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-units-viewport/#webpage","url":"https://fe.hushifa.top/questions/css-units-viewport/","name":"vw、vh、svh、lvh、dvh 有什么区别？移动端整屏高度怎么写？","description":"HTML / CSS面试题：视口单位按视口尺寸的百分比计算，1vw 是视口宽度的 1%。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-units-viewport/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-units-viewport/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"vw、vh、svh、lvh、dvh 有什么区别？移动端整屏高度怎么写？","item":"https://fe.hushifa.top/questions/css-units-viewport/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-BVmbcf0v.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-DkvyXEpT.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">px、rem、em、百分比和动态视口单位怎么选？</span></nav><h1 tabindex="-1">px、rem、em、百分比和动态视口单位怎么选？</h1><p class="reading-summary">字号和间距用 rem，用户调大浏览器字号时会跟着变；跟着组件字号走的局部尺寸用 em；细边框用 px。百分比参照什么要看属性。移动端整屏高度用 svh、lvh、dvh 区分工具栏展开和收起。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">vw、vh、svh、lvh、dvh 有什么区别？移动端整屏高度怎么写？</span></nav><h1 tabindex="-1">vw、vh、svh、lvh、dvh 有什么区别？移动端整屏高度怎么写？</h1><p class="reading-summary">视口单位按视口尺寸的百分比计算，1vw 是视口宽度的 1%。手机浏览器的工具栏会展开收起，所以视口高度分成三种：svh 按工具栏展开时的小视口算，lvh 按收起时的大视口算，dvh 跟着当前状态变化，目前的 vh 等同于 lvh。首屏整屏用 svh，全屏应用外壳用 dvh；100vw 不扣除滚动条，相对父元素要用百分比或容器查询单位。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
 <blockquote>
-<p>字号和主要的间距用 <code>rem</code>，它相对根元素的字号。用户在浏览器设置里调大默认字号，整个页面会一起放大。用 <code>px</code> 写死字号，就把用户的这个设置忽略了。</p>
-<p><code>em</code> 相对当前元素的字号，适合跟着组件一起缩放的尺寸，比如按钮内边距写成 <code>em</code>，按钮字号变大，内边距也跟着变大。要注意 <code>em</code> 嵌套使用时会一层层叠加。边框、阴影这类不需要跟着字号变的细节，用 <code>px</code>。</p>
-<p>百分比参照什么，要看是哪个属性。<code>width</code> 参照包含块的宽度；<code>padding</code> 和 <code>margin</code> 也参照包含块的宽度，上下方向也是；<code>transform: translate</code> 参照元素自己。</p>
-<p>移动端整屏高度最容易出问题。<code>100vh</code> 等于工具栏收起时的大视口，页面刚打开时工具栏是展开的，底部就被遮住了。<code>100svh</code> 是工具栏展开时的小视口，<code>100dvh</code> 跟着工具栏实时变化。</p>
+<p>视口单位是按浏览器可视区域的大小来算的，<code>1vw</code> 是视口宽度的 1%，<code>1vh</code> 是视口高度的 1%。它们和字号、父元素都没有关系。</p>
+<p>麻烦出在手机上。手机浏览器的地址栏和工具栏会随滚动收起、展开，视口高度一直在变。所以规范把视口分成三种：<code>svh</code> 按工具栏全部展开时的小视口算，<code>lvh</code> 按全部收起时的大视口算，<code>dvh</code> 跟着工具栏当前的状态实时变化。MDN 写明，目前浏览器里的 <code>vh</code> 都等同于 <code>lvh</code>。</p>
+<p>这就解释了老问题：页面刚打开时工具栏是展开的，<code>height: 100vh</code> 却按收起时的高度算，底部就被遮住了。首屏内容必须完整可见时用 <code>100svh</code>；全屏应用的外壳用 <code>100dvh</code>；普通长页面里不要用 <code>dvh</code>，用户一滚动它就变，元素高度跟着跳。</p>
+<p>宽度方向也有坑。<code>100vw</code> 按“没有滚动条”来算，桌面上有竖向滚动条时它比页面可用宽度更宽，会多出横向滚动条。要相对父元素就用百分比，要相对组件容器就用 <code>cqi</code> 这类容器查询单位。</p>
 </blockquote>
-<h2>一个常见的组合</h2>
-<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-tag">html</span> {
-  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">100%</span>;
-}
-
-<span class="hljs-selector-tag">body</span> {
-  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">1rem</span>;
-}
-
-<span class="hljs-selector-class">.button</span> {
-  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">1.125rem</span>;
-  <span class="hljs-attribute">padding</span>: <span class="hljs-number">0.5em</span> <span class="hljs-number">1em</span>;
-  <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid;
-}
-
-<span class="hljs-selector-class">.hero</span> {
+<h2>三种视口高度分别是多少</h2>
+<p>手机浏览器的工具栏会随着滚动收起和展开，所以“视口有多高”有三种答案。CSS Values 4 规范的定义是：</p>
+<table><thead><tr><th>单位</th><th>按什么算</th><th>会不会变</th></tr></thead><tbody><tr><td><code>svh</code></td><td>工具栏全部展开时的视口，也就是最小的</td><td>只有视口本身改变尺寸时才变</td></tr><tr><td><code>lvh</code></td><td>工具栏全部收起时的视口，也就是最大的</td><td>只有视口本身改变尺寸时才变</td></tr><tr><td><code>dvh</code></td><td>按工具栏当前的状态动态计算</td><td>滚动时工具栏一动就变</td></tr></tbody></table>
+<p><code>vh</code> 呢？规范允许浏览器自己决定它按哪种算，MDN 写明目前所有浏览器的 <code>vh</code>、<code>vw</code> 等默认视口单位都等同于 <code>lv*</code> 那一套。宽度方向同理，也有 <code>svw</code>、<code>lvw</code>、<code>dvw</code>，只是手机上工具栏一般只影响高度。</p>
+<h2>整屏高度该写哪个</h2>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.hero</span> {
+  <span class="hljs-attribute">min-block-size</span>: <span class="hljs-number">100vh</span>;   <span class="hljs-comment">/* 不支持新单位的浏览器用这一行 */</span>
   <span class="hljs-attribute">min-block-size</span>: <span class="hljs-number">100s</span>vh;
 }
+
+<span class="hljs-selector-class">.app-shell</span> {
+  <span class="hljs-attribute">block-size</span>: <span class="hljs-number">100</span>dvh;
+}
 </code></pre></div>
-<p>根字号保持 <code>100%</code>，也就是用户设置的默认字号。按钮的内边距用 <code>em</code>，是按按钮自己的 1.125rem 来算的。边框用 <code>1px</code>，不管字号多大都是一条细线。首屏区块用 <code>100svh</code>，保证工具栏展开时也能完整看到。</p>
-<p>以前流行把根字号设成 <code>62.5%</code>，让 1rem 等于 10px，方便换算。可是这改变了用户默认字号的基准，现在一般不推荐。</p>
-<h2>三种视口高度怎么选</h2>
-<p>手机浏览器的地址栏和工具栏会随着滚动收起和展开，所以视口高度不是一个固定值。</p>
-<p><code>svh</code> 是工具栏全部展开时的高度，也就是最小的视口。首屏内容必须完整可见时用它。</p>
-<p><code>lvh</code> 是工具栏全部收起时的高度，也就是最大的视口。背景、装饰这类被挡住一点也无所谓的，可以用它。</p>
-<p><code>dvh</code> 是当前实际的高度，会变。适合全屏应用的外壳。可是在长页面里，用户一滚动工具栏就变，<code>dvh</code> 的元素高度也跟着跳，所以不要用在普通区块上。</p>
-<h2>其他常用单位</h2>
-<p><code>ch</code> 是当前字体里“0”这个字符的宽度，<code>max-inline-size: 65ch</code> 常用来控制正文一行的长度。</p>
-<p><code>lh</code> 是当前的行高，适合按行数设置高度。</p>
-<p><code>cqi</code> 是容器查询单位，相对于查询容器的行内尺寸。</p>
-<p><code>vw</code> 包含滚动条的宽度。所以桌面上有竖向滚动条时，<code>width: 100vw</code> 比页面可用宽度更宽，会多出横向滚动条。</p>
+<p>首屏区块写 <code>100svh</code>，因为它按工具栏展开时算，用户刚打开页面时就能完整看到。前面那行 <code>100vh</code> 是回退，不认识 <code>svh</code> 的浏览器会丢掉第二条声明，继续用第一条。</p>
+<p><code>dvh</code> 适合聊天窗口、地图这种整屏固定、内部自己滚动的应用外壳，工具栏收起时它跟着变高，不会留空白。可是 MDN 也提醒，基于动态视口的单位会让内容在用户滚动时改变尺寸，影响体验，还可能带来性能开销。所以长页面里的普通区块不要用 <code>dvh</code>。</p>
+<p><code>lvh</code> 用得少，适合被遮住一点也无所谓的背景、装饰。</p>
+<h2>为什么 100vw 会多出横向滚动条</h2>
+<p>规范规定，除非根元素的 <code>overflow</code> 设成了 <code>scroll</code> 这类一定出现滚动条的值，视口单位都按“滚动条不存在”来计算。普通页面是 <code>overflow: auto</code>，内容一长出现竖向滚动条，<code>100vw</code> 却还按没有滚动条的宽度算，比页面实际可用的宽度多出一条滚动条宽，于是又多出一个横向滚动条。</p>
+<p>所以撑满宽度一般写 <code>width: 100%</code>，而不是 <code>100vw</code>。</p>
+<h2>视口单位、百分比和容器查询单位怎么分</h2>
+<p>视口单位只看视口。一个 <code>width: 50vw</code> 的元素放进 300px 宽的侧栏里，宽度仍然是视口的一半，会把侧栏撑破。</p>
+<p>百分比参照什么，要看是哪个属性。<code>width</code> 参照包含块的宽度；<code>padding</code> 和 <code>margin</code> 也参照包含块的宽度，上下方向也一样；<code>transform: translate()</code> 的百分比参照元素自己的尺寸。</p>
+<p>组件要根据自己所在的容器调整尺寸时，用容器查询单位。<code>1cqi</code> 是查询容器行内尺寸的 1%。MDN 说明，找不到合适的查询容器时，它退回到对应方向的小视口单位。</p>
 <h2>常见追问</h2>
-<p><strong>字号要不要跟着屏幕宽度缩放？</strong></p>
+<p><strong>字号能不能用 vw，让文字跟着屏幕宽度缩放？</strong></p>
 <blockquote>
-<p>可以用 <code>clamp(1rem, 0.9rem + 0.5vw, 1.25rem)</code> 这种写法。但中间那部分一定要包含 <code>rem</code>。只写 <code>vw</code> 的话，用户放大页面时视口宽度不变，字号也就不会变大。</p>
-</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/length" target="_blank" rel="noreferrer">MDN · &lt;length&gt;<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+px%E3%80%81rem%E3%80%81em%E3%80%81%E7%99%BE%E5%88%86%E6%AF%94%E5%92%8C%E5%8A%A8%E6%80%81%E8%A7%86%E5%8F%A3%E5%8D%95%E4%BD%8D%E6%80%8E%E4%B9%88%E9%80%89%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Apx%E3%80%81rem%E3%80%81em%E3%80%81%E7%99%BE%E5%88%86%E6%AF%94%E5%92%8C%E5%8A%A8%E6%80%81%E8%A7%86%E5%8F%A3%E5%8D%95%E4%BD%8D%E6%80%8E%E4%B9%88%E9%80%89%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-units-viewport%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-units-viewport%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：px、rem、em、百分比和动态视口单位怎么选？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-rem-em-vw/">rem、em、vw 有什么区别？怎么换算？</a></li><li><a href="/questions/css-centering/">怎样让一个元素水平垂直居中？</a></li><li><a href="/questions/css-clear-float/">清除浮动有哪几种方法？</a></li><li><a href="/questions/css-text-ellipsis/">单行和多行文本省略怎么写？</a></li></ul></nav></main></div></div>
+<p>不要只写 <code>vw</code>。用户在浏览器里放大页面时视口宽度不变，纯 <code>vw</code> 的字号就不会变大。一般写成 <code>clamp(1rem, 0.9rem + 0.5vw, 1.25rem)</code>，让中间那部分也包含 <code>rem</code>。<code>rem</code>、<code>em</code> 的区别和换算见<a href="/questions/css-rem-em-vw/">《rem 和 em 有什么区别？各自怎么换算？》</a>。</p>
+</blockquote>
+<p><strong>设计稿上的 px 怎么换成 vw？</strong></p>
+<blockquote>
+<p>用 <code>px ÷ 设计稿宽度 × 100</code>。比如 375px 宽的设计稿上 75px 的按钮，写成 <code>75 / 375 × 100 = 20vw</code>。整页按 <code>vw</code> 等比缩放的完整方案见<a href="/questions/mobile-adaptation/">《移动端怎样做屏幕适配？1px 边框为什么看起来变粗了？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/length" target="_blank" rel="noreferrer">MDN · &lt;length&gt;<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://www.w3.org/TR/css-values-4/#viewport-relative-lengths" target="_blank" rel="noreferrer">CSS Values and Units Module Level 4 · Viewport-percentage lengths<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+vw%E3%80%81vh%E3%80%81svh%E3%80%81lvh%E3%80%81dvh+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%E7%A7%BB%E5%8A%A8%E7%AB%AF%E6%95%B4%E5%B1%8F%E9%AB%98%E5%BA%A6%E6%80%8E%E4%B9%88%E5%86%99%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Avw%E3%80%81vh%E3%80%81svh%E3%80%81lvh%E3%80%81dvh+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%E7%A7%BB%E5%8A%A8%E7%AB%AF%E6%95%B4%E5%B1%8F%E9%AB%98%E5%BA%A6%E6%80%8E%E4%B9%88%E5%86%99%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-units-viewport%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-units-viewport%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：vw、vh、svh、lvh、dvh 有什么区别？移动端整屏高度怎么写？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-rem-em-vw/">rem 和 em 有什么区别？各自怎么换算？</a></li><li><a href="/questions/html-inputmode/">inputmode 怎样改善移动端输入体验？</a></li><li><a href="/questions/css-centering/">怎样让一个元素水平垂直居中？</a></li><li><a href="/questions/css-clear-float/">清除浮动有哪几种方法？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

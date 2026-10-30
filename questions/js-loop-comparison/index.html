@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="JavaScript面试题：for...in 遍历对象的可枚举字符串键，会带上原型链上的键；for...of 按迭代器取值，能遍历数组、字符串、Map、Set…" />
+    <title>for...in、for...of、forEach 和 map 有什么区别？forEach 能用 break 跳出吗？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/js-loop-comparison/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="for...in、for...of、forEach 和 map 有什么区别？forEach 能用 break 跳出吗？" />
+    <meta property="og:description" content="JavaScript面试题：for...in 遍历对象的可枚举字符串键，会带上原型链上的键；for...of 按迭代器取值，能遍历数组、字符串、Map、Set…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/js-loop-comparison/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-loop-comparison/#webpage","url":"https://fe.hushifa.top/questions/js-loop-comparison/","name":"for...in、for...of、forEach 和 map 有什么区别？forEach 能用 break 跳出吗？","description":"JavaScript面试题：for...in 遍历对象的可枚举字符串键，会带上原型链上的键；for...of 按迭代器取值，能遍历数组、字符串、Map、Set…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-loop-comparison/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-loop-comparison/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"for...in、for...of、forEach 和 map 有什么区别？forEach 能用 break 跳出吗？","item":"https://fe.hushifa.top/questions/js-loop-comparison/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DkvyXEpT.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">for...in、for...of、forEach 和 map 有什么区别？forEach 能用 break 跳出吗？</span></nav><h1 tabindex="-1">for...in、for...of、forEach 和 map 有什么区别？forEach 能用 break 跳出吗？</h1><p class="reading-summary">for...in 遍历对象的可枚举字符串键，会带上原型链上的键；for...of 按迭代器取值，能遍历数组、字符串、Map、Set；forEach 对每个元素调用回调，没有返回值；map 返回由回调结果组成的新数组。forEach 不能用 break，只有抛出异常才能中途停下，要提前结束就改用 for...of、some 或 find。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>拿一个数组 <code>[&#x27;a&#x27;, &#x27;b&#x27;]</code> 来说，<code>for...in</code> 拿到的是键 <code>&#x27;0&#x27;</code>、<code>&#x27;1&#x27;</code>，而且是字符串；<code>for...of</code> 拿到的是值 <code>&#x27;a&#x27;</code>、<code>&#x27;b&#x27;</code>；<code>forEach</code> 和 <code>map</code> 是数组方法，对每个元素调用一次回调，区别是 <code>forEach</code> 返回 <code>undefined</code>，<code>map</code> 返回由回调返回值组成的新数组。</p>
+<p>它们的来源不同。<code>for...in</code> 走的是属性枚举，会遍历对象自己和原型链上可枚举的字符串键，所以适合普通对象，不适合数组。<code>for...of</code> 走的是迭代器，数组、字符串、<code>Map</code>、<code>Set</code>、<code>NodeList</code> 都能用，普通对象不行。</p>
+<p>选的时候看要做什么：遍历对象的键用 <code>Object.keys</code> 或 <code>for...in</code>；要转换成新数组用 <code>map</code>；只是挨个做点事用 <code>forEach</code> 或 <code>for...of</code>；要中途停下或者要 <code>await</code>，用 <code>for...of</code>。</p>
+<p><code>forEach</code> 不能用 <code>break</code>，写在回调里是语法错误，<code>return</code> 也只是结束这一次回调。MDN 写明，除了抛异常，没有办法停止 <code>forEach</code>。要提前结束，就改用 <code>for...of</code> 加 <code>break</code>，或者用 <code>some</code>、<code>find</code> 这类找到就停的方法。</p>
+</blockquote>
+<h2>同一个数组，四种写法拿到什么</h2>
+<p>下面给数组加了一个非下标属性 <code>extra</code>，再在 <code>Array.prototype</code> 上加一个可枚举的方法，看看每种写法会碰到哪些东西。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> list = [<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>];
+list.<span class="hljs-property">extra</span> = <span class="hljs-string">&#x27;x&#x27;</span>;
+<span class="hljs-title class_">Array</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">hello</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {};
+
+<span class="hljs-keyword">const</span> inKeys = [];
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> key <span class="hljs-keyword">in</span> list) inKeys.<span class="hljs-title function_">push</span>(key);
+<span class="hljs-keyword">const</span> ofValues = [];
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> value <span class="hljs-keyword">of</span> list) ofValues.<span class="hljs-title function_">push</span>(value);
+<span class="hljs-keyword">const</span> eachResult = list.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value.<span class="hljs-title function_">toUpperCase</span>());
+<span class="hljs-keyword">const</span> mapResult = list.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value.<span class="hljs-title function_">toUpperCase</span>());
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(inKeys.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 0,1,extra,hello</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-keyword">typeof</span> inKeys[<span class="hljs-number">0</span>]); <span class="hljs-comment">// string</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(ofValues.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// a,b</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">String</span>(eachResult)); <span class="hljs-comment">// undefined</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(mapResult.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// A,B</span>
+
+<span class="hljs-keyword">delete</span> <span class="hljs-title class_">Array</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">hello</span>;
+</code></pre></div>
+<p><code>for...in</code> 拿到了四个键，除了下标，还有 <code>extra</code> 和原型上的 <code>hello</code>。因为它遍历的是可枚举属性，下标只是名字恰好是整数的属性，和 <code>extra</code> 没有区别，原型链上可枚举的属性也会被带上。下标拿到的是字符串 <code>&#x27;0&#x27;</code>，拿去做加法会变成字符串拼接。所以 MDN 建议遍历数组用普通 <code>for</code> 循环、<code>forEach</code> 或 <code>for...of</code>。</p>
+<p><code>for...of</code> 只拿到 <code>a</code>、<code>b</code>。它不看属性，而是调用数组的迭代器，数组的迭代器只按下标产出元素。</p>
+<p><code>forEach</code> 把回调的返回值丢掉，自己返回 <code>undefined</code>。<code>map</code> 收集每次的返回值，组成新数组。只为了副作用而调用 <code>map</code>，会白白造一个数组，这种时候用 <code>forEach</code> 或 <code>for...of</code>。</p>
+<h2>为什么 forEach 停不下来</h2>
+<p><code>break</code> 和 <code>continue</code> 只能写在循环语句里。<code>forEach</code> 的回调是一个普通函数，不是循环体，所以在回调里写 <code>break</code> 会直接报语法错误。在回调里 <code>return</code>，只是让这一次回调结束，<code>forEach</code> 会接着调用下一个元素。</p>
+<p>MDN 的说法是：除了抛出异常，没有办法停止或跳出 <code>forEach</code>，需要这种行为时，<code>forEach</code> 就不是合适的工具。用 <code>try</code>/<code>catch</code> 包住再 <code>throw</code> 虽然能停，但读代码的人很难看出意图。下面是更直接的写法：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> numbers = [<span class="hljs-number">3</span>, <span class="hljs-number">8</span>, <span class="hljs-number">12</span>, <span class="hljs-number">5</span>];
+
+<span class="hljs-keyword">let</span> firstBig;
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> n <span class="hljs-keyword">of</span> numbers) {
+  <span class="hljs-keyword">if</span> (n &gt; <span class="hljs-number">10</span>) {
+    firstBig = n;
+    <span class="hljs-keyword">break</span>;
+  }
+}
+
+<span class="hljs-keyword">const</span> checked = [];
+<span class="hljs-keyword">const</span> hasBig = numbers.<span class="hljs-title function_">some</span>(<span class="hljs-function">(<span class="hljs-params">n</span>) =&gt;</span> {
+  checked.<span class="hljs-title function_">push</span>(n);
+  <span class="hljs-keyword">return</span> n &gt; <span class="hljs-number">10</span>;
+});
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(firstBig); <span class="hljs-comment">// 12</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">String</span>(hasBig)); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(checked.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 3,8,12</span>
+</code></pre></div>
+<p><code>for...of</code> 遇到 12 就 <code>break</code> 出去了。<code>some</code> 也一样，回调返回 <code>true</code> 以后就不再往后调用，从 <code>checked</code> 能看到最后一个 5 没有被检查。只想拿到第一个满足条件的元素，用 <code>find</code> 更短。</p>
+<h2>还有哪些差别</h2>
+<p><code>forEach</code> 和 <code>map</code> 会跳过稀疏数组里的空位，<code>for...of</code> 会把空位读成 <code>undefined</code>，<code>for...in</code> 也会跳过空位。稀疏数组的问题见<a href="/questions/js-array-iteration/">《数组常用方法怎样选择，哪些会修改原数组？》</a>。</p>
+<p><code>forEach</code> 不会等待 <code>async</code> 回调，MDN 写明它期望的是同步函数。要一个一个等，用 <code>for...of</code> 加 <code>await</code>；要一起跑再等全部完成，用 <code>map</code> 收集 Promise 再交给 <code>Promise.all</code>。</p>
+<p><code>for...of</code> 中途 <code>break</code> 或抛出异常时，会调用迭代器的 <code>return()</code> 方法做清理，见<a href="/questions/js-iterator-closing/">《JavaScript 迭代器关闭和 return 方法有什么作用？》</a>。<code>for...in</code> 的键顺序和各个取键方法的范围，见<a href="/questions/js-property-enumeration/">《Object.keys、for...in 和 Reflect.ownKeys 会返回哪些属性？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong><code>for...of</code> 能遍历普通对象吗？</strong></p>
+<blockquote>
+<p>不能，普通对象没有实现迭代器，会抛出 TypeError。要遍历键值对，写 <code>for (const [key, value] of Object.entries(obj))</code>。</p>
+</blockquote>
+<p><strong><code>forEach</code> 里用 <code>return</code> 有什么效果？</strong></p>
+<blockquote>
+<p>只结束当前这一次回调，相当于普通循环里的 <code>continue</code>。后面的元素还会继续被调用，<code>forEach</code> 本身的返回值始终是 <code>undefined</code>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach" target="_blank" rel="noreferrer">MDN · Array.prototype.forEach()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in" target="_blank" rel="noreferrer">MDN · for...in<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of" target="_blank" rel="noreferrer">MDN · for...of<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map" target="_blank" rel="noreferrer">MDN · Array.prototype.map()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+for...in%E3%80%81for...of%E3%80%81forEach+%E5%92%8C+map+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9FforEach+%E8%83%BD%E7%94%A8+break+%E8%B7%B3%E5%87%BA%E5%90%97%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Afor...in%E3%80%81for...of%E3%80%81forEach+%E5%92%8C+map+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9FforEach+%E8%83%BD%E7%94%A8+break+%E8%B7%B3%E5%87%BA%E5%90%97%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-loop-comparison%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-loop-comparison%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：for...in、for...of、forEach 和 map 有什么区别？forEach 能用 break 跳出吗？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-array-iteration/">数组常用方法怎样选择，哪些会修改原数组？</a></li><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-promise-chain/">回调地狱是什么？Promise 链式调用怎样解决它？then 的返回值有哪些规则？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

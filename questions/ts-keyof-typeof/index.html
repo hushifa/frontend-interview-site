@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="TypeScript面试题：keyof 取出对象类型所有键组成的联合类型；类型位置的 typeof 从一个变量拿到它的类型…" />
+    <title>keyof、typeof、索引访问类型和索引签名分别做什么？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/ts-keyof-typeof/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="keyof、typeof、索引访问类型和索引签名分别做什么？" />
+    <meta property="og:description" content="TypeScript面试题：keyof 取出对象类型所有键组成的联合类型；类型位置的 typeof 从一个变量拿到它的类型…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/ts-keyof-typeof/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-keyof-typeof/#webpage","url":"https://fe.hushifa.top/questions/ts-keyof-typeof/","name":"keyof、typeof、索引访问类型和索引签名分别做什么？","description":"TypeScript面试题：keyof 取出对象类型所有键组成的联合类型；类型位置的 typeof 从一个变量拿到它的类型…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-keyof-typeof/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-keyof-typeof/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"keyof、typeof、索引访问类型和索引签名分别做什么？","item":"https://fe.hushifa.top/questions/ts-keyof-typeof/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DkvyXEpT.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">keyof、typeof、索引访问类型和索引签名分别做什么？</span></nav><h1 tabindex="-1">keyof、typeof、索引访问类型和索引签名分别做什么？</h1><p class="reading-summary">keyof 取出对象类型所有键组成的联合类型；类型位置的 typeof 从一个变量拿到它的类型；索引访问类型 T[K] 按键查出属性的类型，T[number] 能取数组元素类型。三者常组合成 keyof typeof obj 和 (typeof arr)[number]。索引签名 [key: string]: V 描述键名事先不知道的字典，所有具名属性都要符合它，读任意键默认被当成 V，开启 noUncheckedIndexedAccess 才会加上 undefined。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>比如有一个配置对象 <code>config = { port: 3000, host: &#x27;localhost&#x27; }</code>，想写一个函数只接受它的键名。<code>typeof config</code> 能从这个变量拿到它的类型，<code>keyof</code> 再把类型的所有键取出来，<code>keyof typeof config</code> 就是 <code>&#x27;port&#x27; | &#x27;host&#x27;</code>。</p>
+<p>三个工具各管一件事。<code>keyof T</code> 得到 <code>T</code> 所有键组成的联合类型。类型位置上的 <code>typeof x</code> 得到变量 <code>x</code> 的类型，它和 JavaScript 里运行时的 <code>typeof</code> 不是一回事，而且只能用在变量名或它的属性上。索引访问类型 <code>T[K]</code> 按键查属性的类型，比如 <code>Person[&#x27;age&#x27;]</code> 是 <code>number</code>；<code>K</code> 可以是联合类型，<code>T[number]</code> 还能取出数组元素的类型。</p>
+<p>组合起来最常见的用途是“从值推出类型”，让值和类型只维护一份。比如 <code>const roles = [&#x27;admin&#x27;, &#x27;editor&#x27;] as const</code>，再写 <code>type Role = (typeof roles)[number]</code>，就得到 <code>&#x27;admin&#x27; | &#x27;editor&#x27;</code>。泛型里写 <code>K extends keyof T</code>，返回 <code>T[K]</code>，就能做到传错键名报错、返回值类型跟着键走。</p>
+<p>索引签名 <code>[key: string]: number</code> 用来描述键名事先不知道的字典。要注意两点：一是有了字符串索引签名后，所有具名属性的类型都必须符合它；二是读一个不存在的键时，默认类型仍然是 <code>number</code>，不会提醒可能是 <code>undefined</code>，要开启 <code>noUncheckedIndexedAccess</code> 才会。</p>
+</blockquote>
+<h2>keyof 和 typeof 组合</h2>
+<p>下面的代码都用 <code>tsc --strict</code> 验证过（TypeScript 7.0.2）。</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Point</span> = { <span class="hljs-attr">x</span>: <span class="hljs-built_in">number</span>; <span class="hljs-attr">y</span>: <span class="hljs-built_in">number</span> };
+<span class="hljs-keyword">type</span> P = keyof <span class="hljs-title class_">Point</span>; <span class="hljs-comment">// &#x27;x&#x27; | &#x27;y&#x27;</span>
+
+<span class="hljs-keyword">const</span> config = { <span class="hljs-attr">port</span>: <span class="hljs-number">3000</span>, <span class="hljs-attr">host</span>: <span class="hljs-string">&#x27;localhost&#x27;</span> };
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Config</span> = <span class="hljs-keyword">typeof</span> config; <span class="hljs-comment">// { port: number; host: string }</span>
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">ConfigKey</span> = keyof <span class="hljs-keyword">typeof</span> config; <span class="hljs-comment">// &#x27;port&#x27; | &#x27;host&#x27;</span>
+
+<span class="hljs-keyword">function</span> getValue&lt;T, K <span class="hljs-keyword">extends</span> keyof T&gt;(<span class="hljs-attr">obj</span>: T, <span class="hljs-attr">key</span>: K): T[K] {
+  <span class="hljs-keyword">return</span> obj[key];
+}
+<span class="hljs-keyword">const</span> port = <span class="hljs-title function_">getValue</span>(config, <span class="hljs-string">&#x27;port&#x27;</span>);
+port.<span class="hljs-title function_">toFixed</span>();
+<span class="hljs-comment">// @ts-expect-error &#x27;prot&#x27; 不是 config 的键</span>
+<span class="hljs-title function_">getValue</span>(config, <span class="hljs-string">&#x27;prot&#x27;</span>);
+</code></pre></div>
+<p>为什么不能直接写 <code>keyof config</code>？因为 <code>keyof</code> 只接受类型，<code>config</code> 是一个值。要先用 <code>typeof</code> 把值变成类型，再交给 <code>keyof</code>。</p>
+<p><code>getValue</code> 的返回值为什么是 <code>number</code>？调用时 <code>K</code> 被推断成 <code>&#x27;port&#x27;</code>，返回类型 <code>T[K]</code> 就是 <code>config</code> 类型里 <code>port</code> 的类型。换成 <code>&#x27;host&#x27;</code>，返回的就是 <code>string</code>。这样写，键名和返回值类型都由编译器检查。</p>
+<p>类型位置的 <code>typeof</code> 有个限制：Handbook 说明它只能用在标识符（变量名）或它们的属性上。<code>typeof getValue(config, &#x27;port&#x27;)</code> 这种对函数调用结果取类型的写法会报语法错误，要拿返回值类型可以用 <code>ReturnType&lt;typeof getValue&gt;</code>。</p>
+<h2>索引访问类型</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Person</span> = { <span class="hljs-attr">age</span>: <span class="hljs-built_in">number</span>; <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>; <span class="hljs-attr">alive</span>: <span class="hljs-built_in">boolean</span> };
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Age</span> = <span class="hljs-title class_">Person</span>[<span class="hljs-string">&#x27;age&#x27;</span>]; <span class="hljs-comment">// number</span>
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">NameOrAge</span> = <span class="hljs-title class_">Person</span>[<span class="hljs-string">&#x27;age&#x27;</span> | <span class="hljs-string">&#x27;name&#x27;</span>]; <span class="hljs-comment">// number | string</span>
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">AnyValue</span> = <span class="hljs-title class_">Person</span>[keyof <span class="hljs-title class_">Person</span>]; <span class="hljs-comment">// number | string | boolean</span>
+
+<span class="hljs-keyword">const</span> roles = [<span class="hljs-string">&#x27;admin&#x27;</span>, <span class="hljs-string">&#x27;editor&#x27;</span>, <span class="hljs-string">&#x27;viewer&#x27;</span>] <span class="hljs-keyword">as</span> <span class="hljs-keyword">const</span>;
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Role</span> = (<span class="hljs-keyword">typeof</span> roles)[<span class="hljs-built_in">number</span>]; <span class="hljs-comment">// &#x27;admin&#x27; | &#x27;editor&#x27; | &#x27;viewer&#x27;</span>
+</code></pre></div>
+<p><code>Person[keyof Person]</code> 是常见写法，表示“所有属性值类型的联合”。数组用 <code>number</code> 去索引，是因为数组的下标是数字，所以 <code>T[number]</code> 就是元素类型。<code>roles</code> 加了 <code>as const</code> 才会得到字面量联合，否则元素会被推断成 <code>string</code>，<code>as const</code> 的细节见<a href="/questions/ts-satisfies-const/">《as const、类型注解和 satisfies 有什么不同？》</a>。</p>
+<p>方括号里只能写类型。Handbook 举过例子，<code>const key = &#x27;age&#x27;</code> 之后写 <code>Person[key]</code> 会报错，因为 <code>key</code> 是值；改成 <code>type key = &#x27;age&#x27;</code> 就可以。</p>
+<h2>索引签名描述字典</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Mapish</span> = { [<span class="hljs-attr">k</span>: <span class="hljs-built_in">string</span>]: <span class="hljs-built_in">boolean</span> };
+<span class="hljs-keyword">type</span> M = keyof <span class="hljs-title class_">Mapish</span>; <span class="hljs-comment">// string | number</span>
+
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">Dictionary</span> {
+  [<span class="hljs-attr">key</span>: <span class="hljs-built_in">string</span>]: <span class="hljs-built_in">number</span>;
+  <span class="hljs-attr">length</span>: <span class="hljs-built_in">number</span>;
+}
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">Bad</span> {
+  [<span class="hljs-attr">key</span>: <span class="hljs-built_in">string</span>]: <span class="hljs-built_in">number</span>;
+  <span class="hljs-comment">// @ts-expect-error 2411：name 的类型必须符合索引签名</span>
+  <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>;
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">scores</span>: <span class="hljs-title class_">Record</span>&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">number</span>&gt; = { <span class="hljs-attr">ada</span>: <span class="hljs-number">90</span> };
+<span class="hljs-keyword">const</span> s = scores.<span class="hljs-property">bob</span>; <span class="hljs-comment">// 默认是 number，开启 noUncheckedIndexedAccess 后是 number | undefined</span>
+</code></pre></div>
+<p><code>keyof Mapish</code> 为什么是 <code>string | number</code>？Handbook 的解释是，JavaScript 对象的键总会被转成字符串，<code>obj[0]</code> 和 <code>obj[&#x27;0&#x27;]</code> 是同一个属性，所以字符串索引签名也接受数字键。</p>
+<p><code>Bad</code> 为什么报错？字符串索引签名表示任何字符串键读出来都是 <code>number</code>，<code>obj.name</code> 也等于 <code>obj[&#x27;name&#x27;]</code>，所以 <code>name</code> 不能是 <code>string</code>。如果确实要混合，可以把签名写成 <code>number | string</code>。</p>
+<p><code>scores.bob</code> 根本不存在，类型却是 <code>number</code>，直接调用 <code>s.toFixed()</code> 能编译通过，运行时会报错。开启 <code>noUncheckedIndexedAccess</code> 后，同样的代码会提示 <code>&#x27;s&#x27; is possibly &#x27;undefined&#x27;</code>。这个选项的取舍见<a href="/questions/ts-tsconfig/">《strict、noUncheckedIndexedAccess 和 target 如何配置？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong><code>Record&lt;string, number&gt;</code> 和 <code>{ [key: string]: number }</code> 有区别吗？</strong></p>
+<blockquote>
+<p>用字符串作键时效果一样，<code>Record&lt;K, V&gt;</code> 是内置的工具类型。区别在于 <code>Record</code> 的键可以是有限的联合，比如 <code>Record&lt;&#x27;a&#x27; | &#x27;b&#x27;, number&gt;</code> 要求两个键都必须有；索引签名的键只能是 <code>string</code>、<code>number</code>、<code>symbol</code>、模板字符串模式或它们组成的联合。映射类型见<a href="/questions/ts-mapped-utility/">《映射类型与 Partial、Pick、Omit 如何用于接口建模？》</a>。</p>
+</blockquote>
+<p><strong>类型里的 <code>typeof</code> 和运行时的 <code>typeof</code> 怎么区分？</strong></p>
+<blockquote>
+<p>看它出现在哪里。写在类型注解、<code>type</code> 定义这些类型位置上，是 TypeScript 的类型运算，编译后会被删掉。写在 <code>if (typeof x === &#x27;string&#x27;)</code> 这类表达式里，是 JavaScript 运行时的运算符，返回一个字符串，TypeScript 还会根据它缩小类型。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.typescriptlang.org/docs/handbook/2/keyof-types.html" target="_blank" rel="noreferrer">TypeScript Handbook · Keyof Type Operator<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://www.typescriptlang.org/docs/handbook/2/typeof-types.html" target="_blank" rel="noreferrer">TypeScript Handbook · Typeof Type Operator<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://www.typescriptlang.org/docs/handbook/2/indexed-access-types.html" target="_blank" rel="noreferrer">TypeScript Handbook · Indexed Access Types<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://www.typescriptlang.org/docs/handbook/2/objects.html#index-signatures" target="_blank" rel="noreferrer">TypeScript Handbook · Object Types（Index Signatures）<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+keyof%E3%80%81typeof%E3%80%81%E7%B4%A2%E5%BC%95%E8%AE%BF%E9%97%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E7%B4%A2%E5%BC%95%E7%AD%BE%E5%90%8D%E5%88%86%E5%88%AB%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Akeyof%E3%80%81typeof%E3%80%81%E7%B4%A2%E5%BC%95%E8%AE%BF%E9%97%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E7%B4%A2%E5%BC%95%E7%AD%BE%E5%90%8D%E5%88%86%E5%88%AB%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-keyof-typeof%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-keyof-typeof%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：keyof、typeof、索引访问类型和索引签名分别做什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-generics/">泛型解决了什么问题？如何约束泛型？</a></li><li><a href="/questions/ts-enum/">TypeScript 的 enum、const enum 和联合类型怎样选？</a></li><li><a href="/questions/ts-variance/">TypeScript 中的协变和逆变是什么？</a></li><li><a href="/questions/ts-type-challenges/">怎样手写 MyPick、MyOmit、DeepReadonly、TupleToUnion、First、Awaited 这类类型体操？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

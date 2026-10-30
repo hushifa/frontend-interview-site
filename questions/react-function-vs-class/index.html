@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="React面试题：类组件继承 Component，用 this.state、setState 和生命周期方法；函数组件就是返回 JSX 的函数…" />
+    <title>函数组件和类组件有什么区别？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/react-function-vs-class/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="函数组件和类组件有什么区别？ · 前端知库" />
+    <meta property="og:description" content="React面试题：类组件继承 Component，用 this.state、setState 和生命周期方法；函数组件就是返回 JSX 的函数…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/react-function-vs-class/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-function-vs-class/#webpage","url":"https://fe.hushifa.top/questions/react-function-vs-class/","name":"函数组件和类组件有什么区别？ · 前端知库","description":"React面试题：类组件继承 Component，用 this.state、setState 和生命周期方法；函数组件就是返回 JSX 的函数…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-function-vs-class/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-function-vs-class/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"函数组件和类组件有什么区别？","item":"https://fe.hushifa.top/questions/react-function-vs-class/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DkvyXEpT.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">函数组件和类组件有什么区别？</span></nav><h1 tabindex="-1">函数组件和类组件有什么区别？</h1><p class="reading-summary">类组件继承 Component，用 this.state、setState 和生命周期方法；函数组件就是返回 JSX 的函数，用 Hooks 管理状态和副作用。函数组件每次渲染拿到的是那一次的 props 和 state，类组件通过 this 读到的是实例上的当前值。React 推荐新代码用函数组件，类组件仍受支持，错误边界目前还要用类写。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>同一个计数器可以写成两种样子。类组件写 <code>class Counter extends Component</code>，状态放在 <code>this.state</code>，用 <code>this.setState</code> 修改，副作用写在 <code>componentDidMount</code>、<code>componentDidUpdate</code> 这些生命周期方法里。函数组件就是一个返回 JSX 的函数，状态用 <code>useState</code>，副作用用 <code>useEffect</code>。</p>
+<p>两者最本质的差别在于怎样拿到 props 和 state。函数组件每渲染一次就执行一次，函数里的 props、state 和事件处理函数都属于这一次渲染，React 文档把它比作快照。类组件只有一个实例，方法里读的是 <code>this.props</code>、<code>this.state</code>，读到的是读取那一刻实例上的值。所以异步回调里，函数组件读到的是创建回调那次渲染的值，类组件读到的可能已经是新值。</p>
+<p>React 推荐新代码用函数组件。Hooks 出来的动机就是类组件的几个痛点：逻辑复用要靠高阶组件、Render Props 套很多层；相关的逻辑被拆到不同生命周期里，不相关的逻辑又挤在同一个方法里；还要理解 <code>this</code>、记得绑定事件处理函数。用 Hooks，可以按“订阅”“请求数据”这样的功能拆分逻辑，再抽成自定义 Hook 复用。</p>
+<p>要注意，类组件仍然受支持，React 没有移除它的计划，老代码不需要急着重写。另外 <code>getDerivedStateFromError</code>、<code>componentDidCatch</code> 在函数组件里还没有对应写法，错误边界目前仍要写成类组件。</p>
+</blockquote>
+<h2>写法上的对应关系</h2>
+<p>两种写法的生命周期怎样一一对应，见<a href="/questions/react-class-lifecycle/">《React 类组件有哪些生命周期？在函数组件里怎样对应？》</a>。这里只补几个日常写代码时会碰到的差别。</p>
+<p>类组件的 <code>setState</code> 传入对象时，会和 <code>this.state</code> 做浅合并，只改传进去的字段。<code>useState</code> 的更新函数是直接替换，state 是对象时要自己展开旧值，写成 <code>setForm({ ...form, name })</code>。</p>
+<p>类组件要在构造函数里先调用 <code>super(props)</code>，否则构造函数执行期间 <code>this.props</code> 是 <code>undefined</code>。事件处理函数作为方法传出去时，还要绑定 <code>this</code> 或写成箭头函数类字段。函数组件没有 <code>this</code>，这些问题都不存在。</p>
+<p>类组件里要存一个不参与渲染的值，比如定时器 ID，直接挂在实例上，写 <code>this.timer</code>。函数组件里对应的做法是 <code>useRef</code>，旧版 Hooks FAQ 也把 ref 比作类的实例变量，详见<a href="/questions/react-use-ref/">《useRef 有哪些用途？它和 useState 有什么区别？》</a>。</p>
+<h2>为什么异步回调里读到的值不一样</h2>
+<p>下面用普通 JavaScript 模拟两种组件：类组件每次更新都是同一个实例换上新的 <code>props</code>；函数组件每次渲染都是重新调用函数，拿到一份新的 <code>props</code> 参数。点击“关注”时创建回调，回调稍后才执行，在这之间用户切换到了另一个人。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ProfileClass</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">props</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">props</span> = props;
+  }
+  <span class="hljs-title function_">handleClick</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;关注了 &#x27;</span> + <span class="hljs-variable language_">this</span>.<span class="hljs-property">props</span>.<span class="hljs-property">user</span>;
+  }
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">ProfileFunction</span>(<span class="hljs-params">props</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;关注了 &#x27;</span> + props.<span class="hljs-property">user</span>;
+}
+
+<span class="hljs-keyword">const</span> instance = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ProfileClass</span>({ <span class="hljs-attr">user</span>: <span class="hljs-string">&#x27;小王&#x27;</span> });
+<span class="hljs-keyword">const</span> classCallback = instance.<span class="hljs-title function_">handleClick</span>();
+<span class="hljs-keyword">const</span> functionCallback = <span class="hljs-title class_">ProfileFunction</span>({ <span class="hljs-attr">user</span>: <span class="hljs-string">&#x27;小王&#x27;</span> });
+
+instance.<span class="hljs-property">props</span> = { <span class="hljs-attr">user</span>: <span class="hljs-string">&#x27;小李&#x27;</span> };
+<span class="hljs-title class_">ProfileFunction</span>({ <span class="hljs-attr">user</span>: <span class="hljs-string">&#x27;小李&#x27;</span> });
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">classCallback</span>()); <span class="hljs-comment">// 关注了 小李</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">functionCallback</span>()); <span class="hljs-comment">// 关注了 小王</span>
+</code></pre></div>
+<p>点击时页面上显示的是小王，结果类组件的回调却关注了小李。原因是回调里写的是 <code>this.props.user</code>，执行时才去实例上读，而这时实例的 <code>props</code> 已经换成了新的。</p>
+<p>函数组件的回调记住的是那一次调用的 <code>props</code> 参数，第二次渲染是另一次函数调用，有另一份 <code>props</code>，不会影响第一份。这就是 React 文档说的“state 像快照”：一次渲染里的 props、state 和事件处理函数都是用这次渲染的值算出来的。</p>
+<p>反过来，函数组件有时又会读到旧值，比如 <code>useEffect</code> 依赖写成 <code>[]</code>，回调就一直看到第一次渲染的值。这是同一个机制的另一面，见<a href="/questions/react-stale-closure/">《React 中的过期闭包为什么会读到旧状态？》</a>。确实需要在异步回调里读最新值时，把值放进 ref，在回调里读 <code>ref.current</code>。</p>
+<h2>为什么 React 转向函数组件</h2>
+<p>旧版文档在介绍 Hooks 时列了类组件的三个问题。第一，组件之间复用有状态的逻辑很难，只能用高阶组件和 Render Props，DevTools 里会出现一层层包装，这部分对比见<a href="/questions/react-hoc-render-props/">《高阶组件、Render Props 和自定义 Hook 怎样选择？》</a>。</p>
+<p>第二，复杂组件难以理解。同一个订阅，建立写在 <code>componentDidMount</code>，清理写在 <code>componentWillUnmount</code>，相关代码被拆开；而 <code>componentDidMount</code> 里可能同时有请求数据和绑定事件，不相关的代码又混在一起。Hooks 允许按功能拆，一个 <code>useEffect</code> 管一件事，建立和清理写在一起。</p>
+<p>第三，类本身给人和工具都带来麻烦。人要理解 JavaScript 的 <code>this</code>，记得绑定事件处理函数；文档还提到，类不容易被压缩，热重载也不稳定。</p>
+<h2>常见追问</h2>
+<p><strong>类组件以后会被移除吗？</strong></p>
+<blockquote>
+<p>目前没有这个计划。React 文档说类组件仍然受支持，只是不推荐在新代码里使用。旧版文档介绍 Hooks 时也明确说没有移除类组件的计划，建议逐步采用 Hooks，不要大规模重写已有的复杂类组件。</p>
+</blockquote>
+<p><strong>有哪些事情只能用类组件做？</strong></p>
+<blockquote>
+<p>错误边界。捕获子组件渲染错误要用 <code>getDerivedStateFromError</code> 和 <code>componentDidCatch</code>，函数组件里还没有对应的 Hook。常见做法是写一个通用的 <code>ErrorBoundary</code> 类组件全局复用，或者用 react-error-boundary 这个库，见<a href="/questions/react-error-suspense/">《Error Boundary 和 Suspense 分别处理什么？》</a>。</p>
+</blockquote>
+<p><strong>函数组件里怎样实现 shouldComponentUpdate 和 PureComponent 的效果？</strong></p>
+<blockquote>
+<p>用 <code>memo</code> 包住组件，props 浅比较没有变化时跳过重新渲染。这是性能优化手段，不应该依赖它保证逻辑正确。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/reference/react/Component" target="_blank" rel="noreferrer">React · Component（类组件 API）<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://react.dev/learn/state-as-a-snapshot" target="_blank" rel="noreferrer">React · State as a Snapshot<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://legacy.reactjs.org/docs/hooks-intro.html" target="_blank" rel="noreferrer">React 旧版文档 · Introducing Hooks（Motivation）<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://legacy.reactjs.org/docs/hooks-faq.html" target="_blank" rel="noreferrer">React 旧版文档 · Hooks FAQ<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%87%BD%E6%95%B0%E7%BB%84%E4%BB%B6%E5%92%8C%E7%B1%BB%E7%BB%84%E4%BB%B6%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%87%BD%E6%95%B0%E7%BB%84%E4%BB%B6%E5%92%8C%E7%B1%BB%E7%BB%84%E4%BB%B6%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-function-vs-class%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-function-vs-class%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：函数组件和类组件有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-hooks-internals/">Hooks 在 React 内部是怎样保存状态的？为什么靠调用顺序区分？</a></li><li><a href="/questions/react-class-lifecycle/">React 类组件有哪些生命周期？在函数组件里怎样对应？</a></li><li><a href="/questions/react-mini-react/">怎样写一个 mini React（createElement、render、useState）？</a></li><li><a href="/questions/react-state/">为什么调用 setState 后，当前变量还是旧值？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

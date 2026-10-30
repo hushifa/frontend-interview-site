@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="Node.js面试题：cluster 让主进程 fork 多个工作进程共享同一个端口，默认（Windows 除外）由主进程按轮询把连接分给工作进程。" />
+    <title>Node.js 的 cluster 模块怎样实现多进程部署？PM2 做了什么？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/node-cluster-pm2/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="Node.js 的 cluster 模块怎样实现多进程部署？PM2 做了什么？" />
+    <meta property="og:description" content="Node.js面试题：cluster 让主进程 fork 多个工作进程共享同一个端口，默认（Windows 除外）由主进程按轮询把连接分给工作进程。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/node-cluster-pm2/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/node-cluster-pm2/#webpage","url":"https://fe.hushifa.top/questions/node-cluster-pm2/","name":"Node.js 的 cluster 模块怎样实现多进程部署？PM2 做了什么？","description":"Node.js面试题：cluster 让主进程 fork 多个工作进程共享同一个端口，默认（Windows 除外）由主进程按轮询把连接分给工作进程。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/node-cluster-pm2/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/node-cluster-pm2/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Node.js面试题","item":"https://fe.hushifa.top/topics/node/"},{"@type":"ListItem","position":3,"name":"Node.js 的 cluster 模块怎样实现多进程部署？PM2 做了什么？","item":"https://fe.hushifa.top/questions/node-cluster-pm2/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DkvyXEpT.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/node/">Node.js面试题</a><span aria-hidden="true">/</span><span aria-current="page">Node.js 的 cluster 模块怎样实现多进程部署？PM2 做了什么？</span></nav><h1 tabindex="-1">Node.js 的 cluster 模块怎样实现多进程部署？PM2 做了什么？</h1><p class="reading-summary">cluster 让主进程 fork 多个工作进程共享同一个端口，默认（Windows 除外）由主进程按轮询把连接分给工作进程。工作进程不共享内存，会话等状态要放外部存储；进程数量和重启要应用自己管理，PM2 这类进程管理器的 cluster 模式就是在 cluster 模块之上做了这些事。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>一个 Node.js 进程里的 JavaScript 只跑在一个主线程上，机器有 8 核，单进程的 HTTP 服务也只能用满一核。cluster 模块的做法是让一个主进程 fork 出多个工作进程，每个工作进程跑同一份服务代码，并且都能监听同一个端口。</p>
+<p>连接怎么分？除 Windows 外的平台默认用轮询：主进程自己监听端口、接收连接，再轮流交给工作进程。另一种方式是让工作进程直接接收连接，可官方文档说实际分配会很不均衡。</p>
+<p>好处是用满多核，而且一个工作进程崩溃不影响其他进程，主进程收到 <code>exit</code> 事件后可以再 fork 一个。PM2 的 cluster 模式就是基于这个模块，再加上按 CPU 数量启动实例和零停机的 <code>reload</code>。</p>
+<p>要注意两点。工作进程之间不共享内存，会话、登录状态、限流计数要放到 Redis 这类外部存储。还有，Node.js 不会自动维护工作进程的数量，崩溃后重启要应用或进程管理器自己做。</p>
+</blockquote>
+<h2>最小的 cluster 服务长什么样</h2>
+<p>下面的写法来自 Node.js 官方文档，主进程按可用并行度 fork 工作进程，工作进程各自创建 HTTP 服务并监听 8000 端口。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> cluster <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:cluster&#x27;</span>;
+<span class="hljs-keyword">import</span> http <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:http&#x27;</span>;
+<span class="hljs-keyword">import</span> { availableParallelism } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:os&#x27;</span>;
+<span class="hljs-keyword">import</span> process <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:process&#x27;</span>;
+
+<span class="hljs-keyword">if</span> (cluster.<span class="hljs-property">isPrimary</span>) {
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-title function_">availableParallelism</span>(); i++) {
+    cluster.<span class="hljs-title function_">fork</span>();
+  }
+
+  cluster.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;exit&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">worker, code, signal</span>) =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`工作进程 <span class="hljs-subst">${worker.process.pid}</span> 退出，重新启动一个`</span>);
+    cluster.<span class="hljs-title function_">fork</span>();
+  });
+} <span class="hljs-keyword">else</span> {
+  http
+    .<span class="hljs-title function_">createServer</span>(<span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
+      res.<span class="hljs-title function_">end</span>(<span class="hljs-string">`由 <span class="hljs-subst">${process.pid}</span> 处理\n`</span>);
+    })
+    .<span class="hljs-title function_">listen</span>(<span class="hljs-number">8000</span>);
+}
+</code></pre></div>
+<p>同一份文件会执行多次。第一次执行时 <code>cluster.isPrimary</code> 为真，进入主进程分支；<code>cluster.fork()</code> 底层用的是 <code>child_process.fork()</code>，新进程重新执行这个文件，这时 <code>isPrimary</code> 为假，走工作进程分支。</p>
+<p>多个进程都调用 <code>listen(8000)</code>，为什么不报端口占用？因为工作进程里的 <code>server.listen()</code> 会把大部分工作交给主进程，监听 socket 由主进程创建；在默认的轮询方式下，工作进程拿到的是主进程转交的连接。</p>
+<p><code>exit</code> 事件里重新 <code>fork</code> 这一步必须自己写。官方文档明确说 Node.js 不会自动管理工作进程数量，进程全部退出后，已有连接会断开，新连接会被拒绝。</p>
+<h2>连接是怎样分到各个工作进程的</h2>
+<p>cluster 支持两种分配方式，对应 <code>cluster.schedulingPolicy</code> 的两个值。<code>SCHED_RR</code> 是轮询，主进程接收连接后轮流发给工作进程，这是除 Windows 外所有平台的默认值。<code>SCHED_NONE</code> 是把监听 socket 交给工作进程，由它们直接抢连接，交给操作系统调度。</p>
+<p>第二种理论上更快，可官方文档记录过，8 个进程里超过 70% 的连接落到了其中 2 个进程上，所以默认用轮询。这个策略也能通过环境变量 <code>NODE_CLUSTER_SCHED_POLICY</code> 设置为 <code>rr</code> 或 <code>none</code>，在第一个工作进程启动后就不能再改。</p>
+<h2>为什么状态不能放在进程内存里</h2>
+<p>每个工作进程是独立的进程，内存完全隔离。如果把会话存在某个进程的一个对象里，用户下一次请求被分到另一个进程，就找不到这个会话了。官方文档也提醒，Node.js 不提供路由逻辑，应用不要过度依赖内存里的会话和登录数据。</p>
+<p>所以多进程部署时，会话、缓存、限流计数要放进 Redis 或数据库；需要在进程之间传消息时，可以用工作进程和主进程之间的 IPC（<code>worker.send()</code> 和 <code>process.on(&#x27;message&#x27;)</code>），但它只在同一台机器上有效。</p>
+<h2>PM2 在 cluster 之上做了什么</h2>
+<p>PM2 是常见的 Node.js 进程管理器。它的文档说明，cluster 模式依赖 Node.js 的 cluster 模块，用 <code>pm2 start app.js -i max</code> 就能按 CPU 数量启动多个实例，应用代码不用改。</p>
+<p>它还提供 <code>reload</code>：和先杀掉再启动的 <code>restart</code> 不同，<code>reload</code> 做到零停机重载；重载超时会退回普通的 <code>restart</code>。进程数量管理和不停机发布，正是手写 cluster 时要自己处理的部分。</p>
+<p>选型时要知道 PM2 采用 AGPL-3.0 许可。另外在 Kubernetes 这类容器平台上，常见做法是每个容器只跑一个进程，扩容和重启交给平台，详见<a href="/questions/node-process-model/">《Node.js 的子进程、Worker 和集群应该怎样选择？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>cluster 和 Worker Threads 有什么区别？</strong></p>
+<blockquote>
+<p>cluster 复制的是整个服务进程，用来让 HTTP 服务用满多核，进程之间内存隔离。Worker Threads 是同一进程里的线程，用来把一段 CPU 密集的计算挪出主线程。前者解决吞吐，后者解决单个请求里的重计算。</p>
+</blockquote>
+<p><strong>发布新版本时怎样不中断服务？</strong></p>
+<blockquote>
+<p>思路是逐个替换：先启动新的工作进程，等它开始监听，再让旧进程调用 <code>worker.disconnect()</code> 停止接收新连接，处理完已有请求后退出。具体的退出细节见<a href="/questions/node-graceful-shutdown/">《Node.js 服务如何实现优雅退出？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://nodejs.org/api/cluster.html" target="_blank" rel="noreferrer">Node.js · Cluster<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://nodejs.org/api/os.html#osavailableparallelism" target="_blank" rel="noreferrer">Node.js · os.availableParallelism()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://pm2.keymetrics.io/docs/usage/cluster-mode/" target="_blank" rel="noreferrer">PM2 · Cluster Mode<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Node.js+%E7%9A%84+cluster+%E6%A8%A1%E5%9D%97%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E5%A4%9A%E8%BF%9B%E7%A8%8B%E9%83%A8%E7%BD%B2%EF%BC%9FPM2+%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ANode.js+%E7%9A%84+cluster+%E6%A8%A1%E5%9D%97%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E5%A4%9A%E8%BF%9B%E7%A8%8B%E9%83%A8%E7%BD%B2%EF%BC%9FPM2+%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anode-cluster-pm2%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ANode.js%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnode-cluster-pm2%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Node.js 的 cluster 模块怎样实现多进程部署？PM2 做了什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/node-process-model/">Node.js 的子进程、Worker 和集群应该怎样选择？</a></li><li><a href="/questions/node-graceful-shutdown/">Node.js 服务如何实现优雅退出？</a></li><li><a href="/questions/node-koa-express/">Koa 和 Express 有什么区别？中间件洋葱模型是怎样实现的？</a></li><li><a href="/questions/node-eventloop/">Node.js 事件循环和浏览器有什么不同？nextTick 一定先于 Promise 吗？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

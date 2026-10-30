@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="Vue面试题：路由器做三件事：监听地址变化、把路径匹配成路由记录、把当前路由放进响应式数据让 RouterView 重新渲染。" />
+    <title>Vue Router 的原理是什么？怎样手写一个 mini router？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/vue-mini-router/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="Vue Router 的原理是什么？怎样手写一个 mini router？" />
+    <meta property="og:description" content="Vue面试题：路由器做三件事：监听地址变化、把路径匹配成路由记录、把当前路由放进响应式数据让 RouterView 重新渲染。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/vue-mini-router/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-mini-router/#webpage","url":"https://fe.hushifa.top/questions/vue-mini-router/","name":"Vue Router 的原理是什么？怎样手写一个 mini router？","description":"Vue面试题：路由器做三件事：监听地址变化、把路径匹配成路由记录、把当前路由放进响应式数据让 RouterView 重新渲染。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-mini-router/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-mini-router/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"Vue Router 的原理是什么？怎样手写一个 mini router？","item":"https://fe.hushifa.top/questions/vue-mini-router/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DkvyXEpT.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue Router 的原理是什么？怎样手写一个 mini router？</span></nav><h1 tabindex="-1">Vue Router 的原理是什么？怎样手写一个 mini router？</h1><p class="reading-summary">路由器做三件事：监听地址变化、把路径匹配成路由记录、把当前路由放进响应式数据让 RouterView 重新渲染。手写版用一个 history 对象封装 hash 或 pushState，用 shallowRef 保存当前路由，再实现 RouterView、RouterLink 和 install。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>点一下导航里的“用户详情”，地址栏变成 <code>/user/1</code>，页面中间换成用户组件，整个页面却没有重新加载。Vue Router 做的就是这件事。</p>
+<p>它由三部分组成。history 层负责改地址、听地址变化，hash 模式靠 <code>hashchange</code>，HTML5 模式靠 <code>pushState</code> 加 <code>popstate</code>。匹配层把路径和路由表比对，找出对应的组件，顺便解析出 <code>:id</code> 这样的参数。渲染层把当前路由存在响应式数据里，<code>RouterView</code> 读它，所以路由一变，<code>RouterView</code> 就渲染新的组件。</p>
+<p>手写时，<code>router.push</code> 调 history 改地址，再匹配出新路由赋给响应式变量；<code>RouterLink</code> 渲染一个 <code>&lt;a&gt;</code>，点击时阻止默认跳转改调 <code>push</code>；<code>install</code> 里注册这两个组件，再用 <code>provide</code> 把 router 交给组件使用。</p>
+<p>要注意，<code>pushState</code> 不会触发 <code>popstate</code>，所以 <code>push</code> 之后要自己更新当前路由；HTML5 模式下刷新页面会真的请求这个路径，服务器要回退到 <code>index.html</code>。</p>
+</blockquote>
+<h2>先拆成三层</h2>
+<p>官方文档列出了 <code>app.use(router)</code> 做的事：全局注册 <code>RouterView</code> 和 <code>RouterLink</code>，添加 <code>$router</code> 和 <code>$route</code>，启用 <code>useRouter()</code>、<code>useRoute()</code>，并触发初始路由的解析。手写版只要实现其中的主干就够了。</p>
+<p>hash 和 history 两种模式怎样监听地址、服务器怎样配置回退，已经在<a href="/questions/state-hash-history/">《hash 路由和 history 路由的原理是什么？服务器要怎样配置回退？》</a>里讲过，这里把它们看成一个统一的 history 对象：能读当前路径，能跳转，能在用户前进后退时通知路由器。导航守卫的执行顺序见<a href="/questions/state-vue-router-guards/">《Vue Router 有哪些导航守卫？完整的导航流程是怎样的？》</a>，手写版只保留 <code>beforeEach</code>。</p>
+<h2>匹配层：把路径变成路由</h2>
+<p>匹配层和浏览器无关，可以单独用 Node 运行。下面把 <code>/user/:id</code> 这样的路径编译成正则，冒号开头的段落变成捕获组，匹配成功时再按顺序取出参数。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">createMatcher</span>(<span class="hljs-params">routes</span>) {
+  <span class="hljs-keyword">const</span> records = routes.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">route</span>) =&gt;</span> {
+    <span class="hljs-keyword">const</span> keys = [];
+    <span class="hljs-keyword">const</span> pattern = route.<span class="hljs-property">path</span>.<span class="hljs-title function_">replace</span>(<span class="hljs-regexp">/:(\w+)/g</span>, <span class="hljs-function">(<span class="hljs-params">_, key</span>) =&gt;</span> {
+      keys.<span class="hljs-title function_">push</span>(key);
+      <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;([^/]+)&#x27;</span>;
+    });
+    <span class="hljs-keyword">return</span> { route, keys, <span class="hljs-attr">regex</span>: <span class="hljs-keyword">new</span> <span class="hljs-title class_">RegExp</span>(<span class="hljs-string">&#x27;^&#x27;</span> + pattern + <span class="hljs-string">&#x27;$&#x27;</span>) };
+  });
+
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">match</span>(<span class="hljs-params">path</span>) {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> { route, keys, regex } <span class="hljs-keyword">of</span> records) {
+      <span class="hljs-keyword">const</span> result = regex.<span class="hljs-title function_">exec</span>(path);
+      <span class="hljs-keyword">if</span> (result) {
+        <span class="hljs-keyword">const</span> params = {};
+        keys.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">key, index</span>) =&gt;</span> {
+          params[key] = <span class="hljs-built_in">decodeURIComponent</span>(result[index + <span class="hljs-number">1</span>]);
+        });
+        <span class="hljs-keyword">return</span> { ...route, path, params };
+      }
+    }
+    <span class="hljs-keyword">return</span> { path, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;not-found&#x27;</span>, <span class="hljs-attr">params</span>: {} };
+  };
+}
+
+<span class="hljs-keyword">const</span> match = <span class="hljs-title function_">createMatcher</span>([
+  { <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;home&#x27;</span> },
+  { <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;/user/:id&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;user&#x27;</span> },
+  { <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;/user/:id/post/:postId&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;post&#x27;</span> },
+]);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">match</span>(<span class="hljs-string">&#x27;/&#x27;</span>).<span class="hljs-property">name</span>); <span class="hljs-comment">// home</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">match</span>(<span class="hljs-string">&#x27;/user/42&#x27;</span>).<span class="hljs-property">params</span>.<span class="hljs-property">id</span>); <span class="hljs-comment">// 42</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">match</span>(<span class="hljs-string">&#x27;/user/42/post/7&#x27;</span>).<span class="hljs-property">params</span>.<span class="hljs-property">postId</span>); <span class="hljs-comment">// 7</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">match</span>(<span class="hljs-string">&#x27;/about&#x27;</span>).<span class="hljs-property">name</span>); <span class="hljs-comment">// not-found</span>
+</code></pre></div>
+<p>正则两头加了 <code>^</code> 和 <code>$</code>，所以 <code>/user/42</code> 不会被 <code>/</code> 匹配上，<code>/user/42/post/7</code> 也不会被 <code>/user/:id</code> 截走。<code>([^/]+)</code> 只匹配到下一个斜杠为止，一个参数不会吃掉后面的路径。</p>
+<p>手写版按书写顺序找第一个匹配的路由，真正的 Vue Router 匹配语法更丰富，还支持自定义参数正则、可选参数和重复参数。找不到时返回 <code>not-found</code>，对应官方建议配置的 <code>/:pathMatch(.*)</code> 兜底路由。</p>
+<h2>路由器：push 之后自己更新当前路由</h2>
+<p>路由器把 history 和匹配器连起来。当前路由放在 <code>shallowRef</code> 里，因为每次导航都整体换成一个新对象，不需要深层响应。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { shallowRef } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">createRouter</span>(<span class="hljs-params">{ history, routes }</span>) {
+  <span class="hljs-keyword">const</span> match = <span class="hljs-title function_">createMatcher</span>(routes);
+  <span class="hljs-keyword">const</span> currentRoute = <span class="hljs-title function_">shallowRef</span>(<span class="hljs-title function_">match</span>(history.<span class="hljs-title function_">location</span>()));
+  <span class="hljs-keyword">const</span> guards = [];
+
+  <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">navigate</span>(<span class="hljs-params">path, mode</span>) {
+    <span class="hljs-keyword">const</span> to = <span class="hljs-title function_">match</span>(path);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> guard <span class="hljs-keyword">of</span> guards) {
+      <span class="hljs-keyword">if</span> ((<span class="hljs-keyword">await</span> <span class="hljs-title function_">guard</span>(to, currentRoute.<span class="hljs-property">value</span>)) === <span class="hljs-literal">false</span>) <span class="hljs-keyword">return</span>;
+    }
+    <span class="hljs-keyword">if</span> (mode === <span class="hljs-string">&#x27;push&#x27;</span>) history.<span class="hljs-title function_">push</span>(path);
+    <span class="hljs-keyword">if</span> (mode === <span class="hljs-string">&#x27;replace&#x27;</span>) history.<span class="hljs-title function_">replace</span>(path);
+    currentRoute.<span class="hljs-property">value</span> = to;
+  }
+
+  <span class="hljs-comment">// 前进后退时地址已经变了，只需要更新当前路由</span>
+  history.<span class="hljs-title function_">listen</span>(<span class="hljs-function">(<span class="hljs-params">path</span>) =&gt;</span> <span class="hljs-title function_">navigate</span>(path, <span class="hljs-string">&#x27;pop&#x27;</span>));
+
+  <span class="hljs-keyword">return</span> {
+    currentRoute,
+    <span class="hljs-attr">push</span>: <span class="hljs-function">(<span class="hljs-params">path</span>) =&gt;</span> <span class="hljs-title function_">navigate</span>(path, <span class="hljs-string">&#x27;push&#x27;</span>),
+    <span class="hljs-attr">replace</span>: <span class="hljs-function">(<span class="hljs-params">path</span>) =&gt;</span> <span class="hljs-title function_">navigate</span>(path, <span class="hljs-string">&#x27;replace&#x27;</span>),
+    <span class="hljs-attr">beforeEach</span>: <span class="hljs-function">(<span class="hljs-params">guard</span>) =&gt;</span> guards.<span class="hljs-title function_">push</span>(guard),
+    <span class="hljs-title function_">install</span>(<span class="hljs-params">app</span>) {
+      app.<span class="hljs-title function_">provide</span>(<span class="hljs-string">&#x27;router&#x27;</span>, <span class="hljs-variable language_">this</span>);
+      app.<span class="hljs-property">config</span>.<span class="hljs-property">globalProperties</span>.<span class="hljs-property">$router</span> = <span class="hljs-variable language_">this</span>;
+      app.<span class="hljs-title function_">component</span>(<span class="hljs-string">&#x27;RouterView&#x27;</span>, <span class="hljs-title class_">RouterView</span>);
+      app.<span class="hljs-title function_">component</span>(<span class="hljs-string">&#x27;RouterLink&#x27;</span>, <span class="hljs-title class_">RouterLink</span>);
+    },
+  };
+}
+</code></pre></div>
+<p>为什么 <code>push</code> 里改完地址还要手动给 <code>currentRoute</code> 赋值？MDN 说明，调用 <code>pushState</code> 不会触发 <code>popstate</code>，<code>popstate</code> 只在用户前进、后退等切换历史记录时触发。所以主动跳转时路由器得自己更新，被动的前进后退才交给监听器。</p>
+<p><code>match</code> 返回的对象展开了整条路由记录，路由表里写的 <code>component</code> 也会一起带出来，<code>RouterView</code> 就靠它渲染。</p>
+<p>HTML5 模式的 history 对象大致这样写：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">createWebHistory</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">location</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-property">pathname</span>,
+    <span class="hljs-attr">push</span>: <span class="hljs-function">(<span class="hljs-params">path</span>) =&gt;</span> <span class="hljs-variable language_">window</span>.<span class="hljs-property">history</span>.<span class="hljs-title function_">pushState</span>({}, <span class="hljs-string">&#x27;&#x27;</span>, path),
+    <span class="hljs-attr">replace</span>: <span class="hljs-function">(<span class="hljs-params">path</span>) =&gt;</span> <span class="hljs-variable language_">window</span>.<span class="hljs-property">history</span>.<span class="hljs-title function_">replaceState</span>({}, <span class="hljs-string">&#x27;&#x27;</span>, path),
+    <span class="hljs-attr">listen</span>: <span class="hljs-function">(<span class="hljs-params">callback</span>) =&gt;</span> {
+      <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;popstate&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">callback</span>(<span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-property">pathname</span>));
+    },
+  };
+}
+</code></pre></div>
+<p>hash 模式只要把读路径换成 <code>location.hash.slice(1) || &#x27;/&#x27;</code>，跳转改成设置 <code>location.hash</code>，监听改成 <code>hashchange</code>。设置 <code>location.hash</code> 本身会触发 <code>hashchange</code>，所以 hash 版的 <code>push</code> 改完地址后可以不手动更新，交给监听器统一处理，免得一次跳转更新两遍。</p>
+<h2>RouterView 和 RouterLink</h2>
+<p><code>RouterView</code> 读当前路由，渲染对应的组件。它在渲染函数里读了 <code>currentRoute.value</code>，所以路由一换，它就重新渲染。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { h, inject } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">RouterView</span> = {
+  <span class="hljs-title function_">setup</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> router = <span class="hljs-title function_">inject</span>(<span class="hljs-string">&#x27;router&#x27;</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-keyword">const</span> component = router.<span class="hljs-property">currentRoute</span>.<span class="hljs-property">value</span>.<span class="hljs-property">component</span>;
+      <span class="hljs-keyword">return</span> component ? <span class="hljs-title function_">h</span>(component) : <span class="hljs-literal">null</span>;
+    };
+  },
+};
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">RouterLink</span> = {
+  <span class="hljs-attr">props</span>: { <span class="hljs-attr">to</span>: { <span class="hljs-attr">type</span>: <span class="hljs-title class_">String</span>, <span class="hljs-attr">required</span>: <span class="hljs-literal">true</span> } },
+  <span class="hljs-title function_">setup</span>(<span class="hljs-params">props, { slots }</span>) {
+    <span class="hljs-keyword">const</span> router = <span class="hljs-title function_">inject</span>(<span class="hljs-string">&#x27;router&#x27;</span>);
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">onClick</span>(<span class="hljs-params">event</span>) {
+      event.<span class="hljs-title function_">preventDefault</span>();
+      router.<span class="hljs-title function_">push</span>(props.<span class="hljs-property">to</span>);
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">h</span>(<span class="hljs-string">&#x27;a&#x27;</span>, { <span class="hljs-attr">href</span>: props.<span class="hljs-property">to</span>, onClick }, slots.<span class="hljs-property">default</span>?.());
+  },
+};
+</code></pre></div>
+<p><code>RouterLink</code> 仍然渲染真正的 <code>&lt;a href&gt;</code>，这样能看到链接地址、能用新标签页打开。点击时用 <code>preventDefault</code> 拦住浏览器的整页跳转，改调 <code>router.push</code>。官方文档也说，用 <code>RouterLink</code> 代替普通 <code>&lt;a&gt;</code>，是为了让 Vue Router 不重新加载页面就能改地址。</p>
+<p>这两个组件用到的 <code>h()</code> 写法见<a href="/questions/vue-render-function/">《Vue 的渲染函数、JSX 和 h() 怎样使用？》</a>。</p>
+<p>使用方式和官方一样，<code>use</code> 要写在 <code>mount</code> 前面：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> router = <span class="hljs-title function_">createRouter</span>({ <span class="hljs-attr">history</span>: <span class="hljs-title function_">createWebHistory</span>(), routes });
+<span class="hljs-title function_">createApp</span>(<span class="hljs-title class_">App</span>).<span class="hljs-title function_">use</span>(router).<span class="hljs-title function_">mount</span>(<span class="hljs-string">&#x27;#app&#x27;</span>);
+</code></pre></div>
+<h2>常见追问</h2>
+<p><strong>手写版和真正的 Vue Router 差在哪里？</strong></p>
+<blockquote>
+<p>手写版只保留了监听地址、匹配、响应式渲染这条主线。官方版本还支持嵌套路由、命名路由、完整的导航守卫流程、路由懒加载和滚动行为控制，这些在 Vue Router 文档里各有专门章节。</p>
+</blockquote>
+<p><strong>memory 模式是做什么的？</strong></p>
+<blockquote>
+<p><code>createMemoryHistory()</code> 不依赖浏览器环境，不读也不改地址栏，适合 Node 和 SSR。它也不会自动触发初始导航，要在 <code>app.use(router)</code> 之后自己 <code>push</code> 初始路由。在浏览器里用它，前进后退就没有效果。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://router.vuejs.org/guide/" target="_blank" rel="noreferrer">Vue Router · Getting Started<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://router.vuejs.org/guide/essentials/history-mode.html" target="_blank" rel="noreferrer">Vue Router · Different History modes<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://router.vuejs.org/guide/essentials/route-matching-syntax.html" target="_blank" rel="noreferrer">Vue Router · Routes&#x27; Matching Syntax<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/History/pushState" target="_blank" rel="noreferrer">MDN · History.pushState()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/popstate_event" target="_blank" rel="noreferrer">MDN · Window popstate event<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vue+Router+%E7%9A%84%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E6%80%8E%E6%A0%B7%E6%89%8B%E5%86%99%E4%B8%80%E4%B8%AA+mini+router%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVue+Router+%E7%9A%84%E5%8E%9F%E7%90%86%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E6%80%8E%E6%A0%B7%E6%89%8B%E5%86%99%E4%B8%80%E4%B8%AA+mini+router%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-mini-router%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-mini-router%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vue Router 的原理是什么？怎样手写一个 mini router？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-mini-reactivity/">怎样写一个 mini 响应式系统（reactive、effect、computed）？</a></li><li><a href="/questions/vue-options-composition/">Options API 和 Composition API 有什么区别？Vue 组件的 data 为什么必须是函数？</a></li><li><a href="/questions/vue-vif-vfor/">v-if 和 v-for 为什么不建议写在同一个元素上？</a></li><li><a href="/questions/vue-data-function/">Vue 组件的 data 为什么必须是函数？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

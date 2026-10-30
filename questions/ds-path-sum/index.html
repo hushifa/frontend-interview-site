@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="数据结构与算法面试题：I 问有没有从根到叶子的路径和等于目标值，DFS 时每往下走一层就把目标值减去当前节点，到叶子时看剩余是否为 0。" />
+    <title>路径总和 I、II、III 怎样做？III 为什么要用前缀和？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/ds-path-sum/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="路径总和 I、II、III 怎样做？III 为什么要用前缀和？" />
+    <meta property="og:description" content="数据结构与算法面试题：I 问有没有从根到叶子的路径和等于目标值，DFS 时每往下走一层就把目标值减去当前节点，到叶子时看剩余是否为 0。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/ds-path-sum/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ds-path-sum/#webpage","url":"https://fe.hushifa.top/questions/ds-path-sum/","name":"路径总和 I、II、III 怎样做？III 为什么要用前缀和？","description":"数据结构与算法面试题：I 问有没有从根到叶子的路径和等于目标值，DFS 时每往下走一层就把目标值减去当前节点，到叶子时看剩余是否为 0。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ds-path-sum/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ds-path-sum/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"数据结构与算法面试题","item":"https://fe.hushifa.top/topics/data-structures/"},{"@type":"ListItem","position":3,"name":"路径总和 I、II、III 怎样做？III 为什么要用前缀和？","item":"https://fe.hushifa.top/questions/ds-path-sum/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DkvyXEpT.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/data-structures/">数据结构与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">路径总和 I、II、III 怎样做？III 为什么要用前缀和？</span></nav><h1 tabindex="-1">路径总和 I、II、III 怎样做？III 为什么要用前缀和？</h1><p class="reading-summary">I 问有没有从根到叶子的路径和等于目标值，DFS 时每往下走一层就把目标值减去当前节点，到叶子时看剩余是否为 0。II 要列出所有这样的路径，DFS 时用一个数组记录当前路径，回溯时弹出。III 的路径可以从任意节点开始、在任意节点结束，只要一路向下，用前缀和加 Map 计数，一次 DFS 就是 O(n)，离开节点时要把它的前缀和计数减回去。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>路径总和 I（LeetCode 112）问二叉树里有没有一条从根到叶子的路径，节点值加起来等于 <code>targetSum</code>。做法是 DFS：每往下走一个节点，就把目标值减去这个节点的值，走到叶子时看剩下的是不是 0。叶子指左右孩子都为空的节点，空树直接返回 <code>false</code>。</p>
+<p>路径总和 II（LeetCode 113）要把所有满足条件的根到叶子路径都列出来。DFS 时用一个数组记录当前走过的节点，到叶子且和对上了，就把数组复制一份放进结果；从一个节点返回时把它从数组里弹出，这就是回溯。</p>
+<p>路径总和 III（LeetCode 437）放宽了起点和终点，路径可以从任意节点开始、在任意节点结束，但必须一路向下。对每个节点都往下暴力枚举是 O(n²)。更好的办法是把根到当前节点这条链看成一个数组，套用“和为 K 的子数组”的前缀和思路：用 Map 记录这条链上每个前缀和出现了几次，当前前缀和减去 <code>targetSum</code> 出现过几次，就有几条以当前节点结尾的路径，整体 O(n)。</p>
+<p>III 最容易错的是回溯：离开一个节点时，要把它的前缀和计数减 1，因为它不在兄弟子树的那条链上。另外 Map 里要先放 <code>0 → 1</code>，表示从根开始的路径。</p>
+</blockquote>
+<h2>I 和 II：从根到叶子</h2>
+<p>下面先用 LeetCode 的层序数组建树，<code>null</code> 表示空位。示例树来自 LeetCode 113 的示例 1。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">fromLevelOrder</span>(<span class="hljs-params">values</span>) {
+  <span class="hljs-keyword">if</span> (values.<span class="hljs-property">length</span> === <span class="hljs-number">0</span> || values[<span class="hljs-number">0</span>] === <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">const</span> root = { <span class="hljs-attr">val</span>: values[<span class="hljs-number">0</span>], <span class="hljs-attr">left</span>: <span class="hljs-literal">null</span>, <span class="hljs-attr">right</span>: <span class="hljs-literal">null</span> };
+  <span class="hljs-keyword">const</span> queue = [root];
+  <span class="hljs-keyword">let</span> i = <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> head = <span class="hljs-number">0</span>; i &lt; values.<span class="hljs-property">length</span>; head++) {
+    <span class="hljs-keyword">const</span> node = queue[head];
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> side <span class="hljs-keyword">of</span> [<span class="hljs-string">&#x27;left&#x27;</span>, <span class="hljs-string">&#x27;right&#x27;</span>]) {
+      <span class="hljs-keyword">if</span> (i &lt; values.<span class="hljs-property">length</span> &amp;&amp; values[i] !== <span class="hljs-literal">null</span>) {
+        node[side] = { <span class="hljs-attr">val</span>: values[i], <span class="hljs-attr">left</span>: <span class="hljs-literal">null</span>, <span class="hljs-attr">right</span>: <span class="hljs-literal">null</span> };
+        queue.<span class="hljs-title function_">push</span>(node[side]);
+      }
+      i++;
+    }
+  }
+  <span class="hljs-keyword">return</span> root;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">hasPathSum</span>(<span class="hljs-params">root, target</span>) {
+  <span class="hljs-keyword">if</span> (!root) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+  <span class="hljs-keyword">if</span> (!root.<span class="hljs-property">left</span> &amp;&amp; !root.<span class="hljs-property">right</span>) <span class="hljs-keyword">return</span> target === root.<span class="hljs-property">val</span>;
+  <span class="hljs-keyword">const</span> rest = target - root.<span class="hljs-property">val</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">hasPathSum</span>(root.<span class="hljs-property">left</span>, rest) || <span class="hljs-title function_">hasPathSum</span>(root.<span class="hljs-property">right</span>, rest);
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">pathSum</span>(<span class="hljs-params">root, target</span>) {
+  <span class="hljs-keyword">const</span> result = [];
+  <span class="hljs-keyword">const</span> path = [];
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">dfs</span>(<span class="hljs-params">node, rest</span>) {
+    <span class="hljs-keyword">if</span> (!node) <span class="hljs-keyword">return</span>;
+    path.<span class="hljs-title function_">push</span>(node.<span class="hljs-property">val</span>);
+    rest -= node.<span class="hljs-property">val</span>;
+    <span class="hljs-keyword">if</span> (!node.<span class="hljs-property">left</span> &amp;&amp; !node.<span class="hljs-property">right</span> &amp;&amp; rest === <span class="hljs-number">0</span>) result.<span class="hljs-title function_">push</span>([...path]);
+    <span class="hljs-title function_">dfs</span>(node.<span class="hljs-property">left</span>, rest);
+    <span class="hljs-title function_">dfs</span>(node.<span class="hljs-property">right</span>, rest);
+    <span class="hljs-comment">// 回到父节点前，把自己从路径里拿掉</span>
+    path.<span class="hljs-title function_">pop</span>();
+  }
+  <span class="hljs-title function_">dfs</span>(root, target);
+  <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-keyword">const</span> tree = <span class="hljs-title function_">fromLevelOrder</span>([<span class="hljs-number">5</span>, <span class="hljs-number">4</span>, <span class="hljs-number">8</span>, <span class="hljs-number">11</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">13</span>, <span class="hljs-number">4</span>, <span class="hljs-number">7</span>, <span class="hljs-number">2</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">5</span>, <span class="hljs-number">1</span>]);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">String</span>(<span class="hljs-title function_">hasPathSum</span>(tree, <span class="hljs-number">22</span>))); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">String</span>(<span class="hljs-title function_">hasPathSum</span>(<span class="hljs-title function_">fromLevelOrder</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]), <span class="hljs-number">5</span>))); <span class="hljs-comment">// false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(<span class="hljs-title function_">pathSum</span>(tree, <span class="hljs-number">22</span>))); <span class="hljs-comment">// [[5,4,11,2],[5,8,4,5]]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">String</span>(<span class="hljs-title function_">hasPathSum</span>(<span class="hljs-literal">null</span>, <span class="hljs-number">0</span>))); <span class="hljs-comment">// false</span>
+</code></pre></div>
+<p>为什么判断要放在叶子上，而不是“剩余为 0 就返回”？因为题目要的是根到叶子的路径。如果走到一个中间节点时剩余刚好为 0，下面还有孩子，这条路径并没有走完，不算数。</p>
+<p>II 里为什么要 <code>[...path]</code> 复制一份？因为 <code>path</code> 是整个 DFS 共用的数组，后面还会被 <code>push</code> 和 <code>pop</code>。直接把它放进结果，最后结果里所有路径都会指向同一个已经被弹空的数组。</p>
+<h2>III：路径可以从中间开始</h2>
+<p>先看为什么前缀和能用上。从根到当前节点是一条链，设这条链上的前缀和是 <code>sum</code>。如果链上某个祖先位置的前缀和是 <code>sum - targetSum</code>，那么从它下一个节点到当前节点这一段的和正好是 <code>targetSum</code>。所以只要知道链上有几个前缀和等于 <code>sum - targetSum</code>，就知道有几条以当前节点结尾的路径。这和数组里的做法一样，见<a href="/questions/ds-prefix-sum/">《前缀和与差分怎样用？和为 K 的子数组为什么要配哈希表？》</a>。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">fromLevelOrder</span>(<span class="hljs-params">values</span>) {
+  <span class="hljs-keyword">if</span> (values.<span class="hljs-property">length</span> === <span class="hljs-number">0</span> || values[<span class="hljs-number">0</span>] === <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">const</span> root = { <span class="hljs-attr">val</span>: values[<span class="hljs-number">0</span>], <span class="hljs-attr">left</span>: <span class="hljs-literal">null</span>, <span class="hljs-attr">right</span>: <span class="hljs-literal">null</span> };
+  <span class="hljs-keyword">const</span> queue = [root];
+  <span class="hljs-keyword">let</span> i = <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> head = <span class="hljs-number">0</span>; i &lt; values.<span class="hljs-property">length</span>; head++) {
+    <span class="hljs-keyword">const</span> node = queue[head];
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> side <span class="hljs-keyword">of</span> [<span class="hljs-string">&#x27;left&#x27;</span>, <span class="hljs-string">&#x27;right&#x27;</span>]) {
+      <span class="hljs-keyword">if</span> (i &lt; values.<span class="hljs-property">length</span> &amp;&amp; values[i] !== <span class="hljs-literal">null</span>) {
+        node[side] = { <span class="hljs-attr">val</span>: values[i], <span class="hljs-attr">left</span>: <span class="hljs-literal">null</span>, <span class="hljs-attr">right</span>: <span class="hljs-literal">null</span> };
+        queue.<span class="hljs-title function_">push</span>(node[side]);
+      }
+      i++;
+    }
+  }
+  <span class="hljs-keyword">return</span> root;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">pathSumIII</span>(<span class="hljs-params">root, target</span>) {
+  <span class="hljs-comment">// 0 出现 1 次，表示从根节点开始的路径</span>
+  <span class="hljs-keyword">const</span> counts = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>([[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]]);
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">dfs</span>(<span class="hljs-params">node, sum</span>) {
+    <span class="hljs-keyword">if</span> (!node) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+    sum += node.<span class="hljs-property">val</span>;
+    <span class="hljs-keyword">let</span> found = counts.<span class="hljs-title function_">get</span>(sum - target) ?? <span class="hljs-number">0</span>;
+    counts.<span class="hljs-title function_">set</span>(sum, (counts.<span class="hljs-title function_">get</span>(sum) ?? <span class="hljs-number">0</span>) + <span class="hljs-number">1</span>);
+    found += <span class="hljs-title function_">dfs</span>(node.<span class="hljs-property">left</span>, sum) + <span class="hljs-title function_">dfs</span>(node.<span class="hljs-property">right</span>, sum);
+    <span class="hljs-comment">// 离开这个节点，它的前缀和不属于兄弟子树那条链</span>
+    counts.<span class="hljs-title function_">set</span>(sum, counts.<span class="hljs-title function_">get</span>(sum) - <span class="hljs-number">1</span>);
+    <span class="hljs-keyword">return</span> found;
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">dfs</span>(root, <span class="hljs-number">0</span>);
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">pathSumIII</span>(<span class="hljs-title function_">fromLevelOrder</span>([<span class="hljs-number">10</span>, <span class="hljs-number">5</span>, -<span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">11</span>, <span class="hljs-number">3</span>, -<span class="hljs-number">2</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">1</span>]), <span class="hljs-number">8</span>)); <span class="hljs-comment">// 3</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">pathSumIII</span>(<span class="hljs-title function_">fromLevelOrder</span>([<span class="hljs-number">5</span>, <span class="hljs-number">4</span>, <span class="hljs-number">8</span>, <span class="hljs-number">11</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">13</span>, <span class="hljs-number">4</span>, <span class="hljs-number">7</span>, <span class="hljs-number">2</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">5</span>, <span class="hljs-number">1</span>]), <span class="hljs-number">22</span>)); <span class="hljs-comment">// 3</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">pathSumIII</span>(<span class="hljs-title function_">fromLevelOrder</span>([<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>]), <span class="hljs-number">0</span>)); <span class="hljs-comment">// 1</span>
+</code></pre></div>
+<p>第一组是 LeetCode 437 的示例 1，和为 8 的路径有 <code>5 → 3</code>、<code>5 → 2 → 1</code>、<code>-3 → 11</code> 三条。</p>
+<p>为什么要先查 <code>sum - target</code> 再把 <code>sum</code> 加进 Map？因为路径至少包含一个节点。先加再查，当 <code>target</code> 为 0 时，当前节点会和自己配对，多数出一条长度为 0 的“路径”。最后一组 <code>[1,-1]</code> 中，和为 0 的路径只有 <code>1 → -1</code> 一条，结果是 1；顺序写反的话，每个节点都会和自己配对，结果变成 3。</p>
+<p>为什么离开节点时要减回去？Map 里应该只有根到当前节点这条链上的前缀和。左子树遍历完转到右子树时，左子树里的节点已经不在链上了，如果不减掉，右子树的节点会和左子树的节点配对，可它们之间根本没有向下的路径。</p>
+<p>时间上每个节点只访问一次，Map 操作平均常数时间，整体 O(n)；空间是 O(h)，h 是树高，来自递归深度和 Map 里的链。LeetCode 437 的节点值范围是 -10⁹ 到 10⁹，最多 1000 个节点，前缀和最大约 10¹²，在 JavaScript 的安全整数范围内。</p>
+<h2>常见追问</h2>
+<p><strong>III 的暴力解法是什么？</strong></p>
+<blockquote>
+<p>对每个节点，把它当起点往下 DFS，统计和等于目标值的路径数；再对所有节点重复。每个节点作为起点要往下走一遍，平衡树时约 O(n log n)，退化成链时是 O(n²)。</p>
+</blockquote>
+<p><strong>II 为什么不在 dfs 里传 <code>[...path, node.val]</code> 的新数组？</strong></p>
+<blockquote>
+<p>也能写对，而且不用手动 <code>pop</code>。但每层都复制一次数组，额外开销和路径长度成正比。共用一个数组加回溯，只在找到答案时复制。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://leetcode.com/problems/path-sum/" target="_blank" rel="noreferrer">LeetCode 112 · Path Sum<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://leetcode.com/problems/path-sum-ii/" target="_blank" rel="noreferrer">LeetCode 113 · Path Sum II<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://leetcode.com/problems/path-sum-iii/" target="_blank" rel="noreferrer">LeetCode 437 · Path Sum III<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E8%B7%AF%E5%BE%84%E6%80%BB%E5%92%8C+I%E3%80%81II%E3%80%81III+%E6%80%8E%E6%A0%B7%E5%81%9A%EF%BC%9FIII+%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8%E5%89%8D%E7%BC%80%E5%92%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E8%B7%AF%E5%BE%84%E6%80%BB%E5%92%8C+I%E3%80%81II%E3%80%81III+%E6%80%8E%E6%A0%B7%E5%81%9A%EF%BC%9FIII+%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8%E5%89%8D%E7%BC%80%E5%92%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ads-path-sum%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fds-path-sum%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：路径总和 I、II、III 怎样做？III 为什么要用前缀和？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ds-permutations-nqueens/">字符串反转、有重复数字的全排列和 N 皇后怎样用回溯写？</a></li><li><a href="/questions/ds-backtracking/">回溯怎么写？全排列、子集和组合总和怎样做？</a></li><li><a href="/questions/ds-islands/">岛屿数量怎样用 DFS 或 BFS 求？</a></li><li><a href="/questions/ds-tree-lca/">怎样求二叉树的最近公共祖先？二叉搜索树有什么更简单的做法？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

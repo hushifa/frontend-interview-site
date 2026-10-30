@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="TypeScript面试题：类型断言 as T 是告诉编译器“按 T 来看这个值”，只在两种类型有关联（一方更具体或更宽泛）时才允许，编译后被删除…" />
+    <title>类型断言、非空断言、as unknown as 和 satisfies 有什么区别？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/ts-type-assertion/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="类型断言、非空断言、as unknown as 和 satisfies 有什么区别？" />
+    <meta property="og:description" content="TypeScript面试题：类型断言 as T 是告诉编译器“按 T 来看这个值”，只在两种类型有关联（一方更具体或更宽泛）时才允许，编译后被删除…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/ts-type-assertion/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-type-assertion/#webpage","url":"https://fe.hushifa.top/questions/ts-type-assertion/","name":"类型断言、非空断言、as unknown as 和 satisfies 有什么区别？","description":"TypeScript面试题：类型断言 as T 是告诉编译器“按 T 来看这个值”，只在两种类型有关联（一方更具体或更宽泛）时才允许，编译后被删除…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-type-assertion/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-type-assertion/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"类型断言、非空断言、as unknown as 和 satisfies 有什么区别？","item":"https://fe.hushifa.top/questions/ts-type-assertion/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DkvyXEpT.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">类型断言、非空断言、as unknown as 和 satisfies 有什么区别？</span></nav><h1 tabindex="-1">类型断言、非空断言、as unknown as 和 satisfies 有什么区别？</h1><p class="reading-summary">类型断言 as T 是告诉编译器“按 T 来看这个值”，只在两种类型有关联（一方更具体或更宽泛）时才允许，编译后被删除，没有运行时检查。非空断言 x! 是去掉 null 和 undefined 的断言。as unknown as T 先转成 unknown 再转成 T，绕过“类型要有关联”的限制，几乎什么都能转。satisfies 不改变值的类型，只检查值能不能赋给目标类型，写错会报错，所以比断言安全。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>比如 <code>document.getElementById(&#x27;main_canvas&#x27;)</code> 只能推断出 <code>HTMLElement | null</code>，可你知道页面上那个元素一定是画布，就可以写 <code>as HTMLCanvasElement</code>，让编译器按画布的类型来检查后面的代码。这就是类型断言：你比编译器多知道一点信息，直接告诉它。</p>
+<p>断言只影响编译期，编译后会被删掉，运行时没有任何检查，断言错了也不会抛错或者变成 <code>null</code>。所以 TypeScript 给断言设了一道限制：只能把类型转成更具体或更宽泛的版本，<code>&#x27;hello&#x27; as number</code> 这种两边毫无关系的会报错。非空断言 <code>x!</code> 是一种特殊的断言，表示“这个值不是 <code>null</code> 也不是 <code>undefined</code>”，同样没有运行时检查。</p>
+<p>如果确实要在两个没关系的类型之间转，可以先转成 <code>unknown</code> 或 <code>any</code> 再转成目标类型，也就是 <code>as unknown as T</code>。因为任何类型都能转成 <code>unknown</code>，<code>unknown</code> 也能转成任何类型，这道限制就被绕过去了。它等于完全放弃了检查，只适合测试替身这类明确知道在做什么的场合。</p>
+<p><code>satisfies</code> 和它们方向相反。<code>value satisfies T</code> 不改变值的类型，只检查 <code>value</code> 能不能赋给 <code>T</code>，少写必填属性、拼错键名都会报错。所以想“确认值符合某个类型”时用 <code>satisfies</code> 或类型注解，不要用 <code>as</code>。</p>
+</blockquote>
+<h2>断言改的是编译器的看法</h2>
+<p>下面这段代码能通过 <code>tsc --strict</code>（用 TypeScript 7.0.2 验证）。看每一处断言，编译器检查了什么、没检查什么。</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">User</span> = { <span class="hljs-attr">id</span>: <span class="hljs-built_in">number</span>; <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span> };
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">raw</span>: <span class="hljs-built_in">unknown</span> = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(<span class="hljs-string">&#x27;{&quot;id&quot;:1,&quot;name&quot;:&quot;Ada&quot;}&#x27;</span>);
+<span class="hljs-keyword">const</span> user = raw <span class="hljs-keyword">as</span> <span class="hljs-title class_">User</span>;
+user.<span class="hljs-property">name</span>.<span class="hljs-title function_">toUpperCase</span>();
+
+<span class="hljs-comment">// @ts-expect-error 2352：string 和 number 没有足够的重叠</span>
+<span class="hljs-keyword">const</span> n = <span class="hljs-string">&#x27;hello&#x27;</span> <span class="hljs-keyword">as</span> <span class="hljs-built_in">number</span>;
+
+<span class="hljs-keyword">const</span> forced = <span class="hljs-string">&#x27;hello&#x27;</span> <span class="hljs-keyword">as</span> <span class="hljs-built_in">unknown</span> <span class="hljs-keyword">as</span> <span class="hljs-built_in">number</span>;
+
+<span class="hljs-keyword">const</span> partial = {} <span class="hljs-keyword">as</span> <span class="hljs-title class_">User</span>;
+</code></pre></div>
+<p><code>raw as User</code> 能通过，是因为 <code>unknown</code> 可以转成任何类型。可编译器并没有检查 JSON 里真的有 <code>name</code>，如果接口返回的数据少了这个字段，<code>user.name.toUpperCase()</code> 会在运行时报错。外部数据要在运行时校验，见<a href="/questions/ts-runtime-schema/">《为什么 TypeScript 不能替代接口数据校验？》</a>。</p>
+<p><code>&#x27;hello&#x27; as number</code> 报的是 TS2352，错误信息说两个类型“没有足够的重叠”，建议先转成 <code>unknown</code>。这就是 Handbook 里说的规则：断言只允许转成更具体或更宽泛的版本，用来拦住明显不可能的转换。</p>
+<p><code>as unknown as number</code> 照着错误信息的建议做了，于是不再报错。可 <code>forced</code> 运行时仍然是字符串，调用 <code>toFixed</code> 就会出错。</p>
+<p><code>{} as User</code> 也能通过，因为 <code>User</code> 比 <code>{}</code> 更具体，属于允许的方向。可这个对象既没有 <code>id</code> 也没有 <code>name</code>，编译器不会提醒。这是断言最常见的误用：本来想表达“这个对象是 User”，结果把必填属性的检查也跳过了。</p>
+<h2>非空断言 x!</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">len</span>(<span class="hljs-params"><span class="hljs-attr">text</span>?: <span class="hljs-built_in">string</span> | <span class="hljs-literal">null</span></span>) {
+  <span class="hljs-keyword">return</span> text!.<span class="hljs-property">length</span>;
+}
+</code></pre></div>
+<p><code>text</code> 的类型是 <code>string | null | undefined</code>，直接读 <code>.length</code> 会报错。加上 <code>!</code> 以后，编译器把它当成 <code>string</code>。Handbook 说明，<code>!</code> 和其他断言一样不改变运行时行为，所以只有确定值不可能是 <code>null</code> 或 <code>undefined</code> 时才该用。调用 <code>len()</code> 不传参数，运行时照样会报错。</p>
+<p>能用判断代替时，优先用判断或可选链，比如 <code>text?.length ?? 0</code>。判断之后编译器会自动缩小类型，见<a href="/questions/ts-narrowing/">《TypeScript 怎样通过控制流缩小类型？》</a>。</p>
+<h2>satisfies 检查而不改写</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Config</span> = { <span class="hljs-attr">port</span>: <span class="hljs-built_in">number</span>; <span class="hljs-attr">host</span>?: <span class="hljs-built_in">string</span> };
+
+<span class="hljs-keyword">const</span> config = { <span class="hljs-attr">port</span>: <span class="hljs-number">3000</span> } <span class="hljs-keyword">satisfies</span> <span class="hljs-title class_">Config</span>;
+config.<span class="hljs-property">port</span>.<span class="hljs-title function_">toFixed</span>();
+
+<span class="hljs-comment">// @ts-expect-error 拼错的键会被 satisfies 拦下</span>
+<span class="hljs-keyword">const</span> bad = { <span class="hljs-attr">prot</span>: <span class="hljs-number">3000</span> } <span class="hljs-keyword">satisfies</span> <span class="hljs-title class_">Config</span>;
+
+<span class="hljs-keyword">const</span> asserted = { <span class="hljs-attr">host</span>: <span class="hljs-string">&#x27;localhost&#x27;</span> } <span class="hljs-keyword">as</span> <span class="hljs-title class_">Config</span>;
+asserted.<span class="hljs-property">port</span>.<span class="hljs-title function_">toFixed</span>();
+</code></pre></div>
+<p><code>satisfies</code> 把 <code>prot</code> 拼错的对象拦了下来。换成 <code>as Config</code>，缺少 <code>port</code> 的对象照样能通过，<code>asserted.port</code> 的类型是 <code>number</code>，可运行时它是 <code>undefined</code>。</p>
+<p>所以两者的方向不同：<code>as</code> 是“我说它是这个类型，你别管”，<code>satisfies</code> 是“请帮我检查它符合这个类型”。<code>satisfies</code> 和类型注解、<code>as const</code> 的更多对比见<a href="/questions/ts-satisfies-const/">《as const、类型注解和 satisfies 有什么不同？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>尖括号写法 <code>&lt;T&gt;value</code> 和 <code>value as T</code> 有区别吗？</strong></p>
+<blockquote>
+<p>两者等价。但尖括号在 <code>.tsx</code> 文件里会和 JSX 冲突，所以不能用，日常统一写 <code>as</code> 更省事。</p>
+</blockquote>
+<p><strong>什么时候用断言是合理的？</strong></p>
+<blockquote>
+<p>编译器确实缺信息、而你能保证正确的时候。比如通过 ID 拿到一个确定是画布的 DOM 元素，或者在单元测试里构造一个只实现了部分方法的替身对象。接口返回的数据、用户输入这类没法保证的值，应该做运行时校验，而不是断言。</p>
+</blockquote>
+<p><strong><code>any</code> 和 <code>as unknown as</code> 有什么不同？</strong></p>
+<blockquote>
+<p><code>as unknown as T</code> 只在这一处放弃检查，结果是一个确定的类型 <code>T</code>，后面的代码照常检查。<code>any</code> 会一路传染，从它取出的属性、调用的返回值也都是 <code>any</code>，检查一直被关掉。两者都应少用，详见<a href="/questions/ts-unknown/">《any、unknown 和 never 分别适合什么场景？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html" target="_blank" rel="noreferrer">TypeScript Handbook · Everyday Types<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html" target="_blank" rel="noreferrer">TypeScript 4.9 · The satisfies Operator<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E7%B1%BB%E5%9E%8B%E6%96%AD%E8%A8%80%E3%80%81%E9%9D%9E%E7%A9%BA%E6%96%AD%E8%A8%80%E3%80%81as+unknown+as+%E5%92%8C+satisfies+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E7%B1%BB%E5%9E%8B%E6%96%AD%E8%A8%80%E3%80%81%E9%9D%9E%E7%A9%BA%E6%96%AD%E8%A8%80%E3%80%81as+unknown+as+%E5%92%8C+satisfies+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-type-assertion%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-type-assertion%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：类型断言、非空断言、as unknown as 和 satisfies 有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-satisfies-const/">as const、类型注解和 satisfies 有什么不同？</a></li><li><a href="/questions/ts-enum/">TypeScript 的 enum、const enum 和联合类型怎样选？</a></li><li><a href="/questions/ts-variance/">TypeScript 中的协变和逆变是什么？</a></li><li><a href="/questions/ts-type-challenges/">怎样手写 MyPick、MyOmit、DeepReadonly、TupleToUnion、First、Awaited 这类类型体操？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

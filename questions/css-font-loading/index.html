@@ -11,63 +11,91 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="HTML / CSS面试题：网页字体还没下载好时，font-display 决定文字是先藏起来，还是先用系统字体显示，以及字体晚到了还要不要换上。" />
-    <title>font-display 怎样影响字体加载期间的文字显示？</title>
+    <meta name="description" content="HTML / CSS面试题：写了 @font-face 不代表马上下载，多数浏览器要等页面真正用到这个字体时才去取。" />
+    <title>网页字体什么时候开始下载？怎样用 CSS Font Loading API 控制和检测加载？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/css-font-loading/" />
     <meta name="robots" content="index,follow" />
     <meta property="og:type" content="article" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
-    <meta property="og:title" content="font-display 怎样影响字体加载期间的文字显示？" />
-    <meta property="og:description" content="HTML / CSS面试题：网页字体还没下载好时，font-display 决定文字是先藏起来，还是先用系统字体显示，以及字体晚到了还要不要换上。" />
+    <meta property="og:title" content="网页字体什么时候开始下载？怎样用 CSS Font Loading API 控制和检测加载？" />
+    <meta property="og:description" content="HTML / CSS面试题：写了 @font-face 不代表马上下载，多数浏览器要等页面真正用到这个字体时才去取。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/css-font-loading/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-font-loading/#webpage","url":"https://fe.hushifa.top/questions/css-font-loading/","name":"font-display 怎样影响字体加载期间的文字显示？","description":"HTML / CSS面试题：网页字体还没下载好时，font-display 决定文字是先藏起来，还是先用系统字体显示，以及字体晚到了还要不要换上。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-font-loading/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-font-loading/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"font-display 怎样影响字体加载期间的文字显示？","item":"https://fe.hushifa.top/questions/css-font-loading/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-font-loading/#webpage","url":"https://fe.hushifa.top/questions/css-font-loading/","name":"网页字体什么时候开始下载？怎样用 CSS Font Loading API 控制和检测加载？","description":"HTML / CSS面试题：写了 @font-face 不代表马上下载，多数浏览器要等页面真正用到这个字体时才去取。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-font-loading/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-font-loading/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"网页字体什么时候开始下载？怎样用 CSS Font Loading API 控制和检测加载？","item":"https://fe.hushifa.top/questions/css-font-loading/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-BVmbcf0v.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-DkvyXEpT.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">font-display 怎样影响字体加载期间的文字显示？</span></nav><h1 tabindex="-1">font-display 怎样影响字体加载期间的文字显示？</h1><p class="reading-summary">网页字体还没下载好时，font-display 决定文字是先藏起来，还是先用系统字体显示，以及字体晚到了还要不要换上。配合预加载和调整回退字体尺寸，可以减少闪烁和页面跳动。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">网页字体什么时候开始下载？怎样用 CSS Font Loading API 控制和检测加载？</span></nav><h1 tabindex="-1">网页字体什么时候开始下载？怎样用 CSS Font Loading API 控制和检测加载？</h1><p class="reading-summary">写了 @font-face 不代表马上下载，多数浏览器要等页面真正用到这个字体时才去取。CSS Font Loading API 用 FontFace 对象表示一个字体，可以手动 load()、加进 document.fonts，用 status 和 Promise 知道它什么时候加载好；document.fonts.ready 等所有字体和布局完成。check() 只回答“现在画会不会触发换字体”，不能用来判断某个字体是否可用。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
 <blockquote>
-<p>网页用了自定义字体，字体文件还没下载完时，文字怎么显示？浏览器把这段时间分成三个阶段：阻塞期，文字先隐藏；交换期，先用回退字体显示，字体到了再换上；失败期，字体再到也不换了。<code>font-display</code> 就是调这几个阶段的长短。</p>
-<p><code>block</code> 是约 3 秒阻塞，交换期无限长；<code>swap</code> 几乎不阻塞，字体什么时候到都换；<code>fallback</code> 是约 100ms 阻塞加约 3 秒交换；<code>optional</code> 是约 100ms 阻塞，没有交换期，字体晚到这次就不用了。</p>
-<p>正文一般用 <code>swap</code> 或 <code>optional</code>，别让用户长时间看不到字。图标字体常用 <code>block</code>，因为用回退字体显示会是一堆乱码。</p>
-<p>要注意，换字体会让字宽和行高变化，页面会跳。可以用 <code>size-adjust</code>、<code>ascent-override</code> 把回退字体调到接近的尺寸。关键字体用 <code>&lt;link rel=&quot;preload&quot; as=&quot;font&quot; crossorigin&gt;</code> 提前请求，<code>crossorigin</code> 不能省。</p>
+<p>在 CSS 里写了一段 <code>@font-face</code>，浏览器并不会立刻下载这个字体。MDN 的说法是，下载时机由浏览器决定，多数浏览器等到第一次真正需要这个字体时才去取。所以字体常常发现得晚，文字会先空白或先用回退字体。</p>
+<p>CSS Font Loading API 让 JavaScript 能自己控制这件事。<code>new FontFace(名称, 来源, 描述符)</code> 创建一个字体，参数写法和 <code>@font-face</code> 一样；调用 <code>load()</code> 立刻开始下载，返回一个 Promise；再用 <code>document.fonts.add()</code> 把它加进文档的字体集合，页面才能用它画字。</p>
+<p>它最常用在“必须等字体好了才能做”的地方。比如在 Canvas 上画字，字体没好时画出来的是回退字体，画完也不会自动重画；又比如要测量文字宽度。这时等 <code>font.load()</code> 或者 <code>document.fonts.ready</code> 完成再画。</p>
+<p>要注意 <code>document.fonts.check()</code>。它回答的是“用这个字体规格现在画字，会不会用到还没加载好的字体”，不是“这个字体能不能用”。传一个根本不存在的字体名，它也返回 <code>true</code>。</p>
 </blockquote>
-<h2>一个完整的声明</h2>
+<h2>为什么写了 @font-face 字体还没下载</h2>
 <div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-keyword">@font-face</span> {
   <span class="hljs-attribute">font-family</span>: <span class="hljs-string">&#x27;Brand&#x27;</span>;
   <span class="hljs-attribute">src</span>: <span class="hljs-built_in">url</span>(<span class="hljs-string">&#x27;/fonts/brand.woff2&#x27;</span>) <span class="hljs-built_in">format</span>(<span class="hljs-string">&#x27;woff2&#x27;</span>);
-  <span class="hljs-attribute">font-display</span>: swap;
 }
 
-<span class="hljs-keyword">@font-face</span> {
-  <span class="hljs-attribute">font-family</span>: <span class="hljs-string">&#x27;Brand Fallback&#x27;</span>;
-  <span class="hljs-attribute">src</span>: <span class="hljs-built_in">local</span>(<span class="hljs-string">&#x27;Arial&#x27;</span>);
-  size-adjust: <span class="hljs-number">104%</span>;
-  ascent-override: <span class="hljs-number">92%</span>;
-}
-
-<span class="hljs-selector-tag">body</span> {
-  <span class="hljs-attribute">font-family</span>: <span class="hljs-string">&#x27;Brand&#x27;</span>, <span class="hljs-string">&#x27;Brand Fallback&#x27;</span>, sans-serif;
+<span class="hljs-selector-class">.title</span> {
+  <span class="hljs-attribute">font-family</span>: <span class="hljs-string">&#x27;Brand&#x27;</span>, sans-serif;
 }
 </code></pre></div>
-<p>第一段声明品牌字体，用 <code>swap</code>。第二段做了一个“调整过的 Arial”当回退字体。</p>
-<p>为什么要专门调回退字体？因为 <code>swap</code> 下用户先看到的是回退字体，品牌字体到了再换。两种字体字宽不同，换的时候每行的字数和高度会变，下面的内容整体往下跳，这在性能指标里叫布局偏移（CLS）。把 Arial 放大 4%、调整上行高度后，它和品牌字体排出来的效果接近，换字体时几乎不跳。</p>
-<p>具体的百分比要根据两种字体的实际尺寸来算。Next.js 的 <code>next/font</code> 和 Fontaine 这类工具可以自动生成。</p>
-<h2>四个值怎么选</h2>
-<p>品牌字体一定要出现，能接受换一次，用 <code>swap</code>。</p>
-<p>首屏稳定最重要，字体只在有缓存时用，用 <code>optional</code>。第一次访问可能看到的是回退字体，下次有缓存了才是品牌字体。</p>
-<p><code>fallback</code> 介于两者之间。</p>
-<p>图标字体，或者回退字体根本表达不了的内容，用 <code>block</code>。</p>
-<h2>还有哪些办法降低字体的成本</h2>
-<p>字体只提供 WOFF2 格式，按需拆子集。中文字体体积很大，可以用 <code>unicode-range</code> 分片，或者只给标题加载。</p>
-<p>预加载只给首屏真正用到的一两个字体。预加载太多，会跟其他关键资源抢带宽。</p>
-<p>有些场景要精确量文字尺寸，比如在 Canvas 上画字。这时用 <code>document.fonts.ready</code> 或者 <code>FontFace.load()</code>，等字体准备好再画。</p>
+<p>这段 CSS 只是声明“有一个叫 Brand 的字体，文件在这里”。浏览器解析完 CSS、算好样式，发现页面上确实有元素要用 Brand 画字，才发请求。页面上没有 <code>.title</code> 元素，这个文件就一直不会下载。</p>
+<p>这样设计是为了不浪费流量，一个样式表里可能声明了十几种字重，用不到的不该下载。可是代价是发现得晚：要先拿到 HTML，再拿到 CSS，再算样式，才轮到字体。加载期间文字怎么显示由 <code>font-display</code> 决定，提前下载可以用 <code>preload</code>，这些优化手段见<a href="/questions/perf-font-loading/">《网页字体加载怎样优化？font-display、子集化、preload 和 size-adjust 各解决什么问题？》</a>。</p>
+<p><code>src</code> 里可以先写 <code>local()</code>。MDN 说明浏览器按声明的顺序尝试，用户本机装了这个字体就直接用，找不到才下载 <code>url()</code> 里的文件。</p>
+<h2>用 JavaScript 加载一个字体</h2>
+<p>下面加载一个字体，好了以后在 Canvas 上画字：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> font = <span class="hljs-keyword">new</span> <span class="hljs-title class_">FontFace</span>(<span class="hljs-string">&#x27;Brand&#x27;</span>, <span class="hljs-string">&#x27;url(&quot;/fonts/brand.woff2&quot;)&#x27;</span>, { <span class="hljs-attr">weight</span>: <span class="hljs-string">&#x27;400&#x27;</span> });
+<span class="hljs-variable language_">document</span>.<span class="hljs-property">fonts</span>.<span class="hljs-title function_">add</span>(font);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(font.<span class="hljs-property">status</span>); <span class="hljs-comment">// unloaded</span>
+
+font.<span class="hljs-title function_">load</span>().<span class="hljs-title function_">then</span>(
+  <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(font.<span class="hljs-property">status</span>); <span class="hljs-comment">// loaded</span>
+    <span class="hljs-keyword">const</span> ctx = canvas.<span class="hljs-title function_">getContext</span>(<span class="hljs-string">&#x27;2d&#x27;</span>);
+    ctx.<span class="hljs-property">font</span> = <span class="hljs-string">&#x27;36px Brand&#x27;</span>;
+    ctx.<span class="hljs-title function_">fillText</span>(<span class="hljs-string">&#x27;字体已加载&#x27;</span>, <span class="hljs-number">20</span>, <span class="hljs-number">50</span>);
+  },
+  <span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(error),
+);
+</code></pre></div>
+<p>第一次打印为什么是 <code>unloaded</code>？MDN 说明，来源是 URL 的 <code>FontFace</code> 只会校验定义，不会自动下载，状态是 <code>unloaded</code>。调用 <code>load()</code> 以后变成 <code>loading</code>，下载并解析成功变成 <code>loaded</code>，定义无效或文件取不到就是 <code>failed</code>。如果来源是一个 <code>ArrayBuffer</code>，数据已经在手上，就会自动加载。</p>
+<p><code>document.fonts.add()</code> 这一步不能省。MDN 写明，字体可以在加入集合之前或之后加载，但必须加入集合才能用来画字。加入以后，浏览器在页面需要时也会自己去加载它。</p>
+<p>为什么 Canvas 要等？DOM 里的文字，字体到了浏览器会自动用新字体重新排版；Canvas 画的是像素，画完就定了，字体后来到了也不会重画。所以要在 Promise 完成以后再调用 <code>fillText</code>。</p>
+<h2>document.fonts.ready 和 load() 有什么不同</h2>
+<p><code>font.load()</code> 只关心这一个字体。<code>document.fonts</code> 是整个文档的字体集合，<code>@font-face</code> 声明的字体和用 <code>add()</code> 加进来的字体都在里面，它提供了几个整体的入口：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-variable language_">document</span>.<span class="hljs-property">fonts</span>.<span class="hljs-property">ready</span>.<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// 文档里的字体都加载完、布局也完成了</span>
+});
+
+<span class="hljs-variable language_">document</span>.<span class="hljs-property">fonts</span>.<span class="hljs-title function_">load</span>(<span class="hljs-string">&#x27;36px Brand&#x27;</span>).<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">faces</span>) =&gt;</span> {
+  <span class="hljs-comment">// faces 是匹配到并加载完成的 FontFace 数组</span>
+});
+
+<span class="hljs-variable language_">document</span>.<span class="hljs-property">fonts</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;loadingdone&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(event.<span class="hljs-property">fontfaces</span>.<span class="hljs-property">length</span>);
+});
+</code></pre></div>
+<p><code>ready</code> 返回一个 Promise，MDN 说明它要等文档里的字体都加载完、布局也完成以后才完成，适合“等所有字体就绪再测量”。<code>document.fonts.load()</code> 接收一个和 CSS <code>font</code> 属性一样的字体规格，加载能匹配上的字体，结果是一个 <code>FontFace</code> 数组。集合上还会派发 <code>loading</code>、<code>loadingdone</code>、<code>loadingerror</code> 事件，事件对象的 <code>fontfaces</code> 是这一批相关的字体。</p>
+<h2>为什么不能用 check() 判断字体是否可用</h2>
+<p>很多人会写 <code>if (document.fonts.check(&#x27;16px Brand&#x27;))</code> 来判断字体是否加载好。可是 MDN 专门提醒，<code>check()</code> 的含义是“用这个规格画字，会不会用到集合里还没加载完的字体”。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-variable language_">document</span>.<span class="hljs-property">fonts</span>.<span class="hljs-title function_">check</span>(<span class="hljs-string">&#x27;12px Courier&#x27;</span>);     <span class="hljs-comment">// true：匹配到的是系统字体</span>
+<span class="hljs-variable language_">document</span>.<span class="hljs-property">fonts</span>.<span class="hljs-title function_">check</span>(<span class="hljs-string">&#x27;12px i-dont-exist&#x27;</span>); <span class="hljs-comment">// true：集合里没有这个字体，也就不用等</span>
+<span class="hljs-variable language_">document</span>.<span class="hljs-property">fonts</span>.<span class="hljs-title function_">check</span>(<span class="hljs-string">&#x27;12px molot, Courier&#x27;</span>); <span class="hljs-comment">// false：molot 在集合里，但还没加载</span>
+</code></pre></div>
+<p>第二行最容易误解。字体名写错了，<code>check()</code> 反而返回 <code>true</code>，因为集合里没有任何一个字体需要等待。所以要确认某个字体真的可用，应该看那个 <code>FontFace</code> 对象的 <code>status</code>，或者 <code>await font.load()</code>。</p>
 <h2>常见追问</h2>
-<p><strong>为什么预加载字体一定要写 <code>crossorigin</code>？</strong></p>
+<p><strong>FontFace 的描述符写了 italic，字体就会变成斜体吗？</strong></p>
 <blockquote>
-<p>字体请求总是用 CORS 模式发出的，哪怕是同源字体。预加载不写 <code>crossorigin</code>，就是一个非 CORS 请求，跟后面真正用字体时的请求对不上，浏览器会再下载一次。</p>
-</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@font-face/font-display" target="_blank" rel="noreferrer">MDN · font-display<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+font-display+%E6%80%8E%E6%A0%B7%E5%BD%B1%E5%93%8D%E5%AD%97%E4%BD%93%E5%8A%A0%E8%BD%BD%E6%9C%9F%E9%97%B4%E7%9A%84%E6%96%87%E5%AD%97%E6%98%BE%E7%A4%BA%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Afont-display+%E6%80%8E%E6%A0%B7%E5%BD%B1%E5%93%8D%E5%AD%97%E4%BD%93%E5%8A%A0%E8%BD%BD%E6%9C%9F%E9%97%B4%E7%9A%84%E6%96%87%E5%AD%97%E6%98%BE%E7%A4%BA%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-font-loading%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-font-loading%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：font-display 怎样影响字体加载期间的文字显示？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-centering/">怎样让一个元素水平垂直居中？</a></li><li><a href="/questions/css-clear-float/">清除浮动有哪几种方法？</a></li><li><a href="/questions/css-text-ellipsis/">单行和多行文本省略怎么写？</a></li><li><a href="/questions/css-pseudo-class-element/">伪类和伪元素有什么区别？</a></li></ul></nav></main></div></div>
+<p>不会。MDN 说明，和 <code>@font-face</code> 一样，<code>style</code>、<code>weight</code> 这类描述符有的只是告诉浏览器“这个文件里是斜体”，用于匹配。文件本身是不是斜体，要由你保证。</p>
+</blockquote>
+<p><strong>字体加载失败怎么办？</strong></p>
+<blockquote>
+<p><code>font.load()</code> 返回的 Promise 会被拒绝，<code>status</code> 变成 <code>failed</code>，集合上会触发 <code>loadingerror</code>。页面上的文字会继续用 <code>font-family</code> 里后面的回退字体，Canvas 绘制可以在失败分支里改用系统字体。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/CSS_Font_Loading_API" target="_blank" rel="noreferrer">MDN · CSS Font Loading API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/FontFaceSet/check" target="_blank" rel="noreferrer">MDN · FontFaceSet.check()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@font-face" target="_blank" rel="noreferrer">MDN · @font-face<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E7%BD%91%E9%A1%B5%E5%AD%97%E4%BD%93%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%BC%80%E5%A7%8B%E4%B8%8B%E8%BD%BD%EF%BC%9F%E6%80%8E%E6%A0%B7%E7%94%A8+CSS+Font+Loading+API+%E6%8E%A7%E5%88%B6%E5%92%8C%E6%A3%80%E6%B5%8B%E5%8A%A0%E8%BD%BD%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E7%BD%91%E9%A1%B5%E5%AD%97%E4%BD%93%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%BC%80%E5%A7%8B%E4%B8%8B%E8%BD%BD%EF%BC%9F%E6%80%8E%E6%A0%B7%E7%94%A8+CSS+Font+Loading+API+%E6%8E%A7%E5%88%B6%E5%92%8C%E6%A3%80%E6%B5%8B%E5%8A%A0%E8%BD%BD%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-font-loading%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-font-loading%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：网页字体什么时候开始下载？怎样用 CSS Font Loading API 控制和检测加载？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-centering/">怎样让一个元素水平垂直居中？</a></li><li><a href="/questions/css-clear-float/">清除浮动有哪几种方法？</a></li><li><a href="/questions/css-text-ellipsis/">单行和多行文本省略怎么写？</a></li><li><a href="/questions/css-pseudo-class-element/">伪类和伪元素有什么区别？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

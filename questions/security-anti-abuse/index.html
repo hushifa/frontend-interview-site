@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="前端安全面试题：防刷的判断和拦截必须在服务端：按账号、IP 等维度限流，超限返回 429；登录失败次数按账号计数；可疑请求再要求验证码或多因素认证。" />
+    <title>接口防刷怎样做？限流、验证码和风控里前端负责什么？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/security-anti-abuse/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="接口防刷怎样做？限流、验证码和风控里前端负责什么？" />
+    <meta property="og:description" content="前端安全面试题：防刷的判断和拦截必须在服务端：按账号、IP 等维度限流，超限返回 429；登录失败次数按账号计数；可疑请求再要求验证码或多因素认证。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/security-anti-abuse/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/security-anti-abuse/#webpage","url":"https://fe.hushifa.top/questions/security-anti-abuse/","name":"接口防刷怎样做？限流、验证码和风控里前端负责什么？","description":"前端安全面试题：防刷的判断和拦截必须在服务端：按账号、IP 等维度限流，超限返回 429；登录失败次数按账号计数；可疑请求再要求验证码或多因素认证。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/security-anti-abuse/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/security-anti-abuse/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"前端安全面试题","item":"https://fe.hushifa.top/topics/security/"},{"@type":"ListItem","position":3,"name":"接口防刷怎样做？限流、验证码和风控里前端负责什么？","item":"https://fe.hushifa.top/questions/security-anti-abuse/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DkvyXEpT.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/security/">前端安全面试题</a><span aria-hidden="true">/</span><span aria-current="page">接口防刷怎样做？限流、验证码和风控里前端负责什么？</span></nav><h1 tabindex="-1">接口防刷怎样做？限流、验证码和风控里前端负责什么？</h1><p class="reading-summary">防刷的判断和拦截必须在服务端：按账号、IP 等维度限流，超限返回 429；登录失败次数按账号计数；可疑请求再要求验证码或多因素认证。前端代码会被绕过，只能做配合：防重复点击、处理 429 和 Retry-After、在服务端要求时展示验证码、提示保持通用。OWASP 也说明验证码会被破解，不能单独依赖。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>比如登录接口被人用脚本拿泄露的账号密码批量尝试，或者短信验证码接口被反复调用。防刷就是让服务端识别并拦住这类自动化请求，同时不影响正常用户。</p>
+<p>拦截必须放在服务端，因为前端代码和请求都在攻击者手里，脚本可以完全不经过页面直接调接口。OWASP 也提醒，设备指纹、JavaScript 挑战这类客户端防御可能被伪造或绕过，要有其他层兜底。</p>
+<p>服务端常见的几层是：限流，单位时间请求过多时返回 429，可以带 <code>Retry-After</code> 告诉客户端多久后再试；登录失败次数按账号计数并锁定一段时间；请求看起来可疑时再要求验证码或多因素认证。OWASP 认为多因素认证是应对撞库最有效的手段。</p>
+<p>前端负责配合：按钮防重复点击、收到 429 时按 <code>Retry-After</code> 提示和等待、在服务端要求时展示验证码、登录失败只提示“用户名或密码错误”。要注意验证码不是万能的，OWASP 写明存在破解验证码的工具和服务。</p>
+</blockquote>
+<h2>为什么拦截只能在服务端做</h2>
+<p>前端写的任何检查，比如“60 秒内只能点一次发送验证码”，只是对正常使用页面的人生效。攻击者用脚本直接请求接口，根本不会运行页面上的代码。所以前端的限制只能算体验优化，真正的次数统计和拒绝都要在服务端完成。</p>
+<p>OWASP 撞库防护速查表专门讲了这一点：设备指纹或 JavaScript 挑战这类客户端防御可能被伪造或绕过，需要设计其他层防御，在某一层失效时仍然能挡住攻击。</p>
+<h2>服务端通常有哪几层</h2>
+<p>第一层是限流。OWASP 拒绝服务速查表的定义是控制进出服务器或组件的流量速率，可以在基础设施层做，也可以在应用层做，依据可以是 IP、IP 黑名单、地理位置等。超过限制时，服务端返回 429 Too Many Requests，MDN 说明这个状态码表示客户端在给定时间内发了太多请求，响应里可以带 <code>Retry-After</code> 头，告诉客户端多久以后再请求。</p>
+<p>只按 IP 限制不够。OWASP 写明，封 IP 能挡住不太复杂的攻击，但很容易绕过，不应该作为唯一或主要的防御，更有效的是根据攻击的不同特征分级响应、组合多种手段。</p>
+<p>第二层是针对登录的账号锁定。OWASP 认证速查表建议，失败次数要和账号本身关联，而不是和来源 IP 关联，否则攻击者换很多个 IP 就能继续尝试。锁定策略要定三个数：多少次失败后锁定、在多长时间窗口内统计、锁定多久。</p>
+<p>第三层是验证码和多因素认证。OWASP 说要求用户解验证码能帮助识别自动化请求、减缓撞库，但验证码并不完美，存在能以较高成功率破解它的工具或服务。为了兼顾体验，可以只在请求被判定为可疑或高风险时才要求验证码。多因素认证被 OWASP 称为应对大部分密码类攻击最好的防御，也可以只在可疑登录时要求第二因素。</p>
+<h2>前端负责哪些配合</h2>
+<p>最直接的是防重复点击，提交后禁用按钮、请求结束再恢复，具体做法见<a href="/questions/design-prevent-duplicate/">《前端怎样防止重复提交和接口重复请求？》</a>。这减少的是正常用户误操作产生的重复请求，挡不住脚本。</p>
+<p>收到 429 时要正确处理。下面的函数根据 <code>Retry-After</code> 算出等待的秒数，这个头的值可以是秒数，也可以是 HTTP 日期，示例只处理秒数的情况：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">waitSeconds</span>(<span class="hljs-params">status, retryAfter</span>) {
+  <span class="hljs-keyword">if</span> (status !== <span class="hljs-number">429</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">const</span> seconds = <span class="hljs-title class_">Number</span>(retryAfter);
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">Number</span>.<span class="hljs-built_in">isFinite</span>(seconds) &amp;&amp; seconds &gt; <span class="hljs-number">0</span> ? seconds : <span class="hljs-number">60</span>;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">waitSeconds</span>(<span class="hljs-number">200</span>, <span class="hljs-literal">null</span>)); <span class="hljs-comment">// 0</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">waitSeconds</span>(<span class="hljs-number">429</span>, <span class="hljs-string">&#x27;30&#x27;</span>)); <span class="hljs-comment">// 30</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">waitSeconds</span>(<span class="hljs-number">429</span>, <span class="hljs-literal">null</span>)); <span class="hljs-comment">// 60</span>
+</code></pre></div>
+<p>没有 <code>Retry-After</code> 时用一个默认等待时间，这里写 60 秒只用于演示。拿到秒数后，前端可以在按钮上显示倒计时，而不是让用户反复点、或者自动重试把服务端压得更重。</p>
+<p>验证码由服务端决定什么时候要。常见流程是服务端判断请求可疑，返回需要验证的错误码，前端弹出验证码组件，用户通过后把验证结果随请求再提交一次，服务端校验这个结果。前端不能自己判断“验证通过了”就放行。</p>
+<p>错误提示保持通用。OWASP 要求登录、重置密码、找回密码等功能无论账号是否存在都返回通用的提示，避免攻击者通过提示差异枚举出哪些用户名存在。</p>
+<h2>常见追问</h2>
+<p><strong>为什么登录失败次数要按账号统计，而不是按 IP？</strong></p>
+<blockquote>
+<p>按 IP 统计的话，攻击者换一批 IP 就能继续对同一个账号尝试。OWASP 认证速查表要求把失败计数和账号关联，这样无论请求从多少个 IP 发出，同一个账号失败多了都会被锁定。</p>
+</blockquote>
+<p><strong>有了验证码是不是就不用限流了？</strong></p>
+<blockquote>
+<p>不是。OWASP 写明验证码存在破解工具和服务，它只能减缓自动化攻击。限流、账号锁定、多因素认证要一起用，某一层被绕过时还有其他层。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://cheatsheetseries.owasp.org/cheatsheets/Credential_Stuffing_Prevention_Cheat_Sheet.html" target="_blank" rel="noreferrer">OWASP · Credential Stuffing Prevention Cheat Sheet<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html" target="_blank" rel="noreferrer">OWASP · Authentication Cheat Sheet<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html" target="_blank" rel="noreferrer">OWASP · Denial of Service Cheat Sheet<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/429" target="_blank" rel="noreferrer">MDN · 429 Too Many Requests<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%8E%A5%E5%8F%A3%E9%98%B2%E5%88%B7%E6%80%8E%E6%A0%B7%E5%81%9A%EF%BC%9F%E9%99%90%E6%B5%81%E3%80%81%E9%AA%8C%E8%AF%81%E7%A0%81%E5%92%8C%E9%A3%8E%E6%8E%A7%E9%87%8C%E5%89%8D%E7%AB%AF%E8%B4%9F%E8%B4%A3%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%8E%A5%E5%8F%A3%E9%98%B2%E5%88%B7%E6%80%8E%E6%A0%B7%E5%81%9A%EF%BC%9F%E9%99%90%E6%B5%81%E3%80%81%E9%AA%8C%E8%AF%81%E7%A0%81%E5%92%8C%E9%A3%8E%E6%8E%A7%E9%87%8C%E5%89%8D%E7%AB%AF%E8%B4%9F%E8%B4%A3%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Asecurity-anti-abuse%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fsecurity-anti-abuse%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：接口防刷怎样做？限流、验证码和风控里前端负责什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/security-request-signing/">用了 HTTPS 还要在前端加密吗？接口加签和防重放怎样设计？</a></li><li><a href="/questions/http-xss/">XSS 有哪几种？前端怎样防范？</a></li><li><a href="/questions/sec-cookies/">HttpOnly、Secure 和 SameSite 分别保护什么？</a></li><li><a href="/questions/security-https-mitm/">HTTPS 握手中，中间人攻击是怎样被防住的？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="前端安全面试题：密码在传输中靠 HTTPS 保护，TLS 提供机密性和完整性。" />
+    <title>登录密码怎样传输和存储？用了 HTTPS 还需要在前端哈希密码吗？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/security-password-transfer/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="登录密码怎样传输和存储？用了 HTTPS 还需要在前端哈希密码吗？" />
+    <meta property="og:description" content="前端安全面试题：密码在传输中靠 HTTPS 保护，TLS 提供机密性和完整性。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/security-password-transfer/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/security-password-transfer/#webpage","url":"https://fe.hushifa.top/questions/security-password-transfer/","name":"登录密码怎样传输和存储？用了 HTTPS 还需要在前端哈希密码吗？","description":"前端安全面试题：密码在传输中靠 HTTPS 保护，TLS 提供机密性和完整性。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/security-password-transfer/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/security-password-transfer/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"前端安全面试题","item":"https://fe.hushifa.top/topics/security/"},{"@type":"ListItem","position":3,"name":"登录密码怎样传输和存储？用了 HTTPS 还需要在前端哈希密码吗？","item":"https://fe.hushifa.top/questions/security-password-transfer/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DkvyXEpT.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/security/">前端安全面试题</a><span aria-hidden="true">/</span><span aria-current="page">登录密码怎样传输和存储？用了 HTTPS 还需要在前端哈希密码吗？</span></nav><h1 tabindex="-1">登录密码怎样传输和存储？用了 HTTPS 还需要在前端哈希密码吗？</h1><p class="reading-summary">密码在传输中靠 HTTPS 保护，TLS 提供机密性和完整性。前端先哈希一次并不能替代 HTTPS，因为服务端收到的哈希值就成了新的“密码”，被截获照样能登录。真正要做好的是服务端存储：用 Argon2id、bcrypt 或 PBKDF2 这类慢哈希，每个密码一个随机盐，不能用 MD5、SHA-256 这类快速哈希，更不能可逆加密。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>用户在登录框输入密码，点登录后，密码通过 HTTPS 发给服务端，服务端把它和数据库里存的哈希值比对。传输这一段由 TLS 保护，OWASP 写明 TLS 提供机密性（别人读不到）和完整性（别人改不了，也不能重放截获的请求）。</p>
+<p>有人会想在前端先把密码 MD5 或 SHA-256 一下再发。这样做替代不了 HTTPS：服务端比对的就是这个哈希值，它成了新的“密码”，被截获以后攻击者直接拿去发请求一样能登录。</p>
+<p>真正决定密码安全的是服务端怎么存。OWASP 要求不能明文存，要用 Argon2id、bcrypt 或 PBKDF2 这类故意算得很慢的哈希，并给每个密码加一个随机盐，这样数据库泄露后攻击者也很难批量猜出原密码。MD5、SHA-256 算得太快，不适合存密码；可逆加密也不行，因为拿到密钥就能还原。</p>
+<p>前端能做的是配合：页面全站 HTTPS，密码框用正确的 <code>autocomplete</code> 值方便密码管理器，不限制特殊字符、允许长密码，登录失败只提示“用户名或密码错误”。</p>
+</blockquote>
+<h2>HTTPS 已经保护了传输</h2>
+<p>OWASP 的 TLS 速查表列出 TLS 正确使用时的保障：机密性，攻击者读不到流量内容；完整性，攻击者不能篡改流量，也不能把截获的请求重放给服务器。所以“密码在路上被人看到”这件事，只要全站 HTTPS 并且证书校验正常，就已经解决了。</p>
+<p>OWASP 也提醒，如果客户端接受了攻击者的证书，攻击者就能读到发往这个端点的数据。这种情况下前端多加一层处理也没用，因为能当中间人的人同样能替换下发的脚本。更完整的讨论见<a href="/questions/security-request-signing/">《用了 HTTPS 还要在前端加密吗？接口加签和防重放怎样设计？》</a>。</p>
+<h2>前端哈希为什么替代不了 HTTPS</h2>
+<p>下面用一个模拟函数代替真实哈希，只为说明流程。服务端存的是“前端哈希值”的样子，登录时比对客户端发来的值。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">fakeHash</span>(<span class="hljs-params">text</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;h(&#x27;</span> + text + <span class="hljs-string">&#x27;)&#x27;</span>;
+}
+
+<span class="hljs-keyword">const</span> stored = <span class="hljs-title function_">fakeHash</span>(<span class="hljs-string">&#x27;secret123&#x27;</span>);
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">login</span>(<span class="hljs-params">received</span>) {
+  <span class="hljs-keyword">return</span> received === stored ? <span class="hljs-string">&#x27;登录成功&#x27;</span> : <span class="hljs-string">&#x27;登录失败&#x27;</span>;
+}
+
+<span class="hljs-keyword">const</span> sentByBrowser = <span class="hljs-title function_">fakeHash</span>(<span class="hljs-string">&#x27;secret123&#x27;</span>);
+<span class="hljs-keyword">const</span> capturedByAttacker = sentByBrowser;
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">login</span>(sentByBrowser)); <span class="hljs-comment">// 登录成功</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">login</span>(capturedByAttacker)); <span class="hljs-comment">// 登录成功</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">login</span>(<span class="hljs-string">&#x27;secret123&#x27;</span>)); <span class="hljs-comment">// 登录失败</span>
+</code></pre></div>
+<p>攻击者不知道原密码 <code>secret123</code>，可是他截获的哈希值照样登录成功。原因是服务端只认收到的那个字符串，前端哈希后的结果就是实际意义上的密码。前端哈希最多能避免原始密码明文出现在请求里，对“别人拿到请求就能登录”毫无帮助，所以传输安全仍然要靠 HTTPS。</p>
+<h2>服务端应该怎样存密码</h2>
+<p>OWASP 密码存储速查表的第一条是：密码永远不能明文存储，要用强的慢哈希算法，比如 Argon2id、bcrypt 或 PBKDF2。哈希是单向的，没法从哈希值“解密”出原文，所以适合做密码校验。加密是双向的，拿到密钥就能还原明文，适合存地址这类需要展示的数据，不适合存密码。</p>
+<p>为什么要“慢”？因为数据库泄露后，攻击者会拿常见密码一个个去算哈希比对。SHA-256 这类快速哈希一秒能算海量次，OWASP 明确说它们不适合存密码。慢哈希故意让每次计算都消耗时间或内存，把批量猜测的成本拉高。</p>
+<p>盐是给每个密码单独生成的随机值，和密码一起参与哈希。OWASP 要求每个密码一个唯一的盐，这样两个用户密码相同，存下来的哈希也不同，攻击者也没法用提前算好的彩虹表。大多数主流库会自动生成和管理盐，不需要自己处理。</p>
+<p>OWASP 给出的最低参数：Argon2id 使用 19 MiB 内存、迭代 2 次、并行度 1；旧系统使用 bcrypt 时工作因子不低于 10，并且密码长度限制在 72 字节，因为多数 bcrypt 实现的输入上限就是 72 字节；需要 FIPS-140 合规时用 PBKDF2-HMAC-SHA256，迭代 600,000 次以上。</p>
+<h2>前端在密码上能做什么</h2>
+<p>第一是全站 HTTPS，登录页和提交接口都不能走 HTTP。</p>
+<p>第二是让密码管理器正常工作。MDN 写明，<code>autocomplete=&quot;new-password&quot;</code> 用于注册和修改密码时的“新密码”“确认新密码”输入框，和输入当前密码的框区分开，当前密码用 <code>current-password</code>。见<a href="/questions/html-autocomplete/">《HTML autocomplete 属性怎样帮助表单体验和隐私？》</a>。</p>
+<p>第三是不要乱加密码规则。OWASP 认证速查表建议允许所有字符，包括 Unicode 和空格，不要强制要求大小写、数字、特殊字符这类组合规则；最大长度至少允许 64 个字符，方便用户使用长短语。</p>
+<p>第四是错误提示保持通用。OWASP 要求登录、重置密码等功能无论账号是否存在都返回同样的提示，防止攻击者靠提示差异判断哪些用户名存在。</p>
+<h2>常见追问</h2>
+<p><strong>登录密码用 RSA 在前端加密有没有用？</strong></p>
+<blockquote>
+<p>和前端哈希是同一个问题。公钥是公开下发的，攻击者截获密文后直接重放就能登录；页面被注入恶意脚本时，脚本在加密前就能读到输入框里的明文。传输安全靠 HTTPS，存储安全靠服务端慢哈希，前端 RSA 两件事都替代不了。</p>
+</blockquote>
+<p><strong>为什么 bcrypt 要限制 72 字节？</strong></p>
+<blockquote>
+<p>OWASP 写明，多数 bcrypt 实现的输入上限是 72 字节，所以用 bcrypt 时要把密码最大长度限制在 72 字节以内。这个限制按字节算，中文字符在 UTF-8 下一个字占 3 个字节，同样的字数占用更多。新系统 OWASP 首选 Argon2id。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html" target="_blank" rel="noreferrer">OWASP · Password Storage Cheat Sheet<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Security_Cheat_Sheet.html" target="_blank" rel="noreferrer">OWASP · Transport Layer Security Cheat Sheet<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html" target="_blank" rel="noreferrer">OWASP · Authentication Cheat Sheet<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/autocomplete" target="_blank" rel="noreferrer">MDN · HTML autocomplete<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81%E6%80%8E%E6%A0%B7%E4%BC%A0%E8%BE%93%E5%92%8C%E5%AD%98%E5%82%A8%EF%BC%9F%E7%94%A8%E4%BA%86+HTTPS+%E8%BF%98%E9%9C%80%E8%A6%81%E5%9C%A8%E5%89%8D%E7%AB%AF%E5%93%88%E5%B8%8C%E5%AF%86%E7%A0%81%E5%90%97%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81%E6%80%8E%E6%A0%B7%E4%BC%A0%E8%BE%93%E5%92%8C%E5%AD%98%E5%82%A8%EF%BC%9F%E7%94%A8%E4%BA%86+HTTPS+%E8%BF%98%E9%9C%80%E8%A6%81%E5%9C%A8%E5%89%8D%E7%AB%AF%E5%93%88%E5%B8%8C%E5%AF%86%E7%A0%81%E5%90%97%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Asecurity-password-transfer%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fsecurity-password-transfer%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：登录密码怎样传输和存储？用了 HTTPS 还需要在前端哈希密码吗？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/security-https-mitm/">HTTPS 握手中，中间人攻击是怎样被防住的？</a></li><li><a href="/questions/http-xss/">XSS 有哪几种？前端怎样防范？</a></li><li><a href="/questions/sec-cookies/">HttpOnly、Secure 和 SameSite 分别保护什么？</a></li><li><a href="/questions/security-request-signing/">用了 HTTPS 还要在前端加密吗？接口加签和防重放怎样设计？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

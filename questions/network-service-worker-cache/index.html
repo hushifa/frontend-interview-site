@@ -11,45 +11,60 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="网络面试题：新的 Service Worker 装好后，默认要等所有旧页面关掉才生效，这期间旧 Worker 继续用旧缓存。" />
-    <title>Service Worker 缓存更新为什么容易出现旧版本？</title>
+    <meta name="description" content="网络面试题：Service Worker 在 fetch 事件里决定每个请求怎么返回。" />
+    <title>Service Worker 有哪些缓存策略？HTML、静态资源和接口分别怎么缓存？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/network-service-worker-cache/" />
     <meta name="robots" content="index,follow" />
     <meta property="og:type" content="article" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
-    <meta property="og:title" content="Service Worker 缓存更新为什么容易出现旧版本？" />
-    <meta property="og:description" content="网络面试题：新的 Service Worker 装好后，默认要等所有旧页面关掉才生效，这期间旧 Worker 继续用旧缓存。" />
+    <meta property="og:title" content="Service Worker 有哪些缓存策略？HTML、静态资源和接口分别怎么缓存？" />
+    <meta property="og:description" content="网络面试题：Service Worker 在 fetch 事件里决定每个请求怎么返回。" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/network-service-worker-cache/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/network-service-worker-cache/#webpage","url":"https://fe.hushifa.top/questions/network-service-worker-cache/","name":"Service Worker 缓存更新为什么容易出现旧版本？","description":"网络面试题：新的 Service Worker 装好后，默认要等所有旧页面关掉才生效，这期间旧 Worker 继续用旧缓存。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/network-service-worker-cache/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/network-service-worker-cache/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"网络面试题","item":"https://fe.hushifa.top/topics/network/"},{"@type":"ListItem","position":3,"name":"Service Worker 缓存更新为什么容易出现旧版本？","item":"https://fe.hushifa.top/questions/network-service-worker-cache/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/network-service-worker-cache/#webpage","url":"https://fe.hushifa.top/questions/network-service-worker-cache/","name":"Service Worker 有哪些缓存策略？HTML、静态资源和接口分别怎么缓存？","description":"网络面试题：Service Worker 在 fetch 事件里决定每个请求怎么返回。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/network-service-worker-cache/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/network-service-worker-cache/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"网络面试题","item":"https://fe.hushifa.top/topics/network/"},{"@type":"ListItem","position":3,"name":"Service Worker 有哪些缓存策略？HTML、静态资源和接口分别怎么缓存？","item":"https://fe.hushifa.top/questions/network-service-worker-cache/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-BVmbcf0v.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-DkvyXEpT.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/network/">网络面试题</a><span aria-hidden="true">/</span><span aria-current="page">Service Worker 缓存更新为什么容易出现旧版本？</span></nav><h1 tabindex="-1">Service Worker 缓存更新为什么容易出现旧版本？</h1><p class="reading-summary">新的 Service Worker 装好后，默认要等所有旧页面关掉才生效，这期间旧 Worker 继续用旧缓存。再加上缓存名不随版本变、旧缓存没删、引入的脚本被 HTTP 缓存，用户就会长期停在旧版本。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/network/">网络面试题</a><span aria-hidden="true">/</span><span aria-current="page">Service Worker 有哪些缓存策略？HTML、静态资源和接口分别怎么缓存？</span></nav><h1 tabindex="-1">Service Worker 有哪些缓存策略？HTML、静态资源和接口分别怎么缓存？</h1><p class="reading-summary">Service Worker 在 fetch 事件里决定每个请求怎么返回。安装时预缓存应用外壳；缓存优先适合带哈希的静态资源；网络优先适合 HTML 入口和要尽量新的数据；先返回缓存再后台刷新适合响应快更重要、稍旧也能接受的内容；POST 和必须最新的数据只走网络。缓存响应前要 clone，只缓存成功的响应。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
 <blockquote>
-<p>Service Worker 是浏览器在页面背后跑的一个脚本，能拦截页面的请求，自己决定从缓存还是网络返回。它的生命周期是 <code>install</code> → <code>waiting</code> → <code>activate</code>。发了新版本，新 Worker 装好后会停在 waiting，只要还有页面被旧 Worker 控制，它就一直等。这期间用户看到的还是旧版本。</p>
-<p>更新检测本身也有坑。浏览器会逐字节比对 <code>sw.js</code>。<code>updateViaCache</code> 默认是 <code>imports</code>，意思是 <code>sw.js</code> 本身不走 HTTP 缓存，但 <code>importScripts()</code> 引入的脚本会走。被引入的文件不带版本号，更新就可能不生效。</p>
-<p>另外，Cache Storage 和 HTTP 缓存是两套东西，清浏览器缓存清不掉 Cache Storage，必须在代码里删。常规做法是缓存名带版本号，在 <code>activate</code> 时删掉其他版本；HTML 走网络优先，带哈希的静态资源走缓存优先。</p>
-<p><code>skipWaiting()</code> 能让新 Worker 立刻生效，但已经打开的旧页面可能会用新 Worker 去请求已经被删掉的旧资源。所以更稳妥的是提示用户刷新。</p>
+<p>Service Worker 能拦截页面发出的请求，在 <code>fetch</code> 事件里自己决定：从 Cache Storage 拿，还是去网络拿，还是两个都用。MDN 的说法是，缓存策略要在离线可用、响应速度和内容新鲜之间取舍，一个应用通常对不同资源用不同策略。</p>
+<p>常用的有这几种。预缓存是在 <code>install</code> 时把应用外壳存好，适合这个版本一定要用、又不会变的文件。缓存优先是先查缓存，没有再去网络并存一份，适合文件名带哈希的 JS、CSS。网络优先是先请求网络，失败了才用缓存，适合 HTML 入口和消息列表这种要尽量新、但旧的总比没有强的内容。</p>
+<p>还有一种是先返回缓存、同时在后台请求网络更新缓存，叫 stale-while-revalidate，适合响应快更重要、内容稍旧也能接受的场景。至于 POST 请求，以及商品库存这种宁可失败也不能给旧数据的接口，只走网络。</p>
+<p>写的时候要注意两点：<code>Response</code> 的内容只能读一次，存进缓存前要 <code>clone()</code>；只缓存成功的响应，不要把 404、500 也存进去。</p>
 </blockquote>
-<h2>一个不容易卡在旧版本的 sw.js</h2>
+<h2>先看一个按资源分流的 fetch</h2>
+<p>下面的 <code>fetch</code> 处理器按请求类型选策略，只处理同源的 GET 请求：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// sw.js</span>
-<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">VERSION</span> = <span class="hljs-string">&#x27;v42&#x27;</span>;
-<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">STATIC_CACHE</span> = <span class="hljs-string">`static-<span class="hljs-subst">${VERSION}</span>`</span>;
-<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">PRECACHE</span> = [<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-string">&#x27;/assets/app.3f9a1c.js&#x27;</span>, <span class="hljs-string">&#x27;/assets/app.8b2e.css&#x27;</span>];
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">CACHE</span> = <span class="hljs-string">&#x27;static-v42&#x27;</span>;
 
-<span class="hljs-variable language_">self</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;install&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
-  event.<span class="hljs-title function_">waitUntil</span>(caches.<span class="hljs-title function_">open</span>(<span class="hljs-variable constant_">STATIC_CACHE</span>).<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">cache</span>) =&gt;</span> cache.<span class="hljs-title function_">addAll</span>(<span class="hljs-variable constant_">PRECACHE</span>)));
-});
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">cacheFirst</span>(<span class="hljs-params">request</span>) {
+  <span class="hljs-keyword">const</span> hit = <span class="hljs-keyword">await</span> caches.<span class="hljs-title function_">match</span>(request);
+  <span class="hljs-keyword">if</span> (hit) <span class="hljs-keyword">return</span> hit;
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(request);
+    <span class="hljs-keyword">if</span> (response.<span class="hljs-property">ok</span>) {
+      <span class="hljs-keyword">const</span> cache = <span class="hljs-keyword">await</span> caches.<span class="hljs-title function_">open</span>(<span class="hljs-variable constant_">CACHE</span>);
+      cache.<span class="hljs-title function_">put</span>(request, response.<span class="hljs-title function_">clone</span>());
+    }
+    <span class="hljs-keyword">return</span> response;
+  } <span class="hljs-keyword">catch</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-title class_">Response</span>.<span class="hljs-title function_">error</span>();
+  }
+}
 
-<span class="hljs-variable language_">self</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;activate&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
-  event.<span class="hljs-title function_">waitUntil</span>(
-    caches.<span class="hljs-title function_">keys</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">keys</span>) =&gt;</span>
-      <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">all</span>(keys.<span class="hljs-title function_">filter</span>(<span class="hljs-function">(<span class="hljs-params">key</span>) =&gt;</span> key !== <span class="hljs-variable constant_">STATIC_CACHE</span>).<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">key</span>) =&gt;</span> caches.<span class="hljs-title function_">delete</span>(key))),
-    ),
-  );
-});
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">networkFirst</span>(<span class="hljs-params">request</span>) {
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(request);
+    <span class="hljs-keyword">if</span> (response.<span class="hljs-property">ok</span>) {
+      <span class="hljs-keyword">const</span> cache = <span class="hljs-keyword">await</span> caches.<span class="hljs-title function_">open</span>(<span class="hljs-variable constant_">CACHE</span>);
+      cache.<span class="hljs-title function_">put</span>(request, response.<span class="hljs-title function_">clone</span>());
+    }
+    <span class="hljs-keyword">return</span> response;
+  } <span class="hljs-keyword">catch</span> {
+    <span class="hljs-keyword">return</span> (<span class="hljs-keyword">await</span> caches.<span class="hljs-title function_">match</span>(request)) ?? <span class="hljs-title class_">Response</span>.<span class="hljs-title function_">error</span>();
+  }
+}
 
 <span class="hljs-variable language_">self</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;fetch&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> { request } = event;
@@ -57,58 +72,43 @@
   <span class="hljs-keyword">if</span> (request.<span class="hljs-property">method</span> !== <span class="hljs-string">&#x27;GET&#x27;</span> || url.<span class="hljs-property">origin</span> !== <span class="hljs-variable language_">self</span>.<span class="hljs-property">location</span>.<span class="hljs-property">origin</span>) <span class="hljs-keyword">return</span>;
 
   <span class="hljs-keyword">if</span> (request.<span class="hljs-property">mode</span> === <span class="hljs-string">&#x27;navigate&#x27;</span>) {
-    <span class="hljs-comment">// HTML：网络优先，离线时回退缓存</span>
-    event.<span class="hljs-title function_">respondWith</span>(<span class="hljs-title function_">fetch</span>(request).<span class="hljs-title function_">catch</span>(<span class="hljs-function">() =&gt;</span> caches.<span class="hljs-title function_">match</span>(<span class="hljs-string">&#x27;/&#x27;</span>)));
-    <span class="hljs-keyword">return</span>;
+    event.<span class="hljs-title function_">respondWith</span>(<span class="hljs-title function_">networkFirst</span>(request));
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (url.<span class="hljs-property">pathname</span>.<span class="hljs-title function_">startsWith</span>(<span class="hljs-string">&#x27;/assets/&#x27;</span>)) {
+    event.<span class="hljs-title function_">respondWith</span>(<span class="hljs-title function_">cacheFirst</span>(request));
   }
-
-  <span class="hljs-keyword">if</span> (url.<span class="hljs-property">pathname</span>.<span class="hljs-title function_">startsWith</span>(<span class="hljs-string">&#x27;/assets/&#x27;</span>)) {
-    event.<span class="hljs-title function_">respondWith</span>(caches.<span class="hljs-title function_">match</span>(request).<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">hit</span>) =&gt;</span> hit ?? <span class="hljs-title function_">fetch</span>(request)));
-  }
-});
-
-<span class="hljs-variable language_">self</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;message&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
-  <span class="hljs-keyword">if</span> (event.<span class="hljs-property">data</span> === <span class="hljs-string">&#x27;SKIP_WAITING&#x27;</span>) <span class="hljs-variable language_">self</span>.<span class="hljs-title function_">skipWaiting</span>();
 });
 </code></pre></div>
-<p>每次发版改 <code>VERSION</code>，缓存名就变了。<code>install</code> 时把新资源存进新缓存，<code>activate</code> 时把名字不是当前版本的缓存全删掉。如果缓存名一直不变，旧文件就会永远留在里面。</p>
-<p><code>fetch</code> 里分了两种策略。页面导航是网络优先，有网就拿最新的 HTML，断网才用缓存。<code>/assets/</code> 下的文件名带哈希，内容不会变，所以缓存优先。</p>
-<p>还要注意，它只拦截同源的 GET 请求和明确的静态目录，接口请求一律交给网络，免得把个人数据存进 Cache Storage。</p>
-<h2>怎么提示用户更新</h2>
-<p>页面这边监听新 Worker 的状态，装好了就弹个提示：</p>
-<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> registration = <span class="hljs-keyword">await</span> navigator.<span class="hljs-property">serviceWorker</span>.<span class="hljs-title function_">register</span>(<span class="hljs-string">&#x27;/sw.js&#x27;</span>);
-
-registration.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;updatefound&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">const</span> worker = registration.<span class="hljs-property">installing</span>;
-  worker.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;statechange&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-    <span class="hljs-keyword">if</span> (worker.<span class="hljs-property">state</span> === <span class="hljs-string">&#x27;installed&#x27;</span> &amp;&amp; navigator.<span class="hljs-property">serviceWorker</span>.<span class="hljs-property">controller</span>) {
-      <span class="hljs-title function_">showUpdateBanner</span>(<span class="hljs-function">() =&gt;</span> worker.<span class="hljs-title function_">postMessage</span>(<span class="hljs-string">&#x27;SKIP_WAITING&#x27;</span>));
-    }
+<p>没有调用 <code>respondWith()</code> 的请求，比如接口和跨域请求，会按正常方式走网络，Service Worker 不插手。</p>
+<p>为什么要 <code>response.clone()</code>？MDN 解释，<code>Response</code> 是流，只能读一次。存进缓存要读一次，返回给页面又要读一次，所以存一份副本，把原件返回。为什么判断 <code>response.ok</code>？<code>fetch</code> 遇到 404、500 也会正常完成，不判断的话，一次服务端出错就会把错误页面缓存下来，之后一直返回它。</p>
+<p>缓存优先为什么还要在没命中时去网络？因为缓存可能被浏览器或用户清掉，MDN 也提到了这一点，没有网络回退的话，清过缓存后资源就加载不出来了。</p>
+<h2>不同资源为什么用不同策略</h2>
+<p>HTML 入口用网络优先。入口页面里写着当前版本的 JS、CSS 文件名，如果它被缓存优先返回，用户就一直拿到旧页面，新版本的资源也永远不会被请求。断网时再回退到缓存，离线也能打开。</p>
+<p>带哈希的静态资源用缓存优先。文件内容一变，构建工具生成的文件名就变，新文件名相当于一个新资源，所以缓存里的旧文件永远不会被当成新内容返回，命中缓存总是对的。</p>
+<p>接口数据要看业务。MDN 举的例子是，消息应用的最近消息列表适合网络优先；商品列表过时了会让用户困扰，只走网络更合适；POST 这类请求永远不应该缓存。接口里如果有用户个人数据，还要考虑同一台设备上换账号登录的情况，退出登录时要清掉相关缓存。</p>
+<h2>stale-while-revalidate 怎样写</h2>
+<p>这种策略先用缓存快速响应，同时不管有没有命中都去请求网络，拿到新响应后更新缓存，下次访问就是新的了：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">staleWhileRevalidate</span>(<span class="hljs-params">request</span>) {
+  <span class="hljs-keyword">const</span> cache = <span class="hljs-keyword">await</span> caches.<span class="hljs-title function_">open</span>(<span class="hljs-variable constant_">CACHE</span>);
+  <span class="hljs-keyword">const</span> networkPromise = <span class="hljs-title function_">fetch</span>(request).<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">response</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (response.<span class="hljs-property">ok</span>) cache.<span class="hljs-title function_">put</span>(request, response.<span class="hljs-title function_">clone</span>());
+    <span class="hljs-keyword">return</span> response;
   });
-});
-
-<span class="hljs-keyword">let</span> refreshing = <span class="hljs-literal">false</span>;
-navigator.<span class="hljs-property">serviceWorker</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;controllerchange&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
-  <span class="hljs-keyword">if</span> (refreshing) <span class="hljs-keyword">return</span>;
-  refreshing = <span class="hljs-literal">true</span>;
-  location.<span class="hljs-title function_">reload</span>();
-});
+  <span class="hljs-keyword">return</span> (<span class="hljs-keyword">await</span> cache.<span class="hljs-title function_">match</span>(request)) ?? networkPromise;
+}
 </code></pre></div>
-<p>为什么要判断 <code>navigator.serviceWorker.controller</code>？因为它存在，说明当前页面已经被一个旧 Worker 控制，这次是更新；不存在就是第一次安装，没必要提示。</p>
-<p>用户点了更新，页面给新 Worker 发 <code>SKIP_WAITING</code>，新 Worker 调 <code>skipWaiting()</code> 立刻接管。接管时触发 <code>controllerchange</code>，页面就刷新一次。<code>refreshing</code> 这个标记是防止重复刷新。</p>
-<h2>出了问题怎么排查</h2>
-<p>在 DevTools 的 Application → Service Workers 里，可以看到新 Worker 是不是停在 waiting。调试时可以勾选 Update on reload。</p>
-<p>在 Application → Cache Storage 里，确认旧版本的缓存有没有被删掉。</p>
-<p>线上出了大问题需要紧急下线时，可以部署一个只做清理和 <code>registration.unregister()</code> 的 <code>sw.js</code>，或者返回 <code>Clear-Site-Data: &quot;storage&quot;</code> 响应头。</p>
+<p>缓存更新放在 <code>then</code> 里异步完成，页面不用等网络。代价是用户这一次看到的可能是上一次的内容，所以只适合头像、配置这类稍旧也没关系的资源。</p>
+<h2>预缓存放什么</h2>
+<p><code>install</code> 事件里用 <code>cache.addAll()</code> 预缓存的，应该是这个版本一定会用到、而且不会变的文件，比如应用外壳的 HTML、主 JS 和 CSS。MDN 说明，只要其中一个文件缓存失败，整个安装就失败；反过来，安装成功就说明这些文件都已经在缓存里了。</p>
+<p>所以预缓存清单不要放可能 404 的文件，也不要放太多，否则安装慢、容易失败。缓存名带版本号、在 <code>activate</code> 里删掉旧缓存，以及新版本怎样接管页面，见<a href="/questions/mobile-serviceworker/">《Service Worker 的安装、激活与缓存更新有哪些坑？》</a>。</p>
 <h2>常见追问</h2>
+<p><strong>Service Worker 里的 fetch 会经过 HTTP 缓存吗？</strong></p>
+<blockquote>
+<p>会。Service Worker 里调用 <code>fetch()</code> 也是一次普通请求，同样可能命中 HTTP 缓存。所以网络优先拿到的内容旧，不一定是 Cache Storage 的问题，也要看服务端的 <code>Cache-Control</code>，见<a href="/questions/browser-cache-location/">《浏览器缓存存放在哪里？请求按什么顺序查找缓存？》</a>。</p>
+</blockquote>
 <p><strong>Workbox 解决了什么？</strong></p>
 <blockquote>
-<p>它把预缓存清单、版本化和缓存策略这些模板代码封装好了，原理和上面一样。</p>
-</blockquote>
-<p><strong>PWA 还有哪些能力？</strong></p>
-<blockquote>
-<p>见<a href="/questions/mobile-pwa/">《PWA 由哪些能力组成，是否所有浏览器体验都一致？》</a>。</p>
-</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers" target="_blank" rel="noreferrer">MDN · Using Service Workers<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Service+Worker+%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E4%B8%BA%E4%BB%80%E4%B9%88%E5%AE%B9%E6%98%93%E5%87%BA%E7%8E%B0%E6%97%A7%E7%89%88%E6%9C%AC%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AService+Worker+%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E4%B8%BA%E4%BB%80%E4%B9%88%E5%AE%B9%E6%98%93%E5%87%BA%E7%8E%B0%E6%97%A7%E7%89%88%E6%9C%AC%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anetwork-service-worker-cache%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%BD%91%E7%BB%9C%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnetwork-service-worker-cache%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Service Worker 缓存更新为什么容易出现旧版本？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/http-cache/">强缓存与协商缓存如何配合？</a></li><li><a href="/questions/http-cors/">什么是跨域？CORS 为什么需要服务端配合？</a></li><li><a href="/questions/http-cross-origin-solutions/">跨域有哪些解决方案？JSONP 和代理是怎样工作的？</a></li><li><a href="/questions/network-dns-tcp-tls/">DNS、TCP 和 TLS 握手分别会给页面增加哪些等待？</a></li></ul></nav></main></div></div>
+<p>它把预缓存清单、缓存策略和过期清理这些模板代码封装好了，策略的名字也和上面这些对应。原理一样，出问题时还是按上面的思路排查。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Caching" target="_blank" rel="noreferrer">MDN · PWA Caching<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers" target="_blank" rel="noreferrer">MDN · Using Service Workers<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Service+Worker+%E6%9C%89%E5%93%AA%E4%BA%9B%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5%EF%BC%9FHTML%E3%80%81%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E5%92%8C%E6%8E%A5%E5%8F%A3%E5%88%86%E5%88%AB%E6%80%8E%E4%B9%88%E7%BC%93%E5%AD%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AService+Worker+%E6%9C%89%E5%93%AA%E4%BA%9B%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5%EF%BC%9FHTML%E3%80%81%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E5%92%8C%E6%8E%A5%E5%8F%A3%E5%88%86%E5%88%AB%E6%80%8E%E4%B9%88%E7%BC%93%E5%AD%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anetwork-service-worker-cache%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%BD%91%E7%BB%9C%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnetwork-service-worker-cache%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Service Worker 有哪些缓存策略？HTML、静态资源和接口分别怎么缓存？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/http-cache/">强缓存与协商缓存如何配合？</a></li><li><a href="/questions/http-cors/">什么是跨域？CORS 为什么需要服务端配合？</a></li><li><a href="/questions/http-cross-origin-solutions/">跨域有哪些解决方案？JSONP 和代理是怎样工作的？</a></li><li><a href="/questions/network-dns-tcp-tls/">DNS、TCP 和 TLS 握手分别会给页面增加哪些等待？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

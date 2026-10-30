@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="JavaScript面试题：在模板字符串前面写一个函数名，就成了标签模板，这个函数会收到拆开的字符串片段数组和每个插值表达式的值，返回什么都可以。" />
+    <title>标签模板是什么？String.raw 有什么用？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/js-tagged-template/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="标签模板是什么？String.raw 有什么用？ · 前端知库" />
+    <meta property="og:description" content="JavaScript面试题：在模板字符串前面写一个函数名，就成了标签模板，这个函数会收到拆开的字符串片段数组和每个插值表达式的值，返回什么都可以。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/js-tagged-template/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-tagged-template/#webpage","url":"https://fe.hushifa.top/questions/js-tagged-template/","name":"标签模板是什么？String.raw 有什么用？ · 前端知库","description":"JavaScript面试题：在模板字符串前面写一个函数名，就成了标签模板，这个函数会收到拆开的字符串片段数组和每个插值表达式的值，返回什么都可以。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-tagged-template/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-tagged-template/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"标签模板是什么？String.raw 有什么用？","item":"https://fe.hushifa.top/questions/js-tagged-template/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DkvyXEpT.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">标签模板是什么？String.raw 有什么用？</span></nav><h1 tabindex="-1">标签模板是什么？String.raw 有什么用？</h1><p class="reading-summary">在模板字符串前面写一个函数名，就成了标签模板，这个函数会收到拆开的字符串片段数组和每个插值表达式的值，返回什么都可以。字符串数组带一个 raw 属性，保存没有处理转义的原始文本，String.raw 就是用它拼出原始字符串的内置标签，常用来写 Windows 路径和正则。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>写 <code>tag`你好，${name}` </code> 时，JavaScript 不会先拼出字符串，而是调用 <code>tag</code> 函数：第一个参数是被插值切开的字符串片段数组 <code>[&#x27;你好，&#x27;, &#x27;&#x27;]</code>，后面的参数依次是每个 <code>${}</code> 的值。函数返回什么，整个表达式的值就是什么，不一定是字符串。</p>
+<p>有了这个机制，库就能在拼接之前处理插值，比如给每个值做 HTML 转义，而不是直接拼进去。有些工具还会认特定的标签名，比如格式化工具会把 <code>html</code> 标签里的内容当 HTML 来格式化。</p>
+<p>片段数组有一个 <code>raw</code> 属性，存的是源码里原样写的文本，<code>\n</code> 还是反斜杠加 <code>n</code> 两个字符。<code>String.raw</code> 就是用 <code>raw</code> 拼接的内置标签，写 <code>String.raw`C:\new` </code> 能得到原样的路径，写正则的字符串时也不用把反斜杠写两遍。</p>
+<p>有几个细节常被问：片段数组的长度总是插值个数加一；同一处标签模板每次执行收到的都是同一个冻结的数组；标签模板里写了不合法的转义，比如 <code>\unicode</code>，不会报语法错误，那个片段的处理后值是 <code>undefined</code>，<code>raw</code> 里照样有原文。</p>
+</blockquote>
+<h2>标签函数收到什么参数</h2>
+<p>下面写一个最简单的标签，把收到的参数打印出来。注意插值在开头或结尾时，片段数组里会出现空字符串。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">inspect</span>(<span class="hljs-params">strings, ...values</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${strings.length}</span>|<span class="hljs-subst">${<span class="hljs-built_in">JSON</span>.stringify([...strings])}</span>|<span class="hljs-subst">${values.join(<span class="hljs-string">&#x27;,&#x27;</span>)}</span>`</span>;
+}
+
+<span class="hljs-keyword">const</span> name = <span class="hljs-string">&#x27;小明&#x27;</span>;
+<span class="hljs-keyword">const</span> count = <span class="hljs-number">3</span>;
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(inspect<span class="hljs-string">`<span class="hljs-subst">${name}</span>有<span class="hljs-subst">${count}</span>条消息`</span>); <span class="hljs-comment">// 3|[&quot;&quot;,&quot;有&quot;,&quot;条消息&quot;]|小明,3</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(inspect<span class="hljs-string">`没有插值`</span>); <span class="hljs-comment">// 1|[&quot;没有插值&quot;]|</span>
+</code></pre></div>
+<p>第一次调用有两个插值，片段数组就有三项。<code>${name}</code> 在最前面，所以它前面的片段是空字符串 <code>&#x27;&#x27;</code>。这条规则保证了片段和值总是交替出现：<code>strings[0]</code>、<code>values[0]</code>、<code>strings[1]</code>、<code>values[1]</code>……最后以 <code>strings</code> 结尾。所以写标签函数时，拼接的循环通常是以 <code>strings[0]</code> 开头，每轮加一个值和下一个片段。</p>
+<p>没有插值时，片段数组只有一项，值的列表是空的。MDN 写明，片段数组的长度等于插值个数加一，所以它永远不会是空数组。</p>
+<h2>用标签在拼接前处理插值</h2>
+<p>标签函数最常见的用法，是对插值的值做处理，而原样保留写在模板里的片段。下面的 <code>safeHtml</code> 只转义插值部分，因为片段是开发者自己写的，插值才可能来自用户输入。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">escapeHtml</span>(<span class="hljs-params">value</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">String</span>(value)
+    .<span class="hljs-title function_">replaceAll</span>(<span class="hljs-string">&#x27;&amp;&#x27;</span>, <span class="hljs-string">&#x27;&amp;amp;&#x27;</span>)
+    .<span class="hljs-title function_">replaceAll</span>(<span class="hljs-string">&#x27;&lt;&#x27;</span>, <span class="hljs-string">&#x27;&amp;lt;&#x27;</span>)
+    .<span class="hljs-title function_">replaceAll</span>(<span class="hljs-string">&#x27;&gt;&#x27;</span>, <span class="hljs-string">&#x27;&amp;gt;&#x27;</span>)
+    .<span class="hljs-title function_">replaceAll</span>(<span class="hljs-string">&#x27;&quot;&#x27;</span>, <span class="hljs-string">&#x27;&amp;quot;&#x27;</span>);
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">safeHtml</span>(<span class="hljs-params">strings, ...values</span>) {
+  <span class="hljs-keyword">let</span> result = strings[<span class="hljs-number">0</span>];
+  values.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">value, i</span>) =&gt;</span> {
+    result += <span class="hljs-title function_">escapeHtml</span>(value) + strings[i + <span class="hljs-number">1</span>];
+  });
+  <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-keyword">const</span> input = <span class="hljs-string">&#x27;&lt;img src=x onerror=alert(1)&gt;&#x27;</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(safeHtml<span class="hljs-string">`&lt;p&gt;<span class="hljs-subst">${input}</span>&lt;/p&gt;`</span>); <span class="hljs-comment">// &lt;p&gt;&amp;lt;img src=x onerror=alert(1)&amp;gt;&lt;/p&gt;</span>
+</code></pre></div>
+<p><code>&lt;p&gt;</code> 是片段，原样保留；用户输入的 <code>&lt;img ...&gt;</code> 被转义成了文本。如果用普通模板字符串，插值在调用任何函数之前就已经拼进去了，再处理就分不清哪部分是用户输入。</p>
+<p>这里的转义只是演示思路，只覆盖了放在元素内容和双引号属性值里的情况。真实项目输出 HTML 时应该用框架自带的转义，或者经过审查的库。</p>
+<h2>raw 和 String.raw</h2>
+<p>片段数组里的字符串已经处理过转义，<code>\n</code> 变成了换行符。可是有时候要的是源码里写的原文，这就要用 <code>strings.raw</code>。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">showRaw</span>(<span class="hljs-params">strings</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${strings[<span class="hljs-number">0</span>].length}</span>|<span class="hljs-subst">${strings.raw[<span class="hljs-number">0</span>].length}</span>`</span>;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(showRaw<span class="hljs-string">`a\nb`</span>); <span class="hljs-comment">// 3|4</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">String</span>.<span class="hljs-property">raw</span><span class="hljs-string">`C:\new\table`</span>); <span class="hljs-comment">// C:\new\table</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">String</span>.<span class="hljs-property">raw</span><span class="hljs-string">`第<span class="hljs-subst">${<span class="hljs-number">1</span> + <span class="hljs-number">1</span>}</span>行\n`</span>); <span class="hljs-comment">// 第2行\n</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">String</span>.<span class="hljs-title function_">raw</span>({ <span class="hljs-attr">raw</span>: [<span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;y&#x27;</span>, <span class="hljs-string">&#x27;z&#x27;</span>] }, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>)); <span class="hljs-comment">// x1y2z</span>
+</code></pre></div>
+<p><code>a\nb</code> 处理转义以后是 <code>a</code>、换行、<code>b</code> 三个字符，<code>raw</code> 里是 <code>a</code>、<code>\</code>、<code>n</code>、<code>b</code> 四个字符。</p>
+<p><code>String.raw</code> 就是拿 <code>raw</code> 里的片段，和插值交替拼起来。所以 <code>C:\new\table</code> 里的 <code>\n</code>、<code>\t</code> 没有变成换行和制表符，插值 <code>${1 + 1}</code> 照样会计算。最后一行说明它也能当普通函数调用，传入一个带 <code>raw</code> 属性的对象，后面的参数依次插到片段之间。</p>
+<h2>同一处模板每次拿到同一个数组</h2>
+<p>MDN 写明，对于同一个标签模板表达式，无论执行多少次，标签函数收到的都是同一个片段数组；这个数组和它的 <code>raw</code> 属性都被冻结，不能修改。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> seen = [];
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">remember</span>(<span class="hljs-params">strings</span>) {
+  seen.<span class="hljs-title function_">push</span>(strings);
+  <span class="hljs-keyword">return</span> strings;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">run</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> remember<span class="hljs-string">`固定内容`</span>;
+}
+
+<span class="hljs-title function_">run</span>();
+<span class="hljs-title function_">run</span>();
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">String</span>(seen[<span class="hljs-number">0</span>] === seen[<span class="hljs-number">1</span>])); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">String</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">isFrozen</span>(seen[<span class="hljs-number">0</span>]))); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">String</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">isFrozen</span>(seen[<span class="hljs-number">0</span>].<span class="hljs-property">raw</span>))); <span class="hljs-comment">// true</span>
+</code></pre></div>
+<p>调用了两次 <code>run</code>，两次收到的片段数组是同一个对象。所以标签函数可以用片段数组当缓存的键，比如解析模板的结果只算一次。注意这里说的是同一处源码，两段内容一样的标签模板写在不同位置，收到的是不同的数组。</p>
+<h2>标签模板里的非法转义</h2>
+<p>普通模板字符串里写 <code>\unicode</code> 会报语法错误，因为 <code>\u</code> 后面必须跟合法的 Unicode 转义。标签模板放宽了这个限制，因为标签函数可能根本不需要处理后的值，比如要解析 LaTeX 的标签。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">cookedAndRaw</span>(<span class="hljs-params">strings</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">String</span>(strings[<span class="hljs-number">0</span>])}</span>|<span class="hljs-subst">${strings.raw[<span class="hljs-number">0</span>]}</span>`</span>;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(cookedAndRaw<span class="hljs-string">`\unicode`</span>); <span class="hljs-comment">// undefined|\unicode</span>
+</code></pre></div>
+<p>处理后的片段变成了 <code>undefined</code>，<code>raw</code> 里还是原文。这个放宽只对标签模板有效。</p>
+<h2>常见追问</h2>
+<p><strong>可选链后面能接标签模板吗？</strong></p>
+<blockquote>
+<p>不能。MDN 写明 <code>console.log?.`Hello` </code> 和 <code>console?.log`Hello` </code> 都是语法错误，标签模板只允许接在不带可选链的表达式后面。</p>
+</blockquote>
+<p><strong>普通模板字符串和字符串拼接，<code>String.raw</code> 和直接写有什么区别？</strong></p>
+<blockquote>
+<p>模板字符串里没有转义序列时，<code>String.raw</code> 的结果和普通模板字符串一样，可以看成一个原样拼接的标签。有反斜杠时才不同：普通模板字符串会处理转义，<code>String.raw</code> 保留反斜杠。</p>
+</blockquote>
+<p><strong>怎样手写一个模板渲染函数？</strong></p>
+<blockquote>
+<p>那是另一类题，是在运行时解析 <code>{{name}}</code> 这类占位符，见<a href="/questions/alg-template-render/">《怎样手写一个简单的模板字符串渲染函数？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals" target="_blank" rel="noreferrer">MDN · Template literals<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/raw" target="_blank" rel="noreferrer">MDN · String.raw()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%A0%87%E7%AD%BE%E6%A8%A1%E6%9D%BF%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9FString.raw+%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%A0%87%E7%AD%BE%E6%A8%A1%E6%9D%BF%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9FString.raw+%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-tagged-template%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-tagged-template%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：标签模板是什么？String.raw 有什么用？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-es6-features/">ES6 及之后的版本有哪些常用新特性？</a></li><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-promise-chain/">回调地狱是什么？Promise 链式调用怎样解决它？then 的返回值有哪些规则？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

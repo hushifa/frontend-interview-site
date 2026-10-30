@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="TypeScript面试题：public 是默认可见性；protected 只能在类和子类里访问；private 只能在声明它的类里访问，但只在类型检查时生效…" />
+    <title>TypeScript 的 class 中 public、private、protected 和</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/ts-class/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="TypeScript 的 class 中 public、private、protected 和" />
+    <meta property="og:description" content="TypeScript面试题：public 是默认可见性；protected 只能在类和子类里访问；private 只能在声明它的类里访问，但只在类型检查时生效…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/ts-class/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-class/#webpage","url":"https://fe.hushifa.top/questions/ts-class/","name":"TypeScript 的 class 中 public、private、protected 和","description":"TypeScript面试题：public 是默认可见性；protected 只能在类和子类里访问；private 只能在声明它的类里访问，但只在类型检查时生效…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-class/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-class/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"TypeScript 的 class 中 public、private、protected 和","item":"https://fe.hushifa.top/questions/ts-class/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DkvyXEpT.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">TypeScript 的 class 中 public、private、protected 和</span></nav><h1 tabindex="-1">TypeScript 的 class 中 public、private、protected 和</h1><p class="reading-summary">public 是默认可见性；protected 只能在类和子类里访问；private 只能在声明它的类里访问，但只在类型检查时生效，编译后仍是普通属性，还能用方括号绕过。#private 是 JavaScript 的私有字段，运行时也访问不到。readonly 让属性只能在声明处或构造函数里赋值。参数属性在构造函数参数前加修饰符，自动声明并赋值同名属性。abstract 类不能 new，抽象成员由子类实现；extends 继承实现，implements 只检查类是否符合接口，不改变类的类型。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>比如写一个 <code>Account</code> 类，账户名谁都能看，余额只给子类改，密码只在类里面用。TypeScript 用三个修饰符表达：<code>public</code> 是默认值，哪里都能访问；<code>protected</code> 只能在这个类和它的子类里访问；<code>private</code> 连子类都不行，只能在声明它的类里访问。</p>
+<p>要注意 <code>private</code> 和 JavaScript 的 <code>#</code> 私有字段不一样。Handbook 说明，<code>private</code> 和 <code>protected</code> 只在类型检查时生效，编译后就是普通属性，而且类型检查时也允许用 <code>obj[&#x27;pin&#x27;]</code> 这种方括号写法访问，所以叫“软私有”。<code>#token</code> 是 JavaScript 语言本身的私有字段，编译以后外部依然访问不到，是“硬私有”。需要真正藏起数据时用 <code>#</code>。</p>
+<p>还有几个常用写法。<code>readonly</code> 属性只能在声明时或构造函数里赋值。参数属性是在构造函数参数前加 <code>public</code>、<code>private</code>、<code>protected</code> 或 <code>readonly</code>，TypeScript 会自动声明同名属性并把参数赋给它，省去重复的样板代码。<code>abstract</code> 类不能直接 <code>new</code>，里面的抽象方法没有实现，必须由子类实现。</p>
+<p><code>extends</code> 和 <code>implements</code> 的区别是：<code>extends</code> 继承父类的实现，一个类只能继承一个父类；<code>implements</code> 只检查这个类有没有满足接口的要求，可以同时实现多个接口。Handbook 特别提醒，<code>implements</code> 不会改变类的类型，方法参数也不会因此得到接口里的类型，仍要自己写注解。</p>
+</blockquote>
+<h2>四种访问控制</h2>
+<p>下面的代码用 <code>tsc --strict --target es2022</code> 验证过（TypeScript 7.0.2），每个 <code>@ts-expect-error</code> 后面写的是实际报出的错误码。</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Account</span> {
+  <span class="hljs-keyword">public</span> <span class="hljs-attr">owner</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-keyword">protected</span> balance = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">private</span> <span class="hljs-attr">pin</span>: <span class="hljs-built_in">string</span>;
+  #token = <span class="hljs-string">&#x27;secret&#x27;</span>;
+  <span class="hljs-keyword">readonly</span> <span class="hljs-attr">createdAt</span>: <span class="hljs-built_in">number</span>;
+
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-attr">owner</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">pin</span>: <span class="hljs-built_in">string</span></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">owner</span> = owner;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">pin</span> = pin;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">createdAt</span> = <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>();
+  }
+
+  <span class="hljs-title function_">checkPin</span>(<span class="hljs-params"><span class="hljs-attr">input</span>: <span class="hljs-built_in">string</span></span>) {
+    <span class="hljs-keyword">return</span> input === <span class="hljs-variable language_">this</span>.<span class="hljs-property">pin</span> &amp;&amp; <span class="hljs-variable language_">this</span>.#token.<span class="hljs-property">length</span> &gt; <span class="hljs-number">0</span>;
+  }
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Savings</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Account</span> {
+  <span class="hljs-title function_">addInterest</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">balance</span> += <span class="hljs-number">1</span>;
+    <span class="hljs-comment">// @ts-expect-error 2341：private 成员子类也不能访问</span>
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">pin</span>;
+  }
+}
+
+<span class="hljs-keyword">const</span> a = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Account</span>(<span class="hljs-string">&#x27;Ada&#x27;</span>, <span class="hljs-string">&#x27;1234&#x27;</span>);
+<span class="hljs-comment">// @ts-expect-error 2445：protected 只能在类和子类内部访问</span>
+a.<span class="hljs-property">balance</span>;
+<span class="hljs-comment">// @ts-expect-error 2341：private 只能在类内部访问</span>
+a.<span class="hljs-property">pin</span>;
+<span class="hljs-keyword">const</span> leaked = a[<span class="hljs-string">&#x27;pin&#x27;</span>];
+<span class="hljs-comment">// @ts-expect-error 18013：#token 在类外不可访问</span>
+a.#token;
+<span class="hljs-comment">// @ts-expect-error 2540：readonly 只能在构造函数里赋值</span>
+a.<span class="hljs-property">createdAt</span> = <span class="hljs-number">0</span>;
+</code></pre></div>
+<p><code>a.pin</code> 报错，可 <code>a[&#x27;pin&#x27;]</code> 却能通过，这就是 Handbook 说的方括号“逃生口”。Handbook 认为这在写单元测试时方便，代价是 <code>private</code> 并没有真正强制私有。编译成 JavaScript 以后，<code>pin</code> 就是实例上的普通属性，<code>Object.keys(a)</code> 能看到它，<code>console.log(a)</code> 也能打印出来。</p>
+<p><code>#token</code> 不一样。它是 ES2022 的私有字段，MDN 说明在类外部访问会直接是语法错误，<code>Object.keys</code> 也看不到。TypeScript 编译到 ES2021 及以下时，会用 WeakMap 模拟它，效果仍然是外部访问不到。</p>
+<p><code>readonly</code> 只限制赋值的时机：声明处和构造函数里可以赋值，之后就不行了。它和 <code>private</code> 一样只在编译期检查。</p>
+<h2>参数属性省掉样板代码</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Point</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">public</span> <span class="hljs-keyword">readonly</span> <span class="hljs-attr">x</span>: <span class="hljs-built_in">number</span>, <span class="hljs-keyword">private</span> <span class="hljs-attr">y</span>: <span class="hljs-built_in">number</span></span>) {}
+  <span class="hljs-title function_">sum</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">x</span> + <span class="hljs-variable language_">this</span>.<span class="hljs-property">y</span>;
+  }
+}
+<span class="hljs-keyword">const</span> p = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Point</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>);
+p.<span class="hljs-property">x</span>.<span class="hljs-title function_">toFixed</span>();
+</code></pre></div>
+<p>构造函数参数前加了修饰符，TypeScript 就会自动声明 <code>x</code>、<code>y</code> 两个属性，并在构造时赋值，效果等同于先声明字段、再在构造函数里写 <code>this.x = x</code>。不加修饰符的参数只是普通参数，不会变成属性。</p>
+<p>要注意，参数属性不是 JavaScript 语法，编译时会生成赋值代码。开启 <code>erasableSyntaxOnly</code> 后 tsc 会对它报 TS1294，Node.js 只剥离类型直接运行 TypeScript 时也不支持它，详见<a href="/questions/ts-type-imports/">《import type 和 verbatimModuleSyntax 如何影响模块输出？》</a>。</p>
+<h2>abstract、extends 和 implements</h2>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">Pingable</span> {
+  <span class="hljs-title function_">ping</span>(): <span class="hljs-built_in">void</span>;
+}
+
+<span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Shape</span> {
+  <span class="hljs-keyword">abstract</span> <span class="hljs-title function_">area</span>(): <span class="hljs-built_in">number</span>;
+  <span class="hljs-title function_">describe</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`面积是 <span class="hljs-subst">${<span class="hljs-variable language_">this</span>.area()}</span>`</span>;
+  }
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Square</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">Shape</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Pingable</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> <span class="hljs-attr">size</span>: <span class="hljs-built_in">number</span></span>) {
+    <span class="hljs-variable language_">super</span>();
+  }
+  <span class="hljs-title function_">area</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">size</span> ** <span class="hljs-number">2</span>;
+  }
+  <span class="hljs-title function_">ping</span>(<span class="hljs-params"></span>) {}
+}
+
+<span class="hljs-comment">// @ts-expect-error 2511：不能直接 new 抽象类</span>
+<span class="hljs-keyword">new</span> <span class="hljs-title class_">Shape</span>();
+
+<span class="hljs-comment">// @ts-expect-error 2420：缺少 ping</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Ball</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Pingable</span> {
+  <span class="hljs-title function_">pong</span>(<span class="hljs-params"></span>) {}
+}
+</code></pre></div>
+<p><code>Shape</code> 把公共逻辑 <code>describe</code> 写好了，<code>area</code> 留给子类。<code>Square</code> 用 <code>extends</code> 继承了 <code>describe</code> 的实现，同时必须实现 <code>area</code>，否则会报错。这就是抽象类和接口的主要区别：抽象类可以带实现，接口只描述形状。</p>
+<p><code>implements Pingable</code> 只做检查。<code>Ball</code> 没有 <code>ping</code>，所以报 2420。可它不会给类添加任何东西，也不会影响类里的推断：</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">Checkable</span> {
+  <span class="hljs-title function_">check</span>(<span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>): <span class="hljs-built_in">boolean</span>;
+}
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">NameChecker</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Checkable</span> {
+  <span class="hljs-comment">// @ts-expect-error 7006：implements 不会给参数推断类型</span>
+  <span class="hljs-title function_">check</span>(<span class="hljs-params">s</span>) {
+    <span class="hljs-keyword">return</span> s === <span class="hljs-string">&#x27;ok&#x27;</span>;
+  }
+}
+</code></pre></div>
+<p>很多人以为 <code>s</code> 会自动得到接口里的 <code>string</code>，实际上它是隐式的 <code>any</code>，在 <code>strict</code> 下报 7006。Handbook 把这一点单独列为注意事项。</p>
+<h2>常见追问</h2>
+<p><strong>同一个类的两个实例，能互相访问对方的 private 成员吗？</strong></p>
+<blockquote>
+<p>可以。Handbook 说明 TypeScript 允许跨实例访问 <code>private</code>，比如在 <code>sameAs(other: A)</code> 方法里读 <code>other.x</code>。这和 Java、C# 一样，和 Ruby 不同。</p>
+</blockquote>
+<p><strong>子类能把父类的 protected 成员改成 public 吗？</strong></p>
+<blockquote>
+<p>可以。子类重新声明这个属性而不写修饰符，它就变成 <code>public</code> 了。Handbook 提醒，如果不是有意公开，子类里要记得重复写 <code>protected</code>。反过来，<code>private</code> 成员子类根本看不到，也就不能提升可见性。</p>
+</blockquote>
+<p><strong>抽象类和接口怎么选？</strong></p>
+<blockquote>
+<p>只描述形状、需要多实现时用接口，一个类可以 <code>implements</code> 多个接口，接口本身编译后也不会留下代码。需要共享一部分实现、或者希望用 <code>instanceof</code> 判断时用抽象类，因为抽象类编译后是真实存在的 JavaScript 类。接口和类型别名的区别见<a href="/questions/ts-interface-type/">《type 和 interface 有哪些区别？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.typescriptlang.org/docs/handbook/2/classes.html" target="_blank" rel="noreferrer">TypeScript Handbook · Classes<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_elements" target="_blank" rel="noreferrer">MDN · Private elements<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+TypeScript+%E7%9A%84+class+%E4%B8%AD+public%E3%80%81private%E3%80%81protected+%E5%92%8C&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ATypeScript+%E7%9A%84+class+%E4%B8%AD+public%E3%80%81private%E3%80%81protected+%E5%92%8C%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-class%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-class%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：TypeScript 的 class 中 public、private、protected 和（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-enum/">TypeScript 的 enum、const enum 和联合类型怎样选？</a></li><li><a href="/questions/ts-variance/">TypeScript 中的协变和逆变是什么？</a></li><li><a href="/questions/ts-type-challenges/">怎样手写 MyPick、MyOmit、DeepReadonly、TupleToUnion、First、Awaited 这类类型体操？</a></li><li><a href="/questions/ts-decorators-di/">装饰器元数据怎样支撑依赖注入？NestJS 和 Angular 是怎么做的？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

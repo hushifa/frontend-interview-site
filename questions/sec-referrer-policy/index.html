@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="前端安全面试题：Referer 请求头告诉目标服务器请求是从哪个页面来的，Referrer-Policy 决定这个头里带多少信息。" />
+    <title>Referrer-Policy 是什么？默认会把哪些信息发给其他网站？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/sec-referrer-policy/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="Referrer-Policy 是什么？默认会把哪些信息发给其他网站？" />
+    <meta property="og:description" content="前端安全面试题：Referer 请求头告诉目标服务器请求是从哪个页面来的，Referrer-Policy 决定这个头里带多少信息。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/sec-referrer-policy/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/sec-referrer-policy/#webpage","url":"https://fe.hushifa.top/questions/sec-referrer-policy/","name":"Referrer-Policy 是什么？默认会把哪些信息发给其他网站？","description":"前端安全面试题：Referer 请求头告诉目标服务器请求是从哪个页面来的，Referrer-Policy 决定这个头里带多少信息。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/sec-referrer-policy/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/sec-referrer-policy/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"前端安全面试题","item":"https://fe.hushifa.top/topics/security/"},{"@type":"ListItem","position":3,"name":"Referrer-Policy 是什么？默认会把哪些信息发给其他网站？","item":"https://fe.hushifa.top/questions/sec-referrer-policy/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DkvyXEpT.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/security/">前端安全面试题</a><span aria-hidden="true">/</span><span aria-current="page">Referrer-Policy 是什么？默认会把哪些信息发给其他网站？</span></nav><h1 tabindex="-1">Referrer-Policy 是什么？默认会把哪些信息发给其他网站？</h1><p class="reading-summary">Referer 请求头告诉目标服务器请求是从哪个页面来的，Referrer-Policy 决定这个头里带多少信息。浏览器默认用 strict-origin-when-cross-origin：同源发完整地址，跨源只发源，从 HTTPS 降到 HTTP 不发。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>用户在 <code>https://shop.example/order?id=123&amp;token=abc</code> 页面点了一个外部链接，浏览器会在请求里带上 <code>Referer</code> 头，告诉对方“我是从哪个页面来的”。<code>Referrer-Policy</code> 就是用来控制这个头里带多少信息的。</p>
+<p>之所以要控制，是因为地址里常常有隐私数据，比如订单号、搜索词、甚至令牌。完整地址发给第三方，就等于把这些数据泄露了出去。</p>
+<p>现在浏览器的默认策略是 <code>strict-origin-when-cross-origin</code>：同源请求带完整地址，跨源请求只带源，比如 <code>https://shop.example/</code>，从 HTTPS 页面请求 HTTP 地址时不带。需要更严格可以设成 <code>no-referrer</code> 或 <code>same-origin</code>。设置方式有响应头、<code>&lt;meta name=&quot;referrer&quot;&gt;</code>、元素上的 <code>referrerpolicy</code> 属性，链接还能用 <code>rel=&quot;noreferrer&quot;</code>。</p>
+<p>要注意，<code>unsafe-url</code> 会把完整地址发给任何目标，包括 HTTP 网站，MDN 明确提醒要慎用。另外不要拿 <code>Referer</code> 做安全校验，它可能被策略去掉。</p>
+</blockquote>
+<h2>Referer 里会带什么</h2>
+<p><code>Referer</code> 头的名字本身就是 referrer 的拼写错误，规范沿用了下来，而控制它的 <code>Referrer-Policy</code> 拼对了。按 MDN 的说明，<code>Referer</code> 最多包含源、路径和查询字符串，不会包含 <code>#section</code> 这样的片段，也不会包含 <code>username:password</code> 这类用户信息。</p>
+<p>所以真正可能泄露的是路径和查询字符串。比如重置密码页面的地址带着令牌，页面上又引用了第三方统计脚本，要是 <code>Referer</code> 发了完整地址，第三方服务器的日志里就会记下这个令牌。</p>
+<h2>各个取值是什么意思</h2>
+<p>规范定义了八个取值，区别在于“同源还是跨源”和“安全等级有没有降低”。安全等级降低指从 HTTPS 页面请求 HTTP 地址。</p>
+<ul>
+<li><code>no-referrer</code>：任何请求都不发 <code>Referer</code>。</li>
+<li><code>no-referrer-when-downgrade</code>：安全等级不降低时发完整地址，降到 HTTP 时不发。</li>
+<li><code>origin</code>：任何请求都只发源，比如 <code>https://example.com/</code>。</li>
+<li><code>origin-when-cross-origin</code>：同源发完整地址，跨源和降级时只发源。</li>
+<li><code>same-origin</code>：同源发完整地址，跨源不发。</li>
+<li><code>strict-origin</code>：安全等级不变时只发源，降级时不发。</li>
+<li><code>strict-origin-when-cross-origin</code>：同源发完整地址；跨源且安全等级不变时只发源；降级时不发。</li>
+<li><code>unsafe-url</code>：任何请求都发完整地址，不管安全不安全。</li>
+</ul>
+<p>默认值是 <code>strict-origin-when-cross-origin</code>。没有指定策略，或者指定的值无效时，都用它。MDN 提到，这是 2020 年 11 月规范修订后的默认值，以前的默认值是 <code>no-referrer-when-downgrade</code>，那时跨源请求也会带完整地址。</p>
+<p>用 MDN 的例子看一下默认策略：</p>
+<table><thead><tr><th>当前页面</th><th>请求目标</th><th>发出的 Referer</th></tr></thead><tbody><tr><td><code>https://example.com/page</code></td><td><code>https://example.com/otherpage</code></td><td><code>https://example.com/page</code></td></tr><tr><td><code>https://example.com/page</code></td><td><code>https://mozilla.org</code></td><td><code>https://example.com/</code></td></tr><tr><td><code>https://example.com/page</code></td><td><code>http://example.com</code></td><td>不发</td></tr></tbody></table>
+<p>第三行可能让人意外，明明是同一个域名，为什么不发？因为 <code>http://example.com</code> 和 <code>https://example.com</code> 协议不同，不是同源；而且从 HTTPS 到 HTTP 是降级，默认策略在降级时不发。</p>
+<p>另外，W3C 规范规定，完整地址序列化后超过 4096 个字符时，浏览器会改为只发源。</p>
+<h2>怎样设置</h2>
+<p>最常用的是在 HTML 响应上加响应头，整个文档都按它来：</p>
+<div class="not-prose code-block"><div class="code-language">http</div><pre><code class="hljs language-http">Referrer-Policy: strict-origin-when-cross-origin
+</code></pre></div>
+<p>响应头还能写多个值作为兜底，浏览器用最后一个它支持的值。下面这行在不支持 <code>strict-origin-when-cross-origin</code> 的旧浏览器里会退到 <code>no-referrer</code>：</p>
+<div class="not-prose code-block"><div class="code-language">http</div><pre><code class="hljs language-http">Referrer-Policy: no-referrer, strict-origin-when-cross-origin
+</code></pre></div>
+<p>没法改响应头时，可以在页面里用 <code>&lt;meta&gt;</code> 设置整个文档的策略，也可以在单个元素上用 <code>referrerpolicy</code> 属性覆盖：</p>
+<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;referrer&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;no-referrer&quot;</span> /&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://partner.example&quot;</span> <span class="hljs-attr">referrerpolicy</span>=<span class="hljs-string">&quot;origin&quot;</span>&gt;</span>合作方<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cdn.example/a.png&quot;</span> <span class="hljs-attr">referrerpolicy</span>=<span class="hljs-string">&quot;no-referrer&quot;</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;&quot;</span> /&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;https://partner.example&quot;</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;noreferrer&quot;</span>&gt;</span>合作方<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+</code></pre></div>
+<p><code>referrerpolicy</code> 属性可以用在 <code>&lt;a&gt;</code>、<code>&lt;area&gt;</code>、<code>&lt;img&gt;</code>、<code>&lt;iframe&gt;</code>、<code>&lt;script&gt;</code>、<code>&lt;link&gt;</code> 上，只能写一个值，多个值兜底只有响应头支持。<code>rel=&quot;noreferrer&quot;</code> 可以用在 <code>a</code>、<code>area</code>、<code>link</code> 上。有个容易写错的地方：<code>rel</code> 里的 <code>noreferrer</code> 没有连字符，<code>&lt;meta&gt;</code> 里的 <code>no-referrer</code> 有连字符。</p>
+<p>用 <code>fetch</code> 发请求时，可以通过 <code>referrerPolicy</code> 选项单独指定，取值和语义跟响应头一样：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;https://api.partner.example/track&#x27;</span>, { <span class="hljs-attr">referrerPolicy</span>: <span class="hljs-string">&#x27;no-referrer&#x27;</span> });
+</code></pre></div>
+<p>CSS 里引用的资源也遵循策略。MDN 说明，外部样式表里的资源默认用 <code>strict-origin-when-cross-origin</code>，样式表自己的响应带了 <code>Referrer-Policy</code> 头就按那个；<code>&lt;style&gt;</code> 元素和 <code>style</code> 属性里的资源用所在文档的策略。</p>
+<h2>常见追问</h2>
+<p><strong>能不能用 Referer 防 CSRF？</strong></p>
+<blockquote>
+<p>不能把它当唯一手段。<code>Referer</code> 会被 <code>no-referrer</code> 等策略去掉，服务器看到没有这个头时无法判断请求来源。防 CSRF 应该用 SameSite Cookie、CSRF 令牌这类机制，<code>Referer</code> 或 <code>Origin</code> 只能作为辅助检查。</p>
+</blockquote>
+<p><strong>设置成 no-referrer 有什么副作用？</strong></p>
+<blockquote>
+<p>同源请求也不发 <code>Referer</code> 了，依赖它的功能会受影响，比如统计站内的来源页面、某些按来源做防盗链的图片服务。如果只是想不泄露给第三方，<code>same-origin</code> 更合适，它在站内仍然发完整地址，跨源才不发。</p>
+</blockquote>
+<p><strong>为什么默认值从 no-referrer-when-downgrade 改了？</strong></p>
+<blockquote>
+<p>旧默认值只在降级到 HTTP 时不发，HTTPS 网站之间的跨源请求都会带完整地址，路径和查询字符串里的数据很容易泄露给第三方。新默认值跨源只发源，在保留“从哪个网站来”这个信息的同时，把路径和参数藏了起来。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Referrer-Policy" target="_blank" rel="noreferrer">MDN · Referrer-Policy<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://w3c.github.io/webappsec-referrer-policy/" target="_blank" rel="noreferrer">W3C · Referrer Policy<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Referer" target="_blank" rel="noreferrer">MDN · Referer<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Referrer-Policy+%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E9%BB%98%E8%AE%A4%E4%BC%9A%E6%8A%8A%E5%93%AA%E4%BA%9B%E4%BF%A1%E6%81%AF%E5%8F%91%E7%BB%99%E5%85%B6%E4%BB%96%E7%BD%91%E7%AB%99%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReferrer-Policy+%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E9%BB%98%E8%AE%A4%E4%BC%9A%E6%8A%8A%E5%93%AA%E4%BA%9B%E4%BF%A1%E6%81%AF%E5%8F%91%E7%BB%99%E5%85%B6%E4%BB%96%E7%BD%91%E7%AB%99%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Asec-referrer-policy%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fsec-referrer-policy%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Referrer-Policy 是什么？默认会把哪些信息发给其他网站？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/http-xss/">XSS 有哪几种？前端怎样防范？</a></li><li><a href="/questions/sec-partitioned-cookies/">第三方 Cookie、SameSite 和 Partitioned Cookie 有什么区别？</a></li><li><a href="/questions/sec-xs-leaks/">什么是 XS-Leaks？前端如何减少跨站状态被推断？</a></li><li><a href="/questions/sec-cookies/">HttpOnly、Secure 和 SameSite 分别保护什么？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

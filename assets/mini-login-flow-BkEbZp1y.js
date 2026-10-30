@@ -1,0 +1,59 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>用户打开小程序，我们要知道他是谁。小程序先调 <code>wx.login()</code>，拿到一个临时登录凭证 <code>code</code>，把它发给自己的服务器。</p>
+<p>服务器拿着小程序的 <code>appid</code>、<code>appSecret</code> 和这个 <code>code</code>，调用微信的 <code>code2Session</code> 接口，换回用户在这个小程序里的唯一标识 <code>openid</code>、会话密钥 <code>session_key</code>，小程序绑定了微信开放平台账号时还会返回 <code>unionid</code>。之后服务器按 <code>openid</code> 找到或创建自己的用户，生成一个自定义登录态，比如 token，返回给小程序，后面的请求都带上它。</p>
+<p>这样设计是因为 <code>appSecret</code> 和 <code>session_key</code> 都不能出现在前端。<code>code2Session</code> 要求在服务器端调用；官方文档也说 <code>session_key</code> 是对用户数据加密签名的密钥，不应该下发到小程序。</p>
+<p>要注意，<code>code</code> 只能用一次，有效期五分钟。<code>session_key</code> 会过期，再次调用 <code>wx.login</code> 也可能生成新的 <code>session_key</code>，让旧的失效。可以用 <code>wx.checkSession</code> 检查当前登录态是否过期，过期了再走一遍登录。</p>
+</blockquote>
+<h2>登录要经过哪几步</h2>
+<p>微信官方文档把流程分成三步：小程序调用 <code>wx.login()</code> 获取临时登录凭证 <code>code</code>，并回传到开发者服务器；服务器调用 <code>code2Session</code> 接口，换取 <code>openid</code>、<code>unionid</code> 和 <code>session_key</code>；之后服务器根据用户标识生成自定义登录态，用于后续前后端交互时识别用户身份。</p>
+<p>小程序这一侧的代码很短。下面的写法来自 <code>wx.login</code> 的官方示例，拿到 <code>code</code> 后马上发给自己的接口：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">wx.<span class="hljs-title function_">login</span>({
+  <span class="hljs-title function_">success</span>(<span class="hljs-params">res</span>) {
+    <span class="hljs-keyword">if</span> (res.<span class="hljs-property">code</span>) {
+      wx.<span class="hljs-title function_">request</span>({
+        <span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;https://example.com/onLogin&#x27;</span>,
+        <span class="hljs-attr">data</span>: { <span class="hljs-attr">code</span>: res.<span class="hljs-property">code</span> },
+      });
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;登录失败！&#x27;</span> + res.<span class="hljs-property">errMsg</span>);
+    }
+  },
+});
+</code></pre></div>
+<p>读者可能会问，为什么不直接让小程序去换 <code>openid</code>。因为换取时要用到小程序的 <code>appSecret</code>，而小程序的代码包会下载到用户手机上，放在里面等于公开。所以 <code>code2Session</code> 的文档开头就写明，这个接口应在服务器端调用，不可在小程序、网页、App 等前端直接调用。</p>
+<h2>服务器怎样调用 code2Session</h2>
+<p>服务器发一个 GET 请求到 <code>https://api.weixin.qq.com/sns/jscode2session</code>，带上四个参数：<code>appid</code>、<code>secret</code>（也就是 <code>appSecret</code>）、<code>js_code</code>（小程序传来的 <code>code</code>）和固定为 <code>authorization_code</code> 的 <code>grant_type</code>。</p>
+<div class="not-prose code-block"><div class="code-language">text</div><pre><code class="hljs language-text">GET https://api.weixin.qq.com/sns/jscode2session?appid=APPID&amp;secret=SECRET&amp;js_code=JSCODE&amp;grant_type=authorization_code
+</code></pre></div>
+<p>成功时返回 <code>openid</code> 和 <code>session_key</code>；小程序绑定到微信开放平台账号时还会返回 <code>unionid</code>。失败时返回 <code>errcode</code> 和 <code>errmsg</code>，例如 40029 表示 <code>code</code> 无效，45011 表示调用太频繁。</p>
+<p>这里要分清两个标识。<code>openid</code> 是用户在当前这个小程序里的唯一标识，同一个人在不同小程序里的 <code>openid</code> 不同。<code>unionid</code> 是用户在同一个微信开放平台账号下的唯一标识，需要把多个小程序、公众号的用户打通时才用它。</p>
+<h2>自定义登录态是什么，为什么不直接用 session_key</h2>
+<p><code>code2Session</code> 只告诉服务器“这个用户是谁”，并没有替我们管理会话。所以服务器拿到 <code>openid</code> 后，要自己生成一个登录凭证返回给小程序，比如一个随机 token，服务器端记录它对应哪个用户、什么时候过期。小程序把它存起来，之后的请求都带上它，服务器据此识别用户。微信文档把这一步叫作生成自定义登录态。</p>
+<p>不能拿 <code>session_key</code> 来充当这个凭证。官方文档说明，<code>session_key</code> 是对用户数据进行加密签名的密钥，为了数据安全，开发者服务器不应该把它下发到小程序，也不应该对外提供。服务器需要解密用户数据时，在服务器端用它就够了。</p>
+<h2>登录态过期了怎么办</h2>
+<p><code>wx.checkSession</code> 的文档说明，通过 <code>wx.login</code> 获得的登录态有一定时效，用户越久没用小程序，越可能过期；一直在用则会保持有效，具体时效由微信维护，开发者看不到。除了过期，再次调用 <code>wx.login</code> 这类获取 <code>code</code> 的操作也可能生成新的 <code>session_key</code>，把旧的顶替掉。</p>
+<p><code>wx.checkSession</code> 检查的是最后一次获取 <code>code</code> 所对应的那个 <code>session_key</code>：调用成功说明它没过期，失败说明已经过期，这时再调用 <code>wx.login</code> 重新登录。如果要校验某个指定的 <code>session_key</code>，要在服务器端调用 <code>checkSessionKey</code> 接口。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">wx.<span class="hljs-title function_">checkSession</span>({
+  <span class="hljs-title function_">success</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-comment">// session_key 未过期，继续使用已有的自定义登录态</span>
+  },
+  <span class="hljs-title function_">fail</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-comment">// session_key 已过期，重新执行 wx.login 登录流程</span>
+  },
+});
+</code></pre></div>
+<p>要注意，自定义登录态是服务器自己发的，它的有效期也由服务器决定，和 <code>session_key</code> 的过期是两件事。所以实际项目里，服务器返回登录态失效时，小程序也要重新走一遍 <code>wx.login</code>。</p>
+<h2>常见追问</h2>
+<p><strong>wx.login 拿到的 code 能不能缓存起来重复用？</strong></p>
+<blockquote>
+<p>不能。官方文档说明临时登录凭证 <code>code</code> 只能使用一次，<code>wx.login</code> 的文档还写明它的有效期是五分钟。每次需要换取登录信息时，都要重新调用 <code>wx.login</code>。</p>
+</blockquote>
+<p><strong>为什么不要每次请求前都调用 wx.login？</strong></p>
+<blockquote>
+<p>因为获取 <code>code</code> 的操作可能生成新的 <code>session_key</code>，让旧的失效。如果服务器还在用旧的 <code>session_key</code> 解密数据，就会出错。所以通常先用 <code>wx.checkSession</code> 判断，只有过期或者自定义登录态失效时才重新登录。</p>
+</blockquote>
+<p><strong>openid 和 unionid 该用哪个做用户主键？</strong></p>
+<blockquote>
+<p>只有一个小程序时，用 <code>openid</code> 就够了。同一主体有多个小程序或公众号、需要识别为同一个用户时，把它们绑定到同一个微信开放平台账号，用 <code>unionid</code> 关联；<code>code2Session</code> 只在已绑定时才返回 <code>unionid</code>。</p>
+</blockquote>`};export{e as default};

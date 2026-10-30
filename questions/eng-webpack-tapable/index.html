@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="工程化面试题：webpack 启动时创建一个 compiler，每次构建创建一个 compilation。" />
+    <title>webpack 的构建流程是怎样的？Tapable 钩子有哪些类型？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/eng-webpack-tapable/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="webpack 的构建流程是怎样的？Tapable 钩子有哪些类型？" />
+    <meta property="og:description" content="工程化面试题：webpack 启动时创建一个 compiler，每次构建创建一个 compilation。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/eng-webpack-tapable/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/eng-webpack-tapable/#webpage","url":"https://fe.hushifa.top/questions/eng-webpack-tapable/","name":"webpack 的构建流程是怎样的？Tapable 钩子有哪些类型？","description":"工程化面试题：webpack 启动时创建一个 compiler，每次构建创建一个 compilation。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/eng-webpack-tapable/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/eng-webpack-tapable/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"工程化面试题","item":"https://fe.hushifa.top/topics/engineering/"},{"@type":"ListItem","position":3,"name":"webpack 的构建流程是怎样的？Tapable 钩子有哪些类型？","item":"https://fe.hushifa.top/questions/eng-webpack-tapable/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-DkvyXEpT.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/engineering/">工程化面试题</a><span aria-hidden="true">/</span><span aria-current="page">webpack 的构建流程是怎样的？Tapable 钩子有哪些类型？</span></nav><h1 tabindex="-1">webpack 的构建流程是怎样的？Tapable 钩子有哪些类型？</h1><p class="reading-summary">webpack 启动时创建一个 compiler，每次构建创建一个 compilation。大致顺序是 run → compile → compilation → make（从入口构建模块图）→ finishMake → seal（封存模块、生成 chunk 和产物）→ afterCompile → emit（写文件前）→ afterEmit → done。每个阶段都是一个 Tapable 钩子，插件用 tap、tapAsync、tapPromise 注册。钩子按执行方式分为 Sync、AsyncSeries、AsyncParallel，按回调返回值的作用分为基础、Bail、Waterfall、Loop。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>执行一次 <code>webpack</code> 构建，内部会先创建一个 <code>compiler</code> 对象，它代表整个 webpack 实例，从启动到结束只有一个。每开始一次构建，<code>compiler</code> 再创建一个 <code>compilation</code>，它代表这一次构建，watch 模式下每次重新构建都会有新的 <code>compilation</code>。</p>
+<p>流程按 compiler 上的钩子走：<code>run</code> 开始，<code>compile</code> 准备创建 compilation，<code>thisCompilation</code> 和 <code>compilation</code> 在它创建后触发；接着是 <code>make</code>，从入口出发，用 loader 转换每个模块、解析依赖，建出模块图；<code>finishMake</code> 表示所有入口和依赖都加进来了；然后 compilation 执行 <code>seal</code>，不再接受新模块，开始优化、分 chunk、生成产物，<code>processAssets</code> 就在这个阶段；之后是 <code>afterCompile</code>、<code>emit</code>（写入输出目录之前）、<code>afterEmit</code> 和 <code>done</code>。</p>
+<p>这些钩子都来自 Tapable 库。插件通过 <code>tap</code> 注册同步回调，异步钩子还能用 <code>tapAsync</code>（最后一个参数是 callback）和 <code>tapPromise</code>（返回 Promise）。Tapable 的钩子类型从两个角度分：执行方式有 Sync、AsyncSeries（一个接一个）、AsyncParallel（同时跑）；回调返回值的作用有基础钩子（忽略返回值）、Bail（有返回值就停）、Waterfall（返回值传给下一个）、Loop（有返回值就从头再来）。</p>
+<p>写插件时要注意选对钩子。webpack 文档在 <code>emit</code> 里写明，不要在这里新增或修改产物，因为它在 compilation 封存之后才执行，此时 <code>processAssets</code> 的各个阶段都已经跑完了，要改产物应该在 <code>processAssets</code> 里改。</p>
+</blockquote>
+<h2>构建流程和钩子</h2>
+<p>下面按顺序列出 webpack 文档里 compiler 上的主要钩子和类型。类型决定了能用哪种 tap 方法：<code>SyncHook</code> 只能 <code>tap</code>，<code>AsyncSeriesHook</code> 和 <code>AsyncParallelHook</code> 三种都可以。</p>
+<table><thead><tr><th>钩子</th><th>类型</th><th>文档说明</th></tr></thead><tbody><tr><td><code>run</code></td><td>AsyncSeriesHook</td><td>开始读取 records 之前</td></tr><tr><td><code>compile</code></td><td>SyncHook</td><td>创建新的 compilation 之前</td></tr><tr><td><code>thisCompilation</code> / <code>compilation</code></td><td>SyncHook</td><td>compilation 创建时与创建后</td></tr><tr><td><code>make</code></td><td>AsyncParallelHook</td><td>完成 compilation 之前</td></tr><tr><td><code>finishMake</code></td><td>AsyncSeriesHook</td><td>所有入口和依赖都已加入 compilation</td></tr><tr><td><code>afterCompile</code></td><td>AsyncSeriesHook</td><td>compilation 完成并封存之后</td></tr><tr><td><code>emit</code></td><td>AsyncSeriesHook</td><td>把产物写入输出目录之前</td></tr><tr><td><code>afterEmit</code></td><td>AsyncSeriesHook</td><td>产物写入输出目录之后</td></tr><tr><td><code>done</code></td><td>AsyncSeriesHook</td><td>本次构建结束，参数是 <code>stats</code></td></tr></tbody></table>
+<p><code>seal</code> 是 compilation 上的钩子，文档说明它在 compilation 停止接受新模块时触发。从这里开始，webpack 不再找新模块，而是把已有模块分成 chunk、生成代码、计算哈希，产物在这个阶段形成，<code>processAssets</code> 也在这里执行。</p>
+<p>为什么 <code>make</code> 是 AsyncParallelHook？因为多个入口可以同时开始构建，互不依赖。而 <code>emit</code>、<code>done</code> 是 AsyncSeriesHook，插件要按顺序一个个执行，前一个做完后一个才开始。</p>
+<p>插件的写法和 compiler、compilation 的分工，见<a href="/questions/eng-loader-plugin/">《webpack 的 loader 和 plugin 有什么区别？怎样手写一个？》</a>。webpack 的基本配置见<a href="/questions/eng-webpack/">《webpack 的 entry、output、loader 和 plugin 分别负责什么？》</a>。</p>
+<h2>手写简化版 SyncHook 和 AsyncSeriesHook</h2>
+<p>真正的 Tapable 会根据注册的回调数量和类型生成执行代码，还支持拦截器、<code>stage</code> 和 <code>before</code> 等选项。下面只写出最核心的行为：注册回调，按注册顺序调用。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SyncHook</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">args = []</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">args</span> = args;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">taps</span> = [];
+  }
+  <span class="hljs-title function_">tap</span>(<span class="hljs-params">name, fn</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">taps</span>.<span class="hljs-title function_">push</span>({ name, fn });
+  }
+  <span class="hljs-title function_">call</span>(<span class="hljs-params">...args</span>) {
+    <span class="hljs-comment">// 基础钩子忽略回调的返回值</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> { fn } <span class="hljs-keyword">of</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">taps</span>) <span class="hljs-title function_">fn</span>(...args);
+  }
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">AsyncSeriesHook</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">args = []</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">args</span> = args;
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">taps</span> = [];
+  }
+  <span class="hljs-title function_">tap</span>(<span class="hljs-params">name, fn</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">taps</span>.<span class="hljs-title function_">push</span>({ name, <span class="hljs-attr">run</span>: <span class="hljs-function">(<span class="hljs-params">args</span>) =&gt;</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>(<span class="hljs-title function_">fn</span>(...args)) });
+  }
+  <span class="hljs-title function_">tapPromise</span>(<span class="hljs-params">name, fn</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">taps</span>.<span class="hljs-title function_">push</span>({ name, <span class="hljs-attr">run</span>: <span class="hljs-function">(<span class="hljs-params">args</span>) =&gt;</span> <span class="hljs-title function_">fn</span>(...args) });
+  }
+  <span class="hljs-title function_">tapAsync</span>(<span class="hljs-params">name, fn</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">taps</span>.<span class="hljs-title function_">push</span>({
+      name,
+      <span class="hljs-attr">run</span>: <span class="hljs-function">(<span class="hljs-params">args</span>) =&gt;</span>
+        <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+          <span class="hljs-title function_">fn</span>(...args, <span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> (err ? <span class="hljs-title function_">reject</span>(err) : <span class="hljs-title function_">resolve</span>()));
+        }),
+    });
+  }
+  <span class="hljs-keyword">async</span> <span class="hljs-title function_">promise</span>(<span class="hljs-params">...args</span>) {
+    <span class="hljs-comment">// 上一个回调完成后再执行下一个</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> { run } <span class="hljs-keyword">of</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">taps</span>) <span class="hljs-keyword">await</span> <span class="hljs-title function_">run</span>(args);
+  }
+}
+
+<span class="hljs-keyword">const</span> logs = [];
+<span class="hljs-keyword">const</span> compile = <span class="hljs-keyword">new</span> <span class="hljs-title class_">SyncHook</span>([<span class="hljs-string">&#x27;params&#x27;</span>]);
+compile.<span class="hljs-title function_">tap</span>(<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-function">() =&gt;</span> logs.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;compile A&#x27;</span>));
+compile.<span class="hljs-title function_">tap</span>(<span class="hljs-string">&#x27;B&#x27;</span>, <span class="hljs-function">() =&gt;</span> logs.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;compile B&#x27;</span>));
+compile.<span class="hljs-title function_">call</span>({});
+
+<span class="hljs-keyword">const</span> emit = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AsyncSeriesHook</span>([<span class="hljs-string">&#x27;compilation&#x27;</span>]);
+emit.<span class="hljs-title function_">tapPromise</span>(<span class="hljs-string">&#x27;Slow&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> logs.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;emit Slow&#x27;</span>)));
+emit.<span class="hljs-title function_">tapAsync</span>(<span class="hljs-string">&#x27;Callback&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">compilation, callback</span>) =&gt;</span> {
+  logs.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;emit Callback&#x27;</span>);
+  <span class="hljs-title function_">callback</span>();
+});
+emit.<span class="hljs-title function_">tap</span>(<span class="hljs-string">&#x27;Sync&#x27;</span>, <span class="hljs-function">() =&gt;</span> logs.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;emit Sync&#x27;</span>));
+
+emit.<span class="hljs-title function_">promise</span>({}).<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(logs.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27; / &#x27;</span>)); <span class="hljs-comment">// compile A / compile B / emit Slow / emit Callback / emit Sync</span>
+});
+</code></pre></div>
+<p><code>Slow</code> 的回调要等一个微任务才写日志，可 <code>Callback</code> 和 <code>Sync</code> 仍然排在它后面。这就是 AsyncSeries 的含义：前一个回调的 Promise 完成、或者调用了 callback，才会开始下一个。如果换成 AsyncParallel，三个回调会同时开始，<code>Callback</code> 和 <code>Sync</code> 就可能先写日志。</p>
+<p>为什么同步钩子只有 <code>tap</code>？Tapable README 说明，同步钩子只能用 <code>tap</code> 注册，因为 <code>call</code> 是同步返回的，没法等异步回调完成。异步钩子三种方法都支持，同步的 <code>tap</code> 回调在里面也照样能用。</p>
+<h2>Bail、Waterfall 和 Loop</h2>
+<p>这三种只改变“回调的返回值有什么用”，可以和 Sync、AsyncSeries 组合。Bail 是有一个回调返回了非 <code>undefined</code> 的值，就停下来不再执行后面的；webpack 的 <code>shouldEmit</code> 就是 SyncBailHook，返回 <code>false</code> 可以阻止输出文件。Waterfall 把每个回调的返回值传给下一个回调，适合层层加工同一个值。Loop 是某个回调返回非 <code>undefined</code> 时，从第一个回调重新开始，直到所有回调都返回 <code>undefined</code>。</p>
+<h2>常见追问</h2>
+<p><strong>compiler 和 compilation 的钩子怎么区分该用哪个？</strong></p>
+<blockquote>
+<p>跟整个构建生命周期有关的，比如开始、结束、写文件，在 compiler 上；跟这一次构建的模块、chunk、产物有关的，在 compilation 上。要用 compilation 的钩子，通常先在 compiler 的 <code>thisCompilation</code> 或 <code>compilation</code> 钩子里拿到 compilation 对象，再在它上面注册。</p>
+</blockquote>
+<p><strong><code>tap</code> 的第一个参数为什么必须传名字？</strong></p>
+<blockquote>
+<p>Tapable README 写明，注册时必须传入一个名字来标识插件。它用于调试和排序，比如别的插件可以通过 <code>before</code> 指定排在某个名字之前。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://webpack.js.org/api/compiler-hooks/" target="_blank" rel="noreferrer">webpack · Compiler Hooks<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://webpack.js.org/api/compilation-hooks/" target="_blank" rel="noreferrer">webpack · Compilation Hooks<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://github.com/webpack/tapable" target="_blank" rel="noreferrer">Tapable README<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+webpack+%E7%9A%84%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B%E6%98%AF%E6%80%8E%E6%A0%B7%E7%9A%84%EF%BC%9FTapable+%E9%92%A9%E5%AD%90%E6%9C%89%E5%93%AA%E4%BA%9B%E7%B1%BB%E5%9E%8B%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Awebpack+%E7%9A%84%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B%E6%98%AF%E6%80%8E%E6%A0%B7%E7%9A%84%EF%BC%9FTapable+%E9%92%A9%E5%AD%90%E6%9C%89%E5%93%AA%E4%BA%9B%E7%B1%BB%E5%9E%8B%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aeng-webpack-tapable%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Feng-webpack-tapable%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：webpack 的构建流程是怎样的？Tapable 钩子有哪些类型？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/eng-webpack/">webpack 的 entry、output、loader 和 plugin 分别负责什么？</a></li><li><a href="/questions/eng-loader-plugin/">webpack 的 loader 和 plugin 有什么区别？怎样手写一个？</a></li><li><a href="/questions/eng-vite-vs-webpack/">Vite 和 webpack 有什么区别？项目里应该怎样选？</a></li><li><a href="/questions/eng-hmr/">热更新（HMR）是怎样实现的？为什么有时候会整页刷新？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>
