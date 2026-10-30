@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="场景设计面试题：全局提示要能在任意代码里一行调用，所以把“提示队列”做成和界面无关的 store，提供 show、close 和 subscribe…" />
+    <title>怎样实现一个全局 Toast/Message 组件？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/design-toast/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="怎样实现一个全局 Toast/Message 组件？" />
+    <meta property="og:description" content="场景设计面试题：全局提示要能在任意代码里一行调用，所以把“提示队列”做成和界面无关的 store，提供 show、close 和 subscribe…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/design-toast/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/design-toast/#webpage","url":"https://fe.hushifa.top/questions/design-toast/","name":"怎样实现一个全局 Toast/Message 组件？","description":"场景设计面试题：全局提示要能在任意代码里一行调用，所以把“提示队列”做成和界面无关的 store，提供 show、close 和 subscribe…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/design-toast/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/design-toast/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"场景设计面试题","item":"https://fe.hushifa.top/topics/system-design/"},{"@type":"ListItem","position":3,"name":"怎样实现一个全局 Toast/Message 组件？","item":"https://fe.hushifa.top/questions/design-toast/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BH3ahagJ.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/system-design/">场景设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样实现一个全局 Toast/Message 组件？</span></nav><h1 tabindex="-1">怎样实现一个全局 Toast/Message 组件？</h1><p class="reading-summary">全局提示要能在任意代码里一行调用，所以把“提示队列”做成和界面无关的 store，提供 show、close 和 subscribe，再由一个挂在根节点的容器订阅它并渲染。还要处理同时显示的数量上限、自动关闭与悬停暂停、重复关闭，以及用 role=&quot;status&quot; 让读屏软件播报。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>点“保存”以后右上角冒出“保存成功”，三秒后自动消失，这就是 Toast。它和普通组件最大的不同是调用方式：业务代码希望在任何地方写一行 <code>toast.success(&#x27;保存成功&#x27;)</code> 就能弹出来，包括接口拦截器这种根本不在组件里的地方，而不是每个页面都放一个组件、自己管显示状态。</p>
+<p>所以我会把它拆成两层。一层是和界面无关的 store，里面存着当前要显示的提示列表，对外提供 <code>show</code>、<code>close</code> 和 <code>subscribe</code>；另一层是挂在应用根节点的容器组件，订阅 store，列表一变就重新渲染。<code>show</code> 返回一个 id，调用方可以拿它提前关闭，比如“上传中”在上传完成后换成“上传成功”。</p>
+<p>细节上要处理几件事：同时显示的条数要有上限，多出来的排队；自动关闭的计时在鼠标悬停时暂停；关闭要能重复调用而不出错；位置用固定定位，层级要高于页面内容和弹窗。</p>
+<p>无障碍也要考虑。提示区域用 <code>role=&quot;status&quot;</code>，读屏软件会在用户空闲时播报，而且这个容器要在页面加载时就存在，不能和内容一起插入。错误提示不要几秒就消失，用户可能来不及读，重要的错误应该留着让用户手动关闭。</p>
+</blockquote>
+<h2>为什么要把状态放在组件外面</h2>
+<p>如果 Toast 是普通组件，就得在每个页面里放一个，用 <code>useState</code> 控制显示。可是接口拦截器里的统一错误提示、工具函数里的提示，都拿不到组件的状态。</p>
+<p>所以把提示列表放进一个独立的 store。它只是普通的 JS 对象，任何地方都能 <code>import</code> 调用。界面层只负责订阅它、渲染它。这样调用方不关心界面用的是 React 还是 Vue，测试 store 时也不需要渲染任何东西。</p>
+<h2>先写与界面无关的队列</h2>
+<p>下面的 store 最多同时显示 <code>max</code> 条，多出来的进等待队列，有一条关闭就从队列里补上一条。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 与界面无关的 Toast 队列：最多同时显示 max 条，多出来的排队</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">createToastStore</span>(<span class="hljs-params">{ max = <span class="hljs-number">3</span> } = {}</span>) {
+  <span class="hljs-keyword">let</span> nextId = <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">let</span> visible = [];
+  <span class="hljs-keyword">const</span> waiting = [];
+  <span class="hljs-keyword">const</span> listeners = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>();
+
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">notify</span> = (<span class="hljs-params"></span>) =&gt; listeners.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">listener</span>) =&gt;</span> <span class="hljs-title function_">listener</span>(visible));
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">show</span>(<span class="hljs-params">message, { type = <span class="hljs-string">&#x27;info&#x27;</span>, duration = <span class="hljs-number">3000</span> } = {}</span>) {
+    <span class="hljs-keyword">const</span> toast = { <span class="hljs-attr">id</span>: nextId++, message, type, duration };
+    <span class="hljs-keyword">if</span> (visible.<span class="hljs-property">length</span> &lt; max) visible = [...visible, toast];
+    <span class="hljs-keyword">else</span> waiting.<span class="hljs-title function_">push</span>(toast);
+    <span class="hljs-title function_">notify</span>();
+    <span class="hljs-keyword">return</span> toast.<span class="hljs-property">id</span>; <span class="hljs-comment">// 返回 id，调用方可以提前关闭</span>
+  }
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">close</span>(<span class="hljs-params">id</span>) {
+    <span class="hljs-keyword">const</span> before = visible.<span class="hljs-property">length</span>;
+    visible = visible.<span class="hljs-title function_">filter</span>(<span class="hljs-function">(<span class="hljs-params">toast</span>) =&gt;</span> toast.<span class="hljs-property">id</span> !== id);
+    <span class="hljs-keyword">if</span> (visible.<span class="hljs-property">length</span> === before) <span class="hljs-keyword">return</span>; <span class="hljs-comment">// 已经关闭过，忽略重复调用</span>
+    <span class="hljs-keyword">if</span> (waiting.<span class="hljs-property">length</span> &gt; <span class="hljs-number">0</span>) visible = [...visible, waiting.<span class="hljs-title function_">shift</span>()];
+    <span class="hljs-title function_">notify</span>();
+  }
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">subscribe</span>(<span class="hljs-params">listener</span>) {
+    listeners.<span class="hljs-title function_">add</span>(listener);
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> listeners.<span class="hljs-title function_">delete</span>(listener);
+  }
+
+  <span class="hljs-keyword">return</span> { show, close, subscribe };
+}
+
+<span class="hljs-keyword">const</span> store = <span class="hljs-title function_">createToastStore</span>({ <span class="hljs-attr">max</span>: <span class="hljs-number">2</span> });
+<span class="hljs-keyword">let</span> current = [];
+store.<span class="hljs-title function_">subscribe</span>(<span class="hljs-function">(<span class="hljs-params">list</span>) =&gt;</span> { current = list; });
+
+<span class="hljs-keyword">const</span> first = store.<span class="hljs-title function_">show</span>(<span class="hljs-string">&#x27;保存成功&#x27;</span>, { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;success&#x27;</span> });
+store.<span class="hljs-title function_">show</span>(<span class="hljs-string">&#x27;网络较慢&#x27;</span>);
+store.<span class="hljs-title function_">show</span>(<span class="hljs-string">&#x27;已复制&#x27;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(current.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">toast</span>) =&gt;</span> toast.<span class="hljs-property">message</span>).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;|&#x27;</span>)); <span class="hljs-comment">// 保存成功|网络较慢</span>
+
+store.<span class="hljs-title function_">close</span>(first);
+store.<span class="hljs-title function_">close</span>(first); <span class="hljs-comment">// 重复关闭不会多放出一条</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(current.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">toast</span>) =&gt;</span> toast.<span class="hljs-property">message</span>).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;|&#x27;</span>)); <span class="hljs-comment">// 网络较慢|已复制</span>
+</code></pre></div>
+<p>上限是 2，所以第三条“已复制”进了等待队列，第一次输出只有两条。关闭第一条后，“已复制”被补上来。</p>
+<p>为什么要特意处理重复关闭？因为一条提示可能同时被自动计时器和用户点击关闭。如果 <code>close</code> 不检查，第二次调用也会从等待队列里多放出一条，显示的条数就超过上限了。</p>
+<p><code>visible</code> 每次变化都生成新数组，而不是原地修改。这是为了让界面层能用引用比较判断是否需要重新渲染，React 的 <code>useSyncExternalStore</code> 就要求快照在没有变化时保持同一个引用，见<a href="/questions/react-external-store/">《useSyncExternalStore 为什么要求稳定的快照？》</a>。</p>
+<h2>界面层怎样订阅和渲染</h2>
+<p>在应用根节点放一个容器，订阅 store，用 Portal 渲染到 <code>body</code> 下，避免被某个父元素的 <code>overflow: hidden</code> 裁掉：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">ToastViewport</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> toasts = <span class="hljs-title function_">useSyncExternalStore</span>(subscribeToasts, getToasts);
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">createPortal</span>(
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">role</span>=<span class="hljs-string">&quot;status&quot;</span> <span class="hljs-attr">className</span>=<span class="hljs-string">&quot;toast-viewport&quot;</span>&gt;</span>
+      {toasts.map((toast) =&gt; (
+        <span class="hljs-tag">&lt;<span class="hljs-name">ToastItem</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{toast.id}</span> <span class="hljs-attr">toast</span>=<span class="hljs-string">{toast}</span> <span class="hljs-attr">onClose</span>=<span class="hljs-string">{()</span> =&gt;</span> closeToast(toast.id)} /&gt;
+      ))}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>,
+    <span class="hljs-variable language_">document</span>.<span class="hljs-property">body</span>,
+  );
+}
+</code></pre></div>
+<p><code>ToastViewport</code> 要在应用启动时就渲染，即使列表是空的。原因在后面的无障碍部分。</p>
+<p>自动关闭的计时放在每一条 <code>ToastItem</code> 里：挂载时按 <code>duration</code> 开始计时，到时调用 <code>onClose</code>；鼠标移入或键盘焦点进入时暂停，离开时继续；卸载时清掉定时器。<code>duration</code> 为 0 表示不自动关闭。</p>
+<p>层级是一个常见问题。Toast 要显示在弹窗上方，可是原生 <code>dialog</code> 用 <code>showModal()</code> 打开后处在浏览器的顶层（top layer），普通元素的 <code>z-index</code> 再大也盖不住它。一种办法是让 Toast 容器也用 Popover API，<code>showPopover()</code> 会把元素放进顶层，<code>popover=&quot;manual&quot;</code> 不会因为点击外部或按 Esc 被关掉，也不会关掉别的 popover。顶层元素按进入的先后叠放，所以弹窗打开以后再显示的 Toast 会盖在弹窗上面。弹窗的挂载方式见<a href="/questions/design-modal-component/">《弹窗组件怎样设计？》</a>。</p>
+<h2>读屏用户能知道提示出现了吗</h2>
+<p>视觉用户看到右上角冒出一条提示，读屏用户却可能完全不知道。所以容器要设成 live region，内容变化时读屏会自动播报。</p>
+<p><code>role=&quot;status&quot;</code> 自带 <code>aria-live=&quot;polite&quot;</code>，读屏会等用户空闲时再播报，适合“保存成功”这类提示。要注意，MDN 说明读屏一般只播报 live region 里内容的变化，最可靠的方式是让容器在初始页面里就存在，再往里面添加内容。如果每次弹出 Toast 时才创建带 <code>role=&quot;status&quot;</code> 的元素，第一条提示很可能不会被读出来。这也是为什么 <code>ToastViewport</code> 要一开始就渲染。</p>
+<p>紧急的错误可以用 <code>role=&quot;alert&quot;</code>，它会打断当前播报。不要给 Toast 移动焦点，否则会打断用户正在做的操作。live region 的更多细节见<a href="/questions/a11y-live-region/">《aria-live 怎样用于动态状态播报？》</a>。</p>
+<p>自动消失的时长也是无障碍问题。WCAG 的“时间可调整”要求，内容设定的时间限制要能关闭、调整或延长。所以包含重要信息或操作按钮（比如“撤销”）的提示，不要几秒就消失，至少要在悬停或获得焦点时暂停，错误信息最好一直显示到用户手动关闭。</p>
+<h2>常见追问</h2>
+<p><strong>同一条提示被连续触发很多次怎么办？</strong></p>
+<blockquote>
+<p>比如网络断开时每个请求都报“网络异常”，屏幕上会叠一堆一样的提示。可以给 <code>show</code> 增加一个 <code>key</code> 参数，相同 <code>key</code> 的提示已经在显示时，不新增，只更新内容或重新开始计时。</p>
+</blockquote>
+<p><strong>Toast 和 Modal 怎样选？</strong></p>
+<blockquote>
+<p>Toast 用于不需要用户回应的反馈，比如“已保存”“已复制”，它不打断操作，过一会儿自己消失。需要用户确认或做选择的，比如“确定删除吗”，要用弹窗，因为用户必须回应才能继续。错误如果需要用户处理，也不应该只用一个几秒就消失的 Toast。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/status_role" target="_blank" rel="noreferrer">MDN · ARIA status role<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Guides/Live_regions" target="_blank" rel="noreferrer">MDN · ARIA live regions<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/Popover_API" target="_blank" rel="noreferrer">MDN · Popover API<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://drafts.csswg.org/css-position-4/#top-layer" target="_blank" rel="noreferrer">CSS Positioned Layout Level 4 · Top layer<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://www.w3.org/WAI/WCAG22/Understanding/timing-adjustable.html" target="_blank" rel="noreferrer">W3C · Understanding SC 2.2.1 Timing Adjustable<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%85%A8%E5%B1%80+Toast%2FMessage+%E7%BB%84%E4%BB%B6%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%85%A8%E5%B1%80+Toast%2FMessage+%E7%BB%84%E4%BB%B6%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Adesign-toast%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9C%BA%E6%99%AF%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fdesign-toast%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样实现一个全局 Toast/Message 组件？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/design-modal-component/">弹窗组件怎样设计？</a></li><li><a href="/questions/design-table-component/">怎样设计一个通用的表格组件？</a></li><li><a href="/questions/design-autocomplete/">搜索联想（自动补全）组件要处理哪些问题？</a></li><li><a href="/questions/design-permission/">前端权限控制怎样设计路由、按钮和接口三层？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

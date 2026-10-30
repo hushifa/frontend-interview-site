@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="JavaScript面试题：严格模式把一些静默失败改成抛错：给未声明变量赋值抛 ReferenceError，给只读属性赋值抛 TypeError。" />
+    <title>严格模式改变了哪些行为？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/js-strict-mode/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="严格模式改变了哪些行为？ · 前端知库" />
+    <meta property="og:description" content="JavaScript面试题：严格模式把一些静默失败改成抛错：给未声明变量赋值抛 ReferenceError，给只读属性赋值抛 TypeError。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/js-strict-mode/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-strict-mode/#webpage","url":"https://fe.hushifa.top/questions/js-strict-mode/","name":"严格模式改变了哪些行为？ · 前端知库","description":"JavaScript面试题：严格模式把一些静默失败改成抛错：给未声明变量赋值抛 ReferenceError，给只读属性赋值抛 TypeError。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-strict-mode/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-strict-mode/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"严格模式改变了哪些行为？","item":"https://fe.hushifa.top/questions/js-strict-mode/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BH3ahagJ.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">严格模式改变了哪些行为？</span></nav><h1 tabindex="-1">严格模式改变了哪些行为？</h1><p class="reading-summary">严格模式把一些静默失败改成抛错：给未声明变量赋值抛 ReferenceError，给只读属性赋值抛 TypeError。函数里的 this 不再被替换成全局对象或包装对象，arguments 不再和参数同步，禁用 with、八进制字面量和重复参数名，eval 不会往外层加变量。ES 模块和 class 内部自动是严格模式。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>在函数里不小心写了 <code>totle = 1</code>，拼错了变量名，非严格模式下会悄悄创建一个全局变量，严格模式下直接抛 <code>ReferenceError</code>。这就是严格模式的主要作用：把原来静默失败的写法变成报错，让问题早点暴露。</p>
+<p>它改变的行为大致有三类。第一类是把静默失败变成抛错，比如给冻结对象的属性赋值会抛 <code>TypeError</code>。第二类是 <code>this</code>：普通函数直接调用时 <code>this</code> 是 <code>undefined</code>，用 <code>call</code> 传入原始值也不会被包装成对象。第三类是去掉一些难以优化的写法，<code>with</code> 被禁用，<code>eval</code> 不再往外层作用域加变量，<code>arguments</code> 也不再和参数同步。</p>
+<p>开启方式是在脚本或函数体开头写 <code>&#x27;use strict&#x27;</code>。ES 模块和 <code>class</code> 的内部自动就是严格模式，不用再写，所以现代工程代码大多已经在严格模式下运行了。</p>
+<p>要注意，参数用了默认值、解构或剩余参数的函数，函数体里不能写 <code>&#x27;use strict&#x27;</code>，会报语法错误。</p>
+</blockquote>
+<h2>运行时行为的变化</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">sloppyThis</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> <span class="hljs-variable language_">this</span>;
+}
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">strictThis</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-string">&#x27;use strict&#x27;</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>;
+}
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(sloppyThis.<span class="hljs-title function_">call</span>(<span class="hljs-number">1</span>)); <span class="hljs-comment">// object</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(strictThis.<span class="hljs-title function_">call</span>(<span class="hljs-number">1</span>)); <span class="hljs-comment">// 1</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">strictThis</span>()); <span class="hljs-comment">// undefined</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">strictAssign</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-string">&#x27;use strict&#x27;</span>;
+  <span class="hljs-keyword">const</span> frozen = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">freeze</span>({ <span class="hljs-attr">count</span>: <span class="hljs-number">0</span> });
+  <span class="hljs-keyword">try</span> {
+    frozen.<span class="hljs-property">count</span> = <span class="hljs-number">1</span>;
+  } <span class="hljs-keyword">catch</span> (error) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(error.<span class="hljs-property">name</span>); <span class="hljs-comment">// TypeError</span>
+  }
+  <span class="hljs-keyword">try</span> {
+    undeclared = <span class="hljs-number">1</span>;
+  } <span class="hljs-keyword">catch</span> (error) {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(error.<span class="hljs-property">name</span>); <span class="hljs-comment">// ReferenceError</span>
+  }
+}
+<span class="hljs-title function_">strictAssign</span>();
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">sloppyArgs</span>(<span class="hljs-params">a</span>) {
+  a = <span class="hljs-number">2</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-variable language_">arguments</span>[<span class="hljs-number">0</span>];
+}
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">strictArgs</span>(<span class="hljs-params">a</span>) {
+  <span class="hljs-string">&#x27;use strict&#x27;</span>;
+  a = <span class="hljs-number">2</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-variable language_">arguments</span>[<span class="hljs-number">0</span>];
+}
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">sloppyArgs</span>(<span class="hljs-number">1</span>)); <span class="hljs-comment">// 2</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">strictArgs</span>(<span class="hljs-number">1</span>)); <span class="hljs-comment">// 1</span>
+</code></pre></div>
+<p>前三行看 <code>this</code>。非严格模式下，MDN 说函数里的 <code>this</code> 总是对象：传入原始值会被包装成对象，所以 <code>typeof</code> 得到 <code>&#x27;object&#x27;</code>；传入 <code>undefined</code> 或 <code>null</code> 会换成全局对象。严格模式下传什么就是什么，<code>call(1)</code> 得到 1，直接调用得到 <code>undefined</code>。所以严格模式下方法被单独拿出来调用，访问 <code>this.xxx</code> 会马上报错，而不是悄悄改到全局对象上。</p>
+<p>中间两个 <code>try</code> 是静默失败变成抛错。非严格模式下给冻结对象赋值什么也不发生，代码继续跑，很难发现；给未声明的变量赋值会创建全局变量。严格模式下这两种都抛错。</p>
+<p>最后两行是 <code>arguments</code>。非严格模式下 <code>arguments[0]</code> 和参数 <code>a</code> 是联动的，改 <code>a</code> 会同步改 <code>arguments[0]</code>。严格模式下 <code>arguments</code> 只保存调用时传入的值，互不影响。严格模式还禁止访问 <code>arguments.callee</code>。</p>
+<h2>语法上的限制</h2>
+<p>有些写法在严格模式下直接是语法错误，代码一行都不会执行。<code>with</code> 语句被禁用，因为它让变量到底来自哪个对象在运行前无法确定。以 0 开头的八进制字面量如 <code>0644</code> 被禁止，要写成 <code>0o644</code>。函数参数不能重名。<code>delete</code> 一个普通变量名也是语法错误。</p>
+<p><code>eval</code> 的行为也收紧了。非严格模式下 <code>eval(&#x27;var x&#x27;)</code> 会在外层函数或全局里加一个变量 <code>x</code>；严格模式下 <code>eval</code> 里声明的变量只留在 <code>eval</code> 自己的作用域里。</p>
+<h2>怎样开启，作用范围多大</h2>
+<p><code>&#x27;use strict&#x27;</code> 必须写在脚本或函数体的最前面，前面只能有注释或其他指令，否则就是一个普通字符串，不起作用。写在脚本开头会让整个脚本都是严格模式；写在函数开头只影响这个函数。</p>
+<p>ES 模块的全部内容、<code>class</code> 的全部内容都自动是严格模式。<code>this</code> 在不同调用方式下的取值，见<a href="/questions/js-this/">《普通函数和箭头函数的 this 有什么区别？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>为什么带默认参数的函数不能写 &#x27;use strict&#x27;？</strong></p>
+<blockquote>
+<p>这是语言的规定：MDN 写明 <code>&#x27;use strict&#x27;</code> 只能用在参数是简单参数列表的函数体里，参数带默认值、剩余参数或解构时写它就是语法错误。需要的话，把严格模式写到外层脚本或函数上。</p>
+</blockquote>
+<p><strong>严格模式会让代码更快吗？</strong></p>
+<blockquote>
+<p>不能一概而论。MDN 的说法是严格模式代码“有时”能比相同的非严格代码跑得更快，因为它去掉了 <code>with</code>、<code>eval</code> 改外层变量、<code>arguments.callee</code> 这类妨碍引擎优化的行为。但具体快不快取决于引擎和代码，不能把它当成性能开关。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode" target="_blank" rel="noreferrer">MDN · Strict mode<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F%E6%94%B9%E5%8F%98%E4%BA%86%E5%93%AA%E4%BA%9B%E8%A1%8C%E4%B8%BA%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F%E6%94%B9%E5%8F%98%E4%BA%86%E5%93%AA%E4%BA%9B%E8%A1%8C%E4%B8%BA%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-strict-mode%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-strict-mode%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：严格模式改变了哪些行为？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-this/">普通函数和箭头函数的 this 有什么区别？</a></li><li><a href="/questions/js-arrow-function/">箭头函数和普通函数有哪些区别？</a></li><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

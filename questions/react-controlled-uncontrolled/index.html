@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="React面试题：受控和非受控说的是“重要的状态由谁决定”。" />
+    <title>React 中的受控组件和非受控组件是什么？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/react-controlled-uncontrolled/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="React 中的受控组件和非受控组件是什么？ · 前端知库" />
+    <meta property="og:description" content="React面试题：受控和非受控说的是“重要的状态由谁决定”。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/react-controlled-uncontrolled/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-controlled-uncontrolled/#webpage","url":"https://fe.hushifa.top/questions/react-controlled-uncontrolled/","name":"React 中的受控组件和非受控组件是什么？ · 前端知库","description":"React面试题：受控和非受控说的是“重要的状态由谁决定”。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-controlled-uncontrolled/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-controlled-uncontrolled/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"React 中的受控组件和非受控组件是什么？","item":"https://fe.hushifa.top/questions/react-controlled-uncontrolled/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BH3ahagJ.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">React 中的受控组件和非受控组件是什么？</span></nav><h1 tabindex="-1">React 中的受控组件和非受控组件是什么？</h1><p class="reading-summary">受控和非受控说的是“重要的状态由谁决定”。受控组件的值由父组件通过 props 决定，比如带 value 和 onChange 的 input；非受控组件自己保存状态，父组件只能给初值，比如只写 defaultValue 的 input。受控更灵活，非受控更省事，同一个输入框不能在两者之间切换。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>看一个输入框：写 <code>&lt;input value={name} onChange={e =&gt; setName(e.target.value)} /&gt;</code>，输入框显示什么完全由 <code>name</code> 这个 state 决定，这是受控的。只写 <code>&lt;input defaultValue=&quot;张三&quot; /&gt;</code>，React 只给了一个初值，之后的值由浏览器的输入框自己保存，这是非受控的。</p>
+<p>这对概念不只用于表单。react.dev 的说法是：组件的重要信息由自己的局部 state 决定，父组件影响不了，就叫非受控；由 props 驱动、父组件能完全指定它的行为，就叫受控。官方也说明这不是严格的技术术语，一个组件常常两者混用。</p>
+<p>选择的依据是灵活性和使用成本。非受控组件用起来简单，父组件不用管它；可是多个组件要协调时就不方便。受控组件最灵活，父组件可以随时改它、校验它、让它和别的组件联动，代价是父组件要把 props 全部配好。</p>
+<p>输入框有几条硬规则：传了 <code>value</code> 就必须同时传 <code>onChange</code>，否则输入框变成只读；<code>onChange</code> 里要同步把 state 更新为 <code>e.target.value</code>；<code>value</code> 不能先是 <code>undefined</code> 后来变成字符串，因为 React 会把它从非受控切换成受控并发出警告，初值应该写成 <code>&#x27;&#x27;</code>。</p>
+</blockquote>
+<h2>两种输入框写法对比</h2>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Controlled</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [name, setName] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{name}</span> <span class="hljs-attr">onChange</span>=<span class="hljs-string">{(e)</span> =&gt;</span> setName(e.target.value)} /&gt;
+      <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>你好，{name || &#x27;陌生人&#x27;}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;/&gt;</span></span>
+  );
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Uncontrolled</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">handleSubmit</span>(<span class="hljs-params">e</span>) {
+    e.<span class="hljs-title function_">preventDefault</span>();
+    <span class="hljs-keyword">const</span> formData = <span class="hljs-keyword">new</span> <span class="hljs-title class_">FormData</span>(e.<span class="hljs-property">target</span>);
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(formData.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;name&#x27;</span>));
+  }
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">onSubmit</span>=<span class="hljs-string">{handleSubmit}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span> <span class="hljs-attr">defaultValue</span>=<span class="hljs-string">&quot;张三&quot;</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span>&gt;</span>提交<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></span>
+  );
+}
+</code></pre></div>
+<p>受控版本里，每敲一个字都先进 <code>onChange</code>，更新 <code>name</code>，React 重新渲染，输入框再显示新的 <code>name</code>。所以下面的问候语能跟着实时变化。</p>
+<p>非受控版本里，React 不知道用户输入了什么，要用的时候再去读，比如提交时用 <code>FormData</code> 按 <code>name</code> 取值，或者用 <code>ref</code> 读 DOM 的 <code>value</code>。</p>
+<h2>为什么受控的输入框必须同步更新</h2>
+<p>受控的意思是“React 强制输入框显示你传的 <code>value</code>”。所以只传 <code>value</code> 不传 <code>onChange</code>，用户敲字时 state 不变，输入框就一直显示原来的值，React 会在控制台报错，提示你要么加 <code>onChange</code>，要么改用 <code>defaultValue</code>，要么明确写 <code>readOnly</code>。</p>
+<p><code>onChange</code> 里的更新也有讲究。官方文档举了两个会出问题的写法：把 state 更新成跟 <code>e.target.value</code> 不一样的值，比如直接转大写；或者放进 <code>setTimeout</code> 里异步更新。这两种都可能让光标在每次按键后跳到开头。正确的做法是在 <code>onChange</code> 里同步地 <code>setName(e.target.value)</code>。</p>
+<h2>为什么不能在受控和非受控之间切换</h2>
+<p><code>value</code> 是 <code>undefined</code> 时，React 认为输入框是非受控的；后来变成字符串，又成了受控的。React 不知道你到底想要哪种，就会报“A component is changing an uncontrolled input to be controlled”。</p>
+<p>这个问题常见于数据从接口来的时候：<code>user.name</code> 一开始是 <code>undefined</code>，加载完才有值。官方的改法是初值写成 <code>&#x27;&#x27;</code>，或者写 <code>value={user.name ?? &#x27;&#x27;}</code>，保证 <code>value</code> 从头到尾都是字符串。复选框同理，<code>checked</code> 要始终是布尔值。</p>
+<h2>自己写组件时怎么同时支持两种用法</h2>
+<p>很多组件库的组件既能受控也能非受控：传了 <code>value</code> 就听父组件的，没传就用自己的内部状态。下面用一个普通对象模拟这个判断，省掉了 React 的渲染过程：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">createToggle</span>(<span class="hljs-params">{ value, defaultValue = <span class="hljs-literal">false</span>, onChange } = {}</span>) {
+  <span class="hljs-keyword">let</span> inner = defaultValue;
+  <span class="hljs-keyword">const</span> isControlled = value !== <span class="hljs-literal">undefined</span>;
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-keyword">get</span> <span class="hljs-title function_">checked</span>() {
+      <span class="hljs-keyword">return</span> isControlled ? value : inner;
+    },
+    <span class="hljs-title function_">click</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-keyword">const</span> next = !<span class="hljs-variable language_">this</span>.<span class="hljs-property">checked</span>;
+      <span class="hljs-keyword">if</span> (!isControlled) inner = next;
+      onChange?.(next);
+    },
+  };
+}
+
+<span class="hljs-keyword">const</span> uncontrolled = <span class="hljs-title function_">createToggle</span>({ <span class="hljs-attr">defaultValue</span>: <span class="hljs-literal">false</span> });
+uncontrolled.<span class="hljs-title function_">click</span>();
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(uncontrolled.<span class="hljs-property">checked</span>); <span class="hljs-comment">// true</span>
+
+<span class="hljs-keyword">let</span> parentState = <span class="hljs-literal">false</span>;
+<span class="hljs-keyword">const</span> controlled = <span class="hljs-title function_">createToggle</span>({ <span class="hljs-attr">value</span>: parentState, <span class="hljs-attr">onChange</span>: <span class="hljs-function">(<span class="hljs-params">next</span>) =&gt;</span> { parentState = next; } });
+controlled.<span class="hljs-title function_">click</span>();
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(controlled.<span class="hljs-property">checked</span>, parentState); <span class="hljs-comment">// false true</span>
+</code></pre></div>
+<p>非受控的开关点一下就变了，因为它改的是自己的 <code>inner</code>。受控的开关点一下，<code>checked</code> 还是 <code>false</code>，只是通过 <code>onChange</code> 把新值告诉了父组件。为什么不自己变？因为受控组件的值只能由父组件传进来，在 React 里，父组件 <code>setState</code> 后重新渲染，把新的 <code>value</code> 传下来，开关才会变。这就是“单一数据源”。</p>
+<h2>常见追问</h2>
+<p><strong>表单应该选受控还是非受控？</strong></p>
+<blockquote>
+<p>看什么时候要用这个值。输入时就要校验、格式化或联动，用受控；只在提交时要值，用非受控加 <code>FormData</code> 更省事。具体对比见<a href="/questions/react-controlled-forms/">《受控组件与非受控组件应该如何选择？》</a>。</p>
+</blockquote>
+<p><strong>受控输入框每敲一个字都渲染，会不会卡？</strong></p>
+<blockquote>
+<p>如果 state 所在的组件下面有一棵很大的树，可能会。官方的建议是把 state 放到离输入框更近的组件里，避免整棵树跟着渲染；实在避免不了，可以用 <code>useDeferredValue</code> 让输入框保持响应。</p>
+</blockquote>
+<p><strong>改了 <code>defaultValue</code>，为什么输入框没变？</strong></p>
+<blockquote>
+<p><code>defaultValue</code> 只决定初值，之后的值由输入框自己保存。想让它重新取初值，可以给它换一个 <code>key</code>，让 React 重新创建这个输入框。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/learn/sharing-state-between-components" target="_blank" rel="noreferrer">React · Sharing State Between Components<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://react.dev/reference/react-dom/components/input" target="_blank" rel="noreferrer">React · input<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+%E4%B8%AD%E7%9A%84%E5%8F%97%E6%8E%A7%E7%BB%84%E4%BB%B6%E5%92%8C%E9%9D%9E%E5%8F%97%E6%8E%A7%E7%BB%84%E4%BB%B6%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+%E4%B8%AD%E7%9A%84%E5%8F%97%E6%8E%A7%E7%BB%84%E4%BB%B6%E5%92%8C%E9%9D%9E%E5%8F%97%E6%8E%A7%E7%BB%84%E4%BB%B6%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-controlled-uncontrolled%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-controlled-uncontrolled%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React 中的受控组件和非受控组件是什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-controlled-forms/">受控组件与非受控组件应该如何选择？</a></li><li><a href="/questions/react-state/">为什么调用 setState 后，当前变量还是旧值？</a></li><li><a href="/questions/react-use-form-status/">React useFormStatus 适合管理什么表单状态？</a></li><li><a href="/questions/react-batching/">React 的批量更新是什么？React 18 的自动批处理改变了什么？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

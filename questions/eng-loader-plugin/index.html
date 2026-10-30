@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="工程化面试题：loader 是一个函数，接收一个文件的内容，返回转换后的内容，多个 loader 从右往左执行；plugin 是带 apply 方法的对象…" />
+    <title>webpack 的 loader 和 plugin 有什么区别？怎样手写一个？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/eng-loader-plugin/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="webpack 的 loader 和 plugin 有什么区别？怎样手写一个？" />
+    <meta property="og:description" content="工程化面试题：loader 是一个函数，接收一个文件的内容，返回转换后的内容，多个 loader 从右往左执行；plugin 是带 apply 方法的对象…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/eng-loader-plugin/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/eng-loader-plugin/#webpage","url":"https://fe.hushifa.top/questions/eng-loader-plugin/","name":"webpack 的 loader 和 plugin 有什么区别？怎样手写一个？","description":"工程化面试题：loader 是一个函数，接收一个文件的内容，返回转换后的内容，多个 loader 从右往左执行；plugin 是带 apply 方法的对象…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/eng-loader-plugin/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/eng-loader-plugin/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"工程化面试题","item":"https://fe.hushifa.top/topics/engineering/"},{"@type":"ListItem","position":3,"name":"webpack 的 loader 和 plugin 有什么区别？怎样手写一个？","item":"https://fe.hushifa.top/questions/eng-loader-plugin/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BH3ahagJ.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/engineering/">工程化面试题</a><span aria-hidden="true">/</span><span aria-current="page">webpack 的 loader 和 plugin 有什么区别？怎样手写一个？</span></nav><h1 tabindex="-1">webpack 的 loader 和 plugin 有什么区别？怎样手写一个？</h1><p class="reading-summary">loader 是一个函数，接收一个文件的内容，返回转换后的内容，多个 loader 从右往左执行；plugin 是带 apply 方法的对象，通过 compiler 和 compilation 上的钩子介入整个构建，能做生成文件、改产物这类 loader 做不到的事。文中各手写一个，并讲 this.async、getOptions 和 processAssets。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>比如项目里 <code>import &#x27;./app.scss&#x27;</code>，webpack 自己只认识 JS，要靠 <code>sass-loader</code>、<code>css-loader</code>、<code>style-loader</code> 把它一步步转成 JS 模块。loader 就是一个函数，拿到一个文件的源码，返回转换后的结果，一次只管一个文件。plugin 是一个带 <code>apply</code> 方法的对象，webpack 启动时调用它，把 <code>compiler</code> 交给它，它在构建过程的各个钩子上挂回调。</p>
+<p>两者分工不同。loader 只看得到单个模块的内容，适合做“把这种文件转成 JS”；plugin 能看到整个构建，生成 HTML、提取 CSS、往产物里加文件、统计体积，这些 loader 做不到的事都由 plugin 完成。</p>
+<p>手写 loader，就是导出一个普通函数，用 <code>this.getOptions()</code> 读配置，同步时直接返回字符串，异步时调用 <code>this.async()</code> 拿到回调。手写 plugin，就是写一个类，在 <code>apply(compiler)</code> 里用 <code>compiler.hooks.某个钩子.tap()</code> 注册回调。</p>
+<p>要注意两点。多个 loader 是从右往左（数组写成多行时是从下往上）执行的，写反了就会出错。loader 应该保持无状态，不要在模块作用域里存跨文件的数据，因为有缓存时这个 loader 不一定会再执行。</p>
+</blockquote>
+<h2>loader 和 plugin 在构建中处在什么位置</h2>
+<p>webpack 从入口文件开始，遇到一个 <code>import</code> 就去读那个文件。读到文件以后，先按 <code>module.rules</code> 找出匹配的 loader，把内容交给它们转换，转换完的结果必须是 JS，webpack 才能继续分析里面的 <code>import</code>。所以 loader 工作在“单个模块被读进来”这一步。</p>
+<p>plugin 不挂在某个文件上。webpack 本身就是用同一套插件系统搭起来的，从开始编译、构建模块、生成 chunk 到写出文件，每个阶段都暴露了钩子。plugin 在这些钩子上注册回调，所以能拿到所有模块、所有产物，做全局的事情。</p>
+<p>webpack 文档说 plugin 用来做“loader 做不到的其他任何事”。比如 <code>HtmlWebpackPlugin</code> 要在所有 JS 文件名确定以后生成 HTML，并把带 hash 的文件名写进去，这件事只有在产物阶段才能做。</p>
+<h2>多个 loader 按什么顺序执行</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
+  <span class="hljs-attr">module</span>: {
+    <span class="hljs-attr">rules</span>: [
+      {
+        <span class="hljs-attr">test</span>: <span class="hljs-regexp">/\.scss$/</span>,
+        <span class="hljs-attr">use</span>: [<span class="hljs-string">&#x27;style-loader&#x27;</span>, <span class="hljs-string">&#x27;css-loader&#x27;</span>, <span class="hljs-string">&#x27;sass-loader&#x27;</span>],
+      },
+    ],
+  },
+};
+</code></pre></div>
+<p>数组里写在最后的 <code>sass-loader</code> 最先执行，它拿到的是 <code>.scss</code> 原文件；<code>css-loader</code> 拿到 <code>sass-loader</code> 的输出；最前面的 <code>style-loader</code> 最后执行，必须返回 JS。可以用普通函数模拟一下这个顺序：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 用普通函数模拟 use: [&#x27;style-loader&#x27;, &#x27;css-loader&#x27;, &#x27;sass-loader&#x27;] 的执行顺序</span>
+<span class="hljs-keyword">const</span> use = [
+  <span class="hljs-function">(<span class="hljs-params">source</span>) =&gt;</span> <span class="hljs-string">`style(<span class="hljs-subst">${source}</span>)`</span>,
+  <span class="hljs-function">(<span class="hljs-params">source</span>) =&gt;</span> <span class="hljs-string">`css(<span class="hljs-subst">${source}</span>)`</span>,
+  <span class="hljs-function">(<span class="hljs-params">source</span>) =&gt;</span> <span class="hljs-string">`sass(<span class="hljs-subst">${source}</span>)`</span>,
+];
+
+<span class="hljs-keyword">const</span> result = use.<span class="hljs-title function_">reduceRight</span>(<span class="hljs-function">(<span class="hljs-params">source, loader</span>) =&gt;</span> <span class="hljs-title function_">loader</span>(source), <span class="hljs-string">&#x27;app.scss&#x27;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(result); <span class="hljs-comment">// style(css(sass(app.scss)))</span>
+</code></pre></div>
+<p>结果是一层套一层的函数调用，最里面的 <code>sass</code> 最先执行。为什么设计成从右往左？可以把它看成函数组合 <code>style(css(sass(file)))</code>，写法和数学里的复合函数一致。</p>
+<p>另外 loader 还可以导出一个 <code>pitch</code> 方法。正式执行之前，webpack 会先从左往右调用每个 loader 的 <code>pitch</code>；如果某个 <code>pitch</code> 返回了结果，后面的 loader 就直接跳过，流程掉头往回走。<code>style-loader</code> 就用到了 <code>pitch</code>。</p>
+<h2>手写一个 loader</h2>
+<p>下面写一个给文件加注释头的 loader，前缀从配置里读。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// banner-loader.js</span>
+<span class="hljs-keyword">const</span> schema = {
+  <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;object&#x27;</span>,
+  <span class="hljs-attr">properties</span>: {
+    <span class="hljs-attr">banner</span>: { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;string&#x27;</span> },
+  },
+};
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-keyword">function</span> <span class="hljs-title function_">bannerLoader</span>(<span class="hljs-params">source</span>) {
+  <span class="hljs-comment">// webpack 5 起 getOptions 在 loader 上下文里，可以传 JSON Schema 校验配置</span>
+  <span class="hljs-keyword">const</span> { banner = <span class="hljs-string">&#x27;&#x27;</span> } = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getOptions</span>(schema);
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`/* <span class="hljs-subst">${banner}</span> */\n<span class="hljs-subst">${source}</span>`</span>;
+};
+</code></pre></div>
+<p>loader 里的 <code>this</code> 是 webpack 提供的 loader 上下文，不能写成箭头函数，否则拿不到 <code>this</code>。在 webpack 5 之前，读配置要用 <code>loader-utils</code> 的 <code>getOptions</code>，现在直接用 <code>this.getOptions</code>。</p>
+<p>配置里用 <code>loader</code> 加 <code>options</code> 引用它，本地文件可以直接写路径：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">{
+  <span class="hljs-attr">test</span>: <span class="hljs-regexp">/\.js$/</span>,
+  <span class="hljs-attr">use</span>: [
+    {
+      <span class="hljs-attr">loader</span>: path.<span class="hljs-title function_">resolve</span>(__dirname, <span class="hljs-string">&#x27;banner-loader.js&#x27;</span>),
+      <span class="hljs-attr">options</span>: { <span class="hljs-attr">banner</span>: <span class="hljs-string">&#x27;built by webpack&#x27;</span> },
+    },
+  ],
+}
+</code></pre></div>
+<p>如果转换要读文件或请求网络，就用异步写法。<code>this.async()</code> 告诉 webpack 这个 loader 会稍后回调，它返回的就是 <code>this.callback</code>，参数依次是错误、内容、可选的 Source Map 和元数据：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-keyword">function</span> <span class="hljs-title function_">asyncLoader</span>(<span class="hljs-params">source, map, meta</span>) {
+  <span class="hljs-keyword">const</span> callback = <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">async</span>();
+  <span class="hljs-title function_">someAsyncTransform</span>(source)
+    .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">result</span>) =&gt;</span> <span class="hljs-title function_">callback</span>(<span class="hljs-literal">null</span>, result, map, meta))
+    .<span class="hljs-title function_">catch</span>(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> <span class="hljs-title function_">callback</span>(error));
+};
+</code></pre></div>
+<p>默认情况下 loader 拿到的是 UTF-8 字符串。处理图片、字体这类二进制文件时，导出 <code>module.exports.raw = true</code>，loader 就会收到 <code>Buffer</code>。</p>
+<h2>手写 loader 要守的规矩</h2>
+<p>webpack 文档给 loader 定了几条准则：每个 loader 只做一件事，靠串联组合完成复杂处理；输出要是正常的模块；不要保存状态。</p>
+<p>为什么不能保存状态？因为 webpack 会缓存模块的构建结果，loader 默认就被标记为可缓存。如果你在模块作用域里用一个变量收集所有文件的信息，有缓存的那次构建里，没改动的文件根本不会再经过 loader，变量里的数据就不全了。确实要给 plugin 传数据，文档建议写到模块的 <code>buildInfo</code> 上，它会和模块一起被序列化进缓存。</p>
+<h2>手写一个 plugin</h2>
+<p>下面的 plugin 在产物里额外生成一个 <code>assets.md</code>，列出这次构建输出的所有文件。写法照 webpack 文档里的 <code>FileListPlugin</code>。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// file-list-plugin.js</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">FileListPlugin</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">options = {}</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">outputFile</span> = options.<span class="hljs-property">outputFile</span> ?? <span class="hljs-string">&#x27;assets.md&#x27;</span>;
+  }
+
+  <span class="hljs-title function_">apply</span>(<span class="hljs-params">compiler</span>) {
+    <span class="hljs-keyword">const</span> pluginName = <span class="hljs-title class_">FileListPlugin</span>.<span class="hljs-property">name</span>;
+    <span class="hljs-comment">// 从 compiler 上取 webpack，保证和当前构建用的是同一个版本</span>
+    <span class="hljs-keyword">const</span> { <span class="hljs-title class_">Compilation</span>, sources } = compiler.<span class="hljs-property">webpack</span>;
+
+    compiler.<span class="hljs-property">hooks</span>.<span class="hljs-property">thisCompilation</span>.<span class="hljs-title function_">tap</span>(pluginName, <span class="hljs-function">(<span class="hljs-params">compilation</span>) =&gt;</span> {
+      compilation.<span class="hljs-property">hooks</span>.<span class="hljs-property">processAssets</span>.<span class="hljs-title function_">tap</span>(
+        {
+          <span class="hljs-attr">name</span>: pluginName,
+          <span class="hljs-comment">// 选靠后的阶段，确保其他插件已经把产物加进来了</span>
+          <span class="hljs-attr">stage</span>: <span class="hljs-title class_">Compilation</span>.<span class="hljs-property">PROCESS_ASSETS_STAGE_SUMMARIZE</span>,
+        },
+        <span class="hljs-function">(<span class="hljs-params">assets</span>) =&gt;</span> {
+          <span class="hljs-keyword">const</span> list = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(assets).<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">name</span>) =&gt;</span> <span class="hljs-string">`- <span class="hljs-subst">${name}</span>`</span>).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;\n&#x27;</span>);
+          compilation.<span class="hljs-title function_">emitAsset</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">outputFile</span>, <span class="hljs-keyword">new</span> sources.<span class="hljs-title class_">RawSource</span>(<span class="hljs-string">`# 构建产物\n\n<span class="hljs-subst">${list}</span>`</span>));
+        },
+      );
+    });
+  }
+}
+
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-title class_">FileListPlugin</span>;
+</code></pre></div>
+<p>使用时在 <code>plugins</code> 里放一个实例：<code>plugins: [new FileListPlugin()]</code>。plugin 可以接收参数，所以配置里要用 <code>new</code>。</p>
+<p>这里出现了两个对象。<code>compiler</code> 代表整个 webpack 实例，从启动到结束只有一个，<code>run</code>、<code>emit</code>、<code>done</code> 这些钩子是它的。<code>compilation</code> 代表一次构建，watch 模式下每次重新构建都会创建一个新的 <code>compilation</code>，模块、chunk、产物相关的钩子在它上面。所以跨多次构建要保留的数据放在 compiler 上，只和这一次构建有关的放在 compilation 上。</p>
+<p><code>tap</code> 是同步注册。钩子本身支持异步时，可以用 <code>tapAsync</code>，回调最后一个参数是 <code>callback</code>，做完要调用它；或者用 <code>tapPromise</code>，返回一个 Promise。<code>processAssets</code> 就是异步钩子，上面因为没有异步操作才用了 <code>tap</code>。</p>
+<h2>常见追问</h2>
+<p><strong>loader 和 plugin 能互相替代吗？</strong></p>
+<blockquote>
+<p>大多不能。loader 只能拿到单个文件的内容，不知道别的模块和最终产物，所以生成 HTML、合并统计这类事做不了。plugin 虽然也能在钩子里改模块源码，但“按文件类型转换”这件事交给 loader 更简单，也能和别的 loader 串起来复用。有些工具会同时提供两者，比如 <code>mini-css-extract-plugin</code> 既有 loader 也有 plugin，loader 负责收集 CSS，plugin 负责把它写成单独的文件。</p>
+</blockquote>
+<p><strong>怎样调试自己写的 loader 和 plugin？</strong></p>
+<blockquote>
+<p>loader 可以在函数里打印 <code>this.resourcePath</code>，看它处理了哪些文件；也可以用 <code>loader-runner</code> 在不启动 webpack 的情况下单独运行 loader 做测试。plugin 可以先在 <code>done</code> 钩子里打印 <code>stats</code>，确认钩子触发了，再逐步换到更具体的钩子上。</p>
+</blockquote>
+<p><strong>Vite 插件和 webpack 插件有什么不同？</strong></p>
+<blockquote>
+<p>Vite 没有单独的 loader 概念，转换文件也通过插件的 <code>transform</code> 钩子完成，Vite 8 的插件接口在 Rolldown 插件接口上扩展而来，旧版本基于 Rollup。具体见<a href="/questions/engineering-vite-plugin/">《Vite 插件的 resolveId、load 和 transform 分别做什么？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://webpack.js.org/contribute/writing-a-loader/" target="_blank" rel="noreferrer">webpack · Writing a Loader<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://webpack.js.org/api/loaders/" target="_blank" rel="noreferrer">webpack · Loader Interface<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://webpack.js.org/contribute/writing-a-plugin/" target="_blank" rel="noreferrer">webpack · Writing a Plugin<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://webpack.js.org/concepts/plugins/" target="_blank" rel="noreferrer">webpack · Plugins<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+webpack+%E7%9A%84+loader+%E5%92%8C+plugin+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%E6%80%8E%E6%A0%B7%E6%89%8B%E5%86%99%E4%B8%80%E4%B8%AA%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Awebpack+%E7%9A%84+loader+%E5%92%8C+plugin+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%E6%80%8E%E6%A0%B7%E6%89%8B%E5%86%99%E4%B8%80%E4%B8%AA%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aeng-loader-plugin%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Feng-loader-plugin%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：webpack 的 loader 和 plugin 有什么区别？怎样手写一个？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/eng-webpack/">webpack 的 entry、output、loader 和 plugin 分别负责什么？</a></li><li><a href="/questions/eng-vite-vs-webpack/">Vite 和 webpack 有什么区别？项目里应该怎样选？</a></li><li><a href="/questions/eng-hmr/">热更新（HMR）是怎样实现的？为什么有时候会整页刷新？</a></li><li><a href="/questions/eng-webpack-optimization/">webpack 构建慢、产物大，应该怎样优化？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

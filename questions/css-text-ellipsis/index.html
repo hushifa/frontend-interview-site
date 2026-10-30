@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="HTML / CSS面试题：单行省略要同时写 white-space: nowrap…" />
+    <title>单行和多行文本省略怎么写？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/css-text-ellipsis/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="单行和多行文本省略怎么写？ · 前端知库" />
+    <meta property="og:description" content="HTML / CSS面试题：单行省略要同时写 white-space: nowrap…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/css-text-ellipsis/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-text-ellipsis/#webpage","url":"https://fe.hushifa.top/questions/css-text-ellipsis/","name":"单行和多行文本省略怎么写？ · 前端知库","description":"HTML / CSS面试题：单行省略要同时写 white-space: nowrap…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-text-ellipsis/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-text-ellipsis/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"单行和多行文本省略怎么写？","item":"https://fe.hushifa.top/questions/css-text-ellipsis/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BH3ahagJ.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">单行和多行文本省略怎么写？</span></nav><h1 tabindex="-1">单行和多行文本省略怎么写？</h1><p class="reading-summary">单行省略要同时写 white-space: nowrap、overflow: hidden 和 text-overflow: ellipsis，元素还要有确定的宽度。多行省略目前通用写法是 display: -webkit-box、-webkit-box-orient: vertical 加 -webkit-line-clamp，再配 overflow: hidden。标准的 line-clamp 属性浏览器支持还有限。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>商品标题太长，列表里只显示一行，末尾用省略号。单行要写三条：<code>white-space: nowrap</code> 不让文字换行，<code>overflow: hidden</code> 把超出的部分藏起来，<code>text-overflow: ellipsis</code> 在被截断的地方显示省略号。元素本身要有确定的宽度，比如块元素或者设了 <code>width</code>、<code>max-width</code>。</p>
+<p>为什么要三条一起写？MDN 的说明是，<code>text-overflow</code> 只负责“怎样提示内容溢出了”，它不会让文字溢出，要靠 <code>overflow</code> 和 <code>white-space</code> 让文字溢出并隐藏。而且它只处理行内方向的溢出，所以管不了多行。</p>
+<p>多行省略目前通用的写法是带 <code>-webkit-</code> 前缀的一组：<code>display: -webkit-box</code>、<code>-webkit-box-orient: vertical</code>、<code>-webkit-line-clamp: 2</code>，再加 <code>overflow: hidden</code>。MDN 说明这个旧属性只在这种组合下生效。</p>
+<p>要注意，标准的 <code>line-clamp</code> 属性已经写进规范，但浏览器支持还有限，现在还不能只写它。另外被截断的内容要有别的方式能看到，比如详情页或展开按钮。</p>
+</blockquote>
+<h2>单行省略</h2>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.title</span> {
+  <span class="hljs-attribute">white-space</span>: nowrap;
+  <span class="hljs-attribute">overflow</span>: hidden;
+  <span class="hljs-attribute">text-overflow</span>: ellipsis;
+}
+</code></pre></div>
+<p>为什么常见的“只写了 <code>text-overflow</code> 没效果”？因为默认情况下文字会换行，不会溢出，也就没什么可提示的。<code>white-space: nowrap</code> 让文字挤在一行里溢出，<code>overflow: hidden</code> 让溢出部分不显示，<code>text-overflow</code> 才有机会把截断处换成省略号。</p>
+<p>在 flex 布局里，省略常常失效，原因是 flex 子项默认的最小宽度是内容宽度，不会被压缩到比文字还窄。给这个子项加上 <code>min-width: 0</code>，它才能缩小，省略号才会出现。用 headless Chrome 实测，100px 宽的 flex 容器里，没加 <code>min-width: 0</code> 的子项被撑到 261px，加了以后是 100px。</p>
+<h2>多行省略</h2>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.desc</span> {
+  <span class="hljs-attribute">display</span>: -webkit-box;
+  -webkit-<span class="hljs-attribute">box-orient</span>: vertical;
+  -webkit-<span class="hljs-selector-tag">line</span>-clamp: <span class="hljs-number">2</span>;
+  <span class="hljs-attribute">overflow</span>: hidden;
+}
+</code></pre></div>
+<p>这组写法来自旧版的 WebKit 弹性盒，看起来奇怪。MDN 说明这几个带前缀的属性虽然已经废弃，但它们的配合方式已经完整写进规范，会一直被支持。<code>-webkit-line-clamp</code> 只有在 <code>display</code> 是 <code>-webkit-box</code> 或 <code>-webkit-inline-box</code>、并且 <code>-webkit-box-orient</code> 是 <code>vertical</code> 时才生效。</p>
+<p>为什么还要 <code>overflow: hidden</code>？MDN 提醒，大多数情况下都要加，否则省略号会出现在第二行末尾，后面的内容却照样显示出来。用 headless Chrome 156 实测，16px 字号、20px 行高时，加不加 <code>overflow: hidden</code>，元素高度都是 40px，也就是两行；可是不加的话，后面几行文字会溢出到元素外面。</p>
+<h2>标准 line-clamp 现在能用吗</h2>
+<p>CSS Overflow 规范定义了不带前缀的 <code>line-clamp</code>，MDN 把它标为浏览器支持有限。在 Chrome 156 里，<code>CSS.supports(&#x27;line-clamp&#x27;, &#x27;2&#x27;)</code> 返回 <code>false</code>，<code>-webkit-line-clamp</code> 返回 <code>true</code>，只写 <code>line-clamp: 2</code> 时文字不会被截断。所以现阶段多行省略还要写带前缀的那组，可以把标准写法一起写上，等浏览器支持后自动生效。</p>
+<p>和标题的换行美化一起用的写法，见<a href="/questions/css-text-wrap-balance/">《text-wrap: balance 和 pretty 应该怎样使用？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>怎么判断文字有没有真的被截断？</strong></p>
+<blockquote>
+<p>在 JavaScript 里比较元素尺寸。单行看 <code>scrollWidth &gt; clientWidth</code>，多行看 <code>scrollHeight &gt; clientHeight</code>，成立就说明有内容被隐藏，可以据此决定要不要显示“展开”按钮。</p>
+</blockquote>
+<p><strong>省略号能放在中间吗，比如保留文件扩展名？</strong></p>
+<blockquote>
+<p><code>text-overflow</code> 只能在行尾截断。保留扩展名一般把文件名拆成两段：前一段用单行省略，扩展名放在单独的元素里不收缩。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/text-overflow" target="_blank" rel="noreferrer">MDN · text-overflow<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/line-clamp" target="_blank" rel="noreferrer">MDN · line-clamp<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%8D%95%E8%A1%8C%E5%92%8C%E5%A4%9A%E8%A1%8C%E6%96%87%E6%9C%AC%E7%9C%81%E7%95%A5%E6%80%8E%E4%B9%88%E5%86%99%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%8D%95%E8%A1%8C%E5%92%8C%E5%A4%9A%E8%A1%8C%E6%96%87%E6%9C%AC%E7%9C%81%E7%95%A5%E6%80%8E%E4%B9%88%E5%86%99%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-text-ellipsis%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-text-ellipsis%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：单行和多行文本省略怎么写？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-centering/">怎样让一个元素水平垂直居中？</a></li><li><a href="/questions/css-clear-float/">清除浮动有哪几种方法？</a></li><li><a href="/questions/css-pseudo-class-element/">伪类和伪元素有什么区别？</a></li><li><a href="/questions/css-box/">标准盒模型和 border-box 有什么区别？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

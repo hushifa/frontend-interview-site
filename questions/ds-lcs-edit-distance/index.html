@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="数据结构与算法面试题：两题都用二维 dp，dp[i][j] 表示第一个字符串前 i 个字符和第二个字符串前 j 个字符的答案。" />
+    <title>最长公共子序列和编辑距离怎样用动态规划求？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/ds-lcs-edit-distance/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="最长公共子序列和编辑距离怎样用动态规划求？ · 前端知库" />
+    <meta property="og:description" content="数据结构与算法面试题：两题都用二维 dp，dp[i][j] 表示第一个字符串前 i 个字符和第二个字符串前 j 个字符的答案。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/ds-lcs-edit-distance/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ds-lcs-edit-distance/#webpage","url":"https://fe.hushifa.top/questions/ds-lcs-edit-distance/","name":"最长公共子序列和编辑距离怎样用动态规划求？ · 前端知库","description":"数据结构与算法面试题：两题都用二维 dp，dp[i][j] 表示第一个字符串前 i 个字符和第二个字符串前 j 个字符的答案。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ds-lcs-edit-distance/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ds-lcs-edit-distance/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"数据结构与算法面试题","item":"https://fe.hushifa.top/topics/data-structures/"},{"@type":"ListItem","position":3,"name":"最长公共子序列和编辑距离怎样用动态规划求？","item":"https://fe.hushifa.top/questions/ds-lcs-edit-distance/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BH3ahagJ.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/data-structures/">数据结构与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">最长公共子序列和编辑距离怎样用动态规划求？</span></nav><h1 tabindex="-1">最长公共子序列和编辑距离怎样用动态规划求？</h1><p class="reading-summary">两题都用二维 dp，dp[i][j] 表示第一个字符串前 i 个字符和第二个字符串前 j 个字符的答案。最长公共子序列：末尾字符相同时取左上角加 1，不同时取上方和左方的较大值。编辑距离：末尾相同时直接取左上角，不同时取插入、删除、替换三种操作里最小的再加 1。时间复杂度都是 O(mn)，空间可以压缩到一行。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>文本对比工具要找出两段文字里没变的部分，搜索框要判断用户输入的 <code>horse</code> 离 <code>ros</code> 有多远。前一个是最长公共子序列：两个字符串里按相同顺序都出现过的字符，最多能有几个，不要求连续。后一个是编辑距离：通过插入、删除、替换一个字符，最少几步能把一个变成另一个。</p>
+<p>两题都用二维的动态规划。<code>dp[i][j]</code> 表示第一个字符串的前 <code>i</code> 个字符和第二个字符串的前 <code>j</code> 个字符之间的答案，每次只看两个前缀的最后一个字符。</p>
+<p>最长公共子序列：最后一个字符相同，它一定可以放进公共子序列，答案是 <code>dp[i-1][j-1] + 1</code>；不同，就去掉其中一个字符再比，取 <code>dp[i-1][j]</code> 和 <code>dp[i][j-1]</code> 的较大值。编辑距离：最后一个字符相同，不用操作，等于 <code>dp[i-1][j-1]</code>；不同，就在删除、插入、替换三种操作里选步数最少的，再加 1。</p>
+<p>两题的初始值不一样，最容易写错。最长公共子序列里，空串和任何字符串的公共子序列长度都是 0；编辑距离里，空串变成长度为 <code>j</code> 的字符串要插入 <code>j</code> 次，所以第一行是 0、1、2……第一列也一样。时间复杂度都是 O(mn)。</p>
+</blockquote>
+<h2>两题的写法</h2>
+<p>下面两个函数结构几乎一样，表格多开一行一列，用来放空串的情况。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">longestCommonSubsequence</span>(<span class="hljs-params">a, b</span>) {
+  <span class="hljs-keyword">const</span> dp = <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">from</span>({ <span class="hljs-attr">length</span>: a.<span class="hljs-property">length</span> + <span class="hljs-number">1</span> }, <span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(b.<span class="hljs-property">length</span> + <span class="hljs-number">1</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-number">0</span>));
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">1</span>; i &lt;= a.<span class="hljs-property">length</span>; i += <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> j = <span class="hljs-number">1</span>; j &lt;= b.<span class="hljs-property">length</span>; j += <span class="hljs-number">1</span>) {
+      dp[i][j] =
+        a[i - <span class="hljs-number">1</span>] === b[j - <span class="hljs-number">1</span>] ? dp[i - <span class="hljs-number">1</span>][j - <span class="hljs-number">1</span>] + <span class="hljs-number">1</span> : <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(dp[i - <span class="hljs-number">1</span>][j], dp[i][j - <span class="hljs-number">1</span>]);
+    }
+  }
+  <span class="hljs-keyword">return</span> dp[a.<span class="hljs-property">length</span>][b.<span class="hljs-property">length</span>];
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">minDistance</span>(<span class="hljs-params">a, b</span>) {
+  <span class="hljs-keyword">const</span> dp = <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">from</span>({ <span class="hljs-attr">length</span>: a.<span class="hljs-property">length</span> + <span class="hljs-number">1</span> }, <span class="hljs-function">(<span class="hljs-params">_, i</span>) =&gt;</span>
+    <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">from</span>({ <span class="hljs-attr">length</span>: b.<span class="hljs-property">length</span> + <span class="hljs-number">1</span> }, <span class="hljs-function">(<span class="hljs-params">_, j</span>) =&gt;</span> (i === <span class="hljs-number">0</span> ? j : j === <span class="hljs-number">0</span> ? i : <span class="hljs-number">0</span>)),
+  );
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">1</span>; i &lt;= a.<span class="hljs-property">length</span>; i += <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> j = <span class="hljs-number">1</span>; j &lt;= b.<span class="hljs-property">length</span>; j += <span class="hljs-number">1</span>) {
+      <span class="hljs-keyword">if</span> (a[i - <span class="hljs-number">1</span>] === b[j - <span class="hljs-number">1</span>]) {
+        dp[i][j] = dp[i - <span class="hljs-number">1</span>][j - <span class="hljs-number">1</span>];
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-comment">// 删除 a 的末尾、在 a 末尾插入 b[j-1]、把 a 的末尾替换成 b[j-1]</span>
+        dp[i][j] = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(dp[i - <span class="hljs-number">1</span>][j], dp[i][j - <span class="hljs-number">1</span>], dp[i - <span class="hljs-number">1</span>][j - <span class="hljs-number">1</span>]) + <span class="hljs-number">1</span>;
+      }
+    }
+  }
+  <span class="hljs-keyword">return</span> dp[a.<span class="hljs-property">length</span>][b.<span class="hljs-property">length</span>];
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">longestCommonSubsequence</span>(<span class="hljs-string">&#x27;abcde&#x27;</span>, <span class="hljs-string">&#x27;ace&#x27;</span>)); <span class="hljs-comment">// 3</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">longestCommonSubsequence</span>(<span class="hljs-string">&#x27;abc&#x27;</span>, <span class="hljs-string">&#x27;def&#x27;</span>)); <span class="hljs-comment">// 0</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">minDistance</span>(<span class="hljs-string">&#x27;horse&#x27;</span>, <span class="hljs-string">&#x27;ros&#x27;</span>)); <span class="hljs-comment">// 3</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">minDistance</span>(<span class="hljs-string">&#x27;intention&#x27;</span>, <span class="hljs-string">&#x27;execution&#x27;</span>)); <span class="hljs-comment">// 5</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">minDistance</span>(<span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-string">&#x27;abc&#x27;</span>)); <span class="hljs-comment">// 3</span>
+</code></pre></div>
+<p>前四个输入都是 LeetCode 题面里的例子。<code>&#x27;abcde&#x27;</code> 和 <code>&#x27;ace&#x27;</code> 的公共子序列是 <code>ace</code>，长度 3；<code>horse</code> 变成 <code>ros</code> 要三步：<code>h</code> 换成 <code>r</code>，删掉 <code>r</code>，删掉 <code>e</code>。</p>
+<p>为什么 <code>a[i - 1]</code> 要减 1？因为 <code>dp</code> 多开了一行一列，<code>dp[i]</code> 对应的是前 <code>i</code> 个字符，最后一个字符的下标是 <code>i - 1</code>。多开这一行一列的好处是，空串的情况直接写在第 0 行和第 0 列，循环里不用判断越界。</p>
+<h2>编辑距离的三种操作怎样对应三个格子</h2>
+<p><code>dp[i][j]</code> 是把 <code>a</code> 的前 <code>i</code> 个字符变成 <code>b</code> 的前 <code>j</code> 个字符的最少步数。最后一个字符不同时，最后一步只可能是三种操作之一。</p>
+<p>删除：把 <code>a</code> 的第 <code>i</code> 个字符删掉，剩下的问题是把 <code>a</code> 的前 <code>i-1</code> 个变成 <code>b</code> 的前 <code>j</code> 个，就是 <code>dp[i-1][j]</code>。插入：在 <code>a</code> 后面插入 <code>b[j-1]</code>，这样 <code>b</code> 的最后一个字符就对上了，剩下的问题是把 <code>a</code> 的前 <code>i</code> 个变成 <code>b</code> 的前 <code>j-1</code> 个，就是 <code>dp[i][j-1]</code>。替换：把 <code>a</code> 的最后一个字符换成 <code>b</code> 的最后一个字符，两边都对上了，剩下 <code>dp[i-1][j-1]</code>。</p>
+<p>所以取三者的最小值加 1。最长公共子序列只有两个方向，是因为它没有“替换”这个选项：末尾不同时，只能放弃其中一个字符。</p>
+<h2>怎样省空间</h2>
+<p><code>dp[i][j]</code> 只用到上一行和当前行，所以可以只保留一行，空间从 O(mn) 降到 O(n)。要注意，从左往右覆盖时，<code>dp[i-1][j-1]</code> 会在算 <code>dp[i][j-1]</code> 时被覆盖掉，所以要先用一个变量把它存下来。面试时先写出二维版本，再说明可以这样压缩，一般就够了。</p>
+<p>动态规划的基本思路，比如怎样定义状态、怎样找转移方程，见<a href="/questions/ds-dynamic-programming/">《动态规划怎么入门？爬楼梯和最长递增子序列怎样做？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>怎样把最长公共子序列本身找出来，而不只是长度？</strong></p>
+<blockquote>
+<p>填完表以后从右下角往回走。两个字符相同，说明这个字符在子序列里，记下来，往左上角走；不同，就往 <code>dp</code> 值较大的那一边走。走到第 0 行或第 0 列为止，把记下的字符反过来，就是一个最长公共子序列。</p>
+</blockquote>
+<p><strong>子序列和子串有什么区别？</strong></p>
+<blockquote>
+<p>子序列只要求顺序不变，中间可以跳过字符，<code>ace</code> 是 <code>abcde</code> 的子序列；子串必须连续，<code>ace</code> 就不是 <code>abcde</code> 的子串。求最长公共子串时，末尾不同的格子要直接设为 0，因为连续的串在这里断了。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://leetcode.com/problems/longest-common-subsequence/" target="_blank" rel="noreferrer">LeetCode · 1143. Longest Common Subsequence<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://leetcode.com/problems/edit-distance/" target="_blank" rel="noreferrer">LeetCode · 72. Edit Distance<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E5%92%8C%E7%BC%96%E8%BE%91%E8%B7%9D%E7%A6%BB%E6%80%8E%E6%A0%B7%E7%94%A8%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E6%B1%82%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%E5%92%8C%E7%BC%96%E8%BE%91%E8%B7%9D%E7%A6%BB%E6%80%8E%E6%A0%B7%E7%94%A8%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E6%B1%82%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ads-lcs-edit-distance%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fds-lcs-edit-distance%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：最长公共子序列和编辑距离怎样用动态规划求？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ds-dynamic-programming/">动态规划怎么入门？爬楼梯和最长递增子序列怎样做？</a></li><li><a href="/questions/ds-stack-problems/">有效括号、最小栈这类栈题怎样做？</a></li><li><a href="/questions/ds-max-subarray-stock/">最大子数组和、买卖股票的最佳时机怎样做？</a></li><li><a href="/questions/ds-binary-search-variants/">二分查找有哪些常见变体？怎样找边界、在旋转数组里查找？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

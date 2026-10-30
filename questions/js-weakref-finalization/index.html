@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="JavaScript面试题：WeakRef 持有对象的弱引用，不阻止对象被回收，deref() 可能返回 undefined。" />
+    <title>WeakRef 和 FinalizationRegistry 是做什么的？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/js-weakref-finalization/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="WeakRef 和 FinalizationRegistry 是做什么的？" />
+    <meta property="og:description" content="JavaScript面试题：WeakRef 持有对象的弱引用，不阻止对象被回收，deref() 可能返回 undefined。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/js-weakref-finalization/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-weakref-finalization/#webpage","url":"https://fe.hushifa.top/questions/js-weakref-finalization/","name":"WeakRef 和 FinalizationRegistry 是做什么的？","description":"JavaScript面试题：WeakRef 持有对象的弱引用，不阻止对象被回收，deref() 可能返回 undefined。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-weakref-finalization/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-weakref-finalization/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"WeakRef 和 FinalizationRegistry 是做什么的？","item":"https://fe.hushifa.top/questions/js-weakref-finalization/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BH3ahagJ.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">WeakRef 和 FinalizationRegistry 是做什么的？</span></nav><h1 tabindex="-1">WeakRef 和 FinalizationRegistry 是做什么的？</h1><p class="reading-summary">WeakRef 持有对象的弱引用，不阻止对象被回收，deref() 可能返回 undefined。FinalizationRegistry 在注册的对象被回收后可能调用清理回调，但回调不保证执行，也不保证时机。MDN 建议尽量避免使用，典型用途是可丢失的缓存。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>做图片缓存时，希望内存紧张的时候缓存里的大对象能被回收，而不是因为缓存一直引用着就永远留着。<code>WeakRef</code> 就是为这种需求准备的：它引用一个对象，但不阻止这个对象被垃圾回收，需要时用 <code>deref()</code> 取出来，对象已经被回收就得到 <code>undefined</code>。</p>
+<p><code>FinalizationRegistry</code> 是配套的：把对象注册进去，对象被回收后，引擎可能会调用你给的清理回调，回调收到的是注册时给的“持有值”，比如缓存的键，可以用来删掉 Map 里已经失效的条目。</p>
+<p>关键限制是不确定性。垃圾回收什么时候发生、会不会发生，都由引擎决定，<code>deref()</code> 可能一直不返回 <code>undefined</code>，清理回调也可能永远不执行。所以 MDN 说正确使用它们需要仔细考虑，能不用就不用，清理回调不能承担必需的程序逻辑。</p>
+<p>MDN 举的典型用途是按 URL 缓存大对象的缓存系统。清理回调主要用来减少内存占用，比如删掉缓存里失效的条目；关闭连接、移除监听这类必须做的释放，仍然要在代码里显式完成。</p>
+</blockquote>
+<h2>基本用法</h2>
+<p>下面的例子能确定输出的只有“取回对象”和“取消注册”这部分，回收本身不能用代码触发。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">let</span> target = { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;大对象&#x27;</span> };
+<span class="hljs-keyword">const</span> ref = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WeakRef</span>(target);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(ref.<span class="hljs-title function_">deref</span>() === target); <span class="hljs-comment">// true</span>
+<span class="hljs-keyword">const</span> registry = <span class="hljs-keyword">new</span> <span class="hljs-title class_">FinalizationRegistry</span>(<span class="hljs-function">(<span class="hljs-params">heldValue</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;已回收&#x27;</span>, heldValue);
+});
+<span class="hljs-keyword">const</span> token = {};
+registry.<span class="hljs-title function_">register</span>(target, <span class="hljs-string">&#x27;cache-key&#x27;</span>, token);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(registry.<span class="hljs-title function_">unregister</span>(token)); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(registry.<span class="hljs-title function_">unregister</span>(token)); <span class="hljs-comment">// false</span>
+</code></pre></div>
+<p>为什么例子里没有演示“回收之后 <code>deref()</code> 返回 <code>undefined</code>”？因为即使把 <code>target = null</code>，什么时候回收也由引擎决定，可能马上，也可能一直不发生，写不出一个稳定的输出。MDN 还规定，刚创建 <code>WeakRef</code> 或刚通过 <code>deref()</code> 拿到对象后，这个对象在当前任务结束前不会被回收，所以同一段同步代码里多次 <code>deref()</code> 结果是一致的，不会一次拿到对象一次拿到 <code>undefined</code>。</p>
+<p><code>register</code> 的第三个参数是取消注册用的令牌。资源已经被主动释放时，调用 <code>unregister(token)</code> 取消回调，成功返回 <code>true</code>，再调一次就没有可取消的了，返回 <code>false</code>。注册表对令牌和目标对象都只是弱引用。持有值如果是对象，注册表会强引用它，所以持有值里不能再引用目标对象，否则目标永远不会被回收；直接把目标本身当持有值传入，<code>register</code> 会抛 <code>TypeError</code>。</p>
+<h2>写一个可回收的缓存</h2>
+<p>典型写法是用 <code>Map</code> 存 <code>key → WeakRef</code>。读缓存时先 <code>deref()</code>，拿到对象就用，拿到 <code>undefined</code> 就重新加载。再用 <code>FinalizationRegistry</code> 在对象回收后删掉对应的键，避免 Map 里堆满空的 <code>WeakRef</code>。删之前要再检查一次这个键当前存的 <code>WeakRef</code> 是否已经失效，因为同一个键可能已经放进了新对象。</p>
+<p>这和 <code>WeakMap</code> 的用途不一样。<code>WeakMap</code> 是“对象作键”，对象没了条目自动消失，适合给对象附加数据；<code>WeakRef</code> 是“对象作值”，适合按字符串等键缓存对象。两者的对比见<a href="/questions/js-map-set-weak/">《Map、Set、WeakMap 与普通对象各有什么用途？》</a>，内存回收的基本原理见<a href="/questions/js-garbage-collection/">《垃圾回收为什么无法自动解决所有内存泄漏？》</a>。</p>
+<h2>为什么不推荐依赖它们</h2>
+<p>MDN 解释，规范刻意不保证回收行为，是为了不让垃圾回收的细节暴露给代码。否则大家会写依赖某个引擎回收时机的代码，引擎一改就坏了。不同引擎、同一引擎的不同版本、甚至同一页面在不同内存压力下，结果都可能不同。</p>
+<p>MDN 还列出了通常不会调用回调的情况：程序整体退出（比如关闭标签页），或者 <code>FinalizationRegistry</code> 实例本身已经无法访问。所以清理回调只能做“做了更好，不做也不出错”的事，MDN 的原话是它可能有助于减少内存占用，此外不太有用。真正必须释放的资源，比如关闭连接、移除监听，要在业务流程里显式调用释放方法。</p>
+<h2>常见追问</h2>
+<p><strong>清理回调里还能用 deref 拿到对象吗？</strong></p>
+<blockquote>
+<p>不能。MDN 说明，如果一个对象同时被 <code>WeakRef</code> 引用并注册在 <code>FinalizationRegistry</code> 里，<code>WeakRef</code> 的目标会在清理回调调用之前或同时被清空，回调里再 <code>deref()</code> 只能得到 <code>undefined</code>。回调里能用的只有注册时传的持有值。</p>
+</blockquote>
+<p><strong>能用它们检测内存泄漏吗？</strong></p>
+<blockquote>
+<p>只能做粗略的辅助观察，不能作为结论。回调不执行不代表对象泄漏了，可能只是引擎还没回收。排查泄漏应该用 DevTools 的堆快照，看是谁还在引用对象。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakRef" target="_blank" rel="noreferrer">MDN · WeakRef<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/FinalizationRegistry" target="_blank" rel="noreferrer">MDN · FinalizationRegistry<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+WeakRef+%E5%92%8C+FinalizationRegistry+%E6%98%AF%E5%81%9A%E4%BB%80%E4%B9%88%E7%9A%84%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AWeakRef+%E5%92%8C+FinalizationRegistry+%E6%98%AF%E5%81%9A%E4%BB%80%E4%B9%88%E7%9A%84%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-weakref-finalization%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-weakref-finalization%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：WeakRef 和 FinalizationRegistry 是做什么的？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-garbage-collection/">垃圾回收为什么无法自动解决所有内存泄漏？</a></li><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-promise-chain/">回调地狱是什么？Promise 链式调用怎样解决它？then 的返回值有哪些规则？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

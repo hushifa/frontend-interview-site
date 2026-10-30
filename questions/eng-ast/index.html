@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="工程化面试题：AST 是把代码解析成的一棵树，每个节点表示一个语法结构。" />
+    <title>AST 在前端工程里有什么用？Babel、ESLint 和代码转换是怎样用它的？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/eng-ast/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="AST 在前端工程里有什么用？Babel、ESLint 和代码转换是怎样用它的？" />
+    <meta property="og:description" content="工程化面试题：AST 是把代码解析成的一棵树，每个节点表示一个语法结构。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/eng-ast/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/eng-ast/#webpage","url":"https://fe.hushifa.top/questions/eng-ast/","name":"AST 在前端工程里有什么用？Babel、ESLint 和代码转换是怎样用它的？","description":"工程化面试题：AST 是把代码解析成的一棵树，每个节点表示一个语法结构。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/eng-ast/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/eng-ast/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"工程化面试题","item":"https://fe.hushifa.top/topics/engineering/"},{"@type":"ListItem","position":3,"name":"AST 在前端工程里有什么用？Babel、ESLint 和代码转换是怎样用它的？","item":"https://fe.hushifa.top/questions/eng-ast/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BH3ahagJ.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/engineering/">工程化面试题</a><span aria-hidden="true">/</span><span aria-current="page">AST 在前端工程里有什么用？Babel、ESLint 和代码转换是怎样用它的？</span></nav><h1 tabindex="-1">AST 在前端工程里有什么用？Babel、ESLint 和代码转换是怎样用它的？</h1><p class="reading-summary">AST 是把代码解析成的一棵树，每个节点表示一个语法结构。Babel 按“解析 → 遍历改写 → 生成代码”转换语法，ESLint 遍历 AST 找出有问题的写法，Prettier 按 AST 重新打印代码，jscodeshift 这类 codemod 工具批量改写代码。文中手写一个遍历器，演示只读检查和改写节点。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>代码 <code>const total = price * count</code> 对工具来说只是一串字符，没法直接判断“这里声明了一个变量，值是一个乘法”。所以工具先把代码解析成一棵树，根节点是变量声明，下面挂着变量名 <code>total</code> 和乘法表达式，乘法下面再挂着 <code>price</code> 和 <code>count</code>。这棵树就是 AST，抽象语法树。</p>
+<p>有了树，工具就能按节点类型精确地找代码、改代码，而不用拿正则去匹配字符串。字符串匹配分不清 <code>count</code> 是变量、是属性名还是写在注释里的字，AST 上每个节点都有明确的类型。</p>
+<p>前端很多工具都建立在 AST 上。Babel 先把代码解析成 AST，由插件遍历并改写节点，再生成新代码，把新语法转成旧语法就是这样做的。ESLint 遍历 AST，在特定节点上检查写法并报告问题。Prettier 把代码解析成 AST 后丢掉原来的格式，按自己的规则重新打印。jscodeshift 这类 codemod 工具用来批量升级 API。</p>
+<p>要注意，不同工具的 AST 格式不完全一样。ESLint 用的是 ESTree 格式，Babel 的 AST 基于 ESTree 但有自己的差异，写插件时要以对应工具的文档为准。另外 AST 一般不保留空格和格式，所以改写后的代码格式可能变化。</p>
+</blockquote>
+<h2>AST 长什么样</h2>
+<p><code>const total = price * count;</code> 解析成 ESTree 格式的 AST，大致是下面这样（省略了位置信息）。可以把代码贴到 AST Explorer（astexplorer.net）上，选不同的解析器看完整的树。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">{
+  <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;VariableDeclaration&#x27;</span>,
+  <span class="hljs-attr">kind</span>: <span class="hljs-string">&#x27;const&#x27;</span>,
+  <span class="hljs-attr">declarations</span>: [
+    {
+      <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;VariableDeclarator&#x27;</span>,
+      <span class="hljs-attr">id</span>: { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;Identifier&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;total&#x27;</span> },
+      <span class="hljs-attr">init</span>: {
+        <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;BinaryExpression&#x27;</span>,
+        <span class="hljs-attr">operator</span>: <span class="hljs-string">&#x27;*&#x27;</span>,
+        <span class="hljs-attr">left</span>: { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;Identifier&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;price&#x27;</span> },
+        <span class="hljs-attr">right</span>: { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;Identifier&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;count&#x27;</span> },
+      },
+    },
+  ],
+}
+</code></pre></div>
+<p>每个节点都有一个 <code>type</code>，说明它是什么语法结构。<code>Identifier</code> 是标识符，也就是变量名；<code>BinaryExpression</code> 是二元运算，<code>left</code> 和 <code>right</code> 是运算的两边。</p>
+<h2>工具是怎样遍历和改写 AST 的</h2>
+<p>Babel 和 ESLint 都用“访问者”的方式处理 AST：你提供一个对象，键是节点类型，值是函数；工具从根节点开始深度优先地走遍整棵树，每遇到一种类型的节点，就调用对应的函数。下面手写一个简化版，先像 ESLint 那样只读，再像 Babel 那样改写，最后把树拼回代码。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// const total = price * count; 简化后的 AST（字段名参照 ESTree）</span>
+<span class="hljs-keyword">const</span> ast = {
+  <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;VariableDeclaration&#x27;</span>,
+  <span class="hljs-attr">kind</span>: <span class="hljs-string">&#x27;const&#x27;</span>,
+  <span class="hljs-attr">declarations</span>: [
+    {
+      <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;VariableDeclarator&#x27;</span>,
+      <span class="hljs-attr">id</span>: { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;Identifier&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;total&#x27;</span> },
+      <span class="hljs-attr">init</span>: {
+        <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;BinaryExpression&#x27;</span>,
+        <span class="hljs-attr">operator</span>: <span class="hljs-string">&#x27;*&#x27;</span>,
+        <span class="hljs-attr">left</span>: { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;Identifier&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;price&#x27;</span> },
+        <span class="hljs-attr">right</span>: { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;Identifier&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;count&#x27;</span> },
+      },
+    },
+  ],
+};
+
+<span class="hljs-comment">// 深度优先遍历：遇到哪种类型的节点，就调用 visitor 上同名的函数</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">traverse</span>(<span class="hljs-params">node, visitor</span>) {
+  <span class="hljs-keyword">if</span> (!node || <span class="hljs-keyword">typeof</span> node.<span class="hljs-property">type</span> !== <span class="hljs-string">&#x27;string&#x27;</span>) <span class="hljs-keyword">return</span>;
+  visitor[node.<span class="hljs-property">type</span>]?.(node);
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> value <span class="hljs-keyword">of</span> <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">values</span>(node)) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-title class_">Array</span>.<span class="hljs-title function_">isArray</span>(value)) value.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">child</span>) =&gt;</span> <span class="hljs-title function_">traverse</span>(child, visitor));
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (value &amp;&amp; <span class="hljs-keyword">typeof</span> value === <span class="hljs-string">&#x27;object&#x27;</span>) <span class="hljs-title function_">traverse</span>(value, visitor);
+  }
+}
+
+<span class="hljs-comment">// 把 AST 重新拼回代码</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">generate</span>(<span class="hljs-params">node</span>) {
+  <span class="hljs-keyword">switch</span> (node.<span class="hljs-property">type</span>) {
+    <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;VariableDeclaration&#x27;</span>:
+      <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${node.kind}</span> <span class="hljs-subst">${node.declarations.map(generate).join(<span class="hljs-string">&#x27;, &#x27;</span>)}</span>;`</span>;
+    <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;VariableDeclarator&#x27;</span>:
+      <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${generate(node.id)}</span> = <span class="hljs-subst">${generate(node.init)}</span>`</span>;
+    <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;BinaryExpression&#x27;</span>:
+      <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${generate(node.left)}</span> <span class="hljs-subst">${node.operator}</span> <span class="hljs-subst">${generate(node.right)}</span>`</span>;
+    <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;Identifier&#x27;</span>:
+      <span class="hljs-keyword">return</span> node.<span class="hljs-property">name</span>;
+  }
+}
+
+<span class="hljs-comment">// 像 ESLint 规则一样只读不改：收集用到的变量名</span>
+<span class="hljs-keyword">const</span> names = [];
+<span class="hljs-title function_">traverse</span>(ast, { <span class="hljs-title class_">Identifier</span>: <span class="hljs-function">(<span class="hljs-params">node</span>) =&gt;</span> names.<span class="hljs-title function_">push</span>(node.<span class="hljs-property">name</span>) });
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(names.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// total,price,count</span>
+
+<span class="hljs-comment">// 像 Babel 插件一样改写节点：把 const 换成 var，把 count 改名为 quantity</span>
+<span class="hljs-title function_">traverse</span>(ast, {
+  <span class="hljs-title class_">VariableDeclaration</span>: <span class="hljs-function">(<span class="hljs-params">node</span>) =&gt;</span> { node.<span class="hljs-property">kind</span> = <span class="hljs-string">&#x27;var&#x27;</span>; },
+  <span class="hljs-title class_">Identifier</span>: <span class="hljs-function">(<span class="hljs-params">node</span>) =&gt;</span> { <span class="hljs-keyword">if</span> (node.<span class="hljs-property">name</span> === <span class="hljs-string">&#x27;count&#x27;</span>) node.<span class="hljs-property">name</span> = <span class="hljs-string">&#x27;quantity&#x27;</span>; },
+});
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">generate</span>(ast)); <span class="hljs-comment">// var total = price * quantity;</span>
+</code></pre></div>
+<p>第一次遍历只读节点，按深度优先的顺序依次碰到 <code>total</code>、<code>price</code>、<code>count</code>。第二次遍历直接修改节点的属性，生成出来的代码就变了。</p>
+<p>真实的工具比这复杂得多。Babel 传给访问函数的不是节点本身，而是 <code>path</code>，它记录了节点的父节点、所在位置，还提供替换、删除节点的方法；作用域分析也靠它，所以改名时能区分同名的不同变量。可是“解析成树 → 按类型访问节点 → 生成代码”这个流程是一样的。</p>
+<h2>Babel 怎样用 AST</h2>
+<p>Babel 的处理分三步：解析（parse）、转换（transform）、生成（generate）。<code>@babel/parser</code> 把源码解析成 AST，插件在转换阶段改写节点，<code>@babel/generator</code> 再把 AST 输出成代码和 Source Map。</p>
+<p>一个 Babel 插件就是返回 <code>visitor</code> 对象的函数，结构和上面的例子很像：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 把所有 == 换成 ===</span>
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">visitor</span>: {
+      <span class="hljs-title class_">BinaryExpression</span>(path) {
+        <span class="hljs-keyword">if</span> (path.<span class="hljs-property">node</span>.<span class="hljs-property">operator</span> === <span class="hljs-string">&#x27;==&#x27;</span>) path.<span class="hljs-property">node</span>.<span class="hljs-property">operator</span> = <span class="hljs-string">&#x27;===&#x27;</span>;
+      },
+    },
+  };
+};
+</code></pre></div>
+<p>把箭头函数转成普通函数、把可选链展开成条件判断，原理都是找到对应节点，换成旧语法的节点。语法转换和 polyfill 的区别见<a href="/questions/eng-babel/">《Babel 是怎样把新语法转成旧语法的？语法转换和 polyfill 有什么区别？》</a>。</p>
+<h2>ESLint 怎样用 AST</h2>
+<p>ESLint 默认用 Espree 解析代码，得到 ESTree 格式的 AST。一条规则是一个对象，<code>meta</code> 描述规则信息，<code>create(context)</code> 返回访问者对象，在节点上发现问题时调用 <code>context.report()</code>。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 禁止使用 alert()</span>
+<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = {
+  <span class="hljs-attr">meta</span>: {
+    <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;suggestion&#x27;</span>,
+    <span class="hljs-attr">messages</span>: { <span class="hljs-attr">noAlert</span>: <span class="hljs-string">&#x27;不要使用 alert，请改用页面内提示&#x27;</span> },
+  },
+  <span class="hljs-title function_">create</span>(<span class="hljs-params">context</span>) {
+    <span class="hljs-keyword">return</span> {
+      <span class="hljs-title class_">CallExpression</span>(node) {
+        <span class="hljs-keyword">if</span> (node.<span class="hljs-property">callee</span>.<span class="hljs-property">type</span> === <span class="hljs-string">&#x27;Identifier&#x27;</span> &amp;&amp; node.<span class="hljs-property">callee</span>.<span class="hljs-property">name</span> === <span class="hljs-string">&#x27;alert&#x27;</span>) {
+          context.<span class="hljs-title function_">report</span>({ node, <span class="hljs-attr">messageId</span>: <span class="hljs-string">&#x27;noAlert&#x27;</span> });
+        }
+      },
+    };
+  },
+};
+</code></pre></div>
+<p>为什么不用正则搜 <code>alert(</code>？因为正则会把字符串 <code>&#x27;alert(&#x27;</code> 和注释里的字也当成调用，而 <code>obj.alert()</code> 的 <code>callee</code> 是 <code>MemberExpression</code>，按节点类型判断就不会误报。</p>
+<p>和 Babel 不同，ESLint 规则一般只读不改。规则提供了 <code>fixer</code> 时，自动修复是按位置替换源码文本，而不是改 AST。</p>
+<h2>其他用到 AST 的地方</h2>
+<p>Prettier 把代码解析成 AST 后丢掉原有的格式，再按行宽等规则重新打印，所以它只改格式，不改代码的意思。</p>
+<p>codemod 是批量改代码的脚本。比如一个库把 <code>oldApi()</code> 改名为 <code>newApi()</code>，项目里有几百处调用，可以用 jscodeshift 写一个转换脚本，按 AST 找到调用并替换，比手工改或全局替换文本更可靠。</p>
+<p>此外，打包工具分析 <code>import</code> 和 <code>export</code> 做依赖图与 tree shaking、Vue 把模板编译成渲染函数、TypeScript 去掉类型注解，背后也都要先把代码解析成语法树。</p>
+<h2>常见追问</h2>
+<p><strong>为什么 ESLint 和 Babel 不能共用同一份 AST？</strong></p>
+<blockquote>
+<p>两者的 AST 格式有差异。ESLint 规则按 ESTree 格式写，Babel 的 AST 在一些节点上和 ESTree 不同，比如字面量节点的划分。所以要让 ESLint 读懂 Babel 才支持的语法，要用 <code>@babel/eslint-parser</code>，由它把 Babel 的 AST 转成 ESLint 能用的格式。</p>
+</blockquote>
+<p><strong>改写 AST 以后，代码格式会不会乱？</strong></p>
+<blockquote>
+<p>可能会。AST 通常不保存空格、换行这类信息，生成代码时由生成器决定格式。Babel 的产物一般给机器运行，格式不重要；codemod 修改的是要提交的源码，jscodeshift 底层用的 recast 会尽量保留没改动部分的原始格式，改完后通常再跑一次 Prettier。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://github.com/jamiebuilds/babel-handbook/blob/master/translations/en/plugin-handbook.md" target="_blank" rel="noreferrer">Babel Plugin Handbook<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://eslint.org/docs/latest/extend/custom-rules" target="_blank" rel="noreferrer">ESLint · Custom Rules<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://github.com/estree/estree" target="_blank" rel="noreferrer">ESTree Spec<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://babeljs.io/docs/babel-traverse" target="_blank" rel="noreferrer">Babel · @babel/traverse<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://prettier.io/docs/rationale" target="_blank" rel="noreferrer">Prettier · Rationale<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+AST+%E5%9C%A8%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E9%87%8C%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8%EF%BC%9FBabel%E3%80%81ESLint+%E5%92%8C%E4%BB%A3%E7%A0%81%E8%BD%AC%E6%8D%A2%E6%98%AF%E6%80%8E%E6%A0%B7%E7%94%A8%E5%AE%83%E7%9A%84%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AAST+%E5%9C%A8%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E9%87%8C%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8%EF%BC%9FBabel%E3%80%81ESLint+%E5%92%8C%E4%BB%A3%E7%A0%81%E8%BD%AC%E6%8D%A2%E6%98%AF%E6%80%8E%E6%A0%B7%E7%94%A8%E5%AE%83%E7%9A%84%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aeng-ast%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Feng-ast%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：AST 在前端工程里有什么用？Babel、ESLint 和代码转换是怎样用它的？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/eng-babel/">Babel 是怎样把新语法转成旧语法的？语法转换和 polyfill 有什么区别？</a></li><li><a href="/questions/eng-code-quality-tooling/">ESLint、Prettier、husky 和 lint-staged 分别做什么？怎样配合？</a></li><li><a href="/questions/engineering-eslint-flat-config/">ESLint Flat Config 和旧配置方式有什么区别？</a></li><li><a href="/questions/eng-module-history/">前端模块化经历了哪些阶段？IIFE、CommonJS、AMD、UMD 和 ES Modules 有什么区别？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

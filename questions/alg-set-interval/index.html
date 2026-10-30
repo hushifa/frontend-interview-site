@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="手写与算法面试题：在 setTimeout 的回调里先执行任务，再安排下一次 setTimeout，就能循环执行，用一个变量保存最新的定时器 ID 以便取消。" />
+    <title>怎样用 setTimeout 实现 setInterval？两者有什么区别？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/alg-set-interval/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="怎样用 setTimeout 实现 setInterval？两者有什么区别？" />
+    <meta property="og:description" content="手写与算法面试题：在 setTimeout 的回调里先执行任务，再安排下一次 setTimeout，就能循环执行，用一个变量保存最新的定时器 ID 以便取消。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/alg-set-interval/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-set-interval/#webpage","url":"https://fe.hushifa.top/questions/alg-set-interval/","name":"怎样用 setTimeout 实现 setInterval？两者有什么区别？","description":"手写与算法面试题：在 setTimeout 的回调里先执行任务，再安排下一次 setTimeout，就能循环执行，用一个变量保存最新的定时器 ID 以便取消。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-set-interval/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-set-interval/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"怎样用 setTimeout 实现 setInterval？两者有什么区别？","item":"https://fe.hushifa.top/questions/alg-set-interval/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BH3ahagJ.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样用 setTimeout 实现 setInterval？两者有什么区别？</span></nav><h1 tabindex="-1">怎样用 setTimeout 实现 setInterval？两者有什么区别？</h1><p class="reading-summary">在 setTimeout 的回调里先执行任务，再安排下一次 setTimeout，就能循环执行，用一个变量保存最新的定时器 ID 以便取消。区别主要在异步任务上：setInterval 只管按间隔触发回调，回调里发出的请求还没回来，下一次照样触发；链式 setTimeout 可以等请求完成后再安排下一次，还能根据结果调整间隔或停止。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>比如每 5 秒轮询一次订单状态。可以用 <code>setInterval(poll, 5000)</code>，也可以在 <code>setTimeout</code> 的回调里执行完 <code>poll</code> 再安排下一次 <code>setTimeout</code>，一次接一次，效果也是循环执行。</p>
+<p>手写时要注意取消。每一轮都会产生新的定时器 ID，所以要用一个变量保存最新的 ID，取消时清掉它，再加一个标志，防止正在执行的这一轮又安排下一轮。</p>
+<p>两者的区别主要体现在异步任务上。<code>setInterval</code> 只管按间隔触发回调，回调里发出的请求还没回来，下一次照样触发，请求就会堆在一起。链式 <code>setTimeout</code> 可以等请求完成以后再安排下一次，所以同一时间只有一个请求，还能根据结果调整间隔或者停止。MDN 也建议，逻辑执行时间可能超过间隔时，用链式 <code>setTimeout</code>。</p>
+<p>要注意，两者都不保证准时。主线程忙、页面在后台标签页时，实际间隔都会比设定的长；HTML 规范还规定，定时器嵌套超过 5 层后，小于 4 毫秒的延迟会被提高到 4 毫秒。</p>
+</blockquote>
+<h2>手写 mySetInterval</h2>
+<p>下面的 <code>mySetInterval</code> 返回一个取消函数。示例让回调执行 3 次后取消，延迟写成 10 毫秒只是为了运行得快。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">mySetInterval</span>(<span class="hljs-params">callback, delay</span>) {
+  <span class="hljs-keyword">let</span> timer = <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">let</span> stopped = <span class="hljs-literal">false</span>;
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">tick</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-title function_">callback</span>();
+    <span class="hljs-comment">// 回调里可能已经调用了取消函数，这时不再安排下一轮。</span>
+    <span class="hljs-keyword">if</span> (!stopped) timer = <span class="hljs-built_in">setTimeout</span>(tick, delay);
+  }
+
+  timer = <span class="hljs-built_in">setTimeout</span>(tick, delay);
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">cancel</span>(<span class="hljs-params"></span>) {
+    stopped = <span class="hljs-literal">true</span>;
+    <span class="hljs-built_in">clearTimeout</span>(timer);
+  };
+}
+
+<span class="hljs-keyword">const</span> calls = [];
+<span class="hljs-keyword">const</span> cancel = <span class="hljs-title function_">mySetInterval</span>(<span class="hljs-function">() =&gt;</span> {
+  calls.<span class="hljs-title function_">push</span>(calls.<span class="hljs-property">length</span> + <span class="hljs-number">1</span>);
+  <span class="hljs-keyword">if</span> (calls.<span class="hljs-property">length</span> === <span class="hljs-number">3</span>) <span class="hljs-title function_">cancel</span>();
+}, <span class="hljs-number">10</span>);
+
+<span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(calls.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 1,2,3</span>
+}, <span class="hljs-number">100</span>);
+</code></pre></div>
+<p>100 毫秒后打印 <code>1,2,3</code>。按 10 毫秒一轮，这段时间足够跑好几轮，结果只有 3 次，说明取消以后没有再执行。</p>
+<p>为什么除了 <code>clearTimeout</code> 还要一个 <code>stopped</code> 标志？因为第 3 次是在回调里面调用 <code>cancel()</code> 的。这时 <code>timer</code> 指向的是已经触发的那个定时器，清掉它没有作用；<code>callback()</code> 返回后，<code>tick</code> 还会接着安排下一轮。有了 <code>stopped</code>，<code>tick</code> 就知道已经取消了，不再安排。</p>
+<p>为什么不能直接返回定时器 ID？因为每一轮的 ID 都不一样，返回第一个 ID，之后调用 <code>clearTimeout</code> 清掉的只是第一轮，循环还会继续。所以把最新的 ID 放在闭包里，通过返回的函数来取消。</p>
+<h2>异步任务为什么更适合链式 setTimeout</h2>
+<p>回调是同步代码时，两种写法差别不大。按 HTML 规范的定时器算法，<code>setInterval</code> 也是在回调运行完以后才重新开始计时的。差别出在异步任务上：回调只是发出请求就返回了，对定时器来说这一轮已经结束。</p>
+<p>如果回调发出一个请求，请求要 3 秒，用 <code>setInterval(poll, 1000)</code> 会每秒发一个新请求，前面的还没回来，后面的又发出去了。链式 <code>setTimeout</code> 可以在请求完成以后再安排下一次：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">poll</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetchStatus</span>();
+  } <span class="hljs-keyword">finally</span> {
+    timer = <span class="hljs-built_in">setTimeout</span>(poll, <span class="hljs-number">1000</span>);
+  }
+}
+</code></pre></div>
+<p>这样同一时间只有一个请求，还能根据返回结果决定下一次的间隔，比如失败了就把间隔加长，状态完成了就不再安排。</p>
+<h2>为什么定时器不准时</h2>
+<p>定时器到期后，回调只是被放进任务队列，要等主线程把当前的同步代码和微任务执行完才会运行，见<a href="/questions/js-event-loop/">《事件循环中，任务和微任务按什么顺序执行？》</a>。所以延迟是“至少等这么久”，不是“正好这么久”。</p>
+<p>另外 MDN 写明，为了省电，浏览器会对后台标签页的定时器限制最小间隔。HTML 规范规定，定时器嵌套层数超过 5 层以后，小于 4 毫秒的延迟会被提高到 4 毫秒，这一条对 <code>setTimeout</code> 链和 <code>setInterval</code> 都适用。需要准确计时的场景，比如倒计时，应该每次用 <code>Date.now()</code> 算出剩余时间，而不是靠累加次数。</p>
+<h2>常见追问</h2>
+<p><strong>组件卸载时忘了清除定时器会怎样？</strong></p>
+<blockquote>
+<p>回调会继续执行，它通过闭包引用的数据也释放不掉。在 React 里应该在 <code>useEffect</code> 的清理函数中调用 <code>clearInterval</code>，或者调用手写版本返回的取消函数。</p>
+</blockquote>
+<p><strong><code>setInterval</code> 的回调执行时间超过间隔，会不会叠在一起执行？</strong></p>
+<blockquote>
+<p>不会同时执行，JavaScript 主线程一次只能跑一个回调，HTML 规范里 <code>setInterval</code> 也是在回调运行完以后才安排下一次。真正会叠起来的是回调里发出的异步请求，因为请求不占主线程，定时器照样按间隔触发，新请求会不停地发出去。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/setInterval" target="_blank" rel="noreferrer">MDN · setInterval()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout" target="_blank" rel="noreferrer">MDN · setTimeout()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#timers" target="_blank" rel="noreferrer">HTML Standard · Timers<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E7%94%A8+setTimeout+%E5%AE%9E%E7%8E%B0+setInterval%EF%BC%9F%E4%B8%A4%E8%80%85%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E7%94%A8+setTimeout+%E5%AE%9E%E7%8E%B0+setInterval%EF%BC%9F%E4%B8%A4%E8%80%85%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-set-interval%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-set-interval%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样用 setTimeout 实现 setInterval？两者有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-debounce/">怎样实现只在停止调用后执行的防抖函数？</a></li><li><a href="/questions/alg-throttle/">怎样实现首沿节流？它与尾沿节流、防抖有什么区别？</a></li><li><a href="/questions/alg-array-unique-flat/">怎样实现数组去重和数组扁平化？</a></li><li><a href="/questions/alg-call-apply-bind/">怎样手写 call、apply 和 bind？用 new 调用 bind 返回的函数会怎样？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

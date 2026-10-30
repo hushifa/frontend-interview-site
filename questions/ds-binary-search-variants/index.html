@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="数据结构与算法面试题：找目标第一次和最后一次出现的位置，用两次二分：一次找第一个大于等于目标的位置，一次找第一个大于目标的位置再减 1。" />
+    <title>二分查找有哪些常见变体？怎样找边界、在旋转数组里查找？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/ds-binary-search-variants/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="二分查找有哪些常见变体？怎样找边界、在旋转数组里查找？" />
+    <meta property="og:description" content="数据结构与算法面试题：找目标第一次和最后一次出现的位置，用两次二分：一次找第一个大于等于目标的位置，一次找第一个大于目标的位置再减 1。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/ds-binary-search-variants/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ds-binary-search-variants/#webpage","url":"https://fe.hushifa.top/questions/ds-binary-search-variants/","name":"二分查找有哪些常见变体？怎样找边界、在旋转数组里查找？","description":"数据结构与算法面试题：找目标第一次和最后一次出现的位置，用两次二分：一次找第一个大于等于目标的位置，一次找第一个大于目标的位置再减 1。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ds-binary-search-variants/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ds-binary-search-variants/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"数据结构与算法面试题","item":"https://fe.hushifa.top/topics/data-structures/"},{"@type":"ListItem","position":3,"name":"二分查找有哪些常见变体？怎样找边界、在旋转数组里查找？","item":"https://fe.hushifa.top/questions/ds-binary-search-variants/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BH3ahagJ.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/data-structures/">数据结构与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">二分查找有哪些常见变体？怎样找边界、在旋转数组里查找？</span></nav><h1 tabindex="-1">二分查找有哪些常见变体？怎样找边界、在旋转数组里查找？</h1><p class="reading-summary">找目标第一次和最后一次出现的位置，用两次二分：一次找第一个大于等于目标的位置，一次找第一个大于目标的位置再减 1。旋转排序数组没有整体有序，但从中点切开，左右两半至少有一半是有序的，先判断哪一半有序，再看目标在不在这一半里，就能每次排除一半。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>最基本的二分是在有序数组里找某个数在不在。面试常考的是它的变体：数组里有重复的 8，要找第一个 8 和最后一个 8 的下标；或者数组被旋转过，比如 <code>[4, 5, 6, 7, 0, 1, 2]</code>，还要在 O(log n) 里找到目标。</p>
+<p>找边界用两次二分。第一次找第一个大于等于目标的位置，这就是第一次出现的下标；第二次找第一个大于目标的位置，减 1 就是最后一次出现的下标。如果第一次找到的位置越界了，或者那里的值不等于目标，说明目标不存在，返回 <code>[-1, -1]</code>。</p>
+<p>旋转数组整体不是有序的，但从中点切开，左右两半至少有一半是有序的。比较 <code>nums[left]</code> 和 <code>nums[mid]</code>，前者小于等于后者，说明左半边有序，否则右半边有序。目标落在有序那一半的范围里，就去那一半找，不然去另一半，这样每次仍然能排除一半。</p>
+<p>写二分最容易错的是区间和循环条件不配套。选定一种写法，比如左闭右开 <code>[left, right)</code> 配 <code>left &lt; right</code>，或者左闭右闭 <code>[left, right]</code> 配 <code>left &lt;= right</code>，整段代码保持一致，空数组和只有一个元素的情况都要能跑通。</p>
+</blockquote>
+<h2>找第一个和最后一个位置</h2>
+<p>下面的 <code>lowerBound</code> 用左闭右开区间，返回第一个 <code>&gt;= target</code> 的下标。把比较条件改成 <code>&lt;=</code>，就得到第一个 <code>&gt; target</code> 的下标。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">lowerBound</span>(<span class="hljs-params">nums, target, inclusive = <span class="hljs-literal">false</span></span>) {
+  <span class="hljs-keyword">let</span> left = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> right = nums.<span class="hljs-property">length</span>;
+  <span class="hljs-keyword">while</span> (left &lt; right) {
+    <span class="hljs-keyword">const</span> mid = left + <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>((right - left) / <span class="hljs-number">2</span>);
+    <span class="hljs-comment">// inclusive 为 true 时跳过所有等于 target 的值，找第一个大于 target 的位置。</span>
+    <span class="hljs-keyword">if</span> (nums[mid] &lt; target || (inclusive &amp;&amp; nums[mid] === target)) left = mid + <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">else</span> right = mid;
+  }
+  <span class="hljs-keyword">return</span> left;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">searchRange</span>(<span class="hljs-params">nums, target</span>) {
+  <span class="hljs-keyword">const</span> first = <span class="hljs-title function_">lowerBound</span>(nums, target);
+  <span class="hljs-keyword">if</span> (first === nums.<span class="hljs-property">length</span> || nums[first] !== target) <span class="hljs-keyword">return</span> [-<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>];
+  <span class="hljs-keyword">return</span> [first, <span class="hljs-title function_">lowerBound</span>(nums, target, <span class="hljs-literal">true</span>) - <span class="hljs-number">1</span>];
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">searchRotated</span>(<span class="hljs-params">nums, target</span>) {
+  <span class="hljs-keyword">let</span> left = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> right = nums.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">while</span> (left &lt;= right) {
+    <span class="hljs-keyword">const</span> mid = left + <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>((right - left) / <span class="hljs-number">2</span>);
+    <span class="hljs-keyword">if</span> (nums[mid] === target) <span class="hljs-keyword">return</span> mid;
+    <span class="hljs-keyword">if</span> (nums[left] &lt;= nums[mid]) {
+      <span class="hljs-comment">// 左半边 [left, mid] 有序</span>
+      <span class="hljs-keyword">if</span> (nums[left] &lt;= target &amp;&amp; target &lt; nums[mid]) right = mid - <span class="hljs-number">1</span>;
+      <span class="hljs-keyword">else</span> left = mid + <span class="hljs-number">1</span>;
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-comment">// 右半边 [mid, right] 有序</span>
+      <span class="hljs-keyword">if</span> (nums[mid] &lt; target &amp;&amp; target &lt;= nums[right]) left = mid + <span class="hljs-number">1</span>;
+      <span class="hljs-keyword">else</span> right = mid - <span class="hljs-number">1</span>;
+    }
+  }
+  <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">searchRange</span>([<span class="hljs-number">5</span>, <span class="hljs-number">7</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">8</span>, <span class="hljs-number">10</span>], <span class="hljs-number">8</span>).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 3,4</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">searchRange</span>([<span class="hljs-number">5</span>, <span class="hljs-number">7</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">8</span>, <span class="hljs-number">10</span>], <span class="hljs-number">6</span>).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// -1,-1</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">searchRange</span>([], <span class="hljs-number">0</span>).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// -1,-1</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">searchRotated</span>([<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>], <span class="hljs-number">0</span>)); <span class="hljs-comment">// 4</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">searchRotated</span>([<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>], <span class="hljs-number">3</span>)); <span class="hljs-comment">// -1</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">searchRotated</span>([<span class="hljs-number">1</span>], <span class="hljs-number">0</span>)); <span class="hljs-comment">// -1</span>
+</code></pre></div>
+<p>这些输入都是 LeetCode 34 题和 33 题题面里的例子。</p>
+<p><code>searchRange</code> 里为什么第二次二分要减 1？第二次找到的是第一个大于 8 的位置，也就是 10 的下标 5，最后一个 8 就在它前面一格，下标 4。</p>
+<p>为什么第一次二分之后要检查 <code>nums[first] !== target</code>？<code>lowerBound</code> 找的是第一个大于等于目标的位置，目标不存在时它也会返回一个位置。找 6 时，它返回 1，那里是 7，不等于 6，所以要返回 <code>[-1, -1]</code>。目标比所有数都大时，它返回数组长度，这时先判断 <code>first === nums.length</code>，避免读到数组外面。</p>
+<h2>旋转数组里怎样判断哪一半有序</h2>
+<p><code>[4, 5, 6, 7, 0, 1, 2]</code> 是把 <code>[0, 1, 2, 4, 5, 6, 7]</code> 从 4 那里切开、前后调换得到的。数组里有一个“断点”，就是 7 到 0 那里。从中点切开，断点只可能在其中一半，另一半一定是有序的。</p>
+<p>所以先看左半边：<code>nums[left] &lt;= nums[mid]</code> 说明从 <code>left</code> 到 <code>mid</code> 没有断点，是有序的。这时判断目标在不在 <code>nums[left]</code> 到 <code>nums[mid]</code> 之间，在就去左边找，不在就去右边找。右半边有序时同理。</p>
+<p>为什么是 <code>&lt;=</code> 而不是 <code>&lt;</code>？当 <code>left === mid</code> 时，左半边只有一个元素，它当然是有序的，这时两者相等，必须算作左半边有序。如果写成 <code>&lt;</code>，就会误判成右半边有序。</p>
+<p>要注意，这个写法依赖“元素互不相同”。LeetCode 33 题明确说了数组元素各不相同。如果有重复值，比如 <code>[1, 0, 1, 1, 1]</code>，<code>nums[left]</code>、<code>nums[mid]</code>、<code>nums[right]</code> 可能全部相等，判断不出哪一半有序，只能把 <code>left</code> 加 1 缩小一点，最坏情况退化成 O(n)。</p>
+<h2>两种区间写法怎么选</h2>
+<p>左闭右开 <code>[left, right)</code> 里，<code>right</code> 指向的位置不在搜索范围内，所以初始值是 <code>nums.length</code>，循环条件是 <code>left &lt; right</code>，缩小右边界时写 <code>right = mid</code>。这种写法适合找边界，因为结果可能是 <code>nums.length</code>，表示插入到最后。</p>
+<p>左闭右闭 <code>[left, right]</code> 里，<code>right</code> 也在搜索范围内，初始值是 <code>nums.length - 1</code>，循环条件是 <code>left &lt;= right</code>，缩小时写 <code>right = mid - 1</code>。这种写法适合“找到就返回”的场景，比如上面的旋转数组。</p>
+<p>中点写成 <code>left + Math.floor((right - left) / 2)</code>，原因见<a href="/questions/alg-lower-bound/">《二分查找怎样定位时间轴边界？为什么重复值和空数组容易写错？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>怎样找旋转数组里的最小值？</strong></p>
+<blockquote>
+<p>比较 <code>nums[mid]</code> 和 <code>nums[right]</code>。<code>nums[mid] &gt; nums[right]</code> 说明断点在右半边，最小值在 <code>mid</code> 右侧，令 <code>left = mid + 1</code>；否则最小值在 <code>mid</code> 或它左侧，令 <code>right = mid</code>。循环到 <code>left === right</code> 时，那个位置就是最小值。</p>
+</blockquote>
+<p><strong>二分查找还能用在什么地方？</strong></p>
+<blockquote>
+<p>只要答案具有单调性就能用，不一定是在数组里找数。比如“最少需要多大的容量才能在 D 天内运完货物”，容量越大越容易满足，就可以对容量做二分，每次检查这个容量够不够。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/" target="_blank" rel="noreferrer">LeetCode · 34. Find First and Last Position of Element in Sorted Array<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://leetcode.com/problems/search-in-rotated-sorted-array/" target="_blank" rel="noreferrer">LeetCode · 33. Search in Rotated Sorted Array<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://cp-algorithms.com/num_methods/binary_search.html" target="_blank" rel="noreferrer">CP-Algorithms · Binary Search<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E6%9C%89%E5%93%AA%E4%BA%9B%E5%B8%B8%E8%A7%81%E5%8F%98%E4%BD%93%EF%BC%9F%E6%80%8E%E6%A0%B7%E6%89%BE%E8%BE%B9%E7%95%8C%E3%80%81%E5%9C%A8%E6%97%8B%E8%BD%AC%E6%95%B0%E7%BB%84%E9%87%8C%E6%9F%A5%E6%89%BE%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E6%9C%89%E5%93%AA%E4%BA%9B%E5%B8%B8%E8%A7%81%E5%8F%98%E4%BD%93%EF%BC%9F%E6%80%8E%E6%A0%B7%E6%89%BE%E8%BE%B9%E7%95%8C%E3%80%81%E5%9C%A8%E6%97%8B%E8%BD%AC%E6%95%B0%E7%BB%84%E9%87%8C%E6%9F%A5%E6%89%BE%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ads-binary-search-variants%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fds-binary-search-variants%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：二分查找有哪些常见变体？怎样找边界、在旋转数组里查找？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ds-max-subarray-stock/">最大子数组和、买卖股票的最佳时机怎样做？</a></li><li><a href="/questions/ds-two-pointers/">双指针有哪些常见题型？</a></li><li><a href="/questions/ds-lcs-edit-distance/">最长公共子序列和编辑距离怎样用动态规划求？</a></li><li><a href="/questions/ds-lis/">最长递增子序列怎样用贪心加二分做到 O(n log n)？Vue 3 的 diff 为什么用它？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

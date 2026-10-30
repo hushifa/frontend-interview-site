@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="设计模式面试题：职责链把多个处理者串成一条链，请求沿链传递，每个处理者决定自己处理、加工后交给下一个，或者直接中断。" />
+    <title>职责链模式是什么？中间件和请求拦截器是怎样用它的？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/pattern-chain-of-responsibility/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="职责链模式是什么？中间件和请求拦截器是怎样用它的？" />
+    <meta property="og:description" content="设计模式面试题：职责链把多个处理者串成一条链，请求沿链传递，每个处理者决定自己处理、加工后交给下一个，或者直接中断。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/pattern-chain-of-responsibility/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/pattern-chain-of-responsibility/#webpage","url":"https://fe.hushifa.top/questions/pattern-chain-of-responsibility/","name":"职责链模式是什么？中间件和请求拦截器是怎样用它的？","description":"设计模式面试题：职责链把多个处理者串成一条链，请求沿链传递，每个处理者决定自己处理、加工后交给下一个，或者直接中断。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/pattern-chain-of-responsibility/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/pattern-chain-of-responsibility/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"设计模式面试题","item":"https://fe.hushifa.top/topics/design-patterns/"},{"@type":"ListItem","position":3,"name":"职责链模式是什么？中间件和请求拦截器是怎样用它的？","item":"https://fe.hushifa.top/questions/pattern-chain-of-responsibility/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BH3ahagJ.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/design-patterns/">设计模式面试题</a><span aria-hidden="true">/</span><span aria-current="page">职责链模式是什么？中间件和请求拦截器是怎样用它的？</span></nav><h1 tabindex="-1">职责链模式是什么？中间件和请求拦截器是怎样用它的？</h1><p class="reading-summary">职责链把多个处理者串成一条链，请求沿链传递，每个处理者决定自己处理、加工后交给下一个，或者直接中断。前端常见的是 Koa 中间件、Express 中间件和 axios 拦截器。文中写一个审批链和一个洋葱式中间件，并讲 axios 请求拦截器后加先执行的顺序。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>请假审批是最直观的例子：一天以内组长批，五天以内经理批，再长交给总监。申请人不用知道最后谁来批，只要交给第一个人，不归自己管的就往上传。职责链模式就是把多个处理者串成一条链，请求从头往后传，每个处理者自己决定处理、交给下一个，还是直接拦下。</p>
+<p>这样做的好处是发送方和处理方解耦了。新增一个处理环节、调整顺序，只要改链的组成，不用改每个处理者内部的代码。</p>
+<p>前端最常见的就是中间件和拦截器。Koa 的中间件调用 <code>await next()</code> 把控制权交给下一个，下游执行完再回到自己，可以在前后各做一件事，比如记录耗时；某个中间件不调用 <code>next()</code>，链就在这里断开，比如鉴权失败直接返回 401。axios 的拦截器在请求发出前统一加 token，在响应回来后统一处理错误。</p>
+<p>要注意两点。一是顺序很重要，鉴权要放在业务处理之前，日志放在最外层才能统计完整耗时。二是链太长时，一个请求最后落到哪里不容易看出来，出问题要在每一环加日志排查。</p>
+</blockquote>
+<h2>先写一个最简单的职责链</h2>
+<p>审批链里，每个处理者要么返回结果，要么返回 <code>undefined</code> 表示“不归我管”，交给下一个。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 职责链：每个处理者决定自己处理，还是交给下一个</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">createChain</span>(<span class="hljs-params">handlers</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">handle</span>(<span class="hljs-params">request</span>) {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> handler <span class="hljs-keyword">of</span> handlers) {
+      <span class="hljs-keyword">const</span> result = <span class="hljs-title function_">handler</span>(request);
+      <span class="hljs-keyword">if</span> (result !== <span class="hljs-literal">undefined</span>) <span class="hljs-keyword">return</span> result;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;没有人处理&#x27;</span>;
+  };
+}
+
+<span class="hljs-keyword">const</span> approve = <span class="hljs-title function_">createChain</span>([
+  <span class="hljs-function">(<span class="hljs-params">days</span>) =&gt;</span> (days &lt;= <span class="hljs-number">1</span> ? <span class="hljs-string">&#x27;组长审批&#x27;</span> : <span class="hljs-literal">undefined</span>),
+  <span class="hljs-function">(<span class="hljs-params">days</span>) =&gt;</span> (days &lt;= <span class="hljs-number">5</span> ? <span class="hljs-string">&#x27;经理审批&#x27;</span> : <span class="hljs-literal">undefined</span>),
+  <span class="hljs-function">(<span class="hljs-params">days</span>) =&gt;</span> (days &lt;= <span class="hljs-number">15</span> ? <span class="hljs-string">&#x27;总监审批&#x27;</span> : <span class="hljs-literal">undefined</span>),
+]);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">approve</span>(<span class="hljs-number">1</span>));  <span class="hljs-comment">// 组长审批</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">approve</span>(<span class="hljs-number">3</span>));  <span class="hljs-comment">// 经理审批</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">approve</span>(<span class="hljs-number">30</span>)); <span class="hljs-comment">// 没有人处理</span>
+</code></pre></div>
+<p>请 3 天假，组长那一环判断不归自己，交给经理，经理处理了，链就停在这里。30 天谁都不处理，走到链尾返回兜底结果。</p>
+<p>如果以后要在经理和总监之间加一个“部门负责人”，只要往数组里插一项，其他处理者都不用改。</p>
+<h2>中间件为什么能在前后都做事</h2>
+<p>上面的链是“找到一个处理者就停”。中间件更进一步：每一层拿到一个 <code>next</code> 函数，调用它就进入下一层，下一层执行完再回到当前层继续往下走。所以一层可以在 <code>next()</code> 前做准备，在 <code>next()</code> 后做收尾，这就是 Koa 文档说的先向下游执行、再把控制流交回上游，常被叫作洋葱模型。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 洋葱式中间件：每一层可以在 next() 前后各做一件事</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">compose</span>(<span class="hljs-params">middlewares</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">run</span>(<span class="hljs-params">context</span>) {
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">dispatch</span>(<span class="hljs-params">index</span>) {
+      <span class="hljs-keyword">const</span> middleware = middlewares[index];
+      <span class="hljs-keyword">if</span> (!middleware) <span class="hljs-keyword">return</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>();
+      <span class="hljs-keyword">return</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>(<span class="hljs-title function_">middleware</span>(context, <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">dispatch</span>(index + <span class="hljs-number">1</span>)));
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">dispatch</span>(<span class="hljs-number">0</span>);
+  };
+}
+
+<span class="hljs-keyword">const</span> logs = [];
+<span class="hljs-keyword">const</span> run = <span class="hljs-title function_">compose</span>([
+  <span class="hljs-title function_">async</span> (ctx, next) =&gt; {
+    logs.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;日志：开始&#x27;</span>);
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">next</span>();
+    logs.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;日志：结束&#x27;</span>);
+  },
+  <span class="hljs-title function_">async</span> (ctx, next) =&gt; {
+    <span class="hljs-keyword">if</span> (!ctx.<span class="hljs-property">token</span>) {
+      ctx.<span class="hljs-property">status</span> = <span class="hljs-number">401</span>;
+      logs.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;鉴权：拦截&#x27;</span>);
+      <span class="hljs-keyword">return</span>; <span class="hljs-comment">// 不调用 next，后面的中间件都不会执行</span>
+    }
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">next</span>();
+  },
+  <span class="hljs-title function_">async</span> (ctx) =&gt; {
+    ctx.<span class="hljs-property">status</span> = <span class="hljs-number">200</span>;
+    logs.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;业务：处理请求&#x27;</span>);
+  },
+]);
+
+<span class="hljs-title function_">run</span>({ <span class="hljs-attr">token</span>: <span class="hljs-string">&#x27;abc&#x27;</span> })
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(logs.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27; &gt; &#x27;</span>)); <span class="hljs-comment">// 日志：开始 &gt; 业务：处理请求 &gt; 日志：结束</span>
+    logs.<span class="hljs-property">length</span> = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">run</span>({});
+  })
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(logs.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27; &gt; &#x27;</span>)); <span class="hljs-comment">// 日志：开始 &gt; 鉴权：拦截 &gt; 日志：结束</span>
+  });
+</code></pre></div>
+<p>带 token 时，请求一路走到业务层，再一层层退回来，所以“日志：结束”在最后。没有 token 时，鉴权层不调用 <code>next</code>，业务层根本没执行，可是日志层的“结束”仍然会打印，因为鉴权层返回以后，控制权照样回到了日志层。</p>
+<p>这也说明了为什么日志、计时要放在最外层：只有最外层能包住后面所有环节。这个简化版省略了 Koa 的错误处理和防止重复调用 <code>next</code> 的检查，完整实现见<a href="/questions/node-koa-express/">《Koa 和 Express 有什么区别？中间件洋葱模型是怎样实现的？》</a>。</p>
+<h2>axios 拦截器也是一条链</h2>
+<p>axios 用 <code>interceptors.request.use()</code> 注册请求拦截器，用 <code>interceptors.response.use()</code> 注册响应拦截器，<code>use</code> 返回一个 id，可以传给 <code>eject()</code> 移除。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> api = axios.<span class="hljs-title function_">create</span>({ <span class="hljs-attr">baseURL</span>: <span class="hljs-string">&#x27;/api&#x27;</span> });
+
+api.<span class="hljs-property">interceptors</span>.<span class="hljs-property">request</span>.<span class="hljs-title function_">use</span>(<span class="hljs-function">(<span class="hljs-params">config</span>) =&gt;</span> {
+  config.<span class="hljs-property">headers</span>.<span class="hljs-property">Authorization</span> = <span class="hljs-string">`Bearer <span class="hljs-subst">${getToken()}</span>`</span>;
+  <span class="hljs-keyword">return</span> config; <span class="hljs-comment">// 必须把 config 返回，下一环才能拿到</span>
+});
+
+api.<span class="hljs-property">interceptors</span>.<span class="hljs-property">response</span>.<span class="hljs-title function_">use</span>(
+  <span class="hljs-function">(<span class="hljs-params">response</span>) =&gt;</span> response.<span class="hljs-property">data</span>,
+  <span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (error.<span class="hljs-property">response</span>?.<span class="hljs-property">status</span> === <span class="hljs-number">401</span>) <span class="hljs-title function_">redirectToLogin</span>();
+    <span class="hljs-keyword">return</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">reject</span>(error); <span class="hljs-comment">// 继续往下传，让调用方也能感知失败</span>
+  },
+);
+</code></pre></div>
+<p>顺序上有一个容易记错的地方。axios 文档写明，请求拦截器是后添加的先执行，响应拦截器是先添加的先执行。注册了请求拦截器 1、2、3 和响应拦截器 1、2、3，实际顺序是请求 3、2、1，发出请求，响应 1、2、3。所以要依赖前一个请求拦截器结果的逻辑，应该先注册。</p>
+<h2>常见追问</h2>
+<p><strong>职责链和装饰器模式有什么区别？</strong></p>
+<blockquote>
+<p>装饰器是一层包一层地给同一个对象加功能，每一层都会执行。职责链里的处理者可以决定不往下传，请求可能在中途就被处理或拦下。中间件兼有两者的特点：大多数层会调用 <code>next</code> 继续往下，但鉴权这类中间件可以中断。装饰器见<a href="/questions/pattern-decorator/">《装饰器模式是什么？和高阶函数、高阶组件有什么关系？》</a>。</p>
+</blockquote>
+<p><strong>中间件里忘了 <code>await next()</code> 会怎样？</strong></p>
+<blockquote>
+<p>在 Koa 里，如果只写 <code>next()</code> 不 <code>await</code>，当前中间件不会等下游执行完就继续往下走，<code>next()</code> 之后的代码可能在业务处理完成之前就执行了，统计的耗时、设置的响应头都会不对。完全不调用 <code>next()</code>，后面的中间件就不会执行。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://koajs.com/" target="_blank" rel="noreferrer">Koa · Cascading<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://axios.rest/pages/advanced/interceptors" target="_blank" rel="noreferrer">Axios · Interceptors<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://expressjs.com/en/guide/using-middleware.html" target="_blank" rel="noreferrer">Express · Using middleware<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E8%81%8C%E8%B4%A3%E9%93%BE%E6%A8%A1%E5%BC%8F%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%92%8C%E8%AF%B7%E6%B1%82%E6%8B%A6%E6%88%AA%E5%99%A8%E6%98%AF%E6%80%8E%E6%A0%B7%E7%94%A8%E5%AE%83%E7%9A%84%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E8%81%8C%E8%B4%A3%E9%93%BE%E6%A8%A1%E5%BC%8F%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%92%8C%E8%AF%B7%E6%B1%82%E6%8B%A6%E6%88%AA%E5%99%A8%E6%98%AF%E6%80%8E%E6%A0%B7%E7%94%A8%E5%AE%83%E7%9A%84%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Apattern-chain-of-responsibility%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fpattern-chain-of-responsibility%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：职责链模式是什么？中间件和请求拦截器是怎样用它的？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/pattern-observer-pubsub/">观察者模式和发布订阅模式有什么区别？前端哪里用到了它们？</a></li><li><a href="/questions/pattern-singleton/">单例模式在前端怎样实现？ES 模块天然是单例吗？</a></li><li><a href="/questions/pattern-strategy-proxy/">策略模式和代理模式分别解决什么问题？前端怎样使用？</a></li><li><a href="/questions/pattern-factory-adapter/">工厂模式和适配器模式在前端里怎样用？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

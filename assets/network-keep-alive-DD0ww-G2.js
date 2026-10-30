@@ -1,0 +1,57 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>打开一个页面要请求 HTML、CSS、JS 和一堆图片。如果每个请求都新建一条 TCP 连接，用完就关，那每次都要重新握手，HTTPS 还要再做 TLS 握手。持久连接就是让一条连接在响应结束后不关，接着发下一个请求。</p>
+<p>HTTP/1.0 默认每次响应后关闭连接，想复用得双方都认 <code>Connection: keep-alive</code>，这就是 Keep-Alive 这个叫法的来源。HTTP/1.1 把持久连接改成了默认行为，RFC 9112 规定，只要没有出现 <code>close</code> 选项，1.1 的连接在响应后就继续保持，想关闭才发 <code>Connection: close</code>。</p>
+<p>好处是省掉了重复建连的往返，没有空闲太久的连接，拥塞窗口也不用回到初始值重新慢启动。可是 HTTP/1.1 一条连接上的响应必须按顺序返回，前面的慢了后面的就得排队，所以客户端常常对同一个服务器开几条并行连接来绕开。HTTP/2 用一条连接上的多路复用解决了这个问题。</p>
+<p>要注意三点。第一，持久连接要求每个消息都能自己说清楚长度，比如带 <code>Content-Length</code> 或分块传输，否则对方分不清下一个请求从哪开始。第二，服务器一般会关闭空闲太久的连接，规范对超时时长没有要求。第三，HTTP 的 Keep-Alive 和 TCP 的 keep-alive 探测是两回事，在 HTTP/2、HTTP/3 里写 <code>Connection</code> 或 <code>Keep-Alive</code> 头是不允许的。</p>
+</blockquote>
+<h2>连接到底保不保持，怎么判断</h2>
+<p>RFC 9112 给了一个按顺序判断的规则，看的是最近收到的那条消息：</p>
+<ol>
+<li>有 <code>close</code> 连接选项，这次响应后关闭；</li>
+<li>否则，协议版本是 HTTP/1.1 或更高，保持；</li>
+<li>否则，是 HTTP/1.0，并且带了 <code>keep-alive</code> 选项、接收方愿意支持，保持；</li>
+<li>其他情况，关闭。</li>
+</ol>
+<p>把这个规则写成代码，用 node 运行看看几种组合的结果：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">willPersist</span>(<span class="hljs-params">version, connection = <span class="hljs-string">&#x27;&#x27;</span></span>) {
+  <span class="hljs-keyword">const</span> options = connection.<span class="hljs-title function_">toLowerCase</span>().<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;,&#x27;</span>).<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">s</span>) =&gt;</span> s.<span class="hljs-title function_">trim</span>());
+  <span class="hljs-keyword">if</span> (options.<span class="hljs-title function_">includes</span>(<span class="hljs-string">&#x27;close&#x27;</span>)) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+  <span class="hljs-keyword">if</span> (version === <span class="hljs-string">&#x27;1.1&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+  <span class="hljs-keyword">if</span> (version === <span class="hljs-string">&#x27;1.0&#x27;</span>) <span class="hljs-keyword">return</span> options.<span class="hljs-title function_">includes</span>(<span class="hljs-string">&#x27;keep-alive&#x27;</span>);
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">willPersist</span>(<span class="hljs-string">&#x27;1.1&#x27;</span>));               <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">willPersist</span>(<span class="hljs-string">&#x27;1.1&#x27;</span>, <span class="hljs-string">&#x27;close&#x27;</span>));      <span class="hljs-comment">// false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">willPersist</span>(<span class="hljs-string">&#x27;1.0&#x27;</span>));               <span class="hljs-comment">// false</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">willPersist</span>(<span class="hljs-string">&#x27;1.0&#x27;</span>, <span class="hljs-string">&#x27;Keep-Alive&#x27;</span>)); <span class="hljs-comment">// true</span>
+</code></pre></div>
+<p>为什么 HTTP/1.1 什么都不写也会保持？因为 1.1 把持久连接当成默认值，<code>Connection: keep-alive</code> 在 1.1 里是多余的。很多服务器仍然会在响应里带上它，主要是为了兼容 HTTP/1.0 的客户端。</p>
+<p>规则里还有一条细节没写进函数：如果接收方是代理，它收到 HTTP/1.0 请求里的 <code>keep-alive</code> 也不能据此保持。RFC 9112 明确要求代理不能和 HTTP/1.0 客户端维持持久连接，因为老代理不认识 <code>Connection</code> 头，会把它原样转发给下一跳，导致连接挂住。</p>
+<h2>Keep-Alive 响应头里的 timeout 和 max</h2>
+<p>有的服务器会返回这样一个头：</p>
+<div class="not-prose code-block"><div class="code-language">http</div><pre><code class="hljs language-http">Connection: Keep-Alive
+Keep-Alive: timeout=5, max=200
+</code></pre></div>
+<p>MDN 的说明是，<code>timeout</code> 表示主机允许一个空闲连接保持打开的最短秒数，<code>max</code> 表示这条连接关闭前最多还能发多少个请求。它只是提示，而且必须同时有 <code>Connection: keep-alive</code> 才有意义。</p>
+<p><code>Keep-Alive</code> 是浏览器禁止脚本设置的请求头，所以前端用 <code>fetch</code> 没法自己加，连接复用由浏览器管理。</p>
+<h2>为什么同一条连接不能随便塞请求</h2>
+<p>持久连接上，请求和响应是按顺序首尾相接地传的，接收方必须知道一条消息在哪里结束。所以 RFC 9112 要求连接上的每个消息都有自己定义的长度，不能靠“关闭连接”来表示结束。服务器如果没读完请求体就要读下一个请求，必须先关闭连接，否则剩下的请求体会被当成下一个请求解析。</p>
+<p>HTTP/1.1 还允许管线化，也就是不等响应就连续发多个请求。但服务器必须按请求顺序返回响应，前一个慢了，后面的照样被堵住，这叫队头阻塞。HTTP/2 把一条连接拆成多个可以交错传输的流，才真正解决了应用层的队头阻塞，详见<a href="/questions/http-versions/">《HTTP/1.1、HTTP/2 和 HTTP/3 的主要区别是什么？》</a>。</p>
+<h2>HTTP Keep-Alive 和 TCP keep-alive 不是一回事</h2>
+<p>HTTP 的 Keep-Alive 讲的是“响应结束后连接别关，接着用”。TCP 的 keep-alive 是传输层的探测机制：连接空闲时发一个探测报文段，看对方还在不在。</p>
+<p>RFC 9293 对 TCP keep-alive 的要求是：实现可以有这个功能，但必须能按连接开关，默认关闭；空闲间隔必须可配置，默认不少于两小时；而且一次探测没有回应，不能就此判定连接已经断了。</p>
+<h2>常见追问</h2>
+<p><strong>HTTP/2 里还需要 Keep-Alive 吗？</strong></p>
+<blockquote>
+<p>不需要，而且不能写。RFC 9113 规定 HTTP/2 消息里不能有 <code>Connection</code>、<code>Keep-Alive</code>、<code>Proxy-Connection</code>、<code>Transfer-Encoding</code>、<code>Upgrade</code> 这类连接相关的头，带了就是格式错误。MDN 提到 Chrome 和 Firefox 会忽略 HTTP/2 响应中的这类头，Safari 则按规范不加载这样的响应。所以服务器开启 HTTP/2 时要注意别把 1.1 的配置原样带过去。</p>
+</blockquote>
+<p><strong>持久连接为什么能让传输更快？</strong></p>
+<blockquote>
+<p>一是省掉了 TCP 和 TLS 握手的往返，见<a href="/questions/network-tcp-handshake/">《TCP 三次握手和四次挥手是怎样进行的？为什么握手要三次？》</a>。二是连续使用中的连接拥塞窗口已经涨上去了，新连接得从慢启动开始；不过 RFC 5681 也说明，空闲超过一个重传超时后，发送方通常会把窗口降回重启窗口，见<a href="/questions/network-tcp-congestion/">《TCP 的拥塞控制和流量控制有什么区别？》</a>。</p>
+</blockquote>
+<p><strong>客户端发请求时，服务器恰好关闭了空闲连接怎么办？</strong></p>
+<blockquote>
+<p>RFC 9112 承认这种情况会发生：客户端以为在发请求，服务器认为连接已经空闲就关了。所以实现要能应对连接被异步关闭。幂等的请求可以按 RFC 9110 的条件自动重试，非幂等请求就不能随便重发。</p>
+</blockquote>`};export{e as default};
