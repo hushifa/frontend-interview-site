@@ -1,0 +1,102 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>比如后台的订单列表要“导出 Excel”，合同要在页面里直接预览 PDF。这两件事都能在浏览器里完成，常用的库分别是 SheetJS 和 pdf.js。</p>
+<p>SheetJS 的流程是三步：<code>json_to_sheet</code> 把对象数组转成工作表，<code>book_new</code> 和 <code>book_append_sheet</code> 组成工作簿，<code>writeFile</code> 写成文件，浏览器里会提示用户下载。如果只要纯文本表格，也可以自己拼 CSV，但要按 RFC 4180 处理字段里的逗号、引号和换行。pdf.js 的流程是 <code>getDocument</code> 加载文档，<code>getPage</code> 取某一页，按 <code>getViewport</code> 的尺寸把页面渲染到 canvas 上。</p>
+<p>数据量大时，生成工作簿是一段很长的同步计算，主线程被占住，页面就卡死。SheetJS 官方给的做法是放进 Web Worker：Worker 生成文件，再把数据或 object URL 交回主线程触发下载，因为 <code>writeFile</code> 在 Worker 里用不了。pdf.js 本身就把 PDF 解析放在单独的 worker 文件里。</p>
+<p>要注意，SheetJS 官方说明 npm 上的 <code>xlsx</code> 已经过时，要从它的 CDN 安装。pdf.js 的 worker 文件要和主库版本完全一致；PDF 页数多时，官方建议只创建和渲染可见的页面。</p>
+</blockquote>
+<h2>用 SheetJS 导出 Excel</h2>
+<p>SheetJS 官方的导出教程分三步，先把整理好的数据转成工作表，再放进工作簿，最后写成文件：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { utils, writeFileXLSX } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;xlsx&#x27;</span>;
+
+<span class="hljs-keyword">const</span> rows = [
+  { 商品: <span class="hljs-string">&#x27;键盘&#x27;</span>, 数量: <span class="hljs-number">2</span> },
+  { 商品: <span class="hljs-string">&#x27;鼠标&#x27;</span>, 数量: <span class="hljs-number">1</span> },
+];
+<span class="hljs-keyword">const</span> worksheet = utils.<span class="hljs-title function_">json_to_sheet</span>(rows);
+<span class="hljs-keyword">const</span> workbook = utils.<span class="hljs-title function_">book_new</span>();
+utils.<span class="hljs-title function_">book_append_sheet</span>(workbook, worksheet, <span class="hljs-string">&#x27;订单&#x27;</span>);
+<span class="hljs-title function_">writeFileXLSX</span>(workbook, <span class="hljs-string">&#x27;订单.xlsx&#x27;</span>);
+</code></pre></div>
+<p>文档说明，<code>writeFile</code> 在浏览器里会尝试提示用户下载文件，在 Node.js 里则写到本地目录。<code>writeFileXLSX</code> 是只支持 XLSX 格式的精简版，只导出 XLSX 的网站用它能减小打包体积；要导出 XLS、XLSB 等其他格式时，用通用的 <code>writeFile</code>。数据本来就是二维数组时，可以用 <code>aoa_to_sheet</code>。</p>
+<p>安装时有个坑。SheetJS 文档说，npm 公共仓库上的 <code>xlsx</code> 已经过时，最新版本停在 0.18.5，官方以自己的 CDN 为准，安装命令是 <code>npm i --save https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz</code>。</p>
+<h2>只要文本表格时可以拼 CSV</h2>
+<p>如果用户只需要能用 Excel 打开的表格，不要样式、不要多个工作表，可以直接拼 CSV。难点在转义，RFC 4180 规定：含有换行、双引号或逗号的字段要用双引号包起来，字段内部的双引号要再写一个双引号转义。下面的例子同时演示了传给 Worker 时“转移”数据的效果：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 按 RFC 4180 转义：含逗号、引号、换行的字段用双引号包住，内部引号写两遍。</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">csvField</span>(<span class="hljs-params">value</span>) {
+  <span class="hljs-keyword">const</span> text = <span class="hljs-title class_">String</span>(value);
+  <span class="hljs-keyword">return</span> <span class="hljs-regexp">/[&quot;,\\r\\n]/</span>.<span class="hljs-title function_">test</span>(text) ? <span class="hljs-string">\`&quot;<span class="hljs-subst">\${text.replace(/<span class="hljs-string">&quot;/g, &#x27;&quot;</span><span class="hljs-string">&quot;&#x27;)}&quot;</span><span class="hljs-string">\` : text;
+}
+function toCsv(rows) {
+  return rows.map((row) =&gt; row.map(csvField).join(&#x27;,&#x27;)).join(&#x27;\\r\\n&#x27;);
+}
+
+const csv = toCsv([
+  [&#x27;商品&#x27;, &#x27;备注&#x27;],
+  [&#x27;键盘&#x27;, &#x27;含&quot;快递&quot;费&#x27;],
+  [&#x27;鼠标&#x27;, &#x27;红色,无线&#x27;],
+]);
+console.log(csv.split(&#x27;\\r\\n&#x27;)[1]); // 键盘,&quot;含&quot;&quot;快递&quot;&quot;费&quot;
+console.log(csv.split(&#x27;\\r\\n&#x27;)[2]); // 鼠标,&quot;红色,无线&quot;
+
+// 转移 ArrayBuffer 后，原来的引用就不能再用了。
+const buffer = new ArrayBuffer(1024);
+const moved = structuredClone(buffer, { transfer: [buffer] });
+console.log(buffer.byteLength); // 0
+console.log(moved.byteLength); // 1024
+</span></span></span></code></pre></div>
+<p>“红色,无线”里有逗号，不加引号的话，Excel 会把它拆成两列。“含&quot;快递&quot;费”里的引号写成两个，读取时才知道它是内容而不是字段的结尾。行与行之间用 <code>\\r\\n</code>，这也是 RFC 4180 规定的换行。</p>
+<p>编码也要留意。SheetJS 文档提到，为了和 Excel 兼容，它输出的 CSV 总是在开头带 UTF-8 字节顺序标记（BOM）。自己拼 CSV 时可以照做，在内容最前面加上码点为 U+FEFF 的字符。</p>
+<h2>为什么大数据量要放进 Worker</h2>
+<p>生成工作簿、写成 XLSX 都是同步计算，数据越多耗时越长。这段时间主线程没空处理点击和渲染，页面就卡住了。SheetJS 的 Worker 文档说得很直接：库在浏览器里运行时，网站可能会冻结，Worker 可以把重活挪出去，计算仍然在本地进行，数据不会发到服务器。主线程卡顿的原理见<a href="/questions/browser-workers/">《Web Worker 可以解决哪些主线程卡顿？》</a>。</p>
+<p>可是 Worker 里不能直接下载文件，文档明确写了 <code>XLSX.writeFile</code> 在 Web Worker 里用不了。官方示例的做法是：Worker 收到数据、生成工作簿，用 <code>write</code> 得到文件数据，再生成 object URL 发回主线程，由主线程创建链接触发下载。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// worker.js</span>
+<span class="hljs-keyword">import</span> { utils, write } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;xlsx&#x27;</span>;
+
+<span class="hljs-variable language_">self</span>.<span class="hljs-property">onmessage</span> = <span class="hljs-function">(<span class="hljs-params">{ data }</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> workbook = utils.<span class="hljs-title function_">book_new</span>();
+  utils.<span class="hljs-title function_">book_append_sheet</span>(workbook, utils.<span class="hljs-title function_">json_to_sheet</span>(data.<span class="hljs-property">rows</span>), <span class="hljs-string">&#x27;订单&#x27;</span>);
+  <span class="hljs-keyword">const</span> file = <span class="hljs-title function_">write</span>(workbook, { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;array&#x27;</span>, <span class="hljs-attr">bookType</span>: <span class="hljs-string">&#x27;xlsx&#x27;</span> });
+  <span class="hljs-keyword">const</span> blob = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Blob</span>([file], { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet&#x27;</span> });
+  <span class="hljs-variable language_">self</span>.<span class="hljs-title function_">postMessage</span>({ <span class="hljs-attr">url</span>: <span class="hljs-variable constant_">URL</span>.<span class="hljs-title function_">createObjectURL</span>(blob) });
+};
+</code></pre></div>
+<p><code>type: &#x27;array&#x27;</code> 让 <code>write</code> 返回 <code>ArrayBuffer</code>，文档里列出的输出类型还有 base64、二进制字符串等。</p>
+<p>如果不想生成 object URL，也可以把 <code>ArrayBuffer</code> 直接发回主线程。默认 <code>postMessage</code> 会复制一份数据，传几十 MB 时复制本身也慢。把它放进转移列表，内存就直接移交给接收方，MDN 说明转移后原来那个线程里的 buffer 不能再用了，所以例子里转移后 <code>byteLength</code> 变成了 0。</p>
+<h2>用 pdf.js 预览 PDF</h2>
+<p>pdf.js 分成几层：core 层负责解析和解释二进制的 PDF，对应 <code>pdf.worker.mjs</code>；display 层在 core 之上提供渲染 API，对应 <code>pdf.mjs</code>。所以 PDF 的解析本来就在 worker 里进行，使用时要指定 worker 文件的地址。官方 hello world 示例的核心是：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">pdfjsLib.<span class="hljs-property">GlobalWorkerOptions</span>.<span class="hljs-property">workerSrc</span> = <span class="hljs-string">&#x27;/pdf.worker.mjs&#x27;</span>;
+
+<span class="hljs-keyword">const</span> pdf = <span class="hljs-keyword">await</span> pdfjsLib.<span class="hljs-title function_">getDocument</span>({ <span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;/contract.pdf&#x27;</span> }).<span class="hljs-property">promise</span>;
+<span class="hljs-keyword">const</span> page = <span class="hljs-keyword">await</span> pdf.<span class="hljs-title function_">getPage</span>(<span class="hljs-number">1</span>);
+<span class="hljs-keyword">const</span> viewport = page.<span class="hljs-title function_">getViewport</span>({ <span class="hljs-attr">scale</span>: <span class="hljs-number">1.5</span> });
+<span class="hljs-keyword">const</span> outputScale = <span class="hljs-variable language_">window</span>.<span class="hljs-property">devicePixelRatio</span> || <span class="hljs-number">1</span>;
+
+<span class="hljs-keyword">const</span> canvas = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;the-canvas&#x27;</span>);
+canvas.<span class="hljs-property">width</span> = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(viewport.<span class="hljs-property">width</span> * outputScale);
+canvas.<span class="hljs-property">height</span> = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(viewport.<span class="hljs-property">height</span> * outputScale);
+canvas.<span class="hljs-property">style</span>.<span class="hljs-property">width</span> = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(viewport.<span class="hljs-property">width</span>) + <span class="hljs-string">&#x27;px&#x27;</span>;
+canvas.<span class="hljs-property">style</span>.<span class="hljs-property">height</span> = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(viewport.<span class="hljs-property">height</span>) + <span class="hljs-string">&#x27;px&#x27;</span>;
+
+<span class="hljs-keyword">const</span> transform = outputScale !== <span class="hljs-number">1</span> ? [outputScale, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, outputScale, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>] : <span class="hljs-literal">null</span>;
+page.<span class="hljs-title function_">render</span>({ <span class="hljs-attr">canvasContext</span>: canvas.<span class="hljs-title function_">getContext</span>(<span class="hljs-string">&#x27;2d&#x27;</span>), transform, viewport });
+</code></pre></div>
+<p>为什么 canvas 的宽高要乘 <code>devicePixelRatio</code>？高分屏上一个 CSS 像素对应多个物理像素，canvas 只按 CSS 尺寸画会发虚，所以画布按物理像素放大，再用 <code>transform</code> 把绘制坐标也放大。官方例子还提醒，同一个 canvas 不能同时画两页。</p>
+<p>另外两个细节来自官方 FAQ：<code>pdf.js</code> 和 <code>pdf.worker.js</code> 必须是完全相同的版本；页面很多时，每页渲染都要分配几 MB 内存，建议只创建和渲染可见的页面。</p>
+<h2>大 PDF 怎样不用等全部下载完</h2>
+<p>pdf.js 的 FAQ 说，在浏览器和服务器都支持的情况下，它会自动用 HTTP Range 请求获取还没加载的部分，所以不用下载完整文件就能显示文档。Range 请求本身见<a href="/questions/network-range-request/">《HTTP Range 请求适合什么场景？》</a>。</p>
+<p><code>getDocument</code> 有几个相关参数，定义在 pdf.js 的 API 源码注释里：<code>disableRange</code> 默认 <code>false</code>，服务器支持部分内容请求时按块获取；<code>rangeChunkSize</code> 是每次 Range 请求的最大字节数，默认 65536；<code>disableAutoFetch</code> 默认 <code>false</code>，开启 Range 时 pdf.js 即使当前页用不到也会继续预取后面的数据。PDF 放在其他域名下时，服务器还要配好跨域响应头，官方示例的注释也提醒了这一点。</p>
+<p>已经拿到本地 <code>File</code> 对象时，读成 <code>ArrayBuffer</code> 传给 <code>getDocument({ data })</code> 就行，文件对象和 object URL 的用法见<a href="/questions/api-files/">《File、Blob 和 object URL 怎样用于文件预览？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>导出的数据要不要交给后端生成？</strong></p>
+<blockquote>
+<p>看数据在哪里。数据已经在页面上时，前端生成省掉一次请求。数据要从数据库全量查出时，前端得先把所有数据拉下来再生成，这种情况交给后端生成文件，前端只负责下载更合适，大文件下载的做法见<a href="/questions/design-stream-download/">《大文件下载和流式下载怎样做？a[download]、Range 断点和 Service Worker 各适合什么场景？》</a>。</p>
+</blockquote>
+<p><strong>为什么 Worker 里不能直接调用 writeFile 下载？</strong></p>
+<blockquote>
+<p>下载要通过页面创建链接、触发点击，Worker 里没有 DOM。SheetJS 文档明确说 <code>writeFile</code> 在 Worker 里不能用，所以 Worker 只负责生成文件数据或 object URL，交给主线程去下载。</p>
+</blockquote>
+<p><strong>pdf.js 渲染出来的文字能选中复制吗？</strong></p>
+<blockquote>
+<p>只渲染 canvas 的话不能，canvas 上只是像素。官方文档介绍，pdf.js 的 viewer 层建在 display 层之上，是 Firefox 等内置 PDF 查看器的界面，可以作为自己定制查看器的起点。</p>
+</blockquote>`};export{e as default};

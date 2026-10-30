@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="场景设计面试题：搭建平台围绕一份页面协议（schema）工作：物料描述组件能配置什么，画布把物料拖进来、编排成 schema…" />
+    <title>低代码可视化搭建平台怎样设计？物料、画布、拖拽、协议和出码各负责什么？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/design-lowcode-platform/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="低代码可视化搭建平台怎样设计？物料、画布、拖拽、协议和出码各负责什么？" />
+    <meta property="og:description" content="场景设计面试题：搭建平台围绕一份页面协议（schema）工作：物料描述组件能配置什么，画布把物料拖进来、编排成 schema…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/design-lowcode-platform/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/design-lowcode-platform/#webpage","url":"https://fe.hushifa.top/questions/design-lowcode-platform/","name":"低代码可视化搭建平台怎样设计？物料、画布、拖拽、协议和出码各负责什么？","description":"场景设计面试题：搭建平台围绕一份页面协议（schema）工作：物料描述组件能配置什么，画布把物料拖进来、编排成 schema…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/design-lowcode-platform/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/design-lowcode-platform/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"场景设计面试题","item":"https://fe.hushifa.top/topics/system-design/"},{"@type":"ListItem","position":3,"name":"低代码可视化搭建平台怎样设计？物料、画布、拖拽、协议和出码各负责什么？","item":"https://fe.hushifa.top/questions/design-lowcode-platform/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BVmbcf0v.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/system-design/">场景设计面试题</a><span aria-hidden="true">/</span><span aria-current="page">低代码可视化搭建平台怎样设计？物料、画布、拖拽、协议和出码各负责什么？</span></nav><h1 tabindex="-1">低代码可视化搭建平台怎样设计？物料、画布、拖拽、协议和出码各负责什么？</h1><p class="reading-summary">搭建平台围绕一份页面协议（schema）工作：物料描述组件能配置什么，画布把物料拖进来、编排成 schema，渲染器按 schema 和注册过的组件画出页面，出码模块把同一份 schema 转成源码。阿里低代码引擎把它拆成入料、编排、渲染、出码四个模块，协议的作用是让编辑器、渲染和出码能各自升级。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>比如运营要自己搭一个活动页：从左边的组件列表把按钮、图片拖到中间画布，在右边面板里改文字和颜色，点发布就上线。做这样的平台，核心是一份描述页面的 JSON，也叫 schema 或协议，所有模块都围绕它工作。</p>
+<p>阿里开源的低代码引擎把平台拆成四个模块。入料把现有的组件按物料协议描述出来，说明它叫什么、有哪些属性；编排就是在画布上拖拽、改属性，本质是不断生成符合搭建协议的 schema；渲染按 schema 和注册过的组件画出页面；出码把同一份 schema 转成源码。</p>
+<p>为什么要单独定一份协议？引擎文档的说法是，它约束编辑器的输出，同时作为渲染和出码的输入，让这三者解耦、可以各自升级。物料协议也一样，组件只要补一份描述就能接入，不用为搭建平台重写一遍。</p>
+<p>要注意几点：节点要有稳定的 id，拖拽移动时保持不变；渲染器只用注册过的组件，没登记的组件名不能当代码执行；schema 里能写表达式和函数，就要有权限和审核，渲染时的安全边界要单独设计。</p>
+</blockquote>
+<h2>平台由哪几部分组成</h2>
+<p>阿里低代码引擎的架构文档把引擎内核分成四个模块，每个模块和协议的关系都很清楚：</p>
+<ul>
+<li><strong>入料</strong>：把外部物料，比如大量的 npm 组件，按“低代码引擎物料协议规范”描述出来，通过引擎 API 注册后在编辑器里使用。文档强调这里只是增加描述，不是重写组件，所以能最大程度复用已有的组件。</li>
+<li><strong>编排</strong>：在编辑器里对物料做布局、增删改、写 JS/CSS 或逻辑编排，本质是不断生成符合“低代码引擎搭建协议规范”的页面描述。</li>
+<li><strong>渲染</strong>：把编排生成的页面描述渲染成视图，要处理数据流、生命周期、事件绑定、国际化等。</li>
+<li><strong>出码</strong>：把页面描述转换成另一种 DSL 或编程语言的代码。</li>
+</ul>
+<p>所以这四个模块不直接互相调用，而是通过两份协议衔接：物料协议描述“有哪些积木、每块积木能怎么配”，搭建协议描述“这一页用积木搭成了什么样”。</p>
+<h2>物料怎样描述</h2>
+<p>物料协议里，一个组件的描述是一份 JSON，主要有三部分：基础信息，包括组件名、标题、描述、包信息等；属性信息，包括参数、说明、类型、默认值；以及能力配置，用来优化编辑体验。</p>
+<p>右侧属性面板就是根据这份描述生成的。引擎把编辑属性用的控件叫设置器（Setter），比如字符串属性配一个输入框，颜色属性配一个取色器。组件开发者只写描述，不用为每个组件手写一个配置面板。</p>
+<h2>页面协议长什么样</h2>
+<p>搭建协议的组件树里，每个节点对应源码里 render 函数返回的一段 JSX，常用字段有：<code>id</code> 是组件唯一标识，由引擎生成，组件移动时要保持不变；<code>componentName</code> 是组件名，首字母大写，要能在 <code>componentsMap</code> 里找到对应的 npm 包；<code>props</code> 是属性；<code>children</code> 是子节点；另外还有 <code>condition</code> 控制是否渲染、<code>loop</code> 控制循环渲染。</p>
+<p>属性值可以是普通 JSON，也可以是表达式或函数，用 <code>{ &quot;type&quot;: &quot;JSExpression&quot;, &quot;value&quot;: &quot;this.state.user.name&quot; }</code> 表示变量绑定，用 <code>JSFunction</code> 表示事件处理函数。协议顶层还有 <code>version</code>、<code>componentsMap</code>、<code>componentsTree</code>、<code>i18n</code>、<code>dataSource</code> 等字段。</p>
+<p>下面用一个简化版走一遍渲染、拖拽和出码。组件注册表只登记了 <code>Page</code> 和 <code>Button</code>：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 页面 schema：只描述用哪个组件、传什么属性、子节点是什么。</span>
+<span class="hljs-keyword">const</span> schema = {
+  <span class="hljs-attr">componentName</span>: <span class="hljs-string">&#x27;Page&#x27;</span>,
+  <span class="hljs-attr">props</span>: {},
+  <span class="hljs-attr">children</span>: [
+    { <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;n1&#x27;</span>, <span class="hljs-attr">componentName</span>: <span class="hljs-string">&#x27;Button&#x27;</span>, <span class="hljs-attr">props</span>: { <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;提交&#x27;</span> } },
+    { <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;n2&#x27;</span>, <span class="hljs-attr">componentName</span>: <span class="hljs-string">&#x27;Script&#x27;</span>, <span class="hljs-attr">props</span>: { <span class="hljs-attr">code</span>: <span class="hljs-string">&#x27;alert(1)&#x27;</span> } },
+  ],
+};
+
+<span class="hljs-comment">// 物料注册表：画布和渲染器只认这里登记过的组件。</span>
+<span class="hljs-keyword">const</span> materials = {
+  <span class="hljs-title class_">Page</span>: <span class="hljs-function">(<span class="hljs-params">props, children</span>) =&gt;</span> <span class="hljs-string">`&lt;main&gt;<span class="hljs-subst">${children.join(<span class="hljs-string">&#x27;&#x27;</span>)}</span>&lt;/main&gt;`</span>,
+  <span class="hljs-title class_">Button</span>: <span class="hljs-function">(<span class="hljs-params">props</span>) =&gt;</span> <span class="hljs-string">`&lt;button&gt;<span class="hljs-subst">${props.text}</span>&lt;/button&gt;`</span>,
+};
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">render</span>(<span class="hljs-params">node</span>) {
+  <span class="hljs-keyword">const</span> component = materials[node.<span class="hljs-property">componentName</span>];
+  <span class="hljs-keyword">if</span> (!component) <span class="hljs-keyword">return</span> <span class="hljs-string">`&lt;!-- 未注册：<span class="hljs-subst">${node.componentName}</span> --&gt;`</span>;
+  <span class="hljs-keyword">const</span> children = (node.<span class="hljs-property">children</span> ?? []).<span class="hljs-title function_">map</span>(render);
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">component</span>(node.<span class="hljs-property">props</span>, children);
+}
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">render</span>(schema)); <span class="hljs-comment">// &lt;main&gt;&lt;button&gt;提交&lt;/button&gt;&lt;!-- 未注册：Script --&gt;&lt;/main&gt;</span>
+
+<span class="hljs-comment">// 拖拽移动节点：只改 schema，id 保持不变，再重新渲染。</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">moveNode</span>(<span class="hljs-params">tree, id, toIndex</span>) {
+  <span class="hljs-keyword">const</span> list = tree.<span class="hljs-property">children</span>;
+  <span class="hljs-keyword">const</span> <span class="hljs-keyword">from</span> = list.<span class="hljs-title function_">findIndex</span>(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> item.<span class="hljs-property">id</span> === id);
+  <span class="hljs-keyword">const</span> [node] = list.<span class="hljs-title function_">splice</span>(<span class="hljs-keyword">from</span>, <span class="hljs-number">1</span>);
+  list.<span class="hljs-title function_">splice</span>(toIndex, <span class="hljs-number">0</span>, node);
+}
+<span class="hljs-title function_">moveNode</span>(schema, <span class="hljs-string">&#x27;n2&#x27;</span>, <span class="hljs-number">0</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(schema.<span class="hljs-property">children</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> item.<span class="hljs-property">id</span>).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// n2,n1</span>
+
+<span class="hljs-comment">// 出码：同一份 schema 转成源码文本。</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">toJsx</span>(<span class="hljs-params">node</span>) {
+  <span class="hljs-keyword">const</span> children = (node.<span class="hljs-property">children</span> ?? []).<span class="hljs-title function_">map</span>(toJsx).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+  <span class="hljs-keyword">const</span> props = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">entries</span>(node.<span class="hljs-property">props</span>)
+    .<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">[key, value]</span>) =&gt;</span> <span class="hljs-string">` <span class="hljs-subst">${key}</span>=<span class="hljs-subst">${<span class="hljs-built_in">JSON</span>.stringify(value)}</span>`</span>)
+    .<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`&lt;<span class="hljs-subst">${node.componentName}</span><span class="hljs-subst">${props}</span>&gt;<span class="hljs-subst">${children}</span>&lt;/<span class="hljs-subst">${node.componentName}</span>&gt;`</span>;
+}
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">toJsx</span>(schema.<span class="hljs-property">children</span>[<span class="hljs-number">1</span>])); <span class="hljs-comment">// &lt;Button text=&quot;提交&quot;&gt;&lt;/Button&gt;</span>
+</code></pre></div>
+<p>第一行输出里，<code>Script</code> 没有渲染成任何东西，只留下一条注释。为什么不按名字去找一个全局函数执行？因为 schema 可能来自别人的编辑，渲染器只认注册表里的组件，没登记的名字一律不执行，这条边界在<a href="/questions/architecture-low-code-schema/">《低代码和 Schema 驱动 UI 怎样保持可维护与安全？》</a>里有展开。</p>
+<p>拖拽以后，<code>n2</code> 移到了最前面，但两个节点的 id 都没变。选中状态、撤销记录、属性面板都靠 id 找节点，所以协议要求移动时保持 id 不变。</p>
+<p>最后的 <code>toJsx</code> 和 <code>render</code> 读的是同一份 schema，只是一个输出页面，一个输出源码。这就是“一份协议、渲染和出码各自实现”的意思。</p>
+<h2>画布和拖拽怎样实现</h2>
+<p>真实场景里节点有成百上千个，每个都要支持增删改、移动、插入子节点，直接改 JSON 不方便。所以引擎仿照 DOM 设计了节点模型和属性模型，用 <code>node.remove()</code> 这样的接口编排，最后再 <code>export()</code> 出 schema。</p>
+<p>画布采用设计态和渲染态的双层架构：设计器和渲染器处在不同的 frame 里，渲染器以单独的 iframe 嵌入。文档给的理由有两个：一是让渲染器有更干净、更接近生产的运行环境，编辑器自己的样式和脚本不会干扰页面；二是方便用户按接口约束替换自己的渲染器。</p>
+<p>拖拽方面，引擎在初始化时监听主文档和 iframe 里 <code>contentDocument</code> 的鼠标、键盘、拖拽事件，这些监听区域叫感应区（Sensor）。感应区负责两件事：一是事件对象转换，比如 iframe 内外的坐标换算；二是结合每个节点的描述，判断它能不能作为容器、能不能放进来，算出最终的落点。拖拽本身用 HTML5 拖放还是 Pointer 事件实现，取舍见<a href="/questions/design-drag-sort/">《怎样实现拖拽排序？HTML5 拖放 API 和 Pointer 事件怎么选？》</a>。</p>
+<h2>出码模块做什么</h2>
+<p>出码的输入是 schema 和出码方案，输出是一棵源码目录树。出码方案指具体的项目框架，引擎文档举的例子是 Rax 和 Ice.js。引擎的出码核心库 <code>@alilc/lowcode-code-generator</code> 支持在 Node 环境运行，也提供在浏览器里运行的 standalone 模式。</p>
+<p>为什么需要出码？搭建协议的设计目标之一是“生成标准源码”，明确每个属性和源码的对应关系，生成和手写没有差别的代码。这样搭好的页面可以导出成普通项目，继续用常规方式开发和维护。</p>
+<h2>常见追问</h2>
+<p><strong>schema 里允许写 JSFunction，安全怎么保证？</strong></p>
+<blockquote>
+<p>能写函数的人就能在页面里执行任意代码，所以编辑权限本身要严格控制，发布前要审核，修改要留记录。只给运营用的场景，可以不开放函数，只允许选择预先注册好的动作。服务端的校验和权限不能依赖页面配置。</p>
+</blockquote>
+<p><strong>为什么画布要用 iframe，而不是直接渲染在编辑器页面里？</strong></p>
+<blockquote>
+<p>引擎文档的理由是给渲染器一个更干净、更接近生产的运行环境，同时方便替换渲染器。放在同一个页面里，编辑器的全局样式和脚本会影响被搭建的页面，所见就不等于所得。代价是拖拽要处理 iframe 内外两套事件和坐标换算。</p>
+</blockquote>
+<p><strong>协议升级了，旧页面怎么办？</strong></p>
+<blockquote>
+<p>搭建协议顶层有 <code>version</code> 字段，引擎文档说不同的版本号对应不同的渲染 SDK，保证不同版本的产物都能正常渲染。自己设计时，也要在 schema 里记录版本，升级时写迁移函数把旧数据转成新格式。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://lowcode-engine.cn/site/docs/guide/design/summary" target="_blank" rel="noreferrer">低代码引擎 · 架构综述<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://lowcode-engine.cn/site/docs/specs/lowcode-spec" target="_blank" rel="noreferrer">低代码引擎 · 搭建协议规范<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://lowcode-engine.cn/site/docs/specs/material-spec" target="_blank" rel="noreferrer">低代码引擎 · 物料协议规范<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://lowcode-engine.cn/site/docs/guide/design/editor" target="_blank" rel="noreferrer">低代码引擎 · 编排模块设计<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://lowcode-engine.cn/site/docs/guide/design/renderer" target="_blank" rel="noreferrer">低代码引擎 · 渲染模块设计<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://lowcode-engine.cn/site/docs/guide/design/generator" target="_blank" rel="noreferrer">低代码引擎 · 出码模块设计<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://lowcode-engine.cn/site/docs/guide/design/setter" target="_blank" rel="noreferrer">低代码引擎 · 设置器设计<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%BD%8E%E4%BB%A3%E7%A0%81%E5%8F%AF%E8%A7%86%E5%8C%96%E6%90%AD%E5%BB%BA%E5%B9%B3%E5%8F%B0%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%EF%BC%9F%E7%89%A9%E6%96%99%E3%80%81%E7%94%BB%E5%B8%83%E3%80%81%E6%8B%96%E6%8B%BD%E3%80%81%E5%8D%8F%E8%AE%AE%E5%92%8C%E5%87%BA%E7%A0%81%E5%90%84%E8%B4%9F%E8%B4%A3%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%BD%8E%E4%BB%A3%E7%A0%81%E5%8F%AF%E8%A7%86%E5%8C%96%E6%90%AD%E5%BB%BA%E5%B9%B3%E5%8F%B0%E6%80%8E%E6%A0%B7%E8%AE%BE%E8%AE%A1%EF%BC%9F%E7%89%A9%E6%96%99%E3%80%81%E7%94%BB%E5%B8%83%E3%80%81%E6%8B%96%E6%8B%BD%E3%80%81%E5%8D%8F%E8%AE%AE%E5%92%8C%E5%87%BA%E7%A0%81%E5%90%84%E8%B4%9F%E8%B4%A3%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Adesign-lowcode-platform%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9C%BA%E6%99%AF%E8%AE%BE%E8%AE%A1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fdesign-lowcode-platform%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：低代码可视化搭建平台怎样设计？物料、画布、拖拽、协议和出码各负责什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/design-permission/">前端权限控制怎样设计路由、按钮和接口三层？</a></li><li><a href="/questions/design-qr-login/">扫码登录是怎样实现的？</a></li><li><a href="/questions/design-dark-mode/">怎样实现网站的暗黑模式和主题切换？</a></li><li><a href="/questions/design-skeleton/">骨架屏怎样实现？和 loading 有什么区别？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

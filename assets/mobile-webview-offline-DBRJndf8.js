@@ -1,0 +1,81 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>比如 App 里的活动页是 H5 写的，每次打开都要从网络下载 HTML、JS、CSS，弱网下白屏好几秒。离线包的做法是提前把这些文件打成一个包下发到手机上，WebView 再请求它们时，由原生代码拦下来直接返回本地文件，省掉网络请求。</p>
+<p>拦截靠的是 WebView 提供的接口。Android 重写 <code>WebViewClient</code> 的 <code>shouldInterceptRequest</code>，返回本地文件就用本地的，返回 <code>null</code> 就照常走网络；官方的 <code>WebViewAssetLoader</code> 就是基于它实现的。iOS 的 <code>WKWebView</code> 不能接管 <code>https</code>，要注册一个自定义协议，用 <code>WKURLSchemeHandler</code> 返回数据。</p>
+<p>离线包要能更新，也要能出错兜底。一般由服务端下发一份清单，写明每个包的版本号、下载地址和摘要。App 发现版本更新就下载，算一遍摘要和清单比对，一致才启用；校验不过、文件缺失或者本地版本太旧，就回退到线上地址。</p>
+<p>除了资源加载，WebView 自身的初始化也慢。Android 官方说明 WebView 首次启动是一项很重的工作，默认在 UI 线程上进行，可以用 Jetpack Webkit 的 <code>startUpWebView</code> 提前把大部分工作挪到后台线程。</p>
+</blockquote>
+<h2>离线包解决的是哪一段耗时</h2>
+<p>H5 页面在 WebView 里打开，要经过几步：先初始化 WebView，再请求 HTML，解析 HTML 时再请求 JS、CSS、图片，脚本执行完才拿数据渲染。其中请求静态资源这一段受网络影响最大，弱网时最慢。</p>
+<p>离线包针对的就是这一段。页面的 HTML、JS、CSS 基本只在发版时变化，可以提前下载到手机里。用户打开页面时，WebView 照常发出请求，原生代码判断这个地址在离线包里有对应文件，就直接把本地文件当作响应交给 WebView，不再联网。接口数据还是走网络，因为它每次都可能不同。</p>
+<p>Android 官方文档也提到了把网页内容放进 App 的代价：内容更新需要发新版 App，用户如果没升级，App 里的内容就会和网站上的不一致。所以离线包一般不打进安装包，而是做成可以单独下发、单独更新的文件。</p>
+<h2>Android 怎样拦截请求</h2>
+<p>Android 的入口是 <code>WebViewClient.shouldInterceptRequest(WebView, WebResourceRequest)</code>。官方文档说明，它把资源请求通知给宿主 App，允许 App 返回数据：返回 <code>null</code>，WebView 照常加载；返回一个 <code>WebResourceResponse</code>，就用这个响应的数据。</p>
+<p>文档里还有几条和离线包直接相关的细节。这个方法在 UI 线程以外的线程上调用，访问 App 的数据和界面时要注意线程安全。它对 http(s)、data、file 等多种协议都会调用，但不会为 <code>javascript:</code>、<code>blob:</code> 地址以及 <code>file:///android_asset/</code>、<code>file:///android_res/</code> 调用。遇到重定向时，只为最初的地址调用一次。</p>
+<p>官方更推荐的写法是用 Jetpack Webkit 的 <code>WebViewAssetLoader</code>。它让本地内容用一个 HTTPS 地址加载，例如 <code>https://appassets.androidplatform.net/assets/index.html</code>，这样页面符合同源策略，<code>fetch</code> 等 API 能正常用。官方明确不推荐用 <code>file://</code> 加载：<code>file://</code> 和 <code>data:</code> 地址属于不透明源，用不了 <code>fetch()</code>、<code>XMLHttpRequest</code> 这些 API。</p>
+<div class="not-prose code-block"><div class="code-language">kotlin</div><pre><code class="hljs language-kotlin">override fun shouldInterceptRequest(
+    view: WebView,
+    request: WebResourceRequest
+): WebResourceResponse? {
+    // 找不到本地文件时返回 null，WebView 会照常走网络
+    return assetLoader.shouldInterceptRequest(request.url)
+}
+</code></pre></div>
+<p><code>WebViewAssetLoader</code> 通过 <code>PathHandler</code> 按路径找资源，官方自带读取 assets 和 res 的实现。离线包下载到 App 私有目录后，可以自己实现一个 <code>PathHandler</code> 从那里读。官方文档还说明，如果所有已注册的 <code>PathHandler</code> 都找不到资源，WebView 会退回到从网络加载。</p>
+<h2>iOS 怎样拦截请求</h2>
+<p>iOS 的 <code>WKWebView</code> 没有类似 <code>shouldInterceptRequest</code> 的通用拦截。它提供的是 <code>WKURLSchemeHandler</code>，用来加载 WebKit 自己不处理的 URL 协议。注册方法是 <code>WKWebViewConfiguration</code> 的 <code>setURLSchemeHandler(_:forURLScheme:)</code>。</p>
+<p>Apple 文档写明，给 WebKit 已经处理的协议（比如 <code>https</code>）注册处理器属于编程错误，这个方法会抛出异常；可以先用 <code>WKWebView.handlesURLScheme(_:)</code> 判断。所以 iOS 上的离线包通常让页面用自定义协议加载，比如 <code>myapp://activity/index.html</code>。文档还建议自定义协议名里带上 App 或公司的名字，避免以后和 WebKit 冲突。</p>
+<p>WebView 遇到这个协议的资源时，会创建一个 <code>WKURLSchemeTask</code> 交给处理器的 <code>webView(_:start:)</code>。处理器读到本地文件后，先调用 <code>didReceive(_:)</code> 传一个 <code>URLResponse</code>，再传数据，最后调用 <code>didFinish()</code>；出错时调用 <code>didFailWithError(_:)</code>。资源不再需要时，WebView 会调用 <code>webView(_:stop:)</code>。</p>
+<p>用自定义协议有一个副作用：页面的源变成了 <code>myapp://...</code>，和线上的 <code>https</code> 页面不同源，Cookie、<code>localStorage</code> 不共享，请求线上接口也变成跨域。这一点设计时就要考虑，接口要配好 CORS，或者通过 JSBridge 让原生代发请求。JSBridge 的做法见<a href="/questions/mobile-hybrid-jsbridge/">《Hybrid 开发是什么？JSBridge 的 URL Scheme 拦截和注入对象有什么区别？》</a>。</p>
+<h2>离线包怎样下发、更新和校验</h2>
+<p>这部分没有统一的官方标准，各家做法类似：服务端维护一份清单，App 启动或进入某个业务前拉取清单，和本地已有的包比较。清单里每个包至少有这几项：包名、版本号、对应的线上地址前缀、下载地址、文件摘要，以及要求的最低 App 版本。</p>
+<p>下面模拟 App 拿到清单后的决策：本地版本旧了就下载；App 版本不满足要求就不用离线包；下载完成后要校验摘要，一致才启用。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">compareVersion</span>(<span class="hljs-params">a, b</span>) {
+  <span class="hljs-keyword">const</span> x = a.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;.&#x27;</span>).<span class="hljs-title function_">map</span>(<span class="hljs-title class_">Number</span>);
+  <span class="hljs-keyword">const</span> y = b.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;.&#x27;</span>).<span class="hljs-title function_">map</span>(<span class="hljs-title class_">Number</span>);
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(x.<span class="hljs-property">length</span>, y.<span class="hljs-property">length</span>); i++) {
+    <span class="hljs-keyword">const</span> diff = (x[i] ?? <span class="hljs-number">0</span>) - (y[i] ?? <span class="hljs-number">0</span>);
+    <span class="hljs-keyword">if</span> (diff !== <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> diff &gt; <span class="hljs-number">0</span> ? <span class="hljs-number">1</span> : -<span class="hljs-number">1</span>;
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">decide</span>(<span class="hljs-params">remote, local, appVersion</span>) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-title function_">compareVersion</span>(appVersion, remote.<span class="hljs-property">minAppVersion</span>) &lt; <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;online&#x27;</span>;
+  <span class="hljs-keyword">if</span> (!local || <span class="hljs-title function_">compareVersion</span>(remote.<span class="hljs-property">version</span>, local.<span class="hljs-property">version</span>) &gt; <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;download&#x27;</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;use-local&#x27;</span>;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">verify</span>(<span class="hljs-params">pkg, actualDigest</span>) {
+  <span class="hljs-keyword">return</span> actualDigest === pkg.<span class="hljs-property">sha256</span> ? <span class="hljs-string">&#x27;enable&#x27;</span> : <span class="hljs-string">&#x27;discard&#x27;</span>;
+}
+
+<span class="hljs-keyword">const</span> remote = { <span class="hljs-attr">version</span>: <span class="hljs-string">&#x27;1.10.0&#x27;</span>, <span class="hljs-attr">minAppVersion</span>: <span class="hljs-string">&#x27;6.2.0&#x27;</span>, <span class="hljs-attr">sha256</span>: <span class="hljs-string">&#x27;ab12&#x27;</span> };
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">compareVersion</span>(<span class="hljs-string">&#x27;1.10.0&#x27;</span>, <span class="hljs-string">&#x27;1.9.3&#x27;</span>)); <span class="hljs-comment">// 1</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">decide</span>(remote, { <span class="hljs-attr">version</span>: <span class="hljs-string">&#x27;1.9.3&#x27;</span> }, <span class="hljs-string">&#x27;6.3.0&#x27;</span>)); <span class="hljs-comment">// download</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">decide</span>(remote, { <span class="hljs-attr">version</span>: <span class="hljs-string">&#x27;1.10.0&#x27;</span> }, <span class="hljs-string">&#x27;6.3.0&#x27;</span>)); <span class="hljs-comment">// use-local</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">decide</span>(remote, { <span class="hljs-attr">version</span>: <span class="hljs-string">&#x27;1.9.3&#x27;</span> }, <span class="hljs-string">&#x27;6.1.0&#x27;</span>)); <span class="hljs-comment">// online</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">verify</span>(remote, <span class="hljs-string">&#x27;ab12&#x27;</span>)); <span class="hljs-comment">// enable</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">verify</span>(remote, <span class="hljs-string">&#x27;ff00&#x27;</span>)); <span class="hljs-comment">// discard</span>
+</code></pre></div>
+<p>第一行为什么是 1？版本号要按段比较数字，<code>1.10.0</code> 的第二段是 10，比 9 大。如果直接按字符串比，<code>&#x27;1.10.0&#x27; &lt; &#x27;1.9.3&#x27;</code> 会成立，新包反而被当成旧包。</p>
+<p><code>minAppVersion</code> 用来处理 H5 依赖新原生能力的情况。新版页面调用了某个只有 6.2.0 以上才有的 JSBridge 方法，旧 App 用了这个包就会出错，所以直接走线上，由线上页面自己做兼容。</p>
+<p>摘要校验防的是下载不完整或者文件被改动。示例里的摘要是缩短的假值，实际可以用 SHA-256 算整个压缩包的摘要，Web 环境里对应 <code>crypto.subtle.digest(&#x27;SHA-256&#x27;, data)</code>，原生侧用各平台的哈希库。摘要不一致就丢弃，继续用旧包或者线上。清单本身要通过 HTTPS 获取，否则攻击者可以连清单里的摘要一起替换。</p>
+<p>还有两点影响体验。一是切换时机：新包下载好以后，最好等用户下次打开页面再启用，避免一个页面里一半是旧 JS、一半是新 JS。二是兜底：拦截时只有本地文件存在且校验通过才返回，否则返回 <code>null</code> 或者走线上，最坏情况也只是变回普通 H5。</p>
+<h2>WebView 初始化怎样提速</h2>
+<p>资源离线以后，WebView 自身的启动时间就显得突出了。Android 官方文档说明，App 第一次使用 WebView 时系统要执行一些启动工作，这个过程很重；默认情况下，它在 App 第一次调用 <code>android.webkit</code> 或 <code>androidx.webkit</code> 里的很多 API，或者加载包含 <code>&lt;WebView&gt;</code> 的布局时，隐式地在 UI 线程上执行，会阻塞用户输入，增加 ANR（应用无响应）的风险。</p>
+<p>为此 Jetpack Webkit 1.16.0 起提供了 <code>startUpWebView</code>。它让 App 明确控制 WebView 何时启动，把大部分启动工作挪到后台线程，必须在 UI 线程做的部分也拆成小块执行。官方给出两种用法：如果 WebView 不在关键路径上，就在 App 生命周期早期调用它，等成功回调以后再用 WebView；如果一启动就要显示 WebView，也要尽早调用，但不必等回调，而是把创建 WebView 推迟到布局、首帧这些关键的 UI 线程工作做完以后。文档也提醒，调用 <code>startUpWebView</code> 后马上在主线程使用 WebView API，UI 线程会等初始化完成，就没有收益了。</p>
+<h2>常见追问</h2>
+<p><strong>离线包和 Service Worker 缓存有什么区别？</strong></p>
+<blockquote>
+<p>Service Worker 是浏览器标准，由网页自己注册、自己决定缓存什么，第一次访问还是要走网络。离线包由原生 App 管理，可以在用户打开页面之前就下载好，第一次打开也能命中本地文件，但它依赖原生的拦截能力，只在自家 App 的 WebView 里有效。Service Worker 的更新问题见<a href="/questions/network-service-worker-cache/">《Service Worker 缓存更新为什么容易出现旧版本？》</a>。</p>
+</blockquote>
+<p><strong>为什么不直接用 <code>file://</code> 加载离线包？</strong></p>
+<blockquote>
+<p>Android 官方明确不推荐。<code>file://</code> 地址属于不透明源，<code>fetch()</code>、<code>XMLHttpRequest</code> 这些 API 用不了；为了绕过限制去打开 <code>setAllowFileAccessFromFileURLs</code> 之类的开关，又会让 App 暴露在基于文件的攻击之下。官方推荐用 <code>WebViewAssetLoader</code>，让本地内容走一个 HTTPS 地址。</p>
+</blockquote>
+<p><strong>离线包被拦截的请求出错了，页面会怎样？</strong></p>
+<blockquote>
+<p>取决于兜底怎么写。Android 上返回 <code>null</code>，WebView 会照常从网络加载；iOS 的自定义协议没有线上可退，处理器要调用 <code>didFailWithError(_:)</code> 报错，所以一般在加载页面之前就判断离线包是否完整可用，不可用就直接加载线上的 <code>https</code> 地址。</p>
+</blockquote>`};export{e as default};

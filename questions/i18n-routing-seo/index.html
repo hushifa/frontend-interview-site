@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="国际化面试题：每个语言版本要有自己的 URL，常见做法是 /zh-CN/、/en/ 这样的语言前缀。" />
+    <title>国际化网站的路由和 SEO 怎样做？语言前缀、hreflang、x-default 和 Accept-Language 重定向要注意什么？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/i18n-routing-seo/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="国际化网站的路由和 SEO 怎样做？语言前缀、hreflang、x-default 和 Accept-Language 重定向要注意什么？" />
+    <meta property="og:description" content="国际化面试题：每个语言版本要有自己的 URL，常见做法是 /zh-CN/、/en/ 这样的语言前缀。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/i18n-routing-seo/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/i18n-routing-seo/#webpage","url":"https://fe.hushifa.top/questions/i18n-routing-seo/","name":"国际化网站的路由和 SEO 怎样做？语言前缀、hreflang、x-default 和 Accept-Language 重定向要注意什么？","description":"国际化面试题：每个语言版本要有自己的 URL，常见做法是 /zh-CN/、/en/ 这样的语言前缀。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/i18n-routing-seo/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/i18n-routing-seo/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"国际化面试题","item":"https://fe.hushifa.top/topics/internationalization/"},{"@type":"ListItem","position":3,"name":"国际化网站的路由和 SEO 怎样做？语言前缀、hreflang、x-default 和 Accept-Language 重定向要注意什么？","item":"https://fe.hushifa.top/questions/i18n-routing-seo/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BVmbcf0v.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/internationalization/">国际化面试题</a><span aria-hidden="true">/</span><span aria-current="page">国际化网站的路由和 SEO 怎样做？语言前缀、hreflang、x-default 和 Accept-Language 重定向要注意什么？</span></nav><h1 tabindex="-1">国际化网站的路由和 SEO 怎样做？语言前缀、hreflang、x-default 和 Accept-Language 重定向要注意什么？</h1><p class="reading-summary">每个语言版本要有自己的 URL，常见做法是 /zh-CN/、/en/ 这样的语言前缀。用 hreflang 告诉搜索引擎这些页面互为不同语言的版本，每个版本都要列出自己和其他所有版本，并且互相指回，否则会被忽略；x-default 指定没有匹配语言时的兜底页面。Google 建议不要按猜测的语言自动重定向，因为 Googlebot 默认从美国的 IP 抓取、不带 Accept-Language，自动跳转可能让其他语言版本无法被抓到。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>比如一个产品站有中文、英文、日文三个版本。常见的路由是给 URL 加语言前缀，像 <code>/zh-CN/pricing</code>、<code>/en/pricing</code>，每个语言版本都有一个固定的地址。Google 也建议每种语言用不同的 URL，而不是靠 Cookie 或浏览器设置在同一个地址上切换语言。</p>
+<p>搜索引擎要知道这几个页面是同一内容的不同语言版本，就要用 hreflang。在每个页面的 <code>&lt;head&gt;</code> 里用 <code>&lt;link rel=&quot;alternate&quot; hreflang=&quot;en&quot; href=&quot;...&quot;&gt;</code> 列出所有语言版本，包括自己；再加一条 <code>hreflang=&quot;x-default&quot;</code>，给没有匹配语言的用户一个兜底页，比如语言选择页。</p>
+<p>这样做的好处是，搜索结果能给不同语言的用户展示对应的版本，用户分享的链接也总是同一种语言。</p>
+<p>要注意三点。第一，hreflang 必须双向，A 指向 B，B 也要指回 A，否则会被忽略。第二，地址要写完整的绝对 URL，语言代码用 ISO 639-1，地区用 ISO 3166-1 Alpha 2，不能只写地区。第三，不要按 <code>Accept-Language</code> 或 IP 自动重定向到别的语言版本，Googlebot 默认从美国抓取、不带 <code>Accept-Language</code>，自动跳转可能让其他版本抓不到；更好的做法是提示用户并提供切换链接。</p>
+</blockquote>
+<h2>URL 结构怎样选</h2>
+<p>Google 的多语言站点文档比较了几种 URL 结构：</p>
+<table><thead><tr><th>结构</th><th>例子</th><th>文档列出的特点</th></tr></thead><tbody><tr><td>国家代码顶级域名</td><td><code>example.de</code></td><td>地区信号最清楚，但贵，需要更多基础设施，一个域名只能面向一个国家</td></tr><tr><td>子域名</td><td><code>de.example.com</code></td><td>容易搭建，可以放在不同服务器上，但用户不一定看得出 <code>de</code> 是语言还是国家</td></tr><tr><td>子目录</td><td><code>example.com/de/</code></td><td>容易搭建，维护成本低，同一个主机，但不同版本不太好拆开部署</td></tr><tr><td>URL 参数</td><td><code>example.com?loc=de</code></td><td>不推荐</td></tr></tbody></table>
+<p>前端项目最常见的是子目录，也就是语言前缀。它和单页应用的路由天然契合：路由的第一段就是语言，下面的路径各语言保持一致，切换语言只换前缀。</p>
+<p>为什么不推荐只靠 Cookie 切换？Google 文档的建议是每个语言版本用不同的 URL，而不是用 Cookie 或浏览器设置改变同一个页面的语言。因为搜索引擎抓到的只有一个 URL、一种语言，其他语言的内容就无法被单独收录。</p>
+<h2>hreflang 怎样写</h2>
+<p>Google 支持三种等价的写法：HTML 的 <code>&lt;link&gt;</code> 标签、HTTP 响应头 <code>Link</code>、站点地图里的 <code>&lt;xhtml:link&gt;</code>。三种效果一样，选一种维护就行，同时用三种没有额外好处，反而更难维护。下面用 HTML 标签的写法生成三个语言版本的链接：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 每个语言版本都要列出全部版本（包括自己），再加一个 x-default。</span>
+<span class="hljs-keyword">const</span> origin = <span class="hljs-string">&#x27;https://example.com&#x27;</span>;
+<span class="hljs-keyword">const</span> locales = [<span class="hljs-string">&#x27;zh-CN&#x27;</span>, <span class="hljs-string">&#x27;en&#x27;</span>, <span class="hljs-string">&#x27;ja&#x27;</span>];
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">alternates</span>(<span class="hljs-params">path</span>) {
+  <span class="hljs-keyword">const</span> links = locales.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">lang</span>) =&gt;</span> <span class="hljs-string">`&lt;link rel=&quot;alternate&quot; hreflang=&quot;<span class="hljs-subst">${lang}</span>&quot; href=&quot;<span class="hljs-subst">${origin}</span>/<span class="hljs-subst">${lang}</span><span class="hljs-subst">${path}</span>&quot; /&gt;`</span>);
+  links.<span class="hljs-title function_">push</span>(<span class="hljs-string">`&lt;link rel=&quot;alternate&quot; hreflang=&quot;x-default&quot; href=&quot;<span class="hljs-subst">${origin}</span><span class="hljs-subst">${path}</span>&quot; /&gt;`</span>);
+  <span class="hljs-keyword">return</span> links;
+}
+<span class="hljs-keyword">const</span> links = <span class="hljs-title function_">alternates</span>(<span class="hljs-string">&#x27;/pricing&#x27;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(links.<span class="hljs-property">length</span>); <span class="hljs-comment">// 4</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(links[<span class="hljs-number">1</span>]); <span class="hljs-comment">// &lt;link rel=&quot;alternate&quot; hreflang=&quot;en&quot; href=&quot;https://example.com/en/pricing&quot; /&gt;</span>
+
+<span class="hljs-comment">// 按 Accept-Language 的 q 值排序，找出第一个支持的语言；没有请求头时返回 null。</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">pickLocale</span>(<span class="hljs-params">header</span>) {
+  <span class="hljs-keyword">if</span> (!header) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">const</span> wanted = header
+    .<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;,&#x27;</span>)
+    .<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">part</span>) =&gt;</span> {
+      <span class="hljs-keyword">const</span> [tag, q = <span class="hljs-string">&#x27;q=1&#x27;</span>] = part.<span class="hljs-title function_">trim</span>().<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;;&#x27;</span>);
+      <span class="hljs-keyword">return</span> { <span class="hljs-attr">tag</span>: tag.<span class="hljs-title function_">toLowerCase</span>(), <span class="hljs-attr">q</span>: <span class="hljs-title class_">Number</span>(q.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;=&#x27;</span>)[<span class="hljs-number">1</span>]) };
+    })
+    .<span class="hljs-title function_">sort</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> b.<span class="hljs-property">q</span> - a.<span class="hljs-property">q</span>);
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> { tag } <span class="hljs-keyword">of</span> wanted) {
+    <span class="hljs-keyword">const</span> exact = locales.<span class="hljs-title function_">find</span>(<span class="hljs-function">(<span class="hljs-params">lang</span>) =&gt;</span> lang.<span class="hljs-title function_">toLowerCase</span>() === tag);
+    <span class="hljs-keyword">if</span> (exact) <span class="hljs-keyword">return</span> exact;
+    <span class="hljs-keyword">const</span> base = locales.<span class="hljs-title function_">find</span>(<span class="hljs-function">(<span class="hljs-params">lang</span>) =&gt;</span> lang.<span class="hljs-title function_">toLowerCase</span>() === tag.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;-&#x27;</span>)[<span class="hljs-number">0</span>]);
+    <span class="hljs-keyword">if</span> (base) <span class="hljs-keyword">return</span> base;
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+}
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">pickLocale</span>(<span class="hljs-string">&#x27;en-US,en;q=0.9,zh-CN;q=0.8&#x27;</span>)); <span class="hljs-comment">// en</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">pickLocale</span>(<span class="hljs-string">&#x27;fr-CH, fr;q=0.9, ja;q=0.5&#x27;</span>)); <span class="hljs-comment">// ja</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">pickLocale</span>(<span class="hljs-literal">undefined</span>) ?? <span class="hljs-string">&#x27;无&#x27;</span>); <span class="hljs-comment">// 无</span>
+</code></pre></div>
+<p>三个语言加一个 <code>x-default</code>，一共 4 条。这 4 条在中文、英文、日文三个页面上都要出现，内容完全一样。Google 文档的规则是：每个语言版本都要列出自己和其他所有版本，地址要写完整，包括 <code>https://</code>，不能写成 <code>//example.com/foo</code> 或 <code>/foo</code>。</p>
+<p>为什么要求自己也列上、而且双向？Google 解释说，如果两个页面没有互相指向，这组标注就会被忽略，这是为了防止别的网站随便声明自己是你页面的另一个语言版本。</p>
+<p><code>x-default</code> 的意思是“页面上列出的语言都不匹配时，用这个”。Google 建议给语言选择页、或者会自动跳转的首页加上它。</p>
+<p>语言代码也有规定：先写 ISO 639-1 的语言代码，可以再加一个 ISO 3166-1 Alpha 2 的地区代码，比如 <code>en-GB</code>。只写地区不行，<code>es-419</code> 这种不在这两个标准里的代码也不支持。大小写不敏感，但地区代码习惯写成大写。另外 Google 说明，它不用 hreflang 或 HTML 的 <code>lang</code> 属性来判断页面是什么语言，而是用算法判断，所以页面内容本身要真的是对应的语言。</p>
+<h2>Accept-Language 自动重定向为什么要小心</h2>
+<p>后半段的 <code>pickLocale</code> 是很多网站首页的做法：读请求里的 <code>Accept-Language</code>，按 q 值从高到低找第一个支持的语言，再跳转过去。第二个例子里，用户首选法语，网站不支持，就退到权重 0.5 的日语。q 值的写法见 MDN 的 <code>Accept-Language</code> 说明。</p>
+<p>问题出在最后一行。Google 的“按语言区域自适应的网页”文档写明，Googlebot 默认的 IP 看起来在美国，而且发请求时不设置 <code>Accept-Language</code>。如果网站按请求头或 IP 决定显示哪种语言，Google 可能无法抓取、收录全部语言版本。</p>
+<p>所以 Google 在多语言站点文档里建议：不要按你猜测的用户语言，把用户从一个语言版本自动跳转到另一个，这会让用户和搜索引擎都看不到全部版本；应该在页面上放其他语言版本的链接，让用户自己选。如果根路径 <code>/</code> 这个没有语言的入口确实要跳转，前面提到 Google 建议给这类会自动跳转的首页加上 <code>x-default</code>；具体的语言页面则不要跳转，最多显示一个切换语言的提示。按 <code>Accept-Language</code> 返回不同内容时，还要带上 <code>Vary</code>，见<a href="/questions/network-content-negotiation/">《HTTP 内容协商会怎样影响前端资源和接口响应？》</a>。</p>
+<h2>canonical 和 hreflang 怎样配合</h2>
+<p>每个语言版本是不同的内容，canonical 应该指向它自己，而不是统一指向英文版。Google 的重复网址文档说，使用 hreflang 时，要指定同一种语言的规范页面；带 hreflang 属性的 <code>rel=&quot;canonical&quot;</code> 不会被用于规范化，语言版本之间的关系要用 <code>rel=&quot;alternate&quot; hreflang</code> 表达。</p>
+<p>同一种语言出现在多个 URL 上时，比如 <code>example.de/</code> 和 <code>example.com/de/</code> 内容相似，Google 建议选一个首选版本，用 <code>rel=&quot;canonical&quot;</code> 和 hreflang 一起标注。SEO 的其他手段见<a href="/questions/render-seo-checklist/">《前端 SEO 有哪些具体手段？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>单页应用切换语言时，hreflang 要怎样更新？</strong></p>
+<blockquote>
+<p>hreflang 是给搜索引擎看的，关键是抓取到的 HTML 里要有正确的标签。服务端渲染或静态生成时，每个语言页面直接输出完整的 <code>&lt;link&gt;</code>；纯客户端渲染的话，要保证渲染后的 <code>&lt;head&gt;</code> 里有这些标签。渲染方式对 SEO 的影响见<a href="/questions/render-seo-deploy/">《前端渲染方式怎样影响 SEO 和部署？》</a>。</p>
+</blockquote>
+<p><strong>页面 URL 里的路径要不要翻译成当地语言？</strong></p>
+<blockquote>
+<p>可以。Google 文档说 URL 里用本地化的词、用国际化域名都没问题，但要用 UTF-8 编码，链接时正确转义。代价是各语言的路径不再一一对应，切换语言时要多做一层路径映射。</p>
+</blockquote>
+<p><strong>为什么设置了 hreflang，搜索结果还是显示别的语言版本？</strong></p>
+<blockquote>
+<p>先检查是不是双向的：Google 说明没有互相指回的标注会被忽略。再检查地址是不是完整的绝对 URL、语言代码是不是合法、标签是不是在 <code>&lt;head&gt;</code> 里。Google 不靠 hreflang 判断页面语言，如果页面主要内容其实没翻译，它也可能被当成重复页面。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developers.google.com/search/docs/specialty/international/localized-versions" target="_blank" rel="noreferrer">Google Search Central · Localized versions of your pages<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites" target="_blank" rel="noreferrer">Google Search Central · Managing multi-regional and multilingual sites<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developers.google.com/search/docs/specialty/international/locale-adaptive-pages" target="_blank" rel="noreferrer">Google Search Central · Locale-adaptive pages<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls" target="_blank" rel="noreferrer">Google Search Central · Consolidate duplicate URLs<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Accept-Language" target="_blank" rel="noreferrer">MDN · Accept-Language<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/lang" target="_blank" rel="noreferrer">MDN · lang<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%9B%BD%E9%99%85%E5%8C%96%E7%BD%91%E7%AB%99%E7%9A%84%E8%B7%AF%E7%94%B1%E5%92%8C+SEO+%E6%80%8E%E6%A0%B7%E5%81%9A%EF%BC%9F%E8%AF%AD%E8%A8%80%E5%89%8D%E7%BC%80%E3%80%81hreflang%E3%80%81x-default+%E5%92%8C+Accept-Language+%E9%87%8D%E5%AE%9A%E5%90%91%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%9B%BD%E9%99%85%E5%8C%96%E7%BD%91%E7%AB%99%E7%9A%84%E8%B7%AF%E7%94%B1%E5%92%8C+SEO+%E6%80%8E%E6%A0%B7%E5%81%9A%EF%BC%9F%E8%AF%AD%E8%A8%80%E5%89%8D%E7%BC%80%E3%80%81hreflang%E3%80%81x-default+%E5%92%8C+Accept-Language+%E9%87%8D%E5%AE%9A%E5%90%91%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ai18n-routing-seo%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9B%BD%E9%99%85%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fi18n-routing-seo%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：国际化网站的路由和 SEO 怎样做？语言前缀、hreflang、x-default 和 Accept-Language 重定向要注意什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/intl-format/">为什么日期、金额和排序不应该手动拼接格式？</a></li><li><a href="/questions/i18n-translation-workflow/">前端翻译工作流怎样避免把文案写死在组件里？</a></li><li><a href="/questions/i18n-plural-rules/">Intl.PluralRules 怎样帮助实现国际化复数？</a></li><li><a href="/questions/i18n-icu-message/">ICU MessageFormat 为什么适合复杂国际化文案？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>
