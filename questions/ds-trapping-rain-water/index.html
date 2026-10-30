@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="数据结构与算法面试题：每根柱子上方能存的水，等于它左边最高和右边最高中较矮的那个减去它自己的高度。" />
+    <title>接雨水怎样用双指针做到 O(1) 空间？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/ds-trapping-rain-water/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="接雨水怎样用双指针做到 O(1) 空间？ · 前端知库" />
+    <meta property="og:description" content="数据结构与算法面试题：每根柱子上方能存的水，等于它左边最高和右边最高中较矮的那个减去它自己的高度。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/ds-trapping-rain-water/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ds-trapping-rain-water/#webpage","url":"https://fe.hushifa.top/questions/ds-trapping-rain-water/","name":"接雨水怎样用双指针做到 O(1) 空间？ · 前端知库","description":"数据结构与算法面试题：每根柱子上方能存的水，等于它左边最高和右边最高中较矮的那个减去它自己的高度。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ds-trapping-rain-water/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ds-trapping-rain-water/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"数据结构与算法面试题","item":"https://fe.hushifa.top/topics/data-structures/"},{"@type":"ListItem","position":3,"name":"接雨水怎样用双指针做到 O(1) 空间？","item":"https://fe.hushifa.top/questions/ds-trapping-rain-water/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BH3ahagJ.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/data-structures/">数据结构与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">接雨水怎样用双指针做到 O(1) 空间？</span></nav><h1 tabindex="-1">接雨水怎样用双指针做到 O(1) 空间？</h1><p class="reading-summary">每根柱子上方能存的水，等于它左边最高和右边最高中较矮的那个减去它自己的高度。双指针从两头往中间走，同时记录左边最高和右边最高，哪边的最高值更矮，就先结算哪边的柱子，因为那一侧的水位已经确定。时间 O(n)，额外空间 O(1)。也可以用预处理数组或单调栈。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>接雨水是给一排宽度为 1 的柱子高度，问下雨后能存多少水。看单根柱子就好想：它上方的水面高度，取决于它左边最高的柱子和右边最高的柱子里较矮的那一根，水面减去它自己的高度就是这一格的水，结果小于 0 时按 0 算。</p>
+<p>最直接的做法是先从左往右扫一遍，记下每个位置左边的最高值，再从右往左扫一遍记下右边的最高值，最后逐个结算，时间 O(n)、空间 O(n)。双指针把这两个数组省掉了：左右指针从两头往中间走，分别维护 <code>leftMax</code> 和 <code>rightMax</code>，哪边的最高值更矮，就结算哪边的指针并往里挪。</p>
+<p>这样做成立，是因为如果 <code>leftMax</code> 比 <code>rightMax</code> 矮，左指针这一格的右边至少有一根 <code>rightMax</code> 那么高的柱子，所以它的水位只由 <code>leftMax</code> 决定，不用知道右边的完整情况。每个位置只结算一次，时间 O(n)，空间 O(1)。</p>
+<p>要注意，这题和<a href="/questions/ds-two-pointers/">《双指针有哪些常见题型？》</a>里的盛水最多的容器不同，那题只选两根柱子，中间的柱子不挡水；接雨水每一格都要算。单调栈也能做，它按“一层一层横着填”的方式算，同样 O(n)。</p>
+</blockquote>
+<h2>双指针写法</h2>
+<p>看 <code>leftMax &lt; rightMax</code> 时为什么只结算左边。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">trap</span>(<span class="hljs-params">height</span>) {
+  <span class="hljs-keyword">let</span> left = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> right = height.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">let</span> leftMax = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> rightMax = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> water = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">while</span> (left &lt;= right) {
+    leftMax = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(leftMax, height[left]);
+    rightMax = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(rightMax, height[right]);
+    <span class="hljs-keyword">if</span> (leftMax &lt; rightMax) {
+      water += leftMax - height[left];
+      left++;
+    } <span class="hljs-keyword">else</span> {
+      water += rightMax - height[right];
+      right--;
+    }
+  }
+  <span class="hljs-keyword">return</span> water;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">trap</span>([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>])); <span class="hljs-comment">// 6</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">trap</span>([<span class="hljs-number">4</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">5</span>])); <span class="hljs-comment">// 9</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">trap</span>([<span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>])); <span class="hljs-comment">// 0</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">trap</span>([<span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>])); <span class="hljs-comment">// 2</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">trap</span>([<span class="hljs-number">5</span>])); <span class="hljs-comment">// 0</span>
+</code></pre></div>
+<p>为什么 <code>leftMax - height[left]</code> 不会是负数？因为每次结算前先用当前柱子更新了 <code>leftMax</code>，<code>leftMax</code> 至少等于这根柱子的高度，柱子比两边都高时结果就是 0，表示它上面存不了水。</p>
+<p>为什么哪边矮就结算哪边？假设 <code>leftMax &lt; rightMax</code>。左指针这一格左边的最高值就是 <code>leftMax</code>，这是确定的。右边的最高值我们还不完全知道，可是右指针那一侧已经出现过 <code>rightMax</code>，所以右边的最高值不会低于 <code>rightMax</code>，也就比 <code>leftMax</code> 高。两边取较矮的，结果一定是 <code>leftMax</code>。反过来 <code>leftMax &gt;= rightMax</code> 时，同样的道理可以结算右边。</p>
+<p><code>[3, 2, 1]</code> 越往右越矮，水全都流走了，结果是 0。<code>[2, 0, 2]</code> 中间那格两边都是 2，存 2 格水。</p>
+<h2>单调栈怎么想</h2>
+<p>单调栈是栈里的元素保持单调递减。从左往右扫，栈里存下标，当前柱子比栈顶高时，说明栈顶那根柱子成了一个“坑底”，左边是栈里的下一个元素，右边是当前柱子。弹出坑底，用两边较矮的高度减去坑底高度，乘以两边之间的宽度，就是这一层能填的水，然后继续和新的栈顶比较。每个下标入栈出栈各一次，时间 O(n)，栈最多 O(n)。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">trapByStack</span>(<span class="hljs-params">height</span>) {
+  <span class="hljs-keyword">const</span> stack = [];
+  <span class="hljs-keyword">let</span> water = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; height.<span class="hljs-property">length</span>; i++) {
+    <span class="hljs-keyword">while</span> (stack.<span class="hljs-property">length</span> &amp;&amp; height[i] &gt; height[stack[stack.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>]]) {
+      <span class="hljs-keyword">const</span> bottom = stack.<span class="hljs-title function_">pop</span>();
+      <span class="hljs-keyword">if</span> (!stack.<span class="hljs-property">length</span>) <span class="hljs-keyword">break</span>;
+      <span class="hljs-keyword">const</span> left = stack[stack.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>];
+      <span class="hljs-keyword">const</span> level = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(height[left], height[i]) - height[bottom];
+      water += level * (i - left - <span class="hljs-number">1</span>);
+    }
+    stack.<span class="hljs-title function_">push</span>(i);
+  }
+  <span class="hljs-keyword">return</span> water;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">trapByStack</span>([<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>])); <span class="hljs-comment">// 6</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">trapByStack</span>([<span class="hljs-number">4</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">5</span>])); <span class="hljs-comment">// 9</span>
+</code></pre></div>
+<p>弹出坑底后栈空了，说明坑的左边没有挡板，水会流走，所以直接 <code>break</code>。双指针按列竖着算，单调栈按层横着算，两种方法加起来的总量一样。</p>
+<h2>常见追问</h2>
+<p><strong>为什么循环条件是 <code>left &lt;= right</code>？</strong></p>
+<blockquote>
+<p>每一格都要结算一次。两个指针相遇的那一格还没算过，用 <code>&lt;=</code> 才会处理它。那一格通常是最高的柱子，结算出来是 0，所以写成 <code>&lt;</code> 一般也能得到同样的答案，但 <code>&lt;=</code> 的含义更清楚。</p>
+</blockquote>
+<p><strong>二维的接雨水怎么做？</strong></p>
+<blockquote>
+<p>给的是一个高度矩阵，水可以往四个方向流。做法是把最外一圈放进最小堆，每次取出最矮的边界，向四周扩展，比它矮的格子能存的水就是它们的高度差。这和一维双指针“从矮的一边先结算”是同一个思路。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://leetcode.com/problems/trapping-rain-water/" target="_blank" rel="noreferrer">LeetCode 42 · Trapping Rain Water<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%8E%A5%E9%9B%A8%E6%B0%B4%E6%80%8E%E6%A0%B7%E7%94%A8%E5%8F%8C%E6%8C%87%E9%92%88%E5%81%9A%E5%88%B0+O%281%29+%E7%A9%BA%E9%97%B4%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%8E%A5%E9%9B%A8%E6%B0%B4%E6%80%8E%E6%A0%B7%E7%94%A8%E5%8F%8C%E6%8C%87%E9%92%88%E5%81%9A%E5%88%B0+O%281%29+%E7%A9%BA%E9%97%B4%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ads-trapping-rain-water%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fds-trapping-rain-water%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：接雨水怎样用双指针做到 O(1) 空间？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ds-two-pointers/">双指针有哪些常见题型？</a></li><li><a href="/questions/ds-linked-list/">怎样反转链表、判断链表有环？</a></li><li><a href="/questions/ds-max-subarray-stock/">最大子数组和、买卖股票的最佳时机怎样做？</a></li><li><a href="/questions/ds-binary-search-variants/">二分查找有哪些常见变体？怎样找边界、在旋转数组里查找？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

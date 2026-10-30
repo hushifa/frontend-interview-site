@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="数据结构与算法面试题：快慢指针从头出发，慢指针每次一步、快指针每次两步，有环就一定会在环里相遇。" />
+    <title>环形链表怎样找到入环点？为什么相遇后从头再走就能找到？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/ds-linked-list-cycle/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="环形链表怎样找到入环点？为什么相遇后从头再走就能找到？" />
+    <meta property="og:description" content="数据结构与算法面试题：快慢指针从头出发，慢指针每次一步、快指针每次两步，有环就一定会在环里相遇。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/ds-linked-list-cycle/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ds-linked-list-cycle/#webpage","url":"https://fe.hushifa.top/questions/ds-linked-list-cycle/","name":"环形链表怎样找到入环点？为什么相遇后从头再走就能找到？","description":"数据结构与算法面试题：快慢指针从头出发，慢指针每次一步、快指针每次两步，有环就一定会在环里相遇。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ds-linked-list-cycle/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ds-linked-list-cycle/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"数据结构与算法面试题","item":"https://fe.hushifa.top/topics/data-structures/"},{"@type":"ListItem","position":3,"name":"环形链表怎样找到入环点？为什么相遇后从头再走就能找到？","item":"https://fe.hushifa.top/questions/ds-linked-list-cycle/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BH3ahagJ.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/data-structures/">数据结构与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">环形链表怎样找到入环点？为什么相遇后从头再走就能找到？</span></nav><h1 tabindex="-1">环形链表怎样找到入环点？为什么相遇后从头再走就能找到？</h1><p class="reading-summary">快慢指针从头出发，慢指针每次一步、快指针每次两步，有环就一定会在环里相遇。相遇后让一个指针回到头节点，两个指针都每次走一步，再次相遇的地方就是入环点，因为头到入环点的距离等于相遇点往前走到入环点的距离加上若干整圈。时间 O(n)，额外空间 O(1)。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>环形链表就是链表尾部的 <code>next</code> 没有指向 <code>null</code>，而是指回了前面某个节点，一直往后走永远走不完。题目要返回环开始的那个节点，也就是入环点，没有环就返回 <code>null</code>，而且不能修改链表。</p>
+<p>做法分两步。第一步用快慢指针判环：慢指针每次走一步，快指针每次走两步，有环时快指针进了环就在里面绕，每走一轮都比慢指针多走一步，迟早追上。第二步，相遇后把一个指针放回头节点，两个指针都改成每次走一步，再次相遇的节点就是入环点。</p>
+<p>第二步成立是因为一个等式。设头到入环点距离为 a，入环点到相遇点为 b，环长为 c。快指针走的路是慢指针的两倍，推出 a 等于相遇点再往前走 c − b 步回到入环点，再加上若干整圈。所以两个指针同速走 a 步，正好在入环点碰头。</p>
+<p>这样只要 O(n) 时间和 O(1) 额外空间。用 Set 记录走过的节点也能做，第一个重复出现的节点就是入环点，但要 O(n) 额外空间。要注意循环条件写 <code>fast &amp;&amp; fast.next</code>，比较的是节点引用，不是节点的值。</p>
+</blockquote>
+<h2>先判环，再找入环点</h2>
+<p><code>detectCycle</code> 前半段就是判环，后半段把 <code>slow</code> 放回头节点。看第二个循环里两个指针都只走一步。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">fromArray</span>(<span class="hljs-params">values, pos</span>) {
+  <span class="hljs-keyword">const</span> nodes = values.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> ({ value, <span class="hljs-attr">next</span>: <span class="hljs-literal">null</span> }));
+  nodes.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">node, i</span>) =&gt;</span> (node.<span class="hljs-property">next</span> = nodes[i + <span class="hljs-number">1</span>] ?? <span class="hljs-literal">null</span>));
+  <span class="hljs-comment">// pos 和 LeetCode 一样表示尾节点连回的下标，-1 表示无环</span>
+  <span class="hljs-keyword">if</span> (pos &gt;= <span class="hljs-number">0</span>) nodes[nodes.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>].<span class="hljs-property">next</span> = nodes[pos];
+  <span class="hljs-keyword">return</span> nodes[<span class="hljs-number">0</span>] ?? <span class="hljs-literal">null</span>;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">detectCycle</span>(<span class="hljs-params">head</span>) {
+  <span class="hljs-keyword">let</span> slow = head;
+  <span class="hljs-keyword">let</span> fast = head;
+  <span class="hljs-keyword">while</span> (fast &amp;&amp; fast.<span class="hljs-property">next</span>) {
+    slow = slow.<span class="hljs-property">next</span>;
+    fast = fast.<span class="hljs-property">next</span>.<span class="hljs-property">next</span>;
+    <span class="hljs-keyword">if</span> (slow === fast) {
+      slow = head;
+      <span class="hljs-keyword">while</span> (slow !== fast) {
+        slow = slow.<span class="hljs-property">next</span>;
+        fast = fast.<span class="hljs-property">next</span>;
+      }
+      <span class="hljs-keyword">return</span> slow;
+    }
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">detectCycle</span>(<span class="hljs-title function_">fromArray</span>([<span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0</span>, -<span class="hljs-number">4</span>], <span class="hljs-number">1</span>)).<span class="hljs-property">value</span>); <span class="hljs-comment">// 2</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">detectCycle</span>(<span class="hljs-title function_">fromArray</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>], <span class="hljs-number">0</span>)).<span class="hljs-property">value</span>); <span class="hljs-comment">// 1</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">detectCycle</span>(<span class="hljs-title function_">fromArray</span>([<span class="hljs-number">1</span>], -<span class="hljs-number">1</span>))); <span class="hljs-comment">// null</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">detectCycle</span>(<span class="hljs-title function_">fromArray</span>([], -<span class="hljs-number">1</span>))); <span class="hljs-comment">// null</span>
+
+<span class="hljs-keyword">const</span> sameValues = <span class="hljs-title function_">fromArray</span>([<span class="hljs-number">7</span>, <span class="hljs-number">7</span>, <span class="hljs-number">7</span>, <span class="hljs-number">7</span>], <span class="hljs-number">2</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">detectCycle</span>(sameValues) === sameValues.<span class="hljs-property">next</span>.<span class="hljs-property">next</span>); <span class="hljs-comment">// true</span>
+</code></pre></div>
+<p>第一个例子里尾节点 -4 连回下标 1，所以入环点是值为 2 的节点。最后一个例子所有节点的值都是 7，看值分不出是哪个节点，所以用 <code>===</code> 比较返回的引用是不是第三个节点。</p>
+<p>为什么一定会相遇，快指针不会跳过慢指针吗？两个指针都进环以后，每走一轮，快指针和慢指针之间的距离就缩短 1。距离一步步减到 0，中间不会跳过，所以必然相遇。而且慢指针进环后走不满一圈就会被追上，因为快指针追它最多要追一圈的距离。</p>
+<h2>为什么相遇后从头走能到入环点</h2>
+<p>设头节点到入环点要走 a 步，入环点到相遇点要走 b 步，环一共 c 个节点。相遇时慢指针走了 a + b 步。快指针在环里多绕了 k 圈（k ≥ 1），走了 a + b + kc 步。快指针的步数是慢指针的两倍：</p>
+<div class="not-prose code-block"><div class="code-language">text</div><pre><code class="hljs language-text">2(a + b) = a + b + kc
+a + b = kc
+a = kc - b = (k - 1)c + (c - b)
+</code></pre></div>
+<p>最后一行要这样读：从相遇点再往前走 c − b 步，正好回到入环点；再多绕 k − 1 圈，还是停在入环点。所以一个指针从头走 a 步到达入环点时，另一个从相遇点同样走 a 步，也恰好在入环点。两者第一次相同的位置就是入环点，因为在此之前一个还在环外，另一个在环里，不可能重合。</p>
+<p><code>a = 0</code> 的情况也成立，比如第二个例子尾节点连回头节点，相遇后 <code>slow</code> 回到头，它本来就是入环点，第二个循环一次都不执行。</p>
+<h2>常见追问</h2>
+<p><strong>用 Set 做有什么不同？</strong></p>
+<blockquote>
+<p>一路往后走，把每个节点放进 Set，第一次碰到已经在 Set 里的节点就是入环点，走到 <code>null</code> 就说明无环。写法更直白，时间也是 O(n)，但额外空间是 O(n)。Set 按引用区分对象，所以值重复的节点不会误判。</p>
+</blockquote>
+<p><strong>怎么求环的长度？</strong></p>
+<blockquote>
+<p>快慢指针相遇后，让其中一个继续走，同时计数，再回到相遇点时走过的步数就是环长 c。</p>
+</blockquote>
+<p><strong>只判断有没有环的写法在哪里？</strong></p>
+<blockquote>
+<p>见<a href="/questions/ds-linked-list/">《怎样反转链表、判断链表有环？》</a>，那里只用到第一步，相遇就返回 <code>true</code>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://leetcode.com/problems/linked-list-cycle-ii/" target="_blank" rel="noreferrer">LeetCode 142 · Linked List Cycle II<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://leetcode.com/problems/linked-list-cycle/" target="_blank" rel="noreferrer">LeetCode 141 · Linked List Cycle<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8%E6%80%8E%E6%A0%B7%E6%89%BE%E5%88%B0%E5%85%A5%E7%8E%AF%E7%82%B9%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E7%9B%B8%E9%81%87%E5%90%8E%E4%BB%8E%E5%A4%B4%E5%86%8D%E8%B5%B0%E5%B0%B1%E8%83%BD%E6%89%BE%E5%88%B0%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8%E6%80%8E%E6%A0%B7%E6%89%BE%E5%88%B0%E5%85%A5%E7%8E%AF%E7%82%B9%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E7%9B%B8%E9%81%87%E5%90%8E%E4%BB%8E%E5%A4%B4%E5%86%8D%E8%B5%B0%E5%B0%B1%E8%83%BD%E6%89%BE%E5%88%B0%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ads-linked-list-cycle%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fds-linked-list-cycle%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：环形链表怎样找到入环点？为什么相遇后从头再走就能找到？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ds-linked-list/">怎样反转链表、判断链表有环？</a></li><li><a href="/questions/ds-merge-lists/">怎样合并两个有序链表、删除倒数第 N 个节点？哨兵节点有什么用？</a></li><li><a href="/questions/ds-two-pointers/">双指针有哪些常见题型？</a></li><li><a href="/questions/ds-trapping-rain-water/">接雨水怎样用双指针做到 O(1) 空间？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

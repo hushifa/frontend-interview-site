@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="数据结构与算法面试题：小顶堆的做法是维护一个大小为 k 的最小堆，遍历时把每个数放进去，超过 k 个就弹出堆顶，最后堆顶就是第 k 大…" />
+    <title>数组中第 K 大的元素怎样找？小顶堆和快速选择的复杂度有什么区别？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/ds-kth-largest/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="数组中第 K 大的元素怎样找？小顶堆和快速选择的复杂度有什么区别？" />
+    <meta property="og:description" content="数据结构与算法面试题：小顶堆的做法是维护一个大小为 k 的最小堆，遍历时把每个数放进去，超过 k 个就弹出堆顶，最后堆顶就是第 k 大…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/ds-kth-largest/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ds-kth-largest/#webpage","url":"https://fe.hushifa.top/questions/ds-kth-largest/","name":"数组中第 K 大的元素怎样找？小顶堆和快速选择的复杂度有什么区别？","description":"数据结构与算法面试题：小顶堆的做法是维护一个大小为 k 的最小堆，遍历时把每个数放进去，超过 k 个就弹出堆顶，最后堆顶就是第 k 大…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ds-kth-largest/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ds-kth-largest/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"数据结构与算法面试题","item":"https://fe.hushifa.top/topics/data-structures/"},{"@type":"ListItem","position":3,"name":"数组中第 K 大的元素怎样找？小顶堆和快速选择的复杂度有什么区别？","item":"https://fe.hushifa.top/questions/ds-kth-largest/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BH3ahagJ.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/data-structures/">数据结构与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">数组中第 K 大的元素怎样找？小顶堆和快速选择的复杂度有什么区别？</span></nav><h1 tabindex="-1">数组中第 K 大的元素怎样找？小顶堆和快速选择的复杂度有什么区别？</h1><p class="reading-summary">小顶堆的做法是维护一个大小为 k 的最小堆，遍历时把每个数放进去，超过 k 个就弹出堆顶，最后堆顶就是第 k 大，时间 O(n log k)、空间 O(k)。快速选择借用快速排序的分区，每次只往答案所在的一侧递归，平均 O(n)，最坏 O(n²)，随机选基准可以避免固定输入总落到最坏情况。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>第 K 大的元素，是把数组从大到小排好后排在第 k 位的那个数，重复的数各算一次，<code>[3,2,3,1,2,4,5,5,6]</code> 里第 4 大是 4。最直接的做法是排序后取下标 <code>n - k</code>，时间 O(n log n)，题目希望不靠完整排序来做。</p>
+<p>小顶堆的做法像只保留前 k 名的排行榜：堆里最多放 k 个数，堆顶是这 k 个里最小的。每来一个数就放进去，超过 k 个就把堆顶这个最小的踢掉。遍历完，堆里是最大的 k 个数，堆顶就是第 k 大。每次进出堆 O(log k)，总共 O(n log k)，空间 O(k)。</p>
+<p>快速选择借用快速排序的分区：选一个基准，把比它小的放左边、大的放右边，基准落到的下标就是它排好序后的位置。如果正好是 <code>n - k</code> 就找到了，否则只往答案所在的那一侧继续，另一侧直接丢掉。每轮平均扔掉一半，总共平均 O(n)。</p>
+<p>要注意，快速选择最坏是 O(n²)，基准总选到最大或最小值时每轮只排除一个数，所以基准要随机选。它还会原地打乱数组。堆的做法适合数据流式到达、内存只放得下 k 个的情况；快速选择适合数组已经在内存里、只求一次的情况。</p>
+</blockquote>
+<h2>两种写法</h2>
+<p><code>MinHeap</code> 只写了用得到的方法，<code>push</code> 往上浮、<code>pop</code> 往下沉。快速选择用的是 Lomuto 分区，看 <code>quickSelect</code> 里怎样根据基准的位置决定往哪边走。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MinHeap</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span> = [];
+  }
+  <span class="hljs-keyword">get</span> <span class="hljs-title function_">size</span>() {
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>.<span class="hljs-property">length</span>;
+  }
+  <span class="hljs-title function_">peek</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>[<span class="hljs-number">0</span>];
+  }
+  <span class="hljs-title function_">push</span>(<span class="hljs-params">value</span>) {
+    <span class="hljs-keyword">const</span> a = <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>;
+    a.<span class="hljs-title function_">push</span>(value);
+    <span class="hljs-keyword">let</span> i = a.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">while</span> (i &gt; <span class="hljs-number">0</span>) {
+      <span class="hljs-keyword">const</span> parent = (i - <span class="hljs-number">1</span>) &gt;&gt; <span class="hljs-number">1</span>;
+      <span class="hljs-keyword">if</span> (a[parent] &lt;= a[i]) <span class="hljs-keyword">break</span>;
+      [a[parent], a[i]] = [a[i], a[parent]];
+      i = parent;
+    }
+  }
+  <span class="hljs-title function_">pop</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> a = <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>;
+    <span class="hljs-keyword">const</span> top = a[<span class="hljs-number">0</span>];
+    <span class="hljs-keyword">const</span> last = a.<span class="hljs-title function_">pop</span>();
+    <span class="hljs-keyword">if</span> (a.<span class="hljs-property">length</span>) {
+      a[<span class="hljs-number">0</span>] = last;
+      <span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>;
+      <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+        <span class="hljs-keyword">let</span> smallest = i;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> child <span class="hljs-keyword">of</span> [<span class="hljs-number">2</span> * i + <span class="hljs-number">1</span>, <span class="hljs-number">2</span> * i + <span class="hljs-number">2</span>]) {
+          <span class="hljs-keyword">if</span> (child &lt; a.<span class="hljs-property">length</span> &amp;&amp; a[child] &lt; a[smallest]) smallest = child;
+        }
+        <span class="hljs-keyword">if</span> (smallest === i) <span class="hljs-keyword">break</span>;
+        [a[smallest], a[i]] = [a[i], a[smallest]];
+        i = smallest;
+      }
+    }
+    <span class="hljs-keyword">return</span> top;
+  }
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">findKthLargestByHeap</span>(<span class="hljs-params">nums, k</span>) {
+  <span class="hljs-keyword">const</span> heap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MinHeap</span>();
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> num <span class="hljs-keyword">of</span> nums) {
+    heap.<span class="hljs-title function_">push</span>(num);
+    <span class="hljs-keyword">if</span> (heap.<span class="hljs-property">size</span> &gt; k) heap.<span class="hljs-title function_">pop</span>();
+  }
+  <span class="hljs-keyword">return</span> heap.<span class="hljs-title function_">peek</span>();
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">partition</span>(<span class="hljs-params">a, lo, hi</span>) {
+  <span class="hljs-keyword">const</span> r = lo + <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * (hi - lo + <span class="hljs-number">1</span>));
+  [a[r], a[hi]] = [a[hi], a[r]];
+  <span class="hljs-keyword">const</span> pivot = a[hi];
+  <span class="hljs-keyword">let</span> store = lo;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = lo; i &lt; hi; i++) {
+    <span class="hljs-keyword">if</span> (a[i] &lt; pivot) {
+      [a[i], a[store]] = [a[store], a[i]];
+      store++;
+    }
+  }
+  [a[store], a[hi]] = [a[hi], a[store]];
+  <span class="hljs-keyword">return</span> store;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">findKthLargestByQuickSelect</span>(<span class="hljs-params">nums, k</span>) {
+  <span class="hljs-keyword">const</span> a = [...nums];
+  <span class="hljs-keyword">const</span> target = a.<span class="hljs-property">length</span> - k;
+  <span class="hljs-keyword">let</span> lo = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> hi = a.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+    <span class="hljs-keyword">const</span> p = <span class="hljs-title function_">partition</span>(a, lo, hi);
+    <span class="hljs-keyword">if</span> (p === target) <span class="hljs-keyword">return</span> a[p];
+    <span class="hljs-keyword">if</span> (p &lt; target) lo = p + <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">else</span> hi = p - <span class="hljs-number">1</span>;
+  }
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">findKthLargestByHeap</span>([<span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">4</span>], <span class="hljs-number">2</span>)); <span class="hljs-comment">// 5</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">findKthLargestByHeap</span>([<span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>], <span class="hljs-number">4</span>)); <span class="hljs-comment">// 4</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">findKthLargestByQuickSelect</span>([<span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">4</span>], <span class="hljs-number">2</span>)); <span class="hljs-comment">// 5</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">findKthLargestByQuickSelect</span>([<span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>], <span class="hljs-number">4</span>)); <span class="hljs-comment">// 4</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">findKthLargestByQuickSelect</span>([<span class="hljs-number">7</span>], <span class="hljs-number">1</span>)); <span class="hljs-comment">// 7</span>
+</code></pre></div>
+<p>为什么找第 k 大要用小顶堆，不是大顶堆？堆里要留下的是最大的 k 个数，需要随时踢掉的是这 k 个里最小的那个，小顶堆的堆顶正好就是它，O(1) 能看到，O(log k) 能删掉。用大顶堆也能做，但要把 n 个数全放进去再弹 k − 1 次，空间是 O(n)。</p>
+<p>快速选择里 <code>target = a.length - k</code> 是怎么来的？从小到大排好序后，第 1 大在下标 <code>n - 1</code>，第 k 大在下标 <code>n - k</code>。<code>partition</code> 返回基准最终的下标，它左边都比它小，右边都不小于它，所以它就在排好序以后的位置上。基准下标比目标小，答案只能在右边；比目标大，答案只能在左边。</p>
+<p>示例里的快速选择用了 <code>Math.random</code>，每次运行分区的过程不同，但返回的值是确定的，因为第 k 大的数只有一个值。函数先复制了数组，避免原地交换改掉调用方的数据。</p>
+<h2>复杂度从哪来</h2>
+<p>快速选择平均 O(n) 是这么算的：基准随机时，每轮平均能把范围缩小到原来的一半左右，各轮的扫描量是 n、n/2、n/4……加起来不超过 2n。快速排序要两边都递归，每层都要扫完整个数组，所以是 O(n log n)；快速选择只走一边，省掉了这个 log。最坏情况是每轮基准都选到当前范围的最值，扫描量是 n、n − 1、n − 2……加起来 O(n²)。</p>
+<p>还有一点：Lomuto 分区遇到大量重复值时，等于基准的数全都分到同一边，全是相同的值时会退化。处理方法是三路分区，把等于基准的数单独归为中间一段，目标下标落在这一段里就直接返回。</p>
+<p>堆的做法时间稳定在 O(n log k)，k 很小时接近 O(n)。小顶堆的完整实现和插入、删除的过程见<a href="/questions/alg-priority-queue/">《前端任务怎样按优先级排队？二叉堆为什么不需要每次完整排序？》</a>，快速排序的分区见<a href="/questions/ds-sorting/">《快速排序和归并排序怎样实现？时间复杂度和稳定性有什么区别？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>直接 <code>sort</code> 再取值可以吗？</strong></p>
+<blockquote>
+<p>面试里先说出来没问题，时间 O(n log n)，代码最短。要记得传比较函数，<code>nums.sort((a, b) =&gt; b - a)[k - 1]</code>，因为 MDN 说明不传比较函数时 <code>sort</code> 会按字符串比较，<code>[1, 10, 9].sort()</code> 得到的是 <code>[1, 10, 9]</code>，不是按数值排好的 <code>[1, 9, 10]</code>。还要注意 <code>sort</code> 会修改原数组。</p>
+</blockquote>
+<p><strong>要求返回前 k 大的所有元素呢？</strong></p>
+<blockquote>
+<p>小顶堆跑完以后，堆里剩下的就是前 k 大，只是没有排序，需要的话再排一下，O(k log k)。快速选择找到下标 <code>n - k</code> 时，右边的部分也正好是前 k 大的数。</p>
+</blockquote>
+<p><strong>数据是源源不断到来的，怎么随时给出第 k 大？</strong></p>
+<blockquote>
+<p>用小顶堆。每来一个数就 <code>push</code>，超过 k 个就 <code>pop</code>，任何时候堆顶都是目前为止的第 k 大，空间只要 O(k)。快速选择需要整个数组都在手里，不适合这种场景。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://leetcode.com/problems/kth-largest-element-in-an-array/" target="_blank" rel="noreferrer">LeetCode 215 · Kth Largest Element in an Array<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort" target="_blank" rel="noreferrer">MDN · Array.prototype.sort()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%95%B0%E7%BB%84%E4%B8%AD%E7%AC%AC+K+%E5%A4%A7%E7%9A%84%E5%85%83%E7%B4%A0%E6%80%8E%E6%A0%B7%E6%89%BE%EF%BC%9F%E5%B0%8F%E9%A1%B6%E5%A0%86%E5%92%8C%E5%BF%AB%E9%80%9F%E9%80%89%E6%8B%A9%E7%9A%84%E5%A4%8D%E6%9D%82%E5%BA%A6%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%95%B0%E7%BB%84%E4%B8%AD%E7%AC%AC+K+%E5%A4%A7%E7%9A%84%E5%85%83%E7%B4%A0%E6%80%8E%E6%A0%B7%E6%89%BE%EF%BC%9F%E5%B0%8F%E9%A1%B6%E5%A0%86%E5%92%8C%E5%BF%AB%E9%80%9F%E9%80%89%E6%8B%A9%E7%9A%84%E5%A4%8D%E6%9D%82%E5%BA%A6%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ads-kth-largest%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fds-kth-largest%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：数组中第 K 大的元素怎样找？小顶堆和快速选择的复杂度有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ds-sorting/">快速排序和归并排序怎样实现？时间复杂度和稳定性有什么区别？</a></li><li><a href="/questions/ds-linked-list/">怎样反转链表、判断链表有环？</a></li><li><a href="/questions/ds-dynamic-programming/">动态规划怎么入门？爬楼梯和最长递增子序列怎样做？</a></li><li><a href="/questions/ds-two-sum-hash/">两数之和怎样从 O(n²) 优化到 O(n)？哈希表在算法题里怎么用？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

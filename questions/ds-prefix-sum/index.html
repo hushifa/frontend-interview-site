@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="数据结构与算法面试题：前缀和数组记下前 i 个数的和，任意区间和就是两个前缀和相减，O(1) 得到。" />
+    <title>前缀和与差分怎样用？和为 K 的子数组为什么要配哈希表？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/ds-prefix-sum/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="前缀和与差分怎样用？和为 K 的子数组为什么要配哈希表？" />
+    <meta property="og:description" content="数据结构与算法面试题：前缀和数组记下前 i 个数的和，任意区间和就是两个前缀和相减，O(1) 得到。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/ds-prefix-sum/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ds-prefix-sum/#webpage","url":"https://fe.hushifa.top/questions/ds-prefix-sum/","name":"前缀和与差分怎样用？和为 K 的子数组为什么要配哈希表？","description":"数据结构与算法面试题：前缀和数组记下前 i 个数的和，任意区间和就是两个前缀和相减，O(1) 得到。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ds-prefix-sum/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ds-prefix-sum/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"数据结构与算法面试题","item":"https://fe.hushifa.top/topics/data-structures/"},{"@type":"ListItem","position":3,"name":"前缀和与差分怎样用？和为 K 的子数组为什么要配哈希表？","item":"https://fe.hushifa.top/questions/ds-prefix-sum/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BH3ahagJ.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/data-structures/">数据结构与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">前缀和与差分怎样用？和为 K 的子数组为什么要配哈希表？</span></nav><h1 tabindex="-1">前缀和与差分怎样用？和为 K 的子数组为什么要配哈希表？</h1><p class="reading-summary">前缀和数组记下前 i 个数的和，任意区间和就是两个前缀和相减，O(1) 得到。和为 K 的子数组要数有多少段连续子数组和为 k，遍历时用 Map 记录每个前缀和出现过几次，当前前缀和减 k 出现过几次，就有几段以当前位置结尾，整体 O(n)。数组有负数时滑动窗口不适用。差分是前缀和的逆运算，区间整体加一个数只改两个端点，最后再求一次前缀和。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>前缀和就是提前算好“从开头加到第 i 个数一共是多少”。有了它，任意一段区间的和都能用两个前缀和相减得到，比如 <code>[i, j]</code> 的和等于 <code>prefix[j + 1] - prefix[i]</code>，不用每次重新加一遍。像商品列表里反复问“第 3 到第 8 天的销量合计”，预处理一次 O(n)，之后每次查询 O(1)。</p>
+<p>和为 K 的子数组是问有多少段连续子数组的和等于 k。暴力枚举所有区间是 O(n²)。用前缀和换个角度看：以当前位置结尾、和为 k 的区间，就是前面某个前缀和恰好等于“当前前缀和减 k”。所以遍历时用 Map 记录每个前缀和出现了几次，每到一个位置就查一下 <code>sum - k</code> 出现过几次，累加起来，一遍 O(n)。</p>
+<p>差分是反过来的操作。要把区间 <code>[l, r]</code> 里的数都加上 v，在差分数组的 <code>l</code> 位置加 v、<code>r + 1</code> 位置减 v，所有修改做完以后求一次前缀和，就得到最终数组。多次区间修改、最后统一查询时很省事。</p>
+<p>要注意，Map 要先放一个 <code>0 → 1</code>，代表“一个数都不选”的空前缀，否则从下标 0 开始的区间会漏掉。这题数组里有负数，窗口右扩时和不一定变大，所以不能用滑动窗口。</p>
+</blockquote>
+<h2>和为 K 的子数组</h2>
+<p>先看 <code>prefixSums</code> 怎样求区间和，再看 <code>subarraySum</code> 里先查后存的顺序。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">prefixSums</span>(<span class="hljs-params">nums</span>) {
+  <span class="hljs-keyword">const</span> prefix = [<span class="hljs-number">0</span>];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> num <span class="hljs-keyword">of</span> nums) prefix.<span class="hljs-title function_">push</span>(prefix[prefix.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>] + num);
+  <span class="hljs-keyword">return</span> prefix;
+}
+
+<span class="hljs-keyword">const</span> prefix = <span class="hljs-title function_">prefixSums</span>([<span class="hljs-number">3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">1</span>, <span class="hljs-number">5</span>]);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(prefix.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 0,3,4,8,9,14</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(prefix[<span class="hljs-number">4</span>] - prefix[<span class="hljs-number">1</span>]); <span class="hljs-comment">// 6</span>
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">subarraySum</span>(<span class="hljs-params">nums, k</span>) {
+  <span class="hljs-keyword">const</span> count = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>([[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]]);
+  <span class="hljs-keyword">let</span> sum = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> result = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> num <span class="hljs-keyword">of</span> nums) {
+    sum += num;
+    result += count.<span class="hljs-title function_">get</span>(sum - k) ?? <span class="hljs-number">0</span>;
+    count.<span class="hljs-title function_">set</span>(sum, (count.<span class="hljs-title function_">get</span>(sum) ?? <span class="hljs-number">0</span>) + <span class="hljs-number">1</span>);
+  }
+  <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">subarraySum</span>([<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], <span class="hljs-number">2</span>)); <span class="hljs-comment">// 2</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">subarraySum</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], <span class="hljs-number">3</span>)); <span class="hljs-comment">// 2</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">subarraySum</span>([<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], <span class="hljs-number">0</span>)); <span class="hljs-comment">// 3</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">subarraySum</span>([<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">7</span>, <span class="hljs-number">2</span>, -<span class="hljs-number">3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">2</span>], <span class="hljs-number">7</span>)); <span class="hljs-comment">// 4</span>
+</code></pre></div>
+<p><code>prefix</code> 比原数组多一位，<code>prefix[0]</code> 是 0，表示前 0 个数的和。<code>prefix[4] - prefix[1]</code> 是下标 1 到 3 的和，<code>1 + 4 + 1 = 6</code>。多放这个 0，求从开头开始的区间时也能用同一个公式。</p>
+<p><code>subarraySum</code> 里为什么先查 <code>sum - k</code>，再把 <code>sum</code> 存进去？查的是“当前位置之前”的前缀和，如果先存，k 为 0 时当前前缀和会和自己配对，相当于数进了一个空区间。<code>[1, -1, 0]</code> 找和为 0 的区间，答案是 <code>[1, -1]</code>、<code>[0]</code>、<code>[1, -1, 0]</code> 三段，前缀和依次是 1、0、0，第二个 0 能和空前缀的 0 以及第一个 0 各配一次。</p>
+<p>为什么不用滑动窗口？滑动窗口要求窗口扩大时和只增不减，缩小时只减不增，这样和太大就缩左边、太小就扩右边。数组里有负数时，这个规律不成立，窗口怎么动都可能错过答案。滑动窗口的写法见<a href="/questions/ds-sliding-window/">《滑动窗口怎样求无重复字符的最长子串？》</a>。</p>
+<h2>差分：区间修改再统一求值</h2>
+<p>假设有 5 天的预订记录，每条是“第 l 天到第 r 天，每天多 v 个座位”，最后要求每天一共订了多少。逐天累加是每条 O(区间长度)，用差分每条只改两个位置。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">applyRanges</span>(<span class="hljs-params">length, updates</span>) {
+  <span class="hljs-keyword">const</span> diff = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Array</span>(length + <span class="hljs-number">1</span>).<span class="hljs-title function_">fill</span>(<span class="hljs-number">0</span>);
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> [l, r, v] <span class="hljs-keyword">of</span> updates) {
+    diff[l] += v;
+    diff[r + <span class="hljs-number">1</span>] -= v;
+  }
+  <span class="hljs-keyword">const</span> result = [];
+  <span class="hljs-keyword">let</span> running = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; length; i++) {
+    running += diff[i];
+    result.<span class="hljs-title function_">push</span>(running);
+  }
+  <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">applyRanges</span>(<span class="hljs-number">5</span>, [[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">10</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">20</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">25</span>]]).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 10,55,45,25,25</span>
+</code></pre></div>
+<p>差分数组的第 i 位记的是“第 i 天比前一天多了多少”。<code>diff[l] += v</code> 表示从第 l 天开始多出 v，<code>diff[r + 1] -= v</code> 表示从 r + 1 天开始这部分又没了。最后从左往右累加，每天的值就恢复出来了。数组多开一位，是为了 <code>r</code> 等于最后一天时 <code>r + 1</code> 不越界。</p>
+<h2>常见追问</h2>
+<p><strong>二维矩阵的区域和怎么用前缀和？</strong></p>
+<blockquote>
+<p>定义 <code>P[i][j]</code> 为左上角到 <code>(i-1, j-1)</code> 这个矩形的和，递推是 <code>P[i][j] = P[i-1][j] + P[i][j-1] - P[i-1][j-1] + matrix[i-1][j-1]</code>。任意子矩形的和用四个前缀和加减得到，同样 O(1)。</p>
+</blockquote>
+<p><strong>和为 K 的子数组如果要求最长的那一段呢？</strong></p>
+<blockquote>
+<p>Map 里不再存次数，改存每个前缀和第一次出现的下标。遇到 <code>sum - k</code> 已经出现过，就用当前下标减去它的第一次下标更新答案。只存第一次出现的位置，才能让区间尽量长。</p>
+</blockquote>
+<p><strong>前缀和数组会不会溢出？</strong></p>
+<blockquote>
+<p>JavaScript 的数字是双精度浮点数，整数在 <code>Number.MAX_SAFE_INTEGER</code>（2⁵³ − 1）以内都是精确的。这题的数据范围远小于这个值。数据很大时可以改用 <code>BigInt</code>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://leetcode.com/problems/subarray-sum-equals-k/" target="_blank" rel="noreferrer">LeetCode 560 · Subarray Sum Equals K<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map" target="_blank" rel="noreferrer">MDN · Map<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%89%8D%E7%BC%80%E5%92%8C%E4%B8%8E%E5%B7%AE%E5%88%86%E6%80%8E%E6%A0%B7%E7%94%A8%EF%BC%9F%E5%92%8C%E4%B8%BA+K+%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E9%85%8D%E5%93%88%E5%B8%8C%E8%A1%A8%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%89%8D%E7%BC%80%E5%92%8C%E4%B8%8E%E5%B7%AE%E5%88%86%E6%80%8E%E6%A0%B7%E7%94%A8%EF%BC%9F%E5%92%8C%E4%B8%BA+K+%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E9%85%8D%E5%93%88%E5%B8%8C%E8%A1%A8%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ads-prefix-sum%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fds-prefix-sum%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：前缀和与差分怎样用？和为 K 的子数组为什么要配哈希表？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ds-two-sum-hash/">两数之和怎样从 O(n²) 优化到 O(n)？哈希表在算法题里怎么用？</a></li><li><a href="/questions/ds-sorting/">快速排序和归并排序怎样实现？时间复杂度和稳定性有什么区别？</a></li><li><a href="/questions/ds-linked-list/">怎样反转链表、判断链表有环？</a></li><li><a href="/questions/ds-dynamic-programming/">动态规划怎么入门？爬楼梯和最长递增子序列怎样做？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

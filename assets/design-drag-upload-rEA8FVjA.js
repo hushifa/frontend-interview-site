@@ -1,0 +1,136 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>用户从桌面把几张图片拖到网页的虚线框里，松手后就开始上传。实现时要在这个区域监听 <code>dragover</code> 和 <code>drop</code>。<code>dragover</code> 里必须调用 <code>event.preventDefault()</code>，否则这个元素不算放置目标，<code>drop</code> 根本不会触发。<code>drop</code> 里也要 <code>preventDefault()</code>，然后从 <code>event.dataTransfer.files</code> 拿到文件列表。</p>
+<p>为什么还要在 <code>window</code> 上处理？因为文件没拖准、落在框外时，浏览器的默认行为是直接打开或下载这个文件，页面就被替换了。MDN 的做法是在 <code>window</code> 上也监听 <code>dragover</code> 和 <code>drop</code>，拖的是文件时取消默认行为。</p>
+<p>拖进来的文件、点击选择的文件和粘贴的文件，都应该走同一套校验：类型是否允许、单个文件是否超大、总数是否超限，通过的进入上传队列，不通过的告诉用户原因。粘贴上传就是监听 <code>paste</code> 事件，从 <code>event.clipboardData.files</code> 取文件。</p>
+<p>要注意几点。<code>dataTransfer.files</code> 只能在 <code>drop</code> 里读到，<code>dragover</code> 里是空的；拖入文件夹时 <code>files</code> 拿不到里面的文件，要在 <code>drop</code> 里用 <code>webkitGetAsEntry()</code> 递归读取；<code>file.type</code> 是按扩展名猜的，前端校验只用来提示，服务端必须重新校验。</p>
+</blockquote>
+<h2>让区域可以接收文件</h2>
+<p>下面是最小的拖拽区域。<code>dragover</code> 在拖动经过时会不断触发，所以高亮样式在这里加，离开或放下时去掉。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> dropZone = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;#drop-zone&#x27;</span>);
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">hasFiles</span>(<span class="hljs-params">event</span>) {
+  <span class="hljs-keyword">return</span> [...event.<span class="hljs-property">dataTransfer</span>.<span class="hljs-property">items</span>].<span class="hljs-title function_">some</span>(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> item.<span class="hljs-property">kind</span> === <span class="hljs-string">&#x27;file&#x27;</span>);
+}
+
+dropZone.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;dragover&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (!<span class="hljs-title function_">hasFiles</span>(event)) <span class="hljs-keyword">return</span>;
+  event.<span class="hljs-title function_">preventDefault</span>();
+  event.<span class="hljs-property">dataTransfer</span>.<span class="hljs-property">dropEffect</span> = <span class="hljs-string">&#x27;copy&#x27;</span>;
+  dropZone.<span class="hljs-property">classList</span>.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;active&#x27;</span>);
+});
+
+dropZone.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;dragleave&#x27;</span>, <span class="hljs-function">() =&gt;</span> dropZone.<span class="hljs-property">classList</span>.<span class="hljs-title function_">remove</span>(<span class="hljs-string">&#x27;active&#x27;</span>));
+
+dropZone.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;drop&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+  event.<span class="hljs-title function_">preventDefault</span>();
+  dropZone.<span class="hljs-property">classList</span>.<span class="hljs-title function_">remove</span>(<span class="hljs-string">&#x27;active&#x27;</span>);
+  <span class="hljs-title function_">handleFiles</span>(event.<span class="hljs-property">dataTransfer</span>.<span class="hljs-property">files</span>);
+});
+
+<span class="hljs-comment">// 文件落在区域外时，阻止浏览器直接打开文件。</span>
+<span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;dragover&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (!<span class="hljs-title function_">hasFiles</span>(event)) <span class="hljs-keyword">return</span>;
+  event.<span class="hljs-title function_">preventDefault</span>();
+  <span class="hljs-keyword">if</span> (!dropZone.<span class="hljs-title function_">contains</span>(event.<span class="hljs-property">target</span>)) event.<span class="hljs-property">dataTransfer</span>.<span class="hljs-property">dropEffect</span> = <span class="hljs-string">&#x27;none&#x27;</span>;
+});
+<span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;drop&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (<span class="hljs-title function_">hasFiles</span>(event)) event.<span class="hljs-title function_">preventDefault</span>();
+});
+</code></pre></div>
+<p>为什么 <code>dragover</code> 里判断用的是 <code>items</code>，而不是 <code>files</code>？因为拖动过程中浏览器不让页面读取文件内容。MDN 写明，<code>dataTransfer.files</code> 只有在 <code>dragstart</code> 和 <code>drop</code> 的处理函数里才能读到，在其他拖放事件里访问得到的是空列表。<code>items</code> 里每一项的 <code>kind</code> 和 <code>type</code> 在拖动过程中是可以看的，所以先用它判断“拖的是不是文件”。</p>
+<p><code>dropEffect</code> 控制鼠标指针的样式，设成 <code>copy</code> 会显示加号，设成 <code>none</code> 表示这里不能放。框外设成 <code>none</code>，用户一眼就知道要拖进框里。</p>
+<p>高亮样式还有一个坑：鼠标从区域移到区域内的子元素（比如里面的图标、文字）时，区域本身也会收到 <code>dragleave</code>，高亮会闪一下。常见办法是给子元素加 <code>pointer-events: none</code>，或者用一个计数器在 <code>dragenter</code> 时加一、<code>dragleave</code> 时减一，减到 0 才去掉高亮。另外 MDN 提到，从操作系统拖入文件时不会触发 <code>dragstart</code> 和 <code>dragend</code>，要检测文件拖入拖出，用 <code>dragenter</code> 和 <code>dragleave</code>。</p>
+<h2>统一校验：类型、大小、数量</h2>
+<p>拖拽、点击选择、粘贴拿到的都是 File 列表，交给同一个校验函数。下面的函数是纯逻辑，在 Node 里用 <code>File</code> 构造几个假文件就能运行。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">validateFiles</span>(<span class="hljs-params">files, { accept, maxSize, maxCount }</span>) {
+  <span class="hljs-keyword">const</span> accepted = [];
+  <span class="hljs-keyword">const</span> rejected = [];
+
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> file <span class="hljs-keyword">of</span> files) {
+    <span class="hljs-keyword">if</span> (accepted.<span class="hljs-property">length</span> &gt;= maxCount) {
+      rejected.<span class="hljs-title function_">push</span>(<span class="hljs-string">\`<span class="hljs-subst">\${file.name}</span>：超过 <span class="hljs-subst">\${maxCount}</span> 个\`</span>);
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!accept.<span class="hljs-title function_">some</span>(<span class="hljs-function">(<span class="hljs-params">type</span>) =&gt;</span> file.<span class="hljs-property">type</span> === type)) {
+      rejected.<span class="hljs-title function_">push</span>(<span class="hljs-string">\`<span class="hljs-subst">\${file.name}</span>：类型不支持\`</span>);
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (file.<span class="hljs-property">size</span> &gt; maxSize) {
+      rejected.<span class="hljs-title function_">push</span>(<span class="hljs-string">\`<span class="hljs-subst">\${file.name}</span>：超过大小限制\`</span>);
+    } <span class="hljs-keyword">else</span> {
+      accepted.<span class="hljs-title function_">push</span>(file);
+    }
+  }
+  <span class="hljs-keyword">return</span> { accepted, rejected };
+}
+
+<span class="hljs-keyword">const</span> files = [
+  <span class="hljs-keyword">new</span> <span class="hljs-title class_">File</span>([<span class="hljs-string">&#x27;a&#x27;</span>.<span class="hljs-title function_">repeat</span>(<span class="hljs-number">10</span>)], <span class="hljs-string">&#x27;cat.png&#x27;</span>, { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;image/png&#x27;</span> }),
+  <span class="hljs-keyword">new</span> <span class="hljs-title class_">File</span>([<span class="hljs-string">&#x27;b&#x27;</span>.<span class="hljs-title function_">repeat</span>(<span class="hljs-number">10</span>)], <span class="hljs-string">&#x27;notes.txt&#x27;</span>, { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;text/plain&#x27;</span> }),
+  <span class="hljs-keyword">new</span> <span class="hljs-title class_">File</span>([<span class="hljs-string">&#x27;c&#x27;</span>.<span class="hljs-title function_">repeat</span>(<span class="hljs-number">2000</span>)], <span class="hljs-string">&#x27;big.jpg&#x27;</span>, { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;image/jpeg&#x27;</span> }),
+  <span class="hljs-keyword">new</span> <span class="hljs-title class_">File</span>([<span class="hljs-string">&#x27;d&#x27;</span>.<span class="hljs-title function_">repeat</span>(<span class="hljs-number">10</span>)], <span class="hljs-string">&#x27;dog.jpg&#x27;</span>, { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;image/jpeg&#x27;</span> }),
+  <span class="hljs-keyword">new</span> <span class="hljs-title class_">File</span>([<span class="hljs-string">&#x27;e&#x27;</span>.<span class="hljs-title function_">repeat</span>(<span class="hljs-number">10</span>)], <span class="hljs-string">&#x27;bird.png&#x27;</span>, { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;image/png&#x27;</span> }),
+];
+
+<span class="hljs-keyword">const</span> result = <span class="hljs-title function_">validateFiles</span>(files, {
+  <span class="hljs-attr">accept</span>: [<span class="hljs-string">&#x27;image/png&#x27;</span>, <span class="hljs-string">&#x27;image/jpeg&#x27;</span>],
+  <span class="hljs-attr">maxSize</span>: <span class="hljs-number">1024</span>,
+  <span class="hljs-attr">maxCount</span>: <span class="hljs-number">2</span>,
+});
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(result.<span class="hljs-property">accepted</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">file</span>) =&gt;</span> file.<span class="hljs-property">name</span>).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// cat.png,dog.jpg</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(result.<span class="hljs-property">rejected</span>.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27; | &#x27;</span>)); <span class="hljs-comment">// notes.txt：类型不支持 | big.jpg：超过大小限制 | bird.png：超过 2 个</span>
+</code></pre></div>
+<p>5 个文件里，<code>notes.txt</code> 类型不对，<code>big.jpg</code> 有 2000 字节，超过 1024 的限制，<code>cat.png</code> 和 <code>dog.jpg</code> 通过。<code>bird.png</code> 本身没问题，但已经收满 2 个，所以被拒绝。把被拒绝的原因一起返回，界面上就能逐条告诉用户为什么没传上。</p>
+<p>为什么数量要按“已接受的个数”算，而不是直接截取前两个？因为前面有不合格的文件，直接截取会把合格的挤掉。</p>
+<p><code>file.type</code> 能信吗？MDN 写明，浏览器不会读取文件内容来判断类型，而是根据扩展名推断，把 PNG 改名成 .txt，得到的就是 <code>text/plain</code>；不常见的扩展名还会得到空字符串。MDN 也建议不要把它当作唯一的校验手段。所以前端校验只为了尽早提示用户，服务端必须按文件内容重新判断。</p>
+<h2>拖入的是文件夹怎么办</h2>
+<p>用户拖进来一个文件夹时，<code>dataTransfer.files</code> 里拿不到文件夹里的文件。要在 <code>drop</code> 里对每一项调用 <code>webkitGetAsEntry()</code>，得到文件或目录的入口对象，再递归读取：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">collectFiles</span>(<span class="hljs-params">entry</span>) {
+  <span class="hljs-keyword">if</span> (entry.<span class="hljs-property">isFile</span>) {
+    <span class="hljs-keyword">return</span> [<span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> entry.<span class="hljs-title function_">file</span>(resolve, reject))];
+  }
+  <span class="hljs-keyword">const</span> reader = entry.<span class="hljs-title function_">createReader</span>();
+  <span class="hljs-keyword">const</span> result = [];
+  <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+    <span class="hljs-keyword">const</span> batch = <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> reader.<span class="hljs-title function_">readEntries</span>(resolve, reject));
+    <span class="hljs-keyword">if</span> (batch.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>) <span class="hljs-keyword">break</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> child <span class="hljs-keyword">of</span> batch) result.<span class="hljs-title function_">push</span>(...(<span class="hljs-keyword">await</span> <span class="hljs-title function_">collectFiles</span>(child)));
+  }
+  <span class="hljs-keyword">return</span> result;
+}
+
+dropZone.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;drop&#x27;</span>, <span class="hljs-title function_">async</span> (event) =&gt; {
+  event.<span class="hljs-title function_">preventDefault</span>();
+  <span class="hljs-comment">// 入口对象必须在 drop 事件同步执行期间取出，await 之后数据就读不到了。</span>
+  <span class="hljs-keyword">const</span> entries = [...event.<span class="hljs-property">dataTransfer</span>.<span class="hljs-property">items</span>]
+    .<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> item.<span class="hljs-title function_">webkitGetAsEntry</span>())
+    .<span class="hljs-title function_">filter</span>(<span class="hljs-title class_">Boolean</span>);
+  <span class="hljs-keyword">const</span> nested = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">all</span>(entries.<span class="hljs-title function_">map</span>(collectFiles));
+  <span class="hljs-title function_">handleFiles</span>(nested.<span class="hljs-title function_">flat</span>());
+});
+</code></pre></div>
+<p>为什么 <code>readEntries</code> 要放在循环里反复调用？因为它是分批返回的。MDN 写明，Chromium 系浏览器一次最多只返回 100 项，要拿全就必须在同一个 reader 上反复调用，直到返回空数组为止。只调用一次，文件多的文件夹就会漏文件。</p>
+<p>为什么要先把入口对象全部取出来，再去 <code>await</code>？MDN 写明，<code>webkitGetAsEntry()</code> 只有在 <code>dragstart</code> 和 <code>drop</code> 的处理函数里才能读取数据，在别的时机调用会返回 <code>null</code>。处理函数遇到第一个 <code>await</code> 就返回了，之后再调用就拿不到，所以要在同步部分先取完。这个方法目前带着 <code>webkit</code> 前缀，Firefox 也用这个名字实现，MDN 提醒将来可能改名为 <code>getAsEntry()</code>。</p>
+<h2>粘贴上传</h2>
+<p>用户截图后直接 Ctrl+V，也是常见需求。粘贴事件的 <code>clipboardData</code> 和拖放用的是同一种 <code>DataTransfer</code> 对象，MDN 写明粘贴时可以在 <code>paste</code> 处理函数里通过 <code>clipboardData</code> 读到文件：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;paste&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> files = event.<span class="hljs-property">clipboardData</span>?.<span class="hljs-property">files</span>;
+  <span class="hljs-keyword">if</span> (!files || files.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span>;
+  event.<span class="hljs-title function_">preventDefault</span>();
+  <span class="hljs-title function_">handleFiles</span>(files);
+});
+</code></pre></div>
+<p>没有文件时直接返回，不调用 <code>preventDefault()</code>，这样在输入框里粘贴文字仍然正常。拿到的文件交给同一个 <code>handleFiles</code>，所以校验、预览、上传都不用再写一遍。</p>
+<h2>和上传流程怎样衔接</h2>
+<p><code>handleFiles</code> 校验通过以后，给每个文件生成本地预览，放进上传队列，限制同时上传的个数，并显示每个文件的进度和失败重试。预览的写法见<a href="/questions/alg-image-upload-preview/">《图片上传前怎样本地预览？FileReader 和 URL.createObjectURL 有什么区别？》</a>；单个文件很大时要分片上传，见<a href="/questions/design-large-upload/">《大文件上传怎样设计分片、断点续传、秒传和并发控制？》</a>。</p>
+<p>拖拽区域也要保留一个 <code>&lt;input type=&quot;file&quot; multiple&gt;</code>，点击区域就能打开文件选择框。只靠拖拽，键盘用户和触屏用户就没法上传。在页面里拖动元素排序是另一回事，见<a href="/questions/design-drag-sort/">《怎样实现拖拽排序？HTML5 拖放 API 和 Pointer 事件怎么选？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>为什么我的 drop 事件不触发？</strong></p>
+<blockquote>
+<p>最常见的原因是 <code>dragover</code> 里没有调用 <code>preventDefault()</code>。MDN 写明，元素必须取消 <code>dragover</code> 事件，<code>drop</code> 事件才会触发。</p>
+</blockquote>
+<p><strong>拖拽区域能限制只接受图片吗？</strong></p>
+<blockquote>
+<p>可以在 <code>dragover</code> 里检查 <code>dataTransfer.items</code> 每一项的 <code>type</code>，不是图片就把 <code>dropEffect</code> 设成 <code>none</code>，用户会看到禁止的指针。但这只是提示，放下后的校验和服务端校验仍然要做。</p>
+</blockquote>
+<p><strong>拖拽上传还要保留点击选择吗？</strong></p>
+<blockquote>
+<p>要。不是所有用户都能拖拽，比如只用键盘的用户、很多触屏设备上的用户。把 <code>&lt;input type=&quot;file&quot;&gt;</code> 放在区域里，点击区域就能选择文件，选出来的文件同样交给 <code>handleFiles</code>。</p>
+</blockquote>`};export{e as default};

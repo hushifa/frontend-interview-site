@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="手写与算法面试题：用户选好图片后，用 URL.createObjectURL(file) 同步生成一个 blob 地址赋给 img.src 即可预览，地址短…" />
+    <title>图片上传前怎样本地预览？FileReader 和 URL.createObjectURL 有什么区别？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/alg-image-upload-preview/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="图片上传前怎样本地预览？FileReader 和 URL.createObjectURL 有什么区别？" />
+    <meta property="og:description" content="手写与算法面试题：用户选好图片后，用 URL.createObjectURL(file) 同步生成一个 blob 地址赋给 img.src 即可预览，地址短…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/alg-image-upload-preview/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-image-upload-preview/#webpage","url":"https://fe.hushifa.top/questions/alg-image-upload-preview/","name":"图片上传前怎样本地预览？FileReader 和 URL.createObjectURL 有什么区别？","description":"手写与算法面试题：用户选好图片后，用 URL.createObjectURL(file) 同步生成一个 blob 地址赋给 img.src 即可预览，地址短…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-image-upload-preview/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-image-upload-preview/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"图片上传前怎样本地预览？FileReader 和 URL.createObjectURL 有什么区别？","item":"https://fe.hushifa.top/questions/alg-image-upload-preview/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BH3ahagJ.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">图片上传前怎样本地预览？FileReader 和 URL.createObjectURL 有什么区别？</span></nav><h1 tabindex="-1">图片上传前怎样本地预览？FileReader 和 URL.createObjectURL 有什么区别？</h1><p class="reading-summary">用户选好图片后，用 URL.createObjectURL(file) 同步生成一个 blob 地址赋给 img.src 即可预览，地址短、不用读取整个文件，但要在不再显示时调用 revokeObjectURL 释放。FileReader.readAsDataURL 异步读出 base64 的 data URL，是普通字符串，不用释放，适合需要把数据存下来或嵌入的场景。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>用户在 <code>&lt;input type=&quot;file&quot;&gt;</code> 里选了一张头像，上传之前想先在页面上看到。拿到 <code>input.files[0]</code> 这个 File 对象以后，有两种办法把它变成 <code>img</code> 能显示的地址。</p>
+<p>第一种是 <code>URL.createObjectURL(file)</code>，它直接返回一个 <code>blob:</code> 开头的短地址，指向浏览器内存里的这份文件，同步返回，不用先把文件读完。第二种是 <code>FileReader</code> 的 <code>readAsDataURL(file)</code>，它把整个文件读出来编码成 base64，读完后在 <code>load</code> 事件里从 <code>reader.result</code> 拿到 <code>data:image/png;base64,...</code> 这样的长字符串。</p>
+<p>所以单纯预览一般用 object URL，又快又省事。data URL 是普通字符串，不用释放，需要把图片存进 localStorage、或者把 base64 交给别的接口时才用它。</p>
+<p>要注意 object URL 只要还存在，它指向的数据就不能被回收，所以换图、删除预览或组件卸载时要调用 <code>URL.revokeObjectURL()</code>。也别在图片 <code>load</code> 后马上释放，MDN 提醒那样用户就没法右键保存或在新标签打开这张图了。</p>
+</blockquote>
+<h2>用 object URL 预览，并在换图时释放</h2>
+<p>下面把“生成地址”和“释放上一个地址”封装起来。<code>urlApi</code> 在浏览器里传全局的 <code>URL</code>；示例在 Node 里传一个假的对象，记录哪些地址被释放了。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">createPreviewer</span>(<span class="hljs-params">urlApi</span>) {
+  <span class="hljs-keyword">let</span> currentUrl = <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-title function_">show</span>(<span class="hljs-params">file</span>) {
+      <span class="hljs-comment">// 换图前释放上一张，否则旧图片的数据一直不能被回收。</span>
+      <span class="hljs-keyword">if</span> (currentUrl) urlApi.<span class="hljs-title function_">revokeObjectURL</span>(currentUrl);
+      currentUrl = urlApi.<span class="hljs-title function_">createObjectURL</span>(file);
+      <span class="hljs-keyword">return</span> currentUrl;
+    },
+    <span class="hljs-title function_">clear</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-keyword">if</span> (currentUrl) urlApi.<span class="hljs-title function_">revokeObjectURL</span>(currentUrl);
+      currentUrl = <span class="hljs-literal">null</span>;
+    },
+  };
+}
+
+<span class="hljs-keyword">const</span> revoked = [];
+<span class="hljs-keyword">let</span> count = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">const</span> fakeUrlApi = {
+  <span class="hljs-attr">createObjectURL</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-string">`blob:demo-<span class="hljs-subst">${++count}</span>`</span>,
+  <span class="hljs-attr">revokeObjectURL</span>: <span class="hljs-function">(<span class="hljs-params">url</span>) =&gt;</span> revoked.<span class="hljs-title function_">push</span>(url),
+};
+
+<span class="hljs-keyword">const</span> previewer = <span class="hljs-title function_">createPreviewer</span>(fakeUrlApi);
+<span class="hljs-keyword">const</span> file = <span class="hljs-keyword">new</span> <span class="hljs-title class_">File</span>([<span class="hljs-string">&#x27;fake&#x27;</span>], <span class="hljs-string">&#x27;a.png&#x27;</span>, { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;image/png&#x27;</span> });
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(previewer.<span class="hljs-title function_">show</span>(file)); <span class="hljs-comment">// blob:demo-1</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(previewer.<span class="hljs-title function_">show</span>(file)); <span class="hljs-comment">// blob:demo-2</span>
+previewer.<span class="hljs-title function_">clear</span>();
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(revoked.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// blob:demo-1,blob:demo-2</span>
+</code></pre></div>
+<p>同一个文件 <code>show</code> 了两次，得到两个不同的地址。这和 MDN 的说法一致：每调用一次 <code>createObjectURL()</code> 都会生成一个新地址，即使是同一个对象。所以不能指望“同一张图只占一份”，每个地址都要各自释放。</p>
+<p>为什么非释放不可？MDN 写明，只要还有一个 object URL 有效，它背后的数据就不能被垃圾回收。浏览器会在文档卸载时自动释放，可是单页应用里页面一直不卸载，用户反复换图，旧图片就一直占着内存。所以 <code>show</code> 里先释放上一个，<code>clear</code> 在删除预览或组件卸载时调用。</p>
+<p>在浏览器里接上文件选择框是这样的：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> previewer = <span class="hljs-title function_">createPreviewer</span>(<span class="hljs-variable constant_">URL</span>);
+
+input.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;change&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> file = input.<span class="hljs-property">files</span>?.[<span class="hljs-number">0</span>];
+  <span class="hljs-keyword">if</span> (!file || !file.<span class="hljs-property">type</span>.<span class="hljs-title function_">startsWith</span>(<span class="hljs-string">&#x27;image/&#x27;</span>)) <span class="hljs-keyword">return</span>;
+  preview.<span class="hljs-property">src</span> = previewer.<span class="hljs-title function_">show</span>(file);
+});
+</code></pre></div>
+<h2>用 FileReader 读成 data URL</h2>
+<p><code>readAsDataURL</code> 没有返回值，读取是异步的，结果要在事件里拿：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> reader = <span class="hljs-keyword">new</span> <span class="hljs-title class_">FileReader</span>();
+reader.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;load&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  preview.<span class="hljs-property">src</span> = reader.<span class="hljs-property">result</span>; <span class="hljs-comment">// data:image/png;base64,...</span>
+});
+reader.<span class="hljs-title function_">readAsDataURL</span>(file);
+</code></pre></div>
+<p>为什么预览大图时不推荐它？因为它要把整个文件读完、编码成 base64 才能显示，base64 每 3 个字节变成 4 个字符，字符串比原文件大约三分之一。而 object URL 同步返回一个很短的地址，图片数据由浏览器直接加载。</p>
+<p>可是 data URL 也有自己的好处：它就是一个字符串，不依赖当前文档，不用手动释放，可以存起来下次再用。MDN 还提醒，<code>reader.result</code> 开头带着 <code>data:image/png;base64,</code> 这样的声明，只要 base64 部分时要先把逗号前面的去掉。</p>
+<h2>两种方式怎么选</h2>
+<p>只是上传前看一眼，用 object URL。要把图片存进本地存储、塞进 JSON 发给只收 base64 的接口，用 data URL。要读文件的原始字节做处理，比如计算哈希、裁剪压缩，用 <code>file.arrayBuffer()</code> 或者把图片画到 Canvas 上，这两种地址都不是必需的。File、Blob 本身的关系见<a href="/questions/api-files/">《File、Blob 和 object URL 怎样用于文件预览？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>图片太大，想压缩后再上传怎么办？</strong></p>
+<blockquote>
+<p>可以先把图片画到 Canvas 上缩小，再用 <code>canvas.toBlob()</code> 生成一个新的 Blob 上传。预览只是给用户看的，真正上传什么文件由你决定。</p>
+</blockquote>
+<p><strong>前端检查了 <code>file.type</code>，服务端还要校验吗？</strong></p>
+<blockquote>
+<p>要。<code>file.type</code> 是浏览器给出的类型，通常根据扩展名推断，改个扩展名就能骗过去。前端检查只用来提示用户，服务端必须按文件内容重新校验。</p>
+</blockquote>
+<p><strong>React 组件里怎样释放 object URL？</strong></p>
+<blockquote>
+<p>在 <code>useEffect</code> 里根据当前文件创建地址，返回的清理函数里调用 <code>URL.revokeObjectURL</code>。换文件时旧的 effect 被清理，组件卸载时也会清理，就不会漏掉。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL_static" target="_blank" rel="noreferrer">MDN · URL.createObjectURL()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Schemes/blob" target="_blank" rel="noreferrer">MDN · blob URLs<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL" target="_blank" rel="noreferrer">MDN · FileReader.readAsDataURL()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/Blob/type" target="_blank" rel="noreferrer">MDN · Blob.type<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E5%89%8D%E6%80%8E%E6%A0%B7%E6%9C%AC%E5%9C%B0%E9%A2%84%E8%A7%88%EF%BC%9FFileReader+%E5%92%8C+URL.createObjectURL+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E5%89%8D%E6%80%8E%E6%A0%B7%E6%9C%AC%E5%9C%B0%E9%A2%84%E8%A7%88%EF%BC%9FFileReader+%E5%92%8C+URL.createObjectURL+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-image-upload-preview%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-image-upload-preview%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：图片上传前怎样本地预览？FileReader 和 URL.createObjectURL 有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-debounce/">怎样实现只在停止调用后执行的防抖函数？</a></li><li><a href="/questions/alg-throttle/">怎样实现首沿节流？它与尾沿节流、防抖有什么区别？</a></li><li><a href="/questions/alg-array-unique-flat/">怎样实现数组去重和数组扁平化？</a></li><li><a href="/questions/alg-call-apply-bind/">怎样手写 call、apply 和 bind？用 new 调用 bind 返回的函数会怎样？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

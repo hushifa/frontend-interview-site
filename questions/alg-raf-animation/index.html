@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="手写与算法面试题：每一帧用 requestAnimationFrame 安排下一帧，回调里用时间戳减去开始时间算出进度，再经过缓动函数得到当前位置…" />
+    <title>怎样用 requestAnimationFrame 实现平滑动画？比如回到顶部</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/alg-raf-animation/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="怎样用 requestAnimationFrame 实现平滑动画？比如回到顶部" />
+    <meta property="og:description" content="手写与算法面试题：每一帧用 requestAnimationFrame 安排下一帧，回调里用时间戳减去开始时间算出进度，再经过缓动函数得到当前位置…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/alg-raf-animation/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-raf-animation/#webpage","url":"https://fe.hushifa.top/questions/alg-raf-animation/","name":"怎样用 requestAnimationFrame 实现平滑动画？比如回到顶部","description":"手写与算法面试题：每一帧用 requestAnimationFrame 安排下一帧，回调里用时间戳减去开始时间算出进度，再经过缓动函数得到当前位置…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-raf-animation/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-raf-animation/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"怎样用 requestAnimationFrame 实现平滑动画？比如回到顶部","item":"https://fe.hushifa.top/questions/alg-raf-animation/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BH3ahagJ.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样用 requestAnimationFrame 实现平滑动画？比如回到顶部</span></nav><h1 tabindex="-1">怎样用 requestAnimationFrame 实现平滑动画？比如回到顶部</h1><p class="reading-summary">每一帧用 requestAnimationFrame 安排下一帧，回调里用时间戳减去开始时间算出进度，再经过缓动函数得到当前位置；进度到 1 就停。按时间而不是按帧数算，高刷新率屏幕上动画才不会变快。保存最新的请求 ID，用 cancelAnimationFrame 取消。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>比如点“回到顶部”按钮，页面在 300 毫秒内从当前位置滑到顶部，先快后慢。做法是调用 <code>requestAnimationFrame(step)</code>，浏览器在下一次绘制前调用 <code>step</code>，<code>step</code> 里算出这一帧的位置，没结束就再调用一次 <code>requestAnimationFrame</code>，一帧接一帧。</p>
+<p>关键是按时间算进度，不按帧数。回调会收到一个时间戳，用它减去开始时间、除以总时长，得到 0 到 1 的进度。如果每帧固定移动 10 像素，60Hz 和 120Hz 的屏幕上速度会差一倍，MDN 也专门提醒了这一点。</p>
+<p>进度再交给缓动函数，比如 <code>1 - (1 - t) ** 3</code>，得到“先快后慢”的效果，位置等于起点加上距离乘以缓动后的值。</p>
+<p>要注意取消和边界。<code>requestAnimationFrame</code> 返回一个 ID，每一帧都是新的，所以要保存最新的 ID，用户中途滚动或组件卸载时调用 <code>cancelAnimationFrame</code>。另外后台标签页里大多数浏览器会暂停这些回调；只是想平滑滚动的话，<code>window.scrollTo({ top: 0, behavior: &#x27;smooth&#x27; })</code> 就够了。</p>
+</blockquote>
+<h2>手写一个通用的 animate</h2>
+<p>下面的 <code>animate</code> 不直接依赖浏览器，<code>raf</code> 和 <code>caf</code> 作为参数传进来。在浏览器里传 <code>requestAnimationFrame</code> 和 <code>cancelAnimationFrame</code>；示例在 Node 里用一个假的帧队列手动推进时间，这样能看清每一帧算出的值。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">easeOutCubic</span>(<span class="hljs-params">t</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-number">1</span> - <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">pow</span>(<span class="hljs-number">1</span> - t, <span class="hljs-number">3</span>);
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">animate</span>(<span class="hljs-params">{ <span class="hljs-keyword">from</span>, to, duration, easing, onUpdate, raf, caf }</span>) {
+  <span class="hljs-keyword">let</span> start = <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">let</span> id = <span class="hljs-literal">null</span>;
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">step</span>(<span class="hljs-params">timestamp</span>) {
+    <span class="hljs-keyword">if</span> (start === <span class="hljs-literal">null</span>) start = timestamp;
+    <span class="hljs-comment">// 按经过的时间算进度，帧率高低只影响画得多细，不影响总时长。</span>
+    <span class="hljs-keyword">const</span> progress = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>((timestamp - start) / duration, <span class="hljs-number">1</span>);
+    <span class="hljs-title function_">onUpdate</span>(<span class="hljs-keyword">from</span> + (to - <span class="hljs-keyword">from</span>) * <span class="hljs-title function_">easing</span>(progress));
+    id = progress &lt; <span class="hljs-number">1</span> ? <span class="hljs-title function_">raf</span>(step) : <span class="hljs-literal">null</span>;
+  }
+
+  id = <span class="hljs-title function_">raf</span>(step);
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">cancel</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">if</span> (id !== <span class="hljs-literal">null</span>) <span class="hljs-title function_">caf</span>(id);
+    id = <span class="hljs-literal">null</span>;
+  };
+}
+
+<span class="hljs-comment">// 在 Node 里用一个假的帧队列代替浏览器，手动推进时间。</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">createFakeFrames</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> callbacks = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+  <span class="hljs-keyword">let</span> nextId = <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-title function_">raf</span>(<span class="hljs-params">callback</span>) {
+      callbacks.<span class="hljs-title function_">set</span>(nextId, callback);
+      <span class="hljs-keyword">return</span> nextId++;
+    },
+    <span class="hljs-title function_">caf</span>(<span class="hljs-params">id</span>) {
+      callbacks.<span class="hljs-title function_">delete</span>(id);
+    },
+    <span class="hljs-title function_">tick</span>(<span class="hljs-params">time</span>) {
+      <span class="hljs-keyword">const</span> pending = [...callbacks.<span class="hljs-title function_">values</span>()];
+      callbacks.<span class="hljs-title function_">clear</span>();
+      pending.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">callback</span>) =&gt;</span> <span class="hljs-title function_">callback</span>(time));
+    },
+  };
+}
+
+<span class="hljs-keyword">const</span> frames = <span class="hljs-title function_">createFakeFrames</span>();
+<span class="hljs-keyword">const</span> positions = [];
+<span class="hljs-title function_">animate</span>({
+  <span class="hljs-attr">from</span>: <span class="hljs-number">1000</span>,
+  <span class="hljs-attr">to</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">300</span>,
+  <span class="hljs-attr">easing</span>: easeOutCubic,
+  <span class="hljs-attr">onUpdate</span>: <span class="hljs-function">(<span class="hljs-params">y</span>) =&gt;</span> positions.<span class="hljs-title function_">push</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">round</span>(y)),
+  <span class="hljs-attr">raf</span>: frames.<span class="hljs-property">raf</span>,
+  <span class="hljs-attr">caf</span>: frames.<span class="hljs-property">caf</span>,
+});
+[<span class="hljs-number">0</span>, <span class="hljs-number">100</span>, <span class="hljs-number">200</span>, <span class="hljs-number">300</span>, <span class="hljs-number">400</span>].<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">time</span>) =&gt;</span> frames.<span class="hljs-title function_">tick</span>(time));
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(positions.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 1000,296,37,0</span>
+
+<span class="hljs-keyword">const</span> slow = <span class="hljs-title function_">createFakeFrames</span>();
+<span class="hljs-keyword">const</span> halfway = [];
+<span class="hljs-keyword">const</span> cancel = <span class="hljs-title function_">animate</span>({
+  <span class="hljs-attr">from</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-attr">to</span>: <span class="hljs-number">100</span>,
+  <span class="hljs-attr">duration</span>: <span class="hljs-number">1000</span>,
+  <span class="hljs-attr">easing</span>: <span class="hljs-function">(<span class="hljs-params">t</span>) =&gt;</span> t,
+  <span class="hljs-attr">onUpdate</span>: <span class="hljs-function">(<span class="hljs-params">x</span>) =&gt;</span> halfway.<span class="hljs-title function_">push</span>(x),
+  <span class="hljs-attr">raf</span>: slow.<span class="hljs-property">raf</span>,
+  <span class="hljs-attr">caf</span>: slow.<span class="hljs-property">caf</span>,
+});
+slow.<span class="hljs-title function_">tick</span>(<span class="hljs-number">0</span>);
+slow.<span class="hljs-title function_">tick</span>(<span class="hljs-number">500</span>);
+<span class="hljs-title function_">cancel</span>();
+slow.<span class="hljs-title function_">tick</span>(<span class="hljs-number">1000</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(halfway.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 0,50</span>
+</code></pre></div>
+<p>第一段从 1000 滚到 0，时长 300 毫秒。时间推进了 5 帧，却只输出 4 个值，因为第 300 毫秒那一帧进度已经到 1，<code>step</code> 不再安排下一帧，第 400 毫秒时队列是空的。</p>
+<p>为什么 100 毫秒时就已经到了 296，走完了七成？因为用了缓动函数 <code>easeOutCubic</code>。进度 <code>t</code> 是匀速增长的，经过 <code>1 - (1 - t)^3</code> 变换以后，前期增长快、后期增长慢，画面上就是先快后慢地停下。换成 <code>(t) =&gt; t</code> 就是匀速。</p>
+<p>第二段在 500 毫秒时调用了 <code>cancel()</code>，所以只输出 <code>0,50</code>。取消时清掉的是最新的 ID：<code>step</code> 每一帧都会把 <code>id</code> 更新成新申请的那一个，如果只记住第一次的 ID，取消就不起作用。MDN 还建议不要把 0 当作“没有 ID”的标记，所以这里用 <code>null</code>。</p>
+<h2>为什么要按时间算，而不是每帧走固定距离</h2>
+<p>MDN 写明，回调的调用频率通常和屏幕刷新率一致，常见的是 60Hz，也有 75Hz、120Hz 和 144Hz。如果每帧固定移动 10 像素，120Hz 屏幕一秒调用 120 次，动画就比 60Hz 屏幕快一倍。主线程忙的时候掉了几帧，动画又会变慢。</p>
+<p>按时间算就没有这个问题。回调的第一个参数是一个毫秒时间戳，在窗口里等于 <code>document.timeline.currentTime</code>。用它减去第一帧的时间戳得到经过的时间，除以总时长就是进度。帧多帧少只影响画得细不细，到了 300 毫秒一定在终点。MDN 特意提醒，要用这个参数（或者别的取当前时间的办法）计算每帧的进展，否则动画在高刷新率屏幕上会跑得更快。</p>
+<h2>用在回到顶部</h2>
+<p>在浏览器里把 <code>animate</code> 接到滚动上就行。用户在动画过程中自己滚动滚轮时，应该停止动画，不然会和用户抢滚动条。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">let</span> cancelScroll = <span class="hljs-literal">null</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">scrollToTop</span>(<span class="hljs-params"></span>) {
+  cancelScroll?.();
+  cancelScroll = <span class="hljs-title function_">animate</span>({
+    <span class="hljs-attr">from</span>: <span class="hljs-variable language_">window</span>.<span class="hljs-property">scrollY</span>,
+    <span class="hljs-attr">to</span>: <span class="hljs-number">0</span>,
+    <span class="hljs-attr">duration</span>: <span class="hljs-number">300</span>,
+    <span class="hljs-attr">easing</span>: easeOutCubic,
+    <span class="hljs-attr">onUpdate</span>: <span class="hljs-function">(<span class="hljs-params">y</span>) =&gt;</span> <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">scrollTo</span>(<span class="hljs-number">0</span>, y),
+    <span class="hljs-attr">raf</span>: requestAnimationFrame,
+    <span class="hljs-attr">caf</span>: cancelAnimationFrame,
+  });
+}
+
+<span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;wheel&#x27;</span>, <span class="hljs-function">() =&gt;</span> cancelScroll?.(), { <span class="hljs-attr">passive</span>: <span class="hljs-literal">true</span> });
+</code></pre></div>
+<p>为什么不直接用 CSS 的 <code>scroll-behavior: smooth</code> 或者 <code>scrollTo</code> 的 <code>behavior: &#x27;smooth&#x27;</code>？只要求平滑滚动的话，它们更简单。可是 MDN 说明，<code>smooth</code> 的缓动函数和时长都由浏览器决定，浏览器也可以忽略这个属性。需要指定时长、缓动曲线，或者动画的不是滚动位置而是数字、进度条时，才需要自己用 <code>requestAnimationFrame</code> 写。</p>
+<h2>和 setTimeout 写动画有什么区别</h2>
+<p>用 <code>setTimeout(step, 16)</code> 也能一帧帧地动，可是它的时机和屏幕刷新没有关系，16 毫秒也只是“至少等这么久”，和绘制对不齐时画面就会卡顿。<code>requestAnimationFrame</code> 的回调由浏览器安排在下一次重绘之前，更新和绘制的节奏是一致的。</p>
+<p>另外，MDN 写明大多数浏览器在后台标签页和隐藏的 <code>&lt;iframe&gt;</code> 里会暂停 <code>requestAnimationFrame</code> 的回调，以节省性能和电量。切回来时，下一帧的时间戳已经过了很久，按时间算进度的动画会直接跳到终点，不会从中间慢慢补。定时器的精度问题见<a href="/questions/alg-set-interval/">《怎样用 setTimeout 实现 setInterval？两者有什么区别？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong><code>requestAnimationFrame</code> 为什么每帧都要重新调用？</strong></p>
+<blockquote>
+<p>因为它是一次性的，MDN 原话是“one-shot”，调用一次只安排下一帧的一次回调。想继续动，就要在回调里再调用一次。这也是为什么每帧的 ID 都不一样，取消时要用最新的那个。</p>
+</blockquote>
+<p><strong>React 组件里用它要注意什么？</strong></p>
+<blockquote>
+<p>在 <code>useEffect</code> 里启动动画，把取消函数作为清理函数返回。组件卸载或依赖变化时，React 会调用清理函数，动画就不会在已经卸载的组件上继续跑。</p>
+</blockquote>
+<p><strong>动画要考虑用户关闭了动效吗？</strong></p>
+<blockquote>
+<p>要。系统里开启了“减少动态效果”时，媒体查询 <code>prefers-reduced-motion: reduce</code> 会匹配，这时可以把时长设成 0，直接跳到终点。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame" target="_blank" rel="noreferrer">MDN · Window.requestAnimationFrame()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/cancelAnimationFrame" target="_blank" rel="noreferrer">MDN · Window.cancelAnimationFrame()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/scroll-behavior" target="_blank" rel="noreferrer">MDN · scroll-behavior<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E7%94%A8+requestAnimationFrame+%E5%AE%9E%E7%8E%B0%E5%B9%B3%E6%BB%91%E5%8A%A8%E7%94%BB%EF%BC%9F%E6%AF%94%E5%A6%82%E5%9B%9E%E5%88%B0%E9%A1%B6%E9%83%A8&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E7%94%A8+requestAnimationFrame+%E5%AE%9E%E7%8E%B0%E5%B9%B3%E6%BB%91%E5%8A%A8%E7%94%BB%EF%BC%9F%E6%AF%94%E5%A6%82%E5%9B%9E%E5%88%B0%E9%A1%B6%E9%83%A8%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-raf-animation%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-raf-animation%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样用 requestAnimationFrame 实现平滑动画？比如回到顶部（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-debounce/">怎样实现只在停止调用后执行的防抖函数？</a></li><li><a href="/questions/alg-throttle/">怎样实现首沿节流？它与尾沿节流、防抖有什么区别？</a></li><li><a href="/questions/alg-array-unique-flat/">怎样实现数组去重和数组扁平化？</a></li><li><a href="/questions/alg-call-apply-bind/">怎样手写 call、apply 和 bind？用 new 调用 bind 返回的函数会怎样？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

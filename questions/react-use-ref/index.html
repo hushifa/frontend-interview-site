@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="React面试题：useRef 返回一个在组件整个生命周期里都是同一个的 { current } 对象，改 current 不会触发重新渲染…" />
+    <title>useRef 有哪些用途？它和 useState 有什么区别？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/react-use-ref/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="useRef 有哪些用途？它和 useState 有什么区别？" />
+    <meta property="og:description" content="React面试题：useRef 返回一个在组件整个生命周期里都是同一个的 { current } 对象，改 current 不会触发重新渲染…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/react-use-ref/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-use-ref/#webpage","url":"https://fe.hushifa.top/questions/react-use-ref/","name":"useRef 有哪些用途？它和 useState 有什么区别？","description":"React面试题：useRef 返回一个在组件整个生命周期里都是同一个的 { current } 对象，改 current 不会触发重新渲染…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-use-ref/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-use-ref/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"useRef 有哪些用途？它和 useState 有什么区别？","item":"https://fe.hushifa.top/questions/react-use-ref/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BH3ahagJ.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">useRef 有哪些用途？它和 useState 有什么区别？</span></nav><h1 tabindex="-1">useRef 有哪些用途？它和 useState 有什么区别？</h1><p class="reading-summary">useRef 返回一个在组件整个生命周期里都是同一个的 { current } 对象，改 current 不会触发重新渲染，适合保存定时器 ID、DOM 节点等不参与显示的值。useState 的值每次渲染是一份快照，改它要调用 setter 并触发渲染。渲染期间不要读写 ref.current（惰性初始化除外）；React 19 中函数组件可以直接把 ref 当作 prop 接收。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>做一个秒表，点“开始”时 <code>setInterval</code>，点“停止”时要 <code>clearInterval</code>，那个定时器 ID 存在哪里？存在普通变量里，下次渲染函数重新执行就丢了；存在 state 里，又会白白多渲染一次。这时就用 <code>useRef</code>。</p>
+<p><code>useRef(initialValue)</code> 返回一个 <code>{ current: initialValue }</code> 对象，组件存在多久，它就一直是同一个对象。你可以随时改 <code>current</code>，但 React 不知道你改了，所以不会重新渲染。这就是它和 <code>useState</code> 最大的区别：state 一改就触发渲染，而且每次渲染拿到的是一份不变的快照；ref 是可变的，改了立刻生效，但界面不会跟着变。</p>
+<p>所以 ref 适合保存不影响显示的值，比如定时器 ID、上一次的值，还有通过 <code>ref</code> 属性拿到的 DOM 节点，用来聚焦、滚动、测量。要显示在页面上的数据，应该用 state。</p>
+<p>要注意，渲染期间不要读写 <code>ref.current</code>，只有 <code>if (ref.current === null)</code> 这种只在首次执行的初始化例外，否则组件的行为就难以预测。另外在 React 19 里，函数组件可以把 <code>ref</code> 当作普通 prop 接收，不再需要 <code>forwardRef</code>。</p>
+</blockquote>
+<h2>用 ref 保存定时器 ID</h2>
+<p>下面的秒表要显示经过的时间，所以 <code>startTime</code> 和 <code>now</code> 放在 state 里；定时器 ID 不显示，放在 ref 里。</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { useRef, useState } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Stopwatch</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [startTime, setStartTime] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">null</span>);
+  <span class="hljs-keyword">const</span> [now, setNow] = <span class="hljs-title function_">useState</span>(<span class="hljs-literal">null</span>);
+  <span class="hljs-keyword">const</span> intervalRef = <span class="hljs-title function_">useRef</span>(<span class="hljs-literal">null</span>);
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">handleStart</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-title function_">setStartTime</span>(<span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>());
+    <span class="hljs-title function_">setNow</span>(<span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>());
+    <span class="hljs-built_in">clearInterval</span>(intervalRef.<span class="hljs-property">current</span>);
+    intervalRef.<span class="hljs-property">current</span> = <span class="hljs-built_in">setInterval</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">setNow</span>(<span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>()), <span class="hljs-number">10</span>);
+  }
+
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">handleStop</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-built_in">clearInterval</span>(intervalRef.<span class="hljs-property">current</span>);
+  }
+
+  <span class="hljs-keyword">const</span> secondsPassed = startTime != <span class="hljs-literal">null</span> &amp;&amp; now != <span class="hljs-literal">null</span> ? (now - startTime) / <span class="hljs-number">1000</span> : <span class="hljs-number">0</span>;
+
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>已经过 {secondsPassed.toFixed(3)} 秒<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{handleStart}</span>&gt;</span>开始<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{handleStop}</span>&gt;</span>停止<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/&gt;</span></span>
+  );
+}
+</code></pre></div>
+<p>为什么 ID 不能放在普通变量 <code>let intervalId</code> 里？因为每次 <code>setNow</code> 都会让组件重新渲染，函数从头执行一遍，<code>let</code> 声明的变量又回到初始值，<code>handleStop</code> 拿到的就不是当初那个 ID 了。ref 对象由 React 保存，每次渲染返回的都是同一个，所以 <code>handleStop</code> 能读到 <code>handleStart</code> 写进去的值。</p>
+<p>为什么不放进 state？可以，但没必要。ID 不显示在页面上，存进 state 每次开始都会多触发一次渲染。react.dev 的说法是：一个值需要保存，但不影响渲染逻辑，就选 ref。</p>
+<h2>ref 和 state 到底差在哪</h2>
+<p>用 state 时，<code>setCount(count + 1)</code> 之后紧接着读 <code>count</code>，读到的还是旧值，因为这次渲染的 <code>count</code> 是一份快照，新值要等下一次渲染才有，详见<a href="/questions/react-state/">《为什么调用 setState 后，当前变量还是旧值？》</a>。ref 不一样，在事件处理器里写 <code>ref.current = 5</code>，下一行读到的就是 5。</p>
+<p>可是反过来，正因为 React 不知道 ref 什么时候变了，改 ref 不会更新界面。如果把计数器的数字存在 ref 里，点按钮时 <code>current</code> 确实在加，页面上的数字却一直不动。所以判断标准很简单：要显示的用 state，不显示、只在事件或 Effect 里用的用 ref。</p>
+<h2>为什么渲染期间不能读写 ref.current</h2>
+<p>React 要求组件是纯函数，同样的 props 和 state 应该渲染出同样的结果。如果在渲染时读 <code>ref.current</code> 并用它决定显示内容，结果就取决于一个 React 不知道何时变化的值；在渲染时写它，严格模式下组件函数会被调用两次，副作用也会发生两次。所以 react.dev 规定，渲染期间不要读也不要写 <code>ref.current</code>，读写应该放在事件处理器或 Effect 里。</p>
+<p>唯一的例外是惰性初始化，比如只想创建一次的播放器对象：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">Video</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> playerRef = <span class="hljs-title function_">useRef</span>(<span class="hljs-literal">null</span>);
+  <span class="hljs-keyword">if</span> (playerRef.<span class="hljs-property">current</span> === <span class="hljs-literal">null</span>) {
+    playerRef.<span class="hljs-property">current</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">VideoPlayer</span>();
+  }
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre></div>
+<p>这样写是允许的，因为条件只在第一次渲染时成立，结果每次都一样。为什么不直接写 <code>useRef(new VideoPlayer())</code>？因为初始值虽然只在第一次被用到，可是 <code>new VideoPlayer()</code> 这个表达式每次渲染都会执行，白白创建对象。</p>
+<h2>用 ref 操作 DOM，以及 React 19 的 ref prop</h2>
+<p>把 ref 对象传给 JSX 元素的 <code>ref</code> 属性，React 会在创建 DOM 节点后把节点放进 <code>current</code>，之后就能在事件里调用 <code>inputRef.current.focus()</code>。</p>
+<p>自己写的组件默认不会把内部 DOM 暴露出去。在 React 19 里，函数组件可以直接从 props 里取出 <code>ref</code>，再转交给内部的元素：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">MyInput</span>(<span class="hljs-params">{ label, ref, ...otherProps }</span>) {
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>
+      {label}
+      <span class="hljs-tag">&lt;<span class="hljs-name">input</span> {<span class="hljs-attr">...otherProps</span>} <span class="hljs-attr">ref</span>=<span class="hljs-string">{ref}</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Form</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> inputRef = <span class="hljs-title function_">useRef</span>(<span class="hljs-literal">null</span>);
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">MyInput</span> <span class="hljs-attr">label</span>=<span class="hljs-string">&quot;姓名&quot;</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">{inputRef}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> inputRef.current.focus()}&gt;聚焦<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/&gt;</span></span>
+  );
+}
+</code></pre></div>
+<p>以前要用 <code>forwardRef</code> 包一层才能接收 ref。react.dev 写明，React 19 里 <code>forwardRef</code> 已不再必要，以后的版本会将它废弃。至于 ref 回调、<code>useLayoutEffect</code> 里测量 DOM，见<a href="/questions/react-ref-layout-effect/">《useRef、useEffect 和 useLayoutEffect 有什么差别？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>怎样拿到上一次渲染时的值？</strong></p>
+<blockquote>
+<p>常见写法是在 Effect 里把当前值写进 ref，下一次渲染后就能在 Effect 或事件里读到上一次的值。但不要在渲染时读这个 ref 去显示内容；只是想根据旧值算新显示的话，react.dev 建议用一个 state 记住上一次的 prop，在渲染时比较。</p>
+</blockquote>
+<p><strong>改了 <code>ref.current</code>，为什么页面没变？</strong></p>
+<blockquote>
+<p>因为改 ref 不会触发重新渲染，React 也不知道它变了。要让界面更新，这个值应该放进 state。</p>
+</blockquote>
+<p><strong>严格模式下 ref 会被创建两次吗？</strong></p>
+<blockquote>
+<p>会。开发环境的严格模式会把组件函数调用两次，每个 ref 对象也会创建两次，其中一份被丢弃。组件是纯函数时这不影响结果，生产环境也不会这样。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/reference/react/useRef" target="_blank" rel="noreferrer">React · useRef<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://react.dev/learn/referencing-values-with-refs" target="_blank" rel="noreferrer">React · Referencing Values with Refs<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://react.dev/reference/react/forwardRef" target="_blank" rel="noreferrer">React · forwardRef<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+useRef+%E6%9C%89%E5%93%AA%E4%BA%9B%E7%94%A8%E9%80%94%EF%BC%9F%E5%AE%83%E5%92%8C+useState+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AuseRef+%E6%9C%89%E5%93%AA%E4%BA%9B%E7%94%A8%E9%80%94%EF%BC%9F%E5%AE%83%E5%92%8C+useState+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-use-ref%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-use-ref%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：useRef 有哪些用途？它和 useState 有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-hooks-internals/">Hooks 在 React 内部是怎样保存状态的？为什么靠调用顺序区分？</a></li><li><a href="/questions/react-use-reducer/">useReducer 什么时候比 useState 更合适？</a></li><li><a href="/questions/react-ref-layout-effect/">useRef、useEffect 和 useLayoutEffect 有什么差别？</a></li><li><a href="/questions/react-action-state/">useActionState 如何把异步 Action 的结果变成组件状态？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

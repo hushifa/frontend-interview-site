@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="数据结构与算法面试题：三种遍历的区别只在访问当前节点的时机：前序是根左右，中序是左根右，后序是左右根。递归写法只是调整一行的位置。" />
+    <title>二叉树的前序、中序、后序遍历怎样用递归和迭代写？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/ds-tree-iterative-traversal/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="二叉树的前序、中序、后序遍历怎样用递归和迭代写？ · 前端知库" />
+    <meta property="og:description" content="数据结构与算法面试题：三种遍历的区别只在访问当前节点的时机：前序是根左右，中序是左根右，后序是左右根。递归写法只是调整一行的位置。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/ds-tree-iterative-traversal/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ds-tree-iterative-traversal/#webpage","url":"https://fe.hushifa.top/questions/ds-tree-iterative-traversal/","name":"二叉树的前序、中序、后序遍历怎样用递归和迭代写？ · 前端知库","description":"数据结构与算法面试题：三种遍历的区别只在访问当前节点的时机：前序是根左右，中序是左根右，后序是左右根。递归写法只是调整一行的位置。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ds-tree-iterative-traversal/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ds-tree-iterative-traversal/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"数据结构与算法面试题","item":"https://fe.hushifa.top/topics/data-structures/"},{"@type":"ListItem","position":3,"name":"二叉树的前序、中序、后序遍历怎样用递归和迭代写？","item":"https://fe.hushifa.top/questions/ds-tree-iterative-traversal/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BH3ahagJ.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/data-structures/">数据结构与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">二叉树的前序、中序、后序遍历怎样用递归和迭代写？</span></nav><h1 tabindex="-1">二叉树的前序、中序、后序遍历怎样用递归和迭代写？</h1><p class="reading-summary">三种遍历的区别只在访问当前节点的时机：前序是根左右，中序是左根右，后序是左右根。递归写法只是调整一行的位置。迭代写法用显式栈模拟调用栈：前序先压右再压左；中序一路往左压栈，弹出时访问再转向右子树；后序可以按根右左的顺序访问再整体反转。时间都是 O(n)。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>前序、中序、后序都是深度优先遍历，区别只在什么时候记录当前节点：前序是先记自己再走左右子树，中序是走完左子树再记自己，后序是左右子树都走完才记自己。名字里的“前中后”说的就是根节点的位置。</p>
+<p>递归写法三种几乎一样，只是把“记录当前节点”这一行放在两次递归调用的前面、中间或后面。迭代写法要自己用数组当栈，代替函数调用栈：前序弹出就访问，先压右子节点再压左子节点，这样左边先出栈；中序先一路把左子节点压进栈，压到底再弹出访问，然后转到它的右子树；后序最省事的写法是按“根右左”访问，最后把结果反转成“左右根”。</p>
+<p>中序遍历在二叉搜索树上会得到从小到大的序列，常用来验证二叉搜索树、找第 k 小的数；后序适合先算完子树再算自己的场景，比如统计目录大小。迭代写法的用处是树很深时不会撑爆调用栈。</p>
+<p>要注意，三种写法时间都是 O(n)，栈的大小取决于树高。后序“反转”的写法得到的顺序是对的，但访问节点的真实时机不是后序，如果要在访问时做依赖子树结果的事，需要用记录上一个访问节点的写法。</p>
+</blockquote>
+<h2>递归和迭代六种写法</h2>
+<p>先看三个递归函数里 <code>result.push</code> 的位置，再对比三个迭代函数怎样用栈。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">fromLevelOrder</span>(<span class="hljs-params">values</span>) {
+  <span class="hljs-keyword">if</span> (values.<span class="hljs-property">length</span> === <span class="hljs-number">0</span> || values[<span class="hljs-number">0</span>] === <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">const</span> root = { <span class="hljs-attr">val</span>: values[<span class="hljs-number">0</span>], <span class="hljs-attr">left</span>: <span class="hljs-literal">null</span>, <span class="hljs-attr">right</span>: <span class="hljs-literal">null</span> };
+  <span class="hljs-keyword">const</span> queue = [root];
+  <span class="hljs-keyword">let</span> i = <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> head = <span class="hljs-number">0</span>; i &lt; values.<span class="hljs-property">length</span>; head++) {
+    <span class="hljs-keyword">const</span> node = queue[head];
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> side <span class="hljs-keyword">of</span> [<span class="hljs-string">&#x27;left&#x27;</span>, <span class="hljs-string">&#x27;right&#x27;</span>]) {
+      <span class="hljs-keyword">if</span> (i &lt; values.<span class="hljs-property">length</span> &amp;&amp; values[i] !== <span class="hljs-literal">null</span>) {
+        node[side] = { <span class="hljs-attr">val</span>: values[i], <span class="hljs-attr">left</span>: <span class="hljs-literal">null</span>, <span class="hljs-attr">right</span>: <span class="hljs-literal">null</span> };
+        queue.<span class="hljs-title function_">push</span>(node[side]);
+      }
+      i++;
+    }
+  }
+  <span class="hljs-keyword">return</span> root;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">recursive</span>(<span class="hljs-params">order</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">traverse</span>(<span class="hljs-params">root, result = []</span>) {
+    <span class="hljs-keyword">if</span> (!root) <span class="hljs-keyword">return</span> result;
+    <span class="hljs-keyword">if</span> (order === <span class="hljs-string">&#x27;pre&#x27;</span>) result.<span class="hljs-title function_">push</span>(root.<span class="hljs-property">val</span>);
+    <span class="hljs-title function_">traverse</span>(root.<span class="hljs-property">left</span>, result);
+    <span class="hljs-keyword">if</span> (order === <span class="hljs-string">&#x27;in&#x27;</span>) result.<span class="hljs-title function_">push</span>(root.<span class="hljs-property">val</span>);
+    <span class="hljs-title function_">traverse</span>(root.<span class="hljs-property">right</span>, result);
+    <span class="hljs-keyword">if</span> (order === <span class="hljs-string">&#x27;post&#x27;</span>) result.<span class="hljs-title function_">push</span>(root.<span class="hljs-property">val</span>);
+    <span class="hljs-keyword">return</span> result;
+  };
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">preorder</span>(<span class="hljs-params">root</span>) {
+  <span class="hljs-keyword">const</span> result = [];
+  <span class="hljs-keyword">const</span> stack = root ? [root] : [];
+  <span class="hljs-keyword">while</span> (stack.<span class="hljs-property">length</span>) {
+    <span class="hljs-keyword">const</span> node = stack.<span class="hljs-title function_">pop</span>();
+    result.<span class="hljs-title function_">push</span>(node.<span class="hljs-property">val</span>);
+    <span class="hljs-keyword">if</span> (node.<span class="hljs-property">right</span>) stack.<span class="hljs-title function_">push</span>(node.<span class="hljs-property">right</span>);
+    <span class="hljs-keyword">if</span> (node.<span class="hljs-property">left</span>) stack.<span class="hljs-title function_">push</span>(node.<span class="hljs-property">left</span>);
+  }
+  <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">inorder</span>(<span class="hljs-params">root</span>) {
+  <span class="hljs-keyword">const</span> result = [];
+  <span class="hljs-keyword">const</span> stack = [];
+  <span class="hljs-keyword">let</span> node = root;
+  <span class="hljs-keyword">while</span> (node || stack.<span class="hljs-property">length</span>) {
+    <span class="hljs-keyword">while</span> (node) {
+      stack.<span class="hljs-title function_">push</span>(node);
+      node = node.<span class="hljs-property">left</span>;
+    }
+    node = stack.<span class="hljs-title function_">pop</span>();
+    result.<span class="hljs-title function_">push</span>(node.<span class="hljs-property">val</span>);
+    node = node.<span class="hljs-property">right</span>;
+  }
+  <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">postorder</span>(<span class="hljs-params">root</span>) {
+  <span class="hljs-keyword">const</span> result = [];
+  <span class="hljs-keyword">const</span> stack = root ? [root] : [];
+  <span class="hljs-keyword">while</span> (stack.<span class="hljs-property">length</span>) {
+    <span class="hljs-keyword">const</span> node = stack.<span class="hljs-title function_">pop</span>();
+    result.<span class="hljs-title function_">push</span>(node.<span class="hljs-property">val</span>);
+    <span class="hljs-keyword">if</span> (node.<span class="hljs-property">left</span>) stack.<span class="hljs-title function_">push</span>(node.<span class="hljs-property">left</span>);
+    <span class="hljs-keyword">if</span> (node.<span class="hljs-property">right</span>) stack.<span class="hljs-title function_">push</span>(node.<span class="hljs-property">right</span>);
+  }
+  <span class="hljs-keyword">return</span> result.<span class="hljs-title function_">reverse</span>();
+}
+
+<span class="hljs-keyword">const</span> tree = <span class="hljs-title function_">fromLevelOrder</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">8</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">9</span>]);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">preorder</span>(tree).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 1,2,4,5,6,7,3,8,9</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">inorder</span>(tree).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 4,2,6,5,7,1,3,9,8</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">postorder</span>(tree).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 4,6,7,5,2,9,8,3,1</span>
+
+<span class="hljs-keyword">const</span> same = [<span class="hljs-string">&#x27;pre&#x27;</span>, <span class="hljs-string">&#x27;in&#x27;</span>, <span class="hljs-string">&#x27;post&#x27;</span>].<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">order, i</span>) =&gt;</span>
+  <span class="hljs-title function_">recursive</span>(order)(tree).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>) === [preorder, inorder, postorder][i](tree).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>),
+);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(same.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// true,true,true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">inorder</span>(<span class="hljs-title function_">fromLevelOrder</span>([<span class="hljs-number">1</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>])).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 1,3,2</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">preorder</span>(<span class="hljs-literal">null</span>).<span class="hljs-property">length</span>); <span class="hljs-comment">// 0</span>
+</code></pre></div>
+<p>示例的树和输出取自 LeetCode 三道题的第二个示例。<code>recursive</code> 把三种递归合在一个函数里，只是为了让人看清它们只差 <code>push</code> 的位置。</p>
+<p>前序为什么先压右子节点？栈是后进先出的，后压进去的左子节点会先弹出，所以访问顺序是根、左、右。</p>
+<p>中序的外层循环条件为什么是 <code>node || stack.length</code>？<code>node</code> 不为空表示还有一棵子树没开始走，栈不为空表示还有节点在等着访问。内层循环把左边一路压进栈，弹出的节点左子树一定已经处理完了，这时访问它，再把 <code>node</code> 指向它的右子树，右子树为空的话，下一轮就直接弹出上一层的节点。</p>
+<p>后序为什么能靠反转？把前序的压栈顺序改成先左后右，访问顺序就是“根右左”，整个反转过来正好是“左右根”。代价是结果要全部收集完才能反转，不能边遍历边输出。</p>
+<h2>不反转的后序怎么写</h2>
+<p>如果访问时要立刻用到子树的结果，需要真正按后序访问。做法是在中序的基础上多记一个 <code>prev</code>：弹出前先看栈顶，如果它有右子树、而且右子树还没访问过（<code>top.right !== prev</code>），就转去走右子树；否则才弹出访问它，并把 <code>prev</code> 设成它。多叉树用显式栈做前序遍历的写法见<a href="/questions/alg-tree-traversal/">《怎样用显式栈实现树的前序遍历？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>有没有不用栈也不用递归的遍历？</strong></p>
+<blockquote>
+<p>有，叫 Morris 遍历。它利用叶子节点空着的右指针，临时指回中序的后继节点，走完后再把指针改回来，额外空间是 O(1)。缺点是遍历过程中会临时修改树。</p>
+</blockquote>
+<p><strong>怎样用中序遍历验证二叉搜索树？</strong></p>
+<blockquote>
+<p>二叉搜索树的中序结果一定严格递增。遍历时记住上一个访问的值，遇到当前值不大于上一个值就返回 <code>false</code>，不需要把结果全部存下来。</p>
+</blockquote>
+<p><strong>层序遍历属于这三种吗？</strong></p>
+<blockquote>
+<p>不属于。前中后序都是深度优先，用栈；层序是广度优先，用队列，见<a href="/questions/ds-binary-tree-bfs/">《二叉树怎样层序遍历、求最大深度？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://leetcode.com/problems/binary-tree-preorder-traversal/" target="_blank" rel="noreferrer">LeetCode 144 · Binary Tree Preorder Traversal<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://leetcode.com/problems/binary-tree-inorder-traversal/" target="_blank" rel="noreferrer">LeetCode 94 · Binary Tree Inorder Traversal<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://leetcode.com/problems/binary-tree-postorder-traversal/" target="_blank" rel="noreferrer">LeetCode 145 · Binary Tree Postorder Traversal<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%89%8D%E5%BA%8F%E3%80%81%E4%B8%AD%E5%BA%8F%E3%80%81%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E6%80%8E%E6%A0%B7%E7%94%A8%E9%80%92%E5%BD%92%E5%92%8C%E8%BF%AD%E4%BB%A3%E5%86%99%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%89%8D%E5%BA%8F%E3%80%81%E4%B8%AD%E5%BA%8F%E3%80%81%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E6%80%8E%E6%A0%B7%E7%94%A8%E9%80%92%E5%BD%92%E5%92%8C%E8%BF%AD%E4%BB%A3%E5%86%99%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ads-tree-iterative-traversal%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fds-tree-iterative-traversal%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：二叉树的前序、中序、后序遍历怎样用递归和迭代写？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ds-tree-depth-invert/">怎样求二叉树的最大深度、翻转二叉树、判断对称二叉树？</a></li><li><a href="/questions/ds-stack-problems/">有效括号、最小栈这类栈题怎样做？</a></li><li><a href="/questions/ds-tree-lca/">怎样求二叉树的最近公共祖先？二叉搜索树有什么更简单的做法？</a></li><li><a href="/questions/ds-binary-tree-bfs/">二叉树怎样层序遍历、求最大深度？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

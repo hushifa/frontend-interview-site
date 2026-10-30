@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="数据结构与算法面试题：螺旋矩阵用上下左右四条边界，按右、下、左、上的顺序走完一圈就把对应边界往里收，走横向和纵向之前都要检查边界是否已经交错。" />
+    <title>螺旋矩阵和旋转图像怎样做？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/ds-spiral-rotate-matrix/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="螺旋矩阵和旋转图像怎样做？ · 前端知库" />
+    <meta property="og:description" content="数据结构与算法面试题：螺旋矩阵用上下左右四条边界，按右、下、左、上的顺序走完一圈就把对应边界往里收，走横向和纵向之前都要检查边界是否已经交错。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/ds-spiral-rotate-matrix/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ds-spiral-rotate-matrix/#webpage","url":"https://fe.hushifa.top/questions/ds-spiral-rotate-matrix/","name":"螺旋矩阵和旋转图像怎样做？ · 前端知库","description":"数据结构与算法面试题：螺旋矩阵用上下左右四条边界，按右、下、左、上的顺序走完一圈就把对应边界往里收，走横向和纵向之前都要检查边界是否已经交错。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ds-spiral-rotate-matrix/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ds-spiral-rotate-matrix/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"数据结构与算法面试题","item":"https://fe.hushifa.top/topics/data-structures/"},{"@type":"ListItem","position":3,"name":"螺旋矩阵和旋转图像怎样做？","item":"https://fe.hushifa.top/questions/ds-spiral-rotate-matrix/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BH3ahagJ.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/data-structures/">数据结构与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">螺旋矩阵和旋转图像怎样做？</span></nav><h1 tabindex="-1">螺旋矩阵和旋转图像怎样做？</h1><p class="reading-summary">螺旋矩阵用上下左右四条边界，按右、下、左、上的顺序走完一圈就把对应边界往里收，走横向和纵向之前都要检查边界是否已经交错。旋转图像要原地顺时针转 90 度，可以先沿主对角线转置，再把每一行左右翻转，时间 O(n²)、额外空间 O(1)。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>螺旋矩阵是把一个 m × n 的矩阵从左上角开始，按顺时针一圈圈往里读出来。旋转图像是把一个 n × n 的矩阵顺时针转 90 度，而且要原地修改，不能另开一个矩阵。</p>
+<p>螺旋矩阵用四个变量记住还没读的区域：<code>top</code>、<code>bottom</code>、<code>left</code>、<code>right</code>。先沿 <code>top</code> 这一行从左读到右，读完 <code>top</code> 加 1；再沿 <code>right</code> 这一列往下读，<code>right</code> 减 1；然后沿 <code>bottom</code> 从右往左，<code>bottom</code> 减 1；最后沿 <code>left</code> 往上，<code>left</code> 加 1。这样一圈圈往里收，直到边界交错。</p>
+<p>旋转图像有一个好记的拆法：顺时针转 90 度等于先转置，也就是沿左上到右下的对角线把 <code>[i][j]</code> 和 <code>[j][i]</code> 互换，再把每一行左右翻转。两步都是原地交换，时间 O(n²)，额外空间 O(1)。</p>
+<p>要注意，螺旋矩阵走完上边和右边以后，矩阵可能只剩一行或一列，走下边和左边之前要再检查 <code>top &lt;= bottom</code>、<code>left &lt;= right</code>，否则会重复读。转置时只能交换对角线一侧的元素，<code>j</code> 从 <code>i + 1</code> 开始，全部交换一遍就换回去了。</p>
+</blockquote>
+<h2>螺旋矩阵</h2>
+<p>看走下边和左边之前的两个 <code>if</code>。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">spiralOrder</span>(<span class="hljs-params">matrix</span>) {
+  <span class="hljs-keyword">const</span> result = [];
+  <span class="hljs-keyword">let</span> top = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> bottom = matrix.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">let</span> left = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> right = matrix[<span class="hljs-number">0</span>].<span class="hljs-property">length</span> - <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">while</span> (top &lt;= bottom &amp;&amp; left &lt;= right) {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> j = left; j &lt;= right; j++) result.<span class="hljs-title function_">push</span>(matrix[top][j]);
+    top++;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = top; i &lt;= bottom; i++) result.<span class="hljs-title function_">push</span>(matrix[i][right]);
+    right--;
+    <span class="hljs-keyword">if</span> (top &lt;= bottom) {
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> j = right; j &gt;= left; j--) result.<span class="hljs-title function_">push</span>(matrix[bottom][j]);
+      bottom--;
+    }
+    <span class="hljs-keyword">if</span> (left &lt;= right) {
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = bottom; i &gt;= top; i--) result.<span class="hljs-title function_">push</span>(matrix[i][left]);
+      left++;
+    }
+  }
+  <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">rotate</span>(<span class="hljs-params">matrix</span>) {
+  <span class="hljs-keyword">const</span> n = matrix.<span class="hljs-property">length</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; n; i++) {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> j = i + <span class="hljs-number">1</span>; j &lt; n; j++) {
+      [matrix[i][j], matrix[j][i]] = [matrix[j][i], matrix[i][j]];
+    }
+  }
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> row <span class="hljs-keyword">of</span> matrix) row.<span class="hljs-title function_">reverse</span>();
+  <span class="hljs-keyword">return</span> matrix;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">spiralOrder</span>([[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], [<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>], [<span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>]]).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 1,2,3,6,9,8,7,4,5</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">spiralOrder</span>([[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>], [<span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>], [<span class="hljs-number">9</span>, <span class="hljs-number">10</span>, <span class="hljs-number">11</span>, <span class="hljs-number">12</span>]]).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 1,2,3,4,8,12,11,10,9,5,6,7</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">spiralOrder</span>([[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]]).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 1,2,3</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">spiralOrder</span>([[<span class="hljs-number">1</span>], [<span class="hljs-number">2</span>], [<span class="hljs-number">3</span>]]).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 1,2,3</span>
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(<span class="hljs-title function_">rotate</span>([[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], [<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>], [<span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>]]))); <span class="hljs-comment">// [[7,4,1],[8,5,2],[9,6,3]]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(<span class="hljs-title function_">rotate</span>([[<span class="hljs-number">5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">9</span>, <span class="hljs-number">11</span>], [<span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">8</span>, <span class="hljs-number">10</span>], [<span class="hljs-number">13</span>, <span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>], [<span class="hljs-number">15</span>, <span class="hljs-number">14</span>, <span class="hljs-number">12</span>, <span class="hljs-number">16</span>]]))); <span class="hljs-comment">// [[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(<span class="hljs-title function_">rotate</span>([[<span class="hljs-number">1</span>]]))); <span class="hljs-comment">// [[1]]</span>
+</code></pre></div>
+<p>为什么那两个 <code>if</code> 不能省？看只有一行的 <code>[[1, 2, 3]]</code>。上边读完 1、2、3 以后 <code>top</code> 变成 1，比 <code>bottom</code> 的 0 大，右边那一列的循环一次都不执行。如果不检查就去读下边，会把同一行倒着再读一遍，得到 <code>1,2,3,2,1</code>。只有一列时同理，左边那一列会被重复读。前两步不用检查，因为 <code>while</code> 条件已经保证了这一圈开始时边界没有交错。</p>
+<h2>为什么转置加翻转就是顺时针旋转</h2>
+<p>顺时针转 90 度时，原来第 i 行第 j 列的元素，会跑到第 j 行、倒数第 i 列，也就是 <code>[j][n - 1 - i]</code>。转置先把 <code>[i][j]</code> 送到 <code>[j][i]</code>，每行左右翻转再把 <code>[j][i]</code> 送到 <code>[j][n - 1 - i]</code>，两步合起来正好一致。</p>
+<p>看第一个例子，第一行 <code>1,2,3</code> 转置后变成第一列，第一行变成 <code>1,4,7</code>，翻转后是 <code>7,4,1</code>，就是旋转后的第一行。<code>row.reverse()</code> 会原地修改数组，正好满足题目“原地旋转”的要求。</p>
+<h2>常见追问</h2>
+<p><strong>逆时针转 90 度怎么做？</strong></p>
+<blockquote>
+<p>先转置，再上下翻转，也就是把整个行数组 <code>reverse</code> 一下。也可以先把每行左右翻转再转置。转 180 度就是先上下翻转，再把每行左右翻转。</p>
+</blockquote>
+<p><strong>不拆成两步，能一次到位吗？</strong></p>
+<blockquote>
+<p>能。从外到内一圈圈处理，每圈里四个位置的元素组成一组，<code>[i][j]</code>、<code>[j][n-1-i]</code>、<code>[n-1-i][n-1-j]</code>、<code>[n-1-j][i]</code>，用一个临时变量让它们依次挪一格。时间和空间与两步法一样，只是下标容易写错。</p>
+</blockquote>
+<p><strong>螺旋矩阵 II 要求按螺旋顺序填 1 到 n² 怎么做？</strong></p>
+<blockquote>
+<p>边界收缩的写法完全一样，只是把读取 <code>matrix[i][j]</code> 改成写入一个递增的计数器。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://leetcode.com/problems/spiral-matrix/" target="_blank" rel="noreferrer">LeetCode 54 · Spiral Matrix<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://leetcode.com/problems/rotate-image/" target="_blank" rel="noreferrer">LeetCode 48 · Rotate Image<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reverse" target="_blank" rel="noreferrer">MDN · Array.prototype.reverse()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E8%9E%BA%E6%97%8B%E7%9F%A9%E9%98%B5%E5%92%8C%E6%97%8B%E8%BD%AC%E5%9B%BE%E5%83%8F%E6%80%8E%E6%A0%B7%E5%81%9A%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E8%9E%BA%E6%97%8B%E7%9F%A9%E9%98%B5%E5%92%8C%E6%97%8B%E8%BD%AC%E5%9B%BE%E5%83%8F%E6%80%8E%E6%A0%B7%E5%81%9A%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ads-spiral-rotate-matrix%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fds-spiral-rotate-matrix%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：螺旋矩阵和旋转图像怎样做？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ds-max-subarray-stock/">最大子数组和、买卖股票的最佳时机怎样做？</a></li><li><a href="/questions/ds-two-pointers/">双指针有哪些常见题型？</a></li><li><a href="/questions/ds-binary-search-variants/">二分查找有哪些常见变体？怎样找边界、在旋转数组里查找？</a></li><li><a href="/questions/ds-trapping-rain-water/">接雨水怎样用双指针做到 O(1) 空间？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>
