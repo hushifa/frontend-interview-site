@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="TypeScript面试题：类型体操题大多靠三个套路：映射类型遍历键并加减修饰符，T[number] 这类索引访问取出元素类型…" />
+    <title>怎样手写 MyPick、MyOmit、DeepReadonly、TupleToUnion、First、Awaited 这类类型体操？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/ts-type-challenges/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="怎样手写 MyPick、MyOmit、DeepReadonly、TupleToUnion、First、Awaited 这类类型体操？" />
+    <meta property="og:description" content="TypeScript面试题：类型体操题大多靠三个套路：映射类型遍历键并加减修饰符，T[number] 这类索引访问取出元素类型…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/ts-type-challenges/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-type-challenges/#webpage","url":"https://fe.hushifa.top/questions/ts-type-challenges/","name":"怎样手写 MyPick、MyOmit、DeepReadonly、TupleToUnion、First、Awaited 这类类型体操？","description":"TypeScript面试题：类型体操题大多靠三个套路：映射类型遍历键并加减修饰符，T[number] 这类索引访问取出元素类型…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-type-challenges/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-type-challenges/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"怎样手写 MyPick、MyOmit、DeepReadonly、TupleToUnion、First、Awaited 这类类型体操？","item":"https://fe.hushifa.top/questions/ts-type-challenges/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BVmbcf0v.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样手写 MyPick、MyOmit、DeepReadonly、TupleToUnion、First、Awaited 这类类型体操？</span></nav><h1 tabindex="-1">怎样手写 MyPick、MyOmit、DeepReadonly、TupleToUnion、First、Awaited 这类类型体操？</h1><p class="reading-summary">类型体操题大多靠三个套路：映射类型遍历键并加减修饰符，T[number] 这类索引访问取出元素类型，条件类型配合 infer 匹配结构再递归。写完要用 @ts-expect-error 和类型相等断言验证。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>面试让你手写 <code>MyPick</code>、<code>MyReadonly</code>，其实是在问你会不会“用类型写函数”：输入一个类型，按规则算出另一个类型。常见题目几乎都能归到三个套路里。</p>
+<p>第一个套路是映射类型，用 <code>[P in K]</code> 把一组键挨个走一遍，可以加上或去掉 <code>readonly</code>、<code>?</code>，还能用 <code>as</code> 改名或者把键过滤掉，<code>MyPick</code>、<code>MyOmit</code>、<code>MyReadonly</code> 都是这样写的。第二个是索引访问，<code>T[number]</code> 能把数组或元组的元素类型取出来，<code>TupleToUnion</code> 一行就够。第三个是条件类型加 <code>infer</code>，先判断类型长不长某个样子，匹配上了就把其中一块“抠”出来，<code>First</code>、<code>Awaited</code> 用的就是它，需要层层展开时再递归调用自己。</p>
+<p>这些套路在业务里也有用，比如从常量数组生成联合类型、给配置对象加深层只读，都比手写一遍类型更不容易出错。</p>
+<p>要注意两点。泛型参数要加上约束，比如 <code>K extends keyof T</code>，否则传错的键不会报错。另外写完一定要验证，用 <code>@ts-expect-error</code> 标出“这里应该报错”的行，再用类型相等断言比较结果，光看鼠标悬停提示容易漏掉边界情况。</p>
+</blockquote>
+<h2>用映射类型写 MyPick、MyOmit、MyReadonly</h2>
+<p>映射类型就是“遍历一组键，为每个键生成一个属性”。下面三个工具只有遍历的键和修饰符不同：</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">MyPick</span>&lt;T, K <span class="hljs-keyword">extends</span> keyof T&gt; = {
+  [P <span class="hljs-keyword">in</span> K]: T[P];
+};
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">MyOmit</span>&lt;T, K <span class="hljs-keyword">extends</span> keyof <span class="hljs-built_in">any</span>&gt; = {
+  [P <span class="hljs-keyword">in</span> keyof T <span class="hljs-keyword">as</span> P <span class="hljs-keyword">extends</span> K ? <span class="hljs-built_in">never</span> : P]: T[P];
+};
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">MyReadonly</span>&lt;T&gt; = {
+  <span class="hljs-keyword">readonly</span> [P <span class="hljs-keyword">in</span> keyof T]: T[P];
+};
+
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">Todo</span> {
+  <span class="hljs-attr">title</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">description</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">completed</span>: <span class="hljs-built_in">boolean</span>;
+}
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">TodoPreview</span> = <span class="hljs-title class_">MyPick</span>&lt;<span class="hljs-title class_">Todo</span>, <span class="hljs-string">&#x27;title&#x27;</span> | <span class="hljs-string">&#x27;completed&#x27;</span>&gt;;
+<span class="hljs-keyword">const</span> <span class="hljs-attr">preview</span>: <span class="hljs-title class_">TodoPreview</span> = { <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;写周报&#x27;</span>, <span class="hljs-attr">completed</span>: <span class="hljs-literal">false</span> };
+
+<span class="hljs-comment">// @ts-expect-error &#x27;deadline&#x27; 不是 Todo 的键</span>
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Wrong</span> = <span class="hljs-title class_">MyPick</span>&lt;<span class="hljs-title class_">Todo</span>, <span class="hljs-string">&#x27;deadline&#x27;</span>&gt;;
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">NoDesc</span> = <span class="hljs-title class_">MyOmit</span>&lt;<span class="hljs-title class_">Todo</span>, <span class="hljs-string">&#x27;description&#x27;</span>&gt;;
+<span class="hljs-keyword">const</span> <span class="hljs-attr">noDesc</span>: <span class="hljs-title class_">NoDesc</span> = { <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;写周报&#x27;</span>, <span class="hljs-attr">completed</span>: <span class="hljs-literal">true</span> };
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">locked</span>: <span class="hljs-title class_">MyReadonly</span>&lt;<span class="hljs-title class_">Todo</span>&gt; = { <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-attr">description</span>: <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-attr">completed</span>: <span class="hljs-literal">false</span> };
+<span class="hljs-comment">// @ts-expect-error 只读属性不能赋值</span>
+locked.<span class="hljs-property">title</span> = <span class="hljs-string">&#x27;c&#x27;</span>;
+</code></pre></div>
+<p>先看 <code>MyPick</code> 的约束 <code>K extends keyof T</code>。为什么非加不可？因为 <code>T[P]</code> 要求 <code>P</code> 一定是 <code>T</code> 的键，不加约束就没法写 <code>T[P]</code>，而且有了约束，传入 <code>&#x27;deadline&#x27;</code> 这种不存在的键会直接报错，上面用 <code>@ts-expect-error</code> 标出的那一行就验证了这一点。</p>
+<p><code>MyOmit</code> 换了个思路。它遍历的是 <code>T</code> 的全部键，再用 <code>as</code> 子句给每个键重新算一个名字：要排除的键算成 <code>never</code>，其他键保持原样。Handbook 写明，<code>as</code> 子句算出 <code>never</code> 的键会被丢掉，所以这正是“过滤键”的写法。<code>as</code> 重映射从 TypeScript 4.1 开始支持。<code>K</code> 的约束用 <code>keyof any</code>，也就是 <code>string | number | symbol</code>，这和内置 <code>Omit</code> 一样，允许传入 <code>T</code> 上没有的键。</p>
+<p><code>MyReadonly</code> 只是在每个属性前加了 <code>readonly</code>。映射类型的修饰符还能用 <code>-</code> 去掉，比如 <code>-readonly</code> 去掉只读、<code>-?</code> 去掉可选，内置的 <code>Required</code> 就是 <code>-?</code> 的写法。更多内置工具怎样用来建模接口，可以看<a href="/questions/ts-mapped-utility/">《映射类型与 Partial、Pick、Omit 如何用于接口建模？》</a>。</p>
+<h2>DeepReadonly 为什么要递归，又为什么要放过函数</h2>
+<p><code>MyReadonly</code> 只管第一层，<code>config.server.host</code> 照样能改。要让每一层都只读，就要在属性类型是对象时，再对它套一次自己：</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">DeepReadonly</span>&lt;T&gt; = T <span class="hljs-title function_">extends</span> (...<span class="hljs-attr">args</span>: <span class="hljs-built_in">any</span>[]) =&gt; <span class="hljs-built_in">any</span>
+  ? T
+  : T <span class="hljs-keyword">extends</span> <span class="hljs-built_in">object</span>
+    ? { <span class="hljs-keyword">readonly</span> [P <span class="hljs-keyword">in</span> keyof T]: <span class="hljs-title class_">DeepReadonly</span>&lt;T[P]&gt; }
+    : T;
+
+<span class="hljs-keyword">interface</span> <span class="hljs-title class_">Config</span> {
+  <span class="hljs-attr">server</span>: { <span class="hljs-attr">host</span>: <span class="hljs-built_in">string</span>; <span class="hljs-attr">ports</span>: <span class="hljs-built_in">number</span>[] };
+  <span class="hljs-attr">onReady</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">void</span>;
+}
+
+<span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">config</span>: <span class="hljs-title class_">DeepReadonly</span>&lt;<span class="hljs-title class_">Config</span>&gt;;
+<span class="hljs-comment">// @ts-expect-error 深层属性同样只读</span>
+config.<span class="hljs-property">server</span>.<span class="hljs-property">host</span> = <span class="hljs-string">&#x27;localhost&#x27;</span>;
+<span class="hljs-comment">// @ts-expect-error 数组变成 readonly number[]，没有 push</span>
+config.<span class="hljs-property">server</span>.<span class="hljs-property">ports</span>.<span class="hljs-title function_">push</span>(<span class="hljs-number">8080</span>);
+config.<span class="hljs-title function_">onReady</span>();
+</code></pre></div>
+<p>读这段代码时会有个疑问：函数也是 <code>object</code>，为什么要先单独判断？如果不先放过函数，函数类型也会被拿去做映射，结果变成一个没有调用签名的对象类型，<code>config.onReady()</code> 就调用不了了。所以判断顺序是：函数原样返回，对象递归映射，其他基本类型直接返回。</p>
+<p>数组为什么也跟着变成了只读？TypeScript 3.1 的发布说明写明，<code>[P in keyof T]</code> 这种形式的映射类型作用在数组或元组上时，结果仍是数组或元组，<code>readonly</code> 修饰符让 <code>number[]</code> 变成 <code>readonly number[]</code>，上面 <code>push</code> 那一行报错就是证据。</p>
+<h2>用 T[number] 写 TupleToUnion</h2>
+<p>索引访问类型和取对象属性一样，只是取的是类型。Handbook 里专门举了用 <code>number</code> 取数组元素类型的例子：</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">TupleToUnion</span>&lt;T <span class="hljs-keyword">extends</span> <span class="hljs-keyword">readonly</span> <span class="hljs-built_in">unknown</span>[]&gt; = T[<span class="hljs-built_in">number</span>];
+
+<span class="hljs-keyword">const</span> roles = [<span class="hljs-string">&#x27;admin&#x27;</span>, <span class="hljs-string">&#x27;editor&#x27;</span>, <span class="hljs-string">&#x27;viewer&#x27;</span>] <span class="hljs-keyword">as</span> <span class="hljs-keyword">const</span>;
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Role</span> = <span class="hljs-title class_">TupleToUnion</span>&lt;<span class="hljs-keyword">typeof</span> roles&gt;;
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">current</span>: <span class="hljs-title class_">Role</span> = <span class="hljs-string">&#x27;editor&#x27;</span>;
+<span class="hljs-comment">// @ts-expect-error &#x27;guest&#x27; 不在元组里</span>
+<span class="hljs-keyword">const</span> <span class="hljs-attr">guest</span>: <span class="hljs-title class_">Role</span> = <span class="hljs-string">&#x27;guest&#x27;</span>;
+</code></pre></div>
+<p>为什么要写 <code>as const</code>？没有它，<code>roles</code> 会被推断成 <code>string[]</code>，<code>T[number]</code> 取出来就只是 <code>string</code>。加上以后它成了只读元组 <code>readonly [&#x27;admin&#x27;, &#x27;editor&#x27;, &#x27;viewer&#x27;]</code>，每个元素都是字面量类型，取出来才是三个字符串组成的联合类型。也正因为它是只读元组，约束要写成 <code>readonly unknown[]</code>，写成 <code>unknown[]</code> 会拒绝只读元组。</p>
+<p>这个写法在业务里很常用：权限、状态这类取值只维护一份常量数组，运行时可以遍历它，类型也从它生成，两边不会对不上。</p>
+<h2>用 infer 写 First 和 Awaited</h2>
+<p>条件类型就是类型层面的三元表达式。<code>infer</code> 只能写在 <code>extends</code> 右边，意思是“如果匹配上了，这一块是什么类型，就把它叫作某个名字”：</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">First</span>&lt;T <span class="hljs-keyword">extends</span> <span class="hljs-keyword">readonly</span> <span class="hljs-built_in">unknown</span>[]&gt; = T <span class="hljs-keyword">extends</span> [infer F, ...<span class="hljs-built_in">unknown</span>[]] ? F : <span class="hljs-built_in">never</span>;
+
+<span class="hljs-keyword">type</span> <span class="hljs-variable constant_">F1</span> = <span class="hljs-title class_">First</span>&lt;[<span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>]&gt;;
+<span class="hljs-keyword">type</span> <span class="hljs-variable constant_">F2</span> = <span class="hljs-title class_">First</span>&lt;[]&gt;;
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">one</span>: <span class="hljs-variable constant_">F1</span> = <span class="hljs-number">3</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-attr">isNever</span>: [<span class="hljs-variable constant_">F2</span>] <span class="hljs-keyword">extends</span> [<span class="hljs-built_in">never</span>] ? <span class="hljs-literal">true</span> : <span class="hljs-literal">false</span> = <span class="hljs-literal">true</span>;
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">MyAwaited</span>&lt;T&gt; = T <span class="hljs-keyword">extends</span> <span class="hljs-title class_">PromiseLike</span>&lt;infer V&gt; ? <span class="hljs-title class_">MyAwaited</span>&lt;V&gt; : T;
+
+<span class="hljs-keyword">type</span> <span class="hljs-variable constant_">A1</span> = <span class="hljs-title class_">MyAwaited</span>&lt;<span class="hljs-title class_">Promise</span>&lt;<span class="hljs-title class_">Promise</span>&lt;<span class="hljs-built_in">number</span>&gt;&gt;&gt;;
+<span class="hljs-keyword">type</span> <span class="hljs-variable constant_">A2</span> = <span class="hljs-title class_">MyAwaited</span>&lt;<span class="hljs-built_in">boolean</span> | <span class="hljs-title class_">Promise</span>&lt;<span class="hljs-built_in">string</span>&gt;&gt;;
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">a1</span>: <span class="hljs-variable constant_">A1</span> = <span class="hljs-number">1</span>;
+<span class="hljs-keyword">const</span> <span class="hljs-attr">a2</span>: <span class="hljs-variable constant_">A2</span>[] = [<span class="hljs-literal">true</span>, <span class="hljs-string">&#x27;ok&#x27;</span>];
+<span class="hljs-comment">// @ts-expect-error A1 是 number，不能放 Promise</span>
+<span class="hljs-keyword">const</span> <span class="hljs-attr">bad</span>: <span class="hljs-variable constant_">A1</span> = <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>(<span class="hljs-number">1</span>);
+</code></pre></div>
+<p><code>First</code> 拿 <code>T</code> 去比“第一个元素是 <code>F</code>、后面随便”的元组。空元组匹配不上，就走到 <code>never</code>。为什么不直接写 <code>T[0]</code>？因为空元组上 <code>T[0]</code> 会报错，而条件类型能把空元组单独处理掉。检查 <code>F2</code> 时把它包进方括号，是因为 <code>never</code> 在条件类型里会被当成空联合类型，直接分发成 <code>never</code>，原因见<a href="/questions/ts-conditional-infer/">《条件类型、infer 和分布式条件类型如何理解？》</a>。</p>
+<p><code>MyAwaited</code> 先判断 <code>T</code> 是不是一个“有 <code>then</code> 方法、能取出结果类型”的对象，<code>PromiseLike</code> 就描述了这种形状。匹配上就把结果类型 <code>V</code> 取出来，再对 <code>V</code> 调用自己，所以 <code>Promise&lt;Promise&lt;number&gt;&gt;</code> 会一层层剥到 <code>number</code>。传入联合类型时，条件类型会对每个成员分别计算再合并，所以 <code>boolean | Promise&lt;string&gt;</code> 得到 <code>boolean | string</code>。这和 Handbook 里内置 <code>Awaited</code>（TypeScript 4.5 加入）给出的三个例子结果一致。内置版本比这里更周全，还处理了 <code>null</code>、<code>undefined</code> 和 <code>then</code> 的参数形状，业务代码里直接用内置的 <code>Awaited</code> 就行。</p>
+<h2>写完怎样验证</h2>
+<p>类型代码不会运行，所以“看起来对”很容易骗过自己。最简单的验证是在应该报错的地方写 <code>// @ts-expect-error</code>：如果那一行不再报错，编译器会反过来报 “Unused &#x27;@ts-expect-error&#x27; directive”，测试就失败了。上面每段代码都按这个方法用 TypeScript 7.0.2 的 <code>tsc --noEmit --strict</code> 编译通过。</p>
+<p>判断“结果是不是恰好等于某个类型”，可以用下面这个常见的相等判断写法：</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Equal</span>&lt;X, Y&gt; =
+  (&lt;T&gt;<span class="hljs-function">() =&gt;</span> T <span class="hljs-keyword">extends</span> X ? <span class="hljs-number">1</span> : <span class="hljs-number">2</span>) <span class="hljs-keyword">extends</span> &lt;T&gt;<span class="hljs-function">() =&gt;</span> T <span class="hljs-keyword">extends</span> Y ? <span class="hljs-number">1</span> : <span class="hljs-number">2</span> ? <span class="hljs-literal">true</span> : <span class="hljs-literal">false</span>;
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Expect</span>&lt;T <span class="hljs-keyword">extends</span> <span class="hljs-literal">true</span>&gt; = T;
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">MyAwaited</span>&lt;T&gt; = T <span class="hljs-keyword">extends</span> <span class="hljs-title class_">PromiseLike</span>&lt;infer V&gt; ? <span class="hljs-title class_">MyAwaited</span>&lt;V&gt; : T;
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Cases</span> = [
+  <span class="hljs-title class_">Expect</span>&lt;<span class="hljs-title class_">Equal</span>&lt;<span class="hljs-title class_">MyAwaited</span>&lt;<span class="hljs-title class_">Promise</span>&lt;<span class="hljs-title class_">Promise</span>&lt;<span class="hljs-built_in">number</span>&gt;&gt;&gt;, <span class="hljs-title class_">Awaited</span>&lt;<span class="hljs-title class_">Promise</span>&lt;<span class="hljs-title class_">Promise</span>&lt;<span class="hljs-built_in">number</span>&gt;&gt;&gt;&gt;&gt;,
+  <span class="hljs-title class_">Expect</span>&lt;<span class="hljs-title class_">Equal</span>&lt;<span class="hljs-title class_">MyAwaited</span>&lt;<span class="hljs-built_in">boolean</span> | <span class="hljs-title class_">Promise</span>&lt;<span class="hljs-built_in">string</span>&gt;&gt;, <span class="hljs-built_in">boolean</span> | <span class="hljs-built_in">string</span>&gt;&gt;,
+];
+</code></pre></div>
+<p>它比 <code>X extends Y</code> 更严格，比如 <code>any</code> 和 <code>string</code> 用 <code>extends</code> 互相都能通过，用它就会判为不相等。项目里系统地做类型测试，可以看<a href="/questions/ts-type-testing/">《TypeScript 复杂类型应该怎样测试？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>MyOmit 能不能用 Pick 和 Exclude 写？</strong></p>
+<blockquote>
+<p>能，写成 <code>Pick&lt;T, Exclude&lt;keyof T, K&gt;&gt;</code>：先用 <code>Exclude</code> 从全部键里去掉要排除的键，再用 <code>Pick</code> 选出剩下的。它和用 <code>as</code> 过滤键的写法结果一样，<code>as</code> 写法不依赖其他工具，适合面试时从零写出来。</p>
+</blockquote>
+<p><strong>DeepReadonly 处理 Map、Set 吗？</strong></p>
+<blockquote>
+<p>上面的写法不处理。<code>Map</code> 和 <code>Set</code> 的内容是通过 <code>set</code>、<code>add</code> 这些方法改的，映射属性加 <code>readonly</code> 拦不住方法调用。需要的话要单独判断，把 <code>Map&lt;K, V&gt;</code> 换成 <code>ReadonlyMap&lt;K, V&gt;</code>、<code>Set&lt;T&gt;</code> 换成 <code>ReadonlySet&lt;T&gt;</code>，这两个都是标准库自带的只读接口。</p>
+</blockquote>
+<p><strong>类型体操写得越复杂越好吗？</strong></p>
+<blockquote>
+<p>不是。递归和多层条件类型会让类型和报错信息都很难读懂。业务里优先用内置工具类型，只有在能明显减少重复、防止两处定义对不上时才自己写，写了就配上类型测试。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.typescriptlang.org/docs/handbook/2/mapped-types.html" target="_blank" rel="noreferrer">TypeScript Handbook · Mapped Types<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://www.typescriptlang.org/docs/handbook/2/conditional-types.html" target="_blank" rel="noreferrer">TypeScript Handbook · Conditional Types<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://www.typescriptlang.org/docs/handbook/2/indexed-access-types.html" target="_blank" rel="noreferrer">TypeScript Handbook · Indexed Access Types<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://www.typescriptlang.org/docs/handbook/utility-types.html" target="_blank" rel="noreferrer">TypeScript Handbook · Utility Types<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-1.html" target="_blank" rel="noreferrer">TypeScript 3.1 Release Notes · Mapped types on tuples and arrays<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E6%89%8B%E5%86%99+MyPick%E3%80%81MyOmit%E3%80%81DeepReadonly%E3%80%81TupleToUnion%E3%80%81First%E3%80%81Awaited+%E8%BF%99%E7%B1%BB%E7%B1%BB%E5%9E%8B%E4%BD%93%E6%93%8D%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E6%89%8B%E5%86%99+MyPick%E3%80%81MyOmit%E3%80%81DeepReadonly%E3%80%81TupleToUnion%E3%80%81First%E3%80%81Awaited+%E8%BF%99%E7%B1%BB%E7%B1%BB%E5%9E%8B%E4%BD%93%E6%93%8D%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-type-challenges%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-type-challenges%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样手写 MyPick、MyOmit、DeepReadonly、TupleToUnion、First、Awaited 这类类型体操？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-mapped-utility/">映射类型与 Partial、Pick、Omit 如何用于接口建模？</a></li><li><a href="/questions/ts-conditional-infer/">条件类型、infer 和分布式条件类型如何理解？</a></li><li><a href="/questions/ts-type-testing/">TypeScript 复杂类型应该怎样测试？</a></li><li><a href="/questions/ts-enum/">TypeScript 的 enum、const enum 和联合类型怎样选？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

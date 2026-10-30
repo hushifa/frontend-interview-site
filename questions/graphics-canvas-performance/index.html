@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="图形与可视化面试题：Canvas 每一帧都要靠 JavaScript 重画，优化的思路是少画和画得便宜：分层让不变的内容不重画…" />
+    <title>Canvas 性能优化有哪些办法？分层、离屏 Canvas、脏矩形重绘分别解决什么问题？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/graphics-canvas-performance/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="Canvas 性能优化有哪些办法？分层、离屏 Canvas、脏矩形重绘分别解决什么问题？" />
+    <meta property="og:description" content="图形与可视化面试题：Canvas 每一帧都要靠 JavaScript 重画，优化的思路是少画和画得便宜：分层让不变的内容不重画…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/graphics-canvas-performance/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/graphics-canvas-performance/#webpage","url":"https://fe.hushifa.top/questions/graphics-canvas-performance/","name":"Canvas 性能优化有哪些办法？分层、离屏 Canvas、脏矩形重绘分别解决什么问题？","description":"图形与可视化面试题：Canvas 每一帧都要靠 JavaScript 重画，优化的思路是少画和画得便宜：分层让不变的内容不重画…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/graphics-canvas-performance/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/graphics-canvas-performance/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"图形与可视化面试题","item":"https://fe.hushifa.top/topics/graphics/"},{"@type":"ListItem","position":3,"name":"Canvas 性能优化有哪些办法？分层、离屏 Canvas、脏矩形重绘分别解决什么问题？","item":"https://fe.hushifa.top/questions/graphics-canvas-performance/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BVmbcf0v.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/graphics/">图形与可视化面试题</a><span aria-hidden="true">/</span><span aria-current="page">Canvas 性能优化有哪些办法？分层、离屏 Canvas、脏矩形重绘分别解决什么问题？</span></nav><h1 tabindex="-1">Canvas 性能优化有哪些办法？分层、离屏 Canvas、脏矩形重绘分别解决什么问题？</h1><p class="reading-summary">Canvas 每一帧都要靠 JavaScript 重画，优化的思路是少画和画得便宜：分层让不变的内容不重画，离屏 Canvas 缓存重复图形，脏矩形只重画变化的区域，批量绘制和减少状态切换降低每次调用的开销，坐标取整避免额外抗锯齿。高清屏按 devicePixelRatio 放大位图解决模糊，绘制太重时再考虑 OffscreenCanvas 放进 Worker。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>用 Canvas 做一个有几千个点在动的图表或者小游戏，浏览器不会替你记住画面里有哪些东西，每一帧都要由 JavaScript 擦掉再重画。所以 Canvas 卡不卡，取决于每一帧画了多少、每次画得贵不贵。</p>
+<p>第一类办法是少画。把很少变化的背景、经常变化的主体、只在操作时变化的界面分到叠在一起的几个 <code>&lt;canvas&gt;</code> 上，每层只在自己变化时重画；重复出现的复杂图形先画到一张不显示的离屏 Canvas 上，之后每帧直接 <code>drawImage</code> 贴过去；只有一小块变化时，算出变化的矩形，只擦这一块、只重画这一块，这叫脏矩形重绘。</p>
+<p>第二类办法是画得便宜。能合成一条路径的线就一起画，减少调用次数；少切换颜色、线宽这些绘图状态；坐标取整，避免浏览器做亚像素抗锯齿；不需要透明背景就用 <code>alpha: false</code> 创建上下文；动画用 <code>requestAnimationFrame</code> 驱动。</p>
+<p>还要注意两件事。高清屏上 Canvas 会模糊，要把位图尺寸乘以 <code>devicePixelRatio</code>，再用 <code>scale</code> 把坐标换回 CSS 像素，但位图越大每帧要处理的像素也越多。如果绘制本身就很重、和主线程的其他工作抢时间，可以用 <code>OffscreenCanvas</code> 把绘制放进 Worker，但它不会让绘制本身变快。</p>
+</blockquote>
+<h2>为什么要分层</h2>
+<p>假设一个小游戏里有一张复杂的地图背景、几十个在动的角色，还有一个分数面板。只用一个 Canvas 的话，哪怕只有角色在动，每一帧也得把背景和面板跟着重画，因为擦掉画面时它们也一起被擦掉了。</p>
+<p>MDN 的 Optimizing canvas 建议，场景里有的东西经常变、有的基本不变时，把它们分到叠在一起的多个 <code>&lt;canvas&gt;</code> 上：</p>
+<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;stage&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">canvas</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;ui-layer&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;480&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;320&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">canvas</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">canvas</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;game-layer&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;480&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;320&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">canvas</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">canvas</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;background-layer&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;480&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;320&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">canvas</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre></div>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-id">#stage</span> {
+  <span class="hljs-attribute">position</span>: relative;
+  <span class="hljs-attribute">width</span>: <span class="hljs-number">480px</span>;
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">320px</span>;
+}
+
+<span class="hljs-selector-tag">canvas</span> {
+  <span class="hljs-attribute">position</span>: absolute;
+}
+
+<span class="hljs-selector-id">#ui-layer</span> {
+  <span class="hljs-attribute">z-index</span>: <span class="hljs-number">3</span>;
+}
+
+<span class="hljs-selector-id">#game-layer</span> {
+  <span class="hljs-attribute">z-index</span>: <span class="hljs-number">2</span>;
+}
+
+<span class="hljs-selector-id">#background-layer</span> {
+  <span class="hljs-attribute">z-index</span>: <span class="hljs-number">1</span>;
+}
+</code></pre></div>
+<p>三个 Canvas 绝对定位叠在一起，背景层只在初始化时画一次，角色层每帧重画，界面层只在分数变化时重画。如果背景只是一张静态大图，MDN 还建议干脆别画进 Canvas，直接用 CSS 的 <code>background</code> 放在底下的元素上。</p>
+<h2>离屏 Canvas 缓存重复图形</h2>
+<p>另一种浪费是同一个复杂图形每帧都从头画一遍，比如带渐变和阴影的按钮、由几十段路径组成的图标。MDN 的建议是先把它画到一个不显示在页面上的 Canvas 里，之后只用 <code>drawImage</code> 把这张“预渲染好的图”贴到主画布上：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> sprite = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;canvas&#x27;</span>);
+sprite.<span class="hljs-property">width</span> = <span class="hljs-number">64</span>;
+sprite.<span class="hljs-property">height</span> = <span class="hljs-number">64</span>;
+<span class="hljs-title function_">drawComplexIcon</span>(sprite.<span class="hljs-title function_">getContext</span>(<span class="hljs-string">&#x27;2d&#x27;</span>));
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">frame</span>(<span class="hljs-params">ctx, items</span>) {
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> item <span class="hljs-keyword">of</span> items) {
+    ctx.<span class="hljs-title function_">drawImage</span>(sprite, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(item.<span class="hljs-property">x</span>), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(item.<span class="hljs-property">y</span>));
+  }
+}
+</code></pre></div>
+<p>这里的“离屏 Canvas”只是一个没有挂到页面上的普通 <code>&lt;canvas&gt;</code> 元素，仍然在主线程上画，作用是把重复计算变成一次贴图。它和 <code>OffscreenCanvas</code> 这个 API 名字很像，但不是一回事，后者在后面单独讲。同理，MDN 也建议图片要缩放时，加载后先在离屏 Canvas 上缩放好缓存起来，不要每次 <code>drawImage</code> 都带缩放参数。</p>
+<h2>脏矩形：只重画变化的区域</h2>
+<p>MDN 在“更多建议”里提到，只渲染画面的差异，而不是整个新状态。常见的实现叫脏矩形：记下这一帧哪块区域变了，只擦这一块、只重画落在这块里的图形。</p>
+<p>一个方块从旧位置移到新位置，要重画的区域是旧位置和新位置合起来的外接矩形，因为旧位置要擦掉，新位置要画上。下面先算出这个矩形，并把边界扩到整数像素：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">union</span>(<span class="hljs-params">a, b</span>) {
+  <span class="hljs-keyword">const</span> left = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(a.<span class="hljs-property">x</span>, b.<span class="hljs-property">x</span>);
+  <span class="hljs-keyword">const</span> top = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(a.<span class="hljs-property">y</span>, b.<span class="hljs-property">y</span>);
+  <span class="hljs-keyword">const</span> right = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(a.<span class="hljs-property">x</span> + a.<span class="hljs-property">w</span>, b.<span class="hljs-property">x</span> + b.<span class="hljs-property">w</span>);
+  <span class="hljs-keyword">const</span> bottom = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(a.<span class="hljs-property">y</span> + a.<span class="hljs-property">h</span>, b.<span class="hljs-property">y</span> + b.<span class="hljs-property">h</span>);
+  <span class="hljs-keyword">return</span> { <span class="hljs-attr">x</span>: left, <span class="hljs-attr">y</span>: top, <span class="hljs-attr">w</span>: right - left, <span class="hljs-attr">h</span>: bottom - top };
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">snap</span>(<span class="hljs-params">rect</span>) {
+  <span class="hljs-keyword">const</span> x = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(rect.<span class="hljs-property">x</span>);
+  <span class="hljs-keyword">const</span> y = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(rect.<span class="hljs-property">y</span>);
+  <span class="hljs-keyword">return</span> {
+    x,
+    y,
+    <span class="hljs-attr">w</span>: <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">ceil</span>(rect.<span class="hljs-property">x</span> + rect.<span class="hljs-property">w</span>) - x,
+    <span class="hljs-attr">h</span>: <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">ceil</span>(rect.<span class="hljs-property">y</span> + rect.<span class="hljs-property">h</span>) - y,
+  };
+}
+
+<span class="hljs-keyword">const</span> before = { <span class="hljs-attr">x</span>: <span class="hljs-number">10.4</span>, <span class="hljs-attr">y</span>: <span class="hljs-number">20.6</span>, <span class="hljs-attr">w</span>: <span class="hljs-number">30</span>, <span class="hljs-attr">h</span>: <span class="hljs-number">30</span> };
+<span class="hljs-keyword">const</span> after = { <span class="hljs-attr">x</span>: <span class="hljs-number">18.4</span>, <span class="hljs-attr">y</span>: <span class="hljs-number">20.6</span>, <span class="hljs-attr">w</span>: <span class="hljs-number">30</span>, <span class="hljs-attr">h</span>: <span class="hljs-number">30</span> };
+
+<span class="hljs-keyword">const</span> dirty = <span class="hljs-title function_">snap</span>(<span class="hljs-title function_">union</span>(before, after));
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(dirty.<span class="hljs-property">x</span>, dirty.<span class="hljs-property">y</span>, dirty.<span class="hljs-property">w</span>, dirty.<span class="hljs-property">h</span>); <span class="hljs-comment">// 10 20 39 31</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(dirty.<span class="hljs-property">w</span> * dirty.<span class="hljs-property">h</span>); <span class="hljs-comment">// 1209</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-number">800</span> * <span class="hljs-number">600</span>); <span class="hljs-comment">// 480000</span>
+</code></pre></div>
+<p>为什么要向外取整？方块的边落在小数坐标上时，边缘那一列像素只被盖住一部分，按小数坐标擦会留下残影。左上角向下取整、右下角向上取整，擦的范围就把这些像素整个包进去了。</p>
+<p>算出来的区域是 39 × 31，共 1209 个像素，而整张 800 × 600 的画布有 48 万个像素。拿到这个矩形以后，先擦掉它，再用 <code>clip()</code> 把后续绘制限制在这块区域里，把和它相交的图形重画一遍：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">redraw</span>(<span class="hljs-params">ctx, dirty, shapes</span>) {
+  ctx.<span class="hljs-title function_">save</span>();
+  ctx.<span class="hljs-title function_">beginPath</span>();
+  ctx.<span class="hljs-title function_">rect</span>(dirty.<span class="hljs-property">x</span>, dirty.<span class="hljs-property">y</span>, dirty.<span class="hljs-property">w</span>, dirty.<span class="hljs-property">h</span>);
+  ctx.<span class="hljs-title function_">clip</span>();
+  ctx.<span class="hljs-title function_">clearRect</span>(dirty.<span class="hljs-property">x</span>, dirty.<span class="hljs-property">y</span>, dirty.<span class="hljs-property">w</span>, dirty.<span class="hljs-property">h</span>);
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> shape <span class="hljs-keyword">of</span> shapes) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-title function_">intersects</span>(shape.<span class="hljs-property">bounds</span>, dirty)) shape.<span class="hljs-title function_">draw</span>(ctx);
+  }
+  ctx.<span class="hljs-title function_">restore</span>();
+}
+</code></pre></div>
+<p><code>clip()</code> 会把当前路径变成裁剪区域，之后画的东西超出这块就不会落到画布上，所以和脏矩形只相交一部分的图形，也不会把外面画坏。<code>save()</code> 和 <code>restore()</code> 用来在画完后撤掉裁剪。</p>
+<p>脏矩形也有代价，要维护每个图形的包围盒、做相交判断。如果每帧大部分画面都在变，比如整屏粒子动画，算脏区域反而白费功夫，直接全量重画更简单。</p>
+<h2>怎样让每次绘制更便宜</h2>
+<p>先说调用次数。MDN 建议把绘制调用合并起来，比如画一条折线，而不是画很多条独立的线段。下面两种写法画出的折线一样，第二种只描一次边：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">1</span>; i &lt; points.<span class="hljs-property">length</span>; i += <span class="hljs-number">1</span>) {
+  ctx.<span class="hljs-title function_">beginPath</span>();
+  ctx.<span class="hljs-title function_">moveTo</span>(points[i - <span class="hljs-number">1</span>].<span class="hljs-property">x</span>, points[i - <span class="hljs-number">1</span>].<span class="hljs-property">y</span>);
+  ctx.<span class="hljs-title function_">lineTo</span>(points[i].<span class="hljs-property">x</span>, points[i].<span class="hljs-property">y</span>);
+  ctx.<span class="hljs-title function_">stroke</span>();
+}
+
+ctx.<span class="hljs-title function_">beginPath</span>();
+ctx.<span class="hljs-title function_">moveTo</span>(points[<span class="hljs-number">0</span>].<span class="hljs-property">x</span>, points[<span class="hljs-number">0</span>].<span class="hljs-property">y</span>);
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">1</span>; i &lt; points.<span class="hljs-property">length</span>; i += <span class="hljs-number">1</span>) {
+  ctx.<span class="hljs-title function_">lineTo</span>(points[i].<span class="hljs-property">x</span>, points[i].<span class="hljs-property">y</span>);
+}
+ctx.<span class="hljs-title function_">stroke</span>();
+</code></pre></div>
+<p>同样的道理，MDN 也建议避免不必要的绘图状态切换。比如散点图里红点和蓝点交错，与其每画一个点都改一次 <code>fillStyle</code>，不如先按颜色分组，同色的点一起画。</p>
+<p>再说坐标。MDN 指出，在非整数坐标上绘制会触发亚像素渲染，浏览器要多做抗锯齿计算，所以传给 <code>drawImage()</code> 的坐标要先用 <code>Math.floor()</code> 之类的办法取整，上面贴图的例子就是这样做的。</p>
+<p>还有几条容易做到的。不需要透明背景时，用 <code>canvas.getContext(&#x27;2d&#x27;, { alpha: false })</code> 创建上下文，浏览器可以据此在内部优化渲染。<code>shadowBlur</code> 和文字绘制都比较贵，MDN 建议能不用就不用。动画用 <code>requestAnimationFrame()</code> 而不是 <code>setInterval()</code> 驱动，它会在浏览器下一次重绘之前调用回调。</p>
+<h2>高清屏为什么会模糊，放大又有什么代价</h2>
+<p>Canvas 有两个尺寸：<code>width</code>、<code>height</code> 属性决定位图有多少个像素，CSS 的宽高决定它在页面上显示多大。<code>devicePixelRatio</code> 是物理像素和 CSS 像素的比值，在 2 倍屏上，一个 CSS 像素对应 2 × 2 个物理像素。如果位图只有 CSS 尺寸那么大，浏览器就要把它放大两倍显示，看起来就糊了。MDN 给出的做法是：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> dpr = <span class="hljs-variable language_">window</span>.<span class="hljs-property">devicePixelRatio</span>;
+<span class="hljs-keyword">const</span> rect = canvas.<span class="hljs-title function_">getBoundingClientRect</span>();
+
+canvas.<span class="hljs-property">width</span> = rect.<span class="hljs-property">width</span> * dpr;
+canvas.<span class="hljs-property">height</span> = rect.<span class="hljs-property">height</span> * dpr;
+ctx.<span class="hljs-title function_">scale</span>(dpr, dpr);
+
+canvas.<span class="hljs-property">style</span>.<span class="hljs-property">width</span> = <span class="hljs-string">`<span class="hljs-subst">${rect.width}</span>px`</span>;
+canvas.<span class="hljs-property">style</span>.<span class="hljs-property">height</span> = <span class="hljs-string">`<span class="hljs-subst">${rect.height}</span>px`</span>;
+</code></pre></div>
+<p>位图尺寸乘以 <code>dpr</code>，再用 <code>ctx.scale(dpr, dpr)</code> 让后面的绘制代码还能按 CSS 像素写坐标，显示尺寸保持不变。这样一来，2 倍屏上位图的像素数是原来的 4 倍，每帧要清除和填充的像素也跟着变多。所以在性能吃紧的场景里，要在清晰度和速度之间权衡。为什么 Canvas 在高清屏上模糊，也可以看<a href="/questions/graphics-canvas-svg/">《Canvas 和 SVG 怎样选择？》</a>。</p>
+<h2>什么时候用 OffscreenCanvas</h2>
+<p>前面这些办法减少的是绘制本身的工作量。还有一种情况是绘制已经很省了，但主线程同时在跑大量业务逻辑，两边互相抢时间，页面一卡动画就跟着卡。这时可以用 <code>OffscreenCanvas</code>：主线程调用 <code>canvas.transferControlToOffscreen()</code>，把画布的控制权转给 Worker，Worker 里画的内容会直接显示在页面的 <code>&lt;canvas&gt;</code> 上。MDN 的说明是，渲染操作放进 Worker，可以在单独的线程里做这些工作，避免主线程上的繁重工作。</p>
+<p>它解决的是“和谁抢时间”，不是“画得慢”。每一帧画什么、画多少，还是取决于上面那些优化。具体怎样把绘制交给 Worker、哪些情况下用了也没用，可以看<a href="/questions/web-offscreen-canvas/">《OffscreenCanvas 什么时候能减少主线程绘制压力？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>分层以后点击事件怎么处理？</strong></p>
+<blockquote>
+<p>分层只改变了画在哪里，图形的数据还在 JavaScript 里。可以在外面的容器上统一监听指针事件，把坐标换算好，再按从上到下的顺序判断点中了哪一层的哪个图形，详见<a href="/questions/graphics-canvas-hit-test/">《Canvas 图形命中测试应该怎样实现？》</a>。</p>
+</blockquote>
+<p><strong>清空画布用什么方法？</strong></p>
+<blockquote>
+<p>最常用的是 <code>clearRect()</code>，它把指定矩形里的像素变成透明黑色。MDN 也提到可以试试 <code>fillRect()</code> 或者重新设置画布尺寸来清空，哪种快要在目标设备上实测。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas" target="_blank" rel="noreferrer">MDN · Optimizing canvas<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas" target="_blank" rel="noreferrer">MDN · OffscreenCanvas<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio" target="_blank" rel="noreferrer">MDN · Window.devicePixelRatio<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/clip" target="_blank" rel="noreferrer">MDN · CanvasRenderingContext2D.clip()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame" target="_blank" rel="noreferrer">MDN · Window.requestAnimationFrame()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Canvas+%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%9C%89%E5%93%AA%E4%BA%9B%E5%8A%9E%E6%B3%95%EF%BC%9F%E5%88%86%E5%B1%82%E3%80%81%E7%A6%BB%E5%B1%8F+Canvas%E3%80%81%E8%84%8F%E7%9F%A9%E5%BD%A2%E9%87%8D%E7%BB%98%E5%88%86%E5%88%AB%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ACanvas+%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%9C%89%E5%93%AA%E4%BA%9B%E5%8A%9E%E6%B3%95%EF%BC%9F%E5%88%86%E5%B1%82%E3%80%81%E7%A6%BB%E5%B1%8F+Canvas%E3%80%81%E8%84%8F%E7%9F%A9%E5%BD%A2%E9%87%8D%E7%BB%98%E5%88%86%E5%88%AB%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Agraphics-canvas-performance%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%9B%BE%E5%BD%A2%E4%B8%8E%E5%8F%AF%E8%A7%86%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fgraphics-canvas-performance%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Canvas 性能优化有哪些办法？分层、离屏 Canvas、脏矩形重绘分别解决什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/graphics-canvas-svg/">Canvas 和 SVG 怎样选择？</a></li><li><a href="/questions/graphics-canvas-transform/">Canvas 的 transform 怎样影响坐标和绘制？</a></li><li><a href="/questions/graphics-canvas-hit-test/">Canvas 图形命中测试应该怎样实现？</a></li><li><a href="/questions/graphics-chart-accessibility/">前端图表如何同时满足无障碍和高性能？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>
