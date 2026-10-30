@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="Node.js面试题：require 先把参数解析成一个绝对文件名，再用这个文件名查 require.cache，命中就直接返回 module.exports…" />
+    <title>require 怎样查找、包装和缓存模块？循环引用时拿到的是什么？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/node-require-mechanism/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="require 怎样查找、包装和缓存模块？循环引用时拿到的是什么？" />
+    <meta property="og:description" content="Node.js面试题：require 先把参数解析成一个绝对文件名，再用这个文件名查 require.cache，命中就直接返回 module.exports…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/node-require-mechanism/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/node-require-mechanism/#webpage","url":"https://fe.hushifa.top/questions/node-require-mechanism/","name":"require 怎样查找、包装和缓存模块？循环引用时拿到的是什么？","description":"Node.js面试题：require 先把参数解析成一个绝对文件名，再用这个文件名查 require.cache，命中就直接返回 module.exports…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/node-require-mechanism/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/node-require-mechanism/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Node.js面试题","item":"https://fe.hushifa.top/topics/node/"},{"@type":"ListItem","position":3,"name":"require 怎样查找、包装和缓存模块？循环引用时拿到的是什么？","item":"https://fe.hushifa.top/questions/node-require-mechanism/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BHh83_rl.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/node/">Node.js面试题</a><span aria-hidden="true">/</span><span aria-current="page">require 怎样查找、包装和缓存模块？循环引用时拿到的是什么？</span></nav><h1 tabindex="-1">require 怎样查找、包装和缓存模块？循环引用时拿到的是什么？</h1><p class="reading-summary">require 先把参数解析成一个绝对文件名，再用这个文件名查 require.cache，命中就直接返回 module.exports；没命中就创建 module 对象、先放进缓存，再用函数包装器 (exports, require, module, __filename, __dirname) 执行模块代码。因为缓存发生在执行之前，循环引用时对方拿到的是一个还没执行完的 exports 对象。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>写 <code>require(&#x27;./a&#x27;)</code> 时，Node.js 做三件事：先把 <code>./a</code> 解析成一个绝对文件名，再用这个文件名去 <code>require.cache</code> 里查，查到了就直接返回上次的 <code>module.exports</code>；查不到才去读文件、执行代码。</p>
+<p>执行之前，Node.js 会把模块代码包进一个函数，参数是 <code>exports</code>、<code>require</code>、<code>module</code>、<code>__filename</code>、<code>__dirname</code>。所以模块顶层的 <code>const</code>、<code>let</code> 只属于这个模块，不会变成全局变量，那几个看起来像全局的变量其实是函数参数。</p>
+<p>缓存的好处是同一个文件只执行一次，多处 <code>require</code> 拿到的是同一个对象。这也是循环引用不会死循环的原因：模块先进缓存再执行，A 加载 B、B 又加载 A 时，B 拿到的是 A 还没执行完的那个 <code>exports</code>。</p>
+<p>要注意两点。第一，缓存按解析后的文件名区分，从不同目录 <code>require(&#x27;foo&#x27;)</code> 可能解析到不同的 <code>node_modules</code>，拿到的就不是同一个对象。第二，循环引用里过早读取的属性可能还是 <code>undefined</code>，Node.js 文档说这种依赖要仔细规划。</p>
+</blockquote>
+<h2>require 怎样找到文件</h2>
+<p><code>require</code> 的参数分三种情况。以 <code>/</code>、<code>./</code>、<code>../</code> 开头的是文件路径，相对路径按当前模块所在的目录来算。找不到精确的文件名时，Node.js 会依次补上 <code>.js</code>、<code>.json</code>、<code>.node</code> 再试；<code>.json</code> 当 JSON 解析，<code>.node</code> 当编译好的原生插件加载。其他扩展名（比如 <code>.cjs</code>）要写全。</p>
+<p>不带路径前缀的，要么是内置模块，要么去 <code>node_modules</code> 里找。查找从当前模块所在目录开始，拼上 <code>/node_modules</code>，找不到就往上一级目录，一直找到文件系统根目录。比如 <code>/home/ry/projects/foo.js</code> 里写 <code>require(&#x27;bar.js&#x27;)</code>，会依次找 <code>/home/ry/projects/node_modules/bar.js</code>、<code>/home/ry/node_modules/bar.js</code>、<code>/home/node_modules/bar.js</code>、<code>/node_modules/bar.js</code>。</p>
+<p>找到包以后，包里 <code>package.json</code> 的 <code>exports</code> 字段会决定实际加载哪个文件，这部分规则见<a href="/questions/node-module-resolution/">《Node.js 的 package exports 会怎样影响模块解析？》</a>。全都找不到，<code>require</code> 会抛出 <code>MODULE_NOT_FOUND</code> 错误。</p>
+<h2>模块代码为什么被包进一个函数</h2>
+<p>Node.js 文档给出的包装器长这样：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">(<span class="hljs-keyword">function</span> (<span class="hljs-params"><span class="hljs-built_in">exports</span>, <span class="hljs-built_in">require</span>, <span class="hljs-variable language_">module</span>, __filename, __dirname</span>) {
+  <span class="hljs-comment">// 模块代码实际写在这里</span>
+});
+</code></pre></div>
+<p>这样做有两个结果。模块顶层用 <code>var</code>、<code>const</code>、<code>let</code> 声明的变量，作用域是这个函数，而不是全局对象，所以两个模块各写一个 <code>const config</code> 不会冲突。另外，<code>module</code>、<code>exports</code>、<code>__filename</code>、<code>__dirname</code> 看起来像全局变量，其实是每个模块各自的一份函数参数。</p>
+<p><code>exports</code> 是 <code>module.exports</code> 的一个引用，给 <code>exports</code> 整体赋新对象不会改变导出结果，这一点见<a href="/questions/js-esm-cjs/">《ES Modules 和 CommonJS 有哪些关键区别？》</a>。</p>
+<h2>缓存是怎么工作的</h2>
+<p>Node.js 文档说，模块第一次加载后就会被缓存，只要解析到同一个文件，每次 <code>require</code> 都返回同一个对象，模块代码也不会再执行一遍。想让一段代码执行多次，应该导出一个函数，调用它。</p>
+<p>缓存的键是解析后的文件名，这带来两个边界。一是同名包不一定是同一个对象：从不同位置 <code>require(&#x27;foo&#x27;)</code>，可能解析到不同的 <code>node_modules/foo</code>，各有一份缓存。二是在大小写不敏感的文件系统上，<code>require(&#x27;./foo&#x27;)</code> 和 <code>require(&#x27;./FOO&#x27;)</code> 即使是同一个文件，也会被当成两个模块，返回两个不同的对象。</p>
+<p>缓存对象就是 <code>require.cache</code>。删掉其中一个键，下次 <code>require</code> 会重新加载那个模块，原生插件除外，重新加载会报错。要注意，删掉缓存只影响之后的 <code>require</code>，已经拿到旧对象的地方不会自动更新。</p>
+<h2>先进缓存再执行，循环引用就不会死循环</h2>
+<p>下面用一个对象模拟文件，手写一个最小的 <code>myRequire</code>，按“查缓存 → 建 module → 先登记缓存 → 执行包装函数”的顺序加载。<code>a</code> 和 <code>b</code> 互相引用，和 Node.js 文档 Cycles 小节的例子结构一样。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> sources = {
+  <span class="hljs-string">&#x27;./a&#x27;</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"><span class="hljs-built_in">exports</span>, <span class="hljs-built_in">require</span>, <span class="hljs-variable language_">module</span></span>) {
+    <span class="hljs-built_in">exports</span>.<span class="hljs-property">done</span> = <span class="hljs-literal">false</span>;
+    <span class="hljs-keyword">const</span> b = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./b&#x27;</span>);
+    log.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;a 里读到 b.done=&#x27;</span> + b.<span class="hljs-property">done</span>);
+    <span class="hljs-built_in">exports</span>.<span class="hljs-property">done</span> = <span class="hljs-literal">true</span>;
+  },
+  <span class="hljs-string">&#x27;./b&#x27;</span>: <span class="hljs-keyword">function</span> (<span class="hljs-params"><span class="hljs-built_in">exports</span>, <span class="hljs-built_in">require</span>, <span class="hljs-variable language_">module</span></span>) {
+    <span class="hljs-built_in">exports</span>.<span class="hljs-property">done</span> = <span class="hljs-literal">false</span>;
+    <span class="hljs-keyword">const</span> a = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./a&#x27;</span>);
+    log.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;b 里读到 a.done=&#x27;</span> + a.<span class="hljs-property">done</span>);
+    <span class="hljs-built_in">exports</span>.<span class="hljs-property">done</span> = <span class="hljs-literal">true</span>;
+  },
+};
+<span class="hljs-keyword">const</span> cache = {};
+<span class="hljs-keyword">const</span> log = [];
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">myRequire</span>(<span class="hljs-params">id</span>) {
+  <span class="hljs-keyword">if</span> (cache[id]) <span class="hljs-keyword">return</span> cache[id].<span class="hljs-property">exports</span>;
+  <span class="hljs-keyword">const</span> <span class="hljs-variable language_">module</span> = { <span class="hljs-attr">exports</span>: {}, <span class="hljs-attr">loaded</span>: <span class="hljs-literal">false</span> };
+  cache[id] = <span class="hljs-variable language_">module</span>;
+  sources[id](<span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span>, myRequire, <span class="hljs-variable language_">module</span>);
+  <span class="hljs-variable language_">module</span>.<span class="hljs-property">loaded</span> = <span class="hljs-literal">true</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span>;
+}
+
+<span class="hljs-keyword">const</span> a = <span class="hljs-title function_">myRequire</span>(<span class="hljs-string">&#x27;./a&#x27;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(log.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;；&#x27;</span>)); <span class="hljs-comment">// b 里读到 a.done=false；a 里读到 b.done=true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(a.<span class="hljs-property">done</span>); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">myRequire</span>(<span class="hljs-string">&#x27;./a&#x27;</span>) === a); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(cache).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// ./a,./b</span>
+</code></pre></div>
+<p>为什么 <code>b</code> 读到的 <code>a.done</code> 是 <code>false</code>？加载 <code>a</code> 时，<code>a</code> 的 <code>module</code> 先登记进了缓存，然后才开始执行。<code>a</code> 执行到 <code>require(&#x27;./b&#x27;)</code> 就停下来去加载 <code>b</code>，<code>b</code> 又 <code>require(&#x27;./a&#x27;)</code>，这时缓存里已经有 <code>a</code>，于是直接返回 <code>a</code> 的 <code>exports</code>。可是 <code>a</code> 只执行到一半，<code>done</code> 还是 <code>false</code>。</p>
+<p><code>b</code> 执行完以后，控制权回到 <code>a</code>，<code>a</code> 读到的 <code>b.done</code> 已经是 <code>true</code>，最后 <code>a</code> 也把 <code>done</code> 改成 <code>true</code>。Node.js 文档里真实的 <code>a.js</code>、<code>b.js</code>、<code>main.js</code> 运行结果是同样的顺序：先打印 <code>in b, a.done = false</code>，再打印 <code>in a, b.done = true</code>。用 Node.js 22.23.3 实际运行，输出与文档一致。</p>
+<p>如果把“登记缓存”放到执行之后，<code>b</code> 再 <code>require(&#x27;./a&#x27;)</code> 时缓存里没有 <code>a</code>，就会再执行一遍 <code>a</code>，<code>a</code> 又去加载 <code>b</code>，无限循环下去。文档说缓存“允许返回部分完成的对象”，指的就是这个顺序。</p>
+<h2>循环引用里最容易出的错</h2>
+<p>上面的例子里 <code>b</code> 只是打印了 <code>a.done</code>，读到 <code>false</code> 不会出错。真正出问题的是在模块顶层就调用对方的函数，比如 <code>b</code> 顶层写 <code>a.format()</code>，而 <code>a</code> 要到 <code>require(&#x27;./b&#x27;)</code> 之后才给 <code>exports.format</code> 赋值，这时 <code>a.format</code> 是 <code>undefined</code>，调用就会抛 <code>TypeError</code>。</p>
+<p>另一个坑是 <code>module.exports = { ... }</code> 整体替换。<code>b</code> 在循环中拿到的是 <code>a</code> 原来那个 <code>exports</code> 对象，<code>a</code> 后来把 <code>module.exports</code> 换成了新对象，<code>b</code> 手里的引用不会跟着变，永远是那个半成品。</p>
+<p>修复思路和 ESM 一样：把双方共用的部分抽到第三个模块，或者把读取推迟到函数调用时，详见<a href="/questions/js-esm-cjs/">《ES Modules 和 CommonJS 有哪些关键区别？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>怎样判断一个文件是被直接运行还是被 require 的？</strong></p>
+<blockquote>
+<p>直接用 <code>node foo.js</code> 运行时，<code>require.main</code> 就是这个文件的 <code>module</code>，所以可以判断 <code>require.main === module</code>。被别的模块 <code>require</code> 时，这个判断是 <code>false</code>。</p>
+</blockquote>
+<p><strong>删除 require.cache 能实现热更新吗？</strong></p>
+<blockquote>
+<p>能让下一次 <code>require</code> 重新执行文件，但之前已经拿到旧 <code>exports</code> 的模块还在用旧对象，旧模块里开的定时器、注册的监听也还在运行。原生插件不能这样重新加载，会报错。所以它只是让下一次加载重新执行，谈不上完整的热更新。</p>
+</blockquote>
+<p><strong>require 能加载 ES 模块吗？</strong></p>
+<blockquote>
+<p>Node.js 22.12、20.19 起去掉了 <code>--experimental-require-module</code> 标志，可以 <code>require()</code> 同步的 ES 模块；25.4 起文档把它标为不再是实验特性。模块里有顶层 <code>await</code> 时不能这样加载。两种模块格式怎样判定，见<a href="/questions/node-module-resolution/">《Node.js 的 package exports 会怎样影响模块解析？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://nodejs.org/api/modules.html" target="_blank" rel="noreferrer">Node.js · Modules (CommonJS)<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://nodejs.org/api/modules.html#cycles" target="_blank" rel="noreferrer">Node.js · Modules: Cycles<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://nodejs.org/api/modules.html#requirecache" target="_blank" rel="noreferrer">Node.js · require.cache<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+require+%E6%80%8E%E6%A0%B7%E6%9F%A5%E6%89%BE%E3%80%81%E5%8C%85%E8%A3%85%E5%92%8C%E7%BC%93%E5%AD%98%E6%A8%A1%E5%9D%97%EF%BC%9F%E5%BE%AA%E7%8E%AF%E5%BC%95%E7%94%A8%E6%97%B6%E6%8B%BF%E5%88%B0%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Arequire+%E6%80%8E%E6%A0%B7%E6%9F%A5%E6%89%BE%E3%80%81%E5%8C%85%E8%A3%85%E5%92%8C%E7%BC%93%E5%AD%98%E6%A8%A1%E5%9D%97%EF%BC%9F%E5%BE%AA%E7%8E%AF%E5%BC%95%E7%94%A8%E6%97%B6%E6%8B%BF%E5%88%B0%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anode-require-mechanism%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ANode.js%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnode-require-mechanism%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：require 怎样查找、包装和缓存模块？循环引用时拿到的是什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/node-koa-express/">Koa 和 Express 有什么区别？中间件洋葱模型是怎样实现的？</a></li><li><a href="/questions/node-eventloop/">Node.js 事件循环和浏览器有什么不同？nextTick 一定先于 Promise 吗？</a></li><li><a href="/questions/node-bff/">前端工程师编写 Node 服务时需要守住哪些安全边界？</a></li><li><a href="/questions/node-process-model/">Node.js 的子进程、Worker 和集群应该怎样选择？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

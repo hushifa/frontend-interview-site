@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="框架与选型面试题：Hydration 要在浏览器里下载组件代码、重新执行模板，才能找回事件监听、组件树和应用状态…" />
+    <title>Qwik 的可恢复性（Resumability）和 Hydration 有什么区别？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/frameworks-qwik-resumability/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="Qwik 的可恢复性（Resumability）和 Hydration 有什么区别？" />
+    <meta property="og:description" content="框架与选型面试题：Hydration 要在浏览器里下载组件代码、重新执行模板，才能找回事件监听、组件树和应用状态…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/frameworks-qwik-resumability/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/frameworks-qwik-resumability/#webpage","url":"https://fe.hushifa.top/questions/frameworks-qwik-resumability/","name":"Qwik 的可恢复性（Resumability）和 Hydration 有什么区别？","description":"框架与选型面试题：Hydration 要在浏览器里下载组件代码、重新执行模板，才能找回事件监听、组件树和应用状态…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/frameworks-qwik-resumability/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/frameworks-qwik-resumability/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"框架与选型面试题","item":"https://fe.hushifa.top/topics/frameworks/"},{"@type":"ListItem","position":3,"name":"Qwik 的可恢复性（Resumability）和 Hydration 有什么区别？","item":"https://fe.hushifa.top/questions/frameworks-qwik-resumability/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BHh83_rl.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/frameworks/">框架与选型面试题</a><span aria-hidden="true">/</span><span aria-current="page">Qwik 的可恢复性（Resumability）和 Hydration 有什么区别？</span></nav><h1 tabindex="-1">Qwik 的可恢复性（Resumability）和 Hydration 有什么区别？</h1><p class="reading-summary">Hydration 要在浏览器里下载组件代码、重新执行模板，才能找回事件监听、组件树和应用状态；Qwik 在服务端渲染时把这三样序列化进 HTML，浏览器只装一个全局监听器，用户触发事件时才下载并执行对应的处理函数。代价是状态必须可序列化，类实例和流不行。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>服务端渲染的页面先显示出来，可是按钮点了没反应，要等浏览器下载完 JavaScript、把组件重新跑一遍才能用，这一步就是 Hydration。Qwik 的说法是，Hydration 在客户端把应用逻辑“重放”一遍；Qwik 则在服务端暂停执行，到客户端接着执行，这叫可恢复性。</p>
+<p>Qwik 文档把 Hydration 要找回的东西分成三样：事件监听器、组件树和应用状态。为了找回它们，框架要下载页面上所有组件的代码，再执行模板。Qwik 在服务端渲染时把这三样都写进 HTML：监听器写成元素属性，属性里记着处理函数在哪个代码块、叫什么名字；组件边界和状态订阅关系也一起序列化。</p>
+<p>所以浏览器启动时不用执行应用代码。一个叫 Qwikloader 的小脚本在全局装一个监听器，用户点击时读出属性，下载对应的代码块，执行那个函数。写代码时，<code>onClick$</code> 这类带 <code>$</code> 的写法就标出了能单独懒加载的边界。</p>
+<p>代价是状态必须能序列化。Qwik 能处理循环引用、Date、Map、Set、Promise 和 DOM 引用，函数要包成 QRL 才行；普通类的实例和流就不行，这类数据只能放在客户端代码里生成。</p>
+</blockquote>
+<h2>Hydration 在浏览器里做了什么</h2>
+<p>先回顾 Hydration。服务端渲染出的 HTML 只是一份静态的结果，里面没有事件监听，框架也不知道哪个 DOM 属于哪个组件、组件里的状态是什么。</p>
+<p>Qwik 文档把要恢复的东西列成三项。第一是监听器，要找到每个事件处理函数，把它绑到对应的 DOM 节点上。第二是组件树，框架要重建内部的组件层级。第三是应用状态，服务端取到或存下的数据要还原。</p>
+<p>为什么这一步慢？文档给了两个原因：页面上所有组件的代码都要下载，而且要执行模板，才能重新发现监听器在哪里、组件树长什么样。也就是说，哪怕用户只想点一个按钮，浏览器也要先把整页的组件代码跑一遍。Hydration 本身的概念和常见错误可以看<a href="/questions/render-hydration/">《Hydration mismatch 为什么发生，应该怎样修复？》</a>。</p>
+<h2>Qwik 把这三样写进了 HTML</h2>
+<p>Qwik 的思路是：既然服务端已经执行过一次，就把执行到一半的状态存下来，浏览器直接接着用。文档用的比喻是，把一个应用序列化，挪到另一台虚拟机上（从服务器到浏览器），从序列化的那一刻继续运行。</p>
+<p>先看一个计数器：</p>
+<div class="not-prose code-block"><div class="code-language">TSX</div><pre><code class="hljs language-tsx"><span class="hljs-keyword">import</span> { component$, useSignal } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@builder.io/qwik&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title function_">component$</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> count = <span class="hljs-title function_">useSignal</span>(<span class="hljs-number">0</span>);
+
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>$=<span class="hljs-string">{()</span> =&gt;</span> count.value++}&gt;
+      Increment {count.value}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>
+  );
+});
+</code></pre></div>
+<p>这段代码在服务端渲染后，按钮上不会绑真实的事件监听，而是带一个属性，文档里的示意是 <code>&lt;button on:click=&quot;./chunk.js#handler_symbol&quot;&gt;</code>，记着点击时要去哪个代码块找哪个函数。文档的原话是，这个属性包含了恢复应用所需的全部信息，不需要提前做任何事。</p>
+<p>组件树和状态也是同样的处理方式。组件边界信息被序列化，Qwik 不加载组件代码也能重建组件层级，而且只在某个组件需要重新渲染时才去做。状态和组件之间的订阅关系也写进去了，所以 <code>count</code> 变化时，Qwik 知道该重新渲染哪个组件。文档还说明，任何组件都可以在父组件的代码不在场的情况下恢复。</p>
+<h2>用户点击时发生了什么</h2>
+<p>页面上有一个 Qwikloader 脚本。它不需要任何应用代码，只在全局装一个监听器，而不是给每个元素各装一个。</p>
+<p>用户点击按钮时，Qwikloader 读出按钮上的属性，拿到代码块地址和函数名，下载这个代码块，执行对应的函数。函数改了 <code>count</code>，Qwik 根据序列化的订阅关系找到要重新渲染的组件。</p>
+<p>那 <code>onClick$</code> 末尾的 <code>$</code> 是什么意思？Qwik 文档的说法是，<code>$</code> 后缀表示这里有一个懒加载的边界，告诉 Optimizer 和开发者这里会做特殊的转换。处理函数的代码在用户点击前不会进入 JavaScript 虚拟机执行。文档同时说明，浏览器会提前把代码取到缓存里，所以第一次点击不会因为下载变慢。</p>
+<p>这也是 Qwik 文档强调的一点：懒加载是可恢复架构自然带来的结果。在其他框架里，懒加载往往要开发者自己拆分代码；在 Qwik 里，每个 <code>$</code> 都是一个现成的拆分点。</p>
+<h2>和 Islands 有什么不同</h2>
+<p>很多人会把 Qwik 和 Astro 的 Islands 放在一起比。Islands 的做法见<a href="/questions/frameworks-astro-islands/">《Astro Islands 架构怎样减少客户端 JavaScript？》</a>：页面大部分不发 JavaScript，标了 <code>client:*</code> 的组件作为岛屿，在浏览器里各自下载代码并完成 Hydration。所以 Islands 是在减少需要 Hydration 的范围，每个岛屿内部仍然要重放一遍。</p>
+<p>Qwik 不需要开发者划分哪些组件要交互，它的做法是不做 Hydration，靠序列化的信息在事件发生时按需恢复。两者都想减少页面启动时要执行的 JavaScript，切入点不同。</p>
+<h2>可恢复性的代价：状态必须能序列化</h2>
+<p>要把状态写进 HTML，状态就得能被序列化。Qwik 文档列出了它能处理的类型：和 JSON 不同，它支持循环引用，还能序列化 DOM 引用、Promise、Date、<code>URL</code>、<code>Map</code> 和 <code>Set</code>；函数闭包要包成 QRL（也就是带 <code>$</code> 的写法）才能序列化。</p>
+<p>它处理不了的有两类。一是类的实例，序列化以后 <code>instanceof</code> 和原型都会丢，Date、URL、Map、Set 这些内置类型除外。二是流。文档给的办法是，不能序列化的数据只在客户端代码里创建。</p>
+<p>所以文档说 Qwik 应用要按“以 DOM 为中心”的方式写，而不是“以堆内存为中心”。习惯了把状态放在类实例里的写法，迁到 Qwik 时要调整。</p>
+<h2>常见追问</h2>
+<p><strong>可恢复性是不是意味着页面完全不需要 JavaScript？</strong></p>
+<blockquote>
+<p>不是。Qwikloader 还是要加载的，用户交互时对应的代码块也要下载执行。区别在于启动时不用执行应用代码，不用为了找回监听器和组件树把整页组件重跑一遍，代码按交互一块一块地加载。</p>
+</blockquote>
+<p><strong>用户第一次点击会不会因为下载代码而卡一下？</strong></p>
+<blockquote>
+<p>Qwik 文档提到，处理函数虽然要等点击时才执行，浏览器会提前把代码取到缓存里，所以第一次点击不会因为下载而变慢。可以把这理解为“下载”和“执行”分开了：代码可以提前到浏览器缓存，但只在需要时才执行。</p>
+</blockquote>
+<p><strong>组件里用了一个自定义类的实例当状态会怎样？</strong></p>
+<blockquote>
+<p>序列化以后它就不是那个类的实例了，<code>instanceof</code> 判断和原型上的方法都会丢失。Qwik 文档建议这类数据只在客户端代码里创建，或者把状态改成普通对象、Map、Set 这类能序列化的结构。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://qwik.dev/docs/concepts/resumable/" target="_blank" rel="noreferrer">Qwik · Resumable vs. Hydration<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://qwik.dev/docs/components/events/" target="_blank" rel="noreferrer">Qwik · Events<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Qwik+%E7%9A%84%E5%8F%AF%E6%81%A2%E5%A4%8D%E6%80%A7%EF%BC%88Resumability%EF%BC%89%E5%92%8C+Hydration+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AQwik+%E7%9A%84%E5%8F%AF%E6%81%A2%E5%A4%8D%E6%80%A7%EF%BC%88Resumability%EF%BC%89%E5%92%8C+Hydration+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aframeworks-qwik-resumability%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%A1%86%E6%9E%B6%E4%B8%8E%E9%80%89%E5%9E%8B%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fframeworks-qwik-resumability%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Qwik 的可恢复性（Resumability）和 Hydration 有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/frameworks-angular-hydration/">Angular Hydration 解决什么问题？</a></li><li><a href="/questions/framework-vue-vs-react/">Vue 和 React 有什么区别？该怎样选？</a></li><li><a href="/questions/framework-component-library/">前端组件库怎样设计才能让业务方稳定使用？</a></li><li><a href="/questions/framework-react19-migration/">React 18 项目升级到 React 19，怎样分步迁移并验证行为？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

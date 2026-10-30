@@ -23,7 +23,7 @@
     <meta property="og:url" content="https://fe.hushifa.top/questions/vue-lifecycle/" />
     <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-lifecycle/#webpage","url":"https://fe.hushifa.top/questions/vue-lifecycle/","name":"Vue 生命周期中何时访问 DOM、发请求和清理资源？","description":"Vue面试题：setup 最先执行，适合创建状态和发请求，但这时还没有 DOM；要操作 DOM 等 onMounted…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-lifecycle/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-lifecycle/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"Vue 生命周期中何时访问 DOM、发请求和清理资源？","item":"https://fe.hushifa.top/questions/vue-lifecycle/"}]}]}</script>
     
-    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-BHh83_rl.css">
   </head>
   <body>
     <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue 生命周期中何时访问 DOM、发请求和清理资源？</span></nav><h1 tabindex="-1">Vue 生命周期中何时访问 DOM、发请求和清理资源？</h1><p class="reading-summary">setup 最先执行，适合创建状态和发请求，但这时还没有 DOM；要操作 DOM 等 onMounted；定时器和订阅在 onUnmounted 里清掉。服务端渲染时挂载钩子不会执行。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
@@ -72,8 +72,8 @@ onUnmounted(() =&gt; {
 </code></pre></div>
 <p>为什么两个地方都要写 <code>setData</code>？因为请求和挂载谁先完成说不准。请求先回来，图表还没创建，<code>chart?.</code> 什么也不做，等 <code>onMounted</code> 时再把数据塞进去；挂载先完成，图表先建好，等数据回来再 <code>setData</code>。两边都检查对方是否就绪，哪种顺序都不会漏。</p>
 <p>卸载时 <code>abort()</code> 也是必要的：用户很快离开了页面，请求还没回来，就直接取消，免得回来以后往一个已经销毁的图表里写数据。</p>
-<h2>父子组件谁先谁后</h2>
-<p>挂载时的顺序是：父 <code>setup</code> → 子 <code>setup</code> → 子 <code>onMounted</code> → 父 <code>onMounted</code>。因为父组件渲染时才创建子组件，子组件都挂好了，父组件才算挂载完成。所以在父组件的 <code>onMounted</code> 里，子组件已经全部挂载。卸载时也一样，子组件的 <code>onUnmounted</code> 先于父组件执行。</p>
+<h2>父组件 onMounted 里能拿到子组件的 DOM 吗</h2>
+<p>能。子组件都挂载完成，父组件才算挂载完成，所以父组件的 <code>onMounted</code> 里，通过模板 ref 拿到的子组件和它的 DOM 都已就绪。父子钩子的完整执行顺序见<a href="/questions/vue2-lifecycle/">《Vue 2 与 Vue 3 的生命周期如何对照？父子组件钩子按什么顺序执行？》</a>。</p>
 <h2>为什么钩子不能在 await 之后注册</h2>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 错误：await 之后注册，钩子无法关联到当前组件</span>
 <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetchUser</span>();
@@ -82,8 +82,8 @@ onUnmounted(() =&gt; {
 <p><code>onMounted</code> 要知道“现在是哪个组件在初始化”，Vue 只在 <code>setup</code> 同步执行期间记着这个组件。<code>await</code> 之后代码在稍后的微任务里继续执行，这时已经没有“当前组件”了，钩子就挂不上去。<code>&lt;script setup&gt;</code> 的顶层 <code>await</code> 是例外，编译器会在 <code>await</code> 后帮你恢复当前组件，所以那里注册也能生效，但为了统一，仍然建议放在 <code>await</code> 之前。组合式函数里的钩子也遵循同样的规则。</p>
 <h2>被 KeepAlive 缓存的组件</h2>
 <p>被缓存的组件切走时不会卸载，所以 <code>onUnmounted</code> 不执行，触发的是 <code>onDeactivated</code>；切回来时触发 <code>onActivated</code>。离开时需要暂停的资源，应该写在这对钩子里，见<a href="/questions/vue-keepalive-teleport/">《KeepAlive 与 Teleport 有哪些使用边界？》</a>。</p>
-<h2>和 Vue 2 选项式 API 怎么对应</h2>
-<table><thead><tr><th>Vue 2</th><th>Vue 3 组合式 API</th></tr></thead><tbody><tr><td><code>beforeCreate</code> / <code>created</code></td><td><code>setup</code> 本身</td></tr><tr><td><code>mounted</code></td><td><code>onMounted</code></td></tr><tr><td><code>beforeDestroy</code> / <code>destroyed</code></td><td><code>onBeforeUnmount</code> / <code>onUnmounted</code></td></tr></tbody></table>
+<h2>数据更新后怎样读到新的 DOM</h2>
+<p>改了响应式状态，DOM 不会马上变，Vue 会把更新攒到下一个时机统一处理。想在改完数据后立刻读新 DOM，比如列表新增一项后滚动到底部，用 <code>await nextTick()</code> 再读。<code>onUpdated</code> 也能读到更新后的 DOM，但它在组件任何一次更新后都会触发，不容易对应到某一次具体的修改。nextTick 的原理见<a href="/questions/vue-nexttick/">《修改状态后，为什么有时需要 await nextTick()？》</a>。</p>
 <h2>常见追问</h2>
 <p><strong><code>onUpdated</code> 里能修改状态吗？</strong></p>
 <blockquote>
