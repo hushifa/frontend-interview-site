@@ -1,0 +1,86 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p><code>&lt;Transition&gt;</code> 用来给一个元素的出现和消失加动画。触发条件是 <code>v-if</code>、<code>v-show</code>、<code>&lt;component :is&gt;</code> 切换，或者 <code>key</code> 变化。它不写动画本身，只在合适的时机给元素加、删类名，动画由你写的 CSS 完成。</p>
+<p>进入时有三个类：<code>v-enter-from</code> 是起点，插入前加、一帧后删；<code>v-enter-active</code> 贯穿整个进入过程，用来写 <code>transition</code> 时长和缓动；<code>v-enter-to</code> 是终点。离开同理，是 <code>v-leave-from</code>、<code>v-leave-active</code>、<code>v-leave-to</code>。写了 <code>name=&quot;fade&quot;</code>，前缀 <code>v</code> 就换成 <code>fade</code>。</p>
+<p>想用 JS 控制动画时，用 <code>@before-enter</code>、<code>@enter</code>、<code>@leave</code> 这些钩子。<code>@enter(el, done)</code> 里开始动画，结束时调 <code>done()</code> 告诉 Vue 完成了。纯 JS 动画加 <code>:css=&quot;false&quot;</code>，这时 <code>done</code> 必须调。</p>
+<p><code>&lt;TransitionGroup&gt;</code> 给 <code>v-for</code> 列表用，类名加在每一项上，每项必须有唯一 <code>key</code>，不支持 <code>mode</code>。另外它多一个 <code>v-move</code> 类，让其他项在列表变化时平滑移动，而不是跳过去。</p>
+</blockquote>
+<h2>六个类名分别在什么时候出现</h2>
+<p>先看最常见的淡入淡出：</p>
+<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;template&gt;
+  &lt;button @click=&quot;show = !show&quot;&gt;Toggle&lt;/button&gt;
+  &lt;Transition&gt;
+    &lt;p v-if=&quot;show&quot;&gt;hello&lt;/p&gt;
+  &lt;/Transition&gt;
+&lt;/template&gt;
+
+&lt;style&gt;
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+&lt;/style&gt;
+</code></pre></div>
+<p>为什么只写了 <code>opacity: 0</code>，没写 <code>opacity: 1</code>？以进入为例。元素插入前，Vue 同时加上 <code>v-enter-from</code> 和 <code>v-enter-active</code>，这时透明度是 0。一帧以后删掉 <code>v-enter-from</code>、加上 <code>v-enter-to</code>，透明度回到默认的 1。因为 <code>v-enter-active</code> 上有 <code>transition</code>，这个变化就被动画化了。等过渡结束，Vue 删掉 <code>-active</code> 和 <code>-to</code>。</p>
+<p>离开反过来：触发离开时立即加上 <code>v-leave-from</code> 和 <code>v-leave-active</code>，一帧后换成 <code>v-leave-to</code>，透明度从 1 动画到 0，结束后元素才被真正移除。</p>
+<p>Vue 怎么知道“结束了”？默认监听元素上第一个 <code>transitionend</code> 或 <code>animationend</code> 事件。如果嵌套了多层动画，第一个结束事件来得太早，可以用 <code>:duration=&quot;550&quot;</code> 或 <code>:duration=&quot;{ enter: 500, leave: 800 }&quot;</code> 显式指定毫秒数。</p>
+<h2>name、mode 和 appear 解决什么问题</h2>
+<p>一个页面有好几种动画时，用 <code>name</code> 区分。<code>&lt;Transition name=&quot;fade&quot;&gt;</code> 对应的类名就是 <code>fade-enter-active</code> 等。和 Animate.css 这类现成库配合时，可以用 <code>enter-active-class</code> 这类 prop 直接指定类名。</p>
+<p>两个元素来回切换时，默认是旧的离开、新的进入同时进行，两者会叠在一起。<code>mode=&quot;out-in&quot;</code> 让旧元素先离开，离开完再插入新元素，切换组件时最常用：</p>
+<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;Transition name=&quot;fade&quot; mode=&quot;out-in&quot;&gt;
+  &lt;component :is=&quot;activeComponent&quot;&gt;&lt;/component&gt;
+&lt;/Transition&gt;
+</code></pre></div>
+<p><code>&lt;Transition&gt;</code> 里一次只能有一个元素或组件，组件也必须只有一个根元素。<code>v-if</code>、<code>v-else</code> 切换没问题，因为同一时刻只显示一个。</p>
+<p>还有一个容易漏的点：数字变化想要动画，只改文字是不会触发的，因为 Vue 只更新了文本节点，元素没换。给元素加上 <code>:key=&quot;count&quot;</code>，每次值变了就会生成新元素，才有进入和离开可言。</p>
+<p>首次渲染默认没有动画，需要的话加 <code>appear</code>。</p>
+<h2>用 JS 钩子写动画</h2>
+<p>用 GSAP 这类 JS 动画库时，用钩子拿到元素自己控制：</p>
+<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;Transition :css=&quot;false&quot; @before-enter=&quot;onBeforeEnter&quot; @enter=&quot;onEnter&quot; @leave=&quot;onLeave&quot;&gt;
+  &lt;div v-if=&quot;show&quot;&gt;...&lt;/div&gt;
+&lt;/Transition&gt;
+</code></pre></div>
+<p><code>onBeforeEnter(el)</code> 在插入前调用，用来设置起始状态；<code>onEnter(el, done)</code> 在插入后一帧调用，在这里开始动画，动画结束时调 <code>done()</code>；<code>onLeave(el, done)</code> 同理。另外还有 <code>@after-enter</code>、<code>@enter-cancelled</code>、<code>@before-leave</code>、<code>@after-leave</code> 和只在 <code>v-show</code> 下可用的 <code>@leave-cancelled</code>。</p>
+<p>为什么 <code>:css=&quot;false&quot;</code> 时必须调 <code>done</code>？因为这时 Vue 不再检测 CSS 过渡，也就不知道动画什么时候结束，只能靠你通知。不调的话，钩子会被同步执行，过渡立刻结束，离开的元素马上就没了。和 CSS 过渡一起用时 <code>done</code> 是可选的。<code>:css=&quot;false&quot;</code> 还有个好处，能跳过 CSS 检测，也避免 CSS 规则意外干扰 JS 动画。</p>
+<h2>TransitionGroup 有什么不同</h2>
+<p>列表的增删要用 <code>&lt;TransitionGroup&gt;</code>，它支持和 <code>&lt;Transition&gt;</code> 相同的 prop、类名和钩子，但有几处区别：</p>
+<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;TransitionGroup name=&quot;list&quot; tag=&quot;ul&quot;&gt;
+  &lt;li v-for=&quot;item in items&quot; :key=&quot;item&quot;&gt;{{ item }}&lt;/li&gt;
+&lt;/TransitionGroup&gt;
+</code></pre></div>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.list-move</span>,
+<span class="hljs-selector-class">.list-enter-active</span>,
+<span class="hljs-selector-class">.list-leave-active</span> {
+  <span class="hljs-attribute">transition</span>: all <span class="hljs-number">0.5s</span> ease;
+}
+
+<span class="hljs-selector-class">.list-enter-from</span>,
+<span class="hljs-selector-class">.list-leave-to</span> {
+  <span class="hljs-attribute">opacity</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">transform</span>: <span class="hljs-built_in">translateX</span>(<span class="hljs-number">30px</span>);
+}
+
+<span class="hljs-selector-class">.list-leave-active</span> {
+  <span class="hljs-attribute">position</span>: absolute;
+}
+</code></pre></div>
+<p><code>tag=&quot;ul&quot;</code> 指定外层渲染成什么元素，不写就不渲染外层元素。类名加在每个 <code>&lt;li&gt;</code> 上，不加在容器上。每项必须有唯一 <code>key</code>，Vue 靠它判断哪一项是新增、哪一项被删，<code>key</code> 的作用见<a href="/questions/react-key/">《列表中的 key 为什么不能随意使用数组下标？》</a>。它不支持 <code>mode</code>，因为列表里的元素不是互斥地二选一。</p>
+<p><code>.list-move</code> 是列表独有的。插入或删除一项时，周围的项要挪位置，没有这条规则它们会瞬间跳过去；加上以后就会平滑移动，整个列表重新排序也一样。为什么还要给离开的项加 <code>position: absolute</code>？因为它要先脱离文档流，其他项才能算出新位置并开始移动。</p>
+<h2>常见追问</h2>
+<p><strong>v-show 和 v-if 在 Transition 里有什么区别？</strong></p>
+<blockquote>
+<p>两者都能触发进入和离开动画。区别在动画结束后：<code>v-if</code> 会把元素移除，<code>v-show</code> 只是设置 <code>display: none</code>。另外 <code>@leave-cancelled</code> 钩子只在 <code>v-show</code> 下可用。</p>
+</blockquote>
+<p><strong>怎样让列表项一个接一个地出现？</strong></p>
+<blockquote>
+<p>官方示例的做法是给每项加 <code>:data-index=&quot;index&quot;</code>，用 <code>:css=&quot;false&quot;</code> 和 JS 钩子，在 <code>onEnter</code> 里按 <code>el.dataset.index</code> 算出延迟，比如乘以 0.15 秒，动画完成时调 <code>done</code>。</p>
+</blockquote>
+<p><strong>组件被 KeepAlive 缓存，又要切换动画，该怎么写？</strong></p>
+<blockquote>
+<p>把 <code>&lt;KeepAlive&gt;</code> 放在 <code>&lt;Transition&gt;</code> 里面，让 <code>&lt;component :is&gt;</code> 作为 KeepAlive 的子元素。缓存本身的边界见<a href="/questions/vue-keepalive-teleport/">《KeepAlive 与 Teleport 有哪些使用边界？》</a>。</p>
+</blockquote>`};export{e as default};

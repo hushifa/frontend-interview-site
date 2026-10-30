@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="JavaScript面试题：import attributes 在 import 语句后用 with 写明模块类型…" />
+    <title>import attributes（with { type: &#39;json&#39; }）解决什么问题？和旧的 assert 有什么区别？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/js-import-attributes/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="import attributes（with { type: &#39;json&#39; }）解决什么问题？和旧的 assert 有什么区别？" />
+    <meta property="og:description" content="JavaScript面试题：import attributes 在 import 语句后用 with 写明模块类型…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/js-import-attributes/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-import-attributes/#webpage","url":"https://fe.hushifa.top/questions/js-import-attributes/","name":"import attributes（with { type: 'json' }）解决什么问题？和旧的 assert 有什么区别？","description":"JavaScript面试题：import attributes 在 import 语句后用 with 写明模块类型…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-import-attributes/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-import-attributes/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"import attributes（with { type: 'json' }）解决什么问题？和旧的 assert 有什么区别？","item":"https://fe.hushifa.top/questions/js-import-attributes/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">import attributes（with { type: &#x27;json&#x27; }）解决什么问题？和旧的 assert 有什么区别？</span></nav><h1 tabindex="-1">import attributes（with { type: &#x27;json&#x27; }）解决什么问题？和旧的 assert 有什么区别？</h1><p class="reading-summary">import attributes 在 import 语句后用 with 写明模块类型，比如 with { type: &#x27;json&#x27; }。浏览器按服务器返回的 MIME 类型解析模块，写明类型后，类型对不上就直接失败，不会把被篡改的“JSON”当脚本执行。旧提案用 assert 关键字，现在已不是标准写法。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>import attributes 是在 <code>import</code> 语句后面加一段 <code>with { ... }</code>，告诉运行时这个模块应该是什么类型。最常见的写法是 <code>import data from &#x27;./data.json&#x27; with { type: &#x27;json&#x27; }</code>，把一个 JSON 文件直接当模块导入。</p>
+<p>之所以要写明类型，是因为浏览器不看文件扩展名，只按服务器返回的 MIME 类型决定怎么解析模块。如果服务器被篡改，把一个“JSON”文件返回成 <code>text/javascript</code>，里面的代码就会被执行。写了 <code>type: &#x27;json&#x27;</code>，返回的类型不是 <code>application/json</code> 时导入直接失败。</p>
+<p>除了 JSON，浏览器还支持 <code>type: &#x27;css&#x27;</code>，导入得到一个 <code>CSSStyleSheet</code> 对象。动态导入写成 <code>import(&#x27;./data.json&#x27;, { with: { type: &#x27;json&#x27; } })</code>。</p>
+<p>要注意，早期提案用的是 <code>assert</code> 关键字，现在这种写法已经不是标准，新代码应该用 <code>with</code>。另外 JSON 模块只有默认导出，不能按字段做具名导入。</p>
+</blockquote>
+<h2>写法长什么样</h2>
+<p>静态导入和重新导出都把属性写在模块路径后面：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> config <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./config.json&#x27;</span> <span class="hljs-keyword">with</span> { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;json&#x27;</span> };
+<span class="hljs-keyword">export</span> { <span class="hljs-keyword">default</span> <span class="hljs-keyword">as</span> theme } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./theme.json&#x27;</span> <span class="hljs-keyword">with</span> { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;json&#x27;</span> };
+</code></pre></div>
+<p><code>with</code> 后面是一个对象。键可以是标识符或字符串，必须是运行时认识的键，值必须是字符串字面量。静态导入写了运行时不认识的键会报 <code>SyntaxError</code>，动态导入里写了不认识的键会报 <code>TypeError</code>。</p>
+<p>动态导入时，属性放在第二个参数的 <code>with</code> 字段里：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> { <span class="hljs-attr">default</span>: config } = <span class="hljs-keyword">await</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;./config.json&#x27;</span>, {
+  <span class="hljs-attr">with</span>: { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;json&#x27;</span> },
+});
+</code></pre></div>
+<p>拿到的是模块命名空间对象，JSON 内容在 <code>default</code> 上。因为 JSON 模块只有一个默认导出，<code>import { name } from &#x27;./config.json&#x27; with { type: &#x27;json&#x27; }</code> 这种具名导入是不行的。</p>
+<h2>为什么不能看扩展名就决定类型</h2>
+<p>很多人会问：文件叫 <code>config.json</code>，浏览器为什么还要我再声明一遍类型？</p>
+<p>原因是浏览器加载模块时只看服务器响应里的媒体类型（MIME 类型），URL 里的扩展名不起作用。假设服务器出了问题，把这个文件的类型返回成 <code>text/javascript</code>，而文件内容又被换成了恶意代码，没有声明类型时它会被当成脚本执行。导入方本来只想读一份数据，结果执行了外部代码。</p>
+<p>写了 <code>with { type: &#x27;json&#x27; }</code> 以后，运行时会核对类型。服务器返回的不是 <code>application/json</code>，导入就失败。浏览器发请求时还会带上 <code>Accept: application/json</code>。所以这个属性改变的是怎样获取和校验模块，不会改变 JSON 本身怎样解析。</p>
+<p>反过来，不写 <code>type</code> 直接导入 JSON，浏览器会报错，提示期望的是 JavaScript 模块，服务器却返回了 <code>application/json</code>。MDN 也说明 Node 和 Deno 跟浏览器保持一致，导入 JSON 模块同样要求写 <code>type</code>。</p>
+<h2>CSS 模块怎样用</h2>
+<p>浏览器还支持 <code>type: &#x27;css&#x27;</code>，导入的结果是一个 <code>CSSStyleSheet</code> 对象，可以直接加到文档或 Shadow DOM 上：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> sheet <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./card.css&#x27;</span> <span class="hljs-keyword">with</span> { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;css&#x27;</span> };
+<span class="hljs-variable language_">document</span>.<span class="hljs-property">adoptedStyleSheets</span>.<span class="hljs-title function_">push</span>(sheet);
+</code></pre></div>
+<p>同样的规则也适用：服务器返回的不是 <code>text/css</code>，导入就失败。<code>CSSStyleSheet</code> 只在 window 环境里提供，所以 Worker 里通常不能导入 CSS 模块。</p>
+<h2>和旧的 assert 有什么区别</h2>
+<p>这个特性早期叫 import assertions，写法是 <code>import data from &#x27;./data.json&#x27; assert { type: &#x27;json&#x27; }</code>。后来提案改成了 <code>with</code> 关键字，MDN 明确说 <code>assert</code> 现在是非标准写法。</p>
+<p>所以老教程、老项目里看到 <code>assert</code>，迁移时改成 <code>with</code> 即可，花括号里的内容不用变。新代码不要再写 <code>assert</code>。</p>
+<h2>常见追问</h2>
+<p><strong>同一个路径写不同的属性，会是同一个模块吗？</strong></p>
+<blockquote>
+<p>不一定。MDN 说明属性是模块说明符的一部分，同样的路径带上不同的属性，可能加载出完全不同的模块。</p>
+</blockquote>
+<p><strong>导入的 JSON 后来在服务器上改了，页面能读到新内容吗？</strong></p>
+<blockquote>
+<p>读不到。动态导入的模块在整个页面或 Worker 的生命周期里都会被缓存，同一个模块只加载一次。数据会变化的话，应该用 <code>fetch</code> 去请求，而不是用 import。</p>
+</blockquote>
+<p><strong>ESM 和 CommonJS 的其他区别呢？</strong></p>
+<blockquote>
+<p>加载时机、导出的是值还是绑定这些差别，见<a href="/questions/js-esm-cjs/">《ES Modules 和 CommonJS 有哪些关键区别？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import/with" target="_blank" rel="noreferrer">MDN · Import attributes<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+import+attributes%EF%BC%88with+%7B+type%3A+%27json%27+%7D%EF%BC%89%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%E5%92%8C%E6%97%A7%E7%9A%84+assert+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Aimport+attributes%EF%BC%88with+%7B+type%3A+%27json%27+%7D%EF%BC%89%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%E5%92%8C%E6%97%A7%E7%9A%84+assert+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-import-attributes%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-import-attributes%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：import attributes（with { type: &#x27;json&#x27; }）解决什么问题？和旧的 assert 有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-promise-chain/">回调地狱是什么？Promise 链式调用怎样解决它？then 的返回值有哪些规则？</a></li><li><a href="/questions/js-macro-micro-tasks/">事件循环输出顺序题怎么推？async/await、setTimeout、requestAnimationFrame 谁先执行？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

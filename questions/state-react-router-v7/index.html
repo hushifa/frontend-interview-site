@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="状态与路由面试题：Remix 一直是建在 React Router 之上的一层，v7 把这层并进了 React Router…" />
+    <title>React Router v7 的 framework mode 和 Remix 是什么关系？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/state-react-router-v7/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="React Router v7 的 framework mode 和 Remix 是什么关系？" />
+    <meta property="og:description" content="状态与路由面试题：Remix 一直是建在 React Router 之上的一层，v7 把这层并进了 React Router…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/state-react-router-v7/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/state-react-router-v7/#webpage","url":"https://fe.hushifa.top/questions/state-react-router-v7/","name":"React Router v7 的 framework mode 和 Remix 是什么关系？","description":"状态与路由面试题：Remix 一直是建在 React Router 之上的一层，v7 把这层并进了 React Router…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/state-react-router-v7/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/state-react-router-v7/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"状态与路由面试题","item":"https://fe.hushifa.top/topics/state-routing/"},{"@type":"ListItem","position":3,"name":"React Router v7 的 framework mode 和 Remix 是什么关系？","item":"https://fe.hushifa.top/questions/state-react-router-v7/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/state-routing/">状态与路由面试题</a><span aria-hidden="true">/</span><span aria-current="page">React Router v7 的 framework mode 和 Remix 是什么关系？</span></nav><h1 tabindex="-1">React Router v7 的 framework mode 和 Remix 是什么关系？</h1><p class="reading-summary">Remix 一直是建在 React Router 之上的一层，v7 把这层并进了 React Router，原计划的 Remix v3 改为 React Router v7 发布。React Router 现在有 declarative、data、framework 三种模式，功能逐层叠加；framework mode 用 Vite 插件在 data mode 上加了类型安全的路由模块、代码拆分和 SPA、SSR、静态渲染，就是原来 Remix 的能力。Remix 品牌之后走向不依赖 React 的新方向。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>一个 Remix v2 项目升级，官方给的路线不是升到 Remix v3，而是改成 React Router v7：把 <code>@remix-run/*</code> 依赖换成 <code>react-router</code>，Vite 插件从 <code>remix()</code> 换成 <code>reactRouter()</code>。因为 Remix 团队在 2024 年宣布，原计划的 Remix v3 改为 React Router v7 发布。</p>
+<p>原因是 Remix 一直只是 React Router 上面的一层，路由、loader、action 这些核心能力早就放进了 React Router，剩下的这层越来越薄，干脆合并。</p>
+<p>合并以后，React Router 有三种模式，功能逐层叠加。declarative mode 就是熟悉的 <code>&lt;BrowserRouter&gt;</code>，只管 URL 匹配和导航；data mode 用 <code>createBrowserRouter</code> 把路由配置移到 React 渲染之外，加上 loader、action 和 pending 状态；framework mode 再用 Vite 插件包一层，提供类型安全的路由模块、按路由拆分代码，以及 SPA、SSR、静态渲染几种策略。framework mode 就是原来 Remix 提供的那套框架能力。</p>
+<p>要注意两点。第一，Remix 这个名字没有消失，团队 2025 年宣布 Remix 3 会走新路线，不再依赖 React，起点是 Preact 的一个分支，所以“Remix 3”和 React Router v7 是两回事。第二，React Router 已经发布 v8，framework mode 还在，但要求 Vite 7 并默认启用 Vite Environment API 等变更。</p>
+</blockquote>
+<h2>为什么 Remix 会并进 React Router</h2>
+<p>Remix 官方博客的说法是：Remix 一直只是 React Router 之上的一层。团队先把 Remix 的数据加载模式搬进 React Router（就是 v6.4 的 data router），后来又让 Remix 更多地直接依赖 React Router。到最后 Remix 自己的代码只剩很薄一层，所以决定去掉它，把原定的 Remix v3 作为 React Router v7 发布。</p>
+<p>所以理解这件事的关键是：Remix 用户升级到 React Router v7，拿到的还是同一套框架能力，只是包名换了。官方说，在开启所有 future flag、并且已经用 Vite 的前提下，升级除了改 import 基本没有破坏性变更。</p>
+<h2>三种模式分别是什么</h2>
+<p>用哪种模式，取决于入口用的是哪个顶层路由 API。</p>
+<p>declarative mode 写法和以前一样，只提供 URL 匹配、导航和激活状态，比如 <code>&lt;Link&gt;</code>、<code>useNavigate</code>、<code>useLocation</code>：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx">&lt;<span class="hljs-title class_">BrowserRouter</span>&gt;
+  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span></span>
+&lt;/<span class="hljs-title class_">BrowserRouter</span>&gt;
+</code></pre></div>
+<p>data mode 把路由配置移到 React 渲染之外，于是可以在渲染前加载数据：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">const</span> router = <span class="hljs-title function_">createBrowserRouter</span>([
+  { <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-title class_">Component</span>: <span class="hljs-title class_">Root</span>, <span class="hljs-attr">loader</span>: loadRootData },
+]);
+root.<span class="hljs-title function_">render</span>(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">RouterProvider</span> <span class="hljs-attr">router</span>=<span class="hljs-string">{router}</span> /&gt;</span></span>);
+</code></pre></div>
+<p>framework mode 在 data mode 外面包了一个 Vite 插件。路由写在 <code>app/routes.ts</code> 里，每个路由模块导出 <code>loader</code>、组件等，插件会生成对应的类型：</p>
+<div class="not-prose code-block"><div class="code-language">TSX</div><pre><code class="hljs language-tsx"><span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> { <span class="hljs-title class_">Route</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./+types/product&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">loader</span>(<span class="hljs-params">{ params }: <span class="hljs-title class_">Route</span>.<span class="hljs-title class_">LoaderArgs</span></span>) {
+  <span class="hljs-keyword">const</span> product = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getProduct</span>(params.<span class="hljs-property">pid</span>);
+  <span class="hljs-keyword">return</span> { product };
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Product</span>(<span class="hljs-params">{ loaderData }: <span class="hljs-title class_">Route</span>.<span class="hljs-title class_">ComponentProps</span></span>) {
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{loaderData.product.name}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>;
+}
+</code></pre></div>
+<p><code>loaderData</code> 的类型直接从 <code>loader</code> 的返回值推出来，不用手写。<code>&lt;Links&gt;</code>、<code>&lt;Meta&gt;</code>、<code>&lt;Scripts&gt;</code>、<code>&lt;ServerRouter&gt;</code> 和 <code>&lt;Link prefetch&gt;</code> 这些 API 只有 framework mode 才有，因为它们需要构建工具知道每个路由对应哪些资源。</p>
+<h2>该选哪种模式</h2>
+<p>官方文档的建议很直接：每种模式都支持任何架构和部署目标，问题不是要不要 SSR，而是有多少事想自己做。</p>
+<p>想直接用 React 做一个应用、拿不准要不要服务端渲染、或者在和 Next.js 之类的框架做比较、从 Next.js 迁移过来，选 framework mode。想要 loader、action 这些数据能力，但打包、数据层、服务端都想自己控制，或者 v6.4 起就在用 data router，选 data mode。只想把 React Router 当最简单的路由库用，或者数据层自己处理 pending 状态，选 declarative mode。</p>
+<p>路由守卫和懒加载这类通用话题，见<a href="/questions/react-router/">《React Router 的原理是什么？怎样做路由守卫和懒加载？》</a>。</p>
+<h2>Remix v2 怎样升级</h2>
+<p>官方升级指南的主要步骤是：先开启 Remix v2 所有 future flag；运行社区提供的 codemod <code>npx codemod remix/2/react-router/upgrade</code>；把 <code>@remix-run/react</code>、<code>@remix-run/server-runtime</code> 等共享 API 改为从 <code>react-router</code> 导入，运行时相关的包改成 <code>@react-router/node</code>、<code>@react-router/cloudflare</code> 等；<code>vite.config.ts</code> 里的 <code>remix()</code> 换成 <code>@react-router/dev/vite</code> 的 <code>reactRouter()</code>；路由改在 <code>app/routes.ts</code> 里声明，原来的配置挪到 <code>react-router.config.ts</code>；入口文件里的 <code>RemixServer</code> 和 <code>RemixBrowser</code> 换成 <code>ServerRouter</code> 和 <code>HydratedRouter</code>。</p>
+<h2>常见追问</h2>
+<p><strong>Remix 3 是 React Router v7 的下一个版本吗？</strong></p>
+<blockquote>
+<p>不是。React Router v7 承接的是原来的 Remix v2 用户。Remix 团队 2025 年 5 月的博客说，新的 Remix 不会有关键依赖，连 React 都不依赖，起点是 Preact 的一个分支，并要构建自己的组件模型。</p>
+</blockquote>
+<p><strong>从 v7 升到 v8，framework mode 要改什么？</strong></p>
+<blockquote>
+<p>v8 要求 Node 22.22 以上、React 19.2.7 以上，framework mode 还要求 Vite 7。v7 的几个 future flag 变成默认行为，比如中间件、按路由拆分客户端模块、使用 Vite Environment API。另外 <code>react-router-dom</code> 包被移除，DOM 相关的 API 从 <code>react-router/dom</code> 导入。官方建议在 v7 上把 flag 一个个打开、每步提交上线，再升 v8。</p>
+</blockquote>
+<p><strong>data mode 能做服务端渲染吗？</strong></p>
+<blockquote>
+<p>能。官方说每种模式都支持任何架构和部署目标，区别在于 framework mode 把 SSR、代码拆分和类型生成都配好了，data mode 要自己处理打包和服务端这部分。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://reactrouter.com/start/modes" target="_blank" rel="noreferrer">React Router · Picking a Mode<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://remix.run/blog/merging-remix-and-react-router" target="_blank" rel="noreferrer">Remix Blog · Merging Remix and React Router<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://reactrouter.com/upgrading/remix" target="_blank" rel="noreferrer">React Router · Upgrading from Remix<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://remix.run/blog/wake-up-remix" target="_blank" rel="noreferrer">Remix Blog · Wake up, Remix!<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://reactrouter.com/upgrading/v7" target="_blank" rel="noreferrer">React Router · Upgrading from v7<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+Router+v7+%E7%9A%84+framework+mode+%E5%92%8C+Remix+%E6%98%AF%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+Router+v7+%E7%9A%84+framework+mode+%E5%92%8C+Remix+%E6%98%AF%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Astate-react-router-v7%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%8A%B6%E6%80%81%E4%B8%8E%E8%B7%AF%E7%94%B1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fstate-react-router-v7%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React Router v7 的 framework mode 和 Remix 是什么关系？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/state-vue-router-guards/">Vue Router 有哪些导航守卫？完整的导航流程是怎样的？</a></li><li><a href="/questions/state-hash-history/">hash 路由和 history 路由的原理是什么？服务器要怎样配置回退？</a></li><li><a href="/questions/state-router/">前端路由除切换组件外还需要管理什么？</a></li><li><a href="/questions/state-route-concurrency/">路由并发导航和权限变化应该怎样处理？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

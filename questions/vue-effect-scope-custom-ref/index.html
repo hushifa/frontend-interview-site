@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="Vue面试题：effectScope 把一段代码里创建的 computed、watch、watchEffect 收进同一个作用域…" />
+    <title>effectScope 和 customRef 适合什么场景？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/vue-effect-scope-custom-ref/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="effectScope 和 customRef 适合什么场景？" />
+    <meta property="og:description" content="Vue面试题：effectScope 把一段代码里创建的 computed、watch、watchEffect 收进同一个作用域…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/vue-effect-scope-custom-ref/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-effect-scope-custom-ref/#webpage","url":"https://fe.hushifa.top/questions/vue-effect-scope-custom-ref/","name":"effectScope 和 customRef 适合什么场景？","description":"Vue面试题：effectScope 把一段代码里创建的 computed、watch、watchEffect 收进同一个作用域…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-effect-scope-custom-ref/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-effect-scope-custom-ref/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"effectScope 和 customRef 适合什么场景？","item":"https://fe.hushifa.top/questions/vue-effect-scope-custom-ref/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">effectScope 和 customRef 适合什么场景？</span></nav><h1 tabindex="-1">effectScope 和 customRef 适合什么场景？</h1><p class="reading-summary">effectScope 把一段代码里创建的 computed、watch、watchEffect 收进同一个作用域，调用 stop() 就能一起停掉，适合在组件之外使用组合式函数或做共享状态；onScopeDispose 是它的清理钩子。customRef 让你自己决定 ref 什么时候收集依赖（track）、什么时候通知更新（trigger），典型例子是防抖 ref。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>组件里写的 <code>watch</code>、<code>computed</code>，组件卸载时 Vue 会自动停掉。可要是在组件外面创建，比如在一个全局 store 里，就没人管它们的清理了。<code>effectScope()</code> 就是手动建一个“收纳盒”：<code>scope.run()</code> 里创建的所有 effect 都归它管，<code>scope.stop()</code> 一次全部停掉。</p>
+<p>配套的 <code>onScopeDispose(fn)</code> 在当前作用域停止时调用 <code>fn</code>。每个组件的 <code>setup()</code> 本身也运行在一个作用域里，所以组合式函数用 <code>onScopeDispose</code> 代替 <code>onUnmounted</code>，在组件里和组件外都能正确清理。</p>
+<p><code>customRef()</code> 解决的是另一个问题：普通 <code>ref</code> 一读就收集依赖、一写就触发更新，你改不了。<code>customRef</code> 把 <code>track</code> 和 <code>trigger</code> 交给你，在 <code>get</code> 里调 <code>track()</code>，在 <code>set</code> 里决定什么时候调 <code>trigger()</code>。官方例子是防抖 ref，输入停下一段时间后才真正更新。</p>
+<p>要注意，这两个都是进阶 API，业务代码很少直接用。<code>customRef</code> 的 <code>get</code> 每次返回新对象时，作为 prop 传给子组件可能引起意外的更新，官方文档专门提醒过。</p>
+</blockquote>
+<h2>effectScope 怎样把 effect 收在一起</h2>
+<p>先看官方文档的例子。<code>scope.run()</code> 里创建了一个 computed 和两个侦听器：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> scope = <span class="hljs-title function_">effectScope</span>();
+
+scope.<span class="hljs-title function_">run</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> doubled = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> counter.<span class="hljs-property">value</span> * <span class="hljs-number">2</span>);
+
+  <span class="hljs-title function_">watch</span>(doubled, <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(doubled.<span class="hljs-property">value</span>));
+
+  <span class="hljs-title function_">watchEffect</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Count: &#x27;</span>, doubled.<span class="hljs-property">value</span>));
+});
+
+<span class="hljs-comment">// 停掉作用域里的所有 effect</span>
+scope.<span class="hljs-title function_">stop</span>();
+</code></pre></div>
+<p>调用 <code>scope.stop()</code> 后，<code>counter</code> 再变，两个侦听器都不会再执行。为什么不直接把每个 <code>watch</code> 返回的停止函数存起来？可以，但 effect 一多就容易漏，而且组合式函数内部创建的 effect 调用方根本拿不到。作用域会自动收集 <code>run</code> 期间同步创建的所有 effect，不用一个个记。</p>
+<p><code>run</code> 会返回回调的返回值，所以可以在里面创建状态再拿出来。作用域停止后再调用 <code>run</code>，返回的是 <code>undefined</code>。</p>
+<h2>什么时候需要它</h2>
+<p>最典型的是在组件之外共享一份状态。比如多个组件共用一个“鼠标位置”的组合式函数，希望全局只监听一次 <code>mousemove</code>。这时可以在第一次使用时建一个作用域，把组合式函数放进去执行；最后一个使用它的组件卸载时，再 <code>stop()</code> 掉这个作用域。</p>
+<p>组件里没这个需求，是因为 <code>setup()</code> 已经在组件的作用域里执行了，组件卸载时 Vue 会停掉它。<code>effectScope()</code> 还有一个 <code>detached</code> 参数，传 <code>true</code> 时新作用域不会被外层作用域收集，外层停止时它也不受影响。</p>
+<h2>onScopeDispose 和 onUnmounted 有什么不同</h2>
+<p>组合式函数里注册清理逻辑，常见写法是 <code>onUnmounted</code>。可是它只在组件里有效，组合式函数要是在 <code>effectScope</code> 里调用，就没有组件可以挂。</p>
+<p><code>onScopeDispose(fn)</code> 挂在当前作用域上。在组件里调用，当前作用域就是组件的，组件卸载时执行；在手动作用域里调用，<code>scope.stop()</code> 时执行。所以写通用的组合式函数时用它更合适。在没有活动作用域的地方调用会给出警告，Vue 3.5 起第二个参数传 <code>true</code> 可以关掉这个警告。组合式函数的写法见<a href="/questions/vue-composables/">《组合式函数和 mixin 相比有什么维护优势？》</a>。</p>
+<h2>customRef 怎样做一个防抖 ref</h2>
+<p>普通 <code>ref</code> 绑在输入框上，每敲一个字就更新一次，依赖它的搜索请求也跟着发。官方文档给的防抖 ref 是这样写的：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { customRef } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">useDebouncedRef</span>(<span class="hljs-params">value, delay = <span class="hljs-number">200</span></span>) {
+  <span class="hljs-keyword">let</span> timeout;
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">customRef</span>(<span class="hljs-function">(<span class="hljs-params">track, trigger</span>) =&gt;</span> {
+    <span class="hljs-keyword">return</span> {
+      <span class="hljs-title function_">get</span>(<span class="hljs-params"></span>) {
+        <span class="hljs-title function_">track</span>();
+        <span class="hljs-keyword">return</span> value;
+      },
+      <span class="hljs-title function_">set</span>(<span class="hljs-params">newValue</span>) {
+        <span class="hljs-built_in">clearTimeout</span>(timeout);
+        timeout = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+          value = newValue;
+          <span class="hljs-title function_">trigger</span>();
+        }, delay);
+      },
+    };
+  });
+}
+</code></pre></div>
+<p>在组件里用 <code>const text = useDebouncedRef(&#x27;hello&#x27;)</code>，再 <code>v-model=&quot;text&quot;</code> 绑到输入框上。</p>
+<p><code>track()</code> 和 <code>trigger()</code> 是什么？<code>track()</code> 告诉 Vue “有人读了这个值，记下来”，<code>trigger()</code> 告诉 Vue “值变了，通知读过它的地方”。这正是普通 ref 内部做的两件事，原理见<a href="/questions/vue-reactivity-tracking/">《Vue 3 响应式依赖是怎样收集和触发的？》</a>。<code>customRef</code> 把它们交给你，所以这里 <code>set</code> 没有马上触发，而是每次重新计时，停下 200 毫秒后才更新值并 <code>trigger()</code>。</p>
+<h2>用 customRef 要小心什么</h2>
+<p>官方文档提醒，<code>get</code> 每次返回一个新对象时要小心。假设这个 ref 作为 prop 传给子组件，父组件因为别的状态重新渲染，就会重新读一次它，得到一个新对象。子组件比较 prop 发现变了，于是更新；可这个 ref 的 <code>set</code> 根本没被调用过。所以 <code>get</code> 应该返回保存好的值，而不是每次现造一个。</p>
+<h2>常见追问</h2>
+<p><strong>effectScope 能停掉 scope.run 里异步创建的 watch 吗？</strong></p>
+<blockquote>
+<p>作用域收集的是 <code>run</code> 执行期间创建的 effect。<code>await</code> 之后才创建的 watch，已经不在 <code>run</code> 的同步执行过程里了，需要在拿到作用域后再用 <code>scope.run()</code> 包一层。</p>
+</blockquote>
+<p><strong>customRef 能不能不调 track？</strong></p>
+<blockquote>
+<p>可以，官方说何时调用、调不调用都由你控制。不调 <code>track()</code>，读这个 ref 的地方就不会收集依赖，它变了也不会触发更新，相当于一个不响应的值。</p>
+</blockquote>
+<p><strong>怎样拿到当前的作用域？</strong></p>
+<blockquote>
+<p>用 <code>getCurrentScope()</code>，有活动作用域时返回它，否则返回 <code>undefined</code>。组合式函数可以用它判断自己是否运行在作用域里，再决定要不要注册 <code>onScopeDispose</code>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://vuejs.org/api/reactivity-advanced.html" target="_blank" rel="noreferrer">Vue.js · Reactivity API Advanced<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+effectScope+%E5%92%8C+customRef+%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AeffectScope+%E5%92%8C+customRef+%E9%80%82%E5%90%88%E4%BB%80%E4%B9%88%E5%9C%BA%E6%99%AF%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-effect-scope-custom-ref%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-effect-scope-custom-ref%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：effectScope 和 customRef 适合什么场景？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-vmemo-shallowref/">v-once、v-memo、shallowRef 和 markRaw 分别在什么时候用？</a></li><li><a href="/questions/vue-ref-reactive/">Vue 3 中 ref 和 reactive 有什么区别？</a></li><li><a href="/questions/vue2-reactivity/">Vue 2 的响应式原理是什么？</a></li><li><a href="/questions/vue2-vs-vue3-reactivity/">defineProperty 和 Proxy 实现的响应式有什么区别？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

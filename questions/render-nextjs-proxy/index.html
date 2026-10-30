@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="SSR 与渲染面试题：Proxy 在路由渲染之前运行，根据请求做重定向、重写、改请求头和响应头、读写 Cookie，或者直接返回响应。" />
+    <title>Next.js Middleware（16 版改名 proxy.ts）能做什么、不该做什么？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/render-nextjs-proxy/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="Next.js Middleware（16 版改名 proxy.ts）能做什么、不该做什么？" />
+    <meta property="og:description" content="SSR 与渲染面试题：Proxy 在路由渲染之前运行，根据请求做重定向、重写、改请求头和响应头、读写 Cookie，或者直接返回响应。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/render-nextjs-proxy/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/render-nextjs-proxy/#webpage","url":"https://fe.hushifa.top/questions/render-nextjs-proxy/","name":"Next.js Middleware（16 版改名 proxy.ts）能做什么、不该做什么？","description":"SSR 与渲染面试题：Proxy 在路由渲染之前运行，根据请求做重定向、重写、改请求头和响应头、读写 Cookie，或者直接返回响应。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/render-nextjs-proxy/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/render-nextjs-proxy/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"SSR 与渲染面试题","item":"https://fe.hushifa.top/topics/rendering/"},{"@type":"ListItem","position":3,"name":"Next.js Middleware（16 版改名 proxy.ts）能做什么、不该做什么？","item":"https://fe.hushifa.top/questions/render-nextjs-proxy/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/rendering/">SSR 与渲染面试题</a><span aria-hidden="true">/</span><span aria-current="page">Next.js Middleware（16 版改名 proxy.ts）能做什么、不该做什么？</span></nav><h1 tabindex="-1">Next.js Middleware（16 版改名 proxy.ts）能做什么、不该做什么？</h1><p class="reading-summary">Proxy 在路由渲染之前运行，根据请求做重定向、重写、改请求头和响应头、读写 Cookie，或者直接返回响应。Next.js 16 把 middleware 改名为 proxy，默认运行在 Node.js 运行时。官方建议把它当作最后手段，不要把它当成唯一的鉴权关口，CVE-2025-29927 就是靠一个内部请求头绕过了 Middleware。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>比如用户没登录就访问 <code>/dashboard</code>，想在页面渲染之前把他重定向到 <code>/login</code>。Next.js 提供了一个放在项目根目录的文件，以前叫 <code>middleware.ts</code>，16 版起改名为 <code>proxy.ts</code>，它在路由渲染之前拿到请求，可以重定向、重写、改请求头和响应头、读写 Cookie，或者直接返回一个响应。</p>
+<p>改名的原因是“middleware”容易让人联想到 Express 中间件，以为什么逻辑都能往里塞。官方的定位是：它像应用前面的一层网络代理，能独立于渲染代码运行，优化情况下还能部署到 CDN，所以不要依赖共享模块或全局变量。16 版起它默认使用 Node.js 运行时，而且不能再通过 <code>runtime</code> 配置切换。</p>
+<p>适合放进去的是轻量、基于请求本身就能判断的逻辑：按 Cookie 是否存在做乐观的登录跳转、按语言或实验分组重写路径、加安全响应头、处理 CORS。官方明确说建议把它作为最后手段，没有别的办法时才用它。</p>
+<p>要注意，Proxy 不能当成唯一的鉴权关口。2025 年的 CVE-2025-29927 允许外部请求带上内部的 <code>x-middleware-subrequest</code> 头直接跳过 Middleware；而且 Server Function 只是对所在路由的 POST 请求，matcher 漏掉某个路径，那里的 Server Function 也就没被保护。所以每个 Server Function 和数据访问层里都要再校验权限。</p>
+</blockquote>
+<h2>它在请求链路的哪个位置</h2>
+<p>官方文档给出的执行顺序是：先应用 <code>next.config.js</code> 的 <code>headers</code> 和 <code>redirects</code>，然后执行 Proxy，接着才是 <code>beforeFiles</code> 重写、文件系统路由、<code>afterFiles</code> 重写、动态路由和 <code>fallback</code> 重写。所以 Proxy 拿到请求时页面还没开始渲染，它的决定会影响后面走哪个路由。</p>
+<p>下面是一个乐观登录跳转的例子。它只检查 Cookie 在不在，不去数据库查会话：</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">NextResponse</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;next/server&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> { <span class="hljs-title class_">NextRequest</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;next/server&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">proxy</span>(<span class="hljs-params"><span class="hljs-attr">request</span>: <span class="hljs-title class_">NextRequest</span></span>) {
+  <span class="hljs-keyword">if</span> (!request.<span class="hljs-property">cookies</span>.<span class="hljs-title function_">has</span>(<span class="hljs-string">&#x27;session&#x27;</span>)) {
+    <span class="hljs-keyword">return</span> <span class="hljs-title class_">NextResponse</span>.<span class="hljs-title function_">redirect</span>(<span class="hljs-keyword">new</span> <span class="hljs-title function_">URL</span>(<span class="hljs-string">&#x27;/login&#x27;</span>, request.<span class="hljs-property">url</span>));
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">NextResponse</span>.<span class="hljs-title function_">next</span>();
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> config = {
+  <span class="hljs-attr">matcher</span>: <span class="hljs-string">&#x27;/dashboard/:path*&#x27;</span>,
+};
+</code></pre></div>
+<p>读者可能会问，为什么不在这里把会话查清楚？因为 Proxy 会对每个匹配的请求都执行；在这里做慢查询，所有页面都会被拖慢。它只负责“明显没登录就别往里走”，真正的权限判断留给页面和数据层。</p>
+<p><code>matcher</code> 也很关键。不写 <code>matcher</code> 时，Proxy 会对<strong>所有请求</strong>运行，包括 <code>_next/static</code>、<code>_next/image</code> 和 <code>public/</code> 下的资源，鉴权逻辑写得不小心就会把 CSS、JS、图片都拦掉。<code>matcher</code> 的值必须是常量，构建时静态分析，写成变量会被忽略。</p>
+<h2>它能做哪些事</h2>
+<p><code>NextResponse</code> 提供的能力是：<code>redirect</code> 跳转到另一个地址；<code>rewrite</code> 让地址栏不变但显示另一个路由的内容；通过 <code>NextResponse.next({ request: { headers } })</code> 给下游路由加请求头；设置响应头和响应 Cookie；也可以直接返回 <code>Response.json(...)</code> 之类的响应。</p>
+<p>改请求头时容易写错。<code>NextResponse.next({ request: { headers } })</code> 是把头传给下游的页面和路由处理器；写成 <code>NextResponse.next({ headers })</code> 则是把这些头加到返回给浏览器的响应上，内部信息就泄露给客户端了。</p>
+<p>还有一个和部署有关的限制：Proxy 需要服务器运行时，静态导出（<code>output: &#x27;export&#x27;</code>）不支持它。</p>
+<h2>为什么不能只靠它做鉴权</h2>
+<p>CVE-2025-29927 的起因是，Next.js 内部用 <code>x-middleware-subrequest</code> 请求头来识别和防止 Middleware 递归调用。外部请求伪造这个头，就能让 Middleware 被跳过。受影响的是用 <code>next start</code> 或 <code>output: &#x27;standalone&#x27;</code> 自托管的应用；Vercel、Netlify 和 Cloudflare Workers 的架构不受影响，静态导出本来就没有 Middleware。修复版本是 15.2.3、14.2.25、13.5.9 和 12.3.5，暂时不能升级的可以在网关上把这个头过滤掉。</p>
+<p>Vercel 的事后复盘里明确写了：不建议把 Middleware 作为保护路由的唯一手段。官方 Proxy 文档也提醒，Server Function 不是单独的路由，matcher 改动或者把 Server Function 挪到别的路由，都可能悄悄失去 Proxy 的保护。所以权限要在离数据最近的地方再查一遍。</p>
+<h2>从 middleware 迁移</h2>
+<p>迁移只是改文件名和导出的函数名，官方提供了 codemod：</p>
+<div class="not-prose code-block"><div class="code-language">bash</div><pre><code class="hljs language-bash">npx @next/codemod@canary middleware-to-proxy .
+</code></pre></div>
+<p>它会把 <code>middleware.ts</code> 改名为 <code>proxy.ts</code>，并把 <code>export function middleware</code> 改成 <code>export function proxy</code>。相关的配置项也跟着改了名，比如 <code>skipMiddlewareUrlNormalize</code> 变成了 <code>skipProxyUrlNormalize</code>。</p>
+<p>Proxy 和页面渲染、缓存的关系，见<a href="/questions/render-nextjs-modes/">《Next.js 的 SSR、SSG、ISR 和 App Router 怎样理解？》</a>和<a href="/questions/render-next-cache/">《Next.js App Router 中的几层缓存怎样区分？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>Proxy 里能直接查数据库吗？</strong></p>
+<blockquote>
+<p>16 版默认是 Node.js 运行时，技术上能查。但它对每个匹配请求都会执行，所以官方定位它是轻量的请求拦截层。重的会话校验放到页面、Server Function 或数据访问层里做。</p>
+</blockquote>
+<p><strong>Proxy 怎样把信息传给页面？</strong></p>
+<blockquote>
+<p>官方文档列出的方式是请求头、Cookie、重写、重定向或者 URL。不要依赖模块级的全局变量，因为 Proxy 可能和渲染代码不在同一个运行环境里。</p>
+</blockquote>
+<p><strong>CVE-2025-29927 对哪些部署有影响？</strong></p>
+<blockquote>
+<p>影响用 <code>next start</code> 或 <code>output: &#x27;standalone&#x27;</code> 自托管的应用。Vercel 的路由在独立系统里执行，Netlify 和 Cloudflare Workers 也确认不受影响，静态导出没有 Middleware。修复办法是升级到对应版本线的补丁，或者在网关过滤 <code>x-middleware-subrequest</code> 头。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://nextjs.org/docs/app/api-reference/file-conventions/proxy" target="_blank" rel="noreferrer">Next.js · proxy.js<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://vercel.com/blog/postmortem-on-next-js-middleware-bypass" target="_blank" rel="noreferrer">Vercel · Postmortem on Next.js Middleware bypass<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Next.js+Middleware%EF%BC%8816+%E7%89%88%E6%94%B9%E5%90%8D+proxy.ts%EF%BC%89%E8%83%BD%E5%81%9A%E4%BB%80%E4%B9%88%E3%80%81%E4%B8%8D%E8%AF%A5%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ANext.js+Middleware%EF%BC%8816+%E7%89%88%E6%94%B9%E5%90%8D+proxy.ts%EF%BC%89%E8%83%BD%E5%81%9A%E4%BB%80%E4%B9%88%E3%80%81%E4%B8%8D%E8%AF%A5%E5%81%9A%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Arender-nextjs-proxy%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ASSR+%E4%B8%8E%E6%B8%B2%E6%9F%93%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Frender-nextjs-proxy%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Next.js Middleware（16 版改名 proxy.ts）能做什么、不该做什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/render-nextjs-modes/">Next.js 的 SSR、SSG、ISR 和 App Router 怎样理解？</a></li><li><a href="/questions/render-next-cache/">Next.js App Router 中的几层缓存怎样区分？</a></li><li><a href="/questions/render-nextjs-parallel-routes/">Next.js 并行路由和拦截路由解决什么问题？</a></li><li><a href="/questions/render-seo-checklist/">前端 SEO 有哪些具体手段？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

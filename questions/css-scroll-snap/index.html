@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="HTML / CSS面试题：在滚动容器上设置 scroll-snap-type 指定方向和严格程度…" />
+    <title>CSS Scroll Snap 怎样实现吸附滚动？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/css-scroll-snap/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="CSS Scroll Snap 怎样实现吸附滚动？" />
+    <meta property="og:description" content="HTML / CSS面试题：在滚动容器上设置 scroll-snap-type 指定方向和严格程度…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/css-scroll-snap/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/css-scroll-snap/#webpage","url":"https://fe.hushifa.top/questions/css-scroll-snap/","name":"CSS Scroll Snap 怎样实现吸附滚动？","description":"HTML / CSS面试题：在滚动容器上设置 scroll-snap-type 指定方向和严格程度…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/css-scroll-snap/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/css-scroll-snap/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"CSS Scroll Snap 怎样实现吸附滚动？","item":"https://fe.hushifa.top/questions/css-scroll-snap/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">CSS Scroll Snap 怎样实现吸附滚动？</span></nav><h1 tabindex="-1">CSS Scroll Snap 怎样实现吸附滚动？</h1><p class="reading-summary">在滚动容器上设置 scroll-snap-type 指定方向和严格程度，在子元素上用 scroll-snap-align 指定对齐位置，滚动停下时浏览器就会停在对齐点上。scroll-padding 给固定头部留空间，scroll-snap-stop: always 防止快速滑动跳过某一项。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>吸附滚动就是用户滑动一个列表或轮播图，松手后内容不会停在两张卡片中间，而是自动对齐到某一张卡片。以前要监听滚动事件再用 JS 计算位置，现在用 CSS Scroll Snap 几行样式就能做到。</p>
+<p>它需要两边配合。滚动容器上写 <code>scroll-snap-type</code>，比如 <code>x mandatory</code>，规定沿哪个方向吸附、吸附得多严格；子元素上写 <code>scroll-snap-align</code>，比如 <code>start</code> 或 <code>center</code>，规定哪个位置对齐到容器。</p>
+<p>常用的还有三个属性。容器上的 <code>scroll-padding</code> 给吸顶的头部留出空间，子元素上的 <code>scroll-margin</code> 单独调整某一项的间距，<code>scroll-snap-stop: always</code> 让快速滑动时不能跳过这一项。</p>
+<p>要注意，<code>mandatory</code> 会强制停在吸附点上。如果某个子元素比容器还高，它超出的部分就可能永远滚不到，这种情况要用 <code>proximity</code>。</p>
+</blockquote>
+<h2>一个横向卡片列表</h2>
+<p>下面做一个横向滑动的卡片列表，松手后总有一张卡片对齐到左边缘：</p>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.cards</span> {
+  <span class="hljs-attribute">display</span>: flex;
+  <span class="hljs-attribute">gap</span>: <span class="hljs-number">16px</span>;
+  <span class="hljs-attribute">overflow-x</span>: auto;
+  <span class="hljs-attribute">scroll-snap-type</span>: x mandatory;
+  <span class="hljs-attribute">scroll-padding-inline</span>: <span class="hljs-number">16px</span>;
+}
+
+<span class="hljs-selector-class">.cards</span> &gt; <span class="hljs-selector-class">.card</span> {
+  <span class="hljs-attribute">flex</span>: <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">80%</span>;
+  <span class="hljs-attribute">scroll-snap-align</span>: start;
+}
+</code></pre></div>
+<p>容器首先得能滚动，所以要有 <code>overflow-x: auto</code>，内容也要比容器宽。没有溢出，就没有滚动，吸附也无从谈起。</p>
+<p><code>scroll-snap-type: x mandatory</code> 里的 <code>x</code> 是方向，也可以写 <code>y</code>、<code>block</code>、<code>inline</code> 或 <code>both</code>。<code>mandatory</code> 表示滚动停下时一定要落在某个吸附点上；换成 <code>proximity</code>，只有停在离吸附点足够近的地方才会吸过去，多近算近由浏览器决定。</p>
+<p>子元素的 <code>scroll-snap-align: start</code> 表示卡片的起始边和容器的起始边对齐。轮播图常用 <code>center</code>，让当前卡片居中。这个属性默认是 <code>none</code>，没写的子元素不会成为吸附点。</p>
+<p><code>scroll-padding-inline: 16px</code> 把容器的吸附区域往里缩了 16px，所以卡片不会紧贴边缘，左边留出一点空隙。</p>
+<h2>页面有吸顶头部时怎样不被挡住</h2>
+<p>纵向整屏翻页时经常有一个 <code>position: sticky</code> 的头部。如果直接吸附到 <code>start</code>，每一节的标题都会被头部盖住。这时在容器上加 <code>scroll-padding</code>：</p>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.scroller</span> {
+  <span class="hljs-attribute">height</span>: <span class="hljs-number">300px</span>;
+  <span class="hljs-attribute">overflow-y</span>: scroll;
+  <span class="hljs-attribute">scroll-snap-type</span>: y mandatory;
+  <span class="hljs-attribute">scroll-padding-top</span>: <span class="hljs-number">50px</span>;
+}
+
+<span class="hljs-selector-class">.scroller</span> <span class="hljs-selector-tag">section</span> {
+  <span class="hljs-attribute">min-height</span>: <span class="hljs-number">100%</span>;
+  <span class="hljs-attribute">scroll-snap-align</span>: start;
+}
+</code></pre></div>
+<p><code>scroll-padding-top: 50px</code> 让吸附位置整体往下让出 50px，头部占住的那一块就不算在对齐区域里。如果只有个别小节需要额外间距，就在那个子元素上写 <code>scroll-margin</code>，它和容器的 <code>scroll-padding</code> 可以叠加。</p>
+<h2>怎样防止快速滑动跳过内容</h2>
+<p>用户用力一划，可能一下滑过好几张卡片。如果每一张都必须看到，比如新手引导，可以在子元素上写：</p>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.step</span> {
+  <span class="hljs-attribute">scroll-snap-stop</span>: always;
+}
+</code></pre></div>
+<p>默认值是 <code>normal</code>，允许跳过。<code>always</code> 让滚动在这个吸附点必须停一下。代价是用户没办法快速跳到想看的内容，所以普通列表不要随手加。</p>
+<h2>mandatory 的坑</h2>
+<p>MDN 特别提醒：子元素的内容会溢出容器时，不要用 <code>mandatory</code>。因为浏览器总要把滚动位置拉回吸附点，子元素超出的那部分用户可能滚不过去。</p>
+<p>另外，在 <code>mandatory</code> 的容器里，如果某个子元素没有设置 <code>scroll-snap-align</code>，用户也没办法把它滚动到视图里。所以要么每个子元素都设置对齐方式，要么改用 <code>proximity</code>。</p>
+<h2>常见追问</h2>
+<p><strong>怎样知道当前吸附到了哪一张，用来更新指示点？</strong></p>
+<blockquote>
+<p>Chrome 129 起提供了 <code>scrollsnapchange</code> 和 <code>scrollsnapchanging</code> 事件，事件对象上的 <code>snapTargetInline</code>、<code>snapTargetBlock</code> 就是吸附到的元素。Firefox 和 Safari 目前还不支持，所以只能当作渐进增强，不支持时可以用 IntersectionObserver 判断哪张卡片在可见区域。</p>
+</blockquote>
+<p><strong>吸附滚动能和滚动动画一起用吗？</strong></p>
+<blockquote>
+<p>能。吸附只决定滚动最后停在哪里，滚动过程中的视觉效果可以用滚动驱动动画来做，见<a href="/questions/css-scroll-driven-animation/">《CSS 滚动驱动动画适合什么场景？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Scroll_snap/Basic_concepts" target="_blank" rel="noreferrer">MDN · Basic concepts of scroll snap<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Scroll_snap" target="_blank" rel="noreferrer">MDN · CSS scroll snap<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+CSS+Scroll+Snap+%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E5%90%B8%E9%99%84%E6%BB%9A%E5%8A%A8%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ACSS+Scroll+Snap+%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E5%90%B8%E9%99%84%E6%BB%9A%E5%8A%A8%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Acss-scroll-snap%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fcss-scroll-snap%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：CSS Scroll Snap 怎样实现吸附滚动？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/css-centering/">怎样让一个元素水平垂直居中？</a></li><li><a href="/questions/css-selector-matching/">浏览器为什么从右往左匹配 CSS 选择器？选择器性能应该怎么看？</a></li><li><a href="/questions/css-link-vs-import/">link 和 @import 引入 CSS 有什么区别？</a></li><li><a href="/questions/css-cascade-specificity/">层叠、优先级、继承和 !important 谁先决定样式？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

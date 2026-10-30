@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="JavaScript面试题：instanceof Error 只看原型链，跨 iframe 创建的错误会判成 false，伪造原型的普通对象反而判成 true。" />
+    <title>Error.isError 和 instanceof Error 有什么区别？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/js-error-iserror/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="Error.isError 和 instanceof Error 有什么区别？" />
+    <meta property="og:description" content="JavaScript面试题：instanceof Error 只看原型链，跨 iframe 创建的错误会判成 false，伪造原型的普通对象反而判成 true。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/js-error-iserror/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-error-iserror/#webpage","url":"https://fe.hushifa.top/questions/js-error-iserror/","name":"Error.isError 和 instanceof Error 有什么区别？","description":"JavaScript面试题：instanceof Error 只看原型链，跨 iframe 创建的错误会判成 false，伪造原型的普通对象反而判成 true。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-error-iserror/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-error-iserror/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"Error.isError 和 instanceof Error 有什么区别？","item":"https://fe.hushifa.top/questions/js-error-iserror/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">Error.isError 和 instanceof Error 有什么区别？</span></nav><h1 tabindex="-1">Error.isError 和 instanceof Error 有什么区别？</h1><p class="reading-summary">instanceof Error 只看原型链，跨 iframe 创建的错误会判成 false，伪造原型的普通对象反而判成 true。Error.isError 检查的是 Error 构造函数在对象上创建的内部数据，跨 realm 也能认出真正的错误，伪造的对象认不出来。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p><code>Error.isError(value)</code> 用来判断一个值是不是真正的错误对象，用法和 <code>Array.isArray</code> 一样，返回 <code>true</code> 或 <code>false</code>。</p>
+<p><code>instanceof Error</code> 只检查 <code>Error.prototype</code> 在不在对象的原型链上，这会出两种错。一是 iframe 里抛出的错误，它的原型链指向 iframe 自己的 <code>Error</code>，在父页面里判断 <code>instanceof Error</code> 得到 <code>false</code>。二是用 <code>Object.create(Error.prototype)</code> 伪造的普通对象，原型链对上了，<code>instanceof</code> 反而得到 <code>true</code>。</p>
+<p><code>Error.isError</code> 检查的是 <code>Error()</code> 构造函数在对象上创建的私有数据，规范里叫 <code>[[ErrorData]]</code> 内部槽。所以跨 iframe 的真错误能认出来，伪造原型的对象认不出来。它适合在 <code>catch</code> 里判断捕获到的值，必要时包装成真正的错误。</p>
+<p>要注意兼容性，MDN 把它标为 Limited availability。Chrome 134、Firefox 138 起支持，Safari 正式版还没有提供。老环境可以用 core-js 等 polyfill。</p>
+</blockquote>
+<h2>instanceof 为什么会判错</h2>
+<p><code>instanceof</code> 的规则只有一条：沿着原型链往上找，看能不能找到 <code>Error.prototype</code>。它不关心这个对象是怎么创建出来的。下面这段代码伪造了一个“错误”：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> fake = <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">create</span>(<span class="hljs-title class_">Error</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(fake <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Error</span>); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">toString</span>.<span class="hljs-title function_">call</span>(fake)); <span class="hljs-comment">// [object Object]</span>
+<span class="hljs-keyword">const</span> tagged = { [<span class="hljs-title class_">Symbol</span>.<span class="hljs-property">toStringTag</span>]: <span class="hljs-string">&#x27;Error&#x27;</span> };
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">toString</span>.<span class="hljs-title function_">call</span>(tagged)); <span class="hljs-comment">// [object Error]</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(tagged <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Error</span>); <span class="hljs-comment">// false</span>
+</code></pre></div>
+<p><code>fake</code> 从来没有经过 <code>Error</code> 构造函数，只是原型被设成了 <code>Error.prototype</code>，<code>instanceof</code> 就认它是错误。<code>Object.prototype.toString</code> 能看出它不是，可是这个方法会读 <code>Symbol.toStringTag</code>，<code>tagged</code> 只加了一个标签，就被它当成了 <code>[object Error]</code>。</p>
+<p>跨 iframe 的情况正好相反。每个 iframe 有自己的一套全局对象，也就有自己的 <code>Error</code> 构造函数。iframe 里 <code>new Error()</code> 创建的对象，原型链上是 iframe 的 <code>Error.prototype</code>，跟父页面的 <code>Error.prototype</code> 不是同一个对象，所以在父页面里 <code>instanceof Error</code> 是 <code>false</code>。这类“不同的全局环境”在规范里叫 realm，判断类型时的通用问题见<a href="/questions/js-type-checking/">《怎样准确判断一个值的类型？typeof、instanceof 和 Object.prototype.toString 各有什么局限？》</a>。</p>
+<h2>Error.isError 看的是什么</h2>
+<p><code>Error()</code> 构造函数创建对象时，会给对象加上一份外面改不了的内部数据。<code>Error.isError</code> 只检查这份数据在不在，MDN 把这叫“品牌检查”，<code>Array.isArray</code> 也是同样的思路。</p>
+<p>所以结果是这样的（浏览器代码，不在 Node 里运行）：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> iframe = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;iframe&#x27;</span>);
+<span class="hljs-variable language_">document</span>.<span class="hljs-property">body</span>.<span class="hljs-title function_">appendChild</span>(iframe);
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">FrameError</span> = iframe.<span class="hljs-property">contentWindow</span>.<span class="hljs-property">Error</span>;
+<span class="hljs-keyword">const</span> error = <span class="hljs-keyword">new</span> <span class="hljs-title class_">FrameError</span>(<span class="hljs-string">&#x27;来自 iframe&#x27;</span>);
+
+<span class="hljs-title class_">Error</span>.<span class="hljs-title function_">isError</span>(error); <span class="hljs-comment">// true</span>
+error <span class="hljs-keyword">instanceof</span> <span class="hljs-title class_">Error</span>; <span class="hljs-comment">// false</span>
+<span class="hljs-title class_">Error</span>.<span class="hljs-title function_">isError</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">create</span>(<span class="hljs-title class_">Error</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>)); <span class="hljs-comment">// false</span>
+<span class="hljs-title class_">Error</span>.<span class="hljs-title function_">isError</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>()); <span class="hljs-comment">// true</span>
+<span class="hljs-title class_">Error</span>.<span class="hljs-title function_">isError</span>(<span class="hljs-string">&#x27;Error&#x27;</span>); <span class="hljs-comment">// false</span>
+</code></pre></div>
+<p><code>TypeError</code>、<code>RangeError</code> 这些子类都是通过 <code>Error</code> 的机制创建的，所以都返回 <code>true</code>。<code>DOMException</code> 虽然不是规范上的 <code>Error</code> 子类，MDN 说明它在品牌检查上表现得和 <code>Error</code> 一样，<code>Error.isError(new DOMException())</code> 也是 <code>true</code>。不过 MDN 的兼容表注明，Safari 预览版对 <code>DOMException</code> 返回的是 <code>false</code>。</p>
+<h2>实际在哪里用</h2>
+<p>最常见的是 <code>catch</code> 里。JavaScript 允许 <code>throw</code> 任何值，第三方代码可能抛出字符串或普通对象。统一成真正的错误以后，日志和监控才能稳定拿到 <code>message</code> 和 <code>stack</code>：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">try</span> {
+  <span class="hljs-title function_">runTask</span>();
+} <span class="hljs-keyword">catch</span> (caught) {
+  <span class="hljs-keyword">const</span> error = <span class="hljs-title class_">Error</span>.<span class="hljs-title function_">isError</span>(caught) ? caught : <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-title class_">String</span>(caught));
+  <span class="hljs-title function_">report</span>(error);
+}
+</code></pre></div>
+<p>在微前端、iframe 嵌入、或者跨 realm 传递错误对象的场景里，<code>instanceof Error</code> 不可靠，用 <code>Error.isError</code> 才能判断准。</p>
+<h2>常见追问</h2>
+<p><strong>自定义的 class MyError extends Error 能被识别吗？</strong></p>
+<blockquote>
+<p>能。子类构造函数里调用 <code>super()</code> 时，对象是由 <code>Error</code> 的机制创建的，带有那份内部数据，所以 <code>Error.isError</code> 返回 <code>true</code>。</p>
+</blockquote>
+<p><strong>不支持的环境怎么办？</strong></p>
+<blockquote>
+<p>MDN 列出了 core-js 和 es-shims 的 <code>error.iserror</code> polyfill。</p>
+</blockquote>
+<p><strong>全局错误应该怎样收集？</strong></p>
+<blockquote>
+<p><code>window.onerror</code>、<code>unhandledrejection</code> 这些入口见<a href="/questions/js-errors-event-handling/">《同步错误、Promise 拒绝和全局异常应该怎样处理？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/isError" target="_blank" rel="noreferrer">MDN · Error.isError()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof" target="_blank" rel="noreferrer">MDN · instanceof<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Error.isError+%E5%92%8C+instanceof+Error+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AError.isError+%E5%92%8C+instanceof+Error+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-error-iserror%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-error-iserror%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Error.isError 和 instanceof Error 有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-promise-chain/">回调地狱是什么？Promise 链式调用怎样解决它？then 的返回值有哪些规则？</a></li><li><a href="/questions/js-macro-micro-tasks/">事件循环输出顺序题怎么推？async/await、setTimeout、requestAnimationFrame 谁先执行？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="SSR 与渲染面试题：并行路由用 @folder 定义插槽，让同一个布局同时渲染几块可以独立导航的页面，插槽不影响 URL…" />
+    <title>Next.js 并行路由和拦截路由解决什么问题？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/render-nextjs-parallel-routes/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="Next.js 并行路由和拦截路由解决什么问题？ · 前端知库" />
+    <meta property="og:description" content="SSR 与渲染面试题：并行路由用 @folder 定义插槽，让同一个布局同时渲染几块可以独立导航的页面，插槽不影响 URL…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/render-nextjs-parallel-routes/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/render-nextjs-parallel-routes/#webpage","url":"https://fe.hushifa.top/questions/render-nextjs-parallel-routes/","name":"Next.js 并行路由和拦截路由解决什么问题？ · 前端知库","description":"SSR 与渲染面试题：并行路由用 @folder 定义插槽，让同一个布局同时渲染几块可以独立导航的页面，插槽不影响 URL…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/render-nextjs-parallel-routes/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/render-nextjs-parallel-routes/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"SSR 与渲染面试题","item":"https://fe.hushifa.top/topics/rendering/"},{"@type":"ListItem","position":3,"name":"Next.js 并行路由和拦截路由解决什么问题？","item":"https://fe.hushifa.top/questions/render-nextjs-parallel-routes/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/rendering/">SSR 与渲染面试题</a><span aria-hidden="true">/</span><span aria-current="page">Next.js 并行路由和拦截路由解决什么问题？</span></nav><h1 tabindex="-1">Next.js 并行路由和拦截路由解决什么问题？</h1><p class="reading-summary">并行路由用 @folder 定义插槽，让同一个布局同时渲染几块可以独立导航的页面，插槽不影响 URL，刷新后匹配不上的插槽渲染 default.js，没有就 404。拦截路由用 (.)、(..)、(...) 在当前布局里加载另一个路由，常和并行路由一起做可分享 URL 的模态框：站内点击弹出模态框，刷新或直接访问显示完整页面。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>比如图片流页面，点一张图希望弹出模态框，地址栏变成 <code>/photo/123</code> 方便分享；别人直接打开这个链接，看到的是完整的图片详情页。Next.js App Router 用并行路由加拦截路由来做这件事。</p>
+<p>并行路由是在一个布局里同时放几块“插槽”，文件夹用 <code>@</code> 开头，比如 <code>@team</code>、<code>@analytics</code>。插槽会作为 props 传给父布局，每块能独立导航，也能有自己的 loading 和错误界面。插槽不是路由段，不会出现在 URL 里。</p>
+<p>拦截路由是在当前布局里加载另一个路由的内容。文件夹名用 <code>(.)</code>、<code>(..)</code>、<code>(..)(..)</code>、<code>(...)</code> 表示同级、上一级、上两级和根目录，按路由段算，不按文件夹层级算。只有站内的客户端导航会被拦截；刷新或者直接访问，渲染的是原本的完整页面。</p>
+<p>最容易出问题的是刷新。站内跳转时，匹配不上当前 URL 的插槽会保留原来的内容；刷新后 Next.js 无法恢复这些状态，会渲染插槽里的 <code>default.js</code>，没有就直接 404。所以每个插槽，包括隐式的 <code>children</code>，通常都要准备 <code>default.js</code>。</p>
+</blockquote>
+<h2>并行路由怎样写</h2>
+<p>假设仪表盘要同时显示团队和统计两块。目录里建 <code>app/@team</code> 和 <code>app/@analytics</code>，父布局就会多出两个同名的 props：</p>
+<div class="not-prose code-block"><div class="code-language">TSX</div><pre><code class="hljs language-tsx"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Layout</span>(<span class="hljs-params">{
+  children,
+  team,
+  analytics,
+}: {
+  children: React.ReactNode;
+  team: React.ReactNode;
+  analytics: React.ReactNode;
+}</span>) {
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;&gt;</span>
+      {children}
+      {team}
+      {analytics}
+    <span class="hljs-tag">&lt;/&gt;</span></span>
+  );
+}
+</code></pre></div>
+<p><code>children</code> 也是一个插槽，只是不用建文件夹，<code>app/page.js</code> 就等于 <code>app/@children/page.js</code>。插槽不影响地址，<code>app/@analytics/views</code> 对应的 URL 是 <code>/views</code>。</p>
+<p>插槽可以按条件渲染，比如管理员返回 <code>admin</code> 插槽，普通用户返回 <code>user</code> 插槽。官方文档特别提醒：两个插槽都会在服务器上渲染，布局里的条件只决定用户看到哪一块，<code>@admin/page.js</code> 里的数据请求对每个用户都会执行。所以每个插槽的页面里要自己做权限校验。</p>
+<p>还有一个限制：插槽和普通页面合起来组成这个路由段的最终页面，所以同一层级的插槽不能有的静态预渲染、有的动态渲染，只要有一个是动态的，同级的都得是动态的。</p>
+<h2>刷新以后为什么 404</h2>
+<p>插槽在两种导航下表现不同，这是并行路由最容易踩的坑。</p>
+<p>站内用 <code>&lt;Link&gt;</code> 跳转是软导航，Next.js 会记住每个插槽当前显示的子页面。跳到 <code>/settings</code> 时，如果 <code>@team</code> 有 <code>settings</code> 页面而 <code>@analytics</code> 没有，<code>@team</code> 换成新页面，<code>@analytics</code> 继续显示原来的内容。</p>
+<p>刷新页面是硬导航，Next.js 不知道 <code>@analytics</code> 之前显示什么，于是渲染 <code>@analytics/default.js</code>；如果没有这个文件，整页 404。官方的解释是，这个 404 能避免把并行路由渲染到原本不打算出现的页面上。<code>children</code> 也一样，恢复不了父页面状态时同样需要 <code>default.js</code>。</p>
+<h2>用拦截路由做可分享的模态框</h2>
+<p>拦截路由的约定类似相对路径 <code>../</code>，只是按路由段计算。<code>@modal</code> 这种插槽文件夹不算路由段，所以 <code>app/@modal/(.)photo/[id]</code> 里的 <code>(.)</code> 指的是和插槽所在位置同级的 <code>photo</code> 路由。</p>
+<p>做模态框需要几个文件配合。<code>app/photo/[id]/page.tsx</code> 是完整的详情页；<code>app/@modal/default.tsx</code> 返回 <code>null</code>，保证平时不显示模态框；<code>app/@modal/(.)photo/[id]/page.tsx</code> 把详情内容包在模态框组件里；根布局同时渲染 <code>{modal}</code> 和 <code>{children}</code>。</p>
+<p>这样站内点击图片时，<code>/photo/123</code> 被拦截，模态框盖在图片流上；刷新或者直接打开链接，不会发生拦截，显示完整详情页。官方列出的好处是：模态框内容可以通过 URL 分享，刷新后不丢上下文，后退关闭模态框，前进重新打开。</p>
+<p>关闭模态框可以调用 <code>router.back()</code>。如果用 <code>&lt;Link&gt;</code> 跳到别的页面，要注意软导航下插槽会保留旧内容，模态框不会自己消失，所以要给插槽准备一个返回 <code>null</code> 的页面，比如 <code>@modal/page.tsx</code> 或者兜底的 <code>@modal/[...catchAll]/page.tsx</code>。</p>
+<p>模态框本身的焦点和键盘行为，见<a href="/questions/a11y-dialog/">《一个可访问的模态对话框需要具备哪些行为？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>为什么 <code>(..)</code> 有时候和文件夹层级对不上？</strong></p>
+<blockquote>
+<p>因为它按路由段算，不按文件系统算。<code>@slot</code> 文件夹不是路由段，官方例子里 <code>photo</code> 在文件系统上高两级，但按路由段只高一级，所以写 <code>(..)</code> 就够了。</p>
+</blockquote>
+<p><strong>并行路由除了模态框还能做什么？</strong></p>
+<blockquote>
+<p>官方给出的例子有仪表盘同时显示多块内容、按用户角色渲染不同插槽、在插槽里放布局做独立切换的标签页，以及给每块内容单独设置 loading 和错误界面，让它们各自流式加载。</p>
+</blockquote>
+<p><strong>插槽里的组件能读到当前激活的子路由吗？</strong></p>
+<blockquote>
+<p>可以用 <code>useSelectedLayoutSegment</code> 或 <code>useSelectedLayoutSegments</code>，传入插槽名作为 <code>parallelRouteKey</code>。比如访问 <code>/login</code> 时，<code>useSelectedLayoutSegment(&#x27;auth&#x27;)</code> 返回 <code>&quot;login&quot;</code>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://nextjs.org/docs/app/api-reference/file-conventions/parallel-routes" target="_blank" rel="noreferrer">Next.js · Parallel Routes<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://nextjs.org/docs/app/api-reference/file-conventions/intercepting-routes" target="_blank" rel="noreferrer">Next.js · Intercepting Routes<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Next.js+%E5%B9%B6%E8%A1%8C%E8%B7%AF%E7%94%B1%E5%92%8C%E6%8B%A6%E6%88%AA%E8%B7%AF%E7%94%B1%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ANext.js+%E5%B9%B6%E8%A1%8C%E8%B7%AF%E7%94%B1%E5%92%8C%E6%8B%A6%E6%88%AA%E8%B7%AF%E7%94%B1%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Arender-nextjs-parallel-routes%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ASSR+%E4%B8%8E%E6%B8%B2%E6%9F%93%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Frender-nextjs-parallel-routes%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Next.js 并行路由和拦截路由解决什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/render-next-cache/">Next.js App Router 中的几层缓存怎样区分？</a></li><li><a href="/questions/render-nextjs-modes/">Next.js 的 SSR、SSG、ISR 和 App Router 怎样理解？</a></li><li><a href="/questions/render-nextjs-proxy/">Next.js Middleware（16 版改名 proxy.ts）能做什么、不该做什么？</a></li><li><a href="/questions/render-seo-checklist/">前端 SEO 有哪些具体手段？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="JavaScript面试题：btoa/atob 处理的是“每个字符代表一个字节”的二进制字符串…" />
+    <title>Uint8Array.fromBase64/toBase64 和 btoa/atob 有什么区别？中文怎样转 Base64？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/js-base64-uint8array/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="Uint8Array.fromBase64/toBase64 和 btoa/atob 有什么区别？中文怎样转 Base64？" />
+    <meta property="og:description" content="JavaScript面试题：btoa/atob 处理的是“每个字符代表一个字节”的二进制字符串…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/js-base64-uint8array/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-base64-uint8array/#webpage","url":"https://fe.hushifa.top/questions/js-base64-uint8array/","name":"Uint8Array.fromBase64/toBase64 和 btoa/atob 有什么区别？中文怎样转 Base64？","description":"JavaScript面试题：btoa/atob 处理的是“每个字符代表一个字节”的二进制字符串…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-base64-uint8array/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-base64-uint8array/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"Uint8Array.fromBase64/toBase64 和 btoa/atob 有什么区别？中文怎样转 Base64？","item":"https://fe.hushifa.top/questions/js-base64-uint8array/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">Uint8Array.fromBase64/toBase64 和 btoa/atob 有什么区别？中文怎样转 Base64？</span></nav><h1 tabindex="-1">Uint8Array.fromBase64/toBase64 和 btoa/atob 有什么区别？中文怎样转 Base64？</h1><p class="reading-summary">btoa/atob 处理的是“每个字符代表一个字节”的二进制字符串，遇到中文这种码点超过 255 的字符会抛 InvalidCharacterError。中文要先用 TextEncoder 转成 UTF-8 字节再编码。Uint8Array.toBase64 和 fromBase64 直接在字节数组和 Base64 之间转换，还支持 base64url 字母表。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>Base64 编码的对象是字节，不是文字。<code>btoa</code> 接收的是一种“二进制字符串”，每个字符当成一个字节，所以每个字符的码点必须小于 256。直接 <code>btoa(&#x27;中文&#x27;)</code> 会抛出 <code>InvalidCharacterError</code>。</p>
+<p>中文要分两步：先用 <code>new TextEncoder().encode(text)</code> 把文字转成 UTF-8 字节，再把字节编码成 Base64。解码时反过来，先得到字节，再用 <code>TextDecoder</code> 还原成文字。</p>
+<p><code>Uint8Array.prototype.toBase64()</code> 和 <code>Uint8Array.fromBase64()</code> 就是为这件事准备的，它们直接在 <code>Uint8Array</code> 和 Base64 字符串之间转换，不用先拼一个二进制字符串。它们还能选 <code>base64url</code> 字母表、省略末尾的 <code>=</code>，解码时会忽略空白字符。</p>
+<p>要注意兼容性。这两个方法 2025 年 9 月起才在主流浏览器的最新版本里都能用（Baseline 2025），老环境需要 polyfill 或者继续用 <code>TextEncoder</code> 加 <code>btoa</code> 的写法。</p>
+</blockquote>
+<h2>为什么 btoa 处理不了中文</h2>
+<p>先看 <code>btoa</code> 遇到中文时的表现，以及 MDN 推荐的绕法：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">btoa</span>(<span class="hljs-string">&#x27;abc&#x27;</span>)); <span class="hljs-comment">// YWJj</span>
+<span class="hljs-keyword">try</span> {
+  <span class="hljs-title function_">btoa</span>(<span class="hljs-string">&#x27;中文&#x27;</span>);
+} <span class="hljs-keyword">catch</span> (error) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(error.<span class="hljs-property">name</span>); <span class="hljs-comment">// InvalidCharacterError</span>
+}
+<span class="hljs-keyword">const</span> bytes = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TextEncoder</span>().<span class="hljs-title function_">encode</span>(<span class="hljs-string">&#x27;中文&#x27;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(bytes.<span class="hljs-property">length</span>); <span class="hljs-comment">// 6</span>
+<span class="hljs-keyword">const</span> binary = <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">from</span>(bytes, <span class="hljs-function">(<span class="hljs-params">byte</span>) =&gt;</span> <span class="hljs-title class_">String</span>.<span class="hljs-title function_">fromCodePoint</span>(byte)).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+<span class="hljs-keyword">const</span> encoded = <span class="hljs-title function_">btoa</span>(binary);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(encoded); <span class="hljs-comment">// 5Lit5paH</span>
+<span class="hljs-keyword">const</span> back = <span class="hljs-title class_">Uint8Array</span>.<span class="hljs-title function_">from</span>(<span class="hljs-title function_">atob</span>(encoded), <span class="hljs-function">(<span class="hljs-params">char</span>) =&gt;</span> char.<span class="hljs-title function_">codePointAt</span>(<span class="hljs-number">0</span>));
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">TextDecoder</span>().<span class="hljs-title function_">decode</span>(back)); <span class="hljs-comment">// 中文</span>
+</code></pre></div>
+<p><code>abc</code> 每个字符的码点都小于 256，<code>btoa</code> 可以直接处理。可“中”的码点远大于 255，一个字符放不进一个字节，<code>btoa</code> 不知道该怎么拆，只能抛错。</p>
+<p>所以先用 <code>TextEncoder</code> 把文字按 UTF-8 编成字节。两个汉字在 UTF-8 里各占 3 个字节，一共 6 个字节。再把每个字节变成一个码点 0 到 255 的字符，拼成二进制字符串交给 <code>btoa</code>，就能得到 <code>5Lit5paH</code>。</p>
+<p>解码时 <code>atob</code> 返回的也是二进制字符串，要先把每个字符的码点取出来变回字节，再用 <code>TextDecoder</code> 按 UTF-8 解成文字。中间拼字符串、拆字符串的两步，就是 <code>btoa</code>/<code>atob</code> 用起来别扭的地方。</p>
+<h2>Uint8Array 的新方法省掉了哪一步</h2>
+<p>有了 <code>toBase64</code> 和 <code>fromBase64</code>，字节数组可以直接和 Base64 互转：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> encoded = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TextEncoder</span>().<span class="hljs-title function_">encode</span>(<span class="hljs-string">&#x27;中文&#x27;</span>).<span class="hljs-title function_">toBase64</span>(); <span class="hljs-comment">// &#x27;5Lit5paH&#x27;</span>
+<span class="hljs-keyword">const</span> text = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TextDecoder</span>().<span class="hljs-title function_">decode</span>(<span class="hljs-title class_">Uint8Array</span>.<span class="hljs-title function_">fromBase64</span>(encoded)); <span class="hljs-comment">// &#x27;中文&#x27;</span>
+</code></pre></div>
+<p>和上面的写法相比，中间不再需要“二进制字符串”这个过渡形态。MDN 也建议，手上已经是 <code>Uint8Array</code> 时用 <code>toBase64()</code> 代替 <code>btoa()</code>；解码的数据如果本来就是字节而不是 ASCII 文本，用 <code>fromBase64()</code> 代替 <code>atob()</code>。</p>
+<p>这两个方法还多了几个选项。<code>alphabet: &#x27;base64url&#x27;</code> 用 <code>-</code> 和 <code>_</code> 代替 <code>+</code> 和 <code>/</code>，编码结果可以直接放进 URL。<code>toBase64({ omitPadding: true })</code> 去掉末尾的 <code>=</code>。<code>fromBase64</code> 会忽略字符串里的 ASCII 空白，遇到不属于字母表的字符抛 <code>SyntaxError</code>。它的 <code>lastChunkHandling</code> 选项控制最后一组不满 4 个字符时怎么办：默认 <code>loose</code> 允许不带 <code>=</code>，<code>strict</code> 要求必须补齐 <code>=</code>。</p>
+<h2>兼容性怎么处理</h2>
+<p>MDN 把 <code>toBase64</code> 和 <code>fromBase64</code> 标为 Baseline 2025，2025 年 9 月起在各主流浏览器最新版都可用。具体版本是 Chrome 140、Firefox 133、Safari 18.2。用 Node.js 22.23.3 实测，<code>typeof Uint8Array.fromBase64</code> 是 <code>&#x27;undefined&#x27;</code>，这个版本还没有提供。</p>
+<p>所以需要支持旧环境时，可以用 core-js 或 es-arraybuffer-base64 提供的 polyfill，或者继续用前面 <code>TextEncoder</code> 加 <code>btoa</code> 的写法。</p>
+<h2>常见追问</h2>
+<p><strong>Base64 能用来加密吗？</strong></p>
+<blockquote>
+<p>不能。Base64 只是把字节换一种字符表示，任何人都能解回去，没有密钥，也不提供保密性。</p>
+</blockquote>
+<p><strong>图片转 Base64 有什么代价？</strong></p>
+<blockquote>
+<p>Base64 后的长度大约是原始数据的 4/3。图片预览更推荐 object URL，见<a href="/questions/api-files/">《File、Blob 和 object URL 怎样用于文件预览？》</a>。</p>
+</blockquote>
+<p><strong>TextEncoder 编出来的字节为什么和字符串 length 对不上？</strong></p>
+<blockquote>
+<p><code>length</code> 数的是 UTF-16 码元，UTF-8 字节数是另一回事，一个汉字是 1 个码元、3 个字节。字符计数的问题见<a href="/questions/intl-unicode/">《为什么字符串 length 不一定等于用户看到的字符数？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array/fromBase64" target="_blank" rel="noreferrer">MDN · Uint8Array.fromBase64()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array/toBase64" target="_blank" rel="noreferrer">MDN · Uint8Array.prototype.toBase64()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/btoa" target="_blank" rel="noreferrer">MDN · Window.btoa()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Uint8Array.fromBase64%2FtoBase64+%E5%92%8C+btoa%2Fatob+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%E4%B8%AD%E6%96%87%E6%80%8E%E6%A0%B7%E8%BD%AC+Base64%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AUint8Array.fromBase64%2FtoBase64+%E5%92%8C+btoa%2Fatob+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%E4%B8%AD%E6%96%87%E6%80%8E%E6%A0%B7%E8%BD%AC+Base64%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-base64-uint8array%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-base64-uint8array%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Uint8Array.fromBase64/toBase64 和 btoa/atob 有什么区别？中文怎样转 Base64？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-promise-chain/">回调地狱是什么？Promise 链式调用怎样解决它？then 的返回值有哪些规则？</a></li><li><a href="/questions/js-macro-micro-tasks/">事件循环输出顺序题怎么推？async/await、setTimeout、requestAnimationFrame 谁先执行？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

@@ -11,27 +11,27 @@
     <meta property="og:image:alt" content="前端知库" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
-    <meta name="description" content="工程化面试题：Source Map 把压缩后文件里的行列映射回源码位置。前提是映射、脚本和发布版本来自同一次构建；它只改善调试，不能保密源码，也不修复异常。" />
-    <title>Source Map 如何帮助定位压缩后代码的错误？</title>
+    <meta name="description" content="工程化面试题：Source Map 是一个 JSON 文件，mappings 用分号分行、逗号分片段，每个片段有 1、4 或 5 个数字，记录生成列号…" />
+    <title>Source Map 的 mappings 字段是怎样记录位置的？</title>
     <link rel="canonical" href="https://fe.hushifa.top/questions/eng-source-map/" />
     <meta name="robots" content="index,follow" />
     <meta property="og:type" content="article" />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content="前端知库" />
-    <meta property="og:title" content="Source Map 如何帮助定位压缩后代码的错误？" />
-    <meta property="og:description" content="工程化面试题：Source Map 把压缩后文件里的行列映射回源码位置。前提是映射、脚本和发布版本来自同一次构建；它只改善调试，不能保密源码，也不修复异常。" />
+    <meta property="og:title" content="Source Map 的 mappings 字段是怎样记录位置的？" />
+    <meta property="og:description" content="工程化面试题：Source Map 是一个 JSON 文件，mappings 用分号分行、逗号分片段，每个片段有 1、4 或 5 个数字，记录生成列号…" />
     <meta property="og:url" content="https://fe.hushifa.top/questions/eng-source-map/" />
-    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/eng-source-map/#webpage","url":"https://fe.hushifa.top/questions/eng-source-map/","name":"Source Map 如何帮助定位压缩后代码的错误？","description":"工程化面试题：Source Map 把压缩后文件里的行列映射回源码位置。前提是映射、脚本和发布版本来自同一次构建；它只改善调试，不能保密源码，也不修复异常。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/eng-source-map/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/eng-source-map/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"工程化面试题","item":"https://fe.hushifa.top/topics/engineering/"},{"@type":"ListItem","position":3,"name":"Source Map 如何帮助定位压缩后代码的错误？","item":"https://fe.hushifa.top/questions/eng-source-map/"}]}]}</script>
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/eng-source-map/#webpage","url":"https://fe.hushifa.top/questions/eng-source-map/","name":"Source Map 的 mappings 字段是怎样记录位置的？","description":"工程化面试题：Source Map 是一个 JSON 文件，mappings 用分号分行、逗号分片段，每个片段有 1、4 或 5 个数字，记录生成列号…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/eng-source-map/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/eng-source-map/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"工程化面试题","item":"https://fe.hushifa.top/topics/engineering/"},{"@type":"ListItem","position":3,"name":"Source Map 的 mappings 字段是怎样记录位置的？","item":"https://fe.hushifa.top/questions/eng-source-map/"}]}]}</script>
     
     <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
   </head>
   <body>
-    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/engineering/">工程化面试题</a><span aria-hidden="true">/</span><span aria-current="page">Source Map 如何帮助定位压缩后代码的错误？</span></nav><h1 tabindex="-1">Source Map 如何帮助定位压缩后代码的错误？</h1><p class="reading-summary">Source Map 把压缩后文件里的行列映射回源码位置。前提是映射、脚本和发布版本来自同一次构建；它只改善调试，不能保密源码，也不修复异常。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/engineering/">工程化面试题</a><span aria-hidden="true">/</span><span aria-current="page">Source Map 的 mappings 字段是怎样记录位置的？</span></nav><h1 tabindex="-1">Source Map 的 mappings 字段是怎样记录位置的？</h1><p class="reading-summary">Source Map 是一个 JSON 文件，mappings 用分号分行、逗号分片段，每个片段有 1、4 或 5 个数字，记录生成列号、源文件下标、源码行列号和原名下标。数字存的是相对前一个值的差值，再用 Base64 VLQ 编成短字符，所以文件体积小。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
 <blockquote>
-<p>线上代码压缩以后，报错只会告诉你“第 1 行第 27 列”，根本没法看。Source Map 是一个 JSON 文件，记录了压缩后代码的每个位置对应源码的哪个文件、哪一行、哪一列。</p>
-<p>浏览器通过脚本末尾的 <code>//# sourceMappingURL=</code> 注释，或者 <code>SourceMap</code> 响应头找到它，DevTools 就能显示源码。错误监控平台也用它把堆栈还原回源码位置。</p>
-<p>前提是映射文件和产物来自同一次构建，所以监控平台要按发布版本上传和匹配。</p>
-<p>要注意，公开的 Source Map 一般带着完整源码，谁都能下载，不想公开源码就别部署到公开地址。它只改善调试，不改变代码怎样运行。</p>
+<p>线上代码压缩以后，报错只会告诉你“第 1 行第 27 列”。Source Map 是一个 JSON 文件，里面的 mappings 字段像一张对照表，记录压缩后代码的每一段对应哪个源文件、哪一行、哪一列，原来叫什么名字。</p>
+<p>这张表按规范分两层组织：分号隔开生成文件的每一行，逗号隔开一行里的每个片段，每个片段有 1、4 或 5 个数字，分别是生成列号、源文件下标、源码行号、源码列号和原名下标。</p>
+<p>为了让文件变小，数字存的是相对前一个值的差值，再用 Base64 VLQ 编码：每个字符 6 位，最高位表示后面还有没有字符，第一个字符的最低位表示正负。所以小数字只占一个字母。</p>
+<p>要注意，sourcesContent 字段放的是源码全文，公开部署映射文件就等于公开源码；线上怎样只给监控平台用，是另一个问题。</p>
 </blockquote>
 <h2>Source Map 是怎样还原位置的</h2>
 <p>先看一段压缩后的代码，末尾的注释告诉浏览器去哪里找映射文件。</p>
@@ -50,27 +50,55 @@
 }
 </code></pre></div>
 <p><code>sources</code> 列出源文件，<code>names</code> 列出原来的变量名。<code>mappings</code> 是一串经过 Base64 VLQ 编码的数据，记录“生成代码的某个位置，对应第几个源文件的第几行第几列、原名是什么”。</p>
-<p>所以报错堆栈里的 <code>app.3f9a.js:1:27</code>，查一下映射就能还原成 <code>src/math.ts:3:12</code>，压缩后的变量名 <code>r</code> 也能还原成 <code>item</code>。</p>
-<p><code>sourcesContent</code> 里放的是源码全文。这就是为什么公开部署 Source Map 等于公开源码。</p>
-<h2>部署时怎样选</h2>
-<p>公开部署 <code>.map</code> 并保留注释，任何人都能在 DevTools 里看到源码。</p>
-<p>生成 <code>.map</code> 但不部署，只上传到监控平台，线上看不到源码，监控平台仍能还原堆栈。</p>
-<p>部署到需要鉴权的内网地址，用 <code>SourceMap</code> 响应头指向它，只有能访问内网的开发者能用。</p>
-<p>完全不生成的话，线上错误只能看压缩后的位置。</p>
-<p>Vite 的 <code>build.sourcemap</code> 可以设成 <code>true</code>、<code>&#x27;inline&#x27;</code> 或 <code>&#x27;hidden&#x27;</code>。<code>&#x27;hidden&#x27;</code> 会生成 <code>.map</code> 文件，但不在产物里写那行注释，正适合“只上传到监控平台”的做法。</p>
-<h2>怎样和错误监控配合</h2>
-<p>构建时生成 Source Map，同时给这次构建一个发布版本号，比如提交哈希。然后把 <code>.map</code> 文件和版本号一起上传到 Sentry 这类平台，再从公开目录删掉。</p>
-<p>前端 SDK 上报错误时带上同一个版本号，平台就能按版本找到对应的映射文件，还原堆栈。</p>
-<p>版本对不上是最危险的情况。平台可能用错误的映射还原出一个看起来合理、其实完全不对的位置，这比找不到映射更容易误导排查。</p>
+<h2>mappings 这串字母是怎样组织的</h2>
+<p>ECMA-426 规范规定了 <code>mappings</code> 的结构：分号 <code>;</code> 隔开生成文件的每一行，逗号 <code>,</code> 隔开同一行里的每个片段（segment），每个片段由 1、4 或 5 个数字组成。</p>
+<p>这几个数字依次是：生成代码里的列号；源文件在 <code>sources</code> 里的下标；源码里的行号；源码里的列号；变量原名在 <code>names</code> 里的下标。全部从 0 开始计数。只有 1 个数字的片段表示这段生成代码没有对应的源码，有 5 个数字时才带原名。</p>
+<p>为什么不直接写 <code>0,0,2,11,2</code> 这样的明文数字？因为一个压缩文件有成千上万个片段，明文太占地方。所以规范用了两个办法压缩体积。</p>
+<p>第一个办法是存差值。生成列号相对同一行上一个片段，每到新的一行重新从 0 算；其余几个字段相对它在前面最后一次出现的值，跨行也不重置。相邻片段的位置通常很接近，差值是很小的数字。</p>
+<p>第二个办法是 Base64 VLQ 编码，把小数字变成很短的字符。</p>
+<h2>Base64 VLQ 怎样把数字变成字母</h2>
+<p>VLQ 是“可变长度数量”，小数字占一个字符，大数字占几个字符。规范的定义是：每个 Base64 字符代表 6 位，最高位（第 6 位）是继续位，为 1 表示后面还有字符；剩下 5 位存数值，先存低位；第一个字符的最低位是符号位，为 1 表示负数。</p>
+<p>下面按这个定义写一个解码函数，看看样例里的片段代表什么：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> chars = <span class="hljs-string">&#x27;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/&#x27;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">decodeSegment</span>(<span class="hljs-params">text</span>) {
+  <span class="hljs-keyword">const</span> values = [];
+  <span class="hljs-keyword">let</span> value = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> shift = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> ch <span class="hljs-keyword">of</span> text) {
+    <span class="hljs-keyword">const</span> digit = chars.<span class="hljs-title function_">indexOf</span>(ch);
+    value += (digit &amp; <span class="hljs-number">31</span>) &lt;&lt; shift;
+    <span class="hljs-keyword">if</span> (digit &amp; <span class="hljs-number">32</span>) {
+      shift += <span class="hljs-number">5</span>;
+    } <span class="hljs-keyword">else</span> {
+      values.<span class="hljs-title function_">push</span>(value &amp; <span class="hljs-number">1</span> ? -(value &gt;&gt; <span class="hljs-number">1</span>) : value &gt;&gt; <span class="hljs-number">1</span>);
+      value = <span class="hljs-number">0</span>;
+      shift = <span class="hljs-number">0</span>;
+    }
+  }
+  <span class="hljs-keyword">return</span> values;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">decodeSegment</span>(<span class="hljs-string">&#x27;AAAA&#x27;</span>).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 0,0,0,0</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">decodeSegment</span>(<span class="hljs-string">&#x27;SAASA&#x27;</span>).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 9,0,0,9,0</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">decodeSegment</span>(<span class="hljs-string">&#x27;D&#x27;</span>).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// -1</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">decodeSegment</span>(<span class="hljs-string">&#x27;gB&#x27;</span>).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 16</span>
+</code></pre></div>
+<p><code>AAAA</code> 是第一个片段，四个数都是 0：生成代码第 0 列，对应第 0 个源文件第 0 行第 0 列。<code>SAASA</code> 是差值，意思是往后挪 9 列，源码列也往后挪 9 列，并带上 <code>names</code> 里的第 0 个名字。</p>
+<p><code>D</code> 为什么是 -1？<code>D</code> 在字母表里是 3，二进制 <code>000011</code>，继续位是 0，最低位 1 表示负数，去掉符号位剩下 1，所以是 -1。<code>gB</code> 是两个字符：<code>g</code> 是 32，继续位为 1、数值位为 0；<code>B</code> 是 1，左移 5 位得到 32，再去掉符号位就是 16。</p>
+<p>所以浏览器查找一个报错位置时，就按行、按片段把差值累加起来，找到这一列对应的源文件、行列号和原名。</p>
+<h2>浏览器从哪里找到映射文件</h2>
+<p>ECMA-426 规定了两个入口：产物末尾的 <code>//# sourceMappingURL=</code> 注释，或者 <code>SourceMap</code> 响应头。两者都有时以响应头为准。</p>
+<p><code>sourcesContent</code> 里放的是源码全文，所以公开部署带 <code>sourcesContent</code> 的映射文件，等于公开源码。生产环境怎样生成 hidden source map、按版本上传给监控平台还原堆栈、又不把映射文件公开，见<a href="/questions/monitoring-source-map/">《线上报错怎样用 Source Map 还原，又不把 map 文件公开？》</a>。</p>
 <h2>常见追问</h2>
 <p><strong>为什么 DevTools 里还原出来的行号是偏的？</strong></p>
 <blockquote>
 <p>可能是某个构建插件改写代码时，没有生成或传递 Source Map，中间断了一环。也可能部署的 <code>.map</code> 来自另一次构建，跟产物对不上。</p>
 </blockquote>
-<p><strong>生产环境开启 Source Map 会影响性能吗？</strong></p>
+<p><strong>为什么列号要从同一行重新算，其他字段却不重置？</strong></p>
 <blockquote>
-<p>浏览器只在打开 DevTools 时才下载映射文件，普通用户不受影响。代价主要是构建时间会略长一点。</p>
-</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/SourceMap" target="_blank" rel="noreferrer">MDN · SourceMap 响应头<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Source+Map+%E5%A6%82%E4%BD%95%E5%B8%AE%E5%8A%A9%E5%AE%9A%E4%BD%8D%E5%8E%8B%E7%BC%A9%E5%90%8E%E4%BB%A3%E7%A0%81%E7%9A%84%E9%94%99%E8%AF%AF%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ASource+Map+%E5%A6%82%E4%BD%95%E5%B8%AE%E5%8A%A9%E5%AE%9A%E4%BD%8D%E5%8E%8B%E7%BC%A9%E5%90%8E%E4%BB%A3%E7%A0%81%E7%9A%84%E9%94%99%E8%AF%AF%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aeng-source-map%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Feng-source-map%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Source Map 如何帮助定位压缩后代码的错误？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/eng-module-history/">前端模块化经历了哪些阶段？IIFE、CommonJS、AMD、UMD 和 ES Modules 有什么区别？</a></li><li><a href="/questions/eng-browser-compat/">怎样确定要支持哪些浏览器？遇到兼容问题怎样排查和降级？</a></li><li><a href="/questions/eng-webpack/">webpack 的 entry、output、loader 和 plugin 分别负责什么？</a></li><li><a href="/questions/eng-vite/">Vite 开发模式为什么启动快，生产环境为什么仍需要构建？</a></li></ul></nav></main></div></div>
+<p>规范就是这样定义的：生成列号在每个分号之后重新从整数值开始，源文件下标、源码行列号和原名下标则一直相对上一次出现的值。规范没有解释原因；实际效果是每行开头的列号是个小整数，源码位置则能接着上一行的值算差值。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://tc39.es/ecma426/" target="_blank" rel="noreferrer">ECMA-426 · Source map format specification<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/SourceMap" target="_blank" rel="noreferrer">MDN · SourceMap 响应头<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Source+Map+%E7%9A%84+mappings+%E5%AD%97%E6%AE%B5%E6%98%AF%E6%80%8E%E6%A0%B7%E8%AE%B0%E5%BD%95%E4%BD%8D%E7%BD%AE%E7%9A%84%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9ASource+Map+%E7%9A%84+mappings+%E5%AD%97%E6%AE%B5%E6%98%AF%E6%80%8E%E6%A0%B7%E8%AE%B0%E5%BD%95%E4%BD%8D%E7%BD%AE%E7%9A%84%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aeng-source-map%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B7%A5%E7%A8%8B%E5%8C%96%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Feng-source-map%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Source Map 的 mappings 字段是怎样记录位置的？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/eng-module-history/">前端模块化经历了哪些阶段？IIFE、CommonJS、AMD、UMD 和 ES Modules 有什么区别？</a></li><li><a href="/questions/eng-browser-compat/">遇到浏览器兼容问题怎样排查和降级？</a></li><li><a href="/questions/eng-webpack/">webpack 的 entry、output、loader 和 plugin 分别负责什么？</a></li><li><a href="/questions/eng-vite/">Vite 开发模式为什么启动快，生产环境为什么仍需要构建？</a></li></ul></nav></main></div></div>
     
   </body>
 </html>

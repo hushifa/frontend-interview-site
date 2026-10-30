@@ -45,7 +45,29 @@
 <p>三种方式对比如下：</p>
 <table><thead><tr><th>方式</th><th>方法</th><th>读响应</th><th>体积限制</th><th>兼容性</th></tr></thead><tbody><tr><td><code>sendBeacon</code></td><td>仅 POST</td><td>否</td><td>与 keepalive 共享 64 KiB</td><td>广泛支持</td></tr><tr><td><code>fetch</code> + <code>keepalive</code></td><td>任意</td><td>可以</td><td>与 sendBeacon 共享 64 KiB</td><td>广泛支持</td></tr><tr><td><code>fetchLater</code></td><td>任意</td><td>否</td><td>有配额，超出抛 <code>QuotaExceededError</code></td><td>仅 Chromium</td></tr></tbody></table>
 <p>很多人会想：<code>sendBeacon</code> 返回 <code>false</code>，那就换 keepalive 再试一次。可是 <code>false</code> 多半意味着配额满了，而两者共用同一份配额，换了也一样失败。</p>
-<p>所以可靠的做法是平时按数量或时间分批发送，离开时只剩一小块数据要发。keepalive 只用作不支持 <code>sendBeacon</code> 的环境下的回退。返回值、Content-Type 和预检请求的细节见<a href="/questions/api-send-beacon/">《sendBeacon 返回 true 就代表上报成功了吗？页面离开时怎样发送统计？》</a>。</p>
+<p>所以可靠的做法是平时按数量或时间分批发送，离开时只剩一小块数据要发。keepalive 只用作不支持 <code>sendBeacon</code> 的环境下的回退。返回值的含义、Content-Type 和跨源预检的细节见<a href="/questions/api-send-beacon/">《sendBeacon 返回 true 就代表上报成功了吗？它发出的是什么样的请求？》</a>。</p>
+<h2>平时攒批，离开时只发剩下的</h2>
+<p>把上面几点合起来，就是一个简单的上报队列：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> queue = [];
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">MAX_BATCH</span> = <span class="hljs-number">20</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">track</span>(<span class="hljs-params">event</span>) {
+  queue.<span class="hljs-title function_">push</span>({ <span class="hljs-attr">id</span>: crypto.<span class="hljs-title function_">randomUUID</span>(), <span class="hljs-attr">time</span>: <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>(), ...event });
+  <span class="hljs-keyword">if</span> (queue.<span class="hljs-property">length</span> &gt;= <span class="hljs-variable constant_">MAX_BATCH</span>) <span class="hljs-title function_">flush</span>();
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">flush</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">if</span> (queue.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span>;
+  <span class="hljs-keyword">const</span> body = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(queue.<span class="hljs-title function_">splice</span>(<span class="hljs-number">0</span>, queue.<span class="hljs-property">length</span>));
+  navigator.<span class="hljs-title function_">sendBeacon</span>(<span class="hljs-string">&#x27;/api/collect&#x27;</span>, body); <span class="hljs-comment">// 字符串以 text/plain 发出</span>
+}
+
+<span class="hljs-built_in">setInterval</span>(flush, <span class="hljs-number">10_000</span>);
+<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;visibilitychange&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">document</span>.<span class="hljs-property">visibilityState</span> === <span class="hljs-string">&#x27;hidden&#x27;</span>) <span class="hljs-title function_">flush</span>();
+});
+</code></pre></div>
+<p>攒够 20 条或者每 10 秒发一次，单次体积就不会大到超出配额；页面隐藏时把剩下的发掉。每条事件带 <code>crypto.randomUUID()</code> 生成的 ID，服务端按 ID 去重，因为同一会话里页面可能多次隐藏又恢复。</p>
 <h2>fetchLater 怎么用</h2>
 <p><code>fetchLater</code> 的思路不一样：不用抓离开的时机，先把请求登记好，由浏览器决定什么时候发。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">let</span> controller;

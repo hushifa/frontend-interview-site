@@ -1,0 +1,71 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>小程序里的 <code>&lt;web-view&gt;</code> 组件用来承载网页。网页和小程序之间只能通过 JSSDK 提供的接口通信，官方文档写明不支持其他方式。</p>
+<p>网页能用的有 <code>wx.miniProgram.navigateTo</code>、<code>navigateBack</code>、<code>switchTab</code>、<code>reLaunch</code>、<code>redirectTo</code> 这几个跳转接口，<code>postMessage</code> 发消息，<code>getEnv</code> 判断环境。最容易踩坑的是 <code>postMessage</code>：消息不会实时送到，组件的 <code>bindmessage</code> 只在小程序后退、组件销毁、分享、复制链接这几个时机触发，拿到的是多次消息组成的数组。</p>
+<p>需要实时传数据时，常见做法是小程序打开 web-view 时把参数编码进 <code>src</code>，网页要回传就跳转到小程序页面并带上参数，或者两边都通过服务端中转。</p>
+<p>安全上要把网页当成不可信输入。小程序侧先配置业务域名，网页里 iframe 的域名也要配置。在自己的 App 里实现 bridge 时，同样要只对可信来源开放、只开放白名单里的能力、逐个校验参数；支付这类关键结果以服务端校验为准。</p>
+</blockquote>
+<h2>web-view 的基本限制</h2>
+<p>先记住几条组件本身的规则，都来自微信官方文档：</p>
+<ul>
+<li>打开的网页需要在小程序管理后台配置业务域名，关联公众号的文章除外。个人类型的小程序暂不支持 web-view。</li>
+<li>网页内 iframe 的域名也需要配置到域名白名单。</li>
+<li>每个页面只能有一个 web-view，它会自动铺满整个页面，覆盖其他组件。</li>
+<li>链接里避免带中文字符，否则 iOS 上可能白屏，建议先 <code>encodeURIComponent</code>。</li>
+</ul>
+<p>网页里除了 <code>wx.miniProgram</code> 的几个接口，只能用 JSSDK 里的部分能力，比如选择和预览图片、获取地理位置、调起扫一扫。</p>
+<h2>网页怎样把数据交给小程序</h2>
+<p>先看 <code>postMessage</code> 的用法：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 网页侧，引入 https://res.wx.qq.com/open/js/jweixin-1.3.2.js 后调用</span>
+wx.<span class="hljs-property">miniProgram</span>.<span class="hljs-title function_">postMessage</span>({ <span class="hljs-attr">data</span>: { <span class="hljs-attr">orderId</span>: <span class="hljs-string">&#x27;123&#x27;</span> } });
+</code></pre></div>
+<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-comment">&lt;!-- 小程序页面 --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">web-view</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;{{url}}&quot;</span> <span class="hljs-attr">bindmessage</span>=<span class="hljs-string">&quot;onMessage&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">web-view</span>&gt;</span>
+</code></pre></div>
+<p>很多人以为调用以后小程序马上能收到，实际上 <code>onMessage</code> 要等到用户后退、组件销毁、分享或复制链接时才触发，<code>e.detail.data</code> 是这期间所有 <code>postMessage</code> 参数组成的数组。所以它适合“离开前把结果带回去”，比如分享时用网页里的标题。</p>
+<p>要让小程序立刻响应，就用跳转。网页调用 <code>wx.miniProgram.navigateTo({ url: &#x27;/pages/pay/index?orderId=123&#x27; })</code>，小程序页面在 <code>onLoad</code> 里读参数。反方向，小程序把数据拼进 web-view 的 <code>src</code> 查询参数，网页启动时读取。两边状态需要同步得更紧时，就让双方都和服务端通信。</p>
+<p>分享时，小程序可以在 <code>onShareAppMessage</code> 的参数里拿到 <code>webViewUrl</code>，也就是当前网页的地址。</p>
+<h2>网页怎样判断自己在小程序里</h2>
+<p>同一个网页可能在普通浏览器、微信聊天、小程序里打开，调用 <code>wx.miniProgram</code> 之前要先判断环境。官方给了三种办法：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">ready</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">window</span>.<span class="hljs-property">__wxjs_environment</span> === <span class="hljs-string">&#x27;miniprogram&#x27;</span>) {
+    <span class="hljs-comment">// 在小程序 web-view 里</span>
+  }
+}
+<span class="hljs-keyword">if</span> (!<span class="hljs-variable language_">window</span>.<span class="hljs-property">WeixinJSBridge</span> || !<span class="hljs-title class_">WeixinJSBridge</span>.<span class="hljs-property">invoke</span>) {
+  <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;WeixinJSBridgeReady&#x27;</span>, ready, <span class="hljs-literal">false</span>);
+} <span class="hljs-keyword">else</span> {
+  <span class="hljs-title function_">ready</span>();
+}
+</code></pre></div>
+<p>为什么要等 <code>WeixinJSBridgeReady</code>？因为页面脚本执行时，微信的 bridge 可能还没注入好，官方建议在这个事件回调里读 <code>__wxjs_environment</code>。另外也可以调用 <code>wx.miniProgram.getEnv</code>，回调参数的 <code>miniprogram</code> 为 <code>true</code> 就是在小程序里。微信 7.0.0 起，userAgent 里会带 <code>miniProgram</code> 字样。</p>
+<h2>bridge 要做哪些安全校验</h2>
+<p>不管是小程序还是自己的 App，bridge 都是把宿主能力暴露给网页。网页可能嵌了第三方 iframe，可能被导航到别的站点，也可能有 XSS。所以宿主收到的每一次调用都要当成不可信输入来处理。</p>
+<p><strong>校验来源。</strong> 小程序靠业务域名白名单限定能加载哪些页面。在自己的 App 里，要在处理调用时拿到发起方的 origin 再判断。Android 的 <code>WebViewCompat.addWebMessageListener</code> 用 <code>allowedOriginRules</code> 限定往哪些 origin 的 frame 注入对象，回调里还能读到 <code>sourceOrigin</code> 和 <code>isMainFrame</code>；官方说明通配符 <code>*</code> 会注入所有 frame，这时消息要当不可信数据处理。iOS 在处理器里读 <code>message.frameInfo</code>，检查 <code>isMainFrame</code> 和 <code>securityOrigin</code> 的协议、主机名、端口。Android 的 <code>addJavascriptInterface</code> 拿不到调用方 origin，只能靠限制加载的页面来控制。</p>
+<p>比较来源时不能只比字符串前缀：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> allowed = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>([<span class="hljs-string">&#x27;https://m.example.com&#x27;</span>]);
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">isTrusted</span>(<span class="hljs-params">origin</span>) {
+  <span class="hljs-keyword">return</span> allowed.<span class="hljs-title function_">has</span>(<span class="hljs-keyword">new</span> <span class="hljs-title function_">URL</span>(origin).<span class="hljs-property">origin</span>);
+}
+<span class="hljs-comment">// &#x27;https://m.example.com.evil.com&#x27;.startsWith(&#x27;https://m.example.com&#x27;) 为 true，前缀比较会被绕过</span>
+</code></pre></div>
+<p>用 <code>URL</code> 解析出 origin 再精确比较，<code>https://m.example.com.evil.com</code> 就不会混进来。</p>
+<p><strong>最小能力。</strong> 按来源开放不同的方法集合，不提供“执行任意命令”“读写任意文件”这种通用入口。</p>
+<p><strong>校验参数。</strong> 类型、长度、枚举值都要检查；文件路径、跳转地址同样按白名单判断。</p>
+<p><strong>关键结果以服务端为准。</strong> 支付、获取手机号这类操作由宿主发起并弹出原生确认，结果由服务端校验，不要相信网页传回来的“已支付”。</p>
+<p><strong>限制导航。</strong> WebView 只允许跳转白名单域名，防止页面被导航到恶意站点后继续使用 bridge。</p>
+<p>注入对象、URL 拦截这些 bridge 本身的实现方式，见<a href="/questions/mobile-hybrid-jsbridge/">《Hybrid 开发是什么？JSBridge 的 URL Scheme 拦截和注入对象有什么区别？》</a>。Electron 里的 preload 和 IPC 是同一类问题，见<a href="/questions/desktop-electron-ipc/">《Electron 的 IPC 和 contextBridge 怎样设计？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>web-view 里 JSSDK 接口调用没反应怎么办？</strong></p>
+<blockquote>
+<p>官方文档的提示是：iOS 上如果遇到 JSSDK 接口调用无响应，可以在 web-view 的 <code>src</code> 后面加 <code>#wechat_redirect</code>。</p>
+</blockquote>
+<p><strong>网页怎么知道小程序切到后台了？</strong></p>
+<blockquote>
+<p>微信 7.0.3 起，网页里可以用 <code>WeixinJSBridge.on(&#x27;onPageStateChange&#x27;, fn)</code> 监听，回调参数的 <code>active</code> 表示小程序是否在前台。</p>
+</blockquote>
+<p><strong>addJavascriptInterface 在旧系统上有什么风险？</strong></p>
+<blockquote>
+<p>官方文档指出，目标 API 16（Android 4.1）及以下的应用，或者运行在 Android 4.2 以下设备上的应用，页面 JS 可以通过反射访问注入的对象，以宿主的权限执行 Java 代码。所以包含不可信内容的 WebView 不应注入对象。</p>
+</blockquote>`};export{e as default};

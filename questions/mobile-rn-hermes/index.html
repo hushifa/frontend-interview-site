@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="移动端与 PWA面试题：Hermes 是 Meta 为 React Native 做的 JavaScript 引擎，面向资源有限的设备，优化启动速度…" />
+    <title>React Native 的 Hermes 引擎带来了什么？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/mobile-rn-hermes/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="React Native 的 Hermes 引擎带来了什么？" />
+    <meta property="og:description" content="移动端与 PWA面试题：Hermes 是 Meta 为 React Native 做的 JavaScript 引擎，面向资源有限的设备，优化启动速度…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/mobile-rn-hermes/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/mobile-rn-hermes/#webpage","url":"https://fe.hushifa.top/questions/mobile-rn-hermes/","name":"React Native 的 Hermes 引擎带来了什么？","description":"移动端与 PWA面试题：Hermes 是 Meta 为 React Native 做的 JavaScript 引擎，面向资源有限的设备，优化启动速度…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/mobile-rn-hermes/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/mobile-rn-hermes/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"移动端与 PWA面试题","item":"https://fe.hushifa.top/topics/mobile/"},{"@type":"ListItem","position":3,"name":"React Native 的 Hermes 引擎带来了什么？","item":"https://fe.hushifa.top/questions/mobile-rn-hermes/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/mobile/">移动端与 PWA面试题</a><span aria-hidden="true">/</span><span aria-current="page">React Native 的 Hermes 引擎带来了什么？</span></nav><h1 tabindex="-1">React Native 的 Hermes 引擎带来了什么？</h1><p class="reading-summary">Hermes 是 Meta 为 React Native 做的 JavaScript 引擎，面向资源有限的设备，优化启动速度、包体积和内存。它的关键区别是构建时把 JavaScript 预编译成字节码打进安装包，App 启动时省掉解析编译这一步。RN 0.70 起默认启用，现在随每个 RN 版本一起构建，不需要额外配置；用 global.HermesInternal 可以确认是否在用，性能对比要用 release 包。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>一个 React Native App 冷启动慢，用户点了图标要等好一会儿才看到第一屏。JavaScript 引擎怎样加载和执行 bundle 会影响这段时间。Hermes 就是 Meta 为了这个问题做的 JavaScript 引擎，专门面向资源有限的设备，优化启动速度、包体积和内存占用。</p>
+<p>它和其他引擎最大的区别是提前编译。打 release 包时，Hermes 在构建阶段就把 JavaScript 源码编译成字节码，打进安装包里；App 启动时直接执行字节码，省掉了解析和编译这一步。官方文档说，对很多应用来说，和 JavaScriptCore 相比，Hermes 能缩短启动时间、减少内存占用、减小包体积。</p>
+<p>现在不需要做什么就能用上。React Native 0.70 起 Hermes 成为默认引擎，从 0.69 开始每个 RN 版本都会配套构建一份 Hermes，保证版本兼容。在 JS 里检查 <code>global.HermesInternal</code> 是否存在，就能确认当前是不是 Hermes。</p>
+<p>要注意两点。第一，性能对比要用 release 包，因为字节码是在 release 构建时生成的；用了非标准方式加载 bundle 时，<code>HermesInternal</code> 存在也不代表加载的是 <code>.hbc</code> 字节码文件。第二，RN 还支持 JavaScriptCore，但要按社区仓库的说明自己切换，不同引擎之间可能有细微差异，代码不要依赖某个引擎的特有行为。</p>
+</blockquote>
+<h2>启动快在哪里</h2>
+<p>没有预编译时，引擎要在 App 启动时先处理 JavaScript 源码才能执行，这一步发生在用户刚点开 App、什么都还没显示的时候。</p>
+<p>Hermes 的做法是把这一步挪到构建阶段。React Native 官方博客的说法是：Hermes 能提前把 JavaScript 源码编译成字节码，预编译好的字节码打包在安装包里，解释器在 App 启动时就不用再做这一步昂贵的工作。</p>
+<p>官方衡量收益时看三个指标：TTI，这里定义为从点击图标到第一屏渲染完成的时间；安装包大小，Android 看 APK、iOS 看 IPA；以及内存占用。</p>
+<h2>怎样确认在用 Hermes</h2>
+<p>官方文档给的检查方法是读 <code>HermesInternal</code> 这个全局变量：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">const</span> <span class="hljs-title function_">isHermes</span> = (<span class="hljs-params"></span>) =&gt; !!<span class="hljs-variable language_">global</span>.<span class="hljs-property">HermesInternal</span>;
+</code></pre></div>
+<p>这里有个坑。如果用了非标准的方式加载 JS bundle，可能出现 <code>HermesInternal</code> 存在，但实际没有用上预编译字节码的情况。官方建议确认加载的是 <code>.hbc</code> 文件，并实际对比前后的性能。</p>
+<p>对比性能一定要用 release 构建，比如 Android 用 <code>npm run android -- --mode=&quot;release&quot;</code>，iOS 用 <code>npm run ios -- --mode=&quot;Release&quot;</code>。官方文档说，release 构建会在构建时把 JavaScript 编译成 Hermes 字节码，提升设备上的启动速度。</p>
+<h2>和 JavaScriptCore 是什么关系</h2>
+<p>在 Hermes 之前，React Native 用的是 JavaScriptCore，也就是 Safari 背后的引擎。官方文档说，大多数情况下 RN 使用 Hermes；关掉 Hermes 时才使用 JavaScriptCore。而且在 iOS 上，因为 App 没有可写可执行内存，JavaScriptCore 不能使用 JIT。</p>
+<p>想换回 JavaScriptCore，要按 <code>react-native-community/javascriptcore</code> 社区仓库的说明操作。官方提醒，这些运行环境很相似，但仍可能碰到不一致，所以最好不要依赖某个运行时的细节。</p>
+<p>Hermes 只是 RN 架构里执行 JavaScript 的那一层，JS 和原生之间怎样通信、新架构改了什么，见<a href="/questions/mobile-rn-bridge/">《React Native 原生桥接和新架构应该怎样理解？》</a>；RN 和浏览器里的 React 有哪些异同，见<a href="/questions/mobile-rn/">《React Native 与浏览器里的 React 有哪些共同点和差异？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>Hermes 怎样支持 <code>Intl</code>？</strong></p>
+<blockquote>
+<p>官方博客提到，如果把完整的国际化数据打进引擎，体积最多会增加 6MB。为了不让安装包变大，Hermes 在 iOS 上的 <code>Intl</code> 是通过调用系统自身提供的 API 实现的。</p>
+</blockquote>
+<p><strong>为什么从 0.69 起每个 RN 版本都配套构建 Hermes？</strong></p>
+<blockquote>
+<p>官方博客的解释是为了保证和每个 RN 版本完全兼容。官方文档也说，RN 自带一份配套的 Hermes，每发布一个 RN 版本都会构建对应的 Hermes。</p>
+</blockquote>
+<p><strong>开发时调试 JS 跑在哪里？</strong></p>
+<blockquote>
+<p>正常情况下就跑在 App 里的引擎上。官方文档还提到 Chrome 调试的情况：所有 JavaScript 在 Chrome 里用 V8 执行，通过 WebSocket 和原生通信，这时运行环境和真机不同，可能出现只在某一边才有的问题。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://reactnative.dev/docs/hermes" target="_blank" rel="noreferrer">React Native · Using Hermes<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://reactnative.dev/blog/2022/07/08/hermes-as-the-default" target="_blank" rel="noreferrer">React Native Blog · Hermes as the Default<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://reactnative.dev/docs/javascript-environment" target="_blank" rel="noreferrer">React Native · JavaScript Environment<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+Native+%E7%9A%84+Hermes+%E5%BC%95%E6%93%8E%E5%B8%A6%E6%9D%A5%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+Native+%E7%9A%84+Hermes+%E5%BC%95%E6%93%8E%E5%B8%A6%E6%9D%A5%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Amobile-rn-hermes%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E4%B8%8E+PWA%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fmobile-rn-hermes%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React Native 的 Hermes 引擎带来了什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/mobile-flutter-rn-web/">Flutter、React Native 和 Web 跨端怎么选？一套代码能同时跑在 App 和浏览器里吗？</a></li><li><a href="/questions/mobile-rn/">React Native 与浏览器里的 React 有哪些共同点和差异？</a></li><li><a href="/questions/mobile-rn-bridge/">React Native 原生桥接和新架构应该怎样理解？</a></li><li><a href="/questions/mobile-adaptation/">移动端怎样做屏幕适配？1px 边框为什么看起来变粗了？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

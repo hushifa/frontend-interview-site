@@ -1,0 +1,67 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>三个方案解决的问题不完全一样。qiankun 和无界是“把一个完整的子应用嵌进主应用”，Module Federation 是“在构建时声明我要用别人的哪个模块”，运行时把模块加载进来，粒度可以小到一个组件。</p>
+<p>隔离方式是最大的区别。qiankun 用 <code>Proxy</code> 代理 <code>window</code> 做 JS 沙箱，子应用写全局变量写进代理对象，读不到时再去真实的 <code>window</code> 上找；样式隔离默认不开，可以选 Shadow DOM 或给选择器加前缀。无界把子应用的 JS 放进一个和主应用同域的 iframe 里运行，iframe 有自己原生的 <code>window</code>，DOM 则渲染在一个 Web Component 里，样式天然隔开。Module Federation 没有沙箱，也不做样式隔离，远程模块和主应用跑在同一个环境里。</p>
+<p>通信方面，qiankun 用注册时传的 <code>props</code> 和 <code>initGlobalState</code> 返回的全局状态；无界有 <code>props</code> 注入、同域下直接访问 <code>window.parent</code>、以及 EventBus 三种；Module Federation 的远程模块就是普通模块，直接调用函数、传 props 就行。</p>
+<p>所以我会这样选：技术栈统一、想共享组件和依赖，用 Module Federation；要接入技术栈不同的老系统，看重隔离，就在 qiankun 和无界里选。无界的子应用基本不用改造，还支持保活；qiankun 要求子应用导出生命周期、打包成 umd。两者都要求子应用的资源支持跨域访问。</p>
+</blockquote>
+<h2>先说清楚它们在哪一层工作</h2>
+<p>微前端要解决什么组织问题、iframe 和 Web Component 等集成方式怎么比，见<a href="/questions/architecture-microfrontend/">《微前端适合解决什么组织和部署问题？》</a>。Module Federation 的配置和 <code>shared</code> 版本协商，见<a href="/questions/arch-module-federation/">《怎样用 Module Federation 做微前端？exposes、remotes 和 shared 怎样配置？》</a>。这里只比三者在隔离和通信上的不同。</p>
+<p>qiankun 和无界都是运行时方案：主应用运行时拿到子应用的地址，把它的 HTML、JS、CSS 拉下来执行。子应用可以用任何框架、任何时间单独部署。Module Federation 是构建时方案：双方在构建配置里声明暴露和使用的模块，共享依赖也在构建时协商，所以通常要求团队使用支持它的构建工具。</p>
+<h2>JS 沙箱：qiankun 的 Proxy 和无界的 iframe</h2>
+<p>qiankun 文档的 FAQ 写明，<code>start()</code> 传 <code>{ sandbox: true }</code> 时，qiankun 用 <code>Proxy</code> 给子应用隔离全局的 <code>window</code> 对象。子应用读 <code>window.Vue</code> 时，先在代理对象上找，找不到再去全局的 <code>window</code> 上找。下面用几行代码模拟这种行为，这只是原理示意，不是 qiankun 的源码：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> realWindow = { <span class="hljs-attr">appName</span>: <span class="hljs-string">&#x27;主应用&#x27;</span>, <span class="hljs-title class_">Vue</span>: <span class="hljs-string">&#x27;Vue 2&#x27;</span> };
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">createSandbox</span>(<span class="hljs-params"><span class="hljs-variable language_">global</span></span>) {
+  <span class="hljs-keyword">const</span> local = {};
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Proxy</span>(local, {
+    <span class="hljs-title function_">get</span>(<span class="hljs-params">target, key</span>) {
+      <span class="hljs-keyword">return</span> key <span class="hljs-keyword">in</span> target ? target[key] : <span class="hljs-variable language_">global</span>[key];
+    },
+    <span class="hljs-title function_">set</span>(<span class="hljs-params">target, key, value</span>) {
+      target[key] = value; <span class="hljs-comment">// 写入只落在沙箱自己的对象上</span>
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    },
+  });
+}
+
+<span class="hljs-keyword">const</span> subWindow = <span class="hljs-title function_">createSandbox</span>(realWindow);
+subWindow.<span class="hljs-property">appName</span> = <span class="hljs-string">&#x27;子应用&#x27;</span>;
+subWindow.<span class="hljs-property">token</span> = <span class="hljs-string">&#x27;abc&#x27;</span>;
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(subWindow.<span class="hljs-property">appName</span>); <span class="hljs-comment">// 子应用</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(realWindow.<span class="hljs-property">appName</span>); <span class="hljs-comment">// 主应用</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;token&#x27;</span> <span class="hljs-keyword">in</span> realWindow ? <span class="hljs-string">&#x27;泄漏&#x27;</span> : <span class="hljs-string">&#x27;没有泄漏&#x27;</span>); <span class="hljs-comment">// 没有泄漏</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(subWindow.<span class="hljs-property">Vue</span>); <span class="hljs-comment">// Vue 2</span>
+</code></pre></div>
+<p>子应用改了 <code>appName</code>、加了 <code>token</code>，真实的 <code>window</code> 都没变，卸载子应用时把代理对象扔掉就行。可是最后一行说明了这种沙箱的边界：子应用能读到主应用挂在 <code>window</code> 上的东西。qiankun 的 FAQ 就举了这样一个例子：vue-router 加载时会检查 <code>window.Vue</code>，子应用在沙箱里读到的是主应用的 Vue，结果报 <code>Cannot redefine property: $router</code>。</p>
+<p>无界换了一条路。它的文档说，子应用的 JS 注入到一个和主应用同域的 iframe 中运行，iframe 是原生的 <code>window</code> 沙箱，修改只发生在 iframe 内部，主应用的 <code>window</code> 不受影响。iframe 也有自己的 <code>history</code> 和 <code>location</code>，所以子应用的路由和主应用天然分开。无界还特别说明，它不用 <code>with(proxyWindow){code}</code> 这种方式执行代码，子应用的代码以原生速度运行，代价是要创建 iframe，这一步可以用预加载提前做。</p>
+<h2>样式隔离：前缀、Shadow DOM 和 Web Component</h2>
+<p>qiankun 的 <code>sandbox</code> 默认值是 <code>true</code>，只开 JS 沙箱，样式隔离要显式配置。API 文档给了两种：<code>{ strictStyleIsolation: true }</code> 会把每个子应用的容器变成 Shadow DOM，子应用的样式不会泄漏到全局；<code>{ experimentalStyleIsolation: true }</code> 是实验性的方案，给子应用的选择器加上 <code>div[data-qiankun-react16]</code> 这样的前缀来限制作用范围，文档注明 <code>@keyframes</code>、<code>@font-face</code>、<code>@import</code>、<code>@page</code> 不会被改写。</p>
+<p>为什么不默认开 Shadow DOM？因为外部样式进不来，内部样式也出不去，弹窗、下拉菜单这类挂到 <code>document.body</code> 上的组件，会跑到 Shadow DOM 外面，样式就丢了。</p>
+<p>无界的做法是创建一个 <code>wujie</code> 自定义元素，把子应用的完整 DOM 结构渲染在里面，JS 仍然在 iframe 里运行。为了让两边接起来，无界把 iframe 里 <code>document</code> 的 <code>querySelector</code>、<code>getElementById</code>、<code>head</code>、<code>body</code> 等查询都代理到这个 Web Component 上，子应用往 <code>document.body</code> 上 <code>appendChild</code> 的弹窗也会被放进去，所以弹窗不用改造也能正常显示。</p>
+<p>有的浏览器不支持这些能力时，无界会自动降级：用 iframe 替换 Web Component，用 <code>Object.defineProperty</code> 替换 <code>Proxy</code>。<code>startApp</code> 的 <code>degrade</code> 参数可以主动开启降级。</p>
+<p>Module Federation 不提供样式隔离，远程组件的样式和主应用在同一个文档里，要靠 CSS Modules、BEM 或统一前缀之类的约定避免冲突。</p>
+<h2>通信：三者各用什么</h2>
+<p>qiankun 注册子应用时可以传 <code>props</code>，子应用在 <code>mount</code> 生命周期里拿到。需要全局共享状态时，主应用调用 <code>initGlobalState(state)</code> 得到一组方法：<code>onGlobalStateChange</code> 监听变化，<code>setGlobalState</code> 修改状态，文档说明它只能修改已经定义过的第一层属性，<code>offGlobalStateChange</code> 取消监听，子应用卸载时会默认调用。官方建议在主应用里初始化，子应用通过 <code>props</code> 拿到这些方法。</p>
+<p>无界的通信文档列了三种。第一种是 <code>props</code>，主应用在组件上传 <code>props</code>，子应用通过 <code>window.$wujie?.props</code> 读到。第二种是 <code>window</code> 直接通信：因为 iframe 和主应用同域，子应用可以直接读 <code>window.parent.xxx</code>，主应用也能拿到子应用 iframe 的 <code>contentWindow</code>。第三种是 EventBus，主应用用 <code>bus.$on</code>、<code>bus.$emit</code>，子应用用 <code>window.$wujie?.bus</code>，这是一套去中心化的方案，子应用之间也能互相通信。文档提醒，子应用里订阅的事件要在 <code>unmount</code> 生命周期里手动 <code>$off</code>。</p>
+<p>Module Federation 没有专门的通信机制。远程模块被加载以后就是一个普通的 ES 模块，主应用直接调用它导出的函数，或者像用本地组件一样传 props。共享状态库时，把它声明成 <code>shared</code> 的单例，双方用的就是同一份实例。</p>
+<h2>子应用要做哪些改造</h2>
+<p>qiankun 的入门文档要求子应用在入口文件导出 <code>bootstrap</code>、<code>mount</code>、<code>unmount</code> 三个生命周期，并在 webpack 里把输出改成 <code>libraryTarget: &#x27;umd&#x27;</code>。FAQ 还说明，qiankun 用 <code>fetch</code> 获取子应用的静态资源，所以这些资源必须支持 CORS。</p>
+<p>无界的文档说，满足跨域条件时子应用可以不用改造。它的子应用资源和接口请求都从主域名发起，所以子应用同样要配置 CORS。运行模式有三种：<code>alive</code> 设为 <code>true</code> 是保活模式，切走以后 Web Component 留在内存里，回来时重新挂上，状态不丢；<code>alive</code> 为 <code>false</code> 且做了生命周期改造，也就是在 <code>window.__WUJIE_MOUNT</code> 和 <code>window.__WUJIE_UNMOUNT</code> 上挂载和销毁实例，是单例模式；两者都没有，就是重建模式，每次切换都销毁 iframe 和 Web Component。</p>
+<p>Module Federation 要求双方都用支持它的构建工具和插件，在配置里写 <code>exposes</code>、<code>remotes</code> 和 <code>shared</code>。</p>
+<h2>放在一起比</h2>
+<table><thead><tr><th>维度</th><th>qiankun</th><th>无界</th><th>Module Federation</th></tr></thead><tbody><tr><td>接入单位</td><td>子应用</td><td>子应用</td><td>模块</td></tr><tr><td>JS 隔离</td><td><code>Proxy</code> 代理 <code>window</code>，读不到时回落到全局</td><td>同域 iframe 原生 <code>window</code></td><td>不隔离</td></tr><tr><td>样式隔离</td><td>默认不开，可选 Shadow DOM 或选择器前缀</td><td>Web Component 承载 DOM</td><td>不提供，靠约定</td></tr><tr><td>通信</td><td><code>props</code>、<code>initGlobalState</code></td><td><code>props</code>、<code>window.parent</code>、EventBus</td><td>直接调用模块、<code>shared</code> 单例</td></tr><tr><td>子应用改造</td><td>导出生命周期、umd 输出、资源开 CORS</td><td>资源开 CORS，单例模式才需改造生命周期</td><td>构建配置加插件</td></tr></tbody></table>
+<h2>常见追问</h2>
+<p><strong>无界的 iframe 方案和直接用 iframe 嵌页面有什么区别？</strong></p>
+<blockquote>
+<p>直接用 iframe，DOM 被关在 iframe 的矩形区域里，弹窗没法覆盖整个页面，URL 刷新后也会丢。无界只把 JS 放在 iframe 里，DOM 渲染到主文档的 Web Component 中，弹窗能正常显示；它还会劫持 iframe 的 <code>pushState</code>、<code>replaceState</code>，开启 <code>sync</code> 后把子应用的路径同步到主应用 URL 的查询参数上，刷新和分享链接时能还原。</p>
+</blockquote>
+<p><strong>qiankun 的沙箱为什么挡不住所有全局污染？</strong></p>
+<blockquote>
+<p>它代理的是子应用对 <code>window</code> 的读写，读不到的属性会回落到真实的 <code>window</code>，所以子应用能读到主应用的全局变量。官方 FAQ 里 vue-router 读到主应用 <code>window.Vue</code> 的报错就是这个原因，给出的解决办法是子应用把 Vue 打包进自己的代码，或者主应用把全局的 <code>window.Vue</code> 改个名字。</p>
+</blockquote>
+<p><strong>同一个页面要同时显示多个子应用怎么办？</strong></p>
+<blockquote>
+<p>qiankun 的 <code>start()</code> 有 <code>singular</code> 选项，默认 <code>true</code>，同一时间只渲染一个子应用；要同时显示多个，可以把 <code>singular</code> 设为 <code>false</code>，或者用 <code>loadMicroApp</code> 手动加载，它的 <code>singular</code> 默认是 <code>false</code>。无界把子应用当组件用，文档说明一个页面可以同时激活多个子应用。</p>
+</blockquote>`};export{e as default};

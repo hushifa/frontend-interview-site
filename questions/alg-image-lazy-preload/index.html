@@ -67,7 +67,7 @@
 );
 </code></pre></div>
 <p>为什么第二组用 <code>Promise.allSettled</code>？<code>Promise.all</code> 只要有一张失败，整体就失败了。如果一张素材失败不影响开始，比如只是背景图，就用 <code>allSettled</code> 拿到每一张的结果，再决定要不要用占位图。几个方法的区别见<a href="/questions/js-promise-combinators/">《Promise.all、allSettled、race 和 any 如何选择？》</a>。</p>
-<p>只想让浏览器提前下载某张图，也可以在 HTML 里写 <code>&lt;link rel=&quot;preload&quot; as=&quot;image&quot; href=&quot;...&quot;&gt;</code>，见<a href="/questions/network-dns-prefetch-preconnect/">《dns-prefetch、preconnect 和 preload 应该怎样选择？》</a>。</p>
+<p>只想让浏览器提前下载某张图，也可以在 HTML 里写 <code>&lt;link rel=&quot;preload&quot; as=&quot;image&quot; href=&quot;...&quot;&gt;</code>，见<a href="/questions/network-dns-prefetch-preconnect/">《dns-prefetch 和 preconnect 分别把连接的哪几步提前了？》</a>。</p>
 <h2>懒加载：用 IntersectionObserver</h2>
 <p><code>IntersectionObserver</code> 的作用是：告诉它要看哪些元素，元素和视口的相交情况变化时，它会调用回调。以前的做法是监听 <code>scroll</code> 事件，在回调里对每张图调用 <code>getBoundingClientRect</code> 算位置，这些计算都在主线程上反复执行；用 <code>IntersectionObserver</code> 就不用自己算了。下面是浏览器里的写法：</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">lazyLoadImages</span>(<span class="hljs-params">selector = <span class="hljs-string">&#x27;img[data-src]&#x27;</span></span>) {

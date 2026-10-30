@@ -54,7 +54,7 @@
 <p>所以减少往返次数（复用连接、HTTP/3、TLS 1.3），和缩短 RTT（用 CDN 边缘节点让服务器离用户近一点），比优化服务器 CPU 有效得多。</p>
 <h2>前端能做什么</h2>
 <p>首先是少用新域名。首屏依赖的每个第三方域名，都要单独走一遍这三关。</p>
-<p>对关键的第三方域名用 <code>preconnect</code>，可能用到的用 <code>dns-prefetch</code>，见<a href="/questions/network-dns-prefetch-preconnect/">《dns-prefetch、preconnect 和 preload 应该怎样选择？》</a>。</p>
+<p>对关键的第三方域名用 <code>preconnect</code>，可能用到的用 <code>dns-prefetch</code>，见<a href="/questions/network-dns-prefetch-preconnect/">《dns-prefetch 和 preconnect 分别把连接的哪几步提前了？》</a>。</p>
 <p>静态资源尽量和页面同域，或者统一走一个 CDN 域名，这样 HTTP/2 能复用同一条连接。</p>
 <h2>常见追问</h2>
 <p><strong>DNS 能在前端缓存吗？</strong></p>

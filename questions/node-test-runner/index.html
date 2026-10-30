@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="Node.js面试题：node:test 是 Node.js 内置的测试运行器，v20 起稳定，不用装依赖就有 test/describe/it、钩子…" />
+    <title>node:test 能替代 Jest 吗？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/node-test-runner/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="node:test 能替代 Jest 吗？ · 前端知库" />
+    <meta property="og:description" content="Node.js面试题：node:test 是 Node.js 内置的测试运行器，v20 起稳定，不用装依赖就有 test/describe/it、钩子…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/node-test-runner/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/node-test-runner/#webpage","url":"https://fe.hushifa.top/questions/node-test-runner/","name":"node:test 能替代 Jest 吗？ · 前端知库","description":"Node.js面试题：node:test 是 Node.js 内置的测试运行器，v20 起稳定，不用装依赖就有 test/describe/it、钩子…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/node-test-runner/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/node-test-runner/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Node.js面试题","item":"https://fe.hushifa.top/topics/node/"},{"@type":"ListItem","position":3,"name":"node:test 能替代 Jest 吗？","item":"https://fe.hushifa.top/questions/node-test-runner/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/node/">Node.js面试题</a><span aria-hidden="true">/</span><span aria-current="page">node:test 能替代 Jest 吗？</span></nav><h1 tabindex="-1">node:test 能替代 Jest 吗？</h1><p class="reading-summary">node:test 是 Node.js 内置的测试运行器，v20 起稳定，不用装依赖就有 test/describe/it、钩子、函数和定时器 mock、快照、多种报告器，node --test 自动发现测试文件。纯 Node 的库和服务端代码可以用它替代 Jest；前端组件测试需要 jsdom 环境、模块 mock 和成熟生态，仍然是 Jest 或 Vitest 更合适。覆盖率和模块 mock 目前还是实验性功能。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>比如写一个 Node 的工具库，只想测几个纯函数和一个调接口的模块，不想为此装 Jest 和一堆配置。Node.js 自带了测试运行器 <code>node:test</code>，v18 加入、v20 起稳定，写好测试文件运行 <code>node --test</code> 就行。</p>
+<p>它覆盖了单元测试的基本需求：<code>test</code>、<code>describe</code>、<code>it</code> 和 <code>before</code>、<code>afterEach</code> 等钩子；<code>mock.fn</code>、<code>mock.method</code> 能记录调用，<code>mock.timers</code> 能模拟定时器和 <code>Date</code>，通过测试上下文 <code>t.mock</code> 创建的 mock 在测试结束后自动还原；快照测试从 v23.4 起不再是实验性功能；报告器内置 <code>spec</code>、<code>tap</code>、<code>dot</code>、<code>junit</code> 和 <code>lcov</code>。断言用 <code>node:assert</code>。</p>
+<p>所以纯 Node 的库、CLI 和服务端代码，用它替代 Jest 是可行的，少一个依赖，也不需要转译。</p>
+<p>可是前端项目一般不适合换。它没有内置 jsdom 这类浏览器环境，组件测试要的生态也在 Jest 和 Vitest 那边；模块 mock 要加 <code>--experimental-test-module-mocks</code> 参数，还处于早期开发阶段，代码覆盖率要加 <code>--experimental-test-coverage</code>，也是实验性的。只能用 <code>node:test</code> 这个带前缀的名字导入。</p>
+</blockquote>
+<h2>一个最小的测试文件</h2>
+<p>下面测一个购物车的合计函数，它会调用接口取单价。测试里用 <code>t.mock.method</code> 监听接口方法，检查调用次数：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { describe, it } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:test&#x27;</span>;
+<span class="hljs-keyword">import</span> assert <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;node:assert/strict&#x27;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">createCart</span>(<span class="hljs-params">api</span>) {
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-keyword">async</span> <span class="hljs-title function_">total</span>(<span class="hljs-params">ids</span>) {
+      <span class="hljs-keyword">const</span> prices = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">all</span>(ids.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">id</span>) =&gt;</span> api.<span class="hljs-title function_">price</span>(id)));
+      <span class="hljs-keyword">return</span> prices.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a + b, <span class="hljs-number">0</span>);
+    },
+  };
+}
+
+<span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;购物车&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;合计价格&#x27;</span>, <span class="hljs-title function_">async</span> (t) =&gt; {
+    <span class="hljs-keyword">const</span> api = { <span class="hljs-attr">price</span>: <span class="hljs-title function_">async</span> (id) =&gt; (id === <span class="hljs-string">&#x27;a&#x27;</span> ? <span class="hljs-number">10</span> : <span class="hljs-number">5</span>) };
+    t.<span class="hljs-property">mock</span>.<span class="hljs-title function_">method</span>(api, <span class="hljs-string">&#x27;price&#x27;</span>);
+    <span class="hljs-keyword">const</span> cart = <span class="hljs-title function_">createCart</span>(api);
+    assert.<span class="hljs-title function_">equal</span>(<span class="hljs-keyword">await</span> cart.<span class="hljs-title function_">total</span>([<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>]), <span class="hljs-number">15</span>);
+    assert.<span class="hljs-title function_">equal</span>(api.<span class="hljs-property">price</span>.<span class="hljs-property">mock</span>.<span class="hljs-title function_">callCount</span>(), <span class="hljs-number">2</span>);
+  });
+});
+</code></pre></div>
+<p>把它存成 <code>cart.test.mjs</code>，运行 <code>node --test</code> 就会执行，用 Node.js 22.23 实测通过。</p>
+<p>读者可能会问，为什么不写成 <code>import { test } from &#x27;test&#x27;</code>？因为这个模块只能通过 <code>node:</code> 前缀访问，不带前缀会去找 npm 上叫 <code>test</code> 的包。</p>
+<p><code>t.mock</code> 和顶层的 <code>mock</code> 用法一样，区别在于通过测试上下文创建的 mock，测试结束时会自动还原，不用手动 <code>restore</code>。</p>
+<h2>node --test 会找哪些文件</h2>
+<p>不传参数时，<code>node --test</code> 按约定匹配文件，包括 <code>**/*.test.{cjs,mjs,js}</code>、<code>**/*-test.*</code>、<code>**/*_test.*</code>、<code>**/test-*.*</code>、<code>**/test.*</code>，以及 <code>test</code> 目录下的所有脚本。当前文档里，在没有加 <code>--no-strip-types</code> 的情况下，<code>.ts</code>、<code>.mts</code>、<code>.cts</code> 后缀也会匹配。也可以自己传 glob，记得加引号，避免被 shell 展开：</p>
+<div class="not-prose code-block"><div class="code-language">bash</div><pre><code class="hljs language-bash">node --test &quot;**/*.spec.js&quot;
+</code></pre></div>
+<p><code>--watch</code> 可以监听测试文件和它的依赖，改动后重跑受影响的测试，这个功能目前是实验性的。默认每个测试文件在单独的子进程里运行。任何测试失败，进程退出码都会被设为 1，CI 能直接据此判断。</p>
+<h2>和 Jest 比还差什么</h2>
+<p>第一是浏览器环境。Jest 和 Vitest 都可以切到 <code>jsdom</code> 环境测组件，<code>node:test</code> 没有这一层，前端组件测试要自己接，或者干脆用 Vitest，见<a href="/questions/testing-unit-jest-vitest/">《前端单元测试怎么写？Jest 和 Vitest 有什么区别？》</a>。</p>
+<p>第二是模块 mock。Jest 的 <code>jest.mock</code> 很常用，<code>node:test</code> 对应的 <code>mock.module</code> 要加 <code>--experimental-test-module-mocks</code> 参数，稳定性标记是 1.0，也就是早期开发阶段。</p>
+<p>第三是覆盖率。要加 <code>--experimental-test-coverage</code> 参数，同样是实验性的；可以配合 <code>lcov</code> 报告器输出给其他工具。</p>
+<p>另外文档提醒，内置报告器的输出格式在不同 Node 版本之间可能变化，不要让程序去解析它。v23 起非 TTY 输出的默认报告器也从 <code>tap</code> 改成了 <code>spec</code>。</p>
+<p>定时器测试本身容易出的问题，见<a href="/questions/testing-time-and-fake-timers/">《前端怎样测试定时器、重试和超时，避免 Fake Timers 造成假通过？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong><code>t.test()</code> 写的子测试和 <code>describe</code> 里的 <code>it</code> 有什么区别？</strong></p>
+<blockquote>
+<p>文档特别提醒过，用 <code>t.test()</code> 创建的子测试，父测试不会自动等它完成，父测试结束时还没跑完的子测试会被取消并算作失败，所以要 <code>await t.test(...)</code>。写在 <code>describe</code>（也就是 <code>suite</code>）里的测试没有这个问题。</p>
+</blockquote>
+<p><strong>快照测试怎样更新？</strong></p>
+<blockquote>
+<p>用 <code>t.assert.snapshot(value)</code> 断言，第一次或需要更新时，带上 <code>--test-update-snapshots</code> 参数运行，快照默认写到测试文件旁边的 <code>.snapshot</code> 文件里。</p>
+</blockquote>
+<p><strong>只想跑某一个测试怎么办？</strong></p>
+<blockquote>
+<p>可以用 <code>test.only</code>、<code>it.only</code>，再用 <code>--test-only</code> 参数运行；<code>test.skip</code> 跳过，<code>test.todo</code> 标记待完成。也可以用 <code>--test-name-pattern</code> 按名字过滤。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://nodejs.org/api/test.html" target="_blank" rel="noreferrer">Node.js · Test runner<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+node%3Atest+%E8%83%BD%E6%9B%BF%E4%BB%A3+Jest+%E5%90%97%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Anode%3Atest+%E8%83%BD%E6%9B%BF%E4%BB%A3+Jest+%E5%90%97%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anode-test-runner%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ANode.js%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnode-test-runner%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：node:test 能替代 Jest 吗？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/node-koa-express/">Koa 和 Express 有什么区别？中间件洋葱模型是怎样实现的？</a></li><li><a href="/questions/node-eventloop/">Node.js 事件循环和浏览器有什么不同？nextTick 一定先于 Promise 吗？</a></li><li><a href="/questions/node-bff/">前端工程师编写 Node 服务时需要守住哪些安全边界？</a></li><li><a href="/questions/node-process-model/">Node.js 的子进程、Worker 和集群应该怎样选择？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

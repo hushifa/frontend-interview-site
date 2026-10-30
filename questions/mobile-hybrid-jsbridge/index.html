@@ -84,10 +84,10 @@ pending.<span class="hljs-title function_">set</span>(call.<span class="hljs-pro
 <p>拼脚本时，数据要先编码成 JSON 再放进去，比如执行 <code>onNativeReply(${JSON.stringify(json)})</code>，不要把字符串直接拼进代码，否则数据里有引号就会破坏脚本，还可能被注入代码。</p>
 <h2>两种调用方式怎么选</h2>
 <p>URL 拦截不需要原生提前注入任何东西，页面一加载就能用，但所有参数都要编码进 URL，传大数据不方便。</p>
-<p>注入对象直接调方法，iOS 的 <code>postMessage</code> 收到的消息体可以是数字、字符串、日期、数组、字典和 null，比塞进 URL 方便。请求和响应的配对、bridge 就绪的判断、小程序 web-view 的限制，见<a href="/questions/mini-jsbridge/">《JSBridge 是什么？WebView 页面如何与原生或小程序通信，怎样做安全校验？》</a>。</p>
+<p>注入对象直接调方法，iOS 的 <code>postMessage</code> 收到的消息体可以是数字、字符串、日期、数组、字典和 null，比塞进 URL 方便。不管用哪种，请求和响应都靠上面那样的 ID 配对。小程序 web-view 不能自己实现 bridge，只能用 JSSDK，见<a href="/questions/mini-jsbridge/">《小程序 web-view 里的网页怎样和小程序通信？JSBridge 要做哪些安全校验？》</a>。</p>
 <h2>安全上要注意什么</h2>
 <p>Android 官方指南的警告是：<code>addJavascriptInterface</code> 让 JavaScript 能控制 App，如果 WebView 里的 HTML 不可信，比如部分内容来自未知的人，攻击者就能执行你的客户端代码。所以除非 WebView 里的 HTML 和 JS 全是自己写的，否则不要用它，也不要让用户在 WebView 里跳转到不受控制的第三方网页。</p>
-<p>URL 拦截同样要校验。任何页面都能跳转 <code>myapp://</code>，所以原生要先检查当前页面是不是可信的地址，再执行能力。解析地址要用 <code>URL</code> 这类解析器比较协议和主机名，不能只比字符串前缀。来源校验、最小能力和参数校验的细节，在<a href="/questions/mini-jsbridge/">《JSBridge 是什么？WebView 页面如何与原生或小程序通信，怎样做安全校验？》</a>里有展开。</p>
+<p>URL 拦截同样要校验。任何页面都能跳转 <code>myapp://</code>，所以原生要先检查当前页面是不是可信的地址，再执行能力。解析地址要用 <code>URL</code> 这类解析器比较协议和主机名，不能只比字符串前缀。来源校验、最小能力和参数校验的细节，在<a href="/questions/mini-jsbridge/">《小程序 web-view 里的网页怎样和小程序通信？JSBridge 要做哪些安全校验？》</a>里有展开。</p>
 <h2>常见追问</h2>
 <p><strong>为什么页面一打开就调用注入对象，有时会报 undefined？</strong></p>
 <blockquote>

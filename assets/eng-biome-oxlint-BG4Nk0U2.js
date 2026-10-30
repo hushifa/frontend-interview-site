@@ -1,0 +1,37 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>一个大仓库跑一次 ESLint 加 Prettier 要等好几十秒，于是有人提议换成 Biome 或 Oxlint。它们都是用 Rust 写的工具，主要卖点是快：Biome 官网称格式化比 Prettier 快约 35 倍，Oxlint 官网称比 ESLint 快 50 到 100 倍。</p>
+<p>两者的定位不一样。Biome 是一个工具包办格式化和 lint，格式化与 Prettier 约 97% 兼容，<code>biome check --write</code> 一条命令全部跑完，配置也合成一个 <code>biome.json</code>。Oxlint 只做 lint，内置 870 多条规则，覆盖 ESLint 核心和 TypeScript、React、Jest、import、unicorn、jsx-a11y 等常用插件的规则；格式化交给同一项目的 Oxfmt。</p>
+<p>怎样选主要看对现有插件的依赖。只用常见规则、想要一个工具统一配置，Biome 省事；想保留 ESLint 那套规则、只把 lint 换快，Oxlint 更顺。如果依赖一些冷门插件或公司自研的规则，ESLint 加 Prettier 仍然是最稳的，Oxlint 官方也说依赖不支持的插件行为时就留在 ESLint 上。</p>
+<p>要注意，迁移不会百分之百等价。Biome 默认只迁移和 ESLint 完全相同的规则，有些选项没实现，有些规则行为是故意不同的；Oxlint 的 JS 插件还是 alpha。所以迁移后要对比一次结果，大仓库可以先让 Oxlint 和 ESLint 并行跑，逐步收缩 ESLint 的范围。</p>
+</blockquote>
+<h2>两者分别是什么</h2>
+<p>ESLint 和 Prettier 的分工、怎样接进提交流程，见<a href="/questions/eng-code-quality-tooling/">《ESLint、Prettier、husky 和 lint-staged 分别做什么？怎样配合？》</a>。Biome 和 Oxlint 想解决的是同一类问题：JavaScript 写的工具在大仓库里慢，而且要装一堆插件、维护好几份配置。</p>
+<p>Biome 的做法是一个工具包办。它的格式化器和 Prettier 约 97% 兼容，linter 收录了来自 ESLint、TypeScript ESLint 等来源的规则，支持 JavaScript、TypeScript、JSX、JSON、CSS、HTML、GraphQL 等语言。日常用一条命令：</p>
+<div class="not-prose code-block"><div class="code-language">bash</div><pre><code class="hljs language-bash">npx biome check --write
+</code></pre></div>
+<p>它会一次运行格式化和 lint，并写入可以自动修复的改动。Biome v2 起还能自己推断类型，支持 <code>noFloatingPromises</code> 这类需要类型信息的规则，代价是要开启扫描整个项目的 Scanner，官方数据里 5000 个文件左右从约 1 秒涨到约 8 秒。</p>
+<p>Oxlint 是 Oxc 项目的 linter，只做 lint。它的规则覆盖 ESLint 核心以及 TypeScript、React、Jest、Vitest、import、unicorn、jsx-a11y 等插件。需要类型信息的规则基于 tsgo，也就是 TypeScript 编译器的 Go 语言移植版，所以类型判断和 TypeScript 本身一致。格式化交给 Oxfmt，它以 Prettier 的输出为基准，非预期的差异按 bug 处理。</p>
+<h2>迁移时怎样做</h2>
+<p>Biome 提供了迁移命令，可以读取现有的 ESLint 和 Prettier 配置，写进 <code>biome.json</code>：</p>
+<div class="not-prose code-block"><div class="code-language">bash</div><pre><code class="hljs language-bash">npx biome migrate eslint --write
+npx biome migrate prettier --write
+</code></pre></div>
+<p>这里有几个容易漏的地方。默认只迁移和 ESLint 完全相同的规则，只是“参考 ESLint 写的”规则要加 <code>--include-inspired</code> 才会迁过来；即使加了，结果也不会和 ESLint 完全一样，因为有些规则选项没实现、有些规则故意设计得不同。另外 ESLint 迁移会覆盖 <code>biome.json</code> 里原有的 linter 设置，<code>.gitignore</code> 也要开启 VCS 集成后才生效。</p>
+<p>Oxlint 有两种迁移方式。官方推荐大多数项目直接替换，用 <code>@oxlint/migrate</code> 把 ESLint 配置转换过来。特别大的仓库可以渐进迁移：先跑 Oxlint，再用 <code>eslint-plugin-oxlint</code> 把 ESLint 里和 Oxlint 重复的规则关掉，ESLint 只负责剩下那部分，随着 Oxlint 覆盖的规则变多，ESLint 管的范围越来越小。</p>
+<h2>什么时候留在 ESLint</h2>
+<p>ESLint 的优势是生态。公司自研的规则、某个框架专用的插件、依赖 ESLint 插件 API 的细节行为，换到别的工具不一定有对应实现。Biome v2.6 起支持 JavaScript 插件，Oxlint 的 JS 插件目前是 alpha，都在补这块，但迁移前要逐个确认用到的插件有没有替代。</p>
+<p>ESLint 自己的配置方式也换过一次，见<a href="/questions/engineering-eslint-flat-config/">《ESLint Flat Config 和旧配置方式有什么区别？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>Biome 和 Oxlint 能一起用吗？</strong></p>
+<blockquote>
+<p>能，但一般没必要。两者的 lint 功能重叠，同时开意味着维护两套规则配置。常见组合是选一个做 lint，格式化用 Biome、Oxfmt 或 Prettier 其中之一。</p>
+</blockquote>
+<p><strong>格式化从 Prettier 换掉，会造成大面积 diff 吗？</strong></p>
+<blockquote>
+<p>会有一些。Biome 迁移时会把每个格式化选项显式写进配置，尽量保持输出一致，但官方也承认仍有少量差异。Oxfmt 以 Prettier 输出为基准，有意不同的地方只限 Prettier 本身有 bug 或前后不一致的情况。稳妥的做法是用单独一个提交完成全量格式化，方便评审和回滚。</p>
+</blockquote>
+<p><strong>需要类型信息的规则也能用吗？</strong></p>
+<blockquote>
+<p>都能用，实现方式不同。Biome v2 用自己的类型推断，要开启项目扫描，速度会慢一些；Oxlint 的类型规则基于 tsgo。比如检测没处理的 Promise，两者都有对应规则。</p>
+</blockquote>`};export{e as default};

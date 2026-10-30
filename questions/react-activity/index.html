@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="React面试题：React 19.2 起可用的 &lt;Activity mode=&quot;hidden&quot;&gt; 会用 display: none 隐藏子树…" />
+    <title>&lt;Activity&gt; 怎样在隐藏时保留状态？和条件渲染有什么区别？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/react-activity/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="&lt;Activity&gt; 怎样在隐藏时保留状态？和条件渲染有什么区别？" />
+    <meta property="og:description" content="React面试题：React 19.2 起可用的 &lt;Activity mode=&quot;hidden&quot;&gt; 会用 display: none 隐藏子树…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/react-activity/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-activity/#webpage","url":"https://fe.hushifa.top/questions/react-activity/","name":"\u003cActivity> 怎样在隐藏时保留状态？和条件渲染有什么区别？","description":"React面试题：React 19.2 起可用的 \u003cActivity mode=\"hidden\"> 会用 display: none 隐藏子树…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-activity/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-activity/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"\u003cActivity> 怎样在隐藏时保留状态？和条件渲染有什么区别？","item":"https://fe.hushifa.top/questions/react-activity/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">&lt;Activity&gt; 怎样在隐藏时保留状态？和条件渲染有什么区别？</span></nav><h1 tabindex="-1">&lt;Activity&gt; 怎样在隐藏时保留状态？和条件渲染有什么区别？</h1><p class="reading-summary">React 19.2 起可用的 &lt;Activity mode=&quot;hidden&quot;&gt; 会用 display: none 隐藏子树，同时销毁其中的 Effect，但保留 React 状态和 DOM；切回 visible 时状态还在，Effect 重新创建。条件渲染 {show &amp;&amp; &lt;A /&gt;} 会卸载组件，状态和 DOM 都没了。隐藏时 DOM 仍在，video 这类会继续播放，需要在清理函数里暂停。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>做标签页时，用户在“联系”页的输入框里打了一半字，切到“首页”再切回来，内容没了，因为条件渲染把组件卸载了。<code>&lt;Activity&gt;</code> 解决的就是这个问题：<code>&lt;Activity mode=&quot;hidden&quot;&gt;</code> 把子树藏起来，但状态和 DOM 都保留，切回 <code>visible</code> 时原样出现。</p>
+<p>它隐藏时做三件事：用 CSS <code>display: none</code> 藏起子元素；销毁里面的 Effect，订阅之类会被清理；保留 React 状态和 DOM，包括 <code>&lt;textarea&gt;</code> 里输入的文字这类非受控状态。隐藏的子组件收到新 props 仍会重新渲染，只是优先级比可见内容低。</p>
+<p>除了保留状态，它还能预渲染。一开始就是 <code>hidden</code> 的边界，React 会低优先级地先把子组件渲染出来，用 <code>use</code> 读取的数据也会提前请求，用户点开时出现得更快。</p>
+<p>要注意，隐藏的 DOM 还在页面上，所以 <code>&lt;video&gt;</code>、<code>&lt;audio&gt;</code>、<code>&lt;iframe&gt;</code> 这类会继续播放或运行，要在 <code>useLayoutEffect</code> 的清理函数里暂停。另外它是 React 19.2 正式加入的，之前只在实验版里有。</p>
+</blockquote>
+<h2>和条件渲染比，差别在哪</h2>
+<p>React 的官方文档拿侧边栏举例，两种写法只差一行：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-comment">// 条件渲染：隐藏时卸载，状态和 DOM 都被销毁</span>
+{isShowingSidebar &amp;&amp; <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Sidebar</span> /&gt;</span></span>}
+
+<span class="hljs-comment">// Activity：隐藏时保留状态和 DOM</span>
+&lt;<span class="hljs-title class_">Activity</span> mode={isShowingSidebar ? <span class="hljs-string">&#x27;visible&#x27;</span> : <span class="hljs-string">&#x27;hidden&#x27;</span>}&gt;
+  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Sidebar</span> /&gt;</span></span>
+&lt;/<span class="hljs-title class_">Activity</span>&gt;
+</code></pre></div>
+<p>用条件渲染时，<code>isShowingSidebar</code> 变成 <code>false</code>，<code>&lt;Sidebar /&gt;</code> 从树里消失，React 会丢掉它的全部状态。为什么会丢？因为 React 的状态挂在组件在树中的位置上，位置上的组件没了，状态也就没了，见<a href="/questions/react-hooks-internals/">《Hooks 在 React 内部是怎样保存状态的？为什么靠调用顺序区分？》</a>。所以侧边栏里展开的分组，再显示时又收起来了。</p>
+<p>换成 <code>&lt;Activity&gt;</code>，组件一直在树里，只是被标记为隐藏，状态就保住了。<code>Sidebar</code> 本身一行都不用改。</p>
+<p>标签页是最典型的场景，每个标签各包一层：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx">&lt;<span class="hljs-title class_">Activity</span> mode={activeTab === <span class="hljs-string">&#x27;home&#x27;</span> ? <span class="hljs-string">&#x27;visible&#x27;</span> : <span class="hljs-string">&#x27;hidden&#x27;</span>}&gt;
+  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Home</span> /&gt;</span></span>
+&lt;/<span class="hljs-title class_">Activity</span>&gt;
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Activity</span> <span class="hljs-attr">mode</span>=<span class="hljs-string">{activeTab</span> === <span class="hljs-string">&#x27;contact&#x27;</span> ? &#x27;<span class="hljs-attr">visible</span>&#x27; <span class="hljs-attr">:</span> &#x27;<span class="hljs-attr">hidden</span>&#x27;}&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">Contact</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">Activity</span>&gt;</span></span>
+</code></pre></div>
+<h2>隐藏的时候，Effect 怎么处理</h2>
+<p>文档建议把隐藏的 Activity 理解成“被卸载了，只是 React 替你存着状态”。所以进入 <code>hidden</code> 时，里面的 Effect 会执行清理函数；回到 <code>visible</code> 时，Effect 重新执行。这样隐藏的标签页不会还在后台连着 WebSocket、监听窗口事件。</p>
+<p>这就要求 Effect 的清理函数写完整。如果某个副作用只在 Effect 挂载时做，没有对应的清理，隐藏后它就会留在那里。开发环境的 <code>&lt;StrictMode&gt;</code> 会额外多做几次 Activity 的卸载和挂载，帮你暴露这类漏写的清理，见<a href="/questions/react-strict-mode/">《React 严格模式为什么会让组件渲染两次、Effect 执行两次？》</a>。</p>
+<h2>隐藏的视频为什么还在播放</h2>
+<p><code>display: none</code> 只是不显示，<code>&lt;video&gt;</code> 元素还在 DOM 里，所以声音照样在放。文档给的改法是在清理函数里暂停：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { useRef, useLayoutEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">Video</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> ref = <span class="hljs-title function_">useRef</span>();
+
+  <span class="hljs-title function_">useLayoutEffect</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> videoRef = ref.<span class="hljs-property">current</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
+      videoRef.<span class="hljs-title function_">pause</span>();
+    };
+  }, []);
+
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">video</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">{ref}</span> <span class="hljs-attr">controls</span> <span class="hljs-attr">playsInline</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;...&quot;</span> /&gt;</span></span>;
+}
+</code></pre></div>
+<p>为什么用 <code>useLayoutEffect</code> 而不是 <code>useEffect</code>？因为暂停这件事要和“界面被藏起来”同时发生。文档说明，普通 <code>useEffect</code> 的清理可能被重新挂起的 Suspense 边界或 View Transition 推迟。两种 Effect 的时机区别见<a href="/questions/react-ref-layout-effect/">《useEffect 和 useLayoutEffect 在什么时候执行？测量 DOM 为什么要用 useLayoutEffect？》</a>。顺带的好处是，切回来时视频从原来的进度继续，也不用重新下载。</p>
+<p>另一个小坑：如果子组件只返回一段文本，没有任何元素，隐藏时什么都不会输出，因为没有元素可以加 <code>display: none</code>。</p>
+<h2>怎样用它提前加载下一页</h2>
+<p>一开始就是 <code>hidden</code> 的 Activity，React 会在低优先级下先渲染里面的组件，但不挂载 Effect。配合 Suspense，就能在用户点开之前把代码和数据准备好：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx">&lt;<span class="hljs-title class_">Suspense</span> fallback={<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Loading...<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span></span>}&gt;
+  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Activity</span> <span class="hljs-attr">mode</span>=<span class="hljs-string">{activeTab</span> === <span class="hljs-string">&#x27;posts&#x27;</span> ? &#x27;<span class="hljs-attr">visible</span>&#x27; <span class="hljs-attr">:</span> &#x27;<span class="hljs-attr">hidden</span>&#x27;}&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Posts</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">Activity</span>&gt;</span></span>
+&lt;/<span class="hljs-title class_">Suspense</span>&gt;
+</code></pre></div>
+<p>这里有个限制。只有通过会触发 Suspense 的方式读取的数据才会提前请求，比如用 <code>use</code> 读取 Promise。在 Effect 里 <code>fetch</code> 的数据不会，因为隐藏时 Effect 根本不执行。<code>use</code> 的用法见<a href="/questions/react-use-hook/">《React use API 可以读取哪些值？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>Activity 和 Vue 的 KeepAlive 一样吗？</strong></p>
+<blockquote>
+<p>目的相近，都是切走时保留组件状态。但机制不同：Activity 在隐藏时会销毁 Effect、回来再重建，DOM 只是被 <code>display: none</code> 藏起来；KeepAlive 缓存组件实例，组件里的定时器不会自己停，要靠 <code>onActivated</code>、<code>onDeactivated</code> 钩子暂停和恢复，见<a href="/questions/vue-keepalive-teleport/">《KeepAlive 与 Teleport 有哪些使用边界？》</a>。</p>
+</blockquote>
+<p><strong>所有标签页都包 Activity，会不会很耗内存？</strong></p>
+<blockquote>
+<p>会占用更多内存，因为隐藏的组件状态和 DOM 都留着，而且收到新 props 时还会低优先级重新渲染。只给用户会频繁来回切换、丢状态体验差的部分用，不常访问的页面还是条件渲染更省。</p>
+</blockquote>
+<p><strong>服务端渲染时有什么用？</strong></p>
+<blockquote>
+<p>文档提到，Activity 和 Suspense 一样会把树分成可以独立水合的单元，React 可以先水合标签按钮这类部分。区别是 Activity 不显示 fallback，服务端输出的 HTML 不变。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/reference/react/Activity" target="_blank" rel="noreferrer">React · &lt;Activity&gt;<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://react.dev/blog/2025/10/01/react-19-2" target="_blank" rel="noreferrer">React Blog · React 19.2<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%3CActivity%3E+%E6%80%8E%E6%A0%B7%E5%9C%A8%E9%9A%90%E8%97%8F%E6%97%B6%E4%BF%9D%E7%95%99%E7%8A%B6%E6%80%81%EF%BC%9F%E5%92%8C%E6%9D%A1%E4%BB%B6%E6%B8%B2%E6%9F%93%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%3CActivity%3E+%E6%80%8E%E6%A0%B7%E5%9C%A8%E9%9A%90%E8%97%8F%E6%97%B6%E4%BF%9D%E7%95%99%E7%8A%B6%E6%80%81%EF%BC%9F%E5%92%8C%E6%9D%A1%E4%BB%B6%E6%B8%B2%E6%9F%93%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-activity%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-activity%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：&lt;Activity&gt; 怎样在隐藏时保留状态？和条件渲染有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-batching/">React 的批量更新是什么？React 18 的自动批处理改变了什么？</a></li><li><a href="/questions/react-hooks-internals/">Hooks 在 React 内部是怎样保存状态的？为什么靠调用顺序区分？</a></li><li><a href="/questions/react-function-vs-class/">函数组件和类组件有什么区别？</a></li><li><a href="/questions/react-custom-hooks/">自定义 Hook 怎样设计？useRequest、usePrevious、useInterval 该怎么写？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

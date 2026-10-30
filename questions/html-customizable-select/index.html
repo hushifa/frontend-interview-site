@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="HTML / CSS面试题：原生 select 的下拉面板样式由操作系统决定，几乎改不了，所以很多项目只能自己写下拉组件。" />
+    <title>可定制 select（appearance: base-select、::picker(select)）解决什么问题？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/html-customizable-select/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="可定制 select（appearance: base-select、::picker(select)）解决什么问题？" />
+    <meta property="og:description" content="HTML / CSS面试题：原生 select 的下拉面板样式由操作系统决定，几乎改不了，所以很多项目只能自己写下拉组件。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/html-customizable-select/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/html-customizable-select/#webpage","url":"https://fe.hushifa.top/questions/html-customizable-select/","name":"可定制 select（appearance: base-select、::picker(select)）解决什么问题？","description":"HTML / CSS面试题：原生 select 的下拉面板样式由操作系统决定，几乎改不了，所以很多项目只能自己写下拉组件。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/html-customizable-select/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/html-customizable-select/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"HTML / CSS面试题","item":"https://fe.hushifa.top/topics/html-css/"},{"@type":"ListItem","position":3,"name":"可定制 select（appearance: base-select、::picker(select)）解决什么问题？","item":"https://fe.hushifa.top/questions/html-customizable-select/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/html-css/">HTML / CSS面试题</a><span aria-hidden="true">/</span><span aria-current="page">可定制 select（appearance: base-select、::picker(select)）解决什么问题？</span></nav><h1 tabindex="-1">可定制 select（appearance: base-select、::picker(select)）解决什么问题？</h1><p class="reading-summary">原生 select 的下拉面板样式由操作系统决定，几乎改不了，所以很多项目只能自己写下拉组件。给 select 和 ::picker(select) 设置 appearance: base-select 后，可以完全自定义按钮和下拉面板，选项里还能放图标，同时保留原生 select 的键盘操作、表单提交和无障碍语义。不支持的浏览器会退回普通 select。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>原生 <code>&lt;select&gt;</code> 展开后的下拉面板由操作系统绘制，CSS 基本改不了它的样式，选项里也只能放纯文字。设计稿一要求带图标、圆角、自定义箭头，很多团队就只好用 <code>div</code> 自己写一个下拉组件，键盘操作和无障碍都得重新实现。</p>
+<p>可定制 select 让原生 <code>&lt;select&gt;</code> 也能完全改样式。在 <code>select</code> 和代表下拉面板的 <code>::picker(select)</code> 上都设置 <code>appearance: base-select</code>，浏览器就去掉系统样式，只保留一套最基础的样式，剩下的都交给 CSS。</p>
+<p>设置以后，<code>&lt;select&gt;</code> 的第一个子元素可以是 <code>&lt;button&gt;</code>，用来替换关闭状态下的按钮，里面放 <code>&lt;selectedcontent&gt;</code> 显示当前选中项。<code>&lt;option&gt;</code> 里可以放图片、图标这类非交互内容。<code>::picker-icon</code> 改下拉箭头，<code>::checkmark</code> 改选中标记。下拉面板本身是一个 popover，打开时进入顶层，并且已经自动用锚点定位跟按钮关联好了。</p>
+<p>要注意支持现状。按 MDN 兼容数据，Chrome 135 和 Safari 27 起支持，Firefox 只能通过实验开关开启，所以还不是 Baseline。好在它是渐进增强，不支持的浏览器会忽略这些写法，显示普通的 <code>&lt;select&gt;</code>，功能照常可用。</p>
+</blockquote>
+<h2>怎样开启</h2>
+<p>开启只需要一段 CSS，两个地方都要写：</p>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-tag">select</span>,
+::<span class="hljs-built_in">picker</span>(select) {
+  <span class="hljs-attribute">appearance</span>: base-select;
+}
+</code></pre></div>
+<p><code>select</code> 设置后，关闭状态的按钮可以自定义；<code>::picker(select)</code> 设置后，展开的下拉面板可以自定义。可以只给 <code>select</code> 开启、面板保持系统样式，但不能只开启面板而不开启 <code>select</code>。</p>
+<h2>选项里放图标</h2>
+<p>下面做一个带图标的选择框：</p>
+<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">select</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;pet&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">selectedcontent</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">selectedcontent</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;&quot;</span>&gt;</span>请选择宠物<span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;cat&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;icon&quot;</span> <span class="hljs-attr">aria-hidden</span>=<span class="hljs-string">&quot;true&quot;</span>&gt;</span>🐱<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>猫<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">option</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;dog&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;icon&quot;</span> <span class="hljs-attr">aria-hidden</span>=<span class="hljs-string">&quot;true&quot;</span>&gt;</span>🐶<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>狗<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">option</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">select</span>&gt;</span>
+</code></pre></div>
+<p>以前 <code>&lt;select&gt;</code> 里不能放 <code>&lt;button&gt;</code>，<code>&lt;option&gt;</code> 里也只能放文字，这两点在可定制 select 里都放开了。</p>
+<p><code>&lt;selectedcontent&gt;</code> 会把当前选中的 <code>&lt;option&gt;</code> 的内容克隆一份显示在按钮里，所以选了“猫”，按钮上也会带着猫的图标。这个按钮默认是 inert 的，即使里面放了链接或按钮，整体也只当成一个按钮来交互。</p>
+<p>那表单提交的值是什么？和原来一样是 <code>value</code>。没有写 <code>value</code> 时，浏览器取选中项的 <code>textContent</code> 去掉首尾空白作为值。</p>
+<h2>箭头、选中标记和面板位置</h2>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-tag">select</span>::picker-icon {
+  <span class="hljs-attribute">transition</span>: rotate <span class="hljs-number">0.4s</span>;
+}
+
+<span class="hljs-selector-tag">select</span>:open::picker-icon {
+  <span class="hljs-attribute">rotate</span>: <span class="hljs-number">180deg</span>;
+}
+
+<span class="hljs-selector-tag">option</span>::checkmark {
+  <span class="hljs-attribute">content</span>: <span class="hljs-string">&#x27;✓&#x27;</span>;
+}
+
+::<span class="hljs-built_in">picker</span>(select) {
+  <span class="hljs-attribute">top</span>: <span class="hljs-built_in">calc</span>(<span class="hljs-built_in">anchor</span>(bottom) + <span class="hljs-number">4px</span>);
+}
+</code></pre></div>
+<p><code>::picker-icon</code> 是按钮里的下拉箭头，配合 <code>:open</code> 伪类可以在展开时转过来。<code>::checkmark</code> 是选中项前面的勾。这两个伪元素不在无障碍树里，<code>content</code> 写的文字读屏软件不会读出来，所以不要把重要信息放进去。</p>
+<p>下拉面板是一个 popover，打开时进入顶层，不会被父元素的 <code>overflow</code> 裁掉。它和按钮之间已经有隐式的锚点关联，直接用 <code>anchor()</code> 就能调整位置，不用再写 <code>anchor-name</code>。浏览器默认样式还带了备选位置，面板快超出视口时会自动换个方向。锚点定位的细节见<a href="/questions/css-anchor-positioning/">《CSS Anchor Positioning 适合解决哪些浮层布局问题？》</a>。</p>
+<h2>不支持的浏览器会怎样</h2>
+<p>不支持的浏览器会完全忽略 <code>&lt;button&gt;&lt;selectedcontent&gt;&lt;/selectedcontent&gt;&lt;/button&gt;</code> 这段结构，<code>&lt;option&gt;</code> 里的非文字内容也会被去掉，只留下文字。最后得到的是一个普通的原生 <code>&lt;select&gt;</code>，能正常选择和提交。</p>
+<p>所以它可以直接用在生产环境里，只要保证每个选项的文字本身就能说清楚意思。需要只在支持的浏览器里生效的样式，可以放进 <code>@supports (appearance: base-select)</code> 里。MDN 还提醒，有些 JavaScript 框架会拦截这些新元素，或者在服务端渲染时导致水合失败，用之前要在自己的框架里试一下。</p>
+<h2>常见追问</h2>
+<p><strong>和自己用 div 写的下拉组件比，好在哪里？</strong></p>
+<blockquote>
+<p>它仍然是原生 <code>&lt;select&gt;</code>，键盘操作、表单提交和读屏语义都由浏览器提供，不用自己实现。自己写的组件要补齐这些，见<a href="/questions/a11y-combobox/">《可访问的 Combobox 需要哪些键盘和 ARIA 行为？》</a>。</p>
+</blockquote>
+<p><strong>下拉面板能做打开动画吗？</strong></p>
+<blockquote>
+<p>可以。面板是 popover，可以和其他 popover 一样用 <code>@starting-style</code> 做进入动画，见<a href="/questions/css-starting-style-discrete-transition/">《@starting-style 和离散属性过渡解决了什么问题？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Customizable_select" target="_blank" rel="noreferrer">MDN · Customizable select elements<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/::picker" target="_blank" rel="noreferrer">MDN · ::picker()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%8F%AF%E5%AE%9A%E5%88%B6+select%EF%BC%88appearance%3A+base-select%E3%80%81%3A%3Apicker%28select%29%EF%BC%89%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%8F%AF%E5%AE%9A%E5%88%B6+select%EF%BC%88appearance%3A+base-select%E3%80%81%3A%3Apicker%28select%29%EF%BC%89%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ahtml-customizable-select%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AHTML+%2F+CSS%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fhtml-customizable-select%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：可定制 select（appearance: base-select、::picker(select)）解决什么问题？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/html-form-submission/">表单的 name、value、label 与提交行为如何协作？</a></li><li><a href="/questions/html-inputmode/">inputmode 怎样改善移动端输入体验？</a></li><li><a href="/questions/html-autocomplete/">HTML autocomplete 属性怎样帮助表单体验和隐私？</a></li><li><a href="/questions/css-field-sizing/">field-sizing: content 会怎样改变表单控件尺寸？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

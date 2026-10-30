@@ -34,7 +34,7 @@
 <p>还原放在服务端做。前端上报原始堆栈和发布版本号，服务端按版本找到对应的 map，把压缩后的行列号映射回源码位置。</p>
 </blockquote>
 <h2>为什么不能直接公开 map</h2>
-<p>Source Map 的原理、<code>sourcesContent</code> 为什么会暴露源码、按版本上传的基本流程，见<a href="/questions/eng-source-map/">《Source Map 如何帮助定位压缩后代码的错误？》</a>。这里只讲监控这一侧的取舍。</p>
+<p>映射文件里的 <code>sourcesContent</code> 字段存着源码全文，所以公开部署 map 等于公开源码；<code>mappings</code> 怎样编码位置，见<a href="/questions/eng-source-map/">《Source Map 的 mappings 字段是怎样记录位置的？》</a>。</p>
 <p>有一种折中是 <code>nosources-source-map</code>，它不含源码内容，只保留映射，所以可以部署。用它的话，监控平台能还原出源文件名和行列号，但看不到源码片段；文件名和目录结构还是会暴露。</p>
 <p>如果想在告警里直接看到出错的那几行代码，就只能用含源码的 hidden map，并且不部署。</p>
 <h2>构建怎么配置</h2>

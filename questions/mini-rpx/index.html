@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="小程序与跨端面试题：rpx 是微信小程序 WXSS 里的长度单位，1rpx 等于页面宽度的 1/750，页面宽 375px 时 1rpx 是 0.5px…" />
+    <title>rpx 怎样换算？和 rem/vw 方案有什么区别？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/mini-rpx/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="rpx 怎样换算？和 rem/vw 方案有什么区别？" />
+    <meta property="og:description" content="小程序与跨端面试题：rpx 是微信小程序 WXSS 里的长度单位，1rpx 等于页面宽度的 1/750，页面宽 375px 时 1rpx 是 0.5px…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/mini-rpx/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/mini-rpx/#webpage","url":"https://fe.hushifa.top/questions/mini-rpx/","name":"rpx 怎样换算？和 rem/vw 方案有什么区别？","description":"小程序与跨端面试题：rpx 是微信小程序 WXSS 里的长度单位，1rpx 等于页面宽度的 1/750，页面宽 375px 时 1rpx 是 0.5px…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/mini-rpx/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/mini-rpx/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"小程序与跨端面试题","item":"https://fe.hushifa.top/topics/mini-program/"},{"@type":"ListItem","position":3,"name":"rpx 怎样换算？和 rem/vw 方案有什么区别？","item":"https://fe.hushifa.top/questions/mini-rpx/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/mini-program/">小程序与跨端面试题</a><span aria-hidden="true">/</span><span aria-current="page">rpx 怎样换算？和 rem/vw 方案有什么区别？</span></nav><h1 tabindex="-1">rpx 怎样换算？和 rem/vw 方案有什么区别？</h1><p class="reading-summary">rpx 是微信小程序 WXSS 里的长度单位，1rpx 等于页面宽度的 1/750，页面宽 375px 时 1rpx 是 0.5px，所以按 750 宽的设计稿可以直接照抄数值。它和 vw 一样按屏幕宽度等比缩放，和 rem 方案效果相近但不用 JS 设置根字号。官方文档现在优先推荐 vw，因为 rpx 换算有时会取整带来精度问题，并提醒大屏设备上不要滥用这类按宽度缩放的单位。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>设计稿宽 750，一个按钮宽 200。在小程序里直接写 <code>width: 200rpx</code>，在 375px 宽的手机上它就是 100px，正好占屏幕宽度的 26.7%，换到更宽的手机上也按比例放大。</p>
+<p>换算规则是：1rpx 等于页面总宽度的 1/750。页面宽 375px 时，1rpx 就是 0.5px。所以设计稿按 750 宽出图时，标注是多少就写多少 rpx，不用自己算。</p>
+<p>它和 H5 的 vw、rem 方案本质上是同一件事，都是让尺寸跟着屏幕宽度等比变化。vw 是页面宽度的 1%，按 750 设计稿换算要除以 7.5；rem 方案要先用脚本或 <code>10vw</code> 这类写法设置 <code>html</code> 的字号。rpx 由小程序框架换算，写起来最省事。</p>
+<p>要注意，微信官方文档说 rpx 是出于历史原因支持的，它的换算有时会取整，带来精度问题，现在 vw 已经普遍支持，官方优先推荐 vw。另外考虑到 PC、平板这类大屏设备，官方不建议滥用 vw、rpx 这种按屏幕宽度缩放的单位，避不开时要配合媒体查询等响应式布局手段。</p>
+</blockquote>
+<h2>rpx 怎样换算</h2>
+<p>换算只看页面宽度。下面用两个函数把规则写出来，对比 rpx 和 vw：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">rpxToPx</span>(<span class="hljs-params">rpx, pageWidth</span>) {
+  <span class="hljs-keyword">return</span> (rpx * pageWidth) / <span class="hljs-number">750</span>;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">pxToVw</span>(<span class="hljs-params">px, designWidth</span>) {
+  <span class="hljs-keyword">return</span> (px / designWidth) * <span class="hljs-number">100</span>;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">rpxToPx</span>(<span class="hljs-number">1</span>, <span class="hljs-number">375</span>)); <span class="hljs-comment">// 0.5</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">rpxToPx</span>(<span class="hljs-number">200</span>, <span class="hljs-number">375</span>)); <span class="hljs-comment">// 100</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">rpxToPx</span>(<span class="hljs-number">200</span>, <span class="hljs-number">414</span>)); <span class="hljs-comment">// 110.4</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">pxToVw</span>(<span class="hljs-number">150</span>, <span class="hljs-number">750</span>)); <span class="hljs-comment">// 20</span>
+</code></pre></div>
+<p>前两行是官方文档的例子：375px 宽的页面上，1rpx 是 0.5px，200rpx 就是 100px。第三行换成 414px 宽的手机，200rpx 变成 110.4px，比例没变，只是绝对尺寸跟着屏幕变大。</p>
+<p>最后一行是 vw 的换算：750 设计稿上的 150，写成 vw 是 <code>20vw</code>。所以同一个元素，用 rpx 写 <code>150rpx</code>，用 vw 写 <code>20vw</code>，在任何宽度的屏幕上结果都一样。</p>
+<h2>和 rem、vw 方案有什么区别</h2>
+<p>H5 页面的 rem 和 vw 方案见<a href="/questions/mobile-adaptation/">《移动端怎样做屏幕适配？1px 边框为什么看起来变粗了？》</a>。三者解决的是同一个问题：让设计稿上的尺寸在不同宽度的屏幕上等比缩放。</p>
+<p>区别主要在“谁来换算”。rem 方案要先把 <code>html</code> 的 <code>font-size</code> 设成屏幕宽度的某个比例，早年靠 JS 计算，现在可以写 <code>10vw</code>，然后所有尺寸用 rem 写。vw 方案不依赖根字号，直接按视口宽度算，但设计稿上的数值要除以 7.5（750 稿）或 3.75（375 稿），通常交给 PostCSS 插件转换。rpx 则由小程序框架换算，设计稿按 750 宽出图时数值不用改。</p>
+<p>所以 rpx 最省事，代价是它只在小程序里有效。跨端框架把代码编译到小程序时也会处理这个单位，见<a href="/questions/mini-cross-compile/">《Taro 和 uni-app 如何把代码转换成小程序？编译时和运行时有什么区别？》</a>。</p>
+<h2>为什么官方现在更推荐 vw</h2>
+<p>微信开放文档的说法是，WXSS 出于历史原因支持 rpx；rpx 的计算规则有时会对转换后的数值取整，从而带来精度问题。现在 CSS 标准的 <code>vw</code> 已经得到广泛支持，所以优先推荐用 vw。</p>
+<p>还有一点更重要：不管是 rpx 还是 vw，都会让元素跟着屏幕宽度一起放大。手机上没问题，可是小程序也会运行在平板和 PC 上，屏幕一宽，字号和按钮就会大得离谱。官方文档因此提醒不要滥用这类按屏幕宽度缩放的单位；必须用时，要配合媒体查询等响应式布局手段，给大屏单独处理。</p>
+<h2>常见追问</h2>
+<p><strong>细线边框适合用 1rpx 吗？</strong></p>
+<blockquote>
+<p>要小心。1rpx 换算成的 CSS 像素常常是小数，比如 375 宽时是 0.5px，官方又提到换算有时会取整，所以不同机型上的结果不容易保证一致。需要稳定的细线时，可以直接写 <code>1px</code>，或者用<a href="/questions/mobile-adaptation/">《移动端怎样做屏幕适配？1px 边框为什么看起来变粗了？》</a>里讲的缩放方法。</p>
+</blockquote>
+<p><strong>字号也应该用 rpx 吗？</strong></p>
+<blockquote>
+<p>不一定。rpx 会让字号随屏幕宽度变化，大屏上文字会很大。正文字号更适合用固定的 px，或者对缩放单位加上限，再配合媒体查询处理宽屏。</p>
+</blockquote>
+<p><strong>设计稿是 375 宽怎么办？</strong></p>
+<blockquote>
+<p>rpx 按页面宽度 750 份换算，375 稿上的数值乘以 2 就是 rpx 值。也可以直接改用 vw，375 稿的数值除以 3.75 就是 vw 值。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developers.weixin.qq.com/miniprogram/dev/framework/view/wxss.html" target="_blank" rel="noreferrer">微信开放文档 · WXSS<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+rpx+%E6%80%8E%E6%A0%B7%E6%8D%A2%E7%AE%97%EF%BC%9F%E5%92%8C+rem%2Fvw+%E6%96%B9%E6%A1%88%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Arpx+%E6%80%8E%E6%A0%B7%E6%8D%A2%E7%AE%97%EF%BC%9F%E5%92%8C+rem%2Fvw+%E6%96%B9%E6%A1%88%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Amini-rpx%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%B0%8F%E7%A8%8B%E5%BA%8F%E4%B8%8E%E8%B7%A8%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fmini-rpx%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：rpx 怎样换算？和 rem/vw 方案有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/mini-dual-thread/">小程序的双线程模型是什么？逻辑层和渲染层如何协作？</a></li><li><a href="/questions/mini-setdata/">setData 为什么会慢？如何优化小程序的数据更新？</a></li><li><a href="/questions/mini-subpackage/">小程序的分包、独立分包和分包预下载分别解决什么问题？</a></li><li><a href="/questions/mini-cross-compile/">Taro 和 uni-app 如何把代码转换成小程序？编译时和运行时有什么区别？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

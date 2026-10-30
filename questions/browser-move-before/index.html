@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="浏览器原理面试题：insertBefore 移动一个已在页面上的节点时，实际是先移除再插入，iframe 会重新加载，焦点、动画…" />
+    <title>moveBefore() 和 insertBefore 有什么区别？为什么能保留 iframe 和焦点状态？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/browser-move-before/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="moveBefore() 和 insertBefore 有什么区别？为什么能保留 iframe 和焦点状态？" />
+    <meta property="og:description" content="浏览器原理面试题：insertBefore 移动一个已在页面上的节点时，实际是先移除再插入，iframe 会重新加载，焦点、动画…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/browser-move-before/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/browser-move-before/#webpage","url":"https://fe.hushifa.top/questions/browser-move-before/","name":"moveBefore() 和 insertBefore 有什么区别？为什么能保留 iframe 和焦点状态？","description":"浏览器原理面试题：insertBefore 移动一个已在页面上的节点时，实际是先移除再插入，iframe 会重新加载，焦点、动画…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/browser-move-before/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/browser-move-before/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"浏览器原理面试题","item":"https://fe.hushifa.top/topics/browser/"},{"@type":"ListItem","position":3,"name":"moveBefore() 和 insertBefore 有什么区别？为什么能保留 iframe 和焦点状态？","item":"https://fe.hushifa.top/questions/browser-move-before/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/browser/">浏览器原理面试题</a><span aria-hidden="true">/</span><span aria-current="page">moveBefore() 和 insertBefore 有什么区别？为什么能保留 iframe 和焦点状态？</span></nav><h1 tabindex="-1">moveBefore() 和 insertBefore 有什么区别？为什么能保留 iframe 和焦点状态？</h1><p class="reading-summary">insertBefore 移动一个已在页面上的节点时，实际是先移除再插入，iframe 会重新加载，焦点、动画、打开的 popover 和模态 dialog 都会被重置。moveBefore 把节点原地移过去，不经过移除和插入，所以这些状态都能保留。它要求节点和目标在同一个文档里、都连接在页面上，否则抛错，需要回退到 insertBefore。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p><code>parent.moveBefore(node, ref)</code> 把 <code>node</code> 移动到 <code>parent</code> 里、<code>ref</code> 前面，<code>ref</code> 传 <code>null</code> 就放到最后。参数和 <code>insertBefore</code> 一样，区别在于它不会先把节点移除再插入。</p>
+<p>用 <code>insertBefore</code>、<code>append</code> 移动一个已经在页面上的节点，浏览器内部是先移除、再插入，节点的一部分状态会被重置。最明显的是 iframe 会重新加载，正在播放的嵌入视频回到开头。焦点也会丢，CSS 动画和过渡重新开始，打开的 popover 被关掉，模态 dialog 也会关闭。</p>
+<p><code>moveBefore</code> 是真正的移动，这些状态都能保留。所以拖拽排序、把播放器挪到另一个区域、框架在列表重排时移动 DOM，都可以用它避免状态丢失。自定义元素用它移动时，会调用 <code>connectedMoveCallback()</code>，而不是先后调用 <code>disconnectedCallback()</code> 和 <code>connectedCallback()</code>。</p>
+<p>要注意它有限制。节点和目标必须在同一个文档里，并且要么都连接在页面上、要么都不在，否则抛出 <code>HierarchyRequestError</code>。兼容性上 Chrome 133、Firefox 144 起支持，Safari 还不支持。所以要用 <code>try...catch</code> 回退到 <code>insertBefore</code>。</p>
+</blockquote>
+<h2>用 insertBefore 移动会丢什么</h2>
+<p>假设页面上有一个嵌入视频的 iframe，用户正在看，界面布局变了，要把它移到侧边栏：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">sidebar.<span class="hljs-title function_">insertBefore</span>(player, <span class="hljs-literal">null</span>);
+</code></pre></div>
+<p>视频会从头开始，因为 iframe 被移除后重新插入，浏览器会重新加载它的内容。MDN 列出了用 <code>insertBefore</code> 这类方法移动时会被重置、用 <code>moveBefore</code> 能保留的状态：</p>
+<ul>
+<li>动画和过渡的进度</li>
+<li><code>&lt;iframe&gt;</code> 的加载状态</li>
+<li>交互状态，比如 <code>:focus</code> 和 <code>:active</code></li>
+<li>全屏元素的状态</li>
+<li>popover 的打开状态</li>
+<li><code>&lt;dialog&gt;</code> 的模态状态，模态对话框不会被关闭</li>
+</ul>
+<p><code>&lt;video&gt;</code> 和 <code>&lt;audio&gt;</code> 的播放状态不在列表里，因为这两个元素被移除再插入时本来就会保留播放状态，不管用哪种方法移动。</p>
+<h2>改用 moveBefore</h2>
+<p>把上面那行换成 <code>moveBefore</code>，视频就能接着播放：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">moveNode</span>(<span class="hljs-params">parent, node, ref</span>) {
+  <span class="hljs-keyword">try</span> {
+    parent.<span class="hljs-title function_">moveBefore</span>(node, ref);
+  } <span class="hljs-keyword">catch</span> {
+    parent.<span class="hljs-title function_">insertBefore</span>(node, ref);
+  }
+}
+
+<span class="hljs-title function_">moveNode</span>(sidebar, player, <span class="hljs-literal">null</span>);
+</code></pre></div>
+<p>为什么要包一层 <code>try...catch</code>？一方面不支持的浏览器里没有这个方法，调用会抛 <code>TypeError</code>；另一方面就算支持，下面几种情况也会抛 <code>HierarchyRequestError</code>：</p>
+<ul>
+<li>节点不在页面上，却要移到页面上的元素里，或者反过来</li>
+<li>节点是调用者的祖先</li>
+<li>节点和目标属于不同的文档</li>
+<li>节点不是 <code>Element</code> 或 <code>CharacterData</code> 节点</li>
+</ul>
+<p>另外，<code>ref</code> 不是调用者的子节点时抛 <code>NotFoundError</code>，第二个参数没传时抛 <code>TypeError</code>。回退到 <code>insertBefore</code> 就是接受状态被重置，至少位置能移过去。</p>
+<h2>自定义元素和 MutationObserver 能感知到吗</h2>
+<p>自定义元素用 <code>insertBefore</code> 移动时，会先调用 <code>disconnectedCallback()</code> 再调用 <code>connectedCallback()</code>，组件可能会在这两步里做清理和重新初始化。用 <code>moveBefore</code> 移动时，如果元素定义了 <code>connectedMoveCallback()</code>，浏览器只调用它，不再走断开和连接：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">VideoCard</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">HTMLElement</span> {
+  <span class="hljs-title function_">connectedCallback</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">startPlayer</span>();
+  }
+  <span class="hljs-title function_">disconnectedCallback</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">stopPlayer</span>();
+  }
+  <span class="hljs-title function_">connectedMoveCallback</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-comment">// 只是换了位置，播放器不用停也不用重建</span>
+  }
+}
+</code></pre></div>
+<p>MutationObserver 那边没有新的记录类型。用 <code>moveBefore</code> 移动的节点，仍然记录成一次移除加一次添加，所以已有的监听代码不用改。</p>
+<h2>常见追问</h2>
+<p><strong>MutationObserver 能区分 moveBefore 和普通的移除插入吗？</strong></p>
+<blockquote>
+<p>不能。按 MDN 的说明，<code>moveBefore</code> 移动的节点同样记录成一次移除和一次添加。需要区分时，自定义元素可以用 <code>connectedMoveCallback()</code>。</p>
+</blockquote>
+<p><strong>iframe 还有哪些常见问题？</strong></p>
+<blockquote>
+<p>加载开销、跨域通信这些问题见<a href="/questions/browser-iframe/">《iframe 有哪些优缺点？父页面和 iframe 之间怎样通信？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/moveBefore" target="_blank" rel="noreferrer">MDN · Element.moveBefore()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+moveBefore%28%29+%E5%92%8C+insertBefore+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E8%83%BD%E4%BF%9D%E7%95%99+iframe+%E5%92%8C%E7%84%A6%E7%82%B9%E7%8A%B6%E6%80%81%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AmoveBefore%28%29+%E5%92%8C+insertBefore+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E8%83%BD%E4%BF%9D%E7%95%99+iframe+%E5%92%8C%E7%84%A6%E7%82%B9%E7%8A%B6%E6%80%81%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Abrowser-move-before%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%90%86%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fbrowser-move-before%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：moveBefore() 和 insertBefore 有什么区别？为什么能保留 iframe 和焦点状态？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/browser-render/">浏览器从 HTML 到页面显示，经历哪些主要步骤？</a></li><li><a href="/questions/browser-delegation/">事件委托是什么？target 和 currentTarget 有何区别？</a></li><li><a href="/questions/browser-event-propagation/">事件冒泡和捕获怎样理解？阻止冒泡和阻止默认行为有什么区别？</a></li><li><a href="/questions/browser-iframe/">iframe 有哪些优缺点？父页面和 iframe 之间怎样通信？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>
