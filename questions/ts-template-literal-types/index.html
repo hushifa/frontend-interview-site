@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="TypeScript面试题：模板字面量类型用反引号在类型层面拼字符串，插值位置放联合类型时会把所有组合都展开。" />
+    <title>模板字面量类型和映射类型的 as 重映射怎么用？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/ts-template-literal-types/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="模板字面量类型和映射类型的 as 重映射怎么用？ · 前端知库" />
+    <meta property="og:description" content="TypeScript面试题：模板字面量类型用反引号在类型层面拼字符串，插值位置放联合类型时会把所有组合都展开。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/ts-template-literal-types/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ts-template-literal-types/#webpage","url":"https://fe.hushifa.top/questions/ts-template-literal-types/","name":"模板字面量类型和映射类型的 as 重映射怎么用？ · 前端知库","description":"TypeScript面试题：模板字面量类型用反引号在类型层面拼字符串，插值位置放联合类型时会把所有组合都展开。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ts-template-literal-types/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ts-template-literal-types/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"TypeScript面试题","item":"https://fe.hushifa.top/topics/typescript/"},{"@type":"ListItem","position":3,"name":"模板字面量类型和映射类型的 as 重映射怎么用？","item":"https://fe.hushifa.top/questions/ts-template-literal-types/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/typescript/">TypeScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">模板字面量类型和映射类型的 as 重映射怎么用？</span></nav><h1 tabindex="-1">模板字面量类型和映射类型的 as 重映射怎么用？</h1><p class="reading-summary">模板字面量类型用反引号在类型层面拼字符串，插值位置放联合类型时会把所有组合都展开。配合 Uppercase、Capitalize 等内置字符串类型和 infer，可以拼出或拆开字符串字面量；在映射类型里用 as 改键名，就能从一个接口生成 getName 这样的 getter 名或 onNameChange 这样的事件名。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>比如接口地址只允许 <code>GET /users</code>、<code>POST /orders</code> 这类格式，写错大小写或者路径就报错。用模板字面量类型可以写成 <code>`${Uppercase&lt;Method&gt;} ${Route}`</code>，它和 JS 的模板字符串长得一样，只不过拼出来的是字符串字面量类型。</p>
+<p>插值的地方放联合类型时，TypeScript 会把每个成员都代进去，多个插值位置之间按所有组合展开。<code>Uppercase</code>、<code>Lowercase</code>、<code>Capitalize</code>、<code>Uncapitalize</code> 是编译器内置的字符串类型，用来改大小写。反过来，在条件类型里用 <code>infer</code> 配合模板，可以把字符串拆开，比如从 <code>&#x27;/users/:id&#x27;</code> 里取出参数名 <code>id</code>。</p>
+<p>最常见的用法是和映射类型的 <code>as</code> 一起，从一个接口生成新键名。<code>[K in keyof T as `get${Capitalize&lt;string &amp; K&gt;}`]</code> 能把 <code>name</code> 变成 <code>getName</code>；同样的写法可以生成 <code>onNameChange</code> 这样的事件名，再让回调参数的类型跟着对应属性走。<code>as</code> 的结果是 <code>never</code> 时，这个键就被去掉。</p>
+<p>要注意两点。第一，组合展开的数量是相乘的，联合类型太大时编译会变慢，Handbook 建议大的字符串联合提前生成。第二，<code>keyof T</code> 可能包含 <code>number</code> 和 <code>symbol</code> 键，<code>Capitalize</code> 只接受字符串，所以要写成 <code>string &amp; K</code> 把非字符串键过滤掉。</p>
+</blockquote>
+<h2>模板字面量类型怎样拼字符串</h2>
+<p>先看一个限制接口格式的例子。<code>Endpoint</code> 由请求方法和路径拼成，方法要求大写：</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Method</span> = <span class="hljs-string">&#x27;get&#x27;</span> | <span class="hljs-string">&#x27;post&#x27;</span>;
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Route</span> = <span class="hljs-string">&#x27;/users&#x27;</span> | <span class="hljs-string">&#x27;/orders&#x27;</span>;
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Endpoint</span> = <span class="hljs-string">`<span class="hljs-subst">${Uppercase&lt;Method&gt;}</span> <span class="hljs-subst">${Route}</span>`</span>;
+<span class="hljs-comment">// &#x27;GET /users&#x27; | &#x27;GET /orders&#x27; | &#x27;POST /users&#x27; | &#x27;POST /orders&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">ok</span>: <span class="hljs-title class_">Endpoint</span> = <span class="hljs-string">&#x27;GET /users&#x27;</span>;
+<span class="hljs-comment">// @ts-expect-error 方法必须大写</span>
+<span class="hljs-keyword">const</span> <span class="hljs-attr">bad</span>: <span class="hljs-title class_">Endpoint</span> = <span class="hljs-string">&#x27;get /users&#x27;</span>;
+</code></pre></div>
+<p><code>Endpoint</code> 一共有四个成员。为什么是四个？按 Handbook 的说法，插值位置是联合类型时，结果是每个成员代进去得到的所有字符串；有多个插值位置时，各个位置的联合会交叉相乘。这里方法有 2 个、路径有 2 个，所以是 2 × 2 = 4 个。</p>
+<p><code>Uppercase&lt;Method&gt;</code> 先把 <code>&#x27;get&#x27; | &#x27;post&#x27;</code> 变成 <code>&#x27;GET&#x27; | &#x27;POST&#x27;</code>，再参与拼接。这几个内置类型由编译器直接实现，在 <code>.d.ts</code> 文件里找不到定义。Handbook 还说明，它们用的是 JavaScript 的 <code>toUpperCase</code> 这类方法，不考虑语言区域。</p>
+<p>正因为是相乘，联合类型一大，展开后的数量会迅速增长。比如三个各有 20 个成员的联合拼在一起，就是 8000 个成员。Handbook 建议，大的字符串联合最好提前生成好，模板字面量类型更适合小规模的组合。</p>
+<h2>怎样用 infer 把字符串拆开</h2>
+<p>模板字面量类型也能反过来用。在条件类型里，把 <code>infer</code> 放进模板的插值位置，TypeScript 会去匹配字符串，把对应的部分推断出来。条件类型和 <code>infer</code> 本身的读法见<a href="/questions/ts-conditional-infer/">《条件类型、infer 和分布式条件类型如何理解？》</a>，这里看两个拆字符串的例子。</p>
+<p>第一个是从路由里取出参数名，让参数对象的键必须和路由一致：</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">RouteParams</span>&lt;S <span class="hljs-keyword">extends</span> <span class="hljs-built_in">string</span>&gt; =
+  S <span class="hljs-keyword">extends</span> <span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">string</span>}</span>:<span class="hljs-subst">${infer Param}</span>/<span class="hljs-subst">${infer Rest}</span>`</span>
+    ? <span class="hljs-title class_">Param</span> | <span class="hljs-title class_">RouteParams</span>&lt;<span class="hljs-string">`/<span class="hljs-subst">${Rest}</span>`</span>&gt;
+    : S <span class="hljs-keyword">extends</span> <span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-built_in">string</span>}</span>:<span class="hljs-subst">${infer Param}</span>`</span>
+      ? <span class="hljs-title class_">Param</span>
+      : <span class="hljs-built_in">never</span>;
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Params</span> = <span class="hljs-title class_">RouteParams</span>&lt;<span class="hljs-string">&#x27;/users/:userId/posts/:postId&#x27;</span>&gt;;
+<span class="hljs-comment">// &#x27;userId&#x27; | &#x27;postId&#x27;</span>
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">params</span>: <span class="hljs-title class_">Record</span>&lt;<span class="hljs-title class_">Params</span>, <span class="hljs-built_in">string</span>&gt; = { <span class="hljs-attr">userId</span>: <span class="hljs-string">&#x27;1&#x27;</span>, <span class="hljs-attr">postId</span>: <span class="hljs-string">&#x27;2&#x27;</span> };
+<span class="hljs-comment">// @ts-expect-error 少了 postId</span>
+<span class="hljs-keyword">const</span> <span class="hljs-attr">missing</span>: <span class="hljs-title class_">Record</span>&lt;<span class="hljs-title class_">Params</span>, <span class="hljs-built_in">string</span>&gt; = { <span class="hljs-attr">userId</span>: <span class="hljs-string">&#x27;1&#x27;</span> };
+</code></pre></div>
+<p>第一个分支匹配“冒号后面跟着参数名、再跟一个斜杠”的情况，取出 <code>userId</code>，剩下的 <code>posts/:postId</code> 补上斜杠再递归处理。到最后一段没有斜杠了，就走第二个分支，取出 <code>postId</code>。所以结果是两个参数名的联合，少写一个就会报错。</p>
+<p>第二个是把下划线命名转成驼峰：</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">CamelCase</span>&lt;S <span class="hljs-keyword">extends</span> <span class="hljs-built_in">string</span>&gt; =
+  S <span class="hljs-keyword">extends</span> <span class="hljs-string">`<span class="hljs-subst">${infer Head}</span>_<span class="hljs-subst">${infer Rest}</span>`</span>
+    ? <span class="hljs-string">`<span class="hljs-subst">${Head}</span><span class="hljs-subst">${CamelCase&lt;Capitalize&lt;Rest&gt;&gt;}</span>`</span>
+    : S;
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Field</span> = <span class="hljs-title class_">CamelCase</span>&lt;<span class="hljs-string">&#x27;created_at_time&#x27;</span>&gt;; <span class="hljs-comment">// &#x27;createdAtTime&#x27;</span>
+</code></pre></div>
+<p>每次在第一个下划线处切开，后半段首字母大写再继续递归，直到没有下划线为止。这类递归类型在类型层面很好用，但每多一层递归，编译器就多做一次计算，处理很长的字符串时要留意编译速度。</p>
+<h2>映射类型里的 as 怎样改键名</h2>
+<p>从 TypeScript 4.1 开始，映射类型可以在 <code>in</code> 后面写 <code>as</code>，<code>as</code> 后面就是新的键名。配合模板字面量类型，可以从一个接口生成另一套名字：</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">interface</span> <span class="hljs-title class_">User</span> {
+  <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span>;
+  <span class="hljs-attr">age</span>: <span class="hljs-built_in">number</span>;
+}
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Getters</span>&lt;T&gt; = {
+  [K <span class="hljs-keyword">in</span> keyof T <span class="hljs-keyword">as</span> <span class="hljs-string">`get<span class="hljs-subst">${Capitalize&lt;<span class="hljs-built_in">string</span> &amp; K&gt;}</span>`</span>]: <span class="hljs-function">() =&gt;</span> T[K];
+};
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">UserGetters</span> = <span class="hljs-title class_">Getters</span>&lt;<span class="hljs-title class_">User</span>&gt;;
+<span class="hljs-comment">// { getName: () =&gt; string; getAge: () =&gt; number }</span>
+</code></pre></div>
+<p>为什么要写 <code>string &amp; K</code>，不直接写 <code>Capitalize&lt;K&gt;</code>？因为 <code>keyof T</code> 得到的键可能是 <code>string</code>、<code>number</code> 或 <code>symbol</code>，而 <code>Capitalize</code> 只接受字符串。和 <code>string</code> 取交叉以后，数字键和 symbol 键变成 <code>never</code>，拼出来的键名也是 <code>never</code>，这些键就被去掉了。</p>
+<p>值的类型写的是 <code>() =&gt; T[K]</code>，<code>K</code> 在这里仍然是原来的键，所以 <code>getName</code> 返回 <code>string</code>，<code>getAge</code> 返回 <code>number</code>，改名不会把类型对应关系弄丢。</p>
+<p><code>as</code> 的结果是 <code>never</code> 时键会被删掉，所以它也能用来过滤属性。比如只保留值为函数的属性：</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">OnlyMethods</span>&lt;T&gt; = {
+  [K <span class="hljs-keyword">in</span> keyof T <span class="hljs-keyword">as</span> T[K] <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Function</span> ? K : <span class="hljs-built_in">never</span>]: T[K];
+};
+
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">Methods</span> = <span class="hljs-title class_">OnlyMethods</span>&lt;{ <span class="hljs-attr">count</span>: <span class="hljs-built_in">number</span>; <span class="hljs-title function_">reset</span>(): <span class="hljs-built_in">void</span> }&gt;;
+<span class="hljs-comment">// { reset: () =&gt; void }</span>
+</code></pre></div>
+<p>映射类型的基本写法和 <code>Partial</code>、<code>Pick</code> 这些内置工具见<a href="/questions/ts-mapped-utility/">《映射类型与 Partial、Pick、Omit 如何用于接口建模？》</a>。</p>
+<h2>怎样生成类型安全的事件名</h2>
+<p>另一个常见场景是事件。假设一个对象的每个属性变化时都会发事件，事件名是属性名加 <code>Changed</code>。Handbook 给出的写法是让 <code>on</code> 方法带一个泛型，从事件名里推断出属性名：</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Watched</span>&lt;T&gt; = {
+  on&lt;K <span class="hljs-keyword">extends</span> <span class="hljs-built_in">string</span> &amp; keyof T&gt;(
+    <span class="hljs-attr">eventName</span>: <span class="hljs-string">`<span class="hljs-subst">${K}</span>Changed`</span>,
+    <span class="hljs-attr">callback</span>: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">newValue</span>: T[K]</span>) =&gt;</span> <span class="hljs-built_in">void</span>,
+  ): <span class="hljs-built_in">void</span>;
+};
+
+<span class="hljs-keyword">declare</span> <span class="hljs-keyword">const</span> <span class="hljs-attr">user</span>: <span class="hljs-title class_">Watched</span>&lt;<span class="hljs-title class_">User</span>&gt;;
+
+user.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;ageChanged&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value.<span class="hljs-title function_">toFixed</span>()); <span class="hljs-comment">// value 是 number</span>
+<span class="hljs-comment">// @ts-expect-error 属性名拼错了</span>
+user.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;agChanged&#x27;</span>, <span class="hljs-function">() =&gt;</span> {});
+</code></pre></div>
+<p>调用 <code>user.on(&#x27;ageChanged&#x27;, ...)</code> 时，TypeScript 拿 <code>&#x27;ageChanged&#x27;</code> 去匹配 <code>`${K}Changed`</code>，推断出 <code>K</code> 是 <code>&#x27;age&#x27;</code>，再用 <code>T[K]</code> 查到 <code>number</code>，所以回调参数自动就是 <code>number</code>。拼错的 <code>&#x27;agChanged&#x27;</code> 推断出的 <code>&#x27;ag&#x27;</code> 不在 <code>keyof User</code> 里，就会报错。</p>
+<p>如果要的是一个事件处理函数的对象，而不是 <code>on</code> 方法，就用前面的 <code>as</code> 写法：</p>
+<div class="not-prose code-block"><div class="code-language">TypeScript</div><pre><code class="hljs language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">ChangeHandlers</span>&lt;T&gt; = {
+  [K <span class="hljs-keyword">in</span> keyof T <span class="hljs-keyword">as</span> <span class="hljs-string">`on<span class="hljs-subst">${Capitalize&lt;<span class="hljs-built_in">string</span> &amp; K&gt;}</span>Change`</span>]: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">value</span>: T[K]</span>) =&gt;</span> <span class="hljs-built_in">void</span>;
+};
+
+<span class="hljs-keyword">const</span> <span class="hljs-attr">handlers</span>: <span class="hljs-title class_">ChangeHandlers</span>&lt;<span class="hljs-title class_">User</span>&gt; = {
+  <span class="hljs-attr">onNameChange</span>: <span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(value.<span class="hljs-title function_">toUpperCase</span>()),
+  <span class="hljs-attr">onAgeChange</span>: <span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(value.<span class="hljs-title function_">toFixed</span>()),
+};
+</code></pre></div>
+<p>以上代码用 TypeScript 7.0.2 在 <code>--strict</code> 下编译通过，带 <code>@ts-expect-error</code> 的行确实报错。</p>
+<h2>常见追问</h2>
+<p><strong><code>`${string}Changed`</code> 这样直接写 <code>string</code> 有什么用？</strong></p>
+<blockquote>
+<p>它表示“任意字符串后面跟着 Changed”，可以用来约束格式而不限定具体值。比如参数类型写成 <code>`${string}Changed`</code>，<code>&#x27;fooChanged&#x27;</code> 能通过，<code>&#x27;foo&#x27;</code> 就不行。Handbook 里的事件例子一开始就是用 <code>`${string &amp; keyof Type}Changed`</code> 把事件名限制在已有属性范围内。</p>
+</blockquote>
+<p><strong>模板字面量类型能拼数字吗？</strong></p>
+<blockquote>
+<p>能。插值位置可以放 <code>number</code>、<code>bigint</code>、<code>boolean</code> 等类型，比如 <code>`${number}px`</code> 能匹配 <code>&#x27;12px&#x27;</code>、<code>&#x27;1.5px&#x27;</code>。可它只在类型层面检查字符串格式，运行时传进来的值仍然要自己校验。</p>
+</blockquote>
+<p><strong>和映射类型一起用时，怎样按对象联合生成键？</strong></p>
+<blockquote>
+<p><code>in</code> 后面不一定是键的联合，也可以是对象类型的联合。Handbook 的例子是 <code>[E in Events as E[&#x27;kind&#x27;]]: (event: E) =&gt; void</code>，遍历每个事件对象，用它的 <code>kind</code> 字段做键名，值的类型里还能用到完整的事件对象。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html" target="_blank" rel="noreferrer">TypeScript Handbook · Template Literal Types<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://www.typescriptlang.org/docs/handbook/2/mapped-types.html" target="_blank" rel="noreferrer">TypeScript Handbook · Mapped Types<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%A8%A1%E6%9D%BF%E5%AD%97%E9%9D%A2%E9%87%8F%E7%B1%BB%E5%9E%8B%E5%92%8C%E6%98%A0%E5%B0%84%E7%B1%BB%E5%9E%8B%E7%9A%84+as+%E9%87%8D%E6%98%A0%E5%B0%84%E6%80%8E%E4%B9%88%E7%94%A8%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%A8%A1%E6%9D%BF%E5%AD%97%E9%9D%A2%E9%87%8F%E7%B1%BB%E5%9E%8B%E5%92%8C%E6%98%A0%E5%B0%84%E7%B1%BB%E5%9E%8B%E7%9A%84+as+%E9%87%8D%E6%98%A0%E5%B0%84%E6%80%8E%E4%B9%88%E7%94%A8%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ats-template-literal-types%0A-+%E5%88%86%E7%B1%BB%EF%BC%9ATypeScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fts-template-literal-types%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：模板字面量类型和映射类型的 as 重映射怎么用？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ts-enum/">TypeScript 的 enum、const enum 和联合类型怎样选？</a></li><li><a href="/questions/ts-variance/">TypeScript 中的协变和逆变是什么？</a></li><li><a href="/questions/ts-type-challenges/">怎样手写 MyPick、MyOmit、DeepReadonly、TupleToUnion、First、Awaited 这类类型体操？</a></li><li><a href="/questions/ts-mapped-utility/">映射类型与 Partial、Pick、Omit 如何用于接口建模？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

@@ -38,7 +38,7 @@
 <table><thead><tr><th></th><th>Git Flow</th><th>GitHub Flow</th><th>主干开发</th></tr></thead><tbody><tr><td>长期分支</td><td><code>master</code>、<code>develop</code></td><td>只有默认分支</td><td>只有主干</td></tr><tr><td>功能分支</td><td>从 <code>develop</code> 拉，合回 <code>develop</code></td><td>从默认分支拉，PR 后合回</td><td>不用，或者只存在很短时间</td></tr><tr><td>发布方式</td><td><code>release-*</code> 分支合入 <code>master</code> 并打标签</td><td>合入默认分支后部署</td><td>从主干发布</td></tr><tr><td>适合</td><td>有版本号、要维护多个版本</td><td>持续交付的 Web 应用</td><td>频繁集成、配套完善的 CI</td></tr></tbody></table>
 <p>为什么 Git Flow 要多一条 <code>develop</code>？因为它假设“开发中的代码”和“已发布的代码”要长期隔离。<code>master</code> 上每一次合并都对应一个发布版本，可以打标签；<code>develop</code> 上则是下个版本正在攒的功能。<code>release</code> 分支让发版前的修补不会挡住 <code>develop</code> 继续接收新功能。</p>
 <p>可是对每天都要上线好几次的 Web 应用，这些隔离就成了负担。分支越多、存在越久，合并时冲突越多。GitHub Flow 把流程缩成“开分支、提交、PR、合并、删分支”，GitHub 文档还建议每组不相关的改动单独开一个分支，这样审查容易，出问题也容易单独回退。</p>
-<p>主干开发的出发点是减少合并带来的麻烦。trunkbaseddevelopment.com 把它描述为持续集成和持续交付的关键前提：每个人每天多次往主干提交，才能满足“所有改动都及时集成”的要求。代价是主干必须一直保持能构建、能发布，所以要有完善的 CI，以及功能开关这类手段，让没写完的代码合进去也不影响用户，功能开关的设计见<a href="/questions/eng-feature-flags/">《前端功能开关和灰度发布应该怎样设计？》</a>。</p>
+<p>主干开发的出发点是减少合并带来的麻烦。trunkbaseddevelopment.com 把它描述为持续集成和持续交付的关键前提：每个人每天多次往主干提交，才能满足“所有改动都及时集成”的要求。代价是主干必须一直保持能构建、能发布，所以要有完善的 CI，以及功能开关这类手段，让没写完的代码合进去也不影响用户，功能开关的设计见<a href="/questions/eng-feature-flags/">《前端功能开关应该怎样设计？怎样分类、下发和清理？》</a>。</p>
 <p>Git Flow 合并功能分支时用的是 <code>git merge --no-ff</code>，强制生成一个合并提交，这样从历史里能看出哪些提交属于同一个功能，回退时也能整体撤销。合并和变基怎么选，见<a href="/questions/git-merge-rebase/">《git merge 与 rebase 应该怎样选择？》</a>。</p>
 <h2>日常分支命令</h2>
 <p>下面是 GitHub Flow 一次完整改动常用的命令：</p>

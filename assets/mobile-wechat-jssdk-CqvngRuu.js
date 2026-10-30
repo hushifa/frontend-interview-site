@@ -1,0 +1,82 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>在微信里打开的 H5 页面，想调用分享、扫一扫、选图片这些能力，要先引入 JS-SDK，再调用 <code>wx.config</code> 告诉微信“我是哪个公众号，要用哪些接口”。微信会校验一个签名，通过了才放行，接口要放在 <code>wx.ready</code> 里调用。</p>
+<p>签名的算法是：把 <code>jsapi_ticket</code>、<code>noncestr</code>、<code>timestamp</code> 和当前页面的 <code>url</code> 这四个字段按字段名的 ASCII 顺序排好，拼成 <code>key=value&amp;key=value</code> 的字符串，再做 sha1。<code>url</code> 要去掉 <code>#</code> 及后面的部分，<code>noncestr</code> 和 <code>timestamp</code> 必须和传给 <code>wx.config</code> 的一致。</p>
+<p>签名必须在服务端算。因为 <code>jsapi_ticket</code> 要用 <code>access_token</code> 换，<code>access_token</code> 又要用公众号的 AppSecret 换，这个密钥一旦放到前端，任何人都能冒充你的公众号调接口。两者有效期都是 7200 秒，官方要求在服务端全局缓存。</p>
+<p>想知道当前用户是谁，要用网页授权。<code>snsapi_base</code> 是静默授权，只能拿到 openid；<code>snsapi_userinfo</code> 要用户手动同意，才能拿到昵称和头像。微信回调时给页面一个 <code>code</code>，用 <code>code</code> 换 openid 同样要带 AppSecret，所以也在服务端做。<code>code</code> 只能用一次，5 分钟不用就过期。</p>
+</blockquote>
+<h2>前端怎样调用 wx.config</h2>
+<p>页面先引入 JS-SDK 的脚本，然后向自己的服务端要签名。请求时把当前页面地址传过去，服务端算好返回：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">setupWechat</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-comment">// 签名用的 url 不含 # 及后面的部分。</span>
+  <span class="hljs-keyword">const</span> url = location.<span class="hljs-property">href</span>.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;#&#x27;</span>)[<span class="hljs-number">0</span>];
+  <span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">\`/api/wechat/signature?url=<span class="hljs-subst">\${<span class="hljs-built_in">encodeURIComponent</span>(url)}</span>\`</span>);
+  <span class="hljs-keyword">const</span> { appId, timestamp, nonceStr, signature } = <span class="hljs-keyword">await</span> res.<span class="hljs-title function_">json</span>();
+
+  wx.<span class="hljs-title function_">config</span>({
+    <span class="hljs-attr">debug</span>: <span class="hljs-literal">false</span>,
+    appId,
+    timestamp,
+    nonceStr,
+    signature,
+    <span class="hljs-attr">jsApiList</span>: [<span class="hljs-string">&#x27;updateAppMessageShareData&#x27;</span>, <span class="hljs-string">&#x27;scanQRCode&#x27;</span>],
+  });
+
+  wx.<span class="hljs-title function_">ready</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-comment">// 页面加载时就要调用的接口放在这里，确保签名校验已经完成。</span>
+  });
+  wx.<span class="hljs-title function_">error</span>(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;JS-SDK 签名校验失败&#x27;</span>, err);
+  });
+}
+</code></pre></div>
+<p>为什么页面一加载就要调的接口必须放进 <code>wx.ready</code>？因为 <code>wx.config</code> 是异步校验的，调用它以后结果还没回来。官方文档说，用户点击后才触发的接口可以直接调，那时校验早就完成了。</p>
+<p><code>wx.error</code> 在校验失败时触发，比如签名过期。官方建议单页应用可以在这里重新获取签名。单页应用切换路由后 URL 变了，同一个 URL 只需要配置一次，URL 变化后要用新地址重新签名、重新调用 <code>wx.config</code>。</p>
+<p>另外，页面的域名要先在公众号后台的“JS 接口安全域名”里配置，不支持 IP 地址、端口号和短链域名，最多 5 个。域名不对，签名算对了也调不通。</p>
+<h2>签名字符串怎么拼</h2>
+<p>下面用官方文档里的示例值演示拼接顺序。实际签名在服务端用 sha1 计算，这里只演示 sha1 之前的那个字符串：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">buildSignString</span>(<span class="hljs-params">fields</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(fields)
+    .<span class="hljs-title function_">sort</span>()
+    .<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">key</span>) =&gt;</span> <span class="hljs-string">\`<span class="hljs-subst">\${key}</span>=<span class="hljs-subst">\${fields[key]}</span>\`</span>)
+    .<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;&amp;&#x27;</span>);
+}
+
+<span class="hljs-keyword">const</span> fields = {
+  <span class="hljs-attr">noncestr</span>: <span class="hljs-string">&#x27;Wm3WZYTPz0wzccnW&#x27;</span>,
+  <span class="hljs-attr">jsapi_ticket</span>: <span class="hljs-string">&#x27;sM4AOVdWfPE4DxkXGEs8VMCPGGVi4C3VM0P37wVUCFvkVAy_90u5h9nbSlYy3-Sl-HhTdfl2fzFy1AOcHKP7qg&#x27;</span>,
+  <span class="hljs-attr">timestamp</span>: <span class="hljs-number">1414587457</span>,
+  <span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;http://mp.weixin.qq.com?params=value&#x27;</span>,
+};
+
+<span class="hljs-keyword">const</span> signString = <span class="hljs-title function_">buildSignString</span>(fields);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">keys</span>(fields).<span class="hljs-title function_">sort</span>().<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// jsapi_ticket,noncestr,timestamp,url</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(signString.<span class="hljs-title function_">endsWith</span>(<span class="hljs-string">&#x27;&amp;timestamp=1414587457&amp;url=http://mp.weixin.qq.com?params=value&#x27;</span>)); <span class="hljs-comment">// true</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(signString.<span class="hljs-title function_">includes</span>(<span class="hljs-string">&#x27;%&#x27;</span>)); <span class="hljs-comment">// false</span>
+</code></pre></div>
+<p>第一行输出是排序后的字段顺序。对象里写的是 <code>noncestr</code> 在前，排完序 <code>jsapi_ticket</code> 跑到了最前面，因为 <code>j</code> 的 ASCII 码比 <code>n</code> 小。官方要求按字段名的字典序排，顺序错了签名就对不上。</p>
+<p>为什么要检查有没有 <code>%</code>？官方规定字段名和值都用原始值，不做 URL 转义。如果拼接时用了 <code>URLSearchParams</code> 之类的工具，<code>url</code> 里的 <code>:</code>、<code>/</code>、<code>?</code> 会被编码，签出来的结果就不对。字段名也必须全小写，所以这里写的是 <code>noncestr</code>，而传给 <code>wx.config</code> 的是驼峰的 <code>nonceStr</code>，两处的值要相同。</p>
+<p>这个字符串做 sha1 后，得到的是官方文档给出的 <code>0f9de62fce790f9a083d5c99e95740ceb90c27ed</code>，用 Node.js 22 的 <code>crypto.createHash(&#x27;sha1&#x27;)</code> 算出的结果一致。</p>
+<h2>为什么签名必须放在服务端</h2>
+<p>签名用到的 <code>jsapi_ticket</code> 是这样来的：服务端用 AppID 和 AppSecret 换 <code>access_token</code>，再用 <code>access_token</code> 换 <code>jsapi_ticket</code>。AppSecret 相当于公众号的密码，放到前端就等于公开了，别人可以拿它调用你公众号的所有接口。所以官方明确要求签名逻辑在服务器端实现。</p>
+<p>还有一个原因是频率限制。<code>access_token</code> 和 <code>jsapi_ticket</code> 有效期都是 7200 秒，官方说获取 <code>jsapi_ticket</code> 的接口调用次数非常有限，要求两者都在服务端全局缓存，否则上线后会触发频率限制。如果每个用户打开页面都去换一次，很快就会超限。</p>
+<h2>网页授权怎样拿到 openid</h2>
+<p>页面需要知道当前用户是谁时，把用户重定向到微信的授权地址：</p>
+<div class="not-prose code-block"><div class="code-language">text</div><pre><code class="hljs language-text">https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&amp;redirect_uri=REDIRECT_URI&amp;response_type=code&amp;scope=SCOPE&amp;state=STATE#wechat_redirect
+</code></pre></div>
+<p><code>scope</code> 填 <code>snsapi_base</code> 时是静默授权，用户无感知，直接跳回 <code>redirect_uri</code>，只能拿到 openid。填 <code>snsapi_userinfo</code> 时要用户手动同意，同意后能拿到昵称、头像。参数顺序不能乱，官方说参数顺序不对，授权页面无法正常访问；<code>redirect_uri</code> 要做 URL 编码。</p>
+<p>微信跳回来时，地址上带着 <code>code</code> 和原样返回的 <code>state</code>。前端把 <code>code</code> 交给服务端，服务端带上 AppSecret 调 <code>sns/oauth2/access_token</code> 换出 openid 和网页授权的 <code>access_token</code>。官方要求 AppSecret 和换来的 token 只保存在服务器，不能传给客户端。注意这个网页授权的 <code>access_token</code> 和前面 JS-SDK 用的基础 <code>access_token</code> 不是同一个东西，它只能用来获取这个用户的信息。</p>
+<p><code>code</code> 只能用一次，5 分钟没用就自动过期。所以前端拿到 <code>code</code> 后要马上交给服务端，页面刷新时也不要拿旧的 <code>code</code> 再请求一次。</p>
+<h2>常见追问</h2>
+<p><strong>签名校验总是报 invalid signature，先查什么？</strong></p>
+<blockquote>
+<p>先看参与签名的 <code>url</code> 和页面实际地址是否完全一致，包括有没有去掉 <code>#</code> 后面的部分、查询参数是否一样。再看 <code>noncestr</code>、<code>timestamp</code> 是否和传给 <code>wx.config</code> 的相同，以及服务端拼接时有没有对值做 URL 转义。最后确认 <code>jsapi_ticket</code> 没有过期，域名已经配置在 JS 接口安全域名里。</p>
+</blockquote>
+<p><strong>为什么不建议一打开页面就跳 snsapi_userinfo 授权？</strong></p>
+<blockquote>
+<p>微信从 2022 年起调整了规则：没有用户操作就直接发起 <code>snsapi_userinfo</code> 授权，会进入网页快照页模式，页面被固化，用户要点“点击访问完整网页”才能继续。官方不推荐打开网页就直接授权。所以先用 <code>snsapi_base</code> 拿 openid，等用户点了需要个人信息的按钮再发起 <code>snsapi_userinfo</code>。</p>
+</blockquote>
+<p><strong><code>state</code> 参数有什么用？</strong></p>
+<blockquote>
+<p>微信重定向回 <code>redirect_uri</code> 时会原样带上 <code>state</code>，官方说明它用于防止越权行为，取值只能是字母和数字，最多 128 字节。常见做法是发起授权前生成一个随机值存在会话里，回调时比对，不一致就拒绝，这样别人伪造的回调就用不上。</p>
+</blockquote>`};export{e as default};

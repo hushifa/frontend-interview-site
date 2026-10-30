@@ -66,7 +66,7 @@
 </code></pre></div>
 <p>改后为什么 <code>BigTable</code> 不渲染了？因为 <code>keyword</code> 变化只会让 <code>SearchBox</code> 重新执行，<code>Page</code> 自己没有状态变化，也就不会带着 <code>BigTable</code> 一起渲染。文档的原话是优先使用局部状态，不要把状态提升到超出需要的地方，像表单输入、是否悬停这种临时状态不要放在树顶或全局状态库里。</p>
 <p>同样的思路还有一种写法：组件在视觉上包裹别的组件时，让它通过 <code>children</code> 接收 JSX。包裹组件更新自己的状态时，React 知道传进来的 <code>children</code> 不需要重新渲染。文档还指出，React 应用的很多性能问题来自 Effect 里更新状态引起的连锁渲染，能在渲染时直接算出来的值就不要用 Effect 同步到 state。</p>
-<p>这些都做不到时，再用 <code>memo</code>。<code>memo</code> 包住的组件在 props 没变时会跳过渲染，props 默认用 <code>Object.is</code> 逐个比较，所以传给它的对象和函数要用 <code>useMemo</code>、<code>useCallback</code> 保持同一个引用，否则每次都是新的，<code>memo</code> 等于没加。三者怎么配合见<a href="/questions/react-memo/">《memo、useMemo、useCallback 各自优化什么？》</a>。</p>
+<p>这些都做不到时，再用 <code>memo</code>。<code>memo</code> 包住的组件在 props 没变时会跳过渲染，props 默认用 <code>Object.is</code> 逐个比较，所以传给它的对象和函数要用 <code>useMemo</code>、<code>useCallback</code> 保持同一个引用，否则每次都是新的，<code>memo</code> 等于没加。三者怎么配合见<a href="/questions/react-memo/">《React.memo 怎样跳过组件渲染？什么情况下会失效？》</a>。</p>
 <p>列表的 <code>key</code> 也影响渲染工作量。<code>key</code> 稳定时，React 能认出同一项，只更新变化的部分；用下标当 <code>key</code> 又发生插入或排序，React 会把状态和 DOM 对到错误的项上，详见<a href="/questions/react-key/">《列表中的 key 为什么不能随意使用数组下标？》</a>。反过来，同一位置换一个 <code>key</code> 会让 React 丢掉旧组件、重建新组件，这是重置状态的手段，不要在每次渲染时随机生成 <code>key</code>。</p>
 <h2>减少每次渲染的成本</h2>
 <p>渲染次数降不下来时，就让每次渲染少做点事。组件里有很贵的计算，比如对上万条数据过滤排序，用 <code>useMemo</code> 缓存结果，依赖没变就直接复用。</p>

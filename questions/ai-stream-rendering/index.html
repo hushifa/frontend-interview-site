@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="AI 应用前端面试题：每收到一小段文字就重新解析整条消息、更新状态、滚动一次，长回答会越来越卡。" />
+    <title>流式输出的 AI 对话怎样渲染才不卡？自动滚到底部要注意什么？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/ai-stream-rendering/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="流式输出的 AI 对话怎样渲染才不卡？自动滚到底部要注意什么？" />
+    <meta property="og:description" content="AI 应用前端面试题：每收到一小段文字就重新解析整条消息、更新状态、滚动一次，长回答会越来越卡。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/ai-stream-rendering/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ai-stream-rendering/#webpage","url":"https://fe.hushifa.top/questions/ai-stream-rendering/","name":"流式输出的 AI 对话怎样渲染才不卡？自动滚到底部要注意什么？","description":"AI 应用前端面试题：每收到一小段文字就重新解析整条消息、更新状态、滚动一次，长回答会越来越卡。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ai-stream-rendering/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ai-stream-rendering/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"AI 应用前端面试题","item":"https://fe.hushifa.top/topics/ai-frontend/"},{"@type":"ListItem","position":3,"name":"流式输出的 AI 对话怎样渲染才不卡？自动滚到底部要注意什么？","item":"https://fe.hushifa.top/questions/ai-stream-rendering/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/ai-frontend/">AI 应用前端面试题</a><span aria-hidden="true">/</span><span aria-current="page">流式输出的 AI 对话怎样渲染才不卡？自动滚到底部要注意什么？</span></nav><h1 tabindex="-1">流式输出的 AI 对话怎样渲染才不卡？自动滚到底部要注意什么？</h1><p class="reading-summary">每收到一小段文字就重新解析整条消息、更新状态、滚动一次，长回答会越来越卡。做法是把增量先攒起来、每帧最多更新一次；已经完成的段落缓存解析结果，只重新解析最后一段。自动滚动只在用户停在底部时进行，用户往上翻就暂停，并用 overflow-anchor 处理浏览器滚动锚定带来的跳动。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>AI 回答是一小段一小段流过来的，一秒可能来几十次。如果每来一段就更新一次状态、把整条消息的 Markdown 重新解析一遍、再滚动到底部，回答越长每次要做的事越多，页面就越来越卡。</p>
+<p>改法有三步。第一，收到的增量先放进缓冲区，用 <code>requestAnimationFrame</code> 每帧最多合并更新一次，因为屏幕一帧只画一次，更新得再多也看不出来。第二，把消息按段落拆开，已经写完的段落缓存解析结果，每次只重新解析最后那段还在增长的。第三，长对话里只让正在生成的那条消息更新，历史消息不跟着重新渲染。</p>
+<p>自动贴底要尊重用户。用户停在底部时，新内容出来就跟着往下滚；用户往上翻看历史时，就暂停贴底，显示一个“回到底部”的按钮。判断是否在底部，可以在滚动时算 <code>scrollHeight - clientHeight - scrollTop</code> 是否接近 0，也可以在列表末尾放一个哨兵元素，用 <code>IntersectionObserver</code> 看它是否可见。</p>
+<p>还要注意浏览器的滚动锚定。内容在视口外变化时，浏览器默认会调整滚动位置，让用户正在看的内容不动。它在加载更早的历史消息时很有用，可它会额外改变滚动位置，和自己写的滚动逻辑冲突时，可以用 <code>overflow-anchor: none</code> 把相关区域排除掉。</p>
+</blockquote>
+<h2>为什么每来一段就渲染会越来越卡</h2>
+<p>一个流式回答可能有几百上千个增量。假设每个增量都触发一次 React 状态更新，组件就会重新渲染几百次；如果渲染时把整条消息交给 Markdown 解析器，第 500 次更新要解析的是前 500 段拼起来的全文。所以总的工作量不是随长度线性增长，而是越往后每一次都更贵。</p>
+<p>屏幕的刷新是按帧来的，一帧里改十次和改一次，用户看到的是同一个画面。所以没有必要每个增量都更新界面，只要每帧把这期间攒下的文字一次写进去就够了。</p>
+<h2>怎样按帧合并更新</h2>
+<p>思路是收到增量时只往缓冲区里追加，第一次追加时预约一个“下一帧刷新”，刷新时把缓冲区的内容一次性交出去。下面把调度函数做成参数，示例里手动触发“下一帧”，看合并的效果：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">createFrameBatcher</span>(<span class="hljs-params">flush, schedule</span>) {
+  <span class="hljs-keyword">let</span> buffer = <span class="hljs-string">&#x27;&#x27;</span>;
+  <span class="hljs-keyword">let</span> scheduled = <span class="hljs-literal">false</span>;
+
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">push</span>(<span class="hljs-params">chunk</span>) {
+    buffer += chunk;
+    <span class="hljs-keyword">if</span> (scheduled) <span class="hljs-keyword">return</span>;
+    scheduled = <span class="hljs-literal">true</span>;
+    <span class="hljs-title function_">schedule</span>(<span class="hljs-function">() =&gt;</span> {
+      scheduled = <span class="hljs-literal">false</span>;
+      <span class="hljs-keyword">const</span> text = buffer;
+      buffer = <span class="hljs-string">&#x27;&#x27;</span>;
+      <span class="hljs-title function_">flush</span>(text);
+    });
+  };
+}
+
+<span class="hljs-keyword">const</span> frames = [];
+<span class="hljs-keyword">const</span> flushed = [];
+<span class="hljs-keyword">const</span> push = <span class="hljs-title function_">createFrameBatcher</span>(
+  <span class="hljs-function">(<span class="hljs-params">text</span>) =&gt;</span> flushed.<span class="hljs-title function_">push</span>(text),
+  <span class="hljs-function">(<span class="hljs-params">callback</span>) =&gt;</span> frames.<span class="hljs-title function_">push</span>(callback),
+);
+
+<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;你&#x27;</span>);
+<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;好&#x27;</span>);
+<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;，&#x27;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(frames.<span class="hljs-property">length</span>); <span class="hljs-comment">// 1</span>
+frames.<span class="hljs-title function_">shift</span>()();
+<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;世界&#x27;</span>);
+frames.<span class="hljs-title function_">shift</span>()();
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(flushed.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;|&#x27;</span>)); <span class="hljs-comment">// 你好，|世界</span>
+</code></pre></div>
+<p>前三个增量只预约了一次刷新，所以 <code>frames.length</code> 是 1。这一帧执行时，三段文字合在一起交给 <code>flush</code>，界面只更新一次。之后再来的“世界”会预约新的一帧，所以最后 <code>flush</code> 被调用了两次。</p>
+<p>在浏览器里，<code>schedule</code> 传 <code>requestAnimationFrame</code> 就行，<code>flush</code> 里做状态更新。按 MDN 的说明，<code>requestAnimationFrame</code> 的回调在下一次重绘之前执行，大多数浏览器在后台标签页里会暂停它，所以页面不可见时也不会白白刷新。要注意请求结束时缓冲区里可能还有没刷出去的文字，结束事件到来时要立刻刷一次，不要等下一帧。</p>
+<h2>已经完成的段落为什么不用重新解析</h2>
+<p>合并以后每帧最多解析一次，可每次解析的仍然是越来越长的全文。其实前面的段落早就写完了，不会再变，只有最后一段还在增长。</p>
+<p>所以可以按空行把消息切成段落块，每个块用它的文本内容作为缓存的键。已经完成的块，文本没变，就直接用上次的解析结果；只有最后一块每帧重新解析。在 React 里，可以把每个块渲染成一个用 <code>memo</code> 包起来的组件，<code>props</code> 是这一块的文本，文本没变的块就跳过重新渲染。</p>
+<p>切块时要注意代码块。代码块里面也可能有空行，如果按空行硬切，一个代码块会被拆成两半，各自解析出来的结果都不对。所以切分前要先识别 <code>```</code> 围起来的范围，代码块内部的空行不算段落边界。没闭合的代码块、半个链接这类不完整的内容怎样安全显示，见<a href="/questions/ai-markdown-security/">《AI 生成的 Markdown 应该怎样安全地渲染？》</a>。</p>
+<h2>自动滚到底部怎样判断用户在不在底部</h2>
+<p>自动贴底的规则很简单：用户在底部，就跟着新内容滚；用户不在底部，就别动。难点是判断“在底部”。</p>
+<p>一种办法是在滚动事件里计算。<code>scrollTop</code> 是已经滚过去的高度，<code>clientHeight</code> 是可见区域的高度，<code>scrollHeight</code> 是全部内容的高度，三者满足 <code>scrollHeight - clientHeight - scrollTop</code> 接近 0 时就是到底了。MDN 特别说明 <code>scrollTop</code> 可能带小数，而另外两个是整数，所以不能用严格相等，要允许一点误差。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> container = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">querySelector</span>(<span class="hljs-string">&#x27;.messages&#x27;</span>);
+<span class="hljs-keyword">let</span> stickToBottom = <span class="hljs-literal">true</span>;
+
+container.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;scroll&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-keyword">const</span> distance = container.<span class="hljs-property">scrollHeight</span> - container.<span class="hljs-property">clientHeight</span> - container.<span class="hljs-property">scrollTop</span>;
+  <span class="hljs-comment">// 留出几十像素的余量，用户离底部很近时仍然算在底部。</span>
+  stickToBottom = distance &lt; <span class="hljs-number">40</span>;
+  jumpButton.<span class="hljs-property">hidden</span> = stickToBottom;
+});
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">onContentUpdated</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">if</span> (stickToBottom) container.<span class="hljs-property">scrollTop</span> = container.<span class="hljs-property">scrollHeight</span>;
+}
+</code></pre></div>
+<p>另一种办法是在消息列表最后放一个空的哨兵元素，用 <code>IntersectionObserver</code> 观察它。哨兵可见，说明用户在底部；不可见，说明用户往上翻了。它不用在每次滚动时计算，<code>root</code> 设为消息容器，<code>rootMargin</code> 可以把判断范围往外放一点，作用和上面的余量一样。</p>
+<p><code>onContentUpdated</code> 要放在合并后的那次刷新里调用，不要每个增量都滚一次。贴底还要考虑读屏器用户，哪些内容该播报、焦点怎么处理，见<a href="/questions/ai-chat-state/">《AI 聊天界面为什么不能只有 loading 一个状态？》</a>。</p>
+<h2>overflow-anchor 解决什么问题</h2>
+<p>浏览器有一个默认开启的功能叫滚动锚定：当视口外面的内容发生变化，比如上方插入了新元素，浏览器会自动调整滚动位置，让用户正在看的那部分内容停在原地。</p>
+<p>这在聊天里有好有坏。好处是往上翻加载更早的历史消息时，新消息插在顶部，用户看的位置不会被推走。坏处是它会额外改变滚动位置，MDN 提到，页面和滚动锚定配合不好，多半是因为某个 <code>scroll</code> 监听没有处理这次额外的滚动。上面的 <code>scroll</code> 监听就可能被它触发，误判用户离开了底部。</p>
+<p>遇到这种冲突时，可以用 <code>overflow-anchor: none</code> 把某个元素排除在锚点候选之外。这个属性不继承，可 MDN 的指南说明，一个区域被排除以后，里面的子元素也不能再重新加入，所以通常设在消息容器上：</p>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.messages</span> {
+  <span class="hljs-attribute">overflow-anchor</span>: none;
+}
+</code></pre></div>
+<p>MDN 把 <code>overflow-anchor</code> 标为 Baseline 2026 新近可用，较老的浏览器版本可能不支持，所以贴底逻辑不能依赖它，它只用来排除干扰。</p>
+<h2>常见追问</h2>
+<p><strong>为什么不直接用 <code>scrollIntoView</code> 滚到最后一条消息？</strong></p>
+<blockquote>
+<p>可以用，效果一样。关键不在用哪个 API，而在什么时候调用：只在用户本来就在底部时滚，并且每帧最多滚一次。如果每个增量都调用一次，还带着平滑滚动，动画会互相打断，页面看起来一直在抖。</p>
+</blockquote>
+<p><strong>对话很长、有几百条消息时怎么办？</strong></p>
+<blockquote>
+<p>先保证只有正在生成的那条消息在频繁更新，历史消息的组件用 <code>memo</code> 跳过重新渲染。消息多到 DOM 本身成了负担时，再考虑虚拟列表。聊天的消息高度不固定，而且是从底部往上看，测量高度和保持滚动位置都更麻烦，见<a href="/questions/performance-virtual-list/">《动态高度的虚拟列表怎样处理测量、滚动锚点和焦点？》</a>。</p>
+</blockquote>
+<p><strong>流式数据是怎么一段段拿到的？</strong></p>
+<blockquote>
+<p>渲染只是最后一步。前面要从响应流里读出字节、解码成文本、按协议切出完整的事件，再按消息 ID 把文字增量追加到对应的消息上，见<a href="/questions/ai-stream-protocol/">《AI 流式响应为什么不能每收到一块就 JSON.parse？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame" target="_blank" rel="noreferrer">MDN · Window.requestAnimationFrame()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/overflow-anchor" target="_blank" rel="noreferrer">MDN · overflow-anchor<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Scroll_anchoring/Overview" target="_blank" rel="noreferrer">MDN · Overview of scroll anchoring<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollHeight" target="_blank" rel="noreferrer">MDN · Element.scrollHeight<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/IntersectionObserver" target="_blank" rel="noreferrer">MDN · IntersectionObserver()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%B5%81%E5%BC%8F%E8%BE%93%E5%87%BA%E7%9A%84+AI+%E5%AF%B9%E8%AF%9D%E6%80%8E%E6%A0%B7%E6%B8%B2%E6%9F%93%E6%89%8D%E4%B8%8D%E5%8D%A1%EF%BC%9F%E8%87%AA%E5%8A%A8%E6%BB%9A%E5%88%B0%E5%BA%95%E9%83%A8%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%B5%81%E5%BC%8F%E8%BE%93%E5%87%BA%E7%9A%84+AI+%E5%AF%B9%E8%AF%9D%E6%80%8E%E6%A0%B7%E6%B8%B2%E6%9F%93%E6%89%8D%E4%B8%8D%E5%8D%A1%EF%BC%9F%E8%87%AA%E5%8A%A8%E6%BB%9A%E5%88%B0%E5%BA%95%E9%83%A8%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aai-stream-rendering%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AAI+%E5%BA%94%E7%94%A8%E5%89%8D%E7%AB%AF%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fai-stream-rendering%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：流式输出的 AI 对话怎样渲染才不卡？自动滚到底部要注意什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ai-stream-recovery/">AI 流式输出断线后，怎样恢复同一条生成任务？</a></li><li><a href="/questions/ai-stream-protocol/">AI 流式响应为什么不能每收到一块就 JSON.parse？</a></li><li><a href="/questions/ai-chat-state/">AI 聊天界面为什么不能只有 loading 一个状态？</a></li><li><a href="/questions/ai-cancel-generation/">点击“停止生成”后，服务端一定停止调用模型吗？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

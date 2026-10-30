@@ -85,7 +85,7 @@
 }
 </code></pre></div>
 <p>使用时写成 <code>&lt;Tabs defaultValue=&quot;a&quot;&gt;&lt;Tab value=&quot;a&quot;&gt;基本信息&lt;/Tab&gt;&lt;TabPanel value=&quot;a&quot;&gt;...&lt;/TabPanel&gt;&lt;/Tabs&gt;</code>。</p>
-<p>为什么用 Context，而不是在 <code>Tabs</code> 里遍历 <code>children</code>、给每个子元素塞 props？react.dev 的 <code>Children</code> 文档明确说，用 <code>Children</code> 方法操作 children 常常导致代码脆弱，推荐的替代做法之一就是暴露多个组件让使用者自己组合。用 Context 时，<code>Tab</code> 包在别的元素里也能拿到状态，而遍历 <code>children</code> 只能看到直接子元素。Context 的用法见<a href="/questions/react-use-context/">《useContext 怎样用？Context 变化为什么会让所有消费组件重新渲染？》</a>。上面的写法 <code>&lt;TabsContext value={...}&gt;</code> 是 React 19 的语法，更早的版本要写 <code>&lt;TabsContext.Provider value={...}&gt;</code>。</p>
+<p>为什么用 Context，而不是在 <code>Tabs</code> 里遍历 <code>children</code>、给每个子元素塞 props？react.dev 的 <code>Children</code> 文档明确说，用 <code>Children</code> 方法操作 children 常常导致代码脆弱，推荐的替代做法之一就是暴露多个组件让使用者自己组合。用 Context 时，<code>Tab</code> 包在别的元素里也能拿到状态，而遍历 <code>children</code> 只能看到直接子元素。Context 的用法见<a href="/questions/react-use-context/">《useContext 怎样用？什么时候该用 Context 而不是 props？》</a>。上面的写法 <code>&lt;TabsContext value={...}&gt;</code> 是 React 19 的语法，更早的版本要写 <code>&lt;TabsContext.Provider value={...}&gt;</code>。</p>
 <h2>受控和非受控怎样同时支持</h2>
 <p>react.dev 在“组件间共享状态”一节里讲：一个 <code>Panel</code> 用自己的 <code>isActive</code> 状态时是非受控的，父组件没法影响它；改成接收 <code>isActive</code> prop 后就由父组件控制了。非受控组件在父组件里用起来配置少，受控组件最灵活，但要求父组件用 props 完整配置它。</p>
 <p>组件库常见的做法是两种都支持：传了 <code>value</code> 就听父组件的，没传就用 <code>defaultValue</code> 初始化内部状态。</p>

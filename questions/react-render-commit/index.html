@@ -60,7 +60,7 @@
 <p>要记录次数，就用 ref，在 Effect 里修改；要显示在页面上，就放进 state。</p>
 <h2>父组件渲染会带着子组件一起渲染</h2>
 <p>父组件重新渲染时，默认会把所有子组件函数也重新调用一遍，即使子组件的 props 根本没变。</p>
-<p>这一般不是问题，因为调用函数很快，最后真正改到 DOM 上的很少。确实有性能问题时，可以用 <code>memo</code> 跳过子组件，或者启用 React Compiler，详见<a href="/questions/react-memo/">《memo、useMemo、useCallback 各自优化什么？》</a>。</p>
+<p>这一般不是问题，因为调用函数很快，最后真正改到 DOM 上的很少。确实有性能问题时，可以用 <code>memo</code> 跳过子组件，或者启用 React Compiler，详见<a href="/questions/react-memo/">《React.memo 怎样跳过组件渲染？什么情况下会失效？》</a>。</p>
 <h2>提交阶段内部的顺序</h2>
 <p>提交阶段里，React 先把变更应用到 DOM。然后设置 ref，同步执行 <code>useLayoutEffect</code>，这一步会挡住浏览器绘制。接着浏览器绘制画面。最后执行 <code>useEffect</code>，通常在绘制之后。</p>
 <p>这个顺序决定了：要在用户看到之前改布局，用 <code>useLayoutEffect</code>；其他副作用用 <code>useEffect</code>。</p>
