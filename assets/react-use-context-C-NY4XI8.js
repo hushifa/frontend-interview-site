@@ -3,7 +3,7 @@ var e={answerHtml:`<h2>简答</h2>
 <p>应用要支持深色模式，按钮、卡片、弹窗分布在很深的层级里，每一层都传 <code>theme</code> prop 太麻烦。可以 <code>createContext</code> 建一个 <code>ThemeContext</code>，在根部用 <code>&lt;ThemeContext value={theme}&gt;</code> 包住，任何深层组件里调用 <code>useContext(ThemeContext)</code> 就能拿到当前主题。</p>
 <p><code>useContext</code> 会往上找离它最近的同一个 Context 的 Provider，读它的 <code>value</code>；一个都找不到，才用 <code>createContext</code> 时给的默认值。React 19 起可以直接把 <code>&lt;SomeContext&gt;</code> 当 Provider 渲染，之前的版本写 <code>&lt;SomeContext.Provider&gt;</code>。</p>
 <p>Context 不是 props 的替代品。React 文档建议先直接传 props，哪怕要传几层，数据从哪来一眼就能看出；中间层只是转手时，可以让它接收 <code>children</code>，减少层级。主题、语言、当前登录用户这类很多深层组件都要用、变化又不频繁的数据，才适合放进 Context。</p>
-<p>要注意 Provider 必须在调用 <code>useContext</code> 的组件上层，默认值只在完全找不到 Provider 时生效。另外 value 变化时，所有读这个 Context 的组件都会重新渲染，怎样避免不必要的渲染见<a href="/questions/react-context-performance/">《React Context 有哪些性能问题？怎样避免不必要的重新渲染？》</a>。</p>
+<p>要注意 Provider 必须在调用 <code>useContext</code> 的组件上层，默认值只在完全找不到 Provider 时生效。value 变化带来的重新渲染问题见<a href="/questions/react-context-performance/">《React Context 有哪些性能问题？怎样避免不必要的重新渲染？》</a>。</p>
 </blockquote>
 <h2>基本用法</h2>
 <p>下面是一个主题切换的完整写法，注意 Provider 放在读取它的组件的上层：</p>
@@ -33,9 +33,7 @@ var e={answerHtml:`<h2>简答</h2>
 }
 </code></pre></div>
 <p><code>Toolbar</code> 没有接收也没有传递 <code>theme</code>，<code>Button</code> 怎么拿到的？<code>useContext</code> 不走 props，它沿着组件树往上找最近的 <code>ThemeContext</code> Provider。中间隔多少层都没关系。点切换按钮后，<code>theme</code> 状态变化，Provider 的 <code>value</code> 变了，<code>Button</code> 自动用新值重新渲染。</p>
-<p>有两个容易出错的地方。一是 Provider 必须在调用 <code>useContext</code> 的组件<strong>上面</strong>，同一个组件自己渲染的 Provider 对自己无效。二是默认值只在完全找不到 Provider 时使用：如果上层写了 <code>&lt;ThemeContext value={undefined}&gt;</code>，读到的就是 <code>undefined</code>，不是默认值。默认值也永远不会变，要让 Context 能变化，就要像上面这样配合 state。</p>
-<h2>value 变化时会发生什么</h2>
-<p>Provider 的 <code>value</code> 变化后，React 会让下面所有读这个 Context 的组件重新渲染，<code>memo</code> 拦不住，也不会只通知用到某个字段的组件。每次渲染都写 <code>value={{ user, login }}</code> 会让这件事频繁发生。为什么会这样、怎样用 <code>useMemo</code> 稳定 value、怎样拆分 Context，见<a href="/questions/react-context-performance/">《React Context 有哪些性能问题？怎样避免不必要的重新渲染？》</a>；Context 配合 <code>useReducer</code> 管理状态，见<a href="/questions/react-context-reducer/">《Context 与 useReducer 适合管理什么状态？》</a>。</p>
+<p>有两个容易出错的地方。一是 Provider 必须在调用 <code>useContext</code> 的组件<strong>上面</strong>，同一个组件自己渲染的 Provider 对自己无效。二是默认值只在完全找不到 Provider 时使用：如果上层写了 <code>&lt;ThemeContext value={undefined}&gt;</code>，读到的就是 <code>undefined</code>，不是默认值。默认值也永远不会变，要让 Context 能变化，就要像上面这样配合 state。value 变化会让哪些组件重新渲染、怎样减少不必要的渲染，见<a href="/questions/react-context-performance/">《React Context 有哪些性能问题？怎样避免不必要的重新渲染？》</a>；Context 配合 <code>useReducer</code> 管理状态，见<a href="/questions/react-context-reducer/">《Context 与 useReducer 适合管理什么状态？》</a>。</p>
 <h2>什么时候用 Context，什么时候传 props</h2>
 <p>React 文档建议先别急着用 Context。先试着直接传 props，即使要传好几层，数据流也一目了然。如果中间层只是转手，往往说明少抽了组件，可以让中间组件接收 <code>children</code>，比如把 <code>&lt;Layout posts={posts} /&gt;</code> 改成 <code>&lt;Layout&gt;&lt;Posts posts={posts} /&gt;&lt;/Layout&gt;</code>，层数自然就少了。这两种都不合适时，再用 Context。</p>
 <h2>常见追问</h2>
@@ -49,5 +47,5 @@ var e={answerHtml:`<h2>简答</h2>
 </blockquote>
 <p><strong>Context 适合放什么数据？</strong></p>
 <blockquote>
-<p>适合放变化不频繁、很多组件都要用的数据，比如主题、语言、当前登录用户、路由信息。只有一两层的数据直接传 props 更清楚。高频变化的数据，比如输入框内容、拖拽坐标，放进 Context 会让大量组件跟着重新渲染，更适合放在局部 state 里。</p>
+<p>适合放变化不频繁、很多组件都要用的数据，比如主题、语言、当前登录用户、路由信息。只有一两层的数据直接传 props 更清楚。输入框内容、拖拽坐标这类高频变化的数据更适合放在局部 state 里，原因见<a href="/questions/react-context-performance/">《React Context 有哪些性能问题？怎样避免不必要的重新渲染？》</a>。</p>
 </blockquote>`};export{e as default};

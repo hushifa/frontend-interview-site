@@ -1,13 +1,10 @@
 var e={answerHtml:`<h2>简答</h2>
 <blockquote>
-<p>一个商品详情页想被搜索到，要过三关：搜索引擎能发现这个网址，能读懂页面内容，并且愿意在结果里展示它。前端 SEO 的手段基本都对应这三关，可以按清单逐项检查。</p>
+<p>一个商品详情页想被搜索到，要过三关：搜索引擎能发现这个网址，能读懂页面内容，并且愿意在结果里展示它。前端 SEO 的手段基本都对应这三关，可以按清单逐项检查。Google 处理 JavaScript 页面也分抓取、渲染、编入索引三个阶段，渲染方式本身的影响见<a href="/questions/render-seo-deploy/">《前端渲染方式怎样影响 SEO 和部署？》</a>。</p>
 <p>发现阶段，页面之间用带 <code>href</code> 的 <code>&lt;a&gt;</code> 标签链接，单页应用用 History API 路由，不用 <code>#/</code> 这类片段地址；再提供 sitemap，并在 robots.txt 里声明它的位置。理解阶段，每页有唯一的 <code>&lt;title&gt;</code>、<code>meta description</code> 和 <code>canonical</code>，正文要出现在初始 HTML 或渲染后的 DOM 里，不存在的页面返回 404，必要时加 JSON-LD 结构化数据。</p>
 <p>展示阶段，图片用 <code>&lt;img&gt;</code> 加描述性的 <code>alt</code>，不要用 CSS 背景图承载内容图；页面体验上，Google 建议 LCP 在 2.5 秒内、INP 在 200 毫秒内、CLS 低于 0.1。</p>
 <p>要注意，robots.txt 是管抓取流量的，不是藏页面的。被它屏蔽的网址仍可能出现在搜索结果里，想不被索引要用 <code>noindex</code> 或密码保护。</p>
 </blockquote>
-<h2>先分清这道题和渲染方式的关系</h2>
-<p>CSR、SSR、SSG、预渲染各自对 SEO 有什么影响，SPA 部署时的路径回退和 404 怎样处理，见<a href="/questions/render-seo-deploy/">《前端渲染方式怎样影响 SEO 和部署？》</a>。这道题不再重复原理，而是按 Google 搜索中心的文档，列出前端能做的具体检查项。</p>
-<p>Google 处理 JavaScript 页面分三个阶段：抓取、渲染、编入索引。下面的清单也按“找得到、看得懂、展示得好”来排。</p>
 <h2>让搜索引擎找得到</h2>
 <p><strong>链接要用 <code>&lt;a href&gt;</code>。</strong> Google 文档写明，一般来说只有链接是带 <code>href</code> 属性的 <code>&lt;a&gt;</code> 元素时，Google 才能抓取它；没有 <code>href</code> 的 <code>&lt;a&gt;</code>，或者靠脚本事件充当链接的其他标签，Google 无法可靠地提取网址。所以 <code>&lt;span onClick={() =&gt; navigate(&#x27;/item/1&#x27;)}&gt;</code> 这种写法要改成路由库提供的 <code>&lt;Link&gt;</code>，它最终会渲染成 <code>&lt;a href&gt;</code>。</p>
 <p><strong>单页应用用 History API。</strong> JavaScript SEO 基础文档建议，客户端路由要用 History API 切换网址，不要用片段（<code>#</code>）。因为 <code>#</code> 后面的部分不会发送给服务器，也不被当作独立页面。</p>

@@ -62,7 +62,8 @@ var e={answerHtml:`<h2>简答</h2>
 <h2>两种区间写法怎么选</h2>
 <p>左闭右开 <code>[left, right)</code> 里，<code>right</code> 指向的位置不在搜索范围内，所以初始值是 <code>nums.length</code>，循环条件是 <code>left &lt; right</code>，缩小右边界时写 <code>right = mid</code>。这种写法适合找边界，因为结果可能是 <code>nums.length</code>，表示插入到最后。</p>
 <p>左闭右闭 <code>[left, right]</code> 里，<code>right</code> 也在搜索范围内，初始值是 <code>nums.length - 1</code>，循环条件是 <code>left &lt;= right</code>，缩小时写 <code>right = mid - 1</code>。这种写法适合“找到就返回”的场景，比如上面的旋转数组。</p>
-<p>中点写成 <code>left + Math.floor((right - left) / 2)</code>，原因见<a href="/questions/alg-lower-bound/">《二分查找怎样定位时间轴边界？为什么重复值和空数组容易写错？》</a>。</p>
+<p>中点写成 <code>left + Math.floor((right - left) / 2)</code>。<code>(left + right) &gt;&gt; 1</code> 看起来更短，但位运算会先把操作数转成 32 位整数，<code>left + right</code> 超过 2³¹ − 1 时结果就错了。</p>
+<p>把边界查找用到业务里的例子，比如按播放进度定位当前章节，见<a href="/questions/alg-lower-bound/">《视频播放进度怎样用二分查找定位当前章节？》</a>。</p>
 <h2>常见追问</h2>
 <p><strong>怎样找旋转数组里的最小值？</strong></p>
 <blockquote>

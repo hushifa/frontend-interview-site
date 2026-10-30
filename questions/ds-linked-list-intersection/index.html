@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="数据结构与算法面试题：两个指针分别从两个链表头出发，走到尾就换到另一个链表的头继续走，第一次指向同一个节点时就是相交节点；不相交时两个指针会同时走到 null。" />
+    <title>怎样找两个链表的相交节点？为什么双指针换头一定会相遇？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/ds-linked-list-intersection/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="怎样找两个链表的相交节点？为什么双指针换头一定会相遇？" />
+    <meta property="og:description" content="数据结构与算法面试题：两个指针分别从两个链表头出发，走到尾就换到另一个链表的头继续走，第一次指向同一个节点时就是相交节点；不相交时两个指针会同时走到 null。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/ds-linked-list-intersection/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ds-linked-list-intersection/#webpage","url":"https://fe.hushifa.top/questions/ds-linked-list-intersection/","name":"怎样找两个链表的相交节点？为什么双指针换头一定会相遇？","description":"数据结构与算法面试题：两个指针分别从两个链表头出发，走到尾就换到另一个链表的头继续走，第一次指向同一个节点时就是相交节点；不相交时两个指针会同时走到 null。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ds-linked-list-intersection/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ds-linked-list-intersection/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"数据结构与算法面试题","item":"https://fe.hushifa.top/topics/data-structures/"},{"@type":"ListItem","position":3,"name":"怎样找两个链表的相交节点？为什么双指针换头一定会相遇？","item":"https://fe.hushifa.top/questions/ds-linked-list-intersection/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BHh83_rl.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/data-structures/">数据结构与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样找两个链表的相交节点？为什么双指针换头一定会相遇？</span></nav><h1 tabindex="-1">怎样找两个链表的相交节点？为什么双指针换头一定会相遇？</h1><p class="reading-summary">两个指针分别从两个链表头出发，走到尾就换到另一个链表的头继续走，第一次指向同一个节点时就是相交节点；不相交时两个指针会同时走到 null。因为换头后两个指针到达交点前走的步数相同，都是两个独有部分加一段公共部分的长度。时间 O(m + n)，额外空间 O(1)。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>两个单链表从某个节点开始共用后面的部分，就像两条小路汇进同一条大路，汇合的那个节点就是相交节点。题目要返回它，不相交就返回 <code>null</code>，而且不能改动链表的结构。</p>
+<p>最好记的做法是双指针换头。指针 <code>a</code> 从 A 的头出发，<code>b</code> 从 B 的头出发，每次各走一步；<code>a</code> 走到尾就跳到 B 的头，<code>b</code> 走到尾就跳到 A 的头。两个指针第一次相等时，指向的就是相交节点。</p>
+<p>它一定会相遇，是因为两个指针走的路程被拉平了。设 A 独有部分长 x，B 独有部分长 y，公共部分长 z。<code>a</code> 走完 x + z 再走 y 到达交点，<code>b</code> 走完 y + z 再走 x 也到达交点，两者都走了 x + y + z 步。不相交时 z 是 0，两个指针都走 m + n 步后同时变成 <code>null</code>，循环也会结束。</p>
+<p>这个做法时间 O(m + n)，额外空间 O(1)，正好满足题目的进阶要求。要注意，判断相交比的是节点引用，不是节点的值，值相同的两个节点不一定是同一个节点。</p>
+</blockquote>
+<h2>先看代码</h2>
+<p><code>getIntersectionNode</code> 只有一个循环，关键是走到 <code>null</code> 后换到另一个链表的头。<code>build</code> 用来把数组建成链表，第二个参数是接在后面的公共部分。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">build</span>(<span class="hljs-params">values, tail = <span class="hljs-literal">null</span></span>) {
+  <span class="hljs-keyword">let</span> head = tail;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = values.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i -= <span class="hljs-number">1</span>) {
+    head = { <span class="hljs-attr">value</span>: values[i], <span class="hljs-attr">next</span>: head };
+  }
+  <span class="hljs-keyword">return</span> head;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">getIntersectionNode</span>(<span class="hljs-params">headA, headB</span>) {
+  <span class="hljs-keyword">let</span> a = headA;
+  <span class="hljs-keyword">let</span> b = headB;
+  <span class="hljs-keyword">while</span> (a !== b) {
+    a = a ? a.<span class="hljs-property">next</span> : headB;
+    b = b ? b.<span class="hljs-property">next</span> : headA;
+  }
+  <span class="hljs-keyword">return</span> a;
+}
+
+<span class="hljs-keyword">const</span> common = <span class="hljs-title function_">build</span>([<span class="hljs-number">8</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]);
+<span class="hljs-keyword">const</span> listA = <span class="hljs-title function_">build</span>([<span class="hljs-number">4</span>, <span class="hljs-number">1</span>], common);
+<span class="hljs-keyword">const</span> listB = <span class="hljs-title function_">build</span>([<span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">1</span>], common);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">getIntersectionNode</span>(listA, listB).<span class="hljs-property">value</span>); <span class="hljs-comment">// 8</span>
+
+<span class="hljs-keyword">const</span> shared = <span class="hljs-title function_">build</span>([<span class="hljs-number">2</span>, <span class="hljs-number">4</span>]);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">getIntersectionNode</span>(<span class="hljs-title function_">build</span>([<span class="hljs-number">1</span>, <span class="hljs-number">9</span>, <span class="hljs-number">1</span>], shared), <span class="hljs-title function_">build</span>([<span class="hljs-number">3</span>], shared)).<span class="hljs-property">value</span>); <span class="hljs-comment">// 2</span>
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">String</span>(<span class="hljs-title function_">getIntersectionNode</span>(<span class="hljs-title function_">build</span>([<span class="hljs-number">2</span>, <span class="hljs-number">6</span>, <span class="hljs-number">4</span>]), <span class="hljs-title function_">build</span>([<span class="hljs-number">1</span>, <span class="hljs-number">5</span>])))); <span class="hljs-comment">// null</span>
+</code></pre></div>
+<p>前两组对应 LeetCode 的示例 1 和示例 2，第三组是示例 3 的不相交情况。示例 1 里 A 和 B 都有值为 1 的节点，但它们是两个不同的对象，所以交点不是 1，而是值为 8 的那个共用节点。题目也特别说明了这一点，所以循环条件用的是 <code>a !== b</code>，比较引用。</p>
+<h2>为什么换头以后一定会相遇</h2>
+<p>两个链表长度不同，同时出发的指针不会同时到达交点。换头的作用就是让两个指针补上对方多出来的那段路。</p>
+<p>用示例 1 算一下。A 独有部分 <code>4 → 1</code> 长 2，B 独有部分 <code>5 → 6 → 1</code> 长 3，公共部分 <code>8 → 4 → 5</code> 长 3。指针 <code>a</code> 先走完 A 的 5 个节点，跳到 B 的头，再走 3 步到达 8，一共走了 2 + 3 + 3 = 8 步。指针 <code>b</code> 走完 B 的 6 个节点，跳到 A 的头，再走 2 步到达 8，一共是 3 + 3 + 2 = 8 步。步数相同，所以它们在 8 这里同时到达。</p>
+<p>不相交时公共部分长度是 0。示例 3 里 A 长 3、B 长 2，两个指针都走 5 步后同时停在 <code>null</code>，<code>null === null</code> 成立，循环结束并返回 <code>null</code>。所以不需要额外判断不相交的情况，也不会死循环。</p>
+<p>要注意代码里是“走到 <code>null</code> 再换头”，不是“走到最后一个节点就换头”。<code>null</code> 被当作一步，正是它保证了不相交时两个指针能同时到达 <code>null</code>。如果跳过 <code>null</code> 直接换头，不相交时两个指针永远不会相等。</p>
+<h2>其他做法</h2>
+<p>用 <code>Set</code> 也能做：先把 A 的所有节点放进 <code>Set</code>，再遍历 B，第一个出现在 <code>Set</code> 里的节点就是交点。思路直接，但要 O(m) 的额外空间。</p>
+<p>还可以先求两个链表的长度，让长的那个先走长度差那么多步，再一起走，第一次相等就是交点。它也是 O(1) 空间，本质上和换头一样，都是把两个指针对齐到离交点相同距离的位置。</p>
+<p>同样用双指针处理链表的题，还有找环的入口，见<a href="/questions/ds-linked-list-cycle/">《环形链表怎样找到入环点？为什么相遇后从头再走就能找到？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>如果链表里有环，这个方法还能用吗？</strong></p>
+<blockquote>
+<p>题目保证整个链表结构里没有环，所以不用考虑。如果有环，指针可能一直在环里绕，换头的步数计算也不再成立，要先用快慢指针判环再分情况处理。</p>
+</blockquote>
+<p><strong>为什么不能修改链表来做标记？</strong></p>
+<blockquote>
+<p>题目要求函数返回后链表保持原来的结构。比如把走过的节点的 <code>next</code> 改掉做标记，虽然能找到交点，但破坏了输入，也会影响共用这两个链表的其他代码。</p>
+</blockquote>
+<p><strong>两个链表在交点之后还会分开吗？</strong></p>
+<blockquote>
+<p>不会。单链表每个节点只有一个 <code>next</code>，两个链表从交点开始，后面的节点都是同一批，所以相交的形状一定是 Y 形，不会是 X 形。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://leetcode.com/problems/intersection-of-two-linked-lists/" target="_blank" rel="noreferrer">LeetCode 160 · Intersection of Two Linked Lists<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E6%89%BE%E4%B8%A4%E4%B8%AA%E9%93%BE%E8%A1%A8%E7%9A%84%E7%9B%B8%E4%BA%A4%E8%8A%82%E7%82%B9%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%8C%E6%8C%87%E9%92%88%E6%8D%A2%E5%A4%B4%E4%B8%80%E5%AE%9A%E4%BC%9A%E7%9B%B8%E9%81%87%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E6%89%BE%E4%B8%A4%E4%B8%AA%E9%93%BE%E8%A1%A8%E7%9A%84%E7%9B%B8%E4%BA%A4%E8%8A%82%E7%82%B9%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%8C%E6%8C%87%E9%92%88%E6%8D%A2%E5%A4%B4%E4%B8%80%E5%AE%9A%E4%BC%9A%E7%9B%B8%E9%81%87%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ads-linked-list-intersection%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fds-linked-list-intersection%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样找两个链表的相交节点？为什么双指针换头一定会相遇？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ds-linked-list/">怎样反转链表？怎样用反转判断回文链表？</a></li><li><a href="/questions/ds-linked-list-cycle/">环形链表怎样找到入环点？为什么相遇后从头再走就能找到？</a></li><li><a href="/questions/ds-merge-lists/">怎样合并两个有序链表、删除倒数第 N 个节点？哨兵节点有什么用？</a></li><li><a href="/questions/ds-permutations-nqueens/">字符串反转、有重复数字的全排列和 N 皇后怎样用回溯写？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

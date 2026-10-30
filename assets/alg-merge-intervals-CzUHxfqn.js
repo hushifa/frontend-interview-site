@@ -60,7 +60,7 @@ var e={answerHtml:`<h2>简答</h2>
 </blockquote>
 <p><strong>新加一个区间，要整体重新算吗？</strong></p>
 <blockquote>
-<p>不用。结果已经是有序的，可以用二分查找找到插入的位置，只合并受影响的那几个相邻区间，见<a href="/questions/alg-lower-bound/">《二分查找怎样定位时间轴边界？为什么重复值和空数组容易写错？》</a>。</p>
+<p>不用。结果已经是有序的，可以用二分查找找到插入的位置，只合并受影响的那几个相邻区间，找插入位置的写法见<a href="/questions/ds-binary-search-variants/">《二分查找有哪些常见变体？怎样找边界、在旋转数组里查找？》</a>。</p>
 </blockquote>
 <p><strong>观看进度的百分比怎么算？</strong></p>
 <blockquote>

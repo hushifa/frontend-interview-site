@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="数据结构与算法面试题：先把第一个字符串当作候选前缀，和后面的字符串逐个比，对方不以它开头就把候选前缀去掉最后一个字符，直到满足或变成空串。" />
+    <title>怎样求字符串数组的最长公共前缀？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/ds-longest-common-prefix/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="怎样求字符串数组的最长公共前缀？ · 前端知库" />
+    <meta property="og:description" content="数据结构与算法面试题：先把第一个字符串当作候选前缀，和后面的字符串逐个比，对方不以它开头就把候选前缀去掉最后一个字符，直到满足或变成空串。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/ds-longest-common-prefix/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ds-longest-common-prefix/#webpage","url":"https://fe.hushifa.top/questions/ds-longest-common-prefix/","name":"怎样求字符串数组的最长公共前缀？ · 前端知库","description":"数据结构与算法面试题：先把第一个字符串当作候选前缀，和后面的字符串逐个比，对方不以它开头就把候选前缀去掉最后一个字符，直到满足或变成空串。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ds-longest-common-prefix/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ds-longest-common-prefix/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"数据结构与算法面试题","item":"https://fe.hushifa.top/topics/data-structures/"},{"@type":"ListItem","position":3,"name":"怎样求字符串数组的最长公共前缀？","item":"https://fe.hushifa.top/questions/ds-longest-common-prefix/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BHh83_rl.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/data-structures/">数据结构与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样求字符串数组的最长公共前缀？</span></nav><h1 tabindex="-1">怎样求字符串数组的最长公共前缀？</h1><p class="reading-summary">先把第一个字符串当作候选前缀，和后面的字符串逐个比，对方不以它开头就把候选前缀去掉最后一个字符，直到满足或变成空串。也可以按列比较，从第 0 个字符开始检查所有字符串，遇到不相同或某个字符串到头就停。两种做法时间都是 O(S)，S 是所有字符数之和。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>给一组字符串，比如 <code>[&quot;flower&quot;, &quot;flow&quot;, &quot;flight&quot;]</code>，找出它们开头共同的那一段，这里是 <code>&quot;fl&quot;</code>；没有共同开头，比如 <code>[&quot;dog&quot;, &quot;racecar&quot;, &quot;car&quot;]</code>，就返回空字符串。</p>
+<p>最直接的做法是逐个缩短。先假设第一个字符串整个都是公共前缀，然后拿它和第二个、第三个字符串比：对方不以它开头，就把它最后一个字符去掉，再比，直到对方以它开头为止。所有字符串比完，剩下的就是答案。</p>
+<p>另一种是按列比较。从第 0 个字符开始，检查每个字符串在这个位置上的字符是否和第一个字符串相同，全都相同就看下一列，一旦有不同或者某个字符串已经到头，前面的部分就是答案。按列比较的好处是只要遇到最短的那个字符串，就能提前停下。</p>
+<p>要注意空字符串和只有一个字符串的边界。数组里有空字符串时答案一定是空串；只有一个字符串时答案就是它自己。题目保证数组至少有一个元素，所以直接读 <code>strs[0]</code> 不会出错。</p>
+</blockquote>
+<h2>两种写法</h2>
+<p><code>longestCommonPrefix</code> 是逐个缩短的写法，<code>longestCommonPrefixByColumn</code> 是按列比较的写法。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">longestCommonPrefix</span>(<span class="hljs-params">strs</span>) {
+  <span class="hljs-keyword">let</span> prefix = strs[<span class="hljs-number">0</span>];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">1</span>; i &lt; strs.<span class="hljs-property">length</span>; i += <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">while</span> (!strs[i].<span class="hljs-title function_">startsWith</span>(prefix)) {
+      prefix = prefix.<span class="hljs-title function_">slice</span>(<span class="hljs-number">0</span>, -<span class="hljs-number">1</span>);
+    }
+    <span class="hljs-keyword">if</span> (prefix === <span class="hljs-string">&#x27;&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;&#x27;</span>;
+  }
+  <span class="hljs-keyword">return</span> prefix;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">longestCommonPrefixByColumn</span>(<span class="hljs-params">strs</span>) {
+  <span class="hljs-keyword">const</span> first = strs[<span class="hljs-number">0</span>];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; first.<span class="hljs-property">length</span>; i += <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> j = <span class="hljs-number">1</span>; j &lt; strs.<span class="hljs-property">length</span>; j += <span class="hljs-number">1</span>) {
+      <span class="hljs-keyword">if</span> (i === strs[j].<span class="hljs-property">length</span> || strs[j][i] !== first[i]) {
+        <span class="hljs-keyword">return</span> first.<span class="hljs-title function_">slice</span>(<span class="hljs-number">0</span>, i);
+      }
+    }
+  }
+  <span class="hljs-keyword">return</span> first;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">longestCommonPrefix</span>([<span class="hljs-string">&#x27;flower&#x27;</span>, <span class="hljs-string">&#x27;flow&#x27;</span>, <span class="hljs-string">&#x27;flight&#x27;</span>])); <span class="hljs-comment">// fl</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(<span class="hljs-title function_">longestCommonPrefix</span>([<span class="hljs-string">&#x27;dog&#x27;</span>, <span class="hljs-string">&#x27;racecar&#x27;</span>, <span class="hljs-string">&#x27;car&#x27;</span>]))); <span class="hljs-comment">// &quot;&quot;</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">longestCommonPrefixByColumn</span>([<span class="hljs-string">&#x27;flower&#x27;</span>, <span class="hljs-string">&#x27;flow&#x27;</span>, <span class="hljs-string">&#x27;flight&#x27;</span>])); <span class="hljs-comment">// fl</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">longestCommonPrefixByColumn</span>([<span class="hljs-string">&#x27;ab&#x27;</span>, <span class="hljs-string">&#x27;a&#x27;</span>])); <span class="hljs-comment">// a</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(<span class="hljs-title function_">longestCommonPrefixByColumn</span>([<span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>]))); <span class="hljs-comment">// &quot;&quot;</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">longestCommonPrefixByColumn</span>([<span class="hljs-string">&#x27;alone&#x27;</span>])); <span class="hljs-comment">// alone</span>
+</code></pre></div>
+<p>先看逐个缩短。<code>prefix</code> 一开始是 <code>&quot;flower&quot;</code>，和 <code>&quot;flow&quot;</code> 比时，<code>&quot;flow&quot;</code> 不以 <code>&quot;flower&quot;</code> 开头，于是去掉一个字符变成 <code>&quot;flowe&quot;</code>，还不行，再去掉一个变成 <code>&quot;flow&quot;</code>，满足了。再和 <code>&quot;flight&quot;</code> 比，一路缩到 <code>&quot;fl&quot;</code> 才满足。比完所有字符串，答案就是 <code>&quot;fl&quot;</code>。</p>
+<p><code>while</code> 循环会不会停不下来？不会。空字符串是任何字符串的前缀，<code>&quot;任意&quot;.startsWith(&#x27;&#x27;)</code> 一定是 <code>true</code>，所以 <code>prefix</code> 最多缩到空串就会停。循环后面判断 <code>prefix === &#x27;&#x27;</code> 是为了提前结束，后面的字符串不用再比了。</p>
+<p>再看按列比较。外层循环走第一个字符串的每个位置 <code>i</code>，内层检查其他字符串的第 <code>i</code> 个字符。<code>i === strs[j].length</code> 表示这个字符串已经到头，比如 <code>[&#x27;ab&#x27;, &#x27;a&#x27;]</code> 在 <code>i = 1</code> 时，<code>&quot;a&quot;</code> 已经没有第 1 个字符，就返回 <code>&quot;a&quot;</code>。第一个字符串走完都没有返回，说明它整个都是公共前缀，比如只有一个元素 <code>[&#x27;alone&#x27;]</code> 时，内层循环一次都不执行，直接返回 <code>&quot;alone&quot;</code>。</p>
+<h2>复杂度怎么算</h2>
+<p>设 S 是所有字符串的字符数之和。按列比较时，每个字符最多被比较一次，所以时间是 O(S)，最好情况下第一列就不同，马上返回。逐个缩短的写法里，<code>startsWith</code> 和 <code>slice</code> 每次都要扫描和复制字符串，最坏情况下，比如所有字符串都相同，总比较量也是 O(S) 的量级，但缩短过程会多做一些重复比较。两种写法都只用常数个额外变量，除了返回的字符串之外，额外空间是 O(1)。</p>
+<p>还有一种办法是先把数组按字典序排序，然后只比较第一个和最后一个字符串的公共前缀，因为排序后差异最大的两个就在两端。但排序本身要 O(n log n) 次字符串比较，比上面两种都慢，面试里说思路就够了。</p>
+<p>前缀查询如果要反复进行，比如搜索框的输入提示，就不适合每次都这样扫一遍，可以用前缀树，见<a href="/questions/alg-trie-prefix/">《搜索建议什么时候适合用 Trie？前缀树怎样处理重复词和 Unicode？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>为什么按列比较时要判断字符串是否到头？</strong></p>
+<blockquote>
+<p>因为第一个字符串不一定是最短的。如果不判断，<code>strs[j][i]</code> 越界时会得到 <code>undefined</code>，和 <code>first[i]</code> 不相等，碰巧也会返回正确结果，但这是依赖越界的行为，写出 <code>i === strs[j].length</code> 意图更清楚。</p>
+</blockquote>
+<p><strong>能用二分查找做吗？</strong></p>
+<blockquote>
+<p>能。公共前缀的长度在 0 到最短字符串长度之间，可以二分这个长度，每次检查所有字符串在这个长度上的前缀是否相同。时间是 O(S · log m)，m 是最短字符串的长度，比按列比较还多了一个 log，所以一般不用。</p>
+</blockquote>
+<p><strong>题目里的字符串都是小写字母，有什么影响？</strong></p>
+<blockquote>
+<p>题目约束非空字符串只包含小写英文字母，所以按下标逐个比较字符是安全的。如果输入里有 emoji 这类由两个 UTF-16 码元组成的字符，按下标截出来的前缀可能把一个字符切成两半，相关原因见<a href="/questions/intl-unicode/">《为什么字符串 length 不一定等于用户看到的字符数？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://leetcode.com/problems/longest-common-prefix/" target="_blank" rel="noreferrer">LeetCode 14 · Longest Common Prefix<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E6%B1%82%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%89%8D%E7%BC%80%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E6%B1%82%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%89%8D%E7%BC%80%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ads-longest-common-prefix%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fds-longest-common-prefix%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样求字符串数组的最长公共前缀？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ds-stack-problems/">有效括号、最小栈这类栈题怎样做？</a></li><li><a href="/questions/ds-lcs-edit-distance/">最长公共子序列和编辑距离怎样用动态规划求？</a></li><li><a href="/questions/ds-decode-string/">字符串解码 3[a2[c]] 怎样用栈做？</a></li><li><a href="/questions/ds-palindrome/">回文字符串和最长回文子串怎样判断？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

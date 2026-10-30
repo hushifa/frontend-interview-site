@@ -29,7 +29,7 @@ var e={answerHtml:`<h2>简答</h2>
 </code></pre></div>
 <p>拿第一组数据走一遍。<code>10</code> 进来，<code>tails</code> 是 <code>[10]</code>；<code>9</code> 比 10 小，替换，变成 <code>[9]</code>；<code>2</code> 替换，变成 <code>[2]</code>；<code>5</code> 追加，<code>[2, 5]</code>；<code>3</code> 替换 5，<code>[2, 3]</code>；<code>7</code> 追加，<code>[2, 3, 7]</code>；<code>101</code> 追加，<code>[2, 3, 7, 101]</code>；<code>18</code> 替换 101，<code>[2, 3, 7, 18]</code>。长度是 4。</p>
 <p>为什么把 5 换成 3 不会出错？<code>tails[1]</code> 的意思是“长度为 2 的递增子序列，最小的结尾”。<code>2, 5</code> 和 <code>2, 3</code> 都是长度 2，但结尾 3 更小，后面来个 4 也能接上，所以留 3 更好。替换只是更新了“某个长度的最小结尾”，不会让已有的长度变短。</p>
-<p><code>[7, 7, 7, 7]</code> 为什么是 1？题目要求严格递增，相等的数不能接在一起。二分找的是第一个 <code>&gt;= num</code> 的位置，第二个 7 会替换掉第一个 7，而不是追加。如果题目允许相等，要改成找第一个 <code>&gt; num</code> 的位置，也就是<a href="/questions/alg-lower-bound/">《二分查找怎样定位时间轴边界？为什么重复值和空数组容易写错？》</a>里 <code>lowerBound</code> 和 <code>upperBound</code> 的区别。</p>
+<p><code>[7, 7, 7, 7]</code> 为什么是 1？题目要求严格递增，相等的数不能接在一起。二分找的是第一个 <code>&gt;= num</code> 的位置，第二个 7 会替换掉第一个 7，而不是追加。如果题目允许相等，要改成找第一个 <code>&gt; num</code> 的位置，两种边界的写法见<a href="/questions/ds-binary-search-variants/">《二分查找有哪些常见变体？怎样找边界、在旋转数组里查找？》</a>。</p>
 <h2>还原出具体的子序列</h2>
 <p><code>tails</code> 存的是值，不能直接当答案。还原时改成存下标，同时用 <code>prev[i]</code> 记录第 <code>i</code> 个数接在哪个下标后面。</p>
 <div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">getSequenceIndexes</span>(<span class="hljs-params">nums</span>) {
