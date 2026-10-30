@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="状态与路由面试题：MobX 让状态成为可观察的可变对象，组件和 computed 在执行时读到哪些属性就自动订阅哪些，改了属性就只更新用到它的地方…" />
+    <title>MobX 和 Redux 的思路有什么不同？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/state-mobx-vs-redux/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="MobX 和 Redux 的思路有什么不同？ · 前端知库" />
+    <meta property="og:description" content="状态与路由面试题：MobX 让状态成为可观察的可变对象，组件和 computed 在执行时读到哪些属性就自动订阅哪些，改了属性就只更新用到它的地方…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/state-mobx-vs-redux/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/state-mobx-vs-redux/#webpage","url":"https://fe.hushifa.top/questions/state-mobx-vs-redux/","name":"MobX 和 Redux 的思路有什么不同？ · 前端知库","description":"状态与路由面试题：MobX 让状态成为可观察的可变对象，组件和 computed 在执行时读到哪些属性就自动订阅哪些，改了属性就只更新用到它的地方…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/state-mobx-vs-redux/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/state-mobx-vs-redux/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"状态与路由面试题","item":"https://fe.hushifa.top/topics/state-routing/"},{"@type":"ListItem","position":3,"name":"MobX 和 Redux 的思路有什么不同？","item":"https://fe.hushifa.top/questions/state-mobx-vs-redux/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-D7Fxr-3x.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/state-routing/">状态与路由面试题</a><span aria-hidden="true">/</span><span aria-current="page">MobX 和 Redux 的思路有什么不同？</span></nav><h1 tabindex="-1">MobX 和 Redux 的思路有什么不同？</h1><p class="reading-summary">MobX 让状态成为可观察的可变对象，组件和 computed 在执行时读到哪些属性就自动订阅哪些，改了属性就只更新用到它的地方；Redux 把状态放在一个不可变的 store 里，只能 dispatch 一个描述“发生了什么”的 action，由纯 reducer 算出新状态，组件靠 useSelector 比较选出的值决定是否更新。MobX 写起来直接、代码少，Redux 更显式，变化可记录、可回放，适合要求严格追踪的团队。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>同样是把一个待办事项标记为完成，MobX 里直接写 <code>todo.finished = true</code>，读过这个 <code>finished</code> 的组件自动更新；Redux 里要 <code>dispatch({ type: &#x27;todos/toggled&#x27;, payload: id })</code>，reducer 根据旧状态返回一个新的待办列表，组件通过 <code>useSelector</code> 发现选出的值变了才重新渲染。</p>
+<p>根本区别在于怎样知道“谁需要更新”。MobX 是响应式的：状态被标记为 observable，组件、computed 执行时读到了哪些属性，MobX 就记下它们的依赖，属性改了只通知这些地方，和 Vue 的思路一样。Redux 不追踪读取：状态是不可变的，每次 action 产生一个新的状态对象，订阅者自己比较新旧值的引用，判断有没有变。</p>
+<p>这带来不同的取舍。MobX 代码少，可以用类和普通对象建模，更新粒度天然很细；但变化是隐式发生的，哪里改了状态要靠 action 约定和工具去查。Redux 更啰嗦，但每次变化都是一个普通对象，可以记录、序列化、回放，DevTools 能做时间旅行调试，逻辑也容易单独测试。</p>
+<p>要注意，MobX 只追踪在被追踪函数同步执行时读到的属性，<code>await</code> 之后或 <code>setTimeout</code> 里读的不算；修改状态的代码最好标成 action。Redux 则要保证 reducer 纯净、不原地修改，现在一般用 Redux Toolkit，它内置的 Immer 允许把不可变更新写成“直接修改”的样子。</p>
+</blockquote>
+<h2>同一个功能两种写法</h2>
+<p>先看 MobX，注意状态是类里的普通属性，修改方法直接改它：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { makeAutoObservable } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;mobx&#x27;</span>;
+<span class="hljs-keyword">import</span> { observer } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;mobx-react-lite&#x27;</span>;
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">TodoStore</span> {
+  todos = [];
+
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-title function_">makeAutoObservable</span>(<span class="hljs-variable language_">this</span>);
+  }
+
+  <span class="hljs-keyword">get</span> <span class="hljs-title function_">unfinishedCount</span>() {
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">todos</span>.<span class="hljs-title function_">filter</span>(<span class="hljs-function">(<span class="hljs-params">todo</span>) =&gt;</span> !todo.<span class="hljs-property">finished</span>).<span class="hljs-property">length</span>;
+  }
+
+  <span class="hljs-title function_">toggle</span>(<span class="hljs-params">id</span>) {
+    <span class="hljs-keyword">const</span> todo = <span class="hljs-variable language_">this</span>.<span class="hljs-property">todos</span>.<span class="hljs-title function_">find</span>(<span class="hljs-function">(<span class="hljs-params">t</span>) =&gt;</span> t.<span class="hljs-property">id</span> === id);
+    todo.<span class="hljs-property">finished</span> = !todo.<span class="hljs-property">finished</span>;
+  }
+}
+
+<span class="hljs-keyword">const</span> store = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TodoStore</span>();
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">Counter</span> = <span class="hljs-title function_">observer</span>(<span class="hljs-function">() =&gt;</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>未完成：{store.unfinishedCount}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span></span>);
+</code></pre></div>
+<p>再看 Redux Toolkit，状态的修改写在 slice 的 reducer 里，组件通过 <code>dispatch</code> 和 <code>useSelector</code> 交互：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">import</span> { createSlice } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@reduxjs/toolkit&#x27;</span>;
+<span class="hljs-keyword">import</span> { useDispatch, useSelector } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-redux&#x27;</span>;
+
+<span class="hljs-keyword">const</span> todosSlice = <span class="hljs-title function_">createSlice</span>({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;todos&#x27;</span>,
+  <span class="hljs-attr">initialState</span>: [],
+  <span class="hljs-attr">reducers</span>: {
+    <span class="hljs-title function_">toggled</span>(<span class="hljs-params">state, action</span>) {
+      <span class="hljs-keyword">const</span> todo = state.<span class="hljs-title function_">find</span>(<span class="hljs-function">(<span class="hljs-params">t</span>) =&gt;</span> t.<span class="hljs-property">id</span> === action.<span class="hljs-property">payload</span>);
+      todo.<span class="hljs-property">finished</span> = !todo.<span class="hljs-property">finished</span>;
+    },
+  },
+});
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Counter</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> count = <span class="hljs-title function_">useSelector</span>(<span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">todos</span>.<span class="hljs-title function_">filter</span>(<span class="hljs-function">(<span class="hljs-params">t</span>) =&gt;</span> !t.<span class="hljs-property">finished</span>).<span class="hljs-property">length</span>);
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">span</span>&gt;</span>未完成：{count}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span></span>;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">ToggleButton</span>(<span class="hljs-params">{ id }</span>) {
+  <span class="hljs-keyword">const</span> dispatch = <span class="hljs-title function_">useDispatch</span>();
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{()</span> =&gt;</span> dispatch(todosSlice.actions.toggled(id))}&gt;切换<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span>;
+}
+</code></pre></div>
+<p>两段代码都写了 <code>todo.finished = !todo.finished</code>，看起来一样，区别在哪？MobX 里这行代码真的修改了那个对象，MobX 拦截到写入，通知读过它的 <code>unfinishedCount</code> 和 <code>Counter</code>。Redux Toolkit 里的 <code>state</code> 是 Immer 给的草稿，这次“修改”最后会生成一个新的状态树，原来的状态对象没有被改动。</p>
+<h2>MobX 怎么知道组件用了什么</h2>
+<p>MobX 文档把概念分为三类：状态（state）、修改状态的动作（action）和从状态派生出的东西（derivation）。派生又分两种，computed 是用纯函数从状态算出的值，reaction 是状态变化时自动执行的副作用，最常见的 reaction 就是界面组件。</p>
+<p>文档对追踪规则的原话是：MobX 会对被追踪函数执行期间读到的任何 observable 属性做出反应。被追踪函数包括 <code>computed</code> 的表达式、<code>observer</code> 组件的渲染、<code>autorun</code> 等的第一个参数。“执行期间”指同步执行的那段时间，<code>setTimeout</code>、<code>promise.then</code>、<code>await</code> 之后的代码都不算。</p>
+<p>所以上面的 <code>Counter</code> 用 <code>observer</code> 包住后，渲染时读了 <code>store.unfinishedCount</code>，这个 computed 又读了 <code>todos</code> 和每个 <code>finished</code>，于是这些都成了依赖。某个 <code>finished</code> 改了，<code>unfinishedCount</code> 重算，结果变了才通知 <code>Counter</code>。文档还特别说明，组件能访问到但实际没读的 observable，改了也不会让它重新渲染。</p>
+<p>为什么修改要标成 action？action 会在事务里执行，最外层的 action 结束之前不会运行 reaction，所以中间状态不会被界面看到。MobX 的 <code>enforceActions</code> 配置默认是 <code>&quot;observed&quot;</code>，被观察的状态必须在 action 里修改，否则会警告。异步流程里，每一步修改状态的代码也要用 <code>runInAction</code> 或 <code>flow</code> 包起来，因为 <code>await</code> 之后已经不在原来的 action 里了。</p>
+<h2>Redux 怎么知道组件用了什么</h2>
+<p>Redux 文档把它概括为三条原则：整个应用的状态存在一个 store 的对象树里；状态是只读的，唯一的改法是 dispatch 一个描述发生了什么的 action；修改由纯函数 reducer 完成。</p>
+<p>Redux 本身不知道组件读了什么。每次 dispatch 后，React Redux 让每个 <code>useSelector</code> 重新执行选择函数，用 <code>===</code> 比较这次和上次的结果，不同才让组件重新渲染。所以上面的 <code>Counter</code> 只有在未完成数量真的变了时才更新。也因此，选择函数每次都返回新数组或新对象，会导致组件每次都重新渲染，这时要用 <code>createSelector</code> 缓存派生结果，详见<a href="/questions/state-redux/">《Redux 的单向数据流为什么强调 reducer 的纯粹性？》</a>。</p>
+<p>这种显式的方式让每次变化都可追溯。action 是普通对象，可以打日志、序列化、存下来回放；Redux DevTools 能显示状态的变化历史，做时间旅行调试。</p>
+<h2>两者放在一起比</h2>
+<table><thead><tr><th>方面</th><th>MobX</th><th>Redux（Redux Toolkit）</th></tr></thead><tbody><tr><td>状态形态</td><td>可变的 observable 对象、类</td><td>不可变的单一状态树</td></tr><tr><td>修改方式</td><td>在 action 里直接赋值</td><td>dispatch action，由 reducer 返回新状态</td></tr><tr><td>更新粒度</td><td>自动追踪读到的属性</td><td><code>useSelector</code> 比较选出的值</td></tr><tr><td>派生数据</td><td><code>computed</code>，自动缓存</td><td><code>createSelector</code> 手动声明输入</td></tr><tr><td>调试</td><td>依赖关系可用 <code>getDependencyTree</code> 等工具查看</td><td>DevTools 记录每个 action，可时间旅行</td></tr><tr><td>代码量</td><td>少</td><td>较多，Toolkit 已大幅简化</td></tr></tbody></table>
+<h2>怎样选</h2>
+<p>团队熟悉面向对象建模、领域模型复杂、对象之间互相引用多，或者希望少写样板代码，MobX 更顺手。团队规模大、需要严格约定所有修改的入口、重视可回放和可测试，或者已经在用 RTK Query 管理服务端数据，Redux Toolkit 更合适。</p>
+<p>不管选哪个，服务端数据的请求和缓存都可以交给专门的查询库，状态库只管客户端状态。</p>
+<h2>常见追问</h2>
+<p><strong>MobX 和 Vue 的响应式是一回事吗？</strong></p>
+<blockquote>
+<p>思路相同。Vue 文档在讲 signals 时提到，Vue 的 Options API 和 MobX 都基于同样的原理，只是把响应式原语藏在了对象属性后面。都是读的时候收集依赖，写的时候通知更新，computed 也都有缓存。</p>
+</blockquote>
+<p><strong>MobX 里为什么在 await 之后改状态会有警告？</strong></p>
+<blockquote>
+<p>因为 action 只包住了同步执行的那一段。<code>await</code> 之后的代码在新的微任务里运行，已经不在 action 里了，而默认配置要求被观察的状态必须在 action 里修改。把 <code>await</code> 之后的修改包进 <code>runInAction</code>，或者把整个函数写成 <code>flow</code> 生成器即可。</p>
+</blockquote>
+<p><strong>Redux Toolkit 用了 Immer，是不是就和 MobX 一样了？</strong></p>
+<blockquote>
+<p>不一样。Immer 只是让 reducer 里的写法看起来像直接修改，最终产出的仍是新的不可变状态，更新仍然要经过 dispatch 和 reducer，组件仍靠 <code>useSelector</code> 比较引用。MobX 是真的修改原对象，靠追踪读写来通知更新。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://mobx.js.org/the-gist-of-mobx.html" target="_blank" rel="noreferrer">MobX · The gist of MobX<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://mobx.js.org/understanding-reactivity.html" target="_blank" rel="noreferrer">MobX · Understanding reactivity<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://mobx.js.org/actions.html" target="_blank" rel="noreferrer">MobX · Updating state using actions<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://mobx.js.org/react-integration.html" target="_blank" rel="noreferrer">MobX · React integration<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://mobx.js.org/configuration.html" target="_blank" rel="noreferrer">MobX · Configuration（enforceActions）<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://redux.js.org/understanding/thinking-in-redux/three-principles" target="_blank" rel="noreferrer">Redux · Three Principles<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://redux.js.org/tutorials/essentials/part-1-overview-concepts" target="_blank" rel="noreferrer">Redux · Essentials Part 1<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://react-redux.js.org/api/hooks" target="_blank" rel="noreferrer">React Redux · Hooks（useSelector）<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+MobX+%E5%92%8C+Redux+%E7%9A%84%E6%80%9D%E8%B7%AF%E6%9C%89%E4%BB%80%E4%B9%88%E4%B8%8D%E5%90%8C%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AMobX+%E5%92%8C+Redux+%E7%9A%84%E6%80%9D%E8%B7%AF%E6%9C%89%E4%BB%80%E4%B9%88%E4%B8%8D%E5%90%8C%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Astate-mobx-vs-redux%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%8A%B6%E6%80%81%E4%B8%8E%E8%B7%AF%E7%94%B1%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fstate-mobx-vs-redux%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：MobX 和 Redux 的思路有什么不同？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/state-redux/">Redux 的单向数据流为什么强调 reducer 的纯粹性？</a></li><li><a href="/questions/state-vuex/">Vuex 的 state、getter、mutation、action 和 module 分别做什么？</a></li><li><a href="/questions/state-pinia/">Pinia 中 state、getter 和 action 应如何分工？</a></li><li><a href="/questions/state-store-choice/">Zustand、Jotai 和 Redux Toolkit 应该怎样选择？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

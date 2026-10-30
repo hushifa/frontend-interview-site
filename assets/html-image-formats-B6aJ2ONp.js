@@ -1,0 +1,42 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>一个商品详情页有商品照片、一张带文字的活动截图、页头的 logo 和一排小图标。照片用 AVIF 或 WebP，用 <code>&lt;picture&gt;</code> 给不支持的浏览器准备 JPEG；截图用无损的 WebP 或 PNG；logo 和图标用 SVG。</p>
+<p>选格式主要看三件事：图片是矢量还是位图，能不能接受有损压缩，需不需要透明或动画。能用形状描述、需要在任意尺寸下清晰的图，用 SVG。位图里，照片这种颜色连续变化的图能接受有损压缩，丢掉的细节不容易看出来；截图、图表、线条图边缘锐利，有损压缩会在文字周围产生模糊和色边，要用无损。</p>
+<p>位图优先选 WebP 或 AVIF，它们同时支持有损、无损、透明和动画，压缩率一般比 JPEG、PNG、GIF 好。MDN 给的数据是有损 WebP 平均比同等观感的 JPEG 小 25% 到 35%，AVIF 通常比 WebP 压得更小。</p>
+<p>要注意兜底。<code>&lt;img&gt;</code> 本身不能按格式回退，要用 <code>&lt;picture&gt;</code> 按顺序列出 AVIF、WebP，最后的 <code>&lt;img&gt;</code> 放 JPEG 或 PNG。透明图的兜底只能用 PNG，因为 JPEG 没有透明通道。</p>
+</blockquote>
+<h2>先分清矢量和位图</h2>
+<p>位图记录的是每个像素的颜色，放大以后像素会变大、变模糊。SVG 是基于 XML 的矢量格式，记录的是“在哪里画一条线、填什么颜色”这样的绘制指令，浏览器按显示尺寸重新绘制，所以多大都清晰。MDN 的说法是 SVG 适合图表、图标以及其他需要在任意尺寸下精确绘制的图，并建议图标只要有矢量版本就优先用 SVG。</p>
+<p>SVG 本身是文本，可以用 gzip 等 HTTP 压缩传输。可是照片无法用简单的形状描述，所以照片仍然用位图格式。</p>
+<h2>有损和无损怎样选</h2>
+<p>有损压缩会丢掉一部分图像数据来换取小得多的文件，无损压缩能完整还原原图。MDN 的建议是：截图、图表、logo、线条图优先用无损，因为文字和锐利边缘周围的模糊和色边很显眼；照片和其他颜色连续变化的图通常能接受有损，丢掉的细节不容易察觉。</p>
+<p>WebP 和 AVIF 的有损和无损是编码时选的参数，同一种格式两种都能用。JPEG 只有有损，所以适合作为照片的兜底；PNG 是无损的，适合作为截图和线条图的兜底，也是需要透明时的兜底，因为 JPEG 没有 alpha 通道。</p>
+<h2>各格式的特点</h2>
+<p>JPEG 是目前用得最多的有损静态图格式，适合照片，用在图表这类需要清晰边缘的图上效果不好。</p>
+<p>PNG 是无损格式，支持完整的 alpha 透明，颜色深度比 GIF 高。需要精确还原原图或者需要透明时，选 PNG 而不是 JPEG。</p>
+<p>GIF 只能表示 256 色，透明只能是某个颜色完全透明。MDN 建议静态图用 PNG 代替 GIF，动画考虑 WebP、AVIF 或 APNG，GIF 在动画上的性能更差。</p>
+<p>WebP 支持有损、无损、透明和动画。MDN 给出的数据是有损 WebP 平均比同等观感的 JPEG 小 25% 到 35%，无损 WebP 一般比同一张 PNG 小 26%。</p>
+<p>AVIF 同样支持有损、无损、透明和动画，压缩率一般比 WebP 更好；MDN 引用的对比中，同一组 JPEG 转换后 AVIF 的中位压缩幅度约 50%，WebP 约 30%。代价是浏览器支持的历史较短，MDN 提醒不支持渐进式渲染，并建议用 <code>&lt;picture&gt;</code> 提供 WebP、JPEG 或 PNG 兜底。</p>
+<h2>用 picture 提供兜底</h2>
+<p>下面这段代码给同一张照片准备了三种格式，浏览器从上往下找第一个自己支持的 <code>type</code>：</p>
+<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">picture</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">source</span> <span class="hljs-attr">srcset</span>=<span class="hljs-string">&quot;/photo.avif&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;image/avif&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">source</span> <span class="hljs-attr">srcset</span>=<span class="hljs-string">&quot;/photo.webp&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;image/webp&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;/photo.jpg&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;800&quot;</span> <span class="hljs-attr">height</span>=<span class="hljs-string">&quot;600&quot;</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;白色运动鞋侧面照&quot;</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">picture</span>&gt;</span>
+</code></pre></div>
+<p>支持 AVIF 的浏览器用第一个，只支持 WebP 的用第二个，两者都不支持的就用 <code>&lt;img&gt;</code> 里的 JPEG。为什么 <code>alt</code>、<code>width</code>、<code>height</code> 写在 <code>&lt;img&gt;</code> 上？因为真正显示图片的始终是 <code>&lt;img&gt;</code>，<code>&lt;source&gt;</code> 只是给它换候选地址。MDN 也提到，一般准备 2 到 3 个 <code>&lt;source&gt;</code> 就够了。</p>
+<p>同一张图要按屏幕宽度提供不同尺寸时，再给每个 <code>&lt;source&gt;</code> 写 <code>srcset</code> 和 <code>sizes</code>，见<a href="/questions/html-responsive-images/">《srcset、sizes 和 picture 怎样减少图片浪费？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>都用 AVIF 是不是就好了？</strong></p>
+<blockquote>
+<p>不一定。AVIF 压缩率高，但 MDN 说明它的浏览器支持不如 WebP 广，也不支持渐进式渲染，所以总要准备 WebP、JPEG 或 PNG 兜底。图片多的站点一般在构建或上传时预先生成几种格式，页面里用 <code>&lt;picture&gt;</code> 按顺序列出。</p>
+</blockquote>
+<p><strong>照片能不能转成 SVG？</strong></p>
+<blockquote>
+<p>不适合。SVG 记录的是绘制指令，适合能用形状描述的图标和图表；照片的颜色逐像素变化，没法用简单形状描述，仍然用 AVIF、WebP 或 JPEG 这样的位图格式。</p>
+</blockquote>
+<p><strong>同一张图该准备几种尺寸？</strong></p>
+<blockquote>
+<p>格式解决的是“每个像素怎样压缩”，尺寸解决的是“要传多少像素”。即使用了 AVIF，给手机传一张 3000 像素宽的图也是浪费，所以格式和响应式尺寸要一起做。</p>
+</blockquote>`};export{e as default};

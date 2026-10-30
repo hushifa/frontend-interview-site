@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="JavaScript面试题：几个异步操作要按顺序执行时，回调一层套一层，错误处理也要每层写一遍，这就是回调地狱。" />
+    <title>回调地狱是什么？Promise 链式调用怎样解决它？then 的返回值有哪些规则？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/js-promise-chain/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="回调地狱是什么？Promise 链式调用怎样解决它？then 的返回值有哪些规则？" />
+    <meta property="og:description" content="JavaScript面试题：几个异步操作要按顺序执行时，回调一层套一层，错误处理也要每层写一遍，这就是回调地狱。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/js-promise-chain/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-promise-chain/#webpage","url":"https://fe.hushifa.top/questions/js-promise-chain/","name":"回调地狱是什么？Promise 链式调用怎样解决它？then 的返回值有哪些规则？","description":"JavaScript面试题：几个异步操作要按顺序执行时，回调一层套一层，错误处理也要每层写一遍，这就是回调地狱。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-promise-chain/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-promise-chain/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"回调地狱是什么？Promise 链式调用怎样解决它？then 的返回值有哪些规则？","item":"https://fe.hushifa.top/questions/js-promise-chain/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-D7Fxr-3x.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">回调地狱是什么？Promise 链式调用怎样解决它？then 的返回值有哪些规则？</span></nav><h1 tabindex="-1">回调地狱是什么？Promise 链式调用怎样解决它？then 的返回值有哪些规则？</h1><p class="reading-summary">几个异步操作要按顺序执行时，回调一层套一层，错误处理也要每层写一遍，这就是回调地狱。Promise 的 then 总是返回一个新的 Promise，回调返回的值、抛出的错误、返回的 Promise 决定这个新 Promise 的结果，所以多个步骤能写成一条平铺的链，错误统一交给末尾的 catch。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>比如先登录、再拿用户信息、再拿订单列表，每一步都要等上一步的结果。用回调写，就是在第一个回调里发第二个请求，在第二个回调里发第三个请求，代码一层层往右缩进，每层还要单独处理失败，这就是回调地狱，也叫“厄运金字塔”。</p>
+<p>Promise 的关键在于 <code>then</code> 会立即返回一个新的 Promise。上一步的回调里返回下一个请求的 Promise，下一个 <code>then</code> 就会等它完成再执行。这样嵌套就变成了一条从上往下的链，任何一步失败，都会跳过后面的 <code>then</code>，落到链尾的 <code>catch</code>。</p>
+<p><code>then</code> 返回的新 Promise 结果怎么定，看回调做了什么：返回普通值，新 Promise 就以这个值兑现；什么都不返回，就以 <code>undefined</code> 兑现；抛出错误，就以这个错误拒绝；返回一个 Promise 或 thenable，就跟着它的最终结果走。</p>
+<p>要注意两点。第一，在 <code>then</code> 里发起了异步操作却忘了 <code>return</code>，下一步就不会等它，拿到的是 <code>undefined</code>。第二，<code>then</code> 的参数不是函数时会被忽略，值会原样传下去，所以 <code>.then(42)</code> 不会把结果变成 42。</p>
+</blockquote>
+<h2>回调地狱长什么样</h2>
+<p>MDN 用的例子是三个异步步骤依次执行，每一步都依赖上一步的结果：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-title function_">doSomething</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params">result</span>) {
+  <span class="hljs-title function_">doSomethingElse</span>(result, <span class="hljs-keyword">function</span> (<span class="hljs-params">newResult</span>) {
+    <span class="hljs-title function_">doThirdThing</span>(newResult, <span class="hljs-keyword">function</span> (<span class="hljs-params">finalResult</span>) {
+      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Got the final result: <span class="hljs-subst">${finalResult}</span>`</span>);
+    }, failureCallback);
+  }, failureCallback);
+}, failureCallback);
+</code></pre></div>
+<p>问题不只是缩进难看。<code>failureCallback</code> 写了三遍，任何一层忘了传，那一步的错误就没人管了。回调里如果直接 <code>throw</code>，外面的 <code>try/catch</code> 也接不住，因为回调执行时外面的代码早就跑完了。</p>
+<p>换成 Promise 链以后是这样：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-title function_">doSomething</span>()
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">result</span>) =&gt;</span> <span class="hljs-title function_">doSomethingElse</span>(result))
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">newResult</span>) =&gt;</span> <span class="hljs-title function_">doThirdThing</span>(newResult))
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">finalResult</span>) =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Got the final result: <span class="hljs-subst">${finalResult}</span>`</span>))
+  .<span class="hljs-title function_">catch</span>(failureCallback);
+</code></pre></div>
+<p>步骤还是那三步，但它们是平铺的，错误处理只写一次。MDN 也说明了 <code>catch(failureCallback)</code> 就是 <code>then(null, failureCallback)</code> 的简写。</p>
+<h2>then 的返回值规则</h2>
+<p>下面这条链把几种情况都走了一遍。注意每一步打印的值是从哪里来的。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>(<span class="hljs-number">1</span>)
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value + <span class="hljs-number">1</span>)
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(value); <span class="hljs-comment">// 2</span>
+  })
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(value); <span class="hljs-comment">// undefined</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">resolve</span>(<span class="hljs-string">&#x27;等到了&#x27;</span>), <span class="hljs-number">10</span>));
+  })
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(value); <span class="hljs-comment">// 等到了</span>
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;出错了&#x27;</span>);
+  })
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;这一行不会执行&#x27;</span>);
+  })
+  .<span class="hljs-title function_">catch</span>(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(error.<span class="hljs-property">message</span>); <span class="hljs-comment">// 出错了</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;恢复&#x27;</span>;
+  })
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(value); <span class="hljs-comment">// 恢复</span>
+  });
+</code></pre></div>
+<p>第二个 <code>then</code> 打印了 2，却没有 <code>return</code>，所以第三个 <code>then</code> 收到的是 <code>undefined</code>。第三个 <code>then</code> 返回了一个 10 毫秒后才兑现的 Promise，第四个 <code>then</code> 就会等这 10 毫秒，拿到“等到了”，而不是拿到那个 Promise 对象本身。</p>
+<p>第四个 <code>then</code> 抛了错，<code>then</code> 返回的 Promise 就被拒绝，后面那个只传了成功回调的 <code>then</code> 被跳过，错误一路往下找到 <code>catch</code>。<code>catch</code> 本身也返回新的 Promise，它的回调返回了“恢复”，链就回到成功状态，最后一个 <code>then</code> 照常执行。</p>
+<p>这些规则在 MDN 的 <code>then()</code> 页面里写得很明确：回调返回值，新 Promise 以该值兑现；没有返回，以 <code>undefined</code> 兑现；抛错，以该错误拒绝；返回已兑现或已拒绝的 Promise，跟随它的值或原因；返回仍在等待的 Promise，等它落定后跟随它的结果。</p>
+<h2>参数不是函数、返回 thenable 时会怎样</h2>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>(<span class="hljs-string">&#x27;原值&#x27;</span>)
+  .<span class="hljs-title function_">then</span>(<span class="hljs-number">42</span>)
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(value)); <span class="hljs-comment">// 原值</span>
+
+<span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">reject</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;失败&#x27;</span>))
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value)
+  .<span class="hljs-title function_">catch</span>(<span class="hljs-function">(<span class="hljs-params">error</span>) =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(error.<span class="hljs-property">message</span>)); <span class="hljs-comment">// 失败</span>
+
+<span class="hljs-keyword">const</span> thenable = { <span class="hljs-title function_">then</span>(<span class="hljs-params">resolve</span>) { <span class="hljs-title function_">resolve</span>(<span class="hljs-string">&#x27;来自 thenable&#x27;</span>); } };
+<span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>()
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> thenable)
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(value)); <span class="hljs-comment">// 来自 thenable</span>
+</code></pre></div>
+<p><code>.then(42)</code> 为什么还是“原值”？MDN 说明，<code>onFulfilled</code> 不是函数时，内部会换成 <code>(x) =&gt; x</code>，把值原样传下去；<code>onRejected</code> 不是函数时，会换成 <code>(x) =&gt; { throw x; }</code>，把错误继续往下抛。第二段里只写了成功回调，拒绝原因就被这个“抛出函数”传给了后面的 <code>catch</code>。</p>
+<p>第三段返回的是一个带 <code>then</code> 方法的普通对象，也就是 thenable。Promise 会调用它的 <code>then</code> 来取值，所以下一步拿到的是“来自 thenable”。MDN 的说法是，链上的 thenable 总会被解析，<code>onFulfilled</code> 永远收不到 thenable 本身。</p>
+<p>还有一个边界：回调返回的正是 <code>then</code> 自己返回的那个 Promise，它就要等自己，永远等不完。规范规定这种情况以 <code>TypeError</code> 拒绝，在 Node.js 22.23 里运行 <code>const p = Promise.resolve().then(() =&gt; p)</code>，<code>p</code> 会被一个 <code>TypeError</code> 拒绝。</p>
+<h2>链上的回调什么时候执行</h2>
+<p><code>then</code> 的回调总是异步执行，就算 Promise 早就兑现了也一样，它会作为微任务排队，等当前同步代码跑完才执行。所以链上每一步之间都隔着至少一次微任务。具体顺序见<a href="/questions/js-event-loop/">《事件循环中，任务和微任务按什么顺序执行？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>then 和 catch 都返回新的 Promise，为什么不能把同一个 Promise 的 then 写两次当链用？</strong></p>
+<blockquote>
+<p><code>p.then(a); p.then(b);</code> 是给同一个 <code>p</code> 挂了两个回调，<code>a</code> 和 <code>b</code> 拿到的都是 <code>p</code> 的结果，互相不传值。要让 <code>b</code> 拿到 <code>a</code> 的返回值，必须写成 <code>p.then(a).then(b)</code>，在 <code>a</code> 返回的新 Promise 上继续挂。</p>
+</blockquote>
+<p><strong>catch 后面还能接 then 吗？</strong></p>
+<blockquote>
+<p>能。<code>catch</code> 也返回新的 Promise，它的回调正常返回，后面就继续走成功分支；在 <code>catch</code> 里再抛错，就交给更后面的 <code>catch</code>。可以利用这一点在中途兜底，让后续步骤继续执行。</p>
+</blockquote>
+<p><strong>有了 async/await 还需要懂 then 链吗？</strong></p>
+<blockquote>
+<p>需要。<code>await</code> 后面的值也按同样的规则解析，<code>async</code> 函数返回的也是 Promise。忘了 <code>return</code>、错误往哪里传这些问题，换成 <code>await</code> 写法依然存在，见<a href="/questions/js-async-await-errors/">《async/await 如何处理异常和并发？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises" target="_blank" rel="noreferrer">MDN · Using promises<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then" target="_blank" rel="noreferrer">MDN · Promise.prototype.then()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://tc39.es/ecma262/#sec-promise-resolve-functions" target="_blank" rel="noreferrer">ECMAScript · Promise Resolve Functions<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%9B%9E%E8%B0%83%E5%9C%B0%E7%8B%B1%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9FPromise+%E9%93%BE%E5%BC%8F%E8%B0%83%E7%94%A8%E6%80%8E%E6%A0%B7%E8%A7%A3%E5%86%B3%E5%AE%83%EF%BC%9Fthen+%E7%9A%84%E8%BF%94%E5%9B%9E%E5%80%BC%E6%9C%89%E5%93%AA%E4%BA%9B%E8%A7%84%E5%88%99%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%9B%9E%E8%B0%83%E5%9C%B0%E7%8B%B1%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9FPromise+%E9%93%BE%E5%BC%8F%E8%B0%83%E7%94%A8%E6%80%8E%E6%A0%B7%E8%A7%A3%E5%86%B3%E5%AE%83%EF%BC%9Fthen+%E7%9A%84%E8%BF%94%E5%9B%9E%E5%80%BC%E6%9C%89%E5%93%AA%E4%BA%9B%E8%A7%84%E5%88%99%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-promise-chain%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-promise-chain%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：回调地狱是什么？Promise 链式调用怎样解决它？then 的返回值有哪些规则？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-event-loop/">事件循环中，任务和微任务按什么顺序执行？</a></li><li><a href="/questions/js-promise-combinators/">Promise.all、allSettled、race 和 any 如何选择？</a></li><li><a href="/questions/js-promise-with-resolvers/">Promise.withResolvers 适合解决什么问题？怎样避免 deferred 泄漏？</a></li><li><a href="/questions/js-closure/">什么是闭包？它有哪些实际应用？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

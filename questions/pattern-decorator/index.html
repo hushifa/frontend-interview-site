@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="设计模式面试题：装饰器模式是在不修改原对象的前提下，用一个外层把它包起来，调用时先经过外层，从而叠加日志、校验、缓存等功能，接口保持不变。" />
+    <title>装饰器模式是什么？和高阶函数、高阶组件有什么关系？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/pattern-decorator/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="装饰器模式是什么？和高阶函数、高阶组件有什么关系？" />
+    <meta property="og:description" content="设计模式面试题：装饰器模式是在不修改原对象的前提下，用一个外层把它包起来，调用时先经过外层，从而叠加日志、校验、缓存等功能，接口保持不变。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/pattern-decorator/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/pattern-decorator/#webpage","url":"https://fe.hushifa.top/questions/pattern-decorator/","name":"装饰器模式是什么？和高阶函数、高阶组件有什么关系？","description":"设计模式面试题：装饰器模式是在不修改原对象的前提下，用一个外层把它包起来，调用时先经过外层，从而叠加日志、校验、缓存等功能，接口保持不变。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/pattern-decorator/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/pattern-decorator/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"设计模式面试题","item":"https://fe.hushifa.top/topics/design-patterns/"},{"@type":"ListItem","position":3,"name":"装饰器模式是什么？和高阶函数、高阶组件有什么关系？","item":"https://fe.hushifa.top/questions/pattern-decorator/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-D7Fxr-3x.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/design-patterns/">设计模式面试题</a><span aria-hidden="true">/</span><span aria-current="page">装饰器模式是什么？和高阶函数、高阶组件有什么关系？</span></nav><h1 tabindex="-1">装饰器模式是什么？和高阶函数、高阶组件有什么关系？</h1><p class="reading-summary">装饰器模式是在不修改原对象的前提下，用一个外层把它包起来，调用时先经过外层，从而叠加日志、校验、缓存等功能，接口保持不变。在 JavaScript 里最常见的写法是高阶函数，接收一个函数、返回增强后的函数；高阶组件是同样的思路用在 React 组件上。语言层面的 @ 装饰器语法还是 TC39 提案，要靠 TypeScript 或 Babel 编译。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>一个下单接口函数已经写好了，现在想在调用前后打日志、加参数校验，但不想改它本身的代码。做法是写一个函数把它包起来，调用包装后的版本时先校验、再调用原函数、最后打日志，调用方式和原来完全一样。这就是装饰器模式。</p>
+<p>它的意义在于功能可以按需叠加和拆掉。日志、校验、缓存、重试各写成一个包装函数，需要哪几个就套哪几个，原函数始终保持单一职责，也不用为每种组合写一个子类。</p>
+<p>在 JavaScript 里，函数可以当参数传、当返回值返回，所以装饰器最自然的写法就是高阶函数：接收一个函数，返回一个增强后的新函数。React 的高阶组件是同一个思路，接收一个组件，返回一个注入了数据或行为的新组件。</p>
+<p>要注意，包了几层以后执行顺序是从外到内的，顺序不同结果可能不同。<code>@</code> 开头的装饰器语法目前还是 TC39 提案，浏览器不能直接运行，要靠 TypeScript 或 Babel 编译，而且新旧两套语义不兼容。</p>
+</blockquote>
+<h2>用高阶函数实现装饰器</h2>
+<p>下面给 <code>add</code> 套上两层：一层校验参数类型，一层打印调用日志。重点看包装后的函数和原函数在调用方式和结果上的差别：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">withLog</span>(<span class="hljs-params">fn</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> (<span class="hljs-params">...args</span>) {
+    <span class="hljs-keyword">const</span> result = fn.<span class="hljs-title function_">apply</span>(<span class="hljs-variable language_">this</span>, args);
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`<span class="hljs-subst">${fn.name}</span>(<span class="hljs-subst">${args.join(<span class="hljs-string">&#x27;, &#x27;</span>)}</span>) = <span class="hljs-subst">${result}</span>`</span>);
+    <span class="hljs-keyword">return</span> result;
+  };
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">withValidate</span>(<span class="hljs-params">fn</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> (<span class="hljs-params">...args</span>) {
+    <span class="hljs-keyword">if</span> (args.<span class="hljs-title function_">some</span>(<span class="hljs-function">(<span class="hljs-params">n</span>) =&gt;</span> <span class="hljs-keyword">typeof</span> n !== <span class="hljs-string">&#x27;number&#x27;</span>)) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">TypeError</span>(<span class="hljs-string">&#x27;参数必须是数字&#x27;</span>);
+    <span class="hljs-keyword">return</span> fn.<span class="hljs-title function_">apply</span>(<span class="hljs-variable language_">this</span>, args);
+  };
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">a, b</span>) {
+  <span class="hljs-keyword">return</span> a + b;
+}
+
+<span class="hljs-keyword">const</span> safeAdd = <span class="hljs-title function_">withValidate</span>(<span class="hljs-title function_">withLog</span>(add));
+<span class="hljs-title function_">safeAdd</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>); <span class="hljs-comment">// add(1, 2) = 3</span>
+<span class="hljs-keyword">try</span> {
+  <span class="hljs-title function_">safeAdd</span>(<span class="hljs-number">1</span>, <span class="hljs-string">&#x27;2&#x27;</span>);
+} <span class="hljs-keyword">catch</span> (err) {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(err.<span class="hljs-property">message</span>); <span class="hljs-comment">// 参数必须是数字</span>
+}
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">add</span>(<span class="hljs-number">1</span>, <span class="hljs-string">&#x27;2&#x27;</span>)); <span class="hljs-comment">// 12</span>
+</code></pre></div>
+<p><code>safeAdd(1, 2)</code> 的用法和 <code>add(1, 2)</code> 一样，可多了一行日志。传入字符串时，最外层的 <code>withValidate</code> 先检查参数，直接抛错，<code>add</code> 根本没有执行，所以也没有日志。最后一行说明原来的 <code>add</code> 没有被改动，它仍然会把 <code>1 + &#x27;2&#x27;</code> 拼成字符串 <code>&#x27;12&#x27;</code>。</p>
+<p>为什么用 <code>fn.apply(this, args)</code> 而不是 <code>fn(...args)</code>？因为被装饰的可能是对象的方法，要把调用时的 <code>this</code> 原样传下去，否则方法里读 <code>this</code> 会出错。</p>
+<p>为什么日志里的函数名是 <code>add</code>？因为 <code>withLog</code> 包的是 <code>add</code> 本身。如果写成 <code>withLog(withValidate(add))</code>，<code>withLog</code> 拿到的是 <code>withValidate</code> 返回的匿名函数，<code>fn.name</code> 就成了空字符串。这也说明包装的顺序会影响结果：写在最外面的装饰器最先执行。</p>
+<h2>和代理模式有什么区别</h2>
+<p>装饰器和代理都是“包一层、接口不变”，结构几乎一样。区别在意图：装饰器给对象叠加新功能，原有的调用一般都会发生；代理侧重控制访问，可以决定调不调、什么时候调，比如缓存命中时就不调用原函数。上面的 <code>withValidate</code> 会拦住不合法的调用，更接近代理的用法。实际讨论时说清楚这一层做了什么比纠结名字更重要，代理模式见<a href="/questions/pattern-strategy-proxy/">《策略模式和代理模式分别解决什么问题？前端怎样使用？》</a>。</p>
+<h2>高阶组件就是组件的装饰器</h2>
+<p>高阶组件接收一个组件，返回一个新组件，新组件渲染原组件，同时注入额外的 props 或包一层布局：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">withOnlineStatus</span>(<span class="hljs-params">Component</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">WithOnlineStatus</span>(<span class="hljs-params">props</span>) {
+    <span class="hljs-keyword">const</span> isOnline = <span class="hljs-title function_">useOnlineStatus</span>();
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Component</span> {<span class="hljs-attr">...props</span>} <span class="hljs-attr">isOnline</span>=<span class="hljs-string">{isOnline}</span> /&gt;</span></span>;
+  };
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">StatusButton</span> = <span class="hljs-title function_">withOnlineStatus</span>(<span class="hljs-title class_">Button</span>);
+</code></pre></div>
+<p><code>Button</code> 本身不知道网络状态，被包装后多拿到一个 <code>isOnline</code>，其他 props 原样透传，这就是装饰器的思路。现在的 React 里，复用有状态的逻辑首选自定义 Hook，高阶组件要注意的问题和三种写法的比较见<a href="/questions/react-hoc-render-props/">《高阶组件、Render Props 和自定义 Hook 怎样选择？》</a>。</p>
+<h2>@ 语法装饰器是什么</h2>
+<p>很多框架里能看到 <code>@Component</code>、<code>@observable</code> 这样的写法，这是语言层面的装饰器语法，作用在类和类成员上。它目前是 TC39 的提案，浏览器和 Node 还不能直接运行，需要 TypeScript 或 Babel 编译。TypeScript 有新旧两套实现：5.0 开始支持的标准装饰器，和老的 <code>experimentalDecorators</code>，两者参数和行为不同，详见<a href="/questions/ts-decorators-modern/">《TypeScript 新装饰器与 experimentalDecorators 有何区别？》</a>。</p>
+<p>无论哪种语法，背后的思路都和高阶函数一样，都是拿到原来的东西，返回一个增强后的版本。</p>
+<h2>常见追问</h2>
+<p><strong>装饰器和继承相比有什么好处？</strong></p>
+<blockquote>
+<p>继承要为每种功能组合写一个子类，日志加校验、日志加缓存、三个都要，组合一多类就爆炸了。装饰器把每种功能写成独立的一层，运行时按需组合，原类也不用改。</p>
+</blockquote>
+<p><strong>多个装饰器叠加时怎样避免出错？</strong></p>
+<blockquote>
+<p>每一层都要保持接口不变：参数原样传下去、返回值原样返回、<code>this</code> 用 <code>apply</code> 传递。顺序有讲究的要写清楚，比如校验通常放在最外层，让不合法的调用尽早被拦住。</p>
+</blockquote>
+<p><strong>防抖、节流算装饰器吗？</strong></p>
+<blockquote>
+<p>写法上是。<code>debounce(fn, 300)</code> 接收一个函数、返回一个包装后的函数，接口不变，只是改变了调用时机。从意图上说它控制了原函数什么时候执行，也可以看作代理，这两个模式本来就很接近。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Glossary/First-class_Function" target="_blank" rel="noreferrer">MDN · First-class Function<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://github.com/tc39/proposal-decorators" target="_blank" rel="noreferrer">TC39 · Decorators proposal<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://react.dev/learn/reusing-logic-with-custom-hooks" target="_blank" rel="noreferrer">React · Reusing Logic with Custom Hooks<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E5%92%8C%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0%E3%80%81%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E5%92%8C%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0%E3%80%81%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Apattern-decorator%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fpattern-decorator%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：装饰器模式是什么？和高阶函数、高阶组件有什么关系？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/pattern-observer-pubsub/">观察者模式和发布订阅模式有什么区别？前端哪里用到了它们？</a></li><li><a href="/questions/pattern-singleton/">单例模式在前端怎样实现？ES 模块天然是单例吗？</a></li><li><a href="/questions/pattern-strategy-proxy/">策略模式和代理模式分别解决什么问题？前端怎样使用？</a></li><li><a href="/questions/pattern-factory-adapter/">工厂模式和适配器模式在前端里怎样用？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

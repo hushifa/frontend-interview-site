@@ -1,0 +1,172 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>目标是写出这样的效果：<code>effect(() =&gt; console.log(state.count))</code> 先打印一次，之后只要执行 <code>state.count = 2</code>，它就自动再打印一次。实现分三块：<code>reactive</code> 用 Proxy 包住对象，<code>effect</code> 负责运行函数并登记“当前是谁在运行”，<code>track</code> 和 <code>trigger</code> 负责记账和通知。</p>
+<p>读属性时进入 Proxy 的 <code>get</code>，调用 <code>track</code> 把当前 effect 记到这个属性名下；写属性时进入 <code>set</code>，调用 <code>trigger</code> 取出这个属性名下的 effect 逐个重新执行。依赖存成“对象 → 属性名 → effect 集合”三层结构，最外层用 WeakMap，对象没人用了可以被回收。</p>
+<p>写到能用还要补几处：读到的值是对象时再包一层代理，实现嵌套响应；同一个对象只代理一次；effect 每次执行前清掉旧依赖，条件分支切换后才不会被多余的属性触发；用栈记录嵌套的 effect；effect 里改自己读的属性时跳过自己，防止死循环。<code>computed</code> 就是一个 <code>lazy</code> 的 effect 加上调度器：依赖变了只标记为脏，读 <code>.value</code> 时才重算。</p>
+<p>要说明这是教学模型。Vue 3 的真实实现还处理了数组方法、Map/Set、ref、只读和浅层代理、调度队列，当前源码（3.5 重构后）里依赖记录用双向链表和版本号，结构比这复杂得多。</p>
+</blockquote>
+<h2>先把完整代码写出来</h2>
+<p>下面是一个教学用的完整版本，不是 Vue 源码。后面的四组用法分别验证基本触发、嵌套对象、分支切换和 computed：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> targetMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WeakMap</span>(); <span class="hljs-comment">// 原始对象 -&gt; 属性名 -&gt; 依赖它的 effect 集合</span>
+<span class="hljs-keyword">const</span> proxyMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WeakMap</span>(); <span class="hljs-comment">// 原始对象 -&gt; 代理，同一个对象只代理一次</span>
+<span class="hljs-keyword">let</span> activeEffect = <span class="hljs-literal">null</span>;
+<span class="hljs-keyword">const</span> effectStack = [];
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">track</span>(<span class="hljs-params">target, key</span>) {
+  <span class="hljs-keyword">if</span> (!activeEffect) <span class="hljs-keyword">return</span>;
+  <span class="hljs-keyword">let</span> depsMap = targetMap.<span class="hljs-title function_">get</span>(target);
+  <span class="hljs-keyword">if</span> (!depsMap) targetMap.<span class="hljs-title function_">set</span>(target, (depsMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>()));
+  <span class="hljs-keyword">let</span> dep = depsMap.<span class="hljs-title function_">get</span>(key);
+  <span class="hljs-keyword">if</span> (!dep) depsMap.<span class="hljs-title function_">set</span>(key, (dep = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>()));
+  <span class="hljs-keyword">if</span> (!dep.<span class="hljs-title function_">has</span>(activeEffect)) {
+    dep.<span class="hljs-title function_">add</span>(activeEffect);
+    activeEffect.<span class="hljs-property">deps</span>.<span class="hljs-title function_">push</span>(dep); <span class="hljs-comment">// 反向记录，方便下次执行前清理</span>
+  }
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">trigger</span>(<span class="hljs-params">target, key</span>) {
+  <span class="hljs-keyword">const</span> dep = targetMap.<span class="hljs-title function_">get</span>(target)?.<span class="hljs-title function_">get</span>(key);
+  <span class="hljs-keyword">if</span> (!dep) <span class="hljs-keyword">return</span>;
+  <span class="hljs-comment">// 先复制一份再遍历，effect 执行时会重新收集依赖，直接遍历原集合可能死循环</span>
+  [...dep].<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">effectFn</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (effectFn === activeEffect) <span class="hljs-keyword">return</span>; <span class="hljs-comment">// 避免 effect 里自增时触发自己</span>
+    <span class="hljs-keyword">if</span> (effectFn.<span class="hljs-property">scheduler</span>) effectFn.<span class="hljs-title function_">scheduler</span>();
+    <span class="hljs-keyword">else</span> <span class="hljs-title function_">effectFn</span>();
+  });
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">reactive</span>(<span class="hljs-params">target</span>) {
+  <span class="hljs-keyword">if</span> (proxyMap.<span class="hljs-title function_">has</span>(target)) <span class="hljs-keyword">return</span> proxyMap.<span class="hljs-title function_">get</span>(target);
+  <span class="hljs-keyword">const</span> proxy = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Proxy</span>(target, {
+    <span class="hljs-title function_">get</span>(<span class="hljs-params">obj, key, receiver</span>) {
+      <span class="hljs-title function_">track</span>(obj, key);
+      <span class="hljs-keyword">const</span> value = <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">get</span>(obj, key, receiver);
+      <span class="hljs-comment">// 读到对象时才继续代理，叫作懒代理</span>
+      <span class="hljs-keyword">return</span> value !== <span class="hljs-literal">null</span> &amp;&amp; <span class="hljs-keyword">typeof</span> value === <span class="hljs-string">&#x27;object&#x27;</span> ? <span class="hljs-title function_">reactive</span>(value) : value;
+    },
+    <span class="hljs-title function_">set</span>(<span class="hljs-params">obj, key, value, receiver</span>) {
+      <span class="hljs-keyword">const</span> oldValue = obj[key];
+      <span class="hljs-keyword">const</span> result = <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">set</span>(obj, key, value, receiver);
+      <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">is</span>(oldValue, value)) <span class="hljs-title function_">trigger</span>(obj, key);
+      <span class="hljs-keyword">return</span> result;
+    },
+  });
+  proxyMap.<span class="hljs-title function_">set</span>(target, proxy);
+  <span class="hljs-keyword">return</span> proxy;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">cleanup</span>(<span class="hljs-params">effectFn</span>) {
+  effectFn.<span class="hljs-property">deps</span>.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">dep</span>) =&gt;</span> dep.<span class="hljs-title function_">delete</span>(effectFn));
+  effectFn.<span class="hljs-property">deps</span>.<span class="hljs-property">length</span> = <span class="hljs-number">0</span>;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">effect</span>(<span class="hljs-params">fn, options = {}</span>) {
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">effectFn</span> = (<span class="hljs-params"></span>) =&gt; {
+    <span class="hljs-title function_">cleanup</span>(effectFn);
+    effectStack.<span class="hljs-title function_">push</span>(effectFn);
+    activeEffect = effectFn;
+    <span class="hljs-keyword">try</span> {
+      <span class="hljs-keyword">return</span> <span class="hljs-title function_">fn</span>();
+    } <span class="hljs-keyword">finally</span> {
+      effectStack.<span class="hljs-title function_">pop</span>();
+      activeEffect = effectStack[effectStack.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>] ?? <span class="hljs-literal">null</span>;
+    }
+  };
+  effectFn.<span class="hljs-property">deps</span> = [];
+  effectFn.<span class="hljs-property">scheduler</span> = options.<span class="hljs-property">scheduler</span>;
+  <span class="hljs-keyword">if</span> (!options.<span class="hljs-property">lazy</span>) <span class="hljs-title function_">effectFn</span>();
+  <span class="hljs-keyword">return</span> effectFn;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">computed</span>(<span class="hljs-params">getter</span>) {
+  <span class="hljs-keyword">let</span> value;
+  <span class="hljs-keyword">let</span> dirty = <span class="hljs-literal">true</span>;
+  <span class="hljs-keyword">const</span> obj = {};
+  <span class="hljs-keyword">const</span> runner = <span class="hljs-title function_">effect</span>(getter, {
+    <span class="hljs-attr">lazy</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-title function_">scheduler</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-keyword">if</span> (dirty) <span class="hljs-keyword">return</span>;
+      dirty = <span class="hljs-literal">true</span>;
+      <span class="hljs-title function_">trigger</span>(obj, <span class="hljs-string">&#x27;value&#x27;</span>); <span class="hljs-comment">// 通知读过这个 computed 的 effect</span>
+    },
+  });
+  <span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(obj, <span class="hljs-string">&#x27;value&#x27;</span>, {
+    <span class="hljs-title function_">get</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-keyword">if</span> (dirty) {
+        value = <span class="hljs-title function_">runner</span>();
+        dirty = <span class="hljs-literal">false</span>;
+      }
+      <span class="hljs-title function_">track</span>(obj, <span class="hljs-string">&#x27;value&#x27;</span>);
+      <span class="hljs-keyword">return</span> value;
+    },
+  });
+  <span class="hljs-keyword">return</span> obj;
+}
+
+<span class="hljs-comment">// 1. 基本的依赖收集与触发</span>
+<span class="hljs-keyword">const</span> state = <span class="hljs-title function_">reactive</span>({ <span class="hljs-attr">count</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">user</span>: { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Lin&#x27;</span> }, <span class="hljs-attr">show</span>: <span class="hljs-literal">true</span> });
+<span class="hljs-keyword">const</span> log = [];
+<span class="hljs-title function_">effect</span>(<span class="hljs-function">() =&gt;</span> log.<span class="hljs-title function_">push</span>(<span class="hljs-string">\`count=<span class="hljs-subst">\${state.count}</span>\`</span>));
+state.<span class="hljs-property">count</span> = <span class="hljs-number">2</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(log.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>)); <span class="hljs-comment">// 输出 count=1,count=2</span>
+
+<span class="hljs-comment">// 2. 嵌套对象也是响应式的</span>
+<span class="hljs-title function_">effect</span>(<span class="hljs-function">() =&gt;</span> log.<span class="hljs-title function_">push</span>(<span class="hljs-string">\`name=<span class="hljs-subst">\${state.user.name}</span>\`</span>));
+state.<span class="hljs-property">user</span>.<span class="hljs-property">name</span> = <span class="hljs-string">&#x27;Chen&#x27;</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(log.<span class="hljs-title function_">slice</span>(-<span class="hljs-number">1</span>)[<span class="hljs-number">0</span>]); <span class="hljs-comment">// 输出 name=Chen</span>
+
+<span class="hljs-comment">// 3. 分支切换后，不再读的属性不会触发</span>
+<span class="hljs-keyword">let</span> branchRuns = <span class="hljs-number">0</span>;
+<span class="hljs-title function_">effect</span>(<span class="hljs-function">() =&gt;</span> {
+  branchRuns += <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">return</span> state.<span class="hljs-property">show</span> ? state.<span class="hljs-property">user</span>.<span class="hljs-property">name</span> : <span class="hljs-string">&#x27;隐藏&#x27;</span>;
+});
+state.<span class="hljs-property">show</span> = <span class="hljs-literal">false</span>;
+state.<span class="hljs-property">user</span>.<span class="hljs-property">name</span> = <span class="hljs-string">&#x27;Wang&#x27;</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(branchRuns); <span class="hljs-comment">// 输出 2</span>
+
+<span class="hljs-comment">// 4. computed 懒计算、有缓存，并能被 effect 依赖</span>
+<span class="hljs-keyword">let</span> getterRuns = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">const</span> double = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> {
+  getterRuns += <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">return</span> state.<span class="hljs-property">count</span> * <span class="hljs-number">2</span>;
+});
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(getterRuns); <span class="hljs-comment">// 输出 0</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(double.<span class="hljs-property">value</span>, double.<span class="hljs-property">value</span>, getterRuns); <span class="hljs-comment">// 输出 4 4 1</span>
+<span class="hljs-keyword">const</span> seen = [];
+<span class="hljs-title function_">effect</span>(<span class="hljs-function">() =&gt;</span> seen.<span class="hljs-title function_">push</span>(double.<span class="hljs-property">value</span>));
+state.<span class="hljs-property">count</span> = <span class="hljs-number">5</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(seen.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>), getterRuns); <span class="hljs-comment">// 输出 4,10 2</span>
+</code></pre></div>
+<h2>effect 怎么知道函数读了哪些属性</h2>
+<p><code>effect</code> 里的函数没有声明任何依赖，<code>track</code> 却能把它记到 <code>count</code> 名下，靠的是 <code>activeEffect</code>。<code>effectFn</code> 执行 <code>fn</code> 之前，先把自己设为 <code>activeEffect</code>。<code>fn</code> 里读 <code>state.count</code> 时进入 Proxy 的 <code>get</code>，<code>track</code> 看到当前有 effect 在运行，就把它放进 <code>targetMap</code> 里 <code>state</code> 原始对象的 <code>count</code> 集合。之后 <code>state.count = 2</code> 进入 <code>set</code>，<code>trigger</code> 取出这个集合，重新执行里面的 effect，于是 <code>log</code> 里多了 <code>count=2</code>。</p>
+<p><code>set</code> 里先比较新旧值，<code>Object.is</code> 判断相同就不触发。这样重复赋同一个值不会白白执行 effect，<code>NaN</code> 赋给 <code>NaN</code> 也会被认为没变。</p>
+<h2>嵌套对象和重复代理</h2>
+<p>第二组用法改的是 <code>state.user.name</code>，为什么也能触发？<code>reactive</code> 一开始只代理了最外层。effect 读 <code>state.user</code> 时，<code>get</code> 发现拿到的是对象，就当场调用 <code>reactive(value)</code> 再包一层返回，后面读 <code>.name</code> 走的是这层代理的 <code>get</code>，所以 <code>name</code> 也被追踪了。只有真正读到的嵌套对象才会被代理，这叫懒代理，没用到的深层数据不会提前遍历。</p>
+<p>每次读 <code>state.user</code> 都调用 <code>reactive</code>，会不会每次生成一个新代理？<code>proxyMap</code> 记住了原始对象和代理的对应关系，同一个对象第二次进来直接返回已有的代理。否则 <code>state.user === state.user</code> 都会是 <code>false</code>。</p>
+<h2>为什么每次执行前要清理依赖</h2>
+<p>第三组用法里，effect 第一次执行时 <code>show</code> 是 <code>true</code>，读了 <code>show</code> 和 <code>user.name</code>。把 <code>show</code> 改成 <code>false</code> 后，effect 重跑一次，<code>branchRuns</code> 变成 2，这次只读了 <code>show</code>。接着改 <code>user.name</code>，<code>branchRuns</code> 仍然是 2，没有再触发。</p>
+<p>做到这一点靠的是 <code>cleanup</code>。<code>track</code> 登记依赖时，顺便把集合本身存进 <code>effectFn.deps</code>，这样 effect 知道自己在哪些集合里。每次执行前，先从这些集合里把自己删掉，再在执行过程中重新收集。分支切到 <code>false</code> 后不再读 <code>name</code>，<code>name</code> 的集合里也就没有它了。</p>
+<p>清理之后又要重新加入，<code>trigger</code> 如果直接遍历原来的 Set，就会出现一边删一边加、遍历永远结束不了的情况，所以先用 <code>[...dep]</code> 复制一份再遍历。</p>
+<h2>effect 嵌套和自己触发自己</h2>
+<p>组件渲染时，父组件的渲染 effect 里会执行子组件的渲染 effect，这就是 effect 嵌套。如果只有一个 <code>activeEffect</code> 变量，内层执行完把它设成 <code>null</code>，外层后面再读属性就记不上了。所以用 <code>effectStack</code> 保存，内层结束后恢复成栈顶的外层 effect。</p>
+<p>另一个问题是 <code>effect(() =&gt; { state.count++ })</code>。<code>++</code> 先读后写，读的时候把自己登记进去，写的时候 <code>trigger</code> 又要执行自己，无限递归。<code>trigger</code> 里跳过 <code>activeEffect</code> 就能避免。</p>
+<h2>computed 是怎样拼出来的</h2>
+<p><code>computed</code> 没有新机制，只是给 <code>effect</code> 加了两个选项。<code>lazy: true</code> 让 effect 创建时不执行，所以第四组用法里 <code>getterRuns</code> 一开始是 0。<code>scheduler</code> 改变了依赖变化时的行为：<code>trigger</code> 看到 effect 有调度器，就调用调度器而不是直接执行 effect，调度器只把 <code>dirty</code> 设成 <code>true</code>。</p>
+<p>读 <code>.value</code> 时，<code>dirty</code> 为 <code>true</code> 才执行 <code>runner</code> 重新计算，所以连续读两次 getter 只跑一次。computed 本身也要能被别的 effect 依赖：<code>value</code> 的 getter 里调用 <code>track(obj, &#x27;value&#x27;)</code>，调度器里调用 <code>trigger(obj, &#x27;value&#x27;)</code>，于是 <code>count</code> 改成 5 时，依赖 <code>double</code> 的 effect 被通知，重新读 <code>double.value</code>，拿到 10。缓存为什么能成立、Vue 真实实现怎样做脏检查，详见<a href="/questions/vue-computed-watch-internals/">《computed 和 watch 的实现原理是什么？computed 为什么有缓存？》</a>。</p>
+<h2>和 Vue 真实实现差在哪</h2>
+<p>这个版本缺了很多东西。没有拦截 <code>has</code>、<code>deleteProperty</code>、<code>ownKeys</code>，所以 <code>in</code>、<code>delete</code> 和 <code>for...in</code> 不会被追踪；数组的 <code>push</code> 会同时读写 <code>length</code>，需要特别处理；Map、Set 要用单独的拦截方式；还没有 <code>ref</code>、<code>readonly</code>、<code>shallowReactive</code>。</p>
+<p>调度上，这里的 effect 是同步重新执行的。Vue 的组件渲染 effect 被触发后会放进队列，同一轮里同一个组件只更新一次。依赖结构方面，当前 vuejs/core 源码（3.5 重构后）不再用简单的 Set，而是用双向链表把依赖和订阅者连起来，再配合版本号判断是否需要重算。</p>
+<h2>常见追问</h2>
+<p><strong>为什么最外层用 WeakMap，里面用 Map？</strong></p>
+<blockquote>
+<p>最外层的键是被代理的原始对象。用 WeakMap 时，对象在别处没有引用了，这条记录不会阻止它被垃圾回收。里面一层的键是属性名，可能是字符串或 Symbol，WeakMap 的键必须是对象或未注册的 Symbol，不能用字符串，所以用 Map。</p>
+</blockquote>
+<p><strong>为什么在 get 里用 Reflect.get，还要传 receiver？</strong></p>
+<blockquote>
+<p>如果属性是 getter，getter 里的 <code>this</code> 要指向代理而不是原始对象，这样 getter 里读的其他属性也能被追踪。<code>Reflect.get(obj, key, receiver)</code> 会把 <code>receiver</code>，也就是代理本身，作为 getter 的 <code>this</code>。直接写 <code>obj[key]</code> 的话，<code>this</code> 是原始对象，就漏掉了这些依赖。</p>
+</blockquote>
+<p><strong>Vue 2 能用这套写法吗？</strong></p>
+<blockquote>
+<p>Vue 2 用的是 <code>Object.defineProperty</code>，要在初始化时遍历对象，给已有属性逐个定义 getter/setter，所以新增属性、用下标改数组都检测不到，需要 <code>Vue.set</code>。Proxy 拦截的是整个对象的操作，新增属性也能捕获。依赖收集的思路两者一样，详见<a href="/questions/vue-reactivity-tracking/">《Vue 3 响应式依赖是怎样收集和触发的？》</a>。</p>
+</blockquote>`};export{e as default};

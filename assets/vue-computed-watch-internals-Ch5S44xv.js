@@ -1,0 +1,123 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>购物车里有个 <code>total = computed(() =&gt; price.value * count.value)</code>，模板里用了三次 <code>total</code>，getter 只会执行一次；<code>price</code> 改了以后，getter 也不会马上执行，要等下次有人读 <code>total.value</code> 时才重新算。这就是 computed 的缓存和懒计算。</p>
+<p>原理是 computed 内部有一个“脏”标记。它的 getter 作为一个响应式 effect 运行，读到的 <code>price</code>、<code>count</code> 会把它记为依赖。依赖变了，Vue 不重新计算，只把标记设为脏，并通知读过它的组件或 watch。下次读 <code>.value</code>，看到是脏的才重算，算完清掉标记；不脏就直接返回上次的结果。</p>
+<p>watch 也是建在 effect 上的。它把你传的数据源包成一个 getter 执行，收集依赖；依赖变了，交给调度器安排一个任务，任务里重新执行 getter，用 <code>Object.is</code> 比较新旧值，变了才调用回调，并把新值和旧值传进去。<code>deep</code> 就是在 getter 里把对象的属性都读一遍，<code>flush</code> 决定这个任务在组件更新前、更新后还是同步执行。</p>
+<p>版本上要注意，Vue 3.4 起 computed 重算后结果没变，就不会再触发下游；3.5 又重构了响应式系统，用版本号判断依赖有没有变。所以“computed 的依赖一变，读它的组件就一定重新渲染”这个说法放到 3.4 之后不准确。</p>
+</blockquote>
+<h2>computed 为什么不马上重新计算</h2>
+<p>先看一个教学用的极简实现，它不是 Vue 源码，只保留了“脏标记 + 懒计算 + 通知下游”这三件事，watch 也只做了最简单的同步版本：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">let</span> activeEffect = <span class="hljs-literal">null</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">ref</span>(<span class="hljs-params">value</span>) {
+  <span class="hljs-keyword">const</span> subs = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>();
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-keyword">get</span> <span class="hljs-title function_">value</span>() {
+      <span class="hljs-keyword">if</span> (activeEffect) subs.<span class="hljs-title function_">add</span>(activeEffect);
+      <span class="hljs-keyword">return</span> value;
+    },
+    <span class="hljs-keyword">set</span> <span class="hljs-title function_">value</span>(<span class="hljs-params">next</span>) {
+      <span class="hljs-keyword">if</span> (<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">is</span>(next, value)) <span class="hljs-keyword">return</span>;
+      value = next;
+      [...subs].<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">sub</span>) =&gt;</span> sub.<span class="hljs-title function_">notify</span>());
+    },
+  };
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">computed</span>(<span class="hljs-params">getter</span>) {
+  <span class="hljs-keyword">let</span> cached;
+  <span class="hljs-keyword">let</span> dirty = <span class="hljs-literal">true</span>;
+  <span class="hljs-keyword">const</span> subs = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>();
+  <span class="hljs-keyword">const</span> <span class="hljs-variable language_">self</span> = {
+    <span class="hljs-comment">// 依赖变了只做标记，不马上重算</span>
+    <span class="hljs-title function_">notify</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-keyword">if</span> (dirty) <span class="hljs-keyword">return</span>;
+      dirty = <span class="hljs-literal">true</span>;
+      [...subs].<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">sub</span>) =&gt;</span> sub.<span class="hljs-title function_">notify</span>());
+    },
+    <span class="hljs-keyword">get</span> <span class="hljs-title function_">value</span>() {
+      <span class="hljs-keyword">if</span> (activeEffect) subs.<span class="hljs-title function_">add</span>(activeEffect);
+      <span class="hljs-keyword">if</span> (dirty) {
+        <span class="hljs-keyword">const</span> prev = activeEffect;
+        activeEffect = <span class="hljs-variable language_">self</span>;
+        <span class="hljs-keyword">try</span> {
+          cached = <span class="hljs-title function_">getter</span>();
+        } <span class="hljs-keyword">finally</span> {
+          activeEffect = prev;
+        }
+        dirty = <span class="hljs-literal">false</span>;
+      }
+      <span class="hljs-keyword">return</span> cached;
+    },
+  };
+  <span class="hljs-keyword">return</span> <span class="hljs-variable language_">self</span>;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">watch</span>(<span class="hljs-params">source, callback</span>) {
+  <span class="hljs-keyword">let</span> oldValue;
+  <span class="hljs-keyword">const</span> runner = {
+    <span class="hljs-title function_">notify</span>(<span class="hljs-params"></span>) {
+      <span class="hljs-keyword">const</span> newValue = <span class="hljs-title function_">run</span>();
+      <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">is</span>(newValue, oldValue)) {
+        <span class="hljs-title function_">callback</span>(newValue, oldValue);
+        oldValue = newValue;
+      }
+    },
+  };
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">run</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> prev = activeEffect;
+    activeEffect = runner;
+    <span class="hljs-keyword">try</span> {
+      <span class="hljs-keyword">return</span> <span class="hljs-title function_">source</span>();
+    } <span class="hljs-keyword">finally</span> {
+      activeEffect = prev;
+    }
+  }
+  oldValue = <span class="hljs-title function_">run</span>();
+}
+
+<span class="hljs-keyword">const</span> price = <span class="hljs-title function_">ref</span>(<span class="hljs-number">10</span>);
+<span class="hljs-keyword">const</span> count = <span class="hljs-title function_">ref</span>(<span class="hljs-number">2</span>);
+<span class="hljs-keyword">let</span> runs = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">const</span> total = <span class="hljs-title function_">computed</span>(<span class="hljs-function">() =&gt;</span> {
+  runs += <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">return</span> price.<span class="hljs-property">value</span> * count.<span class="hljs-property">value</span>;
+});
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(runs); <span class="hljs-comment">// 输出 0</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(total.<span class="hljs-property">value</span>, total.<span class="hljs-property">value</span>, runs); <span class="hljs-comment">// 输出 20 20 1</span>
+price.<span class="hljs-property">value</span> = <span class="hljs-number">30</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(runs); <span class="hljs-comment">// 输出 1</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(total.<span class="hljs-property">value</span>, runs); <span class="hljs-comment">// 输出 60 2</span>
+
+<span class="hljs-title function_">watch</span>(<span class="hljs-function">() =&gt;</span> total.<span class="hljs-property">value</span>, <span class="hljs-function">(<span class="hljs-params">next, prev</span>) =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">\`total: <span class="hljs-subst">\${prev}</span> -&gt; <span class="hljs-subst">\${next}</span>\`</span>); <span class="hljs-comment">// 输出 total: 60 -&gt; 90</span>
+});
+count.<span class="hljs-property">value</span> = <span class="hljs-number">3</span>;
+</code></pre></div>
+<p>创建 <code>total</code> 后 <code>runs</code> 还是 0，为什么 getter 一次都没执行？因为 <code>dirty</code> 初始是 <code>true</code>，计算被推迟到第一次读 <code>.value</code>。连续读两次，第二次看到 <code>dirty</code> 已经是 <code>false</code>，直接返回 <code>cached</code>，所以 <code>runs</code> 是 1。</p>
+<p><code>price.value = 30</code> 之后 <code>runs</code> 仍然是 1。<code>price</code> 的 setter 通知了 <code>total</code>，但 <code>total.notify()</code> 只把 <code>dirty</code> 设回 <code>true</code>，没有调用 getter。等到下一行读 <code>total.value</code>，才重算出 60。如果在两次读取之间 <code>price</code> 改了十次，getter 也只会执行一次。</p>
+<p>最后的 <code>watch</code> 用 getter 读了 <code>total.value</code>，所以 <code>total</code> 把它记成下游。<code>count</code> 改了，<code>total</code> 变脏并通知 watch，watch 重新执行 getter，读到新值 90，和旧值 60 不同，于是调用回调。</p>
+<h2>真实的 Vue 多做了什么</h2>
+<p>教学版里，computed 一变脏就通知下游，下游一定会重新执行。Vue 3.4 改进了这一点：下游被通知后，会先让 computed 重算，只有结果真的变了才继续执行。官方博客举的例子是 <code>isEven = computed(() =&gt; count.value % 2 === 0)</code>，<code>count</code> 从 0 改成 2，<code>isEven</code> 还是 <code>true</code>，3.4 之前读它的 <code>watchEffect</code> 也会重新执行，3.4 起只有结果真的变了才会执行。</p>
+<p>Vue 3.5 又把响应式系统重写了一次，官方称行为不变、内存占用下降 56%。在当前 <code>vuejs/core</code> 的 <code>computed.ts</code> 和 <code>effect.ts</code> 里，脏检查是这样做的：每个依赖（<code>Dep</code>）有一个版本号，每次触发就加一，同时全局还有一个 <code>globalVersion</code>。读 <code>computed.value</code> 时调用 <code>refreshComputed</code>，如果全局版本号自上次计算以来没变，说明没有任何响应式数据改过，直接返回缓存；否则逐个检查依赖的版本号，有变化才重新执行 getter。重算后用 <code>hasChanged</code>（内部是 <code>Object.is</code>）比较新旧结果，变了才给自己的版本号加一，下游据此判断要不要更新。</p>
+<p>源码注释还提到一个边界：SSR 时没有渲染 effect 订阅 computed，它不会追踪依赖，所以每次读取都重新计算，只靠全局版本号这条快速路径做缓存。</p>
+<h2>watch 是怎样建在 effect 上的</h2>
+<p>在 <code>watch.ts</code> 里，<code>watch</code> 先根据数据源的类型生成 getter：ref 就读 <code>.value</code>，reactive 对象就深度遍历它的属性，数组就逐个处理，函数就直接调用。传了 <code>deep</code> 时，在 getter 外面再包一层 <code>traverse</code>，把返回值的每一层属性都读一遍，这样任何嵌套属性变化都会被追踪到。</p>
+<p>然后用这个 getter 创建一个 <code>ReactiveEffect</code>，并给它一个调度器。依赖变化时，effect 不直接执行，而是把一个任务交给调度器。任务里重新执行 getter 拿到新值，如果设置了 <code>deep</code>、<code>immediate</code>，或者新旧值经 <code>hasChanged</code> 比较不同，就先执行上次登记的清理函数，再调用回调，最后把新值存为旧值。</p>
+<p>调度器决定任务什么时候跑。官方文档说明，默认情况下回调在父组件更新之后、当前组件 DOM 更新之前执行；<code>flush: &#x27;post&#x27;</code> 改为 DOM 更新之后；<code>flush: &#x27;sync&#x27;</code> 则在数据变化时同步执行。<code>watchEffect</code> 没有回调，任务里直接重新执行 effect 本身，所以它没有新旧值可比。</p>
+<h2>为什么 computed 里不能写副作用</h2>
+<p>官方文档要求 computed 的 getter 只做纯计算，不改别的状态、不发请求、不操作 DOM。从原理上看也说得通：getter 什么时候执行由读取时机和脏标记决定，可能晚执行，可能被缓存跳过。把副作用写进去，执行次数和时机都无法预期。要在数据变化时做事，就用 watch，回调的触发时机是明确的。</p>
+<h2>常见追问</h2>
+<p><strong>computed 和 method 都能算出同样的值，区别在哪？</strong></p>
+<blockquote>
+<p>method 每次渲染都会重新调用；computed 按响应式依赖缓存，依赖没变就直接返回上次的结果。官方的说法是，不想要缓存时才用 method。还要注意，像 <code>Date.now()</code> 这种不是响应式依赖的值，computed 读了也不会因为时间变化而更新。</p>
+</blockquote>
+<p><strong>watch 一个 reactive 对象，为什么新值和旧值一样？</strong></p>
+<blockquote>
+<p>因为改的是对象内部的属性，对象本身还是同一个，回调拿到的新值和旧值指向同一个对象。传入 reactive 对象时 watch 会自动深度监听，所以回调能触发，但想比较前后差别，要监听具体的属性，比如 <code>() =&gt; state.count</code>，或者自己保存一份拷贝。</p>
+</blockquote>
+<p><strong>怎样选 computed、watch 和 watchEffect？</strong></p>
+<blockquote>
+<p>要从已有数据派生一个值，用 computed；数据变了要做一件事，比如发请求，用 watch 或 watchEffect。使用层面的区别详见<a href="/questions/vue-computed-watch/">《computed、watch 和 watchEffect 应该如何选择？》</a>，依赖收集本身详见<a href="/questions/vue-reactivity-tracking/">《Vue 3 响应式依赖是怎样收集和触发的？》</a>。</p>
+</blockquote>`};export{e as default};

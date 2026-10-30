@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="Vue面试题：父传子用 props，子传父用 defineEmits 发事件，双向绑定用 v-model（3.4 起可用 defineModel）…" />
+    <title>Vue 3 组件之间有哪些通信方式？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/vue3-communication/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="Vue 3 组件之间有哪些通信方式？ · 前端知库" />
+    <meta property="og:description" content="Vue面试题：父传子用 props，子传父用 defineEmits 发事件，双向绑定用 v-model（3.4 起可用 defineModel）…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/vue3-communication/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue3-communication/#webpage","url":"https://fe.hushifa.top/questions/vue3-communication/","name":"Vue 3 组件之间有哪些通信方式？ · 前端知库","description":"Vue面试题：父传子用 props，子传父用 defineEmits 发事件，双向绑定用 v-model（3.4 起可用 defineModel）…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue3-communication/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue3-communication/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"Vue 3 组件之间有哪些通信方式？","item":"https://fe.hushifa.top/questions/vue3-communication/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-D7Fxr-3x.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue 3 组件之间有哪些通信方式？</span></nav><h1 tabindex="-1">Vue 3 组件之间有哪些通信方式？</h1><p class="reading-summary">父传子用 props，子传父用 defineEmits 发事件，双向绑定用 v-model（3.4 起可用 defineModel）；没声明的属性和监听器通过透传 attrs 落到根元素；父组件可以用模板 ref 调用子组件通过 defineExpose 暴露的方法；跨多层用 provide/inject；兄弟组件和全局共享状态用 Pinia 或响应式 store。组件事件不会冒泡，Vue 3 也删掉了 $on，EventBus 要换成 mitt 这类库。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>做一个商品列表页：父组件把商品数据通过 props 传给子组件 <code>ProductCard</code>，用户点“加入购物车”，子组件用 <code>emit(&#x27;add&#x27;, id)</code> 通知父组件。这是 Vue 3 里最基本的一对通信方式，props 往下，事件往上。</p>
+<p>在这个基础上还有几种补充：表单类组件用 <code>v-model</code> 做双向绑定，Vue 3.4 起子组件里写 <code>defineModel()</code> 就行；父组件确实要调用子组件的方法时，用模板 ref 拿到子组件，子组件要用 <code>defineExpose</code> 主动暴露；主题、表单上下文这类要跨好几层的数据，用 <code>provide</code>/<code>inject</code>。</p>
+<p>兄弟组件或者完全不相关的组件，要共享状态时放进 Pinia 或者一个响应式 store。注意组件事件不会冒泡，只有直接父组件能监听到，所以不能指望孙组件的事件传到爷爷组件。</p>
+<p>要注意的是方向。数据最好只有一个主人，子组件不直接改 props，<code>inject</code> 进来的数据也尽量交给提供方修改。Vue 3 删掉了实例上的 <code>$on</code>、<code>$off</code>，Vue 2 那种 EventBus 写法要换成 mitt 这类库，但能用状态或 props 解决的，就不要用全局事件。</p>
+</blockquote>
+<h2>props 往下，事件往上</h2>
+<p>先看商品卡片怎样拿数据、怎样通知父组件，注意 <code>defineProps</code> 和 <code>defineEmits</code> 都是编译宏，不用导入：</p>
+<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;!-- ProductCard.vue --&gt;
+&lt;script setup&gt;
+const props = defineProps({
+  product: { type: Object, required: true },
+})
+const emit = defineEmits([&#x27;add&#x27;])
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;h3&gt;{{ props.product.name }}&lt;/h3&gt;
+  &lt;button @click=&quot;emit(&#x27;add&#x27;, props.product.id)&quot;&gt;加入购物车&lt;/button&gt;
+&lt;/template&gt;
+</code></pre></div>
+<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;!-- 父组件 --&gt;
+&lt;ProductCard
+  v-for=&quot;item in products&quot;
+  :key=&quot;item.id&quot;
+  :product=&quot;item&quot;
+  @add=&quot;addToCart&quot;
+/&gt;
+</code></pre></div>
+<p>为什么子组件不直接改 <code>product</code> 或者购物车？因为 props 是单向的，子组件改了，父组件和其他用到这份数据的地方就不知道是谁改的。子组件只负责说“用户点了加入”，怎么加由拥有购物车数据的父组件决定，详见<a href="/questions/vue-props/">《为什么 Vue 提倡 props 单向数据流？》</a>。</p>
+<p><code>defineEmits</code> 必须直接写在 <code>&lt;script setup&gt;</code> 顶层，不能放进函数里。它还支持对象语法，给每个事件写校验函数，或者在 TypeScript 里声明参数类型。</p>
+<h2>v-model 和 defineModel</h2>
+<p>输入框、开关这类组件，父组件既要传值又要接收新值。Vue 3.4 起推荐在子组件里用 <code>defineModel()</code>：</p>
+<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;!-- SearchInput.vue --&gt;
+&lt;script setup&gt;
+const keyword = defineModel()
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;input v-model=&quot;keyword&quot; /&gt;
+&lt;/template&gt;
+</code></pre></div>
+<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;SearchInput v-model=&quot;query&quot; /&gt;
+</code></pre></div>
+<p><code>defineModel</code> 返回的是一个 ref，看起来子组件在直接改它，这不就违反单向数据流了吗？其实编译器会把它展开成一个叫 <code>modelValue</code> 的 prop 和一个 <code>update:modelValue</code> 事件，子组件改这个 ref 时实际是在发事件，值还是由父组件更新。3.4 之前要手写这对 prop 和事件。需要多个双向绑定时，可以写 <code>v-model:title</code>、<code>v-model:content</code>，子组件里对应 <code>defineModel(&#x27;title&#x27;)</code>。原理详见<a href="/questions/vue-vmodel/">《组件 v-model 的本质是什么？》</a>。</p>
+<h2>没声明的属性去了哪里</h2>
+<p>父组件给子组件传了 <code>class</code>、<code>id</code>，或者监听了一个子组件没声明的事件，这些叫透传属性（fallthrough attributes）。子组件只有一个根元素时，它们会自动加到根元素上，<code>class</code> 和 <code>style</code> 会和根元素原有的值合并。</p>
+<p>这在封装基础组件时很有用，比如 <code>&lt;MyButton class=&quot;large&quot; @click=&quot;...&quot;&gt;</code>，不用在 <code>MyButton</code> 里一个个声明。不想自动落到根元素，可以设置 <code>inheritAttrs: false</code>，再在模板里用 <code>v-bind=&quot;$attrs&quot;</code> 放到指定元素上；在 <code>&lt;script setup&gt;</code> 里用 <code>useAttrs()</code> 读取。Vue 3 把 Vue 2 的 <code>$listeners</code> 合并进了 <code>$attrs</code>，监听器也是透传属性的一部分。</p>
+<h2>父组件调用子组件的方法</h2>
+<p>有时候父组件要命令式地操作子组件，比如打开弹窗、重置表单。可以给子组件加模板 ref：</p>
+<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;!-- ResetForm.vue --&gt;
+&lt;script setup&gt;
+function reset() {
+  /* 清空字段 */
+}
+defineExpose({ reset })
+&lt;/script&gt;
+</code></pre></div>
+<div class="not-prose code-block"><div class="code-language">vue</div><pre><code class="hljs language-vue">&lt;!-- 父组件 --&gt;
+&lt;script setup&gt;
+import { useTemplateRef } from &#x27;vue&#x27;
+
+const form = useTemplateRef(&#x27;form&#x27;)
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;ResetForm ref=&quot;form&quot; /&gt;
+  &lt;button @click=&quot;form.reset()&quot;&gt;重置&lt;/button&gt;
+&lt;/template&gt;
+</code></pre></div>
+<p>为什么要 <code>defineExpose</code>？因为用 <code>&lt;script setup&gt;</code> 写的组件默认是封闭的，父组件通过 ref 拿到的实例上什么都访问不到，只有子组件主动暴露的东西才能用。<code>useTemplateRef</code> 是 3.5 新增的；更早的版本要声明一个和 <code>ref</code> 属性同名的 <code>ref(null)</code> 变量。官方建议只在确实需要时这样做，大多数情况用 props 和事件就够了。</p>
+<h2>跨多层：provide 和 inject</h2>
+<p>主题、语言、表单上下文要传给很深的后代，每层都写 props 很繁琐。祖先组件 <code>provide</code>，后代组件 <code>inject</code>：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-comment">// 祖先组件</span>
+<span class="hljs-keyword">const</span> theme = <span class="hljs-title function_">ref</span>(<span class="hljs-string">&#x27;dark&#x27;</span>)
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">toggleTheme</span>(<span class="hljs-params"></span>) {
+  theme.<span class="hljs-property">value</span> = theme.<span class="hljs-property">value</span> === <span class="hljs-string">&#x27;dark&#x27;</span> ? <span class="hljs-string">&#x27;light&#x27;</span> : <span class="hljs-string">&#x27;dark&#x27;</span>
+}
+<span class="hljs-title function_">provide</span>(<span class="hljs-string">&#x27;theme&#x27;</span>, { <span class="hljs-attr">theme</span>: <span class="hljs-title function_">readonly</span>(theme), toggleTheme })
+
+<span class="hljs-comment">// 任意后代组件</span>
+<span class="hljs-keyword">const</span> { theme, toggleTheme } = <span class="hljs-title function_">inject</span>(<span class="hljs-string">&#x27;theme&#x27;</span>)
+</code></pre></div>
+<p>提供的是 ref，后代读到的就是响应式的，祖先改了后代自动更新。官方建议把修改留在提供方：后代要改，就调用提供方一起传下来的函数；用 <code>readonly</code> 包一下可以防止后代直接改。大型应用或写给别人用的组件库，注入名最好用 <code>Symbol</code>，避免和别的库冲突。用 <code>app.provide()</code> 可以在应用级别提供，所有组件都能注入，插件常这样用。</p>
+<h2>兄弟组件和全局状态</h2>
+<p>组件事件不会冒泡，兄弟组件之间没有直接的通道。常见做法是把状态提升到共同的父组件，或者放进共享的 store。简单场景可以导出一个 <code>reactive()</code> 对象当 store；需要 DevTools 时间线、SSR 支持、TypeScript 类型推导时，用官方推荐的 Pinia。Vuex 现在处于维护模式，新项目建议用 Pinia。</p>
+<p>如果确实需要“发一个全局事件”，Vue 3 的实例上已经没有 <code>$on</code>、<code>$off</code>、<code>$once</code>，可以用 mitt、tiny-emitter 这类库，但全局事件难以追踪谁发、谁收，优先考虑用状态表达。</p>
+<h2>常见追问</h2>
+<p><strong>孙组件 emit 的事件，爷爷组件能直接监听到吗？</strong></p>
+<blockquote>
+<p>不能。组件事件和原生 DOM 事件不同，不会冒泡，只有直接父组件能监听。要跨层通知，可以让中间组件转发，或者用 <code>provide</code> 传一个回调函数下去，或者把状态放进 Pinia。</p>
+</blockquote>
+<p><strong>provide/inject 和 Pinia 怎么选？</strong></p>
+<blockquote>
+<p>provide/inject 跟组件树绑定，适合一棵子树内部共享，比如一个表单组件和它的表单项，不同的子树可以各自提供不同的值。Pinia 是全局单例，适合整个应用共享的状态，比如登录用户、购物车，还带 DevTools 支持。</p>
+</blockquote>
+<p><strong>Vue 3 和 Vue 2 的通信方式有哪些变化？</strong></p>
+<blockquote>
+<p><code>.sync</code> 改成了 <code>v-model:xxx</code>，<code>$listeners</code> 并进了 <code>$attrs</code>，<code>$on</code>/<code>$off</code> 被删掉。Vue 3 新增了 <code>defineEmits</code>、<code>defineModel</code>、<code>defineExpose</code> 这些编译宏，配合 <code>&lt;script setup&gt;</code> 使用。详见<a href="/questions/vue2-communication/">《Vue 2 有哪些组件通信方式？哪些写法在 Vue 3 中被移除或改变？》</a>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://vuejs.org/guide/components/props.html" target="_blank" rel="noreferrer">Vue · Props<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://vuejs.org/guide/components/events.html" target="_blank" rel="noreferrer">Vue · Component Events<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://vuejs.org/guide/components/v-model.html" target="_blank" rel="noreferrer">Vue · Component v-model<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://vuejs.org/guide/components/attrs.html" target="_blank" rel="noreferrer">Vue · Fallthrough Attributes<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://vuejs.org/guide/essentials/template-refs.html" target="_blank" rel="noreferrer">Vue · Template Refs<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://vuejs.org/guide/components/provide-inject.html" target="_blank" rel="noreferrer">Vue · Provide / Inject<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://vuejs.org/guide/scaling-up/state-management.html" target="_blank" rel="noreferrer">Vue · State Management<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vue+3+%E7%BB%84%E4%BB%B6%E4%B9%8B%E9%97%B4%E6%9C%89%E5%93%AA%E4%BA%9B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVue+3+%E7%BB%84%E4%BB%B6%E4%B9%8B%E9%97%B4%E6%9C%89%E5%93%AA%E4%BA%9B%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue3-communication%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue3-communication%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vue 3 组件之间有哪些通信方式？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-options-composition/">Options API 和 Composition API 有什么区别？Vue 组件的 data 为什么必须是函数？</a></li><li><a href="/questions/vue3-new-features/">Vue 3 相比 Vue 2 有哪些主要变化？</a></li><li><a href="/questions/vue-script-setup-macros/">defineProps、defineEmits 和 defineExpose 有什么作用？</a></li><li><a href="/questions/vue-vif-vfor/">v-if 和 v-for 为什么不建议写在同一个元素上？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

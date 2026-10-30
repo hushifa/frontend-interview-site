@@ -1,0 +1,97 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>写一个统计接口耗时的中间件：在 Koa 里，先记下开始时间，<code>await next()</code> 等后面的中间件和路由全部处理完，再回到这里算出耗时、写进响应头。请求像穿过洋葱一样一层层进去，再一层层出来，这就是洋葱模型。</p>
+<p>Koa 和 Express 的区别主要在定位。Express 在 Node 原生的 <code>req</code>、<code>res</code> 上加了很多方法，自带路由、模板、发送文件等功能，是一个完整的应用框架。Koa 是 Express 原班团队设计的，核心只有中间件机制，不内置任何中间件，也不带路由，把请求和响应封装进一个 <code>ctx</code> 对象，其余功能交给第三方模块。</p>
+<p>洋葱模型是靠 compose 函数实现的。它把中间件数组变成一个函数，<code>dispatch(i)</code> 执行第 i 个中间件，并把 <code>() =&gt; dispatch(i + 1)</code> 作为 <code>next</code> 传进去，每次调用都返回 Promise。所以 <code>await next()</code> 会等后面所有中间件执行完，再回到当前中间件继续往下走。</p>
+<p>要注意，Koa 中间件里调用 <code>next()</code> 时一定要 <code>await</code> 或 <code>return</code>，否则后面的中间件还没执行完，当前中间件就已经结束了。Express 和 Koa 的中间件签名也不一样，不能直接混用。</p>
+</blockquote>
+<h2>两个框架的定位有什么不同</h2>
+<p>Koa 的官方文档有一篇专门对比两者，原话是 Koa 想“修复并替代 Node”，Express 则是“增强 Node”。具体体现在三点。</p>
+<p>第一是请求和响应对象。Express 直接在 Node 的 <code>req</code>、<code>res</code> 上添加属性和方法，比如 <code>res.json()</code>、<code>req.params</code>。Koa 不暴露原生对象给业务代码，而是提供自己的 <code>ctx.request</code>、<code>ctx.response</code>，设置响应体写 <code>ctx.body = ...</code>。</p>
+<p>第二是内置功能。对比表里，Express 自带路由、模板、发送文件、JSONP，Koa 这些都没有，文档说明这不代表 Koa 做不到，只是交给 <code>koa-router</code>、<code>@koa/router</code> 这类第三方模块实现。所以 Koa 本身很小，搭一个项目要自己挑选中间件。</p>
+<p>第三是异步写法。Koa 的中间件就是 async 函数，错误用 <code>try/catch</code> 捕获。Express 传统的中间件形式是 <code>(req, res, next)</code>，文档也说明这种形式和 Koa 不兼容，从 Express 迁移到 Koa 基本要重写。</p>
+<h2>洋葱模型是什么样的</h2>
+<p>Koa 文档里的例子是这样写的：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">app.<span class="hljs-title function_">use</span>(<span class="hljs-title function_">async</span> (ctx, next) =&gt; {
+  <span class="hljs-keyword">const</span> start = <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>();
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">next</span>();
+  <span class="hljs-keyword">const</span> ms = <span class="hljs-title class_">Date</span>.<span class="hljs-title function_">now</span>() - start;
+  ctx.<span class="hljs-title function_">set</span>(<span class="hljs-string">&#x27;X-Response-Time&#x27;</span>, <span class="hljs-string">\`<span class="hljs-subst">\${ms}</span>ms\`</span>);
+});
+
+app.<span class="hljs-title function_">use</span>(<span class="hljs-title function_">async</span> (ctx) =&gt; {
+  ctx.<span class="hljs-property">body</span> = <span class="hljs-string">&#x27;Hello World&#x27;</span>;
+});
+</code></pre></div>
+<p>第一个中间件执行到 <code>await next()</code> 时暂停，控制权交给下一个中间件，文档称为“向下游”；后面没有中间件了，就开始回退，每个中间件从 <code>await next()</code> 之后继续执行，文档称为“向上游”。所以计时中间件能拿到包括后续所有处理在内的总耗时。</p>
+<h2>手写一个简化版 compose</h2>
+<p>下面是一个简化的 <code>compose</code>，用 <code>.then</code> 观察结果。重点看执行顺序和 <code>next</code> 被调用两次时会发生什么：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">compose</span>(<span class="hljs-params">middleware</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> (<span class="hljs-params">ctx</span>) {
+    <span class="hljs-keyword">let</span> index = -<span class="hljs-number">1</span>;
+    <span class="hljs-keyword">function</span> <span class="hljs-title function_">dispatch</span>(<span class="hljs-params">i</span>) {
+      <span class="hljs-keyword">if</span> (i &lt;= index) <span class="hljs-keyword">return</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">reject</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;next() 被调用了多次&#x27;</span>));
+      index = i;
+      <span class="hljs-keyword">const</span> fn = middleware[i];
+      <span class="hljs-keyword">if</span> (!fn) <span class="hljs-keyword">return</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>();
+      <span class="hljs-keyword">try</span> {
+        <span class="hljs-keyword">return</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>(<span class="hljs-title function_">fn</span>(ctx, <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">dispatch</span>(i + <span class="hljs-number">1</span>)));
+      } <span class="hljs-keyword">catch</span> (err) {
+        <span class="hljs-keyword">return</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">reject</span>(err);
+      }
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">dispatch</span>(<span class="hljs-number">0</span>);
+  };
+}
+
+<span class="hljs-keyword">const</span> logs = [];
+<span class="hljs-keyword">const</span> run = <span class="hljs-title function_">compose</span>([
+  <span class="hljs-title function_">async</span> (ctx, next) =&gt; {
+    logs.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;A 进入&#x27;</span>);
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">next</span>();
+    logs.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;A 离开&#x27;</span>);
+  },
+  <span class="hljs-title function_">async</span> (ctx, next) =&gt; {
+    logs.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;B 进入&#x27;</span>);
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">next</span>();
+    logs.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;B 离开&#x27;</span>);
+  },
+  <span class="hljs-title function_">async</span> (ctx) =&gt; {
+    logs.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;C 处理&#x27;</span>);
+    ctx.<span class="hljs-property">body</span> = <span class="hljs-string">&#x27;Hello&#x27;</span>;
+  },
+]);
+
+<span class="hljs-keyword">const</span> ctx = {};
+<span class="hljs-title function_">run</span>(ctx).<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(logs.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27; → &#x27;</span>)); <span class="hljs-comment">// A 进入 → B 进入 → C 处理 → B 离开 → A 离开</span>
+  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(ctx.<span class="hljs-property">body</span>); <span class="hljs-comment">// Hello</span>
+});
+
+<span class="hljs-keyword">const</span> twice = <span class="hljs-title function_">compose</span>([
+  <span class="hljs-title function_">async</span> (ctx, next) =&gt; {
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">next</span>();
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">next</span>();
+  },
+]);
+<span class="hljs-title function_">twice</span>({}).<span class="hljs-title function_">catch</span>(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(err.<span class="hljs-property">message</span>)); <span class="hljs-comment">// next() 被调用了多次</span>
+</code></pre></div>
+<p>为什么 B 离开会排在 C 处理之后？因为 B 里的 <code>await next()</code> 等的是 <code>dispatch(2)</code> 返回的 Promise，这个 Promise 要等 C 执行完才完成。A 等的是 <code>dispatch(1)</code>，而 <code>dispatch(1)</code> 又要等 B 整个执行完，所以 A 离开排在最后。</p>
+<p><code>index</code> 用来防止同一个中间件调用两次 <code>next</code>。第一次调用后 <code>index</code> 已经是 1，第二次再调用 <code>dispatch(1)</code> 时 <code>i &lt;= index</code> 成立，直接返回失败的 Promise。为什么要拦住？因为后面的中间件和路由会再执行一遍，可能写两次响应。</p>
+<p><code>try/catch</code> 是为了处理同步抛错的中间件，把它也转成失败的 Promise，外层统一用 <code>.catch</code> 或 <code>try/catch</code> 处理。当前的 koa-compose 源码改成了 async 函数写法，同样会在 <code>next()</code> 被调用多次时抛出错误，开发环境下还会检查中间件是否在下游完成之前就结束了，提示“可能漏了 await 或 return”。</p>
+<h2>Express 的中间件怎样传递</h2>
+<p>Express 的中间件也按注册顺序执行，当前中间件不结束响应时，必须调用 <code>next()</code> 把控制权交给下一个，否则请求会一直挂着。错误处理中间件靠参数个数区分，必须写满四个参数 <code>(err, req, res, next)</code>。</p>
+<p>异步错误方面，Express 5 的文档说明，返回 Promise 的路由处理函数和中间件在 Promise 失败或抛错时，会自动调用 <code>next(错误)</code>，所以 async 函数里的错误不需要额外处理就能到达错误处理中间件。Express 4 没有这个行为，async 函数里的错误要自己 <code>catch</code> 后调用 <code>next(err)</code>。</p>
+<h2>常见追问</h2>
+<p><strong>Express 能实现洋葱模型吗？</strong></p>
+<blockquote>
+<p>能做到一部分。Express 的 <code>next()</code> 不返回等待后续处理完成的 Promise，所以不能像 Koa 那样写 <code>await next()</code> 然后接着处理响应。这正是 Koa 用 async 函数和 Promise 改写中间件流程的原因。</p>
+</blockquote>
+<p><strong>Koa 里错误怎样统一处理？</strong></p>
+<blockquote>
+<p>在最外层注册一个中间件，用 <code>try { await next() } catch (err) { ... }</code> 包住，后面任何中间件抛出的错误或失败的 Promise 都会沿着洋葱回到这里，统一设置状态码和响应体。</p>
+</blockquote>
+<p><strong>新项目选 Koa 还是 Express？</strong></p>
+<blockquote>
+<p>想要开箱即用、生态里现成的中间件多，选 Express；想要核心小、自己组合中间件、习惯 async 写法，选 Koa。两者的中间件不能直接混用，选定后最好不要中途切换。</p>
+</blockquote>`};export{e as default};

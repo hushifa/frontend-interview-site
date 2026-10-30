@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="浏览器原理面试题：重排是浏览器重新计算元素的位置和尺寸，重绘是把元素重新画成像素。" />
+    <title>重排和重绘有什么区别？哪些操作会触发它们？ · 前端知库</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/browser-reflow-repaint/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="重排和重绘有什么区别？哪些操作会触发它们？ · 前端知库" />
+    <meta property="og:description" content="浏览器原理面试题：重排是浏览器重新计算元素的位置和尺寸，重绘是把元素重新画成像素。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/browser-reflow-repaint/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/browser-reflow-repaint/#webpage","url":"https://fe.hushifa.top/questions/browser-reflow-repaint/","name":"重排和重绘有什么区别？哪些操作会触发它们？ · 前端知库","description":"浏览器原理面试题：重排是浏览器重新计算元素的位置和尺寸，重绘是把元素重新画成像素。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/browser-reflow-repaint/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/browser-reflow-repaint/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"浏览器原理面试题","item":"https://fe.hushifa.top/topics/browser/"},{"@type":"ListItem","position":3,"name":"重排和重绘有什么区别？哪些操作会触发它们？","item":"https://fe.hushifa.top/questions/browser-reflow-repaint/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-D7Fxr-3x.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/browser/">浏览器原理面试题</a><span aria-hidden="true">/</span><span aria-current="page">重排和重绘有什么区别？哪些操作会触发它们？</span></nav><h1 tabindex="-1">重排和重绘有什么区别？哪些操作会触发它们？</h1><p class="reading-summary">重排是浏览器重新计算元素的位置和尺寸，重绘是把元素重新画成像素。改 width、margin、font-size 这类影响几何的属性会触发重排，重排之后通常还要重绘；只改 color 这类不影响几何的属性只触发重绘；单独成层的 transform、opacity 变化可以只在合成阶段完成。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>把一个按钮的宽度从 100px 改成 200px，旁边的元素会被挤开，浏览器要重新算这一片元素的位置和大小，这叫重排（reflow），也就是布局；算完以后再把它们重新画成屏幕上的像素，这叫重绘（repaint）。如果只是把按钮文字从黑色改成红色，位置大小都没变，就只需要重绘。</p>
+<p>区别在于成本。重排要算几何信息，可能影响父元素、兄弟元素甚至整页，而且算完通常还要重绘；重绘只涉及颜色、阴影这类外观。MDN 把 CSS 属性分成三档：影响几何或位置的（<code>width</code>、<code>left</code>、<code>margin</code>、<code>font-size</code>）会触发样式计算、布局和重绘；不影响几何的（<code>color</code>）只触发样式计算和重绘；单独成层的 <code>transform</code>、<code>opacity</code> 变化交给合成阶段处理，连重绘都不需要。</p>
+<p>触发重排的常见原因有：改尺寸和位置相关的样式，增删会占位置的 DOM 节点，没写宽高的图片加载完成后撑开页面。另外，刚改完样式马上读 <code>offsetHeight</code>、<code>getBoundingClientRect()</code> 这类几何信息，会逼浏览器当场重排。</p>
+<p>优化思路是少触发、少影响：动画优先用 <code>transform</code> 和 <code>opacity</code>，图片写好宽高，读写几何信息时先集中读再集中写。</p>
+</blockquote>
+<h2>浏览器画一帧要做哪几步</h2>
+<p>浏览器把页面显示出来，大致要经过样式计算、布局、绘制、合成这几步。MDN 的说法是：布局决定每个节点的尺寸和位置；第一次确定叫布局，之后再算叫重排；绘制把布局算出来的每个盒子转成屏幕上的像素，包括文字、颜色、边框、阴影和图片。页面还可能被拆成多个图层，各自绘制后再组合起来，这一步叫合成。</p>
+<p>所以重排和重绘不是两个独立的动作，它们是同一条流水线上的两个阶段。改动从哪一步开始，后面的步骤就要跟着做。从布局开始的改动，后面要重绘、再合成；从绘制开始的，只需要重绘和合成；只影响合成的，前面两步都能跳过。</p>
+<h2>哪些改动从哪一步开始</h2>
+<p>MDN 在讲动画性能时给了一个按属性分档的说明，这是判断成本最直接的依据：</p>
+<table><thead><tr><th>改动的属性</th><th>要做的步骤</th><th>MDN 举的例子</th></tr></thead><tbody><tr><td>影响几何或位置</td><td>样式计算 → 布局 → 重绘</td><td><code>left</code>、<code>max-width</code>、<code>border-width</code>、<code>margin-left</code>、<code>font-size</code></td></tr><tr><td>不影响几何、元素不单独成层</td><td>样式计算 → 重绘</td><td><code>color</code></td></tr><tr><td>元素单独成层</td><td>样式计算，然后在合成阶段处理</td><td><code>transform</code>、<code>opacity</code></td></tr></tbody></table>
+<p>第三档有个前提，元素要被放到自己的图层里。MDN 提到，<code>&lt;video&gt;</code>、<code>&lt;canvas&gt;</code>，以及设置了 <code>opacity</code>、3D <code>transform</code>、<code>will-change</code> 等属性的元素会被提升成单独的图层。所以“<code>transform</code> 不触发重绘”是以元素单独成层为前提的说法，不能脱离这个条件。</p>
+<p>除了改样式，往页面里插入或删除占位置的节点也会改变其他元素的位置，同样要重新布局。MDN 举过一个具体例子：图片没写宽高，图片下载完成后知道了尺寸，就会发生一次重排，还要接着重绘和合成；写了宽高就不需要这次重排。</p>
+<h2>什么时候重排会“提前”发生</h2>
+<p>浏览器一般不会每改一次样式就重排一次，而是攒到下一次渲染时一起算。可是如果代码刚改完样式，紧接着就读元素的尺寸或位置，浏览器为了给出准确的值，只能当场把布局算一遍。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js">box.<span class="hljs-property">style</span>.<span class="hljs-property">width</span> = <span class="hljs-string">&#x27;200px&#x27;</span>;
+<span class="hljs-keyword">const</span> height = box.<span class="hljs-property">offsetHeight</span>; <span class="hljs-comment">// 这里要拿到新宽度下的高度，浏览器只能立刻重排</span>
+</code></pre></div>
+<p>在循环里一读一写反复这样做，每一轮都要重排一次，就是布局抖动。哪些属性会引起这种同步布局、怎么改成先读后写，见<a href="/questions/browser-reflow/">《什么是强制同步布局？如何避免布局抖动？》</a>。</p>
+<h2>怎样减少重排和重绘</h2>
+<p>位移、缩放、淡入淡出这类动画，用 <code>transform</code> 和 <code>opacity</code> 代替 <code>left</code>、<code>top</code>、<code>width</code>，这样有机会只在合成阶段完成，具体对比见<a href="/questions/css-animation-performance/">《transition、animation 和 requestAnimationFrame 怎么选？》</a>。</p>
+<p>图片、视频、广告位提前写好宽高或 <code>aspect-ratio</code>，避免资源加载后撑开页面引起重排，也能减少布局偏移。</p>
+<p>批量修改 DOM 时先集中读取需要的几何信息，再集中写入，不要读写交替。</p>
+<p><code>will-change</code> 能提示浏览器提前建图层，但 MDN 明确说它是解决已有性能问题的最后手段，滥用会占用大量内存，反而更慢。</p>
+<h2>常见追问</h2>
+<p><strong>display: none 和 visibility: hidden 对重排有什么不同？</strong></p>
+<blockquote>
+<p>MDN 讲渲染树时提到，<code>display: none</code> 的节点不进入渲染树，不占空间，所以在两者之间切换会影响周围元素的布局，需要重排。<code>visibility: hidden</code> 的节点还在渲染树里，照样占位置，只是不显示，在 <code>visible</code> 和 <code>hidden</code> 之间切换不改变几何，通常只需要重绘。</p>
+</blockquote>
+<p><strong>重绘一定比重排便宜吗？</strong></p>
+<blockquote>
+<p>按步骤算，只触发重绘的改动少了布局这一步，所以通常更省。但具体耗时跟要重画的范围有关，不能只靠分档下结论，还是要用浏览器开发者工具的 Performance 面板录一下，看布局和绘制各花了多少时间。</p>
+</blockquote>
+<p><strong>怎么看页面上哪里在重绘？</strong></p>
+<blockquote>
+<p>Chrome 开发者工具的 Rendering 面板有 Paint flashing（绘制闪烁）选项，Chrome 文档的说明是开启后每次重绘都会把重绘区域闪成绿色。Performance 面板录制后，能看到每一帧里 Layout 和 Paint 的耗时。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Glossary/Reflow" target="_blank" rel="noreferrer">MDN · Reflow<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Glossary/Repaint" target="_blank" rel="noreferrer">MDN · Repaint<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/Animation_performance_and_frame_rate" target="_blank" rel="noreferrer">MDN · Animation performance and frame rate<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/How_browsers_work" target="_blank" rel="noreferrer">MDN · How browsers work<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.chrome.com/docs/devtools/rendering/performance" target="_blank" rel="noreferrer">Chrome DevTools · Analyze rendering performance<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E9%87%8D%E6%8E%92%E5%92%8C%E9%87%8D%E7%BB%98%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%E5%93%AA%E4%BA%9B%E6%93%8D%E4%BD%9C%E4%BC%9A%E8%A7%A6%E5%8F%91%E5%AE%83%E4%BB%AC%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E9%87%8D%E6%8E%92%E5%92%8C%E9%87%8D%E7%BB%98%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%E5%93%AA%E4%BA%9B%E6%93%8D%E4%BD%9C%E4%BC%9A%E8%A7%A6%E5%8F%91%E5%AE%83%E4%BB%AC%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Abrowser-reflow-repaint%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8E%9F%E7%90%86%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fbrowser-reflow-repaint%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：重排和重绘有什么区别？哪些操作会触发它们？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/browser-reflow/">什么是强制同步布局？如何避免布局抖动？</a></li><li><a href="/questions/browser-url-to-page/">从输入 URL 到页面显示，中间发生了什么？</a></li><li><a href="/questions/browser-render/">浏览器从 HTML 到页面显示，经历哪些主要步骤？</a></li><li><a href="/questions/browser-storage/">Cookie、localStorage 和 sessionStorage 如何选择？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>
