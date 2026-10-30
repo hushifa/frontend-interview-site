@@ -1,0 +1,106 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>短信里放不下一个几百字符的商品链接，就把它换成 <code>https://s.example/aZ3k9</code>。用户点开时，服务器拿 <code>aZ3k9</code> 查出原来的长网址，返回一个重定向，浏览器自动跳过去。所以核心就两步：生成短码并存下“短码到长网址”的映射；访问时查表并跳转。</p>
+<p>短码常用两种生成方式。一种是数据库给每条记录一个自增 ID，把 ID 转成 62 进制，用 0-9、a-z、A-Z 这 62 个字符表示，7 位就能表示三万多亿个链接，而且不会冲突。缺点是短码按顺序递增，别人可以挨个猜出所有链接。另一种是对长网址做哈希，取前几位当短码，同一个网址总是得到同一个短码，但截短以后不同网址可能撞上，所以写入前要检查，冲突了就加盐重新算。</p>
+<p>跳转用哪个状态码要看需求。301 是永久重定向，浏览器可以把它缓存下来，下次直接跳，不再经过短链服务器，访问就统计不到了，目标网址改了也不会生效。所以要统计点击、可能修改目标的场景，一般用 302 或 307 这类临时重定向。</p>
+<p>统计不要拖慢跳转。跳转时只把短码、时间、来源、设备这些信息写进消息队列或日志，立刻返回重定向，再由后台任务异步聚合成每天的访问量。还要注意安全：短链会掩盖真实地址，所以要检查目标网址是不是恶意站点，并对生成接口限流。</p>
+</blockquote>
+<h2>整体流程</h2>
+<p>生成短链时，前端把长网址提交给服务端，服务端校验它是合法的 <code>http</code> 或 <code>https</code> 地址，生成短码，写入一张表：短码、长网址、创建人、创建时间、过期时间。返回给用户 <code>https://s.example/</code> 加上短码。</p>
+<p>访问短链时，服务端从路径里取出短码，先查缓存，再查数据库。查到了就返回重定向响应，<code>Location</code> 头里写长网址，浏览器收到后自动请求这个地址。查不到或者已经过期，就返回 404 页面。</p>
+<p>读远远多于写，一个短链生成一次，可能被点几百万次。所以“短码到长网址”这层映射适合放进 Redis 这类缓存，跳转接口基本只读缓存。</p>
+<h2>自增 ID 怎样转成 62 进制</h2>
+<p>62 进制的写法和十进制转二进制一样：不断除以 62，余数对应字符表里的一个字符，倒过来排就是结果。下面的 <code>encode</code> 和 <code>decode</code> 互为逆运算：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">ALPHABET</span> = <span class="hljs-string">&#x27;0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ&#x27;</span>;
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">encode</span>(<span class="hljs-params">id</span>) {
+  <span class="hljs-keyword">if</span> (id === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-variable constant_">ALPHABET</span>[<span class="hljs-number">0</span>];
+  <span class="hljs-keyword">let</span> code = <span class="hljs-string">&#x27;&#x27;</span>;
+  <span class="hljs-keyword">while</span> (id &gt; <span class="hljs-number">0</span>) {
+    code = <span class="hljs-variable constant_">ALPHABET</span>[id % <span class="hljs-number">62</span>] + code;
+    id = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(id / <span class="hljs-number">62</span>);
+  }
+  <span class="hljs-keyword">return</span> code;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">decode</span>(<span class="hljs-params">code</span>) {
+  <span class="hljs-keyword">let</span> id = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> ch <span class="hljs-keyword">of</span> code) id = id * <span class="hljs-number">62</span> + <span class="hljs-variable constant_">ALPHABET</span>.<span class="hljs-title function_">indexOf</span>(ch);
+  <span class="hljs-keyword">return</span> id;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">encode</span>(<span class="hljs-number">61</span>)); <span class="hljs-comment">// Z</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">encode</span>(<span class="hljs-number">62</span>)); <span class="hljs-comment">// 10</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">encode</span>(<span class="hljs-number">100000000</span>)); <span class="hljs-comment">// 6LAze</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">decode</span>(<span class="hljs-string">&#x27;6LAze&#x27;</span>)); <span class="hljs-comment">// 100000000</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-number">62</span> ** <span class="hljs-number">7</span>); <span class="hljs-comment">// 3521614606208</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">encode</span>(<span class="hljs-number">62</span> ** <span class="hljs-number">7</span> - <span class="hljs-number">1</span>)); <span class="hljs-comment">// ZZZZZZZ</span>
+</code></pre></div>
+<p>61 是最后一个字符 <code>Z</code>，62 就进位成 <code>10</code>，和十进制里 9 之后是 10 一样。一亿只要 5 位，7 位能表示 <code>62 ** 7</code> 也就是三万五千多亿个 ID，最大的 7 位短码是 <code>ZZZZZZZ</code>。</p>
+<p>这种方式为什么不会冲突？因为数据库的自增 ID 本身不重复，转换又是一一对应的。可是它有两个问题。一是可以被猜到：拿到 <code>6LAze</code>，把它加一就是下一个用户的链接，内部分享的文档链接就可能被人遍历出来。二是短码长度会随数量增长，前几个链接只有一两位。</p>
+<p>常见的改法是先把 ID 打乱再编码，比如用一个可逆的混淆函数把连续的 ID 映射成看起来随机的数字，或者用发号器每次分配一段 ID，再从一个较大的起点开始，让短码长度一开始就固定。ID 超过 <code>Number.MAX_SAFE_INTEGER</code>，也就是 2⁵³ − 1 时，JavaScript 的普通数字就无法精确表示了，要改用 <code>BigInt</code>，不过 7 位短码对应的最大值远小于这个上限。</p>
+<h2>哈希截短怎样处理冲突</h2>
+<p>另一种思路是不依赖数据库 ID，直接对长网址算哈希，取前 7 个字符作为短码。好处是同一个长网址总是得到同一个短码，天然去重；分布式部署时也不需要一个统一的发号器。</p>
+<p>问题在于截短。完整的哈希值几乎不会重复，可只取前几位，两个不同的网址就可能得到同一个短码。所以写入前必须检查：短码已存在且对应的是另一个网址，就在网址后面加一个盐重新算，直到不冲突。下面为了让冲突容易出现，只取 1 位短码演示：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">hash</span>(<span class="hljs-params">str</span>) {
+  <span class="hljs-comment">// FNV-1a 32 位哈希，只用于演示</span>
+  <span class="hljs-keyword">let</span> h = <span class="hljs-number">0x811c9dc5</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; str.<span class="hljs-property">length</span>; i++) {
+    h ^= str.<span class="hljs-title function_">charCodeAt</span>(i);
+    h = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">imul</span>(h, <span class="hljs-number">0x01000193</span>) &gt;&gt;&gt; <span class="hljs-number">0</span>;
+  }
+  <span class="hljs-keyword">return</span> h;
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-variable constant_">ALPHABET</span> = <span class="hljs-string">&#x27;0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ&#x27;</span>;
+<span class="hljs-keyword">const</span> store = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>(); <span class="hljs-comment">// 短码 → 长网址</span>
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">shorten</span>(<span class="hljs-params">url, length</span>) {
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> salt = <span class="hljs-number">0</span>; salt &lt; <span class="hljs-number">10</span>; salt++) {
+    <span class="hljs-keyword">let</span> h = <span class="hljs-title function_">hash</span>(salt === <span class="hljs-number">0</span> ? url : url + <span class="hljs-string">&#x27;#&#x27;</span> + salt);
+    <span class="hljs-keyword">let</span> code = <span class="hljs-string">&#x27;&#x27;</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; length; i++) {
+      code += <span class="hljs-variable constant_">ALPHABET</span>[h % <span class="hljs-number">62</span>];
+      h = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(h / <span class="hljs-number">62</span>);
+    }
+    <span class="hljs-keyword">const</span> existing = store.<span class="hljs-title function_">get</span>(code);
+    <span class="hljs-keyword">if</span> (existing === url) <span class="hljs-keyword">return</span> code + <span class="hljs-string">&#x27;（已存在）&#x27;</span>;
+    <span class="hljs-keyword">if</span> (existing === <span class="hljs-literal">undefined</span>) {
+      store.<span class="hljs-title function_">set</span>(code, url);
+      <span class="hljs-keyword">return</span> code + (salt &gt; <span class="hljs-number">0</span> ? <span class="hljs-string">\`（冲突后重试 <span class="hljs-subst">\${salt}</span> 次）\`</span> : <span class="hljs-string">&#x27;&#x27;</span>);
+    }
+  }
+  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;重试次数用完&#x27;</span>);
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">shorten</span>(<span class="hljs-string">&#x27;https://a.example/1&#x27;</span>, <span class="hljs-number">1</span>)); <span class="hljs-comment">// B</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">shorten</span>(<span class="hljs-string">&#x27;https://a.example/1&#x27;</span>, <span class="hljs-number">1</span>)); <span class="hljs-comment">// B（已存在）</span>
+<span class="hljs-keyword">const</span> results = [];
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">2</span>; i &lt;= <span class="hljs-number">40</span>; i++) results.<span class="hljs-title function_">push</span>(<span class="hljs-title function_">shorten</span>(<span class="hljs-string">\`https://a.example/<span class="hljs-subst">\${i}</span>\`</span>, <span class="hljs-number">1</span>));
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(results.<span class="hljs-title function_">filter</span>(<span class="hljs-function">(<span class="hljs-params">r</span>) =&gt;</span> r.<span class="hljs-title function_">includes</span>(<span class="hljs-string">&#x27;冲突&#x27;</span>)).<span class="hljs-property">length</span> &gt; <span class="hljs-number">0</span> ? <span class="hljs-string">&#x27;出现过冲突&#x27;</span> : <span class="hljs-string">&#x27;没有冲突&#x27;</span>); <span class="hljs-comment">// 出现过冲突</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(store.<span class="hljs-property">size</span>); <span class="hljs-comment">// 40</span>
+</code></pre></div>
+<p>同一个网址第二次提交，算出同一个短码，发现表里存的就是它自己，直接返回，不新建。40 个网址挤进 62 个位置，一定有撞车的，撞上的那些加盐重算以后换了位置，最后 40 个网址都存了进去。</p>
+<p>真实系统用 7 位短码，冲突概率低很多，但量大以后仍然会发生，所以检查不能省。在数据库里，检查和写入要用短码的唯一约束一起完成，靠“先查再写”两步，两个请求同时写入同一个短码时还是会冲突。</p>
+<p>两种方式怎么选？自增 ID 简单、不冲突，适合大多数场景，再做一层混淆避免被猜；哈希适合要求“同一网址只有一个短码”的场景。也可以直接用随机数生成短码，同样要靠唯一约束处理冲突。</p>
+<h2>跳转用 301 还是 302</h2>
+<p>301 和 302 都会让浏览器自动请求 <code>Location</code> 里的地址，区别在“永久”和“临时”。MDN 说，永久重定向意味着原来的网址不应该再使用，搜索引擎会把链接权重转给新地址；临时重定向则不会。HTTP 规范 RFC 9110 还写明，301 响应可以被启发式缓存，也就是没有缓存头时浏览器也可以自己决定缓存它；302 没有这一条。</p>
+<p>这对短链意味着什么？用 301 时，浏览器缓存了跳转结果，同一个用户再点这个短链，可能直接跳到长网址，请求根本不到短链服务器，这次点击就统计不到。目标网址后来改了，或者链接被封禁了，缓存过的浏览器也不知道。所以需要统计、需要能改目标的短链服务，一般用 302，并加上 <code>Cache-Control: private, max-age=0</code> 或 <code>no-store</code> 之类的缓存头，明确不让缓存。</p>
+<p>还有一个细节：MDN 提到，按 Fetch 标准，浏览器对 POST 请求收到 301 或 302 时会改用 GET 去请求新地址。短链基本都是 GET 请求，没有影响；如果需要保留请求方法，临时的用 307，永久的用 308。</p>
+<h2>访问量怎样统计</h2>
+<p>最直接的做法是每次跳转在数据库里给计数加一，可是热门链接每秒可能有上万次访问，同一行反复更新会成为瓶颈，还会拖慢跳转。</p>
+<p>所以跳转接口只做一件事：查到长网址后，把一条访问记录，包括短码、时间、<code>Referer</code>、<code>User-Agent</code>、IP 推算的地区，发到消息队列或写进日志，然后立刻返回重定向。后台任务消费这些记录，按短码和日期聚合成访问量、来源、设备分布，写进统计表，统计页面读的是聚合后的结果。</p>
+<p>需要实时显示的点击数，可以先在 Redis 里用计数器累加，定期写回数据库。</p>
+<h2>常见追问</h2>
+<p><strong>怎样防止短链被拿来传播钓鱼网站？</strong></p>
+<blockquote>
+<p>生成时校验协议只允许 <code>http</code> 和 <code>https</code>，把目标网址和恶意网址库比对；访问时如果发现目标后来被标记为危险，就不跳转，改为显示提示页。生成接口要按用户和 IP 限流，防止有人批量生成。</p>
+</blockquote>
+<p><strong>用户想自定义短码怎么办？</strong></p>
+<blockquote>
+<p>自定义短码和自动生成的放在同一张表里，同样靠唯一约束防止重复。要限制长度和字符集，并保留一批词，比如 <code>admin</code>、<code>api</code>，避免和系统路由冲突。自动生成的短码长度最好和常见的自定义短码错开，减少互相占用。</p>
+</blockquote>
+<p><strong>短链要不要支持过期？</strong></p>
+<blockquote>
+<p>一般要支持。表里存过期时间，跳转时检查，过期就返回提示页。缓存的过期时间不要超过链接本身的过期时间，否则链接过期后还能从缓存里跳转。</p>
+</blockquote>`};export{e as default};

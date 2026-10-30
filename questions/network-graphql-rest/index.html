@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="网络面试题：REST 按资源划分多个 URL，每个接口返回的字段由服务端决定；GraphQL 只有一个端点，服务端用类型系统描述数据…" />
+    <title>GraphQL 和 REST 有什么区别？前端怎样使用 GraphQL？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/network-graphql-rest/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="GraphQL 和 REST 有什么区别？前端怎样使用 GraphQL？" />
+    <meta property="og:description" content="网络面试题：REST 按资源划分多个 URL，每个接口返回的字段由服务端决定；GraphQL 只有一个端点，服务端用类型系统描述数据…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/network-graphql-rest/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/network-graphql-rest/#webpage","url":"https://fe.hushifa.top/questions/network-graphql-rest/","name":"GraphQL 和 REST 有什么区别？前端怎样使用 GraphQL？","description":"网络面试题：REST 按资源划分多个 URL，每个接口返回的字段由服务端决定；GraphQL 只有一个端点，服务端用类型系统描述数据…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/network-graphql-rest/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/network-graphql-rest/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"网络面试题","item":"https://fe.hushifa.top/topics/network/"},{"@type":"ListItem","position":3,"name":"GraphQL 和 REST 有什么区别？前端怎样使用 GraphQL？","item":"https://fe.hushifa.top/questions/network-graphql-rest/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BH3ahagJ.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/network/">网络面试题</a><span aria-hidden="true">/</span><span aria-current="page">GraphQL 和 REST 有什么区别？前端怎样使用 GraphQL？</span></nav><h1 tabindex="-1">GraphQL 和 REST 有什么区别？前端怎样使用 GraphQL？</h1><p class="reading-summary">REST 按资源划分多个 URL，每个接口返回的字段由服务端决定；GraphQL 只有一个端点，服务端用类型系统描述数据，客户端在查询里写明要哪些字段，一次请求可以拿到多个关联的数据。前端用 POST 把查询和变量发到 /graphql，要同时检查 HTTP 状态码和响应里的 errors，因为部分成功也会返回 2xx。代价是 HTTP 缓存不好用、服务端要处理 N+1 和查询复杂度。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>比如商品详情页要显示商品信息、商家名称和前三条评论。用 REST，一般要请求 <code>/products/1</code>、<code>/shops/8</code>、<code>/products/1/reviews</code> 三个接口，每个接口返回什么字段由后端定，常常多给一堆用不上的字段。用 GraphQL，前端写一个查询，把这三样东西和需要的字段都列出来，发到同一个 <code>/graphql</code> 地址，一次拿回来，字段不多不少。</p>
+<p>能这样做是因为 GraphQL 的服务端先用类型系统描述了所有数据：有哪些类型、每个类型有哪些字段、字段之间怎么关联。客户端的查询会先按这套类型校验，再执行。客户端只拿自己写的字段，服务端加字段不影响老查询，所以官方倾向于不做版本号，而是持续演进 schema，旧字段用 <code>@deprecated</code> 标记为废弃。</p>
+<p>前端使用时，通常用 POST 把 <code>query</code> 和 <code>variables</code> 放进 JSON 请求体发过去。要注意，响应里只要 <code>data</code> 不为 <code>null</code>，服务端就应该返回 2xx，即使 <code>errors</code> 里有错误，因为 HTTP 没有“部分成功”这个状态码。所以不能只看 <code>response.ok</code>，还要检查 <code>errors</code>。</p>
+<p>代价也要讲清楚。所有请求都打到一个 URL，REST 那种按 URL 做的 HTTP 缓存和 CDN 缓存就不好用了，客户端要靠对象的 <code>id</code> 自己做缓存；服务端要处理 N+1 查询，还要限制查询深度和复杂度，防止一个查询把服务器拖垮。</p>
+</blockquote>
+<h2>同一个页面，两种写法</h2>
+<p>先看 REST。商品详情页需要三份数据，就要发三个请求，每份数据都是后端定好的形状：</p>
+<div class="not-prose code-block"><div class="code-language">text</div><pre><code class="hljs language-text">GET /products/1          → { id, name, price, description, stock, ... }
+GET /shops/8             → { id, name, address, phone, ... }
+GET /products/1/reviews  → [{ id, content, rating, user, createdAt, ... }, ...]
+</code></pre></div>
+<p>如果第二个请求的商家 ID 要从第一个请求的结果里拿，还得等第一个回来再发，页面就多了一轮等待。</p>
+<p>GraphQL 把这三份数据写进一个查询里，关联关系在查询里直接表达：</p>
+<div class="not-prose code-block"><div class="code-language">graphql</div><pre><code class="hljs language-graphql">query ProductPage($id: ID!) {
+  product(id: $id) {
+    name
+    price
+    shop {
+      name
+    }
+    reviews(first: 3) {
+      content
+      rating
+    }
+  }
+}
+</code></pre></div>
+<p>服务端按查询的形状返回 JSON，<code>data.product.shop.name</code> 就是商家名称，没写的字段不会出现在响应里。商家和评论跟着商品一起返回，前端不用再等第一个请求回来才发第二个。</p>
+<h2>为什么只有一个 URL</h2>
+<p>REST 用 URL 标识资源，<code>/products/1</code> 和 <code>/shops/8</code> 是两个不同的东西。GraphQL 不用 URL 标识实体，官方文档说一个 GraphQL 服务只在一个端点上工作，通常是 <code>/graphql</code>，所有请求都发到这里，要什么数据由查询内容决定。</p>
+<p>HTTP 方法上，官方规定服务端必须支持 POST，可以选择支持 GET，但 GET 只能用于查询（query），变更（mutation）必须用 POST。POST 请求的 <code>Content-Type</code> 应该是 <code>application/json</code>，<code>Accept</code> 里应该带上 <code>application/graphql-response+json</code>。</p>
+<h2>前端怎样发请求、怎样判断出错</h2>
+<p>不用任何库，<code>fetch</code> 就能发 GraphQL 请求：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> res = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;/graphql&#x27;</span>, {
+  <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,
+  <span class="hljs-attr">headers</span>: {
+    <span class="hljs-string">&#x27;Content-Type&#x27;</span>: <span class="hljs-string">&#x27;application/json&#x27;</span>,
+    <span class="hljs-title class_">Accept</span>: <span class="hljs-string">&#x27;application/graphql-response+json, application/json&#x27;</span>,
+  },
+  <span class="hljs-attr">body</span>: <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>({ <span class="hljs-attr">query</span>: <span class="hljs-variable constant_">PRODUCT_QUERY</span>, <span class="hljs-attr">variables</span>: { <span class="hljs-attr">id</span>: <span class="hljs-string">&#x27;1&#x27;</span> } }),
+});
+<span class="hljs-keyword">const</span> body = <span class="hljs-keyword">await</span> res.<span class="hljs-title function_">json</span>();
+</code></pre></div>
+<p><code>variables</code> 单独传，不要把用户输入拼进查询字符串里，这和 SQL 参数化是一个道理。</p>
+<p>拿到响应以后怎样判断成功？官方文档的说法是：响应里至少有 <code>data</code> 或 <code>errors</code> 之一；语法、校验这类请求错误发生在执行之前，不会有 <code>data</code>；某个字段的解析出错时，其他字段照样执行，<code>data</code> 和 <code>errors</code> 同时出现，这叫部分响应。下面把这几种情况分开处理：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">readGraphQL</span>(<span class="hljs-params">status, body</span>) {
+  <span class="hljs-keyword">if</span> (!body.<span class="hljs-property">data</span>) {
+    <span class="hljs-comment">// 请求错误：语法或校验失败，没有执行，通常是 4xx</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`失败(<span class="hljs-subst">${status}</span>)：<span class="hljs-subst">${body.errors.map((e) =&gt; e.message).join(<span class="hljs-string">&#x27;; &#x27;</span>)}</span>`</span>;
+  }
+  <span class="hljs-keyword">if</span> (body.<span class="hljs-property">errors</span>) {
+    <span class="hljs-comment">// 部分响应：data 不为 null，状态码仍是 2xx</span>
+    <span class="hljs-keyword">const</span> paths = body.<span class="hljs-property">errors</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> e.<span class="hljs-property">path</span>.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;.&#x27;</span>));
+    <span class="hljs-keyword">return</span> <span class="hljs-string">`部分成功(<span class="hljs-subst">${status}</span>)，出错字段：<span class="hljs-subst">${paths.join(<span class="hljs-string">&#x27;, &#x27;</span>)}</span>`</span>;
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`成功(<span class="hljs-subst">${status}</span>)`</span>;
+}
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">readGraphQL</span>(<span class="hljs-number">200</span>, { <span class="hljs-attr">data</span>: { <span class="hljs-attr">product</span>: { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;键盘&#x27;</span> } } }));
+<span class="hljs-comment">// 成功(200)</span>
+<span class="hljs-keyword">const</span> partial = {
+  <span class="hljs-attr">data</span>: { <span class="hljs-attr">product</span>: { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;键盘&#x27;</span>, <span class="hljs-attr">reviews</span>: <span class="hljs-literal">null</span> } },
+  <span class="hljs-attr">errors</span>: [{ <span class="hljs-attr">message</span>: <span class="hljs-string">&#x27;评论服务超时&#x27;</span>, <span class="hljs-attr">path</span>: [<span class="hljs-string">&#x27;product&#x27;</span>, <span class="hljs-string">&#x27;reviews&#x27;</span>] }],
+};
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">readGraphQL</span>(<span class="hljs-number">200</span>, partial));
+<span class="hljs-comment">// 部分成功(200)，出错字段：product.reviews</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">readGraphQL</span>(<span class="hljs-number">400</span>, { <span class="hljs-attr">errors</span>: [{ <span class="hljs-attr">message</span>: <span class="hljs-string">&#x27;Cannot query field &quot;prise&quot; on type &quot;Product&quot;.&#x27;</span> }] }));
+<span class="hljs-comment">// 失败(400)：Cannot query field &quot;prise&quot; on type &quot;Product&quot;.</span>
+</code></pre></div>
+<p>第二种情况状态码是 200，如果只判断 <code>res.ok</code>，就会把评论缺失当成正常数据。为什么服务端不返回 5xx？官方文档解释，只要 <code>data</code> 不为 <code>null</code>，就应该返回 2xx，因为 HTTP 还没有表示“部分成功”的状态码。<code>errors</code> 里的 <code>path</code> 指出是哪个字段出了错，页面可以只让评论区显示错误，商品信息照常展示。</p>
+<p>第三种是校验错误，字段名写错了，查询根本没有执行，所以没有 <code>data</code>。官方文档说这类错误服务端通常返回 400；响应类型是 <code>application/graphql-response+json</code> 时，合法的请求执行失败会返回 4xx 或 5xx，而一些用 <code>application/json</code> 的老服务端可能一律返回 2xx。所以前端的判断要以 <code>data</code> 和 <code>errors</code> 为准，状态码作为辅助。</p>
+<p>实际项目里一般会用 Apollo Client、urql 这类客户端库，它们把请求、缓存和错误处理都封装好了，但判断逻辑和上面一样。</p>
+<h2>缓存为什么比 REST 麻烦</h2>
+<p>REST 的 URL 本身就是全局唯一的标识，浏览器和 CDN 可以直接按 URL 缓存。GraphQL 的请求都是 POST 到同一个地址，这条路走不通。官方的建议是给每个对象一个全局唯一的 <code>id</code> 字段，客户端库按“类型 + id”把对象拆开存成一张表，同一个商品出现在两个查询里，更新一次两处都会变。</p>
+<p>也可以让查询走 GET，利用 HTTP 缓存和 CDN。但复杂查询很长，可能超过浏览器和 CDN 对 URL 长度的限制。官方提到的常见做法是持久化查询：服务端预先存好查询文档，客户端只发一个短的标识。</p>
+<h2>服务端要多处理什么</h2>
+<p>N+1 问题是 GraphQL 最常被问的性能问题。查 10 个商品，每个商品再查自己的商家，如果每个字段各查各的，就是 1 次查商品加 10 次查商家。官方文档提到的解决办法是用 Facebook 的 DataLoader 这类工具，把一小段时间里收集到的请求合并成一次批量查询。</p>
+<p>另外，客户端能自由组合查询，也就能写出嵌套很深、很贵的查询。官方的安全文档列了几种手段：限制查询深度、限制广度和批量数量、限流、分析查询复杂度，以及只允许执行预先登记过的查询（trusted documents）。</p>
+<h2>常见追问</h2>
+<p><strong>GraphQL 一定比 REST 好吗？</strong></p>
+<blockquote>
+<p>不一定。数据关系复杂、多个端（Web、App）各要不同字段时，GraphQL 的好处明显。接口简单、主要是增删改查，或者很依赖 HTTP 缓存和 CDN 的场景，REST 更直接。GraphQL 还要求服务端维护 schema、处理 N+1 和查询复杂度，团队成本更高。</p>
+</blockquote>
+<p><strong>GraphQL 的权限控制放在哪里？</strong></p>
+<blockquote>
+<p>官方建议身份认证在 GraphQL 校验请求之前完成，比如放在 HTTP 中间件里；授权放在业务逻辑里，在执行查询时判断当前用户能不能看。前端隐藏某个字段不等于做了权限控制。</p>
+</blockquote>
+<p><strong>为什么 GraphQL 不用版本号？</strong></p>
+<blockquote>
+<p>因为客户端只拿自己写的字段，服务端新增字段不会影响老查询。要替换一个字段时，先加新字段，再给旧字段加上 <code>@deprecated(reason: &quot;...&quot;)</code>，客户端工具会提示开发者改用新字段。官方把这称为 schema 的持续演进，而不是发布 v2、v3。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://graphql.org/learn/introduction/" target="_blank" rel="noreferrer">GraphQL · Introduction<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://graphql.org/learn/serving-over-http/" target="_blank" rel="noreferrer">GraphQL · Serving over HTTP<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://graphql.org/learn/response/" target="_blank" rel="noreferrer">GraphQL · Response<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://graphql.org/learn/caching/" target="_blank" rel="noreferrer">GraphQL · Caching<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://graphql.org/learn/performance/" target="_blank" rel="noreferrer">GraphQL · Performance<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://graphql.org/learn/security/" target="_blank" rel="noreferrer">GraphQL · Security<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+GraphQL+%E5%92%8C+REST+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%E5%89%8D%E7%AB%AF%E6%80%8E%E6%A0%B7%E4%BD%BF%E7%94%A8+GraphQL%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AGraphQL+%E5%92%8C+REST+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%E5%89%8D%E7%AB%AF%E6%80%8E%E6%A0%B7%E4%BD%BF%E7%94%A8+GraphQL%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Anetwork-graphql-rest%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%BD%91%E7%BB%9C%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fnetwork-graphql-rest%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：GraphQL 和 REST 有什么区别？前端怎样使用 GraphQL？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/http-cache/">强缓存与协商缓存如何配合？</a></li><li><a href="/questions/http-cors/">什么是跨域？CORS 为什么需要服务端配合？</a></li><li><a href="/questions/http-cross-origin-solutions/">跨域有哪些解决方案？JSONP 和代理是怎样工作的？</a></li><li><a href="/questions/network-dns-tcp-tls/">DNS、TCP 和 TLS 握手分别会给页面增加哪些等待？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>
