@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="React面试题：Provider 的 value 用 Object.is 比较出变化后，所有读这个 Context 的组件都会重新渲染，memo 也挡不住…" />
+    <title>React Context 有哪些性能问题？怎样避免不必要的重新渲染？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/react-context-performance/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="React Context 有哪些性能问题？怎样避免不必要的重新渲染？" />
+    <meta property="og:description" content="React面试题：Provider 的 value 用 Object.is 比较出变化后，所有读这个 Context 的组件都会重新渲染，memo 也挡不住…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/react-context-performance/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/react-context-performance/#webpage","url":"https://fe.hushifa.top/questions/react-context-performance/","name":"React Context 有哪些性能问题？怎样避免不必要的重新渲染？","description":"React面试题：Provider 的 value 用 Object.is 比较出变化后，所有读这个 Context 的组件都会重新渲染，memo 也挡不住…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/react-context-performance/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/react-context-performance/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"React面试题","item":"https://fe.hushifa.top/topics/react/"},{"@type":"ListItem","position":3,"name":"React Context 有哪些性能问题？怎样避免不必要的重新渲染？","item":"https://fe.hushifa.top/questions/react-context-performance/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-BVmbcf0v.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/react/">React面试题</a><span aria-hidden="true">/</span><span aria-current="page">React Context 有哪些性能问题？怎样避免不必要的重新渲染？</span></nav><h1 tabindex="-1">React Context 有哪些性能问题？怎样避免不必要的重新渲染？</h1><p class="reading-summary">Provider 的 value 用 Object.is 比较出变化后，所有读这个 Context 的组件都会重新渲染，memo 也挡不住，React 不会只通知用到某个字段的组件。常见改法是用 useMemo、useCallback 稳定 value，按变化频率拆分 Context，把 state 和 dispatch 放进两个 Context；高频数据改放外部 store，用 useSyncExternalStore 让组件只订阅自己用到的那一部分。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>比如把 <code>{ user, theme, cart }</code> 放在一个 <code>AppContext</code> 里，购物车数量每变一次，只读 <code>theme</code> 的导航栏、只读 <code>user</code> 的头像也全都跟着重新渲染。原因是 React 只比较 Provider 的 <code>value</code> 整体变没变，变了就让所有读这个 Context 的组件重新渲染，它不知道组件只用了其中哪个字段。</p>
+<p>这个更新连 <code>memo</code> 也挡不住。<code>memo</code> 只在父组件传来的 props 没变时跳过渲染，React 文档写明，组件用到的 Context 变了，被 <code>memo</code> 包住的组件照样重新渲染。</p>
+<p>改法按情况选。value 是每次渲染新建的对象时，用 <code>useMemo</code>、<code>useCallback</code> 让它在数据没变时保持同一个引用；变化频率不同的数据拆成几个 Context；<code>useReducer</code> 的 state 和 dispatch 分开放，只发 action 的组件就不受 state 变化影响。数据变化很频繁、组件只关心一小部分时，就把数据放到 React 外面的 store 里，组件用 <code>useSyncExternalStore</code> 只订阅自己用到的值。</p>
+<p>要注意，这些都是按需做的优化。React 文档说，小应用里 value 每次都新建并不是问题；Context 适合放主题、语言、登录用户这类不常变的数据，输入框内容、拖拽坐标这种高频数据不适合放进去。</p>
+</blockquote>
+<h2>一个 Context 装太多东西会怎样</h2>
+<p>先回顾 Context 的更新规则，基本用法见<a href="/questions/react-use-context/">《useContext 怎样用？Context 变化为什么会让所有消费组件重新渲染？》</a>。React 文档的说法是：从收到不同 value 的 Provider 开始，React 会重新渲染下面所有使用这个 Context 的组件，新旧 value 用 <code>Object.is</code> 比较。</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">const</span> <span class="hljs-title class_">AppContext</span> = <span class="hljs-title function_">createContext</span>(<span class="hljs-literal">null</span>);
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">App</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> [user] = <span class="hljs-title function_">useState</span>({ <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;小明&#x27;</span> });
+  <span class="hljs-keyword">const</span> [theme, setTheme] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;light&#x27;</span>);
+  <span class="hljs-keyword">const</span> [cartCount, setCartCount] = <span class="hljs-title function_">useState</span>(<span class="hljs-number">0</span>);
+
+  <span class="hljs-keyword">const</span> value = <span class="hljs-title function_">useMemo</span>(
+    <span class="hljs-function">() =&gt;</span> ({ user, theme, cartCount, setTheme, setCartCount }),
+    [user, theme, cartCount],
+  );
+
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">AppContext</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{value}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">NavBar</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">ProductList</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">AppContext</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">NavBar</span> = <span class="hljs-title function_">memo</span>(<span class="hljs-keyword">function</span> <span class="hljs-title function_">NavBar</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> { theme } = <span class="hljs-title function_">useContext</span>(<span class="hljs-title class_">AppContext</span>);
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">nav</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{theme}</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">nav</span>&gt;</span></span>;
+});
+</code></pre></div>
+<p>这里已经用 <code>useMemo</code> 稳定了 value，可是购物车加一件商品，<code>cartCount</code> 变了，<code>value</code> 就得是一个新对象。<code>NavBar</code> 只用了 <code>theme</code>，也会重新渲染。</p>
+<p>为什么外面包了 <code>memo</code> 还没用？因为 <code>memo</code> 管的是 props。<code>NavBar</code> 没有从父组件拿任何 props，它的更新来自 <code>useContext</code>。React 文档写得很直接：就算组件被 <code>memo</code> 包住，它使用的 Context 变了，它仍然会重新渲染，记忆化只跟父组件传来的 props 有关。</p>
+<h2>第一步：别让 value 无故变化</h2>
+<p>最常见的问题其实比上面更简单：value 写成了 <code>value={{ user, login }}</code>，Provider 所在组件每渲染一次，对象和函数都是新的，<code>Object.is</code> 永远判定为不同。这时数据根本没变，所有消费组件却都在跟着渲染。</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">const</span> login = <span class="hljs-title function_">useCallback</span>(<span class="hljs-function">(<span class="hljs-params">response</span>) =&gt;</span> {
+  <span class="hljs-title function_">setCurrentUser</span>(response.<span class="hljs-property">user</span>);
+}, []);
+
+<span class="hljs-keyword">const</span> contextValue = <span class="hljs-title function_">useMemo</span>(<span class="hljs-function">() =&gt;</span> ({ currentUser, login }), [currentUser, login]);
+</code></pre></div>
+<p>用 <code>useCallback</code> 固定函数，用 <code>useMemo</code> 固定对象，只有 <code>currentUser</code> 真的变了，value 才会变。这一步只能消除“数据没变却重新渲染”，数据真的变了，所有消费组件还是会更新，所以还要看下面的拆分。<code>useMemo</code> 和 <code>memo</code> 的区别见<a href="/questions/react-memo/">《memo、useMemo、useCallback 各自优化什么？》</a>。</p>
+<h2>第二步：按变化频率拆分 Context</h2>
+<p>既然 React 按“整个 Context”通知，那就让每个 Context 只装一类数据。上面的例子可以拆成 <code>ThemeContext</code>、<code>UserContext</code>、<code>CartContext</code>，<code>NavBar</code> 只读 <code>ThemeContext</code>，购物车变化就不会再影响它。</p>
+<p>如果只是一个组件想读 Context 里的一部分，React 的 <code>memo</code> 文档给了另一种办法：把组件拆成两层，外层读 Context，把用到的那个字段作为 prop 传给一个被 <code>memo</code> 包住的内层组件。外层每次还会渲染，但它很轻；内层只在这个字段变了时才渲染。</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">NavBarOuter</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> { theme } = <span class="hljs-title function_">useContext</span>(<span class="hljs-title class_">AppContext</span>);
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">NavBarInner</span> <span class="hljs-attr">theme</span>=<span class="hljs-string">{theme}</span> /&gt;</span></span>;
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">NavBarInner</span> = <span class="hljs-title function_">memo</span>(<span class="hljs-keyword">function</span> <span class="hljs-title function_">NavBarInner</span>(<span class="hljs-params">{ theme }</span>) {
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">nav</span> <span class="hljs-attr">className</span>=<span class="hljs-string">{theme}</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">nav</span>&gt;</span></span>;
+});
+</code></pre></div>
+<h2>第三步：state 和 dispatch 分开放</h2>
+<p><code>useReducer</code> 配合 Context 时，React 文档的做法是建两个 Context：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">const</span> <span class="hljs-title class_">TasksContext</span> = <span class="hljs-title function_">createContext</span>(<span class="hljs-literal">null</span>);
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">TasksDispatchContext</span> = <span class="hljs-title function_">createContext</span>(<span class="hljs-literal">null</span>);
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">TasksProvider</span>(<span class="hljs-params">{ children }</span>) {
+  <span class="hljs-keyword">const</span> [tasks, dispatch] = <span class="hljs-title function_">useReducer</span>(tasksReducer, initialTasks);
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">TasksContext</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{tasks}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">TasksDispatchContext</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{dispatch}</span>&gt;</span>{children}<span class="hljs-tag">&lt;/<span class="hljs-name">TasksDispatchContext</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">TasksContext</span>&gt;</span></span>
+  );
+}
+</code></pre></div>
+<p>为什么要分开？因为 <code>useReducer</code> 返回的 <code>dispatch</code> 的引用是稳定的（React 文档称它有 stable identity），<code>TasksDispatchContext</code> 的 value 永远不变。“添加任务”按钮只读 <code>dispatch</code>，任务列表怎么变，它都不会因为 Context 重新渲染。要是把 <code>{ tasks, dispatch }</code> 放在一个对象里，任务一变，按钮也得跟着渲染。这种组合的适用范围见<a href="/questions/react-context-reducer/">《Context 与 useReducer 适合管理什么状态？》</a>。</p>
+<h2>数据变化很频繁时：外部 store 加 useSyncExternalStore</h2>
+<p>拆分也有尽头。比如一个协作编辑器，文档状态有几十个字段，每秒变好几次，每个组件只关心其中一两个。拆成几十个 Context 不现实，放在一个 Context 里又会每次全部重新渲染。</p>
+<p>这时的思路是把数据放到 React 外面，自己管理订阅，让每个组件只在“自己关心的那部分”变了时才更新。下面用纯 JavaScript 模拟这个机制：<code>watch</code> 相当于一个组件，它记住自己选出来的值，store 通知变化时，用 <code>Object.is</code> 比较新旧两次选出的值，不同才算一次重新渲染。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">createStore</span>(<span class="hljs-params">initialState</span>) {
+  <span class="hljs-keyword">let</span> state = initialState;
+  <span class="hljs-keyword">const</span> listeners = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>();
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">getState</span>: <span class="hljs-function">() =&gt;</span> state,
+    <span class="hljs-title function_">setState</span>(<span class="hljs-params">patch</span>) {
+      state = { ...state, ...patch };
+      listeners.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">listener</span>) =&gt;</span> <span class="hljs-title function_">listener</span>());
+    },
+    <span class="hljs-title function_">subscribe</span>(<span class="hljs-params">listener</span>) {
+      listeners.<span class="hljs-title function_">add</span>(listener);
+      <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> listeners.<span class="hljs-title function_">delete</span>(listener);
+    },
+  };
+}
+
+<span class="hljs-keyword">const</span> store = <span class="hljs-title function_">createStore</span>({ <span class="hljs-attr">count</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">theme</span>: <span class="hljs-string">&#x27;light&#x27;</span> });
+<span class="hljs-keyword">const</span> renders = { <span class="hljs-attr">counter</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">themeLabel</span>: <span class="hljs-number">0</span> };
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">watch</span>(<span class="hljs-params">name, selector</span>) {
+  <span class="hljs-keyword">let</span> last = <span class="hljs-title function_">selector</span>(store.<span class="hljs-title function_">getState</span>());
+  store.<span class="hljs-title function_">subscribe</span>(<span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> next = <span class="hljs-title function_">selector</span>(store.<span class="hljs-title function_">getState</span>());
+    <span class="hljs-keyword">if</span> (!<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">is</span>(last, next)) {
+      last = next;
+      renders[name] += <span class="hljs-number">1</span>;
+    }
+  });
+}
+
+<span class="hljs-title function_">watch</span>(<span class="hljs-string">&#x27;counter&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">count</span>);
+<span class="hljs-title function_">watch</span>(<span class="hljs-string">&#x27;themeLabel&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">theme</span>);
+
+store.<span class="hljs-title function_">setState</span>({ <span class="hljs-attr">count</span>: <span class="hljs-number">1</span> });
+store.<span class="hljs-title function_">setState</span>({ <span class="hljs-attr">count</span>: <span class="hljs-number">2</span> });
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(renders.<span class="hljs-property">counter</span>); <span class="hljs-comment">// 2</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(renders.<span class="hljs-property">themeLabel</span>); <span class="hljs-comment">// 0</span>
+store.<span class="hljs-title function_">setState</span>({ <span class="hljs-attr">theme</span>: <span class="hljs-string">&#x27;dark&#x27;</span> });
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(renders.<span class="hljs-property">themeLabel</span>); <span class="hljs-comment">// 1</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">is</span>({ <span class="hljs-attr">count</span>: <span class="hljs-number">2</span> }, { <span class="hljs-attr">count</span>: <span class="hljs-number">2</span> })); <span class="hljs-comment">// false</span>
+</code></pre></div>
+<p><code>count</code> 改了两次，<code>counter</code> 更新了两次，只读 <code>theme</code> 的 <code>themeLabel</code> 一次都没更新；改 <code>theme</code> 以后它才更新一次。这正是 Context 做不到的：Context 只能按整个 value 通知，这里每个订阅者按自己选出的值判断。</p>
+<p>最后一行说明为什么选出来的值要是原始值或者 store 里原有的引用。两个内容相同的新对象，<code>Object.is</code> 也判定为不同，选择函数要是每次都拼一个新对象返回，就等于每次都更新。</p>
+<p>在 React 里，把这个 store 接进组件的官方方式是 <code>useSyncExternalStore</code>：</p>
+<div class="not-prose code-block"><div class="code-language">JSX</div><pre><code class="hljs language-jsx"><span class="hljs-keyword">function</span> <span class="hljs-title function_">useStore</span>(<span class="hljs-params">selector</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">useSyncExternalStore</span>(store.<span class="hljs-property">subscribe</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">selector</span>(store.<span class="hljs-title function_">getState</span>()));
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">Counter</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> count = <span class="hljs-title function_">useStore</span>(<span class="hljs-function">(<span class="hljs-params">state</span>) =&gt;</span> state.<span class="hljs-property">count</span>);
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>{count}<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>;
+}
+</code></pre></div>
+<p>React 文档说明，store 变化时调用 <code>subscribe</code> 传进来的回调，React 会重新调用 <code>getSnapshot</code>，返回值用 <code>Object.is</code> 比较，不同才重新渲染这个组件。所以 <code>Counter</code> 只在 <code>count</code> 变了时更新。<code>getSnapshot</code> 在数据没变时必须返回同一个值，原因见<a href="/questions/react-external-store/">《useSyncExternalStore 为什么要求稳定的快照？》</a>。Zustand、Redux 这类支持选择器的状态库，也是让组件只订阅自己用到的字段，选型见<a href="/questions/state-store-choice/">《Zustand、Jotai 和 Redux Toolkit 应该怎样选择？》</a>。</p>
+<p>不过 React 文档也建议，能用 <code>useState</code>、<code>useReducer</code> 解决的就优先用内置状态，<code>useSyncExternalStore</code> 主要用于接入已有的非 React 代码。所以先拆 Context、稳定 value，确实不够再换外部 store。</p>
+<h2>常见追问</h2>
+<p><strong>为什么 memo 挡不住 Context 引起的重新渲染？</strong></p>
+<blockquote>
+<p><code>memo</code> 只比较父组件传来的 props，props 没变就跳过这次渲染。Context 的更新不经过 props，React 会直接找到读了这个 Context 的组件，让它重新渲染。React 文档写明，被 <code>memo</code> 包住的组件，用到的 Context 变了照样重新渲染。想让它只在某个字段变了时更新，就拆成两层：外层读 Context，把字段当 prop 传给 <code>memo</code> 包住的内层。</p>
+</blockquote>
+<p><strong>为什么 dispatch 要单独放一个 Context？</strong></p>
+<blockquote>
+<p>因为 <code>useReducer</code> 返回的 <code>dispatch</code> 引用是稳定的，单独放在一个 Context 里，这个 Context 的 value 就从来不变。只发 action、不读 state 的组件只订阅它，state 怎么变都不受影响。要是 state 和 dispatch 放在同一个对象里，state 一变对象就是新的，这些组件也会跟着渲染。</p>
+</blockquote>
+<p><strong>Context 的问题是不是说明不该用它？</strong></p>
+<blockquote>
+<p>不是。主题、语言、当前登录用户这类数据变化不频繁、很多组件都要用，放 Context 很合适，偶尔整体重新渲染一次没有影响。问题出在把高频变化的数据放进一个大 Context。这类数据放局部 state，或者放进能按字段订阅的外部 store。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://react.dev/reference/react/useContext" target="_blank" rel="noreferrer">React · useContext<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://react.dev/reference/react/memo" target="_blank" rel="noreferrer">React · memo<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://react.dev/learn/scaling-up-with-reducer-and-context" target="_blank" rel="noreferrer">React · Scaling Up with Reducer and Context<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://react.dev/reference/react/useSyncExternalStore" target="_blank" rel="noreferrer">React · useSyncExternalStore<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+React+Context+%E6%9C%89%E5%93%AA%E4%BA%9B%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%EF%BC%9F%E6%80%8E%E6%A0%B7%E9%81%BF%E5%85%8D%E4%B8%8D%E5%BF%85%E8%A6%81%E7%9A%84%E9%87%8D%E6%96%B0%E6%B8%B2%E6%9F%93%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AReact+Context+%E6%9C%89%E5%93%AA%E4%BA%9B%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98%EF%BC%9F%E6%80%8E%E6%A0%B7%E9%81%BF%E5%85%8D%E4%B8%8D%E5%BF%85%E8%A6%81%E7%9A%84%E9%87%8D%E6%96%B0%E6%B8%B2%E6%9F%93%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Areact-context-performance%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AReact%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Freact-context-performance%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：React Context 有哪些性能问题？怎样避免不必要的重新渲染？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/react-use-context/">useContext 怎样用？Context 变化为什么会让所有消费组件重新渲染？</a></li><li><a href="/questions/react-batching/">React 的批量更新是什么？React 18 的自动批处理改变了什么？</a></li><li><a href="/questions/react-hooks-internals/">Hooks 在 React 内部是怎样保存状态的？为什么靠调用顺序区分？</a></li><li><a href="/questions/react-usememo-usecallback/">useMemo 和 useCallback 有什么区别？什么时候不该用？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

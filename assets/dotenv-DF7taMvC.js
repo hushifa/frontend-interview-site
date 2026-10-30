@@ -1,0 +1,3 @@
+var e={notesHtml:`<p>零依赖模块，在应用启动时尽早调用 <code>require(&#x27;dotenv&#x27;).config()</code> 或 <code>import &#x27;dotenv/config&#x27;</code>，把 <code>.env</code> 中的键值写入 <code>process.env</code>。</p>
+<p>默认不覆盖已存在的环境变量，需要覆盖时传 <code>override: true</code>。官方建议不要把 <code>.env</code> 提交到仓库，并为每个环境分别维护 <code>.env</code> 文件，不要做继承式配置。README 中的加密、变量展开等功能属于另一个项目 dotenvx，不在本条范围内。</p>
+<p>许可：BSD-2-Clause。</p>`};export{e as default};
