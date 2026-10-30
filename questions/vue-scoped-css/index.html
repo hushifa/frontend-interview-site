@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="Vue面试题：加了 scoped 的 style 会被编译器改写，每个选择器末尾加上 [data-v-哈希] 属性选择器，组件渲染出的元素也带上同一个属性…" />
+    <title>Vue 的 scoped CSS 是怎样实现的？:deep()、:slotted()、v-bind() 编译成了什么？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/vue-scoped-css/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="Vue 的 scoped CSS 是怎样实现的？:deep()、:slotted()、v-bind() 编译成了什么？" />
+    <meta property="og:description" content="Vue面试题：加了 scoped 的 style 会被编译器改写，每个选择器末尾加上 [data-v-哈希] 属性选择器，组件渲染出的元素也带上同一个属性…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/vue-scoped-css/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/vue-scoped-css/#webpage","url":"https://fe.hushifa.top/questions/vue-scoped-css/","name":"Vue 的 scoped CSS 是怎样实现的？:deep()、:slotted()、v-bind() 编译成了什么？","description":"Vue面试题：加了 scoped 的 style 会被编译器改写，每个选择器末尾加上 [data-v-哈希] 属性选择器，组件渲染出的元素也带上同一个属性…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/vue-scoped-css/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/vue-scoped-css/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"Vue面试题","item":"https://fe.hushifa.top/topics/vue/"},{"@type":"ListItem","position":3,"name":"Vue 的 scoped CSS 是怎样实现的？:deep()、:slotted()、v-bind() 编译成了什么？","item":"https://fe.hushifa.top/questions/vue-scoped-css/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/vue/">Vue面试题</a><span aria-hidden="true">/</span><span aria-current="page">Vue 的 scoped CSS 是怎样实现的？:deep()、:slotted()、v-bind() 编译成了什么？</span></nav><h1 tabindex="-1">Vue 的 scoped CSS 是怎样实现的？:deep()、:slotted()、v-bind() 编译成了什么？</h1><p class="reading-summary">加了 scoped 的 style 会被编译器改写，每个选择器末尾加上 [data-v-哈希] 属性选择器，组件渲染出的元素也带上同一个属性，样式就只命中本组件。:deep() 把属性移到前面的父级，:slotted() 改成 -s 后缀的插槽属性，:global() 去掉属性，CSS 里的 v-bind() 编译成哈希过的自定义属性，由运行时写到组件根元素的行内样式上。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>在单文件组件里写 <code>&lt;style scoped&gt;</code>，<code>.title { color: red }</code> 编译后会变成 <code>.title[data-v-7ba5bd90]</code>，而这个组件渲染出来的元素都会带上 <code>data-v-7ba5bd90</code> 这个属性。哈希每个组件不同，所以这条样式只能命中本组件的元素。</p>
+<p>这样做是因为浏览器的 CSS 默认是全局的，两个组件都写 <code>.title</code> 就会互相影响。Vue 不依赖 Shadow DOM，只靠编译期改写选择器和给元素加属性，就做到了组件级隔离，不需要任何 polyfill。</p>
+<p>要穿透隔离时有几个伪类：<code>:deep(.b)</code> 把属性挪到前面的父级，用来改子组件内部的样式；<code>:slotted()</code> 专门选插槽内容；<code>:global()</code> 让某一条规则不加属性。CSS 里还能写 <code>v-bind(color)</code>，编译成一个哈希过的 CSS 自定义属性，运行时写到组件根元素的行内样式上，数据变了样式跟着变。</p>
+<p>要注意两点。子组件的根元素会同时带上父组件和子组件的属性，所以父组件的 scoped 样式能命中子组件根元素，这是官方有意的设计，方便父组件做布局。另外 <code>v-html</code> 插入的内容没有属性，scoped 样式管不到，得用 <code>:deep()</code>。</p>
+</blockquote>
+<h2>编译器把样式改成了什么</h2>
+<p>下面这段 scoped 样式用 <code>@vue/compiler-sfc</code> 3.5.44 的 <code>compileStyle</code> 编译，<code>id</code> 传 <code>data-v-7ba5bd90</code>：</p>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.title</span> { <span class="hljs-attribute">color</span>: red; }
+<span class="hljs-selector-class">.a</span> :<span class="hljs-built_in">deep</span>(.b) { <span class="hljs-attribute">color</span>: blue; }
+<span class="hljs-selector-pseudo">:slotted</span>(<span class="hljs-selector-tag">div</span>) { <span class="hljs-attribute">color</span>: green; }
+:<span class="hljs-built_in">global</span>(.dark) { <span class="hljs-attribute">color</span>: white; }
+<span class="hljs-selector-class">.box</span> { <span class="hljs-attribute">color</span>: <span class="hljs-built_in">v-bind</span>(color); <span class="hljs-attribute">width</span>: <span class="hljs-built_in">v-bind</span>(<span class="hljs-string">&#x27;size.w&#x27;</span>); }
+</code></pre></div>
+<p>实际输出是：</p>
+<div class="not-prose code-block"><div class="code-language">CSS</div><pre><code class="hljs language-css"><span class="hljs-selector-class">.title</span><span class="hljs-selector-attr">[data-v-7ba5bd90]</span> { <span class="hljs-attribute">color</span>: red; }
+<span class="hljs-selector-class">.a</span><span class="hljs-selector-attr">[data-v-7ba5bd90]</span> <span class="hljs-selector-class">.b</span> { <span class="hljs-attribute">color</span>: blue; }
+<span class="hljs-selector-tag">div</span><span class="hljs-selector-attr">[data-v-7ba5bd90-s]</span> { <span class="hljs-attribute">color</span>: green; }
+<span class="hljs-selector-class">.dark</span> { <span class="hljs-attribute">color</span>: white; }
+<span class="hljs-selector-class">.box</span><span class="hljs-selector-attr">[data-v-7ba5bd90]</span> { <span class="hljs-attribute">color</span>: <span class="hljs-built_in">var</span>(--<span class="hljs-number">7</span>ba5bd90-color); <span class="hljs-attribute">width</span>: <span class="hljs-built_in">var</span>(--<span class="hljs-number">7</span>ba5bd90-size\.w); }
+</code></pre></div>
+<p>普通选择器的属性加在最右边那一段上，也就是真正被选中的元素。所以 <code>.title</code> 必须同时满足“有这个类”和“是本组件渲染的”才会生效。</p>
+<p><code>:deep(.b)</code> 为什么能改到子组件里面？因为属性被挪到了 <code>.a</code> 上，<code>.b</code> 本身不再要求带本组件的属性。只要 <code>.a</code> 是本组件的元素，它后代里任何 <code>.b</code> 都能命中，包括子组件内部的元素。</p>
+<p><code>:slotted(div)</code> 用的是 <code>-s</code> 后缀的属性。官方文档说，插槽内容默认被看作父组件的东西，子组件的 scoped 样式管不到它；Vue 运行时在渲染插槽内容时，会给它们加上 <code>data-v-哈希-s</code>，<code>:slotted()</code> 就是专门匹配这个属性的。<code>:global(.dark)</code> 则直接去掉属性，相当于写在一个不带 scoped 的 <code>&lt;style&gt;</code> 里。</p>
+<h2>元素上的属性从哪里来</h2>
+<p>模板编译时传入 <code>scopeId</code>，运行时给组件渲染的每个元素都加上这个属性。下面是用 Vue 3.5.44 的 <code>renderToString</code> 实际渲染的结果，父组件的 scopeId 是 <code>data-v-parent</code>，子组件是 <code>data-v-child</code>：</p>
+<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">section</span> <span class="hljs-attr">data-v-parent</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">data-v-parent</span>&gt;</span>text<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;child&quot;</span> <span class="hljs-attr">data-v-child</span> <span class="hljs-attr">data-v-parent</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">data-v-child</span>&gt;</span>inner<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">data-v-parent</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">b</span>&gt;</span>html<span class="hljs-tag">&lt;/<span class="hljs-name">b</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span>
+</code></pre></div>
+<p>子组件的根元素 <code>div.child</code> 同时带着两个属性，它里面的 <code>span</code> 只有 <code>data-v-child</code>。这就是官方文档说的：父组件的样式不会漏进子组件内部，但子组件的根元素同时受父子两边的 scoped 样式影响。</p>
+<p>最后一个 <code>div</code> 用 <code>innerHTML</code> 插入了 <code>&lt;b&gt;</code>，<code>&lt;b&gt;</code> 上没有属性。<code>v-html</code> 也是这样，所以官方提示 <code>v-html</code> 的内容不受 scoped 样式影响，要用 <code>:deep()</code> 去选。</p>
+<h2>CSS 里的 v-bind() 怎样变成响应式</h2>
+<p><code>v-bind(color)</code> 编译成 <code>var(--7ba5bd90-color)</code> 后，CSS 文件本身还是静态的。值从哪来？同一个组件的 <code>&lt;script setup&gt;</code> 编译结果里会多出一段：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-title function_">_useCssVars</span>(<span class="hljs-function"><span class="hljs-params">_ctx</span> =&gt;</span> ({
+  <span class="hljs-string">&quot;7ba5bd90-color&quot;</span>: (color.<span class="hljs-property">value</span>)
+}))
+</code></pre></div>
+<p><code>useCssVars</code> 在运行时把 <code>--7ba5bd90-color: red</code> 写到组件根元素的行内样式上，<code>color</code> 变了就重新写一次。自定义属性会继承，所以组件内部的元素都能读到。官方文档的说法是：值被编译成哈希过的 CSS 自定义属性，通过行内样式应用到组件根元素，源数据变化时响应式更新。写 JavaScript 表达式时要加引号，比如 <code>v-bind(&#x27;theme.color&#x27;)</code>。</p>
+<h2>使用时要注意什么</h2>
+<p>官方给了两条建议。第一，scoped 不能代替类名，<code>p { color: red }</code> 加了 scoped 以后变成元素选择器加属性选择器，官方说这样会慢很多，换成类名或 id 基本就没有这个损耗。第二，递归组件里小心后代选择器，<code>.a .b</code> 中 <code>.a</code> 所在的元素如果包含递归的子组件，子组件里所有 <code>.b</code> 都会被命中，因为它们带着同样的属性。</p>
+<p>如果想要不依赖属性、而是改写类名的隔离方式，可以用 <code>&lt;style module&gt;</code>，见<a href="/questions/css-modern-architecture/">《CSS Modules、层叠层和自定义属性怎样帮助维护样式？》</a>。浏览器原生的作用域方案见<a href="/questions/css-scope/">《CSS @scope 能解决哪些样式隔离问题？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>为什么父组件的 scoped 样式能改到子组件的根元素？</strong></p>
+<blockquote>
+<p>因为子组件根元素同时带着父组件和子组件的 <code>data-v</code> 属性。Vue 官方说这是有意设计的，让父组件能给子组件的根元素设置布局相关的样式，比如外边距、宽度。子组件内部的其他元素只有子组件自己的属性，父组件的样式就碰不到。</p>
+</blockquote>
+<p><strong>同一个组件能同时写 scoped 和非 scoped 的样式吗？</strong></p>
+<blockquote>
+<p>可以，写两个 <code>&lt;style&gt;</code> 块，一个带 <code>scoped</code>、一个不带，不带的就是全局样式。如果只有一两条规则需要全局，也可以在 scoped 块里用 <code>:global()</code> 包起来。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://vuejs.org/api/sfc-css-features.html" target="_blank" rel="noreferrer">Vue · SFC CSS Features<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+Vue+%E7%9A%84+scoped+CSS+%E6%98%AF%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E7%9A%84%EF%BC%9F%3Adeep%28%29%E3%80%81%3Aslotted%28%29%E3%80%81v-bind%28%29+%E7%BC%96%E8%AF%91%E6%88%90%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9AVue+%E7%9A%84+scoped+CSS+%E6%98%AF%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E7%9A%84%EF%BC%9F%3Adeep%28%29%E3%80%81%3Aslotted%28%29%E3%80%81v-bind%28%29+%E7%BC%96%E8%AF%91%E6%88%90%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Avue-scoped-css%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AVue%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fvue-scoped-css%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：Vue 的 scoped CSS 是怎样实现的？:deep()、:slotted()、v-bind() 编译成了什么？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/vue-options-composition/">Options API 和 Composition API 有什么区别？Vue 组件的 data 为什么必须是函数？</a></li><li><a href="/questions/vue-vif-vfor/">v-if 和 v-for 为什么不建议写在同一个元素上？</a></li><li><a href="/questions/vue-data-function/">Vue 组件的 data 为什么必须是函数？</a></li><li><a href="/questions/vue-mini-router/">Vue Router 的原理是什么？怎样手写一个 mini router？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

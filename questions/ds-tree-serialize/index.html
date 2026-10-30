@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="数据结构与算法面试题：序列化是把树变成字符串，反序列化是按同样的规则还原。" />
+    <title>二叉树怎样序列化和反序列化？前序加空标记和层序两种写法有什么区别？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/ds-tree-serialize/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="二叉树怎样序列化和反序列化？前序加空标记和层序两种写法有什么区别？" />
+    <meta property="og:description" content="数据结构与算法面试题：序列化是把树变成字符串，反序列化是按同样的规则还原。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/ds-tree-serialize/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/ds-tree-serialize/#webpage","url":"https://fe.hushifa.top/questions/ds-tree-serialize/","name":"二叉树怎样序列化和反序列化？前序加空标记和层序两种写法有什么区别？","description":"数据结构与算法面试题：序列化是把树变成字符串，反序列化是按同样的规则还原。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/ds-tree-serialize/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/ds-tree-serialize/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"数据结构与算法面试题","item":"https://fe.hushifa.top/topics/data-structures/"},{"@type":"ListItem","position":3,"name":"二叉树怎样序列化和反序列化？前序加空标记和层序两种写法有什么区别？","item":"https://fe.hushifa.top/questions/ds-tree-serialize/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/data-structures/">数据结构与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">二叉树怎样序列化和反序列化？前序加空标记和层序两种写法有什么区别？</span></nav><h1 tabindex="-1">二叉树怎样序列化和反序列化？前序加空标记和层序两种写法有什么区别？</h1><p class="reading-summary">序列化是把树变成字符串，反序列化是按同样的规则还原。前序写法在遇到空节点时写一个空标记，还原时按前序顺序递归读；层序写法用队列一层层写出节点和 null，还原时用队列依次给父节点挂左右孩子。关键是空节点必须记下来，否则无法唯一还原。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>比如要把一棵二叉树存进 localStorage 或者通过接口发给别人，就得先把它变成字符串，这叫序列化；拿到字符串再把原来的树建回来，叫反序列化。LeetCode 297 就是这道题，它不限定格式，只要求能还原成原来的结构。</p>
+<p>难点在空节点。只记录节点值的话，同一串值可以对应好几棵形状不同的树，所以空的位置也要记下来。前序写法遇到空节点写一个 <code>#</code>，层序写法写 <code>null</code>，有了这些标记，结构就唯一确定了。</p>
+<p>两种写法各有用处。前序写法代码短，序列化和反序列化都是同一个递归顺序，读一个标记建一个节点；层序写法和 LeetCode 题面的 <code>[1,2,3,null,null,4,5]</code> 格式一样，用队列一层层处理，树很深时也不会递归太深。</p>
+<p>要注意两点。第一，反序列化必须严格按序列化时的顺序读，前序就前序、层序就层序。第二，层序写法末尾的 <code>null</code> 可以省掉，但还原时要处理右孩子标记读不到的情况。</p>
+</blockquote>
+<h2>为什么空节点必须记下来</h2>
+<p>只记录前序遍历的值，<code>1,2</code> 既可以是“2 是 1 的左孩子”，也可以是“2 是 1 的右孩子”，两棵树的前序结果一样，所以无法唯一还原。前序遍历的写法见<a href="/questions/ds-tree-iterative-traversal/">《二叉树的前序、中序、后序遍历怎样用递归和迭代写？》</a>。</p>
+<p>把空节点也写出来就不一样了。左孩子的情况写成 <code>1,2,#,#,#</code>，右孩子的情况写成 <code>1,#,2,#,#</code>。每个节点后面紧跟着它的左子树和右子树，空子树也占一个位置，读的时候每一步该建哪个节点就确定了。</p>
+<h2>前序加空标记的写法</h2>
+<p>下面用 LeetCode 题面示例里的树：根是 1，左孩子 2，右孩子 3，3 下面挂着 4 和 5。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">TreeNode</span>(<span class="hljs-params">val, left = <span class="hljs-literal">null</span>, right = <span class="hljs-literal">null</span></span>) {
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">val</span> = val;
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">left</span> = left;
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">right</span> = right;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">serialize</span>(<span class="hljs-params">root</span>) {
+  <span class="hljs-keyword">const</span> out = [];
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">walk</span>(<span class="hljs-params">node</span>) {
+    <span class="hljs-keyword">if</span> (node === <span class="hljs-literal">null</span>) {
+      out.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;#&#x27;</span>);
+      <span class="hljs-keyword">return</span>;
+    }
+    out.<span class="hljs-title function_">push</span>(<span class="hljs-title class_">String</span>(node.<span class="hljs-property">val</span>));
+    <span class="hljs-title function_">walk</span>(node.<span class="hljs-property">left</span>);
+    <span class="hljs-title function_">walk</span>(node.<span class="hljs-property">right</span>);
+  }
+  <span class="hljs-title function_">walk</span>(root);
+  <span class="hljs-keyword">return</span> out.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>);
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">deserialize</span>(<span class="hljs-params">data</span>) {
+  <span class="hljs-keyword">const</span> tokens = data.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;,&#x27;</span>);
+  <span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">build</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> token = tokens[i++];
+    <span class="hljs-keyword">if</span> (token === <span class="hljs-string">&#x27;#&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">const</span> node = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeNode</span>(<span class="hljs-title class_">Number</span>(token));
+    node.<span class="hljs-property">left</span> = <span class="hljs-title function_">build</span>();
+    node.<span class="hljs-property">right</span> = <span class="hljs-title function_">build</span>();
+    <span class="hljs-keyword">return</span> node;
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-title function_">build</span>();
+}
+
+<span class="hljs-keyword">const</span> root = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeNode</span>(<span class="hljs-number">1</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeNode</span>(<span class="hljs-number">2</span>), <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeNode</span>(<span class="hljs-number">3</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeNode</span>(<span class="hljs-number">4</span>), <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeNode</span>(<span class="hljs-number">5</span>)));
+<span class="hljs-keyword">const</span> text = <span class="hljs-title function_">serialize</span>(root);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(text); <span class="hljs-comment">// 1,2,#,#,3,4,#,#,5,#,#</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">serialize</span>(<span class="hljs-title function_">deserialize</span>(text)) === text ? <span class="hljs-string">&#x27;一致&#x27;</span> : <span class="hljs-string">&#x27;不一致&#x27;</span>); <span class="hljs-comment">// 一致</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">serialize</span>(<span class="hljs-literal">null</span>)); <span class="hljs-comment">// #</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">deserialize</span>(<span class="hljs-string">&#x27;#&#x27;</span>) === <span class="hljs-literal">null</span> ? <span class="hljs-string">&#x27;空树&#x27;</span> : <span class="hljs-string">&#x27;非空&#x27;</span>); <span class="hljs-comment">// 空树</span>
+</code></pre></div>
+<p>序列化结果是 <code>1,2,#,#,3,4,#,#,5,#,#</code>。2 是叶子，所以后面跟着两个 <code>#</code>，分别代表它的空左孩子和空右孩子。</p>
+<p>为什么反序列化只用一个下标 <code>i</code> 就够了？因为 <code>build</code> 的顺序和 <code>walk</code> 完全一样：先读当前节点，再递归建左子树，再递归建右子树。左子树建完时，<code>i</code> 正好停在右子树的第一个标记上。读到 <code>#</code> 就返回 <code>null</code>，递归自然在这里停下。</p>
+<p>空树序列化成 <code>#</code>，还原回来是 <code>null</code>，不需要额外判断。这种写法的缺点是递归深度等于树高，题目约束节点数最多 10⁴，如果树退化成一条链，递归就有一万层，可以按需改成用栈的迭代写法。</p>
+<h2>层序写法</h2>
+<p>层序写法就是 LeetCode 题面用的格式。序列化时用队列按层取节点，空孩子也放进队列，取到空的写 <code>null</code>；层序遍历本身见<a href="/questions/ds-binary-tree-bfs/">《二叉树怎样层序遍历、求最大深度？》</a>。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">TreeNode</span>(<span class="hljs-params">val, left = <span class="hljs-literal">null</span>, right = <span class="hljs-literal">null</span></span>) {
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">val</span> = val;
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">left</span> = left;
+  <span class="hljs-variable language_">this</span>.<span class="hljs-property">right</span> = right;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">serialize</span>(<span class="hljs-params">root</span>) {
+  <span class="hljs-keyword">if</span> (root === <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;&#x27;</span>;
+  <span class="hljs-keyword">const</span> out = [];
+  <span class="hljs-keyword">const</span> queue = [root];
+  <span class="hljs-keyword">let</span> head = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">while</span> (head &lt; queue.<span class="hljs-property">length</span>) {
+    <span class="hljs-keyword">const</span> node = queue[head++];
+    <span class="hljs-keyword">if</span> (node === <span class="hljs-literal">null</span>) {
+      out.<span class="hljs-title function_">push</span>(<span class="hljs-string">&#x27;null&#x27;</span>);
+      <span class="hljs-keyword">continue</span>;
+    }
+    out.<span class="hljs-title function_">push</span>(<span class="hljs-title class_">String</span>(node.<span class="hljs-property">val</span>));
+    queue.<span class="hljs-title function_">push</span>(node.<span class="hljs-property">left</span>, node.<span class="hljs-property">right</span>);
+  }
+  <span class="hljs-comment">// 末尾的 null 不影响还原，去掉后和 LeetCode 的写法一致。</span>
+  <span class="hljs-keyword">while</span> (out[out.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>] === <span class="hljs-string">&#x27;null&#x27;</span>) out.<span class="hljs-title function_">pop</span>();
+  <span class="hljs-keyword">return</span> out.<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>);
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">deserialize</span>(<span class="hljs-params">data</span>) {
+  <span class="hljs-keyword">if</span> (data === <span class="hljs-string">&#x27;&#x27;</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">const</span> tokens = data.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#x27;,&#x27;</span>);
+  <span class="hljs-keyword">const</span> root = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeNode</span>(<span class="hljs-title class_">Number</span>(tokens[<span class="hljs-number">0</span>]));
+  <span class="hljs-keyword">const</span> queue = [root];
+  <span class="hljs-keyword">let</span> head = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> i = <span class="hljs-number">1</span>;
+  <span class="hljs-keyword">while</span> (i &lt; tokens.<span class="hljs-property">length</span>) {
+    <span class="hljs-keyword">const</span> parent = queue[head++];
+    <span class="hljs-keyword">const</span> leftToken = tokens[i++];
+    <span class="hljs-keyword">if</span> (leftToken !== <span class="hljs-string">&#x27;null&#x27;</span>) {
+      parent.<span class="hljs-property">left</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeNode</span>(<span class="hljs-title class_">Number</span>(leftToken));
+      queue.<span class="hljs-title function_">push</span>(parent.<span class="hljs-property">left</span>);
+    }
+    <span class="hljs-keyword">const</span> rightToken = tokens[i++];
+    <span class="hljs-keyword">if</span> (rightToken !== <span class="hljs-literal">undefined</span> &amp;&amp; rightToken !== <span class="hljs-string">&#x27;null&#x27;</span>) {
+      parent.<span class="hljs-property">right</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeNode</span>(<span class="hljs-title class_">Number</span>(rightToken));
+      queue.<span class="hljs-title function_">push</span>(parent.<span class="hljs-property">right</span>);
+    }
+  }
+  <span class="hljs-keyword">return</span> root;
+}
+
+<span class="hljs-keyword">const</span> root = <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeNode</span>(<span class="hljs-number">1</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeNode</span>(<span class="hljs-number">2</span>), <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeNode</span>(<span class="hljs-number">3</span>, <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeNode</span>(<span class="hljs-number">4</span>), <span class="hljs-keyword">new</span> <span class="hljs-title class_">TreeNode</span>(<span class="hljs-number">5</span>)));
+<span class="hljs-keyword">const</span> text = <span class="hljs-title function_">serialize</span>(root);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(text); <span class="hljs-comment">// 1,2,3,null,null,4,5</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">serialize</span>(<span class="hljs-title function_">deserialize</span>(text)) === text ? <span class="hljs-string">&#x27;一致&#x27;</span> : <span class="hljs-string">&#x27;不一致&#x27;</span>); <span class="hljs-comment">// 一致</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">deserialize</span>(<span class="hljs-string">&#x27;1,2,3,null,null,4,5&#x27;</span>).<span class="hljs-property">right</span>.<span class="hljs-property">left</span>.<span class="hljs-property">val</span>); <span class="hljs-comment">// 4</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">serialize</span>(<span class="hljs-literal">null</span>) === <span class="hljs-string">&#x27;&#x27;</span> ? <span class="hljs-string">&#x27;空字符串&#x27;</span> : <span class="hljs-string">&#x27;非空&#x27;</span>); <span class="hljs-comment">// 空字符串</span>
+</code></pre></div>
+<p>结果是 <code>1,2,3,null,null,4,5</code>，和题面示例的输入一样。2 的两个孩子是空的，写成两个 <code>null</code>；4 和 5 的孩子也是空的，但都在末尾，被去掉了。</p>
+<p>反序列化为什么能把值挂到正确的父节点上？因为字符串里非空节点出现的顺序，就是它们进队列的顺序。队列里每取出一个父节点，就从字符串里往后读两个标记，分别作为它的左孩子和右孩子，非空的孩子再进队列，等着之后挂它们自己的孩子。</p>
+<p>末尾的 <code>null</code> 被去掉了，所以最后一个父节点的右孩子标记可能读不到，<code>tokens[i++]</code> 会得到 <code>undefined</code>，代码里要把它当成空孩子。题面示例 2 的空树，这里序列化成空字符串，反序列化时先判断空字符串直接返回 <code>null</code>。</p>
+<p>这两种写法时间复杂度都是 O(n)，每个节点和空标记各处理一次。层序写法用循环加队列，不会因为树深导致递归过深；前序写法代码更短，面试时手写更不容易出错。</p>
+<h2>常见追问</h2>
+<p><strong>只用前序和中序遍历结果能还原二叉树吗？</strong></p>
+<blockquote>
+<p>节点值互不相同时可以。前序的第一个是根，在中序里找到根，左边是左子树、右边是右子树，再递归处理。但 297 题没有说节点值不重复，值在 -1000 到 1000 之间，节点却可以有 10⁴ 个，必然有重复，所以这道题要用带空标记的写法。</p>
+</blockquote>
+<p><strong>为什么队列用下标 head 往后走，而不是 shift？</strong></p>
+<blockquote>
+<p><code>shift</code> 每次要把后面的元素往前挪，数组很长时会变慢。用一个 <code>head</code> 下标记录读到哪里，取元素是 O(1)，整体就是 O(n)。</p>
+</blockquote>
+<p><strong>节点值本身含有逗号或者 # 怎么办？</strong></p>
+<blockquote>
+<p>这道题的节点值都是整数，不会冲突。如果值是任意字符串，就要对值做转义，或者改成先写长度再写内容的格式，也可以直接用 <code>JSON.stringify</code> 处理值，保证分隔符不会和值混在一起。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://leetcode.com/problems/serialize-and-deserialize-binary-tree/" target="_blank" rel="noreferrer">LeetCode 297 · Serialize and Deserialize Binary Tree<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E4%BA%8C%E5%8F%89%E6%A0%91%E6%80%8E%E6%A0%B7%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%9F%E5%89%8D%E5%BA%8F%E5%8A%A0%E7%A9%BA%E6%A0%87%E8%AE%B0%E5%92%8C%E5%B1%82%E5%BA%8F%E4%B8%A4%E7%A7%8D%E5%86%99%E6%B3%95%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E4%BA%8C%E5%8F%89%E6%A0%91%E6%80%8E%E6%A0%B7%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%EF%BC%9F%E5%89%8D%E5%BA%8F%E5%8A%A0%E7%A9%BA%E6%A0%87%E8%AE%B0%E5%92%8C%E5%B1%82%E5%BA%8F%E4%B8%A4%E7%A7%8D%E5%86%99%E6%B3%95%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ads-tree-serialize%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fds-tree-serialize%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：二叉树怎样序列化和反序列化？前序加空标记和层序两种写法有什么区别？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/ds-binary-tree-bfs/">二叉树怎样层序遍历、求最大深度？</a></li><li><a href="/questions/ds-tree-lca/">怎样求二叉树的最近公共祖先？二叉搜索树有什么更简单的做法？</a></li><li><a href="/questions/ds-tree-depth-invert/">怎样求二叉树的最大深度、翻转二叉树、判断对称二叉树？</a></li><li><a href="/questions/ds-sorting/">快速排序和归并排序怎样实现？时间复杂度和稳定性有什么区别？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="移动端与 PWA面试题：ArkTS 在 TypeScript 基础上强制静态类型、禁止运行时改对象布局，不支持 any、JSX、解构声明等写法…" />
+    <title>鸿蒙的 ArkTS/ArkUI 和 Web、React Native 有什么区别？Web 前端页面怎样适配鸿蒙？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/mobile-harmonyos/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="鸿蒙的 ArkTS/ArkUI 和 Web、React Native 有什么区别？Web 前端页面怎样适配鸿蒙？" />
+    <meta property="og:description" content="移动端与 PWA面试题：ArkTS 在 TypeScript 基础上强制静态类型、禁止运行时改对象布局，不支持 any、JSX、解构声明等写法…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/mobile-harmonyos/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/mobile-harmonyos/#webpage","url":"https://fe.hushifa.top/questions/mobile-harmonyos/","name":"鸿蒙的 ArkTS/ArkUI 和 Web、React Native 有什么区别？Web 前端页面怎样适配鸿蒙？","description":"移动端与 PWA面试题：ArkTS 在 TypeScript 基础上强制静态类型、禁止运行时改对象布局，不支持 any、JSX、解构声明等写法…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/mobile-harmonyos/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/mobile-harmonyos/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"移动端与 PWA面试题","item":"https://fe.hushifa.top/topics/mobile/"},{"@type":"ListItem","position":3,"name":"鸿蒙的 ArkTS/ArkUI 和 Web、React Native 有什么区别？Web 前端页面怎样适配鸿蒙？","item":"https://fe.hushifa.top/questions/mobile-harmonyos/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/mobile/">移动端与 PWA面试题</a><span aria-hidden="true">/</span><span aria-current="page">鸿蒙的 ArkTS/ArkUI 和 Web、React Native 有什么区别？Web 前端页面怎样适配鸿蒙？</span></nav><h1 tabindex="-1">鸿蒙的 ArkTS/ArkUI 和 Web、React Native 有什么区别？Web 前端页面怎样适配鸿蒙？</h1><p class="reading-summary">ArkTS 在 TypeScript 基础上强制静态类型、禁止运行时改对象布局，不支持 any、JSX、解构声明等写法；ArkUI 用 struct 自定义组件、链式属性和装饰器状态变量声明界面。Web 页面在鸿蒙上由基于 Chromium 的 ArkWeb 组件显示，适配重点是按 UA 里的 OpenHarmony 识别设备、按系统版本对应的内核查兼容性、通过 javaScriptProxy 和 runJavaScript 与应用互相调用。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>鸿蒙原生应用默认用 ArkTS 写。ArkTS 是在 TypeScript 基础上扩展出来的，风格和 TS 很像，但规则更严：必须用静态类型，不能用 <code>any</code>，运行时不能给对象加删属性，JSX、<code>var</code>、解构声明这些写法也不支持。界面用 ArkUI 的声明式写法，组件是一个带 <code>@Component</code> 的 <code>struct</code>，在 <code>build()</code> 里用 <code>Column()</code>、<code>Text()</code> 这类系统组件拼界面，样式用 <code>.fontSize()</code> 这样链式调用。</p>
+<p>它和 React、Vue 的思路相同，都是“状态变了，界面自动跟着变”。区别在于状态要用 <code>@State</code> 这类装饰器标出来，没有装饰的变量改了界面也不刷新；界面最后画的是 ArkUI 自己的组件，不是 DOM。React Native 也不生成 DOM，它在运行时创建 Android、iOS 的原生视图，但写的仍是 JavaScript 和 JSX。</p>
+<p>Web 前端更常碰到的是另一件事：H5 页面在鸿蒙应用里由 ArkWeb 的 <code>Web</code> 组件显示。ArkWeb 基于 Chromium，不同系统版本对应不同内核，比如 HarmonyOS 6.0 默认 M132，所以查兼容性要按内核版本查。页面识别鸿蒙设备，官方建议看 UA 里的 <code>OpenHarmony</code> 关键字。</p>
+<p>页面和应用互相调用也有固定方式。应用用 <code>javaScriptProxy()</code> 或 <code>registerJavaScriptProxy()</code> 把对象注入页面，页面直接调用；应用调页面用 <code>runJavaScript()</code>。注册时要配合 <code>deleteJavaScriptRegister</code> 防止内存泄漏，调试要先在应用里调用 <code>setWebDebuggingAccess()</code> 打开开关。</p>
+</blockquote>
+<h2>ArkTS 比 TypeScript 多了哪些限制</h2>
+<p>ArkTS 是 HarmonyOS 应用的默认开发语言。官方的说法是，它在 TypeScript 生态的基础上做了扩展，保持 TS 的基本风格，从 API version 10 起进一步强化了开发期的静态检查。主要的差异有四条：强制使用静态类型、禁止在运行时改变对象布局、限制部分运算符的语义（例如一元 <code>+</code> 只能用于数字）、不支持结构化类型（structural typing）。</p>
+<p>为什么要这样限制？因为类型和对象结构在运行前都确定了，编译器能提前验证代码，运行时就能少做类型检查，官方把这一点归为性能上的考虑。所以 ArkTS 不支持一切“运行时才知道长什么样”的写法。</p>
+<p>“从TypeScript到ArkTS的适配规则”列了每条规则的名字，其中级别为“错误”的不遵守就编译失败。前端开发者最容易撞上的几条如下，每条后面是规则名：</p>
+<ul>
+<li>不能用 <code>any</code> 和 <code>unknown</code>（<code>arkts-no-any-unknown</code>）。</li>
+<li>不能用 <code>var</code>，改用 <code>let</code>（<code>arkts-no-var</code>）。</li>
+<li>不支持解构变量声明（<code>arkts-no-destruct-decls</code>）。</li>
+<li>不支持函数表达式，改用箭头函数（<code>arkts-no-func-expressions</code>）。</li>
+<li>不支持 <code>in</code> 运算符，因为对象布局在编译时已知（<code>arkts-no-in</code>）。</li>
+<li>不支持 JSX（<code>arkts-no-jsx</code>）。</li>
+<li>不支持结构化类型，形状相同的两个类型不能互相赋值（<code>arkts-no-structural-typing</code>）。</li>
+</ul>
+<p>文档也说明，按这些约束改过的代码仍然是合法的 TS 代码，没有被约束的 TS 特性 ArkTS 完全支持。另外 ArkTS 兼容 TS/JS 生态，可以用 TS/JS 开发或复用已有代码，具体限制见官方的“兼容 TS/JS 的约束”。</p>
+<h2>ArkUI 的组件和状态怎么写</h2>
+<p>ArkUI 提供两种开发范式：基于 ArkTS 的声明式开发范式，和兼容 JS 的类 Web 开发范式（HML、CSS、JavaScript 三段式）。官方推荐新应用用声明式范式，理由之一是它不需要 JS 框架管理页面 DOM，渲染更新链路更短。</p>
+<p>下面是官方“创建自定义组件”里的例子，点一下文字，界面从 <code>Hello, World!</code> 变成 <code>Hello, ArkUI!</code>：</p>
+<div class="not-prose code-block"><div class="code-language">arkts</div><pre><code class="hljs language-arkts">@Component
+struct HelloComponent {
+  @State message: string = &#x27;Hello, World!&#x27;;
+
+  build() {
+    Row() {
+      Text(this.message)
+        .fontSize(20)
+        .margin(10)
+        .onClick(() =&gt; {
+          this.message = &#x27;Hello, ArkUI!&#x27;;
+        })
+    }
+  }
+}
+</code></pre></div>
+<p>拿它和 React 对比，读者会注意到几处不同。组件不是函数也不是 class，而是 <code>struct</code> 加 <code>@Component</code>；页面入口组件还要再加 <code>@Entry</code>。界面写在 <code>build()</code> 里，创建系统组件不用 <code>new</code>，也不写标签，直接 <code>Text(this.message)</code>。样式和事件都用“.”链式调用，官方建议每个属性方法单独一行。</p>
+<p>状态这一点最要注意。“状态管理概述”写明，自定义组件里的变量必须用装饰器装饰才能成为状态变量，状态变量改变才会刷新界面；不加装饰器，界面只在初始化时渲染一次。这和 React 每次渲染重新执行函数、Vue 用响应式代理自动追踪都不一样。状态管理目前分 V1、V2 两个版本，官方建议新应用直接用 V2；而且状态管理只能在 UI 主线程使用，不能在 Worker、TaskPool 里用。</p>
+<h2>和 Web、React Native 的差别放在一起看</h2>
+<p>三者都是“写组件，描述界面应该长什么样”，差别在于最后画出来的东西和用的语言。</p>
+<p>Web 页面画的是 DOM，由浏览器排版渲染，语言是 JavaScript，样式是 CSS。React Native 用 JavaScript 和 React 写，官方文档说明它在运行时为组件创建对应的 Android、iOS 原生视图，详见<a href="/questions/mobile-rn/">《React Native 与浏览器里的 React 有哪些共同点和差异？》</a>。ArkUI 声明式范式用 ArkTS 写，界面由 ArkUI 框架的组件和渲染引擎绘制，同样没有 DOM，也没有 CSS 文件，样式通过组件的属性方法设置。</p>
+<p>所以 React 或 Vue 的代码不能直接搬到 ArkUI 里。组件的拆分方式和“状态驱动界面”的思路可以沿用，语法、样式和状态声明要按 ArkTS 重写。</p>
+<h2>H5 页面在鸿蒙应用里怎样运行</h2>
+<p>更常见的情况是，鸿蒙应用里嵌了 H5 页面。显示网页用的是 ArkWeb（方舟 Web）提供的 <code>Web</code> 组件，访问在线网页时应用要声明 <code>ohos.permission.INTERNET</code> 权限。</p>
+<p>ArkWeb 基于 Chromium 内核开发，系统版本和内核版本的对应关系由官方表格给出，例如：HarmonyOS 4.0 及之前是 M99，4.1 到 5.1 是 M114，6.0 默认 M132（也可切换到 M114）。官方建议按内核版本到 MDN 等网站查 W3C 标准的支持情况。所以评估某个 CSS 或 JS 特性能不能用，先确认目标设备的系统版本，再看对应 Chromium 版本是否支持。</p>
+<h3>怎样识别鸿蒙设备</h3>
+<p>ArkWeb 的默认 UA 格式是：</p>
+<div class="not-prose code-block"><div class="code-language">text</div><pre><code class="hljs language-text">Mozilla/5.0 ({DeviceType}; {OSName} {OSVersion}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{ChromeCompatibleVersion}.0.0.0 Safari/537.36 ArkWeb/{ArkWeb VersionCode} {DeviceCompat} {扩展区}
+</code></pre></div>
+<p><code>DeviceType</code> 取值是 <code>Phone</code>、<code>Tablet</code>、<code>PC</code>（2in1 设备），<code>OSName</code> 默认是 <code>OpenHarmony</code>，手机上 <code>DeviceCompat</code> 默认是 <code>Mobile</code>。官方推荐用 <code>OpenHarmony</code> 关键字识别鸿蒙设备，理由是 <code>ArkWeb</code> 表示用的 Web 内核，<code>OpenHarmony</code> 才表示操作系统。下面用官方文档里的示例 UA 演示：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">parseHarmonyUA</span>(<span class="hljs-params">ua</span>) {
+  <span class="hljs-keyword">const</span> match = <span class="hljs-regexp">/\((Phone|Tablet|PC); OpenHarmony ([\d.]+)\)/</span>.<span class="hljs-title function_">exec</span>(ua);
+  <span class="hljs-keyword">if</span> (!match) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">return</span> { <span class="hljs-attr">deviceType</span>: match[<span class="hljs-number">1</span>], <span class="hljs-attr">osVersion</span>: match[<span class="hljs-number">2</span>] };
+}
+
+<span class="hljs-keyword">const</span> ua =
+  <span class="hljs-string">&#x27;Mozilla/5.0 (Phone; OpenHarmony 5.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 ArkWeb/4.1.6.1 Mobile&#x27;</span>;
+<span class="hljs-keyword">const</span> info = <span class="hljs-title function_">parseHarmonyUA</span>(ua);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(info.<span class="hljs-property">deviceType</span>); <span class="hljs-comment">// Phone</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(info.<span class="hljs-property">osVersion</span>); <span class="hljs-comment">// 5.0</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">String</span>(<span class="hljs-title function_">parseHarmonyUA</span>(<span class="hljs-string">&#x27;Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)&#x27;</span>))); <span class="hljs-comment">// null</span>
+</code></pre></div>
+<p>为什么不只看有没有 <code>Mobile</code>？因为平板和 PC 上 <code>DeviceCompat</code> 默认为空，只看 <code>Mobile</code> 会把它们当成桌面浏览器。文档还提到一个相关的细节：ArkWeb 根据 UA 里有没有 <code>Mobile</code> 决定是否启用页面 <code>meta</code> 标签的 viewport 属性，没有 <code>Mobile</code> 时默认关闭，应用可以显式设置 <code>metaViewport</code> 为 true 打开。所以平板上布局不对时，要先确认 viewport 是否生效。</p>
+<h3>页面和应用怎样互相调用</h3>
+<p>这和<a href="/questions/mobile-hybrid-jsbridge/">《Hybrid 开发是什么？JSBridge 的 URL Scheme 拦截和注入对象有什么区别？》</a>里的“注入对象”是同一种思路。应用侧有两种注册方式：<code>Web</code> 组件初始化时用 <code>javaScriptProxy()</code>，初始化完成后用 <code>registerJavaScriptProxy()</code>，后者在下次加载或重新加载后生效。两种方式都要配合 <code>deleteJavaScriptRegister</code> 使用，防止内存泄漏。</p>
+<p>假设应用把一个对象以 <code>testObjName</code> 的名字注册，并在 <code>methodList</code> 里列出 <code>test</code>，页面就能像调用全局对象一样调用它，这是官方示例里页面侧的写法：</p>
+<div class="not-prose code-block"><div class="code-language">HTML</div><pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+  <span class="hljs-keyword">function</span> <span class="hljs-title function_">callArkTS</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">let</span> str = testObjName.<span class="hljs-title function_">test</span>();
+    <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;demo&#x27;</span>).<span class="hljs-property">innerHTML</span> = str;
+  }
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre></div>
+<p>反过来，应用调用页面里的函数用 <code>runJavaScript()</code> 或 <code>runJavaScriptExt()</code>，后者除了字符串还支持 <code>ArrayBuffer</code> 参数。页面只要把函数挂在全局，比如 <code>function htmlTest() {}</code>，应用就能用 <code>runJavaScript(&#x27;htmlTest()&#x27;)</code> 执行。</p>
+<p>注入时还可以传 <code>permission</code> 参数，官方示例用它按 scheme、host 等限定哪些网址可以调用哪些方法。</p>
+<h3>怎样调试</h3>
+<p>用电脑上的 DevTools 调试真机网页的通用做法见<a href="/questions/mobile-remote-debugging/">《移动端页面怎样在真机上调试？Safari Web Inspector、chrome://inspect 和 vConsole 各适合什么场景？》</a>。区别是要先让应用调用 <code>setWebDebuggingAccess()</code> 打开 Web 调试开关，否则 DevTools 发现不了页面；设备需要 4.1.0 及以上版本，从 API version 20 开始还支持指定端口的无线调试。</p>
+<h2>常见追问</h2>
+<p><strong>为什么 ArkTS 不支持 any 和运行时加属性？</strong></p>
+<blockquote>
+<p>官方给的理由是性能和正确性。类型和对象布局都在编译时确定，编译器就能提前检查错误，运行时也少做类型检查。代价是很多 JS 的动态写法要改成用类或接口声明类型，比如对象字面量要有明确的类型，判断成员是否存在不能用 <code>in</code>，要用 <code>instanceof</code>。</p>
+</blockquote>
+<p><strong>已有的 H5 业务要上鸿蒙，最省事的办法是什么？</strong></p>
+<blockquote>
+<p>用 ArkWeb 的 <code>Web</code> 组件直接加载已有页面，原生能力通过 <code>javaScriptProxy</code> 注入的对象提供。页面侧要做的是按 <code>OpenHarmony</code> 识别设备、按系统版本对应的 Chromium 内核检查兼容性，再确认平板和 PC 上 viewport 是否生效。需要原生体验的页面再用 ArkUI 重写。</p>
+</blockquote>
+<p><strong>ArkUI 的类 Web 开发范式是不是就能直接跑 Vue 或 React？</strong></p>
+<blockquote>
+<p>不是。类 Web 范式用的是 HML 标签、CSS 和 JavaScript 三段式写法，只是更贴近 Web 开发习惯，不是浏览器环境。而且官方推荐新应用用声明式范式；在 Stage 模型下，类 Web 范式只支持卡片，应用页面只支持声明式范式。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkts-get-started" target="_blank" rel="noreferrer">HarmonyOS 开发者文档 · 初识ArkTS语言<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/typescript-to-arkts-migration-guide" target="_blank" rel="noreferrer">HarmonyOS 开发者文档 · 从TypeScript到ArkTS的适配规则<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkui-overview" target="_blank" rel="noreferrer">HarmonyOS 开发者文档 · ArkUI简介<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkts-create-custom-components" target="_blank" rel="noreferrer">HarmonyOS 开发者文档 · 创建自定义组件<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/arkts-state-management-overview" target="_blank" rel="noreferrer">HarmonyOS 开发者文档 · 状态管理概述<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/web-component-overview" target="_blank" rel="noreferrer">HarmonyOS 开发者文档 · ArkWeb简介<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/web-default-useragent" target="_blank" rel="noreferrer">HarmonyOS 开发者文档 · User-Agent开发指导<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/web-in-page-app-function-invoking" target="_blank" rel="noreferrer">HarmonyOS 开发者文档 · 前端页面调用应用侧函数<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/web-in-app-frontend-page-function-invoking" target="_blank" rel="noreferrer">HarmonyOS 开发者文档 · 应用侧调用前端页面函数<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/web-debugging-with-devtools" target="_blank" rel="noreferrer">HarmonyOS 开发者文档 · 使用DevTools工具调试前端页面<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://reactnative.dev/docs/intro-react-native-components" target="_blank" rel="noreferrer">React Native · Core Components and Native Components<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E9%B8%BF%E8%92%99%E7%9A%84+ArkTS%2FArkUI+%E5%92%8C+Web%E3%80%81React+Native+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9FWeb+%E5%89%8D%E7%AB%AF%E9%A1%B5%E9%9D%A2%E6%80%8E%E6%A0%B7%E9%80%82%E9%85%8D%E9%B8%BF%E8%92%99%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E9%B8%BF%E8%92%99%E7%9A%84+ArkTS%2FArkUI+%E5%92%8C+Web%E3%80%81React+Native+%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9FWeb+%E5%89%8D%E7%AB%AF%E9%A1%B5%E9%9D%A2%E6%80%8E%E6%A0%B7%E9%80%82%E9%85%8D%E9%B8%BF%E8%92%99%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Amobile-harmonyos%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E7%A7%BB%E5%8A%A8%E7%AB%AF%E4%B8%8E+PWA%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fmobile-harmonyos%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：鸿蒙的 ArkTS/ArkUI 和 Web、React Native 有什么区别？Web 前端页面怎样适配鸿蒙？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/mobile-flutter-rn-web/">Flutter、React Native 和 Web 跨端怎么选？一套代码能同时跑在 App 和浏览器里吗？</a></li><li><a href="/questions/mobile-cross-platform-choice/">Flutter、React Native 和小程序跨端方案怎样选？</a></li><li><a href="/questions/mobile-rn/">React Native 与浏览器里的 React 有哪些共同点和差异？</a></li><li><a href="/questions/mobile-adaptation/">移动端怎样做屏幕适配？1px 边框为什么看起来变粗了？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

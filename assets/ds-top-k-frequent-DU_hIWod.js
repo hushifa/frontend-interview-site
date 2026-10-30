@@ -1,0 +1,104 @@
+var e={answerHtml:`<h2>简答</h2>
+<blockquote>
+<p>LeetCode 347 给一个整数数组 <code>nums</code> 和整数 <code>k</code>，要返回出现次数最多的 k 个元素，顺序不限，题目保证答案唯一。比如 <code>[1,1,1,2,2,3]</code>、<code>k = 2</code>，1 出现 3 次、2 出现 2 次，答案是 <code>[1,2]</code>。进阶要求时间复杂度优于 O(n log n)，也就是不能把计数结果整个排序。</p>
+<p>第一步都一样：用 <code>Map</code> 遍历一遍，记下每个数出现了几次，O(n)。难点在第二步，从计数结果里挑出次数最多的 k 个。</p>
+<p>一种做法是小顶堆，和找第 K 大元素的思路相同，只是比较的是出现次数。堆里最多放 k 个，堆顶是次数最少的那个，来一个就放进去，超过 k 个就弹出堆顶。最多有 n 种不同的数，每次进出堆 O(log k)，总共 O(n log k)。另一种是桶排序：出现次数最多是 n，所以准备下标 0 到 n 的桶，把每个数放进下标等于它出现次数的桶里，再从下标 n 往下收集，凑够 k 个就停，总共 O(n)。</p>
+<p>要注意两点。桶排序要额外开 n+1 个桶，数组很长但不同的数很少时会浪费空间，这时堆的做法更省。另外题目保证答案唯一，不需要处理第 k 名有几个数并列的情况，实际业务里如果有并列，要先定好怎样取舍。</p>
+</blockquote>
+<h2>两种写法</h2>
+<p><code>countFrequency</code> 两种写法共用。<code>MinHeap</code> 和<a href="/questions/ds-kth-largest/">《数组中第 K 大的元素怎样找？小顶堆和快速选择的复杂度有什么区别？》</a>里的写法相同，只是多了一个比较函数，因为这里堆里放的是 <code>[数字, 次数]</code>，要按次数比较。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">function</span> <span class="hljs-title function_">countFrequency</span>(<span class="hljs-params">nums</span>) {
+  <span class="hljs-keyword">const</span> counts = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> num <span class="hljs-keyword">of</span> nums) counts.<span class="hljs-title function_">set</span>(num, (counts.<span class="hljs-title function_">get</span>(num) ?? <span class="hljs-number">0</span>) + <span class="hljs-number">1</span>);
+  <span class="hljs-keyword">return</span> counts;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">topKByBucket</span>(<span class="hljs-params">nums, k</span>) {
+  <span class="hljs-keyword">const</span> counts = <span class="hljs-title function_">countFrequency</span>(nums);
+  <span class="hljs-comment">// 出现次数最多是 nums.length，所以下标 0 到 n 的桶就够用。</span>
+  <span class="hljs-keyword">const</span> buckets = <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">from</span>({ <span class="hljs-attr">length</span>: nums.<span class="hljs-property">length</span> + <span class="hljs-number">1</span> }, <span class="hljs-function">() =&gt;</span> []);
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> [num, count] <span class="hljs-keyword">of</span> counts) buckets[count].<span class="hljs-title function_">push</span>(num);
+
+  <span class="hljs-keyword">const</span> result = [];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> count = nums.<span class="hljs-property">length</span>; count &gt; <span class="hljs-number">0</span> &amp;&amp; result.<span class="hljs-property">length</span> &lt; k; count -= <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> num <span class="hljs-keyword">of</span> buckets[count]) {
+      result.<span class="hljs-title function_">push</span>(num);
+      <span class="hljs-keyword">if</span> (result.<span class="hljs-property">length</span> === k) <span class="hljs-keyword">break</span>;
+    }
+  }
+  <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MinHeap</span> {
+  <span class="hljs-title function_">constructor</span>(<span class="hljs-params">compare</span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span> = [];
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">compare</span> = compare;
+  }
+  <span class="hljs-keyword">get</span> <span class="hljs-title function_">size</span>() {
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>.<span class="hljs-property">length</span>;
+  }
+  <span class="hljs-title function_">push</span>(<span class="hljs-params">value</span>) {
+    <span class="hljs-keyword">const</span> a = <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>;
+    a.<span class="hljs-title function_">push</span>(value);
+    <span class="hljs-keyword">let</span> i = a.<span class="hljs-property">length</span> - <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">while</span> (i &gt; <span class="hljs-number">0</span>) {
+      <span class="hljs-keyword">const</span> parent = (i - <span class="hljs-number">1</span>) &gt;&gt; <span class="hljs-number">1</span>;
+      <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">compare</span>(a[parent], a[i]) &lt;= <span class="hljs-number">0</span>) <span class="hljs-keyword">break</span>;
+      [a[parent], a[i]] = [a[i], a[parent]];
+      i = parent;
+    }
+  }
+  <span class="hljs-title function_">pop</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">const</span> a = <span class="hljs-variable language_">this</span>.<span class="hljs-property">items</span>;
+    <span class="hljs-keyword">const</span> top = a[<span class="hljs-number">0</span>];
+    <span class="hljs-keyword">const</span> last = a.<span class="hljs-title function_">pop</span>();
+    <span class="hljs-keyword">if</span> (a.<span class="hljs-property">length</span>) {
+      a[<span class="hljs-number">0</span>] = last;
+      <span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>;
+      <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
+        <span class="hljs-keyword">let</span> smallest = i;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> child <span class="hljs-keyword">of</span> [<span class="hljs-number">2</span> * i + <span class="hljs-number">1</span>, <span class="hljs-number">2</span> * i + <span class="hljs-number">2</span>]) {
+          <span class="hljs-keyword">if</span> (child &lt; a.<span class="hljs-property">length</span> &amp;&amp; <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">compare</span>(a[child], a[smallest]) &lt; <span class="hljs-number">0</span>) smallest = child;
+        }
+        <span class="hljs-keyword">if</span> (smallest === i) <span class="hljs-keyword">break</span>;
+        [a[smallest], a[i]] = [a[i], a[smallest]];
+        i = smallest;
+      }
+    }
+    <span class="hljs-keyword">return</span> top;
+  }
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">topKByHeap</span>(<span class="hljs-params">nums, k</span>) {
+  <span class="hljs-keyword">const</span> counts = <span class="hljs-title function_">countFrequency</span>(nums);
+  <span class="hljs-comment">// 堆里放 [数字, 次数]，按次数比较，堆顶是目前 k 个里次数最少的。</span>
+  <span class="hljs-keyword">const</span> heap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MinHeap</span>(<span class="hljs-function">(<span class="hljs-params">x, y</span>) =&gt;</span> x[<span class="hljs-number">1</span>] - y[<span class="hljs-number">1</span>]);
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> entry <span class="hljs-keyword">of</span> counts) {
+    heap.<span class="hljs-title function_">push</span>(entry);
+    <span class="hljs-keyword">if</span> (heap.<span class="hljs-property">size</span> &gt; k) heap.<span class="hljs-title function_">pop</span>();
+  }
+  <span class="hljs-keyword">return</span> heap.<span class="hljs-property">items</span>.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">[num]</span>) =&gt;</span> num);
+}
+
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">sort</span> = (<span class="hljs-params">list</span>) =&gt; [...list].<span class="hljs-title function_">sort</span>(<span class="hljs-function">(<span class="hljs-params">x, y</span>) =&gt;</span> x - y).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;,&#x27;</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">sort</span>(<span class="hljs-title function_">topKByBucket</span>([<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], <span class="hljs-number">2</span>))); <span class="hljs-comment">// 1,2</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">sort</span>(<span class="hljs-title function_">topKByHeap</span>([<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], <span class="hljs-number">2</span>))); <span class="hljs-comment">// 1,2</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">sort</span>(<span class="hljs-title function_">topKByBucket</span>([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>], <span class="hljs-number">2</span>))); <span class="hljs-comment">// 1,2</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">sort</span>(<span class="hljs-title function_">topKByHeap</span>([<span class="hljs-number">4</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>], <span class="hljs-number">1</span>))); <span class="hljs-comment">// 6</span>
+</code></pre></div>
+<p>题目允许任意顺序返回，所以打印前先排个序再比较。前三行用的是 LeetCode 题面里的例子，最后一行是额外补的：6 出现 3 次，比 4 的 2 次多，<code>k = 1</code> 时只返回 6。</p>
+<h2>桶排序为什么能做到 O(n)</h2>
+<p>普通排序要比较大小，所以至少 O(n log n)。桶排序不比较，而是利用了一个事实：出现次数是 1 到 n 之间的整数。既然范围已知，就可以直接拿次数当数组下标，把数放进对应的桶，这一步只要遍历一次计数结果。</p>
+<p>收集时从下标 n 往下走，最多走 n+1 个桶。每个数只会被放进一个桶、最多被取出一次，所以收集也是 O(n)。三步加起来，计数 O(n)、分桶 O(n)、收集 O(n)，总共 O(n)。代价是空间，桶数组的长度是 n+1，不管有多少种不同的数都要开这么多。</p>
+<h2>堆为什么是小顶堆</h2>
+<p>要的是次数最多的 k 个，用的却是小顶堆，这一点容易绕。堆在这里像一个只有 k 个名额的排行榜，堆顶是榜上次数最少的那个，也就是“门槛”。新来的数如果次数比门槛高，放进去以后堆就超过 k 个了，弹出的是堆顶，也就是原来的门槛，新数就留下了。如果新来的数次数还不如门槛，它放进去以后自己就到了堆顶，马上又被弹出去。</p>
+<p>所以遍历完，留在堆里的就是次数最多的 k 个。堆的大小始终不超过 k，每次进出 O(log k)，设不同的数有 m 种，总共 O(n + m log k)，m 最多是 n，所以写成 O(n log k)。堆的原理见<a href="/questions/alg-priority-queue/">《前端任务怎样按优先级排队？二叉堆为什么不需要每次完整排序？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>直接把计数结果排序可以吗？</strong></p>
+<blockquote>
+<p>可以，<code>[...counts].sort((x, y) =&gt; y[1] - x[1]).slice(0, k)</code> 写起来最短。但排序是 O(m log m)，m 是不同数的个数，最坏等于 n，就是 O(n log n)，不满足题目的进阶要求。面试时可以先说这个写法，再给出堆或桶排序作为优化。</p>
+</blockquote>
+<p><strong>数据是不断到来的流，怎么求当前的前 K 个？</strong></p>
+<blockquote>
+<p>桶排序需要知道全部数据，不适合流。可以一直维护计数 <code>Map</code>，需要结果时再用大小为 k 的小顶堆扫一遍计数，每次查询 O(m log k)。</p>
+</blockquote>`};export{e as default};

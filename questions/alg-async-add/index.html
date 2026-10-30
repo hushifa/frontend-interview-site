@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="手写与算法面试题：先把回调形式的 asyncAdd 包成返回 Promise 的 add，最直接的做法是串行累加，n 个数要等 n-1 次调用依次完成。" />
+    <title>只给一个异步加法函数 asyncAdd，怎样求多个数的和并尽量快？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/alg-async-add/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="只给一个异步加法函数 asyncAdd，怎样求多个数的和并尽量快？" />
+    <meta property="og:description" content="手写与算法面试题：先把回调形式的 asyncAdd 包成返回 Promise 的 add，最直接的做法是串行累加，n 个数要等 n-1 次调用依次完成。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/alg-async-add/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/alg-async-add/#webpage","url":"https://fe.hushifa.top/questions/alg-async-add/","name":"只给一个异步加法函数 asyncAdd，怎样求多个数的和并尽量快？","description":"手写与算法面试题：先把回调形式的 asyncAdd 包成返回 Promise 的 add，最直接的做法是串行累加，n 个数要等 n-1 次调用依次完成。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/alg-async-add/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/alg-async-add/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"手写与算法面试题","item":"https://fe.hushifa.top/topics/algorithms/"},{"@type":"ListItem","position":3,"name":"只给一个异步加法函数 asyncAdd，怎样求多个数的和并尽量快？","item":"https://fe.hushifa.top/questions/alg-async-add/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/algorithms/">手写与算法面试题</a><span aria-hidden="true">/</span><span aria-current="page">只给一个异步加法函数 asyncAdd，怎样求多个数的和并尽量快？</span></nav><h1 tabindex="-1">只给一个异步加法函数 asyncAdd，怎样求多个数的和并尽量快？</h1><p class="reading-summary">先把回调形式的 asyncAdd 包成返回 Promise 的 add，最直接的做法是串行累加，n 个数要等 n-1 次调用依次完成。加法满足结合律，可以每一轮把数两两配对、用 Promise.all 同时计算，奇数个时最后一个直接进入下一轮，调用次数还是 n-1，但只需等约 log₂n 轮。调用量很大时再配合并发上限，避免一次发出太多请求。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>题目一般这样给：有一个 <code>asyncAdd(a, b, callback)</code>，它不立即返回结果，而是过一会儿通过 <code>callback(err, result)</code> 告诉你 <code>a + b</code>，可以想象成一次要等待的网络请求。要求只用它算出 <code>sum(1, 2, 3, ...)</code>。</p>
+<p>第一步是把回调包成 Promise，写一个 <code>add(a, b)</code> 返回 Promise，后面就能用 <code>await</code> 和 <code>Promise.all</code>。最直接的写法是串行累加：先算 <code>1 + 2</code>，结果再加 3，以此类推。n 个数要调用 n-1 次，每次都得等上一次完成，总耗时是 n-1 次调用的时间。</p>
+<p>优化的依据是加法满足结合律，先加哪两个都不影响结果。所以每一轮把数两两配对，<code>[1,2,3,4]</code> 同时算 <code>1+2</code> 和 <code>3+4</code>，用 <code>Promise.all</code> 等这一轮全部完成，下一轮再把结果两两相加。调用次数还是 n-1，但只要等约 log₂n 轮，8 个数从 7 轮降到 3 轮。</p>
+<p>要注意，第一轮会同时发出约 n/2 次调用，如果 <code>asyncAdd</code> 背后是真实请求，数量大时要加并发上限。另外 <code>Promise.all</code> 只要有一个失败就整体失败，回调里的 <code>err</code> 一定要传给 <code>reject</code>，否则错误会被吞掉。</p>
+</blockquote>
+<h2>先把回调包成 Promise，再比较两种写法</h2>
+<p>示例里的 <code>asyncAdd</code> 用 <code>Promise.resolve().then()</code> 模拟异步，<code>calls</code> 记录它被调用了多少次，<code>rounds</code> 记录两两合并的写法等了几轮。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">let</span> calls = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">asyncAdd</span>(<span class="hljs-params">a, b, callback</span>) {
+  calls += <span class="hljs-number">1</span>;
+  <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">resolve</span>().<span class="hljs-title function_">then</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">callback</span>(<span class="hljs-literal">null</span>, a + b));
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">a, b</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    <span class="hljs-title function_">asyncAdd</span>(a, b, <span class="hljs-function">(<span class="hljs-params">err, result</span>) =&gt;</span> (err ? <span class="hljs-title function_">reject</span>(err) : <span class="hljs-title function_">resolve</span>(result)));
+  });
+}
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">sumSerial</span>(<span class="hljs-params">nums</span>) {
+  <span class="hljs-keyword">if</span> (nums.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> total = nums[<span class="hljs-number">0</span>];
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">1</span>; i &lt; nums.<span class="hljs-property">length</span>; i += <span class="hljs-number">1</span>) total = <span class="hljs-keyword">await</span> <span class="hljs-title function_">add</span>(total, nums[i]);
+  <span class="hljs-keyword">return</span> total;
+}
+
+<span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">sumParallel</span>(<span class="hljs-params">nums</span>) {
+  <span class="hljs-keyword">if</span> (nums.<span class="hljs-property">length</span> === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> rounds = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> current = nums;
+  <span class="hljs-keyword">while</span> (current.<span class="hljs-property">length</span> &gt; <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">const</span> tasks = [];
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; current.<span class="hljs-property">length</span>; i += <span class="hljs-number">2</span>) {
+      tasks.<span class="hljs-title function_">push</span>(i + <span class="hljs-number">1</span> &lt; current.<span class="hljs-property">length</span> ? <span class="hljs-title function_">add</span>(current[i], current[i + <span class="hljs-number">1</span>]) : current[i]);
+    }
+    current = <span class="hljs-keyword">await</span> <span class="hljs-title class_">Promise</span>.<span class="hljs-title function_">all</span>(tasks);
+    rounds += <span class="hljs-number">1</span>;
+  }
+  <span class="hljs-keyword">return</span> { <span class="hljs-attr">total</span>: current[<span class="hljs-number">0</span>], rounds };
+}
+
+<span class="hljs-keyword">const</span> nums = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>];
+<span class="hljs-title function_">sumSerial</span>(nums)
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">total</span>) =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`串行：<span class="hljs-subst">${total}</span>，调用 <span class="hljs-subst">${calls}</span> 次`</span>); <span class="hljs-comment">// 串行：36，调用 7 次</span>
+    calls = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">sumParallel</span>(nums);
+  })
+  .<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">{ total, rounds }</span>) =&gt;</span> {
+    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`两两合并：<span class="hljs-subst">${total}</span>，调用 <span class="hljs-subst">${calls}</span> 次，<span class="hljs-subst">${rounds}</span> 轮`</span>); <span class="hljs-comment">// 两两合并：36，调用 7 次，3 轮</span>
+  });
+</code></pre></div>
+<p>两种写法调用 <code>asyncAdd</code> 的次数一样，都是 7 次，差别在等待的方式。串行写法里每次 <code>await</code> 都要等上一次结果回来，7 次调用一个接一个，要等 7 次。两两合并的写法第一轮同时发出 4 次调用，<code>1+2</code>、<code>3+4</code>、<code>5+6</code>、<code>7+8</code>，第二轮 2 次，第三轮 1 次，只需要等 3 轮。如果每次调用要 100 毫秒，串行大约 700 毫秒，两两合并大约 300 毫秒。</p>
+<p>为什么调用次数省不下来？因为每次加法把两个数变成一个，n 个数变成 1 个，不管怎么安排都要做 n-1 次。能优化的只有“多少次调用可以同时进行”。</p>
+<h2>两两合并里的几个细节</h2>
+<p>奇数个数时怎么办？<code>tasks.push</code> 那一行判断，最后一个数没有搭档，就把它原样放进 <code>tasks</code>。<code>Promise.all</code> 接受普通值，会把它当成已经完成的结果，下一轮它再和别人配对。</p>
+<p>为什么先包成 <code>add</code>？因为 <code>Promise.all</code> 只能等 Promise，回调形式的函数没法直接放进去。包装时要把回调里的 <code>err</code> 交给 <code>reject</code>，这样任何一次加法失败，<code>Promise.all</code> 都会立刻进入失败状态，外面可以 <code>catch</code> 到。<code>Promise.all</code> 的手写见<a href="/questions/alg-promise-all/">《怎样实现保持输入顺序的 Promise.all 教学版本？》</a>。</p>
+<h2>数量很多时加上并发上限</h2>
+<p>两两合并的第一轮会同时发出 n/2 次调用。如果 <code>asyncAdd</code> 其实是一次服务端请求，1000 个数就会一下子发出 500 个请求，浏览器和服务端都可能吃不消。</p>
+<p>这时可以换一种调度方式：准备一个待加的数字队列，同时最多开 k 个任务，每个任务从队列里取两个数相加，结果放回队列；队列里只剩一个数、且没有正在进行的任务时就结束。每次一个任务完成，就有空位去取下一对，这和并发池的思路一样，见<a href="/questions/alg-concurrency-pool/">《怎样实现有明确失败语义的异步并发池？》</a>。k 取 n/2 时就退化成上面的两两合并，k 取 1 就是串行。</p>
+<h2>常见追问</h2>
+<p><strong>如果 asyncAdd 本身支持传多个数，比如 <code>asyncAdd(a, b, c, callback)</code>，怎么优化？</strong></p>
+<blockquote>
+<p>思路一样，只是每一轮不是两两分组，而是按它能接受的个数分组，每组一次调用。每轮剩下的数变成原来的几分之一，轮数会更少。</p>
+</blockquote>
+<p><strong>如果同样的两个数可能被反复计算，还能怎么优化？</strong></p>
+<blockquote>
+<p>可以按 <code>a</code> 和 <code>b</code> 做缓存，把 <code>add(a, b)</code> 返回的 Promise 存进 <code>Map</code>，键用两个数拼成的字符串。缓存 Promise 而不是结果，同一对数在计算中再次被请求时，会复用同一个正在进行的 Promise，不会重复调用。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all" target="_blank" rel="noreferrer">MDN · Promise.all()<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises" target="_blank" rel="noreferrer">MDN · Using promises<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E5%8F%AA%E7%BB%99%E4%B8%80%E4%B8%AA%E5%BC%82%E6%AD%A5%E5%8A%A0%E6%B3%95%E5%87%BD%E6%95%B0+asyncAdd%EF%BC%8C%E6%80%8E%E6%A0%B7%E6%B1%82%E5%A4%9A%E4%B8%AA%E6%95%B0%E7%9A%84%E5%92%8C%E5%B9%B6%E5%B0%BD%E9%87%8F%E5%BF%AB%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E5%8F%AA%E7%BB%99%E4%B8%80%E4%B8%AA%E5%BC%82%E6%AD%A5%E5%8A%A0%E6%B3%95%E5%87%BD%E6%95%B0+asyncAdd%EF%BC%8C%E6%80%8E%E6%A0%B7%E6%B1%82%E5%A4%9A%E4%B8%AA%E6%95%B0%E7%9A%84%E5%92%8C%E5%B9%B6%E5%B0%BD%E9%87%8F%E5%BF%AB%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Aalg-async-add%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E6%89%8B%E5%86%99%E4%B8%8E%E7%AE%97%E6%B3%95%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Falg-async-add%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：只给一个异步加法函数 asyncAdd，怎样求多个数的和并尽量快？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/alg-promise-sequence/">怎样用 Promise 实现红绿灯循环和 LazyMan 这类按顺序延时执行的题？</a></li><li><a href="/questions/alg-promise-race-allsettled/">怎样手写 Promise.race、Promise.allSettled 和 Promise.any？</a></li><li><a href="/questions/alg-sleep-timeout-cancel/">怎样实现 sleep、带超时的请求和可取消的 Promise？</a></li><li><a href="/questions/alg-promise-aplus/">怎样手写一个符合 Promises/A+ 规范的 Promise？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

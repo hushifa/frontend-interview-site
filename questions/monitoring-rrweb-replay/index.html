@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="前端监控面试题：rrweb 记录的不是视频，而是 DOM 数据。" />
+    <title>rrweb 录屏回放是怎样实现的？全量快照、增量快照和隐私脱敏怎样配合？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/monitoring-rrweb-replay/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="rrweb 录屏回放是怎样实现的？全量快照、增量快照和隐私脱敏怎样配合？" />
+    <meta property="og:description" content="前端监控面试题：rrweb 记录的不是视频，而是 DOM 数据。" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/monitoring-rrweb-replay/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/monitoring-rrweb-replay/#webpage","url":"https://fe.hushifa.top/questions/monitoring-rrweb-replay/","name":"rrweb 录屏回放是怎样实现的？全量快照、增量快照和隐私脱敏怎样配合？","description":"前端监控面试题：rrweb 记录的不是视频，而是 DOM 数据。","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/monitoring-rrweb-replay/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/monitoring-rrweb-replay/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"前端监控面试题","item":"https://fe.hushifa.top/topics/monitoring/"},{"@type":"ListItem","position":3,"name":"rrweb 录屏回放是怎样实现的？全量快照、增量快照和隐私脱敏怎样配合？","item":"https://fe.hushifa.top/questions/monitoring-rrweb-replay/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/monitoring/">前端监控面试题</a><span aria-hidden="true">/</span><span aria-current="page">rrweb 录屏回放是怎样实现的？全量快照、增量快照和隐私脱敏怎样配合？</span></nav><h1 tabindex="-1">rrweb 录屏回放是怎样实现的？全量快照、增量快照和隐私脱敏怎样配合？</h1><p class="reading-summary">rrweb 记录的不是视频，而是 DOM 数据。开始时把整棵 DOM 序列化成全量快照，每个节点分配 id；之后用 MutationObserver 和事件监听把 DOM 变化、鼠标、滚动、输入记成增量事件。回放时在 iframe 里重建 DOM 并按时间应用事件。密码框默认脱敏，maskAllInputs、blockClass、maskTextClass 控制其他内容。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>用户反馈“点了提交没反应”，开发者想看他当时到底做了什么，rrweb 这类工具就能把那段操作“回放”出来。它录下来的不是视频，而是 DOM 数据：开始时把整个页面的 DOM 序列化成一份全量快照，之后只记录变化。</p>
+<p>全量快照里每个节点都有一个数字 id。之后 rrweb 用 <code>MutationObserver</code> 记录节点增删、属性和文字的变化，再监听鼠标、滚动、输入、窗口大小这些事件，每条增量事件只写节点 id。回放时先在 iframe 里按快照重建 DOM，再按时间顺序把增量事件一条条应用上去。</p>
+<p>这样录下来的是 JSON，比录视频小得多，回放时还能看到真实的 DOM 结构。页面原来的脚本在回放时不会执行，界面变化全部来自录下来的事件。</p>
+<p>要注意隐私。rrweb 默认只把密码框的值替换成 <code>*</code>，其他输入要开 <code>maskAllInputs</code> 或配置 <code>maskInputOptions</code>；带 <code>rr-block</code> 类的元素整块不录，回放时显示为同样大小的占位；<code>rr-mask</code> 类的元素文字会被打码。最好在采集端就脱敏，不要把敏感数据发出去再处理。</p>
+</blockquote>
+<h2>全量快照记录了什么</h2>
+<p>rrweb 的文档解释了为什么要自己写序列化：直接克隆出的 DOM 只能留在内存里，不能变成 JSON 发到服务器。所以全量快照会逐个节点遍历 DOM，把每个节点写成包含类型、标签名、属性、子节点的普通对象，并给它分配一个唯一的数字 id。</p>
+<p>序列化时还要处理几件事，否则回放会出错。<code>script</code> 元素会换成占位的 <code>noscript</code>，脚本内容丢掉，因为回放时页面脚本不能执行。相对路径会改成绝对路径，因为回放页面的地址和原页面不同，CSS 里的相对路径也要转换。外部样式表会读出已解析的规则写成内联样式，这样内网或 localhost 的样式也能正确回放。输入框里用户输入的值不在 HTML 里，序列化时也会读出来存成属性。</p>
+<h2>增量快照怎样记录变化</h2>
+<p>全量快照之后，rrweb 只记录变化。文档列出的增量来源有：DOM 变化（节点增删、属性变化、文字变化）、鼠标移动、鼠标交互（点击、双击、聚焦、触摸等）、页面或元素滚动、窗口大小变化、输入。</p>
+<p>DOM 变化靠 <code>MutationObserver</code>。它是浏览器提供的接口，DOM 改变后会批量回调一次，告诉你哪些节点增加、删除，哪些属性改了。rrweb 在一次回调里做了去重：同一个节点只记录一次；同一批里先加后删的节点直接丢掉；同一属性只保留最后的值。</p>
+<p>有些变化 <code>MutationObserver</code> 看不到。代码直接给 <code>input.value</code> 赋值不会触发它，所以 rrweb 还劫持了这些属性的 setter。鼠标移动非常频繁，rrweb 最多每 20 毫秒取一次坐标，最多每 500 毫秒发送一批。</p>
+<p>每条增量事件只引用节点 id。录制端和回放端各维护一张“id 到节点”的映射表，节点增删时同步更新，回放时按 id 找到要操作的节点。</p>
+<h2>用一个小例子看快照加增量</h2>
+<p>下面用普通对象模拟 DOM，演示“全量快照分配 id，增量事件按 id 修改”的过程。真实的 rrweb 结构更复杂，这里只看思路。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">let</span> nextId = <span class="hljs-number">1</span>;
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">snapshot</span>(<span class="hljs-params">node</span>) {
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">id</span>: nextId++,
+    <span class="hljs-attr">tag</span>: node.<span class="hljs-property">tag</span>,
+    <span class="hljs-attr">text</span>: node.<span class="hljs-property">text</span>,
+    <span class="hljs-attr">children</span>: (node.<span class="hljs-property">children</span> || []).<span class="hljs-title function_">map</span>(snapshot),
+  };
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">rebuild</span>(<span class="hljs-params">tree</span>) {
+  <span class="hljs-keyword">const</span> map = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Map</span>();
+  (<span class="hljs-keyword">function</span> <span class="hljs-title function_">walk</span>(<span class="hljs-params">n</span>) {
+    map.<span class="hljs-title function_">set</span>(n.<span class="hljs-property">id</span>, n);
+    n.<span class="hljs-property">children</span>.<span class="hljs-title function_">forEach</span>(walk);
+  })(tree);
+  <span class="hljs-keyword">return</span> map;
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">applyEvent</span>(<span class="hljs-params">map, event</span>) {
+  <span class="hljs-keyword">if</span> (event.<span class="hljs-property">type</span> === <span class="hljs-string">&#x27;add&#x27;</span>) {
+    <span class="hljs-keyword">const</span> node = { ...event.<span class="hljs-property">node</span>, <span class="hljs-attr">children</span>: [] };
+    map.<span class="hljs-title function_">get</span>(event.<span class="hljs-property">parentId</span>).<span class="hljs-property">children</span>.<span class="hljs-title function_">push</span>(node);
+    map.<span class="hljs-title function_">set</span>(node.<span class="hljs-property">id</span>, node);
+  }
+  <span class="hljs-keyword">if</span> (event.<span class="hljs-property">type</span> === <span class="hljs-string">&#x27;text&#x27;</span>) map.<span class="hljs-title function_">get</span>(event.<span class="hljs-property">id</span>).<span class="hljs-property">text</span> = event.<span class="hljs-property">text</span>;
+  <span class="hljs-keyword">if</span> (event.<span class="hljs-property">type</span> === <span class="hljs-string">&#x27;remove&#x27;</span>) {
+    <span class="hljs-keyword">const</span> parent = map.<span class="hljs-title function_">get</span>(event.<span class="hljs-property">parentId</span>);
+    parent.<span class="hljs-property">children</span> = parent.<span class="hljs-property">children</span>.<span class="hljs-title function_">filter</span>(<span class="hljs-function">(<span class="hljs-params">c</span>) =&gt;</span> c.<span class="hljs-property">id</span> !== event.<span class="hljs-property">id</span>);
+    map.<span class="hljs-title function_">delete</span>(event.<span class="hljs-property">id</span>);
+  }
+}
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">render</span>(<span class="hljs-params">n</span>) {
+  <span class="hljs-keyword">const</span> inner = n.<span class="hljs-property">text</span> !== <span class="hljs-literal">undefined</span> ? n.<span class="hljs-property">text</span> : n.<span class="hljs-property">children</span>.<span class="hljs-title function_">map</span>(render).<span class="hljs-title function_">join</span>(<span class="hljs-string">&#x27;&#x27;</span>);
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`&lt;<span class="hljs-subst">${n.tag}</span>&gt;<span class="hljs-subst">${inner}</span>&lt;/<span class="hljs-subst">${n.tag}</span>&gt;`</span>;
+}
+
+<span class="hljs-keyword">const</span> full = <span class="hljs-title function_">snapshot</span>({ <span class="hljs-attr">tag</span>: <span class="hljs-string">&#x27;ul&#x27;</span>, <span class="hljs-attr">children</span>: [{ <span class="hljs-attr">tag</span>: <span class="hljs-string">&#x27;li&#x27;</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;苹果&#x27;</span> }, { <span class="hljs-attr">tag</span>: <span class="hljs-string">&#x27;li&#x27;</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;香蕉&#x27;</span> }] });
+<span class="hljs-keyword">const</span> incremental = [
+  { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;add&#x27;</span>, <span class="hljs-attr">parentId</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">node</span>: { <span class="hljs-attr">id</span>: <span class="hljs-number">4</span>, <span class="hljs-attr">tag</span>: <span class="hljs-string">&#x27;li&#x27;</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;橙子&#x27;</span> } },
+  { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;text&#x27;</span>, <span class="hljs-attr">id</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;青苹果&#x27;</span> },
+  { <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;remove&#x27;</span>, <span class="hljs-attr">parentId</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">id</span>: <span class="hljs-number">3</span> },
+];
+
+<span class="hljs-keyword">const</span> replayMap = <span class="hljs-title function_">rebuild</span>(<span class="hljs-title function_">structuredClone</span>(full));
+<span class="hljs-keyword">const</span> root = replayMap.<span class="hljs-title function_">get</span>(<span class="hljs-number">1</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">render</span>(root)); <span class="hljs-comment">// &lt;ul&gt;&lt;li&gt;苹果&lt;/li&gt;&lt;li&gt;香蕉&lt;/li&gt;&lt;/ul&gt;</span>
+incremental.<span class="hljs-title function_">forEach</span>(<span class="hljs-function">(<span class="hljs-params">event</span>) =&gt;</span> <span class="hljs-title function_">applyEvent</span>(replayMap, event));
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title function_">render</span>(root)); <span class="hljs-comment">// &lt;ul&gt;&lt;li&gt;青苹果&lt;/li&gt;&lt;li&gt;橙子&lt;/li&gt;&lt;/ul&gt;</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(replayMap.<span class="hljs-property">size</span>); <span class="hljs-comment">// 3</span>
+</code></pre></div>
+<p>全量快照给 <code>ul</code> 分配了 1，两个 <code>li</code> 分别是 2 和 3。三条增量事件都没有保存节点本身的引用，只写了 id，所以能变成 JSON 存下来。回放端先重建映射表，再按 id 找到节点应用变化，最后得到和录制时一样的结果，映射表里也同步删掉了 3 号节点。</p>
+<p>这也说明了为什么回放必须从全量快照开始：只有增量事件，就不知道 2 号节点是什么。rrweb 文档也说，默认情况下回放需要全部事件。</p>
+<h2>录制和回放的基本用法</h2>
+<p>文档推荐安装 <code>@rrweb/record</code> 和 <code>@rrweb/replay</code>，原来的 <code>rrweb</code> 包已标为弃用。<code>record</code> 返回一个停止函数：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { record } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@rrweb/record&#x27;</span>;
+
+<span class="hljs-keyword">const</span> events = [];
+<span class="hljs-keyword">const</span> stop = <span class="hljs-title function_">record</span>({
+  <span class="hljs-title function_">emit</span>(<span class="hljs-params">event</span>) {
+    events.<span class="hljs-title function_">push</span>(event);
+  },
+  <span class="hljs-attr">maskAllInputs</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">blockClass</span>: <span class="hljs-string">&#x27;rr-block&#x27;</span>,
+});
+</code></pre></div>
+<p>回放时用 <code>Replayer</code>，调用 <code>play()</code> 开始，也可以传毫秒数从某个时间点开始。需要带进度条的界面，可以用基于它的 <code>rrweb-player</code>。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Replayer</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@rrweb/replay&#x27;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;@rrweb/replay/dist/style.css&#x27;</span>;
+
+<span class="hljs-keyword">const</span> replayer = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Replayer</span>(events);
+replayer.<span class="hljs-title function_">play</span>();
+</code></pre></div>
+<p>如果一直录、只想保留最近一段，可以用 <code>checkoutEveryNth</code> 或 <code>checkoutEveryNms</code> 定期重新生成全量快照，<code>emit</code> 的第二个参数 <code>isCheckout</code> 会告诉你新快照开始了，这时可以丢掉更早的事件。因为增量事件是一条链，文档说保留的长度不精确：设 <code>checkoutEveryNth: 200</code>，最后会留下 200 到 400 条事件。文档也说多数情况下不需要配置它。</p>
+<h2>隐私脱敏怎样配置</h2>
+<p>rrweb 的默认值只遮住密码框：<code>maskInputOptions</code> 默认是 <code>{ password: true }</code>，<code>maskAllInputs</code> 默认是 <code>false</code>。所以手机号、身份证这类普通输入框默认会被原样录下来，要主动开启脱敏。几个常用选项的作用如下：</p>
+<ul>
+<li><code>maskAllInputs: true</code>：所有输入框的值都替换成 <code>*</code>。</li>
+<li><code>maskInputOptions</code>：按输入框类型选择要脱敏的类别。</li>
+<li><code>blockClass</code>（默认 <code>rr-block</code>）和 <code>blockSelector</code>：匹配的元素整块不录，回放时显示为同样大小的占位。</li>
+<li><code>maskTextClass</code>（默认 <code>rr-mask</code>）：匹配元素及其子元素里的文字被打码。</li>
+<li><code>ignoreClass</code>（默认 <code>rr-ignore</code>）：不记录匹配元素的输入事件。</li>
+<li><code>maskInputFn</code>、<code>maskTextFn</code>：自定义脱敏函数。</li>
+</ul>
+<p>这些处理都发生在录制端，敏感内容不会出现在事件数据里。如果先原样上报再在服务端打码，敏感数据就已经离开了用户的浏览器。</p>
+<p>回放端也有安全问题。回放的 iframe 默认在沙箱里不能运行脚本，文档提醒，<code>UNSAFE_replayCanvas</code> 会给 iframe 加上 <code>allow-scripts</code>，去掉这层保护，所以不安全。</p>
+<h2>常见追问</h2>
+<p><strong>为什么不直接录视频？</strong></p>
+<blockquote>
+<p>录视频要一直截图编码，耗性能，数据也大。rrweb 记录的是 DOM 变化，页面不动时几乎没有数据，回放时还能看到真实的 DOM 结构。代价是有些内容录不全，比如 Canvas 默认不录，要开 <code>recordCanvas</code>。</p>
+</blockquote>
+<p><strong>回放时页面的接口请求、脚本会重新执行吗？</strong></p>
+<blockquote>
+<p>不会。序列化时脚本已经换成了 <code>noscript</code>，回放时也不执行 JavaScript，文档说正因如此才要记录脚本造成的所有 DOM 变化。界面上的变化全部来自录下来的事件。</p>
+</blockquote>
+<p><strong>Sentry 的会话回放和 rrweb 是什么关系？</strong></p>
+<blockquote>
+<p>两者解决的是同一类问题，接入和采样配置见<a href="/questions/monitoring-sentry/">《错误监控平台怎样接入？以 Sentry 为例讲 SDK 初始化、Source Map 上传、release 关联和采样》</a>。用 rrweb 自建时，事件存储、采样和上报都要自己做。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://github.com/rrweb-io/rrweb/blob/master/guide.md" target="_blank" rel="noreferrer">rrweb · Guide<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://github.com/rrweb-io/rrweb/blob/master/docs/serialization.md" target="_blank" rel="noreferrer">rrweb · Serialization<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://github.com/rrweb-io/rrweb/blob/master/docs/observer.md" target="_blank" rel="noreferrer">rrweb · Incremental snapshot<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver" target="_blank" rel="noreferrer">MDN · MutationObserver<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+rrweb+%E5%BD%95%E5%B1%8F%E5%9B%9E%E6%94%BE%E6%98%AF%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E7%9A%84%EF%BC%9F%E5%85%A8%E9%87%8F%E5%BF%AB%E7%85%A7%E3%80%81%E5%A2%9E%E9%87%8F%E5%BF%AB%E7%85%A7%E5%92%8C%E9%9A%90%E7%A7%81%E8%84%B1%E6%95%8F%E6%80%8E%E6%A0%B7%E9%85%8D%E5%90%88%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9Arrweb+%E5%BD%95%E5%B1%8F%E5%9B%9E%E6%94%BE%E6%98%AF%E6%80%8E%E6%A0%B7%E5%AE%9E%E7%8E%B0%E7%9A%84%EF%BC%9F%E5%85%A8%E9%87%8F%E5%BF%AB%E7%85%A7%E3%80%81%E5%A2%9E%E9%87%8F%E5%BF%AB%E7%85%A7%E5%92%8C%E9%9A%90%E7%A7%81%E8%84%B1%E6%95%8F%E6%80%8E%E6%A0%B7%E9%85%8D%E5%90%88%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Amonitoring-rrweb-replay%0A-+%E5%88%86%E7%B1%BB%EF%BC%9A%E5%89%8D%E7%AB%AF%E7%9B%91%E6%8E%A7%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fmonitoring-rrweb-replay%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：rrweb 录屏回放是怎样实现的？全量快照、增量快照和隐私脱敏怎样配合？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/monitoring-tracking/">前端埋点有哪些方式？怎样设计一套埋点方案？</a></li><li><a href="/questions/monitoring-sentry/">错误监控平台怎样接入？以 Sentry 为例讲 SDK 初始化、Source Map 上传、release 关联和采样</a></li><li><a href="/questions/monitoring-api-sdk/">接口监控 SDK 怎样代理 fetch 和 XHR？怎样采集耗时与错误，又避免上报死循环和泄露隐私？</a></li><li><a href="/questions/monitoring-error-capture/">前端怎样全局捕获 JS 错误、Promise 拒绝和资源加载失败？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>

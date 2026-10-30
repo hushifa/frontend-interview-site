@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#147d68" />
+    <meta property="og:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta property="og:image:alt" content="前端知库" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content="https://fe.hushifa.top/logo-512.png" />
+    <meta name="description" content="JavaScript面试题：== 一边是对象、一边是数字时，会先把对象转成原始值，转换会调用对象的 Symbol.toPrimitive…" />
+    <title>怎样让 a == 1 &amp;&amp; a == 2 &amp;&amp; a == 3 成立？</title>
+    <link rel="canonical" href="https://fe.hushifa.top/questions/js-loose-equality-trick/" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:site_name" content="前端知库" />
+    <meta property="og:title" content="怎样让 a == 1 &amp;&amp; a == 2 &amp;&amp; a == 3 成立？" />
+    <meta property="og:description" content="JavaScript面试题：== 一边是对象、一边是数字时，会先把对象转成原始值，转换会调用对象的 Symbol.toPrimitive…" />
+    <meta property="og:url" content="https://fe.hushifa.top/questions/js-loose-equality-trick/" />
+    <script id="site-structured-data" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://fe.hushifa.top/#organization","name":"前端知库","url":"https://fe.hushifa.top/","logo":{"@type":"ImageObject","url":"https://fe.hushifa.top/logo-512.png"}},{"@type":"WebSite","@id":"https://fe.hushifa.top/#website","url":"https://fe.hushifa.top/","name":"前端知库","inLanguage":"zh-CN","publisher":{"@id":"https://fe.hushifa.top/#organization"}},{"@type":"WebPage","@id":"https://fe.hushifa.top/questions/js-loose-equality-trick/#webpage","url":"https://fe.hushifa.top/questions/js-loose-equality-trick/","name":"怎样让 a == 1 && a == 2 && a == 3 成立？","description":"JavaScript面试题：== 一边是对象、一边是数字时，会先把对象转成原始值，转换会调用对象的 Symbol.toPrimitive…","inLanguage":"zh-CN","isPartOf":{"@id":"https://fe.hushifa.top/#website"},"breadcrumb":{"@id":"https://fe.hushifa.top/questions/js-loose-equality-trick/#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://fe.hushifa.top/questions/js-loose-equality-trick/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"前端知库","item":"https://fe.hushifa.top/"},{"@type":"ListItem","position":2,"name":"JavaScript面试题","item":"https://fe.hushifa.top/topics/javascript/"},{"@type":"ListItem","position":3,"name":"怎样让 a == 1 && a == 2 && a == 3 成立？","item":"https://fe.hushifa.top/questions/js-loose-equality-trick/"}]}]}</script>
+    
+    <link rel="stylesheet" crossorigin href="/assets/index-Dg8FMQvh.css">
+  </head>
+  <body>
+    <div id="root"><div class="reading-page"><header class="reading-header"><a class="brand" href="/"><strong>前端知库</strong></a><nav class="site-nav" aria-label="网站栏目"><a aria-current="page" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg><span>面试题库</span></a><a href="/resources/"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-blocks" aria-hidden="true"><path d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg><span>前端资源</span></a></nav></header><main><nav class="breadcrumbs" aria-label="面包屑"><a href="/">前端知库</a><span aria-hidden="true">/</span><a href="/topics/javascript/">JavaScript面试题</a><span aria-hidden="true">/</span><span aria-current="page">怎样让 a == 1 &amp;&amp; a == 2 &amp;&amp; a == 3 成立？</span></nav><h1 tabindex="-1">怎样让 a == 1 &amp;&amp; a == 2 &amp;&amp; a == 3 成立？</h1><p class="reading-summary">== 一边是对象、一边是数字时，会先把对象转成原始值，转换会调用对象的 Symbol.toPrimitive、valueOf 或 toString。让这些方法每次返回一个递增的数，三次比较就分别得到 1、2、3。全局变量改成 getter 也行，每次读取 a 都会执行函数，这时连 === 都能成立。Proxy 拦截 Symbol.toPrimitive 是同一个思路的变形。</p><div class="answer-inner"><div class="answer-label">参考答案</div><div class="prose prose-slate prose-sm max-w-none overflow-x-auto prose-code:before:content-none prose-code:after:content-none prose-code:rounded-sm prose-code:bg-slate-200/60 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-blockquote:font-normal prose-blockquote:not-italic [&amp;_blockquote_p]:before:content-none [&amp;_blockquote_p]:after:content-none"><h2>简答</h2>
+<blockquote>
+<p>这道题考的是 <code>==</code> 遇到对象时会做什么。<code>a == 1</code> 里一边是对象、一边是数字，规范要求先把对象转成原始值再比较，而转换过程会调用对象自己的方法，所以只要让这个方法每次返回的数加 1，三次比较就分别拿到 1、2、3。</p>
+<p>对象转原始值时，先看有没有 <code>Symbol.toPrimitive</code> 方法，有就用它；没有就在 <code>valueOf</code> 和 <code>toString</code> 之间按顺序试，<code>==</code> 这种场合先试 <code>valueOf</code>。所以最常见的写法是给对象写一个 <code>valueOf</code>，里面让计数器自增并返回。</p>
+<p>另一种思路是不让 <code>a</code> 是普通变量。把 <code>a</code> 定义成全局对象上的 getter，每次读 <code>a</code> 都会执行函数，返回一个递增的数。这种写法连 <code>a === 1 &amp;&amp; a === 2 &amp;&amp; a === 3</code> 都能成立，因为严格相等虽然不做类型转换，但读取 <code>a</code> 本身就有副作用。</p>
+<p>要注意，这些写法利用的都是“比较时会调用你的代码”，实际项目里不应该这样写。它真正的启示是：<code>==</code> 和对象比较时行为可以被改写，所以业务代码里应该用 <code>===</code>，并避免让对象和原始值直接比较。</p>
+</blockquote>
+<h2>用 valueOf 和 toString 实现</h2>
+<p>下面三种写法都成立，先看运行结果，再看各自依赖的规则。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> a = {
+  <span class="hljs-attr">value</span>: <span class="hljs-number">0</span>,
+  <span class="hljs-title function_">valueOf</span>(<span class="hljs-params"></span>) {
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">value</span> += <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">value</span>;
+  },
+};
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(a == <span class="hljs-number">1</span> &amp;&amp; a == <span class="hljs-number">2</span> &amp;&amp; a == <span class="hljs-number">3</span> ? <span class="hljs-string">&#x27;成立&#x27;</span> : <span class="hljs-string">&#x27;不成立&#x27;</span>); <span class="hljs-comment">// 成立</span>
+
+<span class="hljs-keyword">const</span> list = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>];
+list.<span class="hljs-property">toString</span> = list.<span class="hljs-property">shift</span>;
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(list == <span class="hljs-number">1</span> &amp;&amp; list == <span class="hljs-number">2</span> &amp;&amp; list == <span class="hljs-number">3</span> ? <span class="hljs-string">&#x27;成立&#x27;</span> : <span class="hljs-string">&#x27;不成立&#x27;</span>); <span class="hljs-comment">// 成立</span>
+
+<span class="hljs-keyword">let</span> count = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">const</span> b = {
+  [<span class="hljs-title class_">Symbol</span>.<span class="hljs-property">toPrimitive</span>](hint) {
+    count += <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">return</span> hint === <span class="hljs-string">&#x27;string&#x27;</span> ? <span class="hljs-string">&#x27;第&#x27;</span> + count + <span class="hljs-string">&#x27;次&#x27;</span> : count;
+  },
+};
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(b == <span class="hljs-number">1</span> &amp;&amp; b == <span class="hljs-number">2</span> &amp;&amp; b == <span class="hljs-number">3</span> ? <span class="hljs-string">&#x27;成立&#x27;</span> : <span class="hljs-string">&#x27;不成立&#x27;</span>); <span class="hljs-comment">// 成立</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`<span class="hljs-subst">${b}</span>`</span>); <span class="hljs-comment">// 第4次</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(b === <span class="hljs-number">5</span> ? <span class="hljs-string">&#x27;成立&#x27;</span> : <span class="hljs-string">&#x27;不成立&#x27;</span>); <span class="hljs-comment">// 不成立</span>
+</code></pre></div>
+<p>第一种为什么成立？ECMAScript 的 <code>IsLooselyEqual</code> 规定，一边是对象、另一边是数字或字符串时，先对对象调用 <code>ToPrimitive</code>。对象没有 <code>Symbol.toPrimitive</code>，<code>ToPrimitive</code> 就按默认顺序先调 <code>valueOf</code>。每比较一次，<code>valueOf</code> 就执行一次，返回 1、2、3，正好和右边对上。</p>
+<p>第二种是第一种的变形。数组自带的 <code>valueOf</code> 返回数组自己，还是对象，不是原始值，于是转换接着调 <code>toString</code>。把 <code>toString</code> 换成 <code>shift</code>，每次调用就从数组头部取出一个元素，依次是 1、2、3。</p>
+<p>第三种用 <code>Symbol.toPrimitive</code>，它的优先级最高，有它就不再看 <code>valueOf</code> 和 <code>toString</code>。它还会收到一个 <code>hint</code> 参数，说明调用方想要什么类型：<code>==</code> 传的是 <code>&#x27;default&#x27;</code>，模板字符串传的是 <code>&#x27;string&#x27;</code>。所以第 4 次在模板字符串里调用时，返回的是“第4次”。</p>
+<p>最后一行说明了这种写法的边界：<code>===</code> 不做类型转换，对象和数字直接判定为不相等，<code>Symbol.toPrimitive</code> 根本不会被调用。对象转原始值的完整规则见<a href="/questions/js-coercion/">《隐式类型转换有哪些容易踩坑的规则？》</a>。</p>
+<h2>用 getter 让 === 也成立</h2>
+<p>如果想让严格相等也成立，就不能靠类型转换了，要让“读取 <code>a</code>”这个动作本身返回不同的值。</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">let</span> n = <span class="hljs-number">0</span>;
+<span class="hljs-title class_">Object</span>.<span class="hljs-title function_">defineProperty</span>(globalThis, <span class="hljs-string">&#x27;c&#x27;</span>, {
+  <span class="hljs-title function_">get</span>(<span class="hljs-params"></span>) {
+    n += <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">return</span> n;
+  },
+});
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(c === <span class="hljs-number">1</span> &amp;&amp; c === <span class="hljs-number">2</span> &amp;&amp; c === <span class="hljs-number">3</span> ? <span class="hljs-string">&#x27;成立&#x27;</span> : <span class="hljs-string">&#x27;不成立&#x27;</span>); <span class="hljs-comment">// 成立</span>
+</code></pre></div>
+<p>在非严格的脚本里，直接写变量名 <code>c</code>，找不到局部变量时会去全局对象上找属性。这个属性是 getter，每读一次就执行一次函数，所以三次读到的分别是 1、2、3，比较的都是数字，<code>===</code> 自然成立。属性描述符和 getter 的用法见<a href="/questions/js-property-descriptors/">《属性描述符、Object.freeze 和只读有什么区别？》</a>。</p>
+<p>用 <code>with</code> 语句把一个带 getter 的对象放进作用域链，效果也一样，不过 <code>with</code> 在严格模式下不能用。</p>
+<h2>用 Proxy 拦截转换</h2>
+<p><code>Proxy</code> 可以拦截对属性的读取，<code>ToPrimitive</code> 在内部会读对象的 <code>Symbol.toPrimitive</code> 属性，所以可以在 <code>get</code> 里拦住它，返回一个自增的函数：</p>
+<div class="not-prose code-block"><div class="code-language">JavaScript</div><pre><code class="hljs language-js"><span class="hljs-keyword">const</span> counter = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Proxy</span>({ <span class="hljs-attr">n</span>: <span class="hljs-number">0</span> }, {
+  <span class="hljs-title function_">get</span>(<span class="hljs-params">target, key</span>) {
+    <span class="hljs-keyword">if</span> (key === <span class="hljs-title class_">Symbol</span>.<span class="hljs-property">toPrimitive</span>) <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> ++target.<span class="hljs-property">n</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-title class_">Reflect</span>.<span class="hljs-title function_">get</span>(target, key);
+  },
+});
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(counter == <span class="hljs-number">1</span> &amp;&amp; counter == <span class="hljs-number">2</span> &amp;&amp; counter == <span class="hljs-number">3</span> ? <span class="hljs-string">&#x27;成立&#x27;</span> : <span class="hljs-string">&#x27;不成立&#x27;</span>); <span class="hljs-comment">// 成立</span>
+</code></pre></div>
+<p>这和第三种写法本质相同，只是方法不是写在对象上，而是读取时临时给出来的。<code>Proxy</code> 的其他用法见<a href="/questions/js-proxy-reflect/">《Proxy 与 Reflect 能实现什么，存在哪些限制？》</a>。</p>
+<h2>常见追问</h2>
+<p><strong>为什么 <code>valueOf</code> 写法里，<code>===</code> 不成立？</strong></p>
+<blockquote>
+<p>因为 <code>===</code> 不做类型转换。两边类型不同，一个是对象一个是数字，直接返回 <code>false</code>，不会调用 <code>valueOf</code>。想让 <code>===</code> 成立，只能让读取变量本身返回不同的数字，也就是 getter 的写法。</p>
+</blockquote>
+<p><strong><code>a</code> 同时有 <code>valueOf</code> 和 <code>toString</code>，<code>a == &#x27;1&#x27;</code> 用哪个？</strong></p>
+<blockquote>
+<p>没有 <code>Symbol.toPrimitive</code> 时，<code>==</code> 用的是 <code>&#x27;default&#x27;</code> 提示，普通对象按数字的顺序处理，先调 <code>valueOf</code>，它返回原始值就不再调 <code>toString</code>。<code>Date</code> 是例外，它在 <code>&#x27;default&#x27;</code> 提示下先调 <code>toString</code>。</p>
+</blockquote></div><div class="answer-bottom"><div class="answer-references"><a href="https://tc39.es/ecma262/#sec-islooselyequal" target="_blank" rel="noreferrer">ECMAScript · IsLooselyEqual<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://tc39.es/ecma262/#sec-toprimitive" target="_blank" rel="noreferrer">ECMAScript · ToPrimitive<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Equality" target="_blank" rel="noreferrer">MDN · Equality (==)<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/toPrimitive" target="_blank" rel="noreferrer">MDN · Symbol.toPrimitive<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></a></div><a class="question-feedback" href="https://github.com/hushifa/frontend-interview-site/issues/new?title=%5B%E9%A2%98%E7%9B%AE%E5%8F%8D%E9%A6%88%5D+%E6%80%8E%E6%A0%B7%E8%AE%A9+a+%3D%3D+1+%26%26+a+%3D%3D+2+%26%26+a+%3D%3D+3+%E6%88%90%E7%AB%8B%EF%BC%9F&amp;body=%23%23%23+%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF%0A%0A-+%E9%A2%98%E7%9B%AE%EF%BC%9A%E6%80%8E%E6%A0%B7%E8%AE%A9+a+%3D%3D+1+%26%26+a+%3D%3D+2+%26%26+a+%3D%3D+3+%E6%88%90%E7%AB%8B%EF%BC%9F%0A-+%E9%A2%98%E7%9B%AE+ID%EF%BC%9Ajs-loose-equality-trick%0A-+%E5%88%86%E7%B1%BB%EF%BC%9AJavaScript%0A-+%E7%BD%91%E9%A1%B5%E9%93%BE%E6%8E%A5%EF%BC%9Ahttps%3A%2F%2Ffe.hushifa.top%2Fquestions%2Fjs-loose-equality-trick%2F%0A%0A%23%23%23+%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0%0A%0A%E8%AF%B7%E8%AF%B4%E6%98%8E%E5%93%AA%E6%AE%B5%E5%86%85%E5%AE%B9%E6%9C%89%E9%97%AE%E9%A2%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E4%BD%A0%E8%AE%A4%E4%B8%BA%E6%9C%89%E9%97%AE%E9%A2%98%E7%9A%84%E5%8E%9F%E5%9B%A0%E3%80%82%0A%0A%23%23%23+%E4%BF%AE%E6%94%B9%E5%BB%BA%E8%AE%AE%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E5%86%99%E5%87%BA%E5%BB%BA%E8%AE%AE%E7%9A%84%E8%A1%A8%E8%BF%B0%E6%88%96%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E%E3%80%82%0A%0A%23%23%23+%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%88%E9%80%89%E5%A1%AB%EF%BC%89%0A%0A%E5%8F%AF%E4%BB%A5%E9%99%84%E4%B8%8A%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E9%93%BE%E6%8E%A5%E6%88%96%E5%8F%AF%E5%A4%8D%E7%8E%B0%E7%9A%84%E7%A4%BA%E4%BE%8B%E3%80%82" target="_blank" rel="noopener noreferrer" aria-label="反馈此题：怎样让 a == 1 &amp;&amp; a == 2 &amp;&amp; a == 3 成立？（在 GitHub 新窗口打开）" title="在 GitHub 提交公开反馈，需要登录"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square" aria-hidden="true"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path></svg>反馈此题</a></div></div><nav class="related-content" aria-labelledby="related-heading"><h2 id="related-heading">同分类题目</h2><ul><li><a href="/questions/js-inheritance-patterns/">ES5 有哪些继承方式？为什么寄生组合继承最好？</a></li><li><a href="/questions/js-values-equality/">JavaScript 的值类型与相等比较应该怎样理解？</a></li><li><a href="/questions/js-coercion/">隐式类型转换有哪些容易踩坑的规则？</a></li><li><a href="/questions/js-async-generator-runner/">async/await 的原理是什么？怎样用 Generator 实现自动执行？</a></li></ul></nav></main></div></div>
+    
+  </body>
+</html>
